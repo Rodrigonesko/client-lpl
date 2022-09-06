@@ -22,9 +22,21 @@ const UploadRn = () => {
 
         const result = XLSX.utils.sheet_to_json(worksheet)
 
-        const send = await Axios.post('http://10.0.121.55:3001/rn/upload', { result }, { withCredentials: true })
+        try {
+            const send = await Axios.post('http://10.0.121.55:3001/rn/upload', { result }, { withCredentials: true })
 
-        console.log(send);
+            if(send.status === 200){
+                console.log(send);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+
+
+
+
     }
 
 
