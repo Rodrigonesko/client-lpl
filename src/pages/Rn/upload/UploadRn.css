@@ -1,0 +1,25 @@
+.section-upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.upload-container {
+    text-align: center;
+    border-radius: 20px;
+    padding: 1rem;
+    background: #e0e0e0;
+    box-shadow: 20px 20px 60px #bebebe,
+        -20px -20px 60px #ffffff;
+}
+
+.upload-container div {
+    margin: 1rem;
+}
+
+.btn {
+    padding: 7px;
+    border-radius: 5px;
+    width: 30%;
+}
