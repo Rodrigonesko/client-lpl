@@ -1,0 +1,74 @@
+.section-detalhes-container {
+    width: 100%;
+    padding: 1rem;
+}
+
+.detalhes-container {
+    border: 1px solid gray;
+    padding: 1rem;
+}
+
+.info-proposta {
+    display: flex;
+    margin: 10px 0;
+}
+
+.info-proposta span {
+    border-bottom: 1px solid black;
+    padding: 2px;
+}
+
+.info-box {
+    margin-right:  20px;
+}
+
+.procedimento span{
+    border: none;
+}
+
+.periodo-doenca strong {
+    font-size: 0.9rem;
+}
+
+.periodo-doenca span {
+    border: none;
+}
+
+input {
+    padding: 3px;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.observacoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#observacoes {
+    padding: 1rem;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.salvar {
+    background-color: lightblue;
+    border: none;
+    margin-right: 1rem;
+    font-weight: 600;
+}
+
+.concluir {
+    background-color: rgb(51, 158, 51);
+    border: none;
+    font-weight: 600;
+    color: white;
+}
+
+.concluir:hover {
+    background-color: rgb(21, 102, 21);
+}

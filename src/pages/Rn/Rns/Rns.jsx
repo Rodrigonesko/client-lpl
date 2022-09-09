@@ -1,12 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
+import { Link } from 'react-router-dom'
 import Sidebar from "../../../components/Sidebar/Sidebar";
+import './Rns.css'
 
 const Rns = () => {
+
+    const [rns, setRns] = useState([])
+
+    const searchRn = async () => {
+        try {
+            const result = await Axios.get('http://10.0.121.55:3001/rn/rns', { withCredentials: true })
+            setRns(result.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    useEffect(() => {
+        searchRn()
+    }, [])
+
     return (
-        <div>
+        <>
             <Sidebar />
-            Rns
-        </div>
+            <section className="section-rn-container">
+                <div className="rn-container">
+                    <div className="title">
+                        <h2>Rns</h2>
+                    </div>
+                    <div className="table-container">
+                        <table className="table">
+                            <thead>
+                                <tr className="table-header">
+                                    <th>BENEFICIARIO</th>
+                                    <th>MO</th>
+                                    <th>IDADE</th>
+                                    <th>TELEFONE</th>
+                                    <th>DETALHES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {rns.map(e => {
+                                    return (
+                                        <tr key={e.proposta}>
+                                            <td>{e.beneficiario}</td>
+                                            <td>{e.mo}</td>
+                                            <td>{e.idade}</td>
+                                            <td>{e.telefones}</td>
+                                            <td><Link to={''+e.proposta} className="link">Detalhes</Link></td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </>
     )
 }
 

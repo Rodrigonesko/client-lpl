@@ -3,6 +3,15 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    flex-direction: column;
+}
+
+.result {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-radius: 18px;
+    border: 1px solid black;
+    font-weight: 600;
 }
 
 .upload-container {

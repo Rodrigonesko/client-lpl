@@ -8,6 +8,7 @@ import Axios from 'axios'
 const UploadRn = () => {
 
     const [file, setFile] = useState()
+    const [status, setStatus] = useState('')
 
     const send = async e => {
         e.preventDefault()
@@ -23,19 +24,20 @@ const UploadRn = () => {
         const result = XLSX.utils.sheet_to_json(worksheet)
 
         try {
+
+            setStatus('Enviando...')
+
             const send = await Axios.post('http://10.0.121.55:3001/rn/upload', { result }, { withCredentials: true })
 
             if(send.status === 200){
+                setStatus(send.data.message)
                 console.log(send);
             }
 
         } catch (error) {
             console.log(error);
+            setStatus('Algo deu errado')
         }
-
-
-
-
 
     }
 
@@ -45,7 +47,11 @@ const UploadRn = () => {
         <>
             <Sidebar />
             <section className="section-upload-container">
-
+                {status != '' ? (
+                    <div className="result">
+                        <p>{status}</p>
+                    </div>
+                ) : null}
                 <div className="upload-container">
                     <form action="" method="post">
                         <div className="title">
