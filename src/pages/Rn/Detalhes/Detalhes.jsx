@@ -15,8 +15,7 @@ const Detalhes = () => {
     const [contato3, setContato3] = useState('')
     const [horario1, setHorario1] = useState('')
     const [horario2, setHorario2] = useState('')
-    const [horario3, setHorario3] = useState('')
-
+    const [observacoes, setObservacoes] = useState('')
 
 
     const search = async () => {
@@ -28,6 +27,11 @@ const Detalhes = () => {
         setEmail(dados.email)
 
         console.log(dados);
+    }
+
+    const update = async () => {
+
+        console.log('atualizado');
     }
 
     useEffect(() => {
@@ -126,23 +130,24 @@ const Detalhes = () => {
                         </div>
                         <div className="info-box">
                             <label htmlFor="email">Email Beneficiário: </label>
-                            <input type="email" id="email" name="email" defaultValue={dados.email} onChange={e=>setEmail(e.target.value)} />
-                        </div>
+                            <input type="email" id="email" name="email" defaultValue={email} onChange={e=>setEmail(e.target.value)} />
+                        </div> 
                     </div>
-                    <div className="info-proposta">
+                    <div className="info-proposta"> 
                         <div className="info-box">
                             <label htmlFor="data-contato-1">1° Contato</label>
-                            <input type="date" name="data-contato-1" id="data-contato-1" value={dados.contato1} />
+                            <input type="date" name="data-contato-1" id="data-contato-1" defaultValue={dados.contato1} onChange={e=>{setContato1(e.target.value)
+                                 console.log(contato1)} }/>
                             <input type="time" name="horario-contato-1" id="horario-contato-1" />
                         </div>
                         <div className="info-box">
                             <label htmlFor="data-contato-2">2° Contato</label>
-                            <input type="date" name="data-contato-2" id="data-contato-2" value={dados.contato2} />
+                            <input type="date" name="data-contato-2" id="data-contato-2"  defaultValue={dados.contato2} />
                             <input type="time" name="horario-contato-2" id="horario-contato-2" />
                         </div>
                         <div className="info-box">
                             <label htmlFor="data-contato-3">3° Contato</label>
-                            <input type="date" name="data-contato-3" id="data-contato-3" value={dados.contato3} />
+                            <input type="date" name="data-contato-3" id="data-contato-3"  defaultValue={dados.contato} />
                             <input type="time" name="horario-contato-3" id="horario-contato-3" />
                         </div>
                     </div>
@@ -153,7 +158,7 @@ const Detalhes = () => {
                         </div>
                     </div>
                     <div className="buttons">
-                        <button className="salvar">Salvar</button>
+                        <button onClick={update} className="salvar">Salvar</button>
                         <button className="concluir">Concluir</button>
                     </div>
                 </div>
