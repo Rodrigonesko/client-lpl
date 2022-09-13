@@ -43,15 +43,19 @@ const Rns = () => {
                             </thead>
                             <tbody>
                                 {rns.map(e => {
-                                    return (
-                                        <tr key={e.proposta}>
-                                            <td>{e.beneficiario}</td>
-                                            <td>{e.mo}</td>
-                                            <td>{e.idade}</td>
-                                            <td>{e.telefones}</td>
-                                            <td><Link to={''+e.proposta} className="link">Detalhes</Link></td>
-                                        </tr>
-                                    )
+
+                                    if (e.status == 'Em andamento') {
+                                        return (
+                                            <tr key={e.proposta}>
+                                                <td>{e.beneficiario}</td>
+                                                <td>{e.mo}</td>
+                                                <td>{e.idade}</td>
+                                                <td>{e.telefones}</td>
+                                                <td><Link to={'' + e.proposta} className="link">Detalhes</Link></td>
+                                            </tr>
+                                        )
+                                    }
+
                                 })}
                             </tbody>
                         </table>

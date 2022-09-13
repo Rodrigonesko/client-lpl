@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .container-login {
@@ -11,6 +12,11 @@
     box-shadow: 20px 20px 60px #bebebe,
         -20px -20px 60px #ffffff;
     padding: 1rem;
+    text-align: center;
+}
+
+.pro-sidebar {
+    height: 100vh !important;
 }
 
 .input-box {

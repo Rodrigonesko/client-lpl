@@ -5,6 +5,7 @@ import Home from "./pages/home/home";
 import UploadRn from "./pages/Rn/upload/UploadRn";
 import Rns from "./pages/Rn/Rns/Rns";
 import Detalhes from "./pages/Rn/Detalhes/Detalhes";
+import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -25,6 +26,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/rn/rns" element={<ProtectedRoute>
                     <Rns />
+                </ProtectedRoute>} />
+                <Route exact path="/rn/todas" element={<ProtectedRoute>
+                    <Todas />
                 </ProtectedRoute>} />
                 <Route path="/rn/rns/:proposta" element={<ProtectedRoute>
                     <Detalhes />

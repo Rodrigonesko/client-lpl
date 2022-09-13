@@ -16,6 +16,7 @@ const Sidebar = () => {
                 <SubMenu title="Rn" icon={<FaHeart />}>
                     <MenuItem><Link to='/rn/upload'>Upload</Link></MenuItem>
                     <MenuItem><Link to='/rn/rns'>Rns</Link></MenuItem>
+                    <MenuItem><Link to='/rn/todas'>Todas</Link></MenuItem>
                 </SubMenu>
             </Menu>
         </ProSidebar>

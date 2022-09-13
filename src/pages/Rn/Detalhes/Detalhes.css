@@ -1,6 +1,9 @@
 .section-detalhes-container {
     width: 100%;
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .detalhes-container {
@@ -11,15 +14,18 @@
 .info-proposta {
     display: flex;
     margin: 10px 0;
+    width: 100%;
 }
 
 .info-proposta span {
     border-bottom: 1px solid black;
     padding: 2px;
+    
 }
 
 .info-box {
     margin-right:  20px;
+    width: 100%;
 }
 
 .procedimento span{
@@ -38,6 +44,10 @@ input {
     padding: 3px;
     border: none;
     border-bottom: 1px solid black;
+}
+
+#email {
+    width: 60%;
 }
 
 .observacoes {
@@ -71,4 +81,49 @@ input {
 
 .concluir:hover {
     background-color: rgb(21, 102, 21);
+}
+
+.success {
+    background-color: #198754;
+    text-align: center;
+    padding: 1rem;
+    width: 50%;
+    margin-bottom: 15px;
+    border-radius: 18px;
+    border: 1px solid darkgreen;
+    color: white;
+    font-weight: bold;
+}
+
+.modal-overlay{
+    background-color: lightgray;
+    opacity: 0.9;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 200ms;
+    border: 1px solid black;
+}
+
+.modal-content {
+    background-color: white;
+    border: 1px solid black;
+    padding: 1rem;
+    transition: 200ms;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin-bottom: 1rem;
+}
+
+.modal-content button {
+    margin: 1rem;
 }

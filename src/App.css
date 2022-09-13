@@ -1,10 +1,11 @@
 .App {
   display: flex;
   position: relative;
-  height: 100vh;
 }
 
-
+.pro-sidebar {
+  height: 100vw;
+}
 
 @media (max-width: 767.98px) {
 
