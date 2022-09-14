@@ -21,7 +21,7 @@ const Todas = () => {
         }
     }
 
-    const transformData = () => {
+    const transformData = (rns) => {
         try {
 
             rnsForExcel = rns.map(e => {
@@ -71,9 +71,6 @@ const Todas = () => {
 
             })
 
-            console.log(rns.length);
-            console.log(rnsForExcel.length);
-
 
         } catch (error) {
             console.log(error);
@@ -82,7 +79,7 @@ const Todas = () => {
 
     const report = async () => {
 
-        transformData()
+        transformData(rns)
 
         try {
             const ws = XLSX.utils.json_to_sheet(rnsForExcel)
@@ -95,7 +92,64 @@ const Todas = () => {
             console.log(error);
         }
 
-        console.log('log');
+    }
+
+    const reportDiario = async () => {
+
+        const result = await Axios.get('http://10.0.121.55:3001/rn/report', { withCredentials: true })
+
+        let arrReportDiario = result.data.map(e => {
+
+            let contato1, contato2, contato3
+
+            if (e.dataContato1 !== undefined) {
+                contato1 = moment(e.dataContato1).format('DD/MM/YYYY') + ' ' + e.horarioContato1
+            }
+
+            if (e.dataContato2 !== undefined) {
+                contato2 = moment(e.dataContato2).format('DD/MM/YYYY') + ' ' + e.horarioContato2
+            }
+
+            if (e.dataContato3 !== undefined) {
+                contato3 = moment(e.dataContato3).format('DD/MM/YYYY') + ' ' + e.horarioContato3
+            }
+
+            return (
+                {
+                    DATA: e.data,
+                    'BENEFICIÁRIO': e.beneficiario,
+                    MO: e.mo,
+                    PROPOSTA: e.proposta,
+                    VIGENCIA: e.vigencia,
+                    'PEDIDO/PROPOSTA': e.pedido,
+                    TIPO: e.tipo,
+                    FILIAL: e.filial,
+                    IDADE: e.idade,
+                    'DATA RECEBIMENTO DO PEDIDO': e.dataRecebimento,
+                    PROCEDIMENTO: e.procedimento,
+                    'DOENÇA': e.doenca,
+                    CID: e.cid,
+                    'PERÍODO DA DOENÇA': e.periodo,
+                    PRC: e.prc,
+                    'TELEFONES BENEFICIARIO': e.telefones,
+                    'EMAIL BENEFICIARIO': e.email,
+                    '1º CTTO': contato1,
+                    '2º CTTO': contato2,
+                    '3º CTTO': contato3,
+                    'OBSERVAÇÕES DO CONTATO': e.observacoes
+
+                }
+            )
+        })
+
+        const ws = XLSX.utils.json_to_sheet(arrReportDiario)
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
+        XLSX.writeFile(wb, 'reportRn.xlsx')
+
+        console.log(ws);
+
+        // console.log(arrReportDiario);
+
     }
 
 
@@ -110,6 +164,7 @@ const Todas = () => {
                 <div className="rn-container">
                     <div className="report">
                         <button onClick={report}>Report</button>
+                        <button onClick={reportDiario} >Report Diario</button>
                     </div>
                     <div className="title">
                         <h2>Rns</h2>
