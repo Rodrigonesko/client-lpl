@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt } from "react-icons/fa";
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import 'react-pro-sidebar/dist/css/styles.css'
 
 
 
-const Sidebar = () => {
+const Sidebar = ({ accessLevel }) => {
 
     const [isOpen, setIsOpen] = useState(true)
 
@@ -15,6 +15,8 @@ const Sidebar = () => {
         setIsOpen(!isOpen)
     }
 
+    console.log(accessLevel);
+
     return (
         <>
             {
@@ -22,6 +24,15 @@ const Sidebar = () => {
                     <ProSidebar>
                         <Menu iconShape="square">
                             <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
+                            {
+                                 (
+                                    <SubMenu title="Admin" icon={<FaShieldAlt />} >
+                                        <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
+                                        <MenuItem>Alterar Senha Usuario</MenuItem>
+                                    </SubMenu>
+                                )
+                            }
+
                             <SubMenu title="Rn" icon={<FaHeadset />}>
                                 <MenuItem><Link to='/rn/upload'>Upload</Link></MenuItem>
                                 <MenuItem><Link to='/rn/rns'>Rns</Link></MenuItem>
@@ -47,9 +58,15 @@ const Sidebar = () => {
             }
             {
                 isOpen ? (
-                    <FaAngleDoubleLeft className="toggle" onClick={toggleMenu} />
+                    <div className="div-toggle">
+                        <FaAngleDoubleLeft className="toggle" onClick={toggleMenu} />
+                    </div>
+
                 ) : (
-                    <FaAngleDoubleRight className="toggle" onClick={toggleMenu} />
+                    <div className="div-toggle">
+                        <FaAngleDoubleRight className="toggle" onClick={toggleMenu} />
+                    </div>
+
                 )
             }
 

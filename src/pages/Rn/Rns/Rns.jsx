@@ -10,7 +10,7 @@ const Rns = () => {
 
     const searchRn = async () => {
         try {
-            const result = await Axios.get('http://10.0.121.55:3001/rn/rns', { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
             setRns(result.data)
         } catch (error) {
             console.log(error);

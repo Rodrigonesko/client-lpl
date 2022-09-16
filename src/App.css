@@ -1,6 +1,5 @@
 .App {
   display: flex;
-  position: relative;
 }
 
 .pro-sidebar {
@@ -8,13 +7,19 @@
   
 }
 
+.div-toggle {
+  width: 20px;
+  margin: 1rem 10px;
+}
+
 .toggle {
-  position: relative;
-  top: 15px;
+   /* position: relative;
+  top: 15px; */
   height: 24px;
   width: 24px;
-  left: 8px;
-  text-align: center;
+  /* left: 8px;
+  text-align: center;  */
+
   transition: 200ms;
 }
 

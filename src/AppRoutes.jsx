@@ -7,6 +7,8 @@ import Rns from "./pages/Rn/Rns/Rns";
 import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
+
+import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
 
 
@@ -33,6 +35,13 @@ const AppRoutes = () => {
                 <Route path="/rn/rns/:proposta" element={<ProtectedRoute>
                     <Detalhes />
                 </ProtectedRoute>} />
+
+                {/* Admin Routes*/}
+
+                <Route exact path="/admin/criar" element={<ProtectedRoute>
+                    <Create />
+                </ProtectedRoute>} />
+
             </Routes>
         </AuthProvider>
 

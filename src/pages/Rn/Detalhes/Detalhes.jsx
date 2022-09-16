@@ -5,6 +5,7 @@ import Axios from 'axios'
 import Modal from 'react-modal'
 import './Detalhes.css'
 
+
 Modal.setAppElement('#root')
 
 const Detalhes = () => {
@@ -35,7 +36,8 @@ const Detalhes = () => {
 
 
     const search = async () => {
-        const resultado = await Axios.get(`http://10.0.121.55:3001/rn/rns/${proposta}`, { withCredentials: true })
+
+        const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${proposta}`, { withCredentials: true })
         const data = resultado.data
 
         setDados(data)
@@ -60,7 +62,7 @@ const Detalhes = () => {
     const update = async () => {
 
         try {
-            const result = await Axios.put('http://10.0.121.55:3001/rn/rns/update', {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/rns/update`, {
                 proposta: proposta,
                 email: email,
                 dataContato1: data1,
@@ -87,7 +89,7 @@ const Detalhes = () => {
     const concluir = async () => {
 
         try {
-            const result = await Axios.put('http://10.0.121.55:3001/rn/rns/concluir', {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/rns/concluir`, {
                 proposta: proposta,
                 email: email,
                 dataContato1: data1,
@@ -115,7 +117,9 @@ const Detalhes = () => {
 
     useEffect(() => {
 
-        search()
+        search() 
+
+
 
     }, [])
 

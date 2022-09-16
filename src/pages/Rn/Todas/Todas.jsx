@@ -14,14 +14,14 @@ const Todas = () => {
 
     const searchRn = async () => {
         try {
-            const result = await Axios.get('http://10.0.121.55:3001/rn/rns', { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
             setRns(result.data)
         } catch (error) {
             console.log(error);
         }
     }
 
-    const transformData = (rns) => {
+    const transformData = () => {
         try {
 
             rnsForExcel = rns.map(e => {
@@ -79,7 +79,7 @@ const Todas = () => {
 
     const report = async () => {
 
-        transformData(rns)
+        transformData()
 
         try {
             const ws = XLSX.utils.json_to_sheet(rnsForExcel)
@@ -145,10 +145,6 @@ const Todas = () => {
         const ws = XLSX.utils.json_to_sheet(arrReportDiario)
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
         XLSX.writeFile(wb, 'reportRn.xlsx')
-
-        console.log(ws);
-
-        // console.log(arrReportDiario);
 
     }
 

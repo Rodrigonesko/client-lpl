@@ -27,7 +27,7 @@ const UploadRn = () => {
 
             setStatus('Enviando...')
 
-            const send = await Axios.post('http://10.0.121.55:3001/rn/upload', { result }, { withCredentials: true })
+            const send = await Axios.post(`${process.env.REACT_APP_API_KEY}/rn/upload`, { result }, { withCredentials: true })
 
             if(send.status === 200){
                 setStatus(send.data.message)

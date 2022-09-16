@@ -7,6 +7,7 @@ import Axios from 'axios'
 const ProtectedRoute = ({ children }) => {
 
     const { authToken } = useContext(AuthContext)
+    const {accessLevel} = useContext(AuthContext)
 
     const navigate = useNavigate()
 
