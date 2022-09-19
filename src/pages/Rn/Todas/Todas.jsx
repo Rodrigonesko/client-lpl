@@ -12,6 +12,14 @@ const Todas = () => {
 
     let rnsForExcel
 
+    const searchProposta = async (proposta) => {
+
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/pedido/${proposta}`, {withCredentials: true})
+
+        setRns(result.data)
+
+    }
+
     const searchRn = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
@@ -96,7 +104,7 @@ const Todas = () => {
 
     const reportDiario = async () => {
 
-        const result = await Axios.get('http://10.0.121.55:3001/rn/report', { withCredentials: true })
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/report`, { withCredentials: true })
 
         let arrReportDiario = result.data.map(e => {
 
@@ -164,6 +172,17 @@ const Todas = () => {
                     </div>
                     <div className="title">
                         <h2>Rns</h2>
+                    </div>
+                    <div className="filters">
+                        <div className="filter">
+                            <label htmlFor="proposta">Proposta: </label>
+                            <input type="text" id="proposta" name="proposta" placeholder="Proposta" onKeyUp={ e => {
+                                let proposta = e.target.value
+
+                                searchProposta(proposta)
+
+                            }} />
+                        </div>
                     </div>
                     <div className="table-container">
                         <table className="table">
