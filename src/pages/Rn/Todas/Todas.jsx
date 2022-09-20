@@ -192,6 +192,7 @@ const Todas = () => {
                                     <th>MO</th>
                                     <th>IDADE</th>
                                     <th>TELEFONE</th>
+                                    <th>CONFIRMADO?</th>
                                     <th>DETALHES</th>
                                 </tr>
                             </thead>
@@ -203,6 +204,7 @@ const Todas = () => {
                                             <td>{e.mo}</td>
                                             <td>{e.idade}</td>
                                             <td>{e.telefones}</td>
+                                            <td>{e.respostaBeneficiario}</td>
                                             <td><Link to={'../rn/rns/' + e.proposta} className="link">Detalhes</Link></td>
                                         </tr>
                                     )

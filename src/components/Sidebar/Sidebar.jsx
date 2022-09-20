@@ -37,6 +37,7 @@ const Sidebar = ({ accessLevel }) => {
                                 <MenuItem><Link to='/rn/upload'>Upload</Link></MenuItem>
                                 <MenuItem><Link to='/rn/rns'>Rns</Link></MenuItem>
                                 <MenuItem><Link to='/rn/todas'>Todas</Link></MenuItem>
+                                <MenuItem><Link to='/rn/uploadConfirmadas'>Upload Confirmadas</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title="Tele Entrevistas" icon={<FaClipboard />}>
                                 <SubMenu title='Agenda' icon={<FaCalendar />}>
@@ -47,7 +48,7 @@ const Sidebar = ({ accessLevel }) => {
                                     <MenuItem>Ajustar Horarios</MenuItem>
                                 </SubMenu>
                                 <MenuItem>Propostas</MenuItem>
-                                <MenuItem>Upload</MenuItem>
+                                <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>
 

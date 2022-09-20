@@ -6,3 +6,8 @@
 .filters {
     display: flex;
 }
+
+.section-rn-container {
+    height: 100vh;
+    overflow: auto;
+}

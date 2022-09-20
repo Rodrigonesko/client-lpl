@@ -3,13 +3,17 @@ import { Route, Routes } from 'react-router-dom'
 import Login from "./pages/login/Login";
 import Home from "./pages/home/home";
 import UploadRn from "./pages/Rn/upload/UploadRn";
+import UploadConfirmadas from "./pages/Rn/UploadConfirmadas/UploadConfirmadas";
 import Rns from "./pages/Rn/Rns/Rns";
 import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
+import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
+
 import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
+
 
 
 const AppRoutes = () => {
@@ -26,6 +30,9 @@ const AppRoutes = () => {
                 <Route exact path="/rn/upload" element={<ProtectedRoute>
                     <UploadRn />
                 </ProtectedRoute>} />
+                <Route exact path="/rn/uploadConfirmadas" element={<ProtectedRoute>
+                    <UploadConfirmadas />
+                </ProtectedRoute>} />
                 <Route exact path="/rn/rns" element={<ProtectedRoute>
                     <Rns />
                 </ProtectedRoute>} />
@@ -40,6 +47,12 @@ const AppRoutes = () => {
 
                 <Route exact path="/admin/criar" element={<ProtectedRoute>
                     <Create />
+                </ProtectedRoute>} />
+
+                {/* Tele entrevista Routes */}
+
+                <Route exact path="/entrevistas/upload" element={<ProtectedRoute>
+                    <UploadEntrevistas />
                 </ProtectedRoute>} />
 
             </Routes>
