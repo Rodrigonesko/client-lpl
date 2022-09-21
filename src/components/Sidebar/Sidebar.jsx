@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt } from "react-icons/fa";
+import { BsGraphUp} from 'react-icons/bs'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import 'react-pro-sidebar/dist/css/styles.css'
@@ -29,6 +30,9 @@ const Sidebar = ({ accessLevel }) => {
                                     <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                         <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                         <MenuItem>Alterar Senha Usuario</MenuItem>
+                                        <SubMenu title='Gráficos' icon={<BsGraphUp />} >
+                                            <MenuItem><Link to='/admin/graphicos/rn'>Rns</Link></MenuItem>
+                                        </SubMenu>
                                     </SubMenu>
                                 )
                             }

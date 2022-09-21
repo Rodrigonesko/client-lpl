@@ -1,0 +1,5 @@
+.section-graphs-container {
+    height: 100vh;
+    overflow: auto;
+    width: 100%;
+}
