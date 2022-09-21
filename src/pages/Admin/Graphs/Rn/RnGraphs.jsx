@@ -9,13 +9,14 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 import moment from 'moment';
 import * as XLSX from "xlsx";
 import './RnGraphs.css'
 
+moment.locale('pt-br')
 
 ChartJS.register(
   CategoryScale,
@@ -134,78 +135,44 @@ const RnGraphs = () => {
 
       console.log(rns);
 
-      let labelsMes = Object.values(rns).map(e => {
-        let mes = e.createdAt
-        mes = moment(mes).format('MM')
-        let mesLabel
-        switch (mes) {
-          case '01':
-            mesLabel = 'Janeiro'
-            break;
-          case '02':
-            mesLabel = 'Fevereiro'
-            break;
-          case '03':
-            mesLabel = 'Março'
-            break;
-          case '04':
-            mesLabel = 'Abril'
-            break;
-          case '05':
-            mesLabel = 'Maio'
-            break;
-          case '06':
-            mesLabel = 'Junho'
-            break;
-          case '07':
-            mesLabel = 'Julho'
-            break;
-          case '08':
-            mesLabel = 'Agosto'
-            break;
-          case '09':
-            mesLabel = 'Setembro'
-            break;
-          case '10':
-            mesLabel = 'Outubro'
-            break;
-          case '11':
-            mesLabel = 'Novembro'
-            break;
-          case '12':
-            mesLabel = 'Dezembro'
-            break;
-          default:
-            break;
-        }
-
-        return mesLabel
-      })
-
-      labelsMes = labelsMes.filter((mes, i) => labelsMes.indexOf(mes) === i);
-
-      console.log(labelsMes);
-
       let quantidadeConcluidas1 = 0
       let quantidadeConfirmadas1 = 0
 
       let quantidadeRecebidasMes = {
-        '1': 0,
-        '2': 0,
-        '3': 0,
-        '4': 0,
-        '5': 0,
-        '6': 0,
-        '7': 0,
-        '8': 0,
-        '9': 0,
-        '10': 0,
-        '11': 0,
-        '12': 0,
+        'Agosto': 0,
+        'Setembro': 0,
+      }
+      let quantidadeRealizadasMes = {
+        'Agosto': 0,
+        'Setembro': 0,
+      }
+
+      let quantidadeConfirmadasMes = {
+        'Agosto': 0,
+        'Setembro': 0,
       }
 
       Object.values(rns).forEach(item => {
-        quantidadeRecebidasMes[moment(item.createdAt).month() + 1] += 1
+        if ((moment(item.createdAt).month() + 1) === 8) {
+          quantidadeRecebidasMes['Agosto'] += 1
+          if (item.status === 'Concluido') {
+            quantidadeRealizadasMes['Agosto'] += 1
+          }
+          if (item.respostaBeneficiario === 'Sim') {
+            quantidadeConfirmadasMes['Agosto'] += 1
+          }
+        }
+        if ((moment(item.createdAt).month() + 1) === 9) {
+          quantidadeRecebidasMes['Setembro'] += 1
+          if (item.status === 'Concluido') {
+            quantidadeRealizadasMes['Setembro'] += 1
+          }
+          if (item.respostaBeneficiario === 'Sim') {
+            quantidadeConfirmadasMes['Setembro'] += 1
+          }
+        }
+        console.log(moment(item.createdAt).format('MMMM'));
+        // quantidadeRecebidasMes[moment(item.createdAt).month() + 1] += 1
       })
 
       console.log(quantidadeRecebidasMes);
@@ -248,22 +215,25 @@ const RnGraphs = () => {
       })
 
       setDataMes({
-        labels: labelsMes,
+        labels: [],
         datasets: [
           {
             label: 'Recebidas',
-            data: ['60', '90'],
+            data: quantidadeRecebidasMes,
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgba(255, 99, 132, 0.5)',
           },
           {
             label: 'Realizadas',
-            data: [50, 80],
+            data: quantidadeRealizadasMes,
             backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            borderColor: 'rgba(53, 162, 235, 0.5)',
           },
           {
             label: 'Beneficiario Concordou',
-            data: [50, 78],
+            data: quantidadeConfirmadasMes,
             backgroundColor: 'rgba(21, 190, 255, 0.5)',
+            borderColor: 'rgba(21, 190, 255, 0.5)',
           },
         ]
       })
@@ -299,6 +269,7 @@ const RnGraphs = () => {
         <div className="graphs-container">
           <Bar className="recebidas-x-realizadas" options={options} data={data} />
           <Bar className="recebidas-x-realizadas" options={optionsMes} data={dataMes} />
+          <Line className="recebidas-x-realizadas" options={optionsMes} data={dataMes} />
           <button onClick={report}>Report</button>
         </div>
       </section>

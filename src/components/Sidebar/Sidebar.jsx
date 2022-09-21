@@ -1,22 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt } from "react-icons/fa";
 import { BsGraphUp} from 'react-icons/bs'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
+import AuthContext from "../../context/AuthContext";
 import 'react-pro-sidebar/dist/css/styles.css'
 
 
 
-const Sidebar = ({ accessLevel }) => {
+const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(true)
+
+    const {accessLevel} = useContext(AuthContext)
 
     const toggleMenu = () => {
         console.log('toggle');
         setIsOpen(!isOpen)
     }
-
-    console.log(accessLevel);
 
     return (
         <>
@@ -26,7 +27,7 @@ const Sidebar = ({ accessLevel }) => {
                         <Menu iconShape="square">
                             <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
                             {
-                                 (
+                                accessLevel != 'false' ? (
                                     <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                         <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                         <MenuItem>Alterar Senha Usuario</MenuItem>
@@ -34,7 +35,7 @@ const Sidebar = ({ accessLevel }) => {
                                             <MenuItem><Link to='/admin/graphicos/rn'>Rns</Link></MenuItem>
                                         </SubMenu>
                                     </SubMenu>
-                                )
+                                ) : null
                             }
 
                             <SubMenu title="Rn" icon={<FaHeadset />}>

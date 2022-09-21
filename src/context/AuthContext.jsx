@@ -9,7 +9,7 @@ export const AuthProvider = ({children}) =>{
     const [accessLevel, setAccessLevel] = useState()
 
     return (
-        <AuthContext.Provider value={{authToken: null, setAuthToken, accessLevel: null, setAccessLevel}}>
+        <AuthContext.Provider value={{authToken, setAuthToken, accessLevel, setAccessLevel, name, setName}}>
             {children}
         </AuthContext.Provider>
     )

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import './style.css'
 import SideBar from '../../components/Sidebar/Sidebar'
 import Axios from 'axios'
+import AuthContext from "../../context/AuthContext";
 
 const Home = () => {
 
@@ -10,6 +11,8 @@ const Home = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [username, setUsername] = useState('')
     const [msg, setMsg] = useState('')
+
+    const {name} = useContext(AuthContext)
 
     const updatePassword = async () => {
 
@@ -54,7 +57,7 @@ const Home = () => {
             <section className="section">
                 <div className="container">
                     <div className="title">
-                        <h1>Bem vindo {username}!</h1>
+                        <h1>Bem vindo {name}!</h1>
                     </div>
 
                     {msg && (
