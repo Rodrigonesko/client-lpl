@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt } from "react-icons/fa";
-import { BsGraphUp} from 'react-icons/bs'
+import { BsGraphUp } from 'react-icons/bs'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
@@ -12,7 +12,7 @@ const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(true)
 
-    const {accessLevel} = useContext(AuthContext)
+    const { accessLevel } = useContext(AuthContext)
 
     const toggleMenu = () => {
         console.log('toggle');
@@ -56,7 +56,16 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>
-
+                                <SubMenu title='Liminares'>
+                                    <MenuItem><Link to='/liminares/andamento'>Em andamento</Link></MenuItem>
+                                    <MenuItem><Link to='/liminares/upload'>Upload</Link></MenuItem>
+                                    <MenuItem>Concluidas</MenuItem>
+                                </SubMenu>
+                                <SubMenu title='Liminares AJ'>
+                                    <MenuItem>Em andamento</MenuItem>
+                                    <MenuItem>Upload</MenuItem>
+                                    <MenuItem>Concluidas</MenuItem>
+                                </SubMenu>
                             </SubMenu>
                         </Menu>
                     </ProSidebar>

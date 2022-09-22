@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
 import Axios from 'axios'
+import logo from '../../imgs/logo.png'
 import './style.css'
 
 const Login = () => {
@@ -18,7 +19,7 @@ const Login = () => {
         console.log(email, password);
 
         try {
-            const result = await Axios.post('http://10.0.121.55:3001/login', {
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/login`, {
                 email,
                 password
             }, { withCredentials: true })
@@ -42,7 +43,7 @@ const Login = () => {
             <div className="container-login">
                 <form action="#" method="POST">
                     <div className="logo">
-
+                        <img src={logo} width={300} alt="logo lpl" srcset="logo lpl" />
                     </div>
                     <div className="title">
                         <h3>Login</h3>

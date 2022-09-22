@@ -11,6 +11,9 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
 
+import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
+import AndamentoLiminar from "./pages/Liminares/Andamento/AndamentoLiminar";
+
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
 
 import Create from "./pages/Admin/Create/Create";
@@ -59,6 +62,17 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/upload" element={<ProtectedRoute>
                     <UploadEntrevistas />
                 </ProtectedRoute>} />
+
+                {/* Liminares Routes */}
+
+                <Route exact path="/liminares/upload" element={<ProtectedRoute>
+                    <UploadLiminar />
+                </ProtectedRoute>} />
+                
+                <Route exact path="/liminares/andamento" element={<ProtectedRoute>
+                    <AndamentoLiminar />
+                </ProtectedRoute>} />
+
 
             </Routes>
         </AuthProvider>

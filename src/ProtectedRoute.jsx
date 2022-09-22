@@ -17,8 +17,6 @@ const ProtectedRoute = ({ children }) => {
             setName(result.data.name)
             setAccessLevel(result.data.accessLevel)
 
-            console.log(name, accessLevel);
-
         } catch (error) {
             navigate('/login')
         }
