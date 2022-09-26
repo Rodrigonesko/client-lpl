@@ -31,6 +31,7 @@ const Sidebar = () => {
                                     <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                         <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                         <MenuItem>Alterar Senha Usuario</MenuItem>
+                                        <MenuItem><Link to='/admin/liberarModulos' >Liberação Módulos</Link></MenuItem>
                                         <SubMenu title='Gráficos' icon={<BsGraphUp />} >
                                             <MenuItem><Link to='/admin/graphicos/rn'>Rns</Link></MenuItem>
                                         </SubMenu>

@@ -6,16 +6,22 @@ import Axios from 'axios'
 
 const ProtectedRoute = ({ children }) => {
 
-    const { authToken, accessLevel, setAccessLevel, name, setName} = useContext(AuthContext)
+    const { authToken, accessLevel, setAccessLevel, name, setName, setLiminares, setLiminaresAj, setEnfermeiro, setElegibilidade} = useContext(AuthContext)
 
     const navigate = useNavigate()
 
     const verifyToken = async () =>{
         try {
-            const result = await Axios.get('http://10.0.121.55:3001/verifyToken', {withCredentials: true})
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/verifyToken`, {withCredentials: true})
 
             setName(result.data.name)
             setAccessLevel(result.data.accessLevel)
+
+            const modules = await Axios.get(`${process.env.REACT_APP_API_KEY}/infoUser`, {withCredentials: true})
+            setLiminares(modules.data.user.liminares)
+            setLiminaresAj(modules.data.user.liminaresAj)
+            setEnfermeiro(modules.data.user.enfermeiro)
+            setElegibilidade(modules.data.user.elegibilidade)
 
         } catch (error) {
             navigate('/login')

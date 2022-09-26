@@ -15,6 +15,7 @@ import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
 import AndamentoLiminar from "./pages/Liminares/Andamento/AndamentoLiminar";
 
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
+import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 
 import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
@@ -53,6 +54,9 @@ const AppRoutes = () => {
                 <Route exact path="/admin/criar" element={<ProtectedRoute>
                     <Create />
                 </ProtectedRoute>} />
+                <Route exact path="/admin/liberarModulos" element={<ProtectedRoute>
+                    <LiberacaoModulos />
+                </ProtectedRoute>} />
                 <Route exact path="/admin/graphicos/rn" element={<ProtectedRoute>
                     <RnGraphs />
                 </ProtectedRoute>} />
@@ -67,8 +71,7 @@ const AppRoutes = () => {
 
                 <Route exact path="/liminares/upload" element={<ProtectedRoute>
                     <UploadLiminar />
-                </ProtectedRoute>} />
-                
+                </ProtectedRoute>} />        
                 <Route exact path="/liminares/andamento" element={<ProtectedRoute>
                     <AndamentoLiminar />
                 </ProtectedRoute>} />

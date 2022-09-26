@@ -56,3 +56,27 @@
     background-color: rgb(194, 227, 238);
 }
 
+
+.vermelho {
+    padding: 5px;
+    border-radius: 50%;
+    width: 5px;
+    border: none;
+    background-color: red;
+}
+
+.vermelho:hover {
+    background-color: red;
+}
+
+.verde {
+    padding: 5px;
+    border-radius: 50%;
+    width: 5px;
+    border: none;
+    background-color: green;
+}
+
+.verde:hover {
+    background-color: green;
+}
