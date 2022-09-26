@@ -15,6 +15,7 @@ import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
 import AndamentoLiminar from "./pages/Liminares/Andamento/AndamentoLiminar";
 
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
+import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 
 import Create from "./pages/Admin/Create/Create";
@@ -59,6 +60,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/graphicos/rn" element={<ProtectedRoute>
                     <RnGraphs />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/graphicos/liminares" element={<ProtectedRoute>
+                    <LiminaresGraphs />
                 </ProtectedRoute>} />
 
                 {/* Tele entrevista Routes */}

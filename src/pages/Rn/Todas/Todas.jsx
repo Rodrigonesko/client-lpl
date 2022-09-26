@@ -14,7 +14,7 @@ const Todas = () => {
 
     const searchProposta = async (proposta) => {
 
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/pedido/${proposta}`, {withCredentials: true})
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/pedido/${proposta}`, { withCredentials: true })
 
         setRns(result.data)
 
@@ -176,7 +176,7 @@ const Todas = () => {
                     <div className="filters">
                         <div className="filter">
                             <label htmlFor="proposta">Proposta: </label>
-                            <input type="text" id="proposta" name="proposta" placeholder="Proposta" onKeyUp={ e => {
+                            <input type="text" id="proposta" name="proposta" placeholder="Proposta" onKeyUp={e => {
                                 let proposta = e.target.value
 
                                 searchProposta(proposta)

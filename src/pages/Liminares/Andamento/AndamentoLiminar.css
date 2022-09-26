@@ -80,3 +80,18 @@
 .verde:hover {
     background-color: green;
 }
+
+.filters {
+    display: flex;
+    align-items: center;
+}
+
+.report {
+    padding: 8px;
+    position: absolute;
+    right: 2rem;
+}
+
+.concluir {
+    padding: 0.5rem;
+}

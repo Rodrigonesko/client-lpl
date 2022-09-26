@@ -3,6 +3,7 @@ import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment";
 import AuthContext from "../../../context/AuthContext";
+import * as XLSX from "xlsx";
 import './AndamentoLiminar.css'
 
 const AndamentoLiminar = () => {
@@ -10,7 +11,40 @@ const AndamentoLiminar = () => {
     const [liminares, setLiminares] = useState([])
     const [analistas, setAnalistas] = useState([])
 
+
     const { name } = useContext(AuthContext)
+
+    let aux = 0
+
+    const report = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/liminares/show`, { withCredentials: true })
+
+            let LimForExcel = Object.values(result.data.liminares).map(e => {
+                return (
+                    {
+                        Analista: e.analista,
+                        Id: e.idLiminar,
+                        MO: e.mo,
+                        Beneficiario: e.beneficiario,
+                        'Data Abertura': moment(e.createdAt).format('DD/MM/YYYY'),
+                        'Data Conclusão': moment(e.dataConclusao).format('DD/MM/YYYY'),
+                        Situacao: e.situacao
+
+                    }
+                )
+
+            })
+
+            const ws = XLSX.utils.json_to_sheet(Object.values(LimForExcel))
+            const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
+            XLSX.writeFile(wb, 'reportRn.xlsx')
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const serchLiminares = async () => {
 
@@ -82,23 +116,23 @@ const AndamentoLiminar = () => {
 
         setLiminares([])
 
-        if(analista.target.value === 'Todos') {
+        if (analista.target.value === 'Todos') {
             serchLiminares()
-        } 
+        }
 
-        Object.values(result.data.liminares).forEach(e=>{
-            if(e.analista === analista.target.value){
-               setLiminares(liminares => [...liminares, e])
+        Object.values(result.data.liminares).forEach(e => {
+            if (e.analista === analista.target.value) {
+                setLiminares(liminares => [...liminares, e])
             }
         })
 
     }
 
     const changeAnalist = async e => {
-        
+
         const analista = e.target.value
 
-        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/liminares/change`, {analista}, {withCredentials: true})
+        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/liminares/change`, { analista }, { withCredentials: true })
 
         console.log(result);
 
@@ -108,6 +142,7 @@ const AndamentoLiminar = () => {
     useEffect(() => {
         serchLiminares()
         searchAnalistas()
+
     }, [])
 
     return (
@@ -116,7 +151,7 @@ const AndamentoLiminar = () => {
             <section className="section-andamento-container">
                 <div className="andamento-container">
                     <div className="title">
-                        <h2>Liminares em Andamento</h2>
+                        <h2>Liminares em Andamento: <span id="qtd"></span></h2>
                     </div>
                     <div className="filters">
                         <label htmlFor="analistas">Analistas: </label>
@@ -131,6 +166,7 @@ const AndamentoLiminar = () => {
                                 })
                             }
                         </select>
+                        <button className="report" onClick={report}>Report</button>
                     </div>
                     <div className="table-container">
                         <table className="table">
@@ -147,10 +183,13 @@ const AndamentoLiminar = () => {
                                 </tr>
                             </thead>
                             <tbody>
+
                                 {Object.values(liminares).map(e => {
 
                                     if (e.situacao == 'andamento') {
                                         let status = verifyDate(e.dataVigencia)
+
+                                        aux++
 
                                         return (
                                             <tr key={e._id}>
@@ -178,16 +217,20 @@ const AndamentoLiminar = () => {
                                                         <button className="vermelho"></button>
                                                     )}
                                                 </td>
-                                                <td><button onClick={() => concluir(e._id)}>Concluir</button></td>
+                                                <td><button onClick={() => concluir(e._id)} className='concluir'>Concluir</button></td>
 
                                             </tr>
                                         )
                                     }
 
                                 })}
+
                             </tbody>
                         </table>
                     </div>
+                    {/* {
+                        document.getElementById('qtd').innerHTML = aux
+                    } */}
                 </div>
             </section>
         </>
