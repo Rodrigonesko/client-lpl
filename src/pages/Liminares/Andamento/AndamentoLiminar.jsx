@@ -54,6 +54,8 @@ const AndamentoLiminar = () => {
 
             setLiminares(result.data.liminares)
 
+            
+
         } catch (error) {
             console.log(error);
         }
@@ -184,7 +186,9 @@ const AndamentoLiminar = () => {
                             </thead>
                             <tbody>
 
-                                {Object.values(liminares).map(e => {
+                                {
+                                
+                                Object.values(liminares).map(e => {
 
                                     if (e.situacao == 'andamento') {
                                         let status = verifyDate(e.dataVigencia)

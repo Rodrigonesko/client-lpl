@@ -13,6 +13,7 @@ import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
 
 import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
 import AndamentoLiminar from "./pages/Liminares/Andamento/AndamentoLiminar";
+import ReportLiminar from "./pages/Liminares/Report/ReportLiminar";
 
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
 import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
@@ -78,7 +79,11 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />        
                 <Route exact path="/liminares/andamento" element={<ProtectedRoute>
                     <AndamentoLiminar />
+                </ProtectedRoute>} />        
+                <Route exact path="/liminares/report" element={<ProtectedRoute>
+                    <ReportLiminar />
                 </ProtectedRoute>} />
+                
 
 
             </Routes>

@@ -49,6 +49,19 @@ export const optionsMes = {
     },
 };
 
+export const optionsDaily = {
+    responsive: true,
+    plugins: {
+        legend: {
+            position: 'top',
+        },
+        title: {
+            display: true,
+            text: 'Recebidas x Concluídas por dia',
+        },
+    },
+};
+
 
 const LiminaresGraphs = () => {
 
@@ -64,6 +77,12 @@ const LiminaresGraphs = () => {
         labels: [],
         datasets: []
     })
+
+    const [dataDaily, setDataDaily] = useState({
+        labels: [],
+        datasets: []
+    })
+
 
 
     const searchLiminares = async () => {
@@ -94,79 +113,45 @@ const LiminaresGraphs = () => {
             ]
         })
 
-        let quantidadeRecebidasMes = {
-            'March': 0,
-            'April': 0,
-            'May': 0,
-            'June': 0,
-            'July': 0,
-            'August': 0,
-            'September': 0
-        }
-
-        let quantidadeConcluidasMes = {
-            'March': 0,
-            'April': 0,
-            'May': 0,
-            'June': 0,
-            'July': 0,
-            'August': 0,
-            'September': 0
-        }
+        let quantidadeRecebidasMes = new Map()
+        let quantidadeConcluidasMes = new Map()
 
         Object.values(liminares).forEach(item => {
 
-            if (moment(item.createdAt).format('MMMM') === 'March') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
-            }
-            if (moment(item.createdAt).format('MMMM') === 'April') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
-            }
-            if (moment(item.createdAt).format('MMMM') === 'May') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
-            }
-            if (moment(item.createdAt).format('MMMM') === 'June') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
-            }
-            if (moment(item.createdAt).format('MMMM') === 'July') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
-            }
-            if (moment(item.createdAt).format('MMMM') === 'August') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
-            }
-            if (moment(item.createdAt).format('MMMM') === 'September') {
-                quantidadeRecebidasMes[moment(item.createdAt).format('MMMM')] += 1
-                if (item.situacao !== 'andamento') {
-                    quantidadeConcluidasMes[moment(item.createdAt).format('MMMM')] += 1
-                }
+            if (quantidadeRecebidasMes.has(moment(item.createdAt).format('MMMM'))) {
+                quantidadeRecebidasMes.set(moment(item.createdAt).format('MMMM'), quantidadeRecebidasMes.get(moment(item.createdAt).format('MMMM')) + 1)
+            } else {
+                quantidadeRecebidasMes.set(moment(item.createdAt).format('MMMM'), 1)
             }
 
-            // console.log(moment(item.createdAt).format('MMMM'));
+            if (quantidadeConcluidasMes.has(moment(item.dataConclusao).format('MMMM'))) {
+                quantidadeConcluidasMes.set(moment(item.createdAt).format('MMMM'), quantidadeConcluidasMes.get(moment(item.createdAt).format('MMMM')) + 1)
+            } else {
+                quantidadeConcluidasMes.set(moment(item.dataConclusao).format('MMMM'), 1)
+            }
 
         })
 
         console.log(quantidadeRecebidasMes);
 
+        let labelsMes = []
+
+        quantidadeRecebidasMes.forEach((e, key)=>{
+            labelsMes.push(key)
+        })
+
+        console.log(labelsMes);
+
+        quantidadeRecebidasMes = [...quantidadeRecebidasMes.values()]
+
+        quantidadeConcluidasMes = [...quantidadeConcluidasMes.values()]
+
+
+
+        //console.log(quantidadeRecebidasMes);
+
         setDataMes({
-            labels: [],
+            labels: labelsMes,
             datasets: [
                 {
                     label: 'Recebidas',
@@ -177,6 +162,44 @@ const LiminaresGraphs = () => {
                 {
                     label: 'Realizadas',
                     data: quantidadeConcluidasMes,
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    borderColor: 'rgba(53, 162, 235, 0.5)',
+                },
+            ]
+        })
+
+        let recebidasDiarias = new Map()
+        let concluidasDiarias = new Map()
+
+        Object.values(liminares).forEach(e => {
+            if (recebidasDiarias.has(e.createdAt)) {
+                recebidasDiarias.set(e.createdAt, recebidasDiarias.get(e.createdAt) + 1)
+            } else {
+                recebidasDiarias.set(e.createdAt, 1)
+            }
+            if (concluidasDiarias.has(e.dataConclusao)) {
+                concluidasDiarias.set(e.dataConclusao, concluidasDiarias.get(e.dataConclusao) + 1)
+            } else {
+                concluidasDiarias.set(e.dataConclusao, 1)
+            }
+        })
+
+        let recebidas = [...recebidasDiarias.values()]
+
+        let concluidas = [...concluidasDiarias.values()]
+
+        setDataDaily({
+            labels: recebidas,
+            datasets: [
+                {
+                    label: 'Recebidas',
+                    data: recebidas,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                },
+                {
+                    label: 'Concluidas',
+                    data: concluidas,
                     backgroundColor: 'rgba(53, 162, 235, 0.5)',
                     borderColor: 'rgba(53, 162, 235, 0.5)',
                 },
@@ -202,6 +225,7 @@ const LiminaresGraphs = () => {
                     <div>
                         <Bar className="recebidas-x-realizadas" options={options} data={data} />
                         <Bar className="recebidas-x-realizadas" options={optionsMes} data={dataMes} />
+                        <Line className="recebidas-x-realizadas" options={optionsDaily} data={dataDaily} />
                     </div>
                 </div>
             </section>

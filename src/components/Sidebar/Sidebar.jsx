@@ -61,12 +61,11 @@ const Sidebar = () => {
                                 <SubMenu title='Liminares'>
                                     <MenuItem><Link to='/liminares/andamento'>Em andamento</Link></MenuItem>
                                     <MenuItem><Link to='/liminares/upload'>Upload</Link></MenuItem>
-                                    <MenuItem>Concluidas</MenuItem>
+                                    <MenuItem><Link to='/liminares/report'>Report</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu title='Liminares AJ'>
                                     <MenuItem>Em andamento</MenuItem>
                                     <MenuItem>Upload</MenuItem>
-                                    <MenuItem>Concluidas</MenuItem>
                                 </SubMenu>
                             </SubMenu>
                         </Menu>

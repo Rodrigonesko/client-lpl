@@ -133,50 +133,8 @@ const RnGraphs = () => {
       const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
       setRns(result.data)
 
-      console.log(rns);
-
       let quantidadeConcluidas1 = 0
       let quantidadeConfirmadas1 = 0
-
-      let quantidadeRecebidasMes = {
-        'Agosto': 0,
-        'Setembro': 0,
-      }
-      let quantidadeRealizadasMes = {
-        'Agosto': 0,
-        'Setembro': 0,
-      }
-
-      let quantidadeConfirmadasMes = {
-        'Agosto': 0,
-        'Setembro': 0,
-      }
-
-      Object.values(rns).forEach(item => {
-        if ((moment(item.createdAt).month() + 1) === 8) {
-          quantidadeRecebidasMes['Agosto'] += 1
-          if (item.status === 'Concluido') {
-            quantidadeRealizadasMes['Agosto'] += 1
-          }
-          if (item.respostaBeneficiario === 'Sim') {
-            quantidadeConfirmadasMes['Agosto'] += 1
-          }
-        }
-        if ((moment(item.createdAt).month() + 1) === 9) {
-          quantidadeRecebidasMes['Setembro'] += 1
-          if (item.status === 'Concluido') {
-            quantidadeRealizadasMes['Setembro'] += 1
-          }
-          if (item.respostaBeneficiario === 'Sim') {
-            quantidadeConfirmadasMes['Setembro'] += 1
-          }
-        }
-        console.log(moment(item.createdAt).format('MMMM'));
-        // quantidadeRecebidasMes[moment(item.createdAt).month() + 1] += 1
-      })
-
-      console.log(quantidadeRecebidasMes);
-
 
       Object.values(rns).forEach(e => {
 
@@ -187,8 +145,6 @@ const RnGraphs = () => {
           quantidadeConfirmadas1++
         }
       })
-
-
 
       setQuantidadeConcluidas(quantidadeConcluidas1)
       setQuantidadeConfirmadas(quantidadeConfirmadas1)
@@ -214,8 +170,47 @@ const RnGraphs = () => {
         ],
       })
 
+      let quantidadeRecebidasMes = new Map()
+      let quantidadeRealizadasMes = new Map()
+      let quantidadeConfirmadasMes = new Map()
+
+      Object.values(rns).forEach(item => {
+
+        if (quantidadeRecebidasMes.has(moment(item.createdAt).format('MMMM/YY'))) {
+          quantidadeRecebidasMes.set(moment(item.createdAt).format('MMMM/YY'), quantidadeRecebidasMes.get(moment(item.createdAt).format('MMMM/YY')) + 1)
+          if (item.status === 'Concluido') {
+            if (quantidadeRealizadasMes.has(moment(item.createdAt).format('MMMM/YY'))) {
+              quantidadeRealizadasMes.set(moment(item.createdAt).format('MMMM/YY'), quantidadeRealizadasMes.get(moment(item.createdAt).format('MMMM/YY')) + 1)
+            } else {
+              quantidadeRealizadasMes.set(moment(item.createdAt).format('MMMM/YY'), 2)
+            }
+          }
+
+          if (item.respostaBeneficiario === 'Sim') {
+            if (quantidadeConfirmadasMes.has(moment(item.createdAt).format('MMMM/YY'))) {
+              quantidadeConfirmadasMes.set(moment(item.createdAt).format('MMMM/YY'), quantidadeConfirmadasMes.get(moment(item.createdAt).format('MMMM/YY')) + 1)
+            } else {
+              quantidadeConfirmadasMes.set(moment(item.createdAt).format('MMMM/YY'), 2)
+            }
+          }
+
+        } else {
+          quantidadeRecebidasMes.set(moment(item.createdAt).format('MMMM/YY'), 1)
+        }
+      })
+
+      let labelsMes = []
+
+      quantidadeRecebidasMes.forEach((e, key) => {
+        labelsMes.push(key)
+      })
+
+      quantidadeRecebidasMes = [...quantidadeRecebidasMes.values()]
+      quantidadeRealizadasMes = [...quantidadeRealizadasMes.values()]
+      quantidadeConfirmadasMes = [...quantidadeConfirmadasMes.values()]
+
       setDataMes({
-        labels: [],
+        labels: labelsMes,
         datasets: [
           {
             label: 'Recebidas',
@@ -245,13 +240,10 @@ const RnGraphs = () => {
 
   const report = () => {
     transformData()
-    console.log('report');
     try {
       const ws = XLSX.utils.json_to_sheet(rnsForExcel)
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
       XLSX.writeFile(wb, 'reportRnCompleto.xlsx')
-
-      console.log(ws);
 
     } catch (error) {
       console.log(error);
