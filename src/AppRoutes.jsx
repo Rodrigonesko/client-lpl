@@ -11,9 +11,17 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
 
+/* -----------------  Liminares ----------------- */
+
 import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
 import AndamentoLiminar from "./pages/Liminares/Andamento/AndamentoLiminar";
 import ReportLiminar from "./pages/Liminares/Report/ReportLiminar";
+
+/* Projeto AJ */
+
+import UploadAj from "./pages/ProjetoAj/Upload/UploadAj";
+import AndamentoAj from "./pages/ProjetoAj/Andamento/AndamentoAj";
+import ReportAj from "./pages/ProjetoAj/Report/ReportAj";
 
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
 import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
@@ -76,14 +84,24 @@ const AppRoutes = () => {
 
                 <Route exact path="/liminares/upload" element={<ProtectedRoute>
                     <UploadLiminar />
-                </ProtectedRoute>} />        
+                </ProtectedRoute>} />
                 <Route exact path="/liminares/andamento" element={<ProtectedRoute>
                     <AndamentoLiminar />
-                </ProtectedRoute>} />        
+                </ProtectedRoute>} />
                 <Route exact path="/liminares/report" element={<ProtectedRoute>
                     <ReportLiminar />
+
                 </ProtectedRoute>} />
-                
+                <Route exact path="/liminares/uploadAj" element={<ProtectedRoute>
+                    <UploadAj />
+                </ProtectedRoute>} />
+                <Route exact path="/liminares/andamentoAj" element={<ProtectedRoute>
+                    <AndamentoAj />
+                </ProtectedRoute>} />
+                <Route exact path="/liminares/reportAj" element={<ProtectedRoute>
+                    <ReportAj />
+                </ProtectedRoute>} />
+
 
 
             </Routes>

@@ -176,6 +176,8 @@ const RnGraphs = () => {
 
       Object.values(rns).forEach(item => {
 
+        console.log(item.createdAt+' - ' + item._id);
+
         if (quantidadeRecebidasMes.has(moment(item.createdAt).format('MMMM/YY'))) {
           quantidadeRecebidasMes.set(moment(item.createdAt).format('MMMM/YY'), quantidadeRecebidasMes.get(moment(item.createdAt).format('MMMM/YY')) + 1)
           if (item.status === 'Concluido') {

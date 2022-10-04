@@ -64,8 +64,9 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/liminares/report'>Report</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu title='Liminares AJ'>
-                                    <MenuItem>Em andamento</MenuItem>
-                                    <MenuItem>Upload</MenuItem>
+                                    <MenuItem><Link to='/liminares/andamentoAj'>Em andamento</Link></MenuItem>
+                                    <MenuItem><Link to='/liminares/uploadAj'>Upload</Link></MenuItem>
+                                    <MenuItem><Link to='/liminares/reportAj'>Report</Link></MenuItem>
                                 </SubMenu>
                             </SubMenu>
                         </Menu>
