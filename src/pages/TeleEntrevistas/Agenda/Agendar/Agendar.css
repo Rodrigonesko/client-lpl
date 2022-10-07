@@ -1,0 +1,42 @@
+.gerar-horarios {
+    display: flex;
+    align-items: center;
+}
+
+.btn-gerar-horarios {
+    padding: 6px;
+}
+
+.section-agendamento-container {
+    width: 100%;
+}
+
+.agendamento-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.gerar-horarios {
+    margin-top: 1rem;
+}
+
+.agendar {
+    margin-top: 1rem;
+}
+
+.nao-agendados {
+    margin-top: 1rem;
+}
+
+.btn-cancelar {
+    background-color: red;
+    color: white;
+    font-weight: 600;
+    border: none
+}
+
+.btn-cancelar:hover {
+    background-color: darkred;
+}

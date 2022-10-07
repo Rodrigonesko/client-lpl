@@ -9,7 +9,11 @@ import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
+
+/* -----------------  Tele Entrevistas ----------------- */
+
 import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
+import Agendar from "./pages/TeleEntrevistas/Agenda/Agendar/Agendar";
 
 /* -----------------  Liminares ----------------- */
 
@@ -78,6 +82,9 @@ const AppRoutes = () => {
 
                 <Route exact path="/entrevistas/upload" element={<ProtectedRoute>
                     <UploadEntrevistas />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/agenda/agendar" element={<ProtectedRoute>
+                    <Agendar />
                 </ProtectedRoute>} />
 
                 {/* Liminares Routes */}

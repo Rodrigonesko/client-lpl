@@ -48,7 +48,7 @@ const Sidebar = () => {
                             </SubMenu>
                             <SubMenu title="Tele Entrevistas" icon={<FaClipboard />}>
                                 <SubMenu title='Agenda' icon={<FaCalendar />}>
-                                    <MenuItem>Agendar</MenuItem>
+                                    <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
                                     <MenuItem>Agendado</MenuItem>
                                     <MenuItem>Mensagens</MenuItem>
                                     <MenuItem>Anexar</MenuItem>

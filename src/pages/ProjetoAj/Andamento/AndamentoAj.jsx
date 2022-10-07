@@ -2,19 +2,32 @@ import React, { useEffect, useState, useContext } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment";
+import Modal from 'react-modal';
 import AuthContext from "../../../context/AuthContext";
 import * as XLSX from "xlsx";
 import './AndamentoAj.css'
+
+Modal.setAppElement('#root')
 
 const AndamentoAj = () => {
 
     const [liminares, setLiminares] = useState([])
     const [analistas, setAnalistas] = useState([])
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [comentarios, setComentarios] = useState()
 
 
     const { name } = useContext(AuthContext)
 
     let aux = 0
+
+    const openModal = () => {
+        setModalIsOpen(true)
+    }
+
+    const closeModal = () => {
+        setModalIsOpen(false)
+    }
 
     const report = async () => {
         try {
@@ -54,7 +67,7 @@ const AndamentoAj = () => {
 
             setLiminares(result.data.liminares)
 
-            
+
 
         } catch (error) {
             console.log(error);
@@ -181,62 +194,90 @@ const AndamentoAj = () => {
                                     <th>DATA ABERTURA</th>
                                     <th>DATA VENCIMENTO</th>
                                     <th>STATUS</th>
+                                    <th>AGENDA</th>
                                     <th>CONCLUIR</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                                 {
-                                
-                                Object.values(liminares).map(e => {
+                                    Object.values(liminares).map(e => {
 
-                                    if (e.situacao == 'andamento') {
-                                        let status = verifyDate(e.dataVigencia)
+                                        if (e.situacao == 'andamento') {
+                                            let status = verifyDate(e.dataVigencia)
 
-                                        aux++
+                                            aux++
 
-                                        return (
-                                            <tr key={e._id}>
-                                                <td>
-                                                    <select name="analista" id="analista" onChange={changeAnalist}>
-                                                        <option value={e.analista}>{e.analista}</option>
-                                                        {
-                                                            analistas.map(analista => {
-                                                                return (
-                                                                    <option key={analista} value={[analista, e._id]}>{analista}</option>
-                                                                )
-                                                            })
-                                                        }
-                                                    </select>
-                                                </td>
-                                                <td>{e.idLiminar}</td>
-                                                <td>{e.mo}</td>
-                                                <td>{e.beneficiario}</td>
-                                                <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
-                                                <td>{moment(e.dataVigencia).format('DD/MM/YYYY HH:mm:ss')}</td>
-                                                <td>
-                                                    {status ? (
-                                                        <button className="verde"></button>
-                                                    ) : (
-                                                        <button className="vermelho"></button>
-                                                    )}
-                                                </td>
-                                                <td><button onClick={() => concluir(e._id)} className='concluir'>Concluir</button></td>
+                                            return (
+                                                <tr key={e._id}>
+                                                    <td>
+                                                        <select name="analista" id="analista" onChange={changeAnalist}>
+                                                            <option value={e.analista}>{e.analista}</option>
+                                                            {
+                                                                analistas.map(analista => {
+                                                                    return (
+                                                                        <option key={analista} value={[analista, e._id]}>{analista}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td>{e.idLiminar}</td>
+                                                    <td>{e.mo}</td>
+                                                    <td>{e.beneficiario}</td>
+                                                    <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
+                                                    <td>{moment(e.dataVigencia).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                    <td>
+                                                        {status ? (
+                                                            <button className="verde"></button>
+                                                        ) : (
+                                                            <button className="vermelho"></button>
+                                                        )}
+                                                    </td>
+                                                    <td> <button onClick={() => { openModal() }} className="agenda" >Agenda</button></td>
+                                                    <td><button onClick={() => concluir(e._id)} className='concluir'>Concluir</button></td>
 
-                                            </tr>
-                                        )
-                                    }
+                                                </tr>
+                                            )
+                                        }
 
-                                })}
+                                    })}
 
                             </tbody>
                         </table>
                     </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        contentLabel="Exemplo"
+                        overlayClassName='modal-overlay'
+                        className='modal-content'>
+                        <h2>Agenda</h2>
+                        <div className="comment-container">
+                            <textarea name="comentario" id="comentario" cols="30" rows="3"></textarea>
+                            <button className="enviar-comentario" >Enviar</button>
+                        </div>
+                        <div className="container-tabela">
+                            <table className="tabela-agenda" border='1'>
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Data</th>
+                                        <th>Comentário</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="table-body">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button onClick={closeModal}>Fechar</button>
+                    </Modal>
                     {/* {
                         document.getElementById('qtd').innerHTML = aux
                     } */}
                 </div>
-            </section>
+            </section >
         </>
     )
 }
