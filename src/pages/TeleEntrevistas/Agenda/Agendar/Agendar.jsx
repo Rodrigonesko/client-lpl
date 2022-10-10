@@ -2,11 +2,25 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Agendar.css'
+import moment from "moment";
 
 const Agendar = () => {
 
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
+    const [dataGerar, setDataGerar] = useState('')
+    const [datasEntrevista, setDatasEntrevista] = useState([])
+    const [enfermeiro, setEnfermeiro] = useState('')
+    const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
+
+    const [beneficiario, setBeneficiario] = useState('')
+    const [dataEntrevista, setDataEntrevista] = useState('')
+
+    const ajustarDia = (data) => {
+        const arr = data.split('/')
+
+        return `${arr[2]}-${arr[1]}-${arr[0]}`
+    }
 
     const searchPropostas = async () => {
         try {
@@ -21,13 +35,65 @@ const Agendar = () => {
 
     const searchEnfermeiros = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, {withCredentials: true})
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, { withCredentials: true })
 
             setEnfermeiros(result.data.enfermeiros)
 
-            console.log(enfermeiros); 
+            console.log(enfermeiros);
 
         } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const gerarHorarios = async () => {
+        try {
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/gerarHorarios`, { dataGerar }, { withCredentials: true })
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const searchDataDisp = async (enfermeiro) => {
+        try {
+
+            setEnfermeiro(enfermeiro)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarDiasDisponiveis/${enfermeiro}`, { withCredentials: true })
+
+            setDatasEntrevista(result.data.dias)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const searchHorariosDisp = async (dia) => {
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${enfermeiro}/${ajustarDia(dia)}`, { withCredentials: true })
+
+            setHorariosDisponiveis(result.data.horarios)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const agendar = async () => {
+        try {
+            console.log(beneficiario, enfermeiro, dataEntrevista);
+            let horario = document.getElementById('horario').value
+
+            console.log(horario);
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, {beneficiario: beneficiario, enfermeiro: enfermeiro, data: dataEntrevista, horario: horario}, {withCredentials: true})
+
+            console.log(result);
+
+        } catch (error) {   
             console.log(error);
         }
     }
@@ -47,16 +113,16 @@ const Agendar = () => {
                     </div>
                     <div className="gerar-horarios">
                         <label htmlFor="">Selecionar dia para entrevistas</label>
-                        <input type="date" name="" id="" />
-                        <button className="btn-gerar-horarios">Gerar</button>
+                        <input type="date" name="" id="" onChange={e => setDataGerar(e.target.value)} />
+                        <button className="btn-gerar-horarios" onClick={gerarHorarios} >Gerar</button>
                     </div>
                     <div className="agendar">
-                        <select name="nome" id="nome">
+                        <select name="nome" id="nome" onChange={e=>setBeneficiario(e.target.value)} >
                             <option value=""></option>
                             {
                                 propostas.map(e => {
 
-                                    if (e.status != 'Concluido') {
+                                    if (e.status !== 'Concluido' && e.agendado !== 'agendado') {
                                         return (
                                             <option key={e._id} value={e.nome}>{e.nome}</option>
                                         )
@@ -65,25 +131,42 @@ const Agendar = () => {
                                 })
                             }
                         </select>
-                        <select name="enfermeira" id="enfermeira">
+                        <select name="enfermeira" id="enfermeira" onChange={e => {
+                            searchDataDisp(e.target.value)
+                        }}>
                             <option value=""></option>
                             {
-                                enfermeiros.map( e => {
+                                enfermeiros.map(e => {
                                     return (
                                         <option key={e._id} value={e.name}>{e.name}</option>
                                     )
                                 })
                             }
                         </select>
-                        <select name="data" id="data">
+                        <select name="data" id="data" onChange={e => {
+                            searchHorariosDisp(e.target.value)
+                            setDataEntrevista(e.target.value)
+                        }}>
                             <option value=""></option>
-                            <option value="05/10/2022">05/10/2022</option>
+                            {
+                                datasEntrevista.map(e => {
+                                    return (
+                                        <option key={e} value={e}>{e}</option>
+                                    )
+                                })
+                            }
+
                         </select>
                         <select name="horario" id="horario">
-                            <option value=""></option>
-                            <option value="09:00">09:00</option>
+                            {
+                                horariosDisponiveis.map(e => {
+                                    return (
+                                        <option key={e} value={e}>{e}</option>
+                                    )
+                                })
+                            }
                         </select>
-                        <button className="btn-agendar">Agendar</button>
+                        <button className="btn-agendar" onClick={agendar}>Agendar</button>
                     </div>
                     <div className="nao-agendados">
                         <table className="table">

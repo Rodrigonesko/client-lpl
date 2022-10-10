@@ -12,6 +12,10 @@ const LiberacaoModulos = () => {
     const [elegibilidade, setElegibilidade] = useState(false)
     const [busca, setBusca] = useState(false)
     const [msg, setMsg] = useState('')
+    const [entrada1, setEntrada1] = useState('')
+    const [saida1, setSaida1] = useState('')
+    const [entrada2, setEntrada2] = useState('')
+    const [saida2, setSaida2] = useState('')
 
     const buscarEmail = async e => {
         try {
@@ -21,6 +25,12 @@ const LiberacaoModulos = () => {
                 setBusca(true)
                 console.log(result);
                 setMsg('')
+
+                setEntrada1(result.data.user.horarioEntrada1)
+                setSaida1(result.data.user.horarioSaida1)
+                setEntrada2(result.data.user.horarioEntrada2)
+                setSaida2(result.data.user.horarioSaida2)
+
                 if (result.data.user.liminares == null || result.data.user.liminares == 'false') {
                     setLiminares(false)
                 } else {
@@ -60,9 +70,9 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, {email, liminares, liminaresAj, enfermeiro, elegibilidade}, {withCredentials: true})
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, { email, liminares, liminaresAj, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2 }, { withCredentials: true })
 
-            if(result.status == 200){
+            if (result.status == 200) {
                 setMsg('Modulos atualizados com sucesso!')
             }
 
@@ -104,6 +114,20 @@ const LiberacaoModulos = () => {
                                 <div className="input-box">
                                     <label htmlFor="enfermeiro">Enfermeiro</label>
                                     <input type="checkbox" name="enfermeiro" id="enfermeiro" defaultChecked={enfermeiro} onChange={e => setEnfermeiro(!enfermeiro)} />
+                                </div>
+                                <div className="input-box">
+                                    <h4>Definir carga horária para o enfermeiro</h4>
+                                    <label htmlFor="entrada-1">Horario 1° Entrada:</label>
+                                    <input type="time" id="entrada-1" defaultValue={entrada1} onChange={e => setEntrada1(e.target.value)} />
+                                    <br />
+                                    <label htmlFor="saida-1">Horario 1° Saída:</label>
+                                    <input type="time" id="saida-1" defaultValue={saida1} onChange={e => setSaida1(e.target.value)} />
+                                    <br />
+                                    <label htmlFor="entrada-2">Horario 2° Entrada:</label>
+                                    <input type="time" id="entrada-2" defaultValue={entrada2} onChange={e => setEntrada2(e.target.value)} />
+                                    <br />
+                                    <label htmlFor="saida-2">Horario 2° Saída:</label>
+                                    <input type="time" id="saida-2" defaultValue={saida2} onChange={e => setSaida2(e.target.value)} />
                                 </div>
                                 <div className="input-box">
                                     <label htmlFor="elegibilidade">Elegiblidade</label>
