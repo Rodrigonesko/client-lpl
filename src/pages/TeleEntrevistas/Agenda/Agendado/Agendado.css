@@ -1,0 +1,17 @@
+.section-agendados-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.agendados-container {  
+
+    height: 100vh;
+    text-align: center;
+}
+
+.filtros-agendados {
+    padding: 1rem;
+}

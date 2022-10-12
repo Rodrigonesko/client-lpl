@@ -9,6 +9,8 @@
 
 .section-agendamento-container {
     width: 100%;
+    overflow: auto;
+    height: 100vh;
 }
 
 .agendamento-container {
@@ -16,6 +18,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
 }
 
 .gerar-horarios {
@@ -24,6 +27,17 @@
 
 .agendar {
     margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.agendar select {
+    margin: 5px;
+}
+
+.agendar button {
+    padding: 5px;
 }
 
 .nao-agendados {

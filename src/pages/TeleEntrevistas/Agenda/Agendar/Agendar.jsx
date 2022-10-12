@@ -3,8 +3,13 @@ import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Agendar.css'
 import moment from "moment";
+import Modal from "react-modal";
+
+Modal.setAppElement('#root')
 
 const Agendar = () => {
+
+    const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
@@ -12,9 +17,21 @@ const Agendar = () => {
     const [datasEntrevista, setDatasEntrevista] = useState([])
     const [enfermeiro, setEnfermeiro] = useState('')
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
+    const [msg, setMsg] = useState('')
 
     const [beneficiario, setBeneficiario] = useState('')
     const [dataEntrevista, setDataEntrevista] = useState('')
+
+    const [qtdNaoAgendado, setQtdNaoAgendado] = useState(0)
+
+
+    const openModal = () => {
+        setModalIsOpen(true)
+    }
+
+    const closeModal = () => {
+        setModalIsOpen(false)
+    }
 
     const ajustarDia = (data) => {
         const arr = data.split('/')
@@ -27,6 +44,16 @@ const Agendar = () => {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
+
+            let qtd = 0
+            
+            propostas.forEach(e => {
+                if (e.status != 'Concluido' && e.agendado !== 'agendado') {
+                    qtd++
+                }
+            })
+
+            setQtdNaoAgendado(qtd)
 
         } catch (error) {
             console.log(error);
@@ -52,8 +79,14 @@ const Agendar = () => {
 
             console.log(result);
 
+            if (result.status === 200) {
+                setMsg('Horario gerados com sucesso!')
+                openModal()
+            }
         } catch (error) {
             console.log(error);
+            setMsg('Horarios ja gerados para o dia escolhido!')
+            openModal()
         }
     }
 
@@ -89,19 +122,27 @@ const Agendar = () => {
 
             console.log(horario);
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, {beneficiario: beneficiario, enfermeiro: enfermeiro, data: dataEntrevista, horario: horario}, {withCredentials: true})
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { beneficiario: beneficiario, enfermeiro: enfermeiro, data: dataEntrevista, horario: horario }, { withCredentials: true })
 
-            console.log(result);
+            if (result.status === 200) {
+                setMsg('Agendado com sucesso!')
+                openModal()
+            }
 
-        } catch (error) {   
+        } catch (error) {
             console.log(error);
         }
     }
 
+    const countNaoAgendados = async () => {
+
+
+    }
     useEffect(() => {
         searchPropostas()
         searchEnfermeiros()
-    }, [])
+
+    }, [qtdNaoAgendado])
 
     return (
         <>
@@ -117,7 +158,7 @@ const Agendar = () => {
                         <button className="btn-gerar-horarios" onClick={gerarHorarios} >Gerar</button>
                     </div>
                     <div className="agendar">
-                        <select name="nome" id="nome" onChange={e=>setBeneficiario(e.target.value)} >
+                        <select name="nome" id="nome" onChange={e => setBeneficiario(e.target.value)} >
                             <option value=""></option>
                             {
                                 propostas.map(e => {
@@ -168,6 +209,9 @@ const Agendar = () => {
                         </select>
                         <button className="btn-agendar" onClick={agendar}>Agendar</button>
                     </div>
+                    <div className="title">
+                        <h3>Não Agendados: {qtdNaoAgendado}</h3>
+                    </div>
                     <div className="nao-agendados">
                         <table className="table">
                             <thead className="table-header">
@@ -184,7 +228,7 @@ const Agendar = () => {
                             <tbody>
                                 {
                                     propostas.map(e => {
-                                        if (e.status != 'Concluido') {
+                                        if (e.status != 'Concluido' && e.agendado !== 'agendado') {
                                             return (
                                                 <tr key={e._id}>
                                                     <td>{e.vigencia}</td>
@@ -203,6 +247,19 @@ const Agendar = () => {
                         </table>
                     </div>
                 </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <h2>{msg}</h2>
+
+                    <button onClick={() => {
+                        closeModal()
+                        window.location.reload();
+                    }}>Fechar</button>
+                </Modal>
             </section>
         </>
     )

@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
 import Agendar from "./pages/TeleEntrevistas/Agenda/Agendar/Agendar";
+import Agendado from "./pages/TeleEntrevistas/Agenda/Agendado/Agendado";
 
 /* -----------------  Liminares ----------------- */
 
@@ -86,6 +87,10 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/agenda/agendar" element={<ProtectedRoute>
                     <Agendar />
                 </ProtectedRoute>} />
+                <Route exact path="/entrevistas/agenda/agendados" element={<ProtectedRoute>
+                    <Agendado />
+                </ProtectedRoute>} />
+
 
                 {/* Liminares Routes */}
 
