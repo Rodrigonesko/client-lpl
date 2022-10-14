@@ -15,6 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
 import Agendar from "./pages/TeleEntrevistas/Agenda/Agendar/Agendar";
 import Agendado from "./pages/TeleEntrevistas/Agenda/Agendado/Agendado";
+import Mensagens from "./pages/TeleEntrevistas/Agenda/Mensagens/Mensagens";
 
 /* -----------------  Liminares ----------------- */
 
@@ -60,7 +61,7 @@ const AppRoutes = () => {
                 <Route exact path="/rn/todas" element={<ProtectedRoute>
                     <Todas />
                 </ProtectedRoute>} />
-                <Route path="/rn/rns/:proposta" element={<ProtectedRoute>
+                <Route path="/rn/rns/:id" element={<ProtectedRoute>
                     <Detalhes />
                 </ProtectedRoute>} />
 
@@ -89,6 +90,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/agenda/agendados" element={<ProtectedRoute>
                     <Agendado />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/agenda/mensagens" element={<ProtectedRoute>
+                    <Mensagens />
                 </ProtectedRoute>} />
 
 

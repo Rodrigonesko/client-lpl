@@ -205,7 +205,7 @@ const Todas = () => {
                                             <td>{e.idade}</td>
                                             <td>{e.telefones}</td>
                                             <td>{e.respostaBeneficiario}</td>
-                                            <td><Link to={'../rn/rns/' + e.proposta} className="link">Detalhes</Link></td>
+                                            <td><Link to={'../rn/rns/' + e._id} className="link">Detalhes</Link></td>
                                         </tr>
                                     )
                                 })}

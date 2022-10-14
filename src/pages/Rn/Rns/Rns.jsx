@@ -51,7 +51,7 @@ const Rns = () => {
                                                 <td>{e.mo}</td>
                                                 <td>{e.idade}</td>
                                                 <td>{e.telefones}</td>
-                                                <td><Link to={'' + e.proposta} className="link">Detalhes</Link></td>
+                                                <td><Link to={'' + e._id} className="link">Detalhes</Link></td>
                                             </tr>
                                         )
                                     }

@@ -10,7 +10,7 @@ Modal.setAppElement('#root')
 
 const Detalhes = () => {
 
-    const { proposta } = useParams()
+    const { id } = useParams()
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
@@ -35,9 +35,9 @@ const Detalhes = () => {
     }
 
 
-    const search = async () => {
+    const search = async () => { 
 
-        const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${proposta}`, { withCredentials: true })
+        const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
         const data = resultado.data
 
         setDados(data)
@@ -61,9 +61,11 @@ const Detalhes = () => {
 
     const update = async () => {
 
+        console.log(id);
+
         try {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/rns/update`, {
-                proposta: proposta,
+                id: id,
                 email: email,
                 dataContato1: data1,
                 dataContato2: data2,
@@ -90,7 +92,7 @@ const Detalhes = () => {
 
         try {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/rns/concluir`, {
-                proposta: proposta,
+                id: id,
                 email: email,
                 dataContato1: data1,
                 dataContato2: data2,
@@ -147,7 +149,7 @@ const Detalhes = () => {
 
                 <div className="detalhes-container">
 
-                    <h3>{proposta}</h3>
+                    <h3>{dados.pedido}</h3>
 
                     <div className="info-proposta">
                         <div className="info-box">
@@ -160,7 +162,7 @@ const Detalhes = () => {
                         </div>
                         <div className="info-box">
                             <label htmlFor="proposta">Proposta: </label>
-                            <span><strong>{proposta}</strong></span>
+                            <span><strong>{dados.proposta}</strong></span>
                         </div>
                     </div>
                     <div className="info-proposta">
@@ -272,7 +274,6 @@ const Detalhes = () => {
                     </Modal>
                 </div>
             </section>
-
         </>
     )
 }

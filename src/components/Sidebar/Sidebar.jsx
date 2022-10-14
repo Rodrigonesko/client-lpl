@@ -50,7 +50,7 @@ const Sidebar = () => {
                                 <SubMenu title='Agenda' icon={<FaCalendar />}>
                                     <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/agenda/agendados'>Agendados</Link></MenuItem>
-                                    <MenuItem>Mensagens</MenuItem>
+                                    <MenuItem><Link to='/entrevistas/agenda/mensagens'>Mensagens</Link></MenuItem>
                                     <MenuItem>Anexar</MenuItem>
                                     <MenuItem>Ajustar Horarios</MenuItem>
                                 </SubMenu>
