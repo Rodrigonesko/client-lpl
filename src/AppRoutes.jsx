@@ -9,6 +9,10 @@ import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
+/* RSD */
+
+import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
+import UploadRsd from "./pages/Rsd/UploadRsd/UploadRsd";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -118,7 +122,14 @@ const AppRoutes = () => {
                     <ReportAj />
                 </ProtectedRoute>} />
 
+                {/* RSD */}
 
+                <Route exact path="/rsd/PainelProcesso" element={<ProtectedRoute>
+                    <PainelProcessos />
+                </ProtectedRoute>} />
+                <Route exact path="/rsd/UploadArquivo" element={<ProtectedRoute>
+                    <UploadRsd />
+                </ProtectedRoute>} />
 
             </Routes>
         </AuthProvider>

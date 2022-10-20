@@ -1,0 +1,126 @@
+import React, { useState, useEffect } from "react";
+import { FaAngleDown } from 'react-icons/fa'
+import Sidebar from "../../../components/Sidebar/Sidebar";
+import Painel from "../../../components/Painel/Painel";
+import './PainelProcessos.css'
+
+const PainelProcessos = () => {
+
+    const [statusVencidoIniciar, setStatusVencidoInciar] = useState(false)
+    const [statusVenceHojeIniciar, setStatusVenceHojeInciar] = useState(false)
+    const [statusVenceAmanhaIniciar, setStatusVenceAmanhaInciar] = useState(false)
+    const [statusVence2Iniciar, setStatusVence2Inciar] = useState(false)
+    const [statusVence3Iniciar, setStatusVence3Inciar] = useState(false)
+    const [statusVence4Iniciar, setStatusVence4Iniciar] = useState(false)
+
+    const [statusVencidoAgendado, setStatusVencidoAgendado] = useState(false)
+    const [statusVenceHojeAgendado, setStatusVenceHojeAgendado] = useState(false)
+    const [statusVenceAmanhaAgendado, setStatusVenceAmanhaAgendado] = useState(false)
+    const [statusVence2Agendado, setStatusVence2Agendado] = useState(false)
+    const [statusVence3Agendado, setStatusVence3Agendado] = useState(false)
+    const [statusVence4Agendado, setStatusVence4Agendado] = useState(false)
+
+    const [statusVencidoAgc, setStatusVencidoAgc] = useState(false)
+    const [statusVenceHojeAgc, setStatusVenceHojeAgc] = useState(false)
+    const [statusVenceAmanhaAgc, setStatusVenceAmanhaAgc] = useState(false)
+    const [statusVence2Agc, setStatusVence2Agc] = useState(false)
+    const [statusVence3Agc, setStatusVence3Agc] = useState(false)
+    const [statusVence4Agc, setStatusVence4Agc] = useState(false)
+
+    const [statusVencidoAgd, setStatusVencidoAgd] = useState(false)
+    const [statusVenceHojeAgd, setStatusVenceHojeAgd] = useState(false)
+    const [statusVenceAmanhaAgd, setStatusVenceAmanhaAgd] = useState(false)
+    const [statusVence2Agd, setStatusVence2Agd] = useState(false)
+    const [statusVence3Agd, setStatusVence3Agd] = useState(false)
+    const [statusVence4Agd, setStatusVence4Agd] = useState(false)
+
+    return (
+        <>
+            <Sidebar></Sidebar>
+            <section className="section-painel-container">
+                <div className="painel-container">
+                    <div className="title">
+                        <h3>Painel Processos</h3>
+                    </div>
+                    <div className="filtros-painel">
+                        <input type="text" placeholder="Marca ótica, nome, CPF, Protocolo" />
+                        <select name="analista" id="analista">
+                            <option value="">Analista</option>
+                        </select>
+                        <button>Pesquisar</button>
+                    </div>
+                    <div className="painel-processos">
+                        <Painel
+                            statusVencido={statusVencidoIniciar}
+                            statusVenceHoje={statusVenceHojeIniciar}
+                            statusVenceAmanha={statusVenceAmanhaIniciar}
+                            statusVence2={statusVence2Iniciar}
+                            statusVence3={statusVence3Iniciar}
+                            statusVence4={statusVence4Iniciar}
+                            setStatusVencido={setStatusVencidoInciar}
+                            setStatusVenceHoje={setStatusVenceHojeInciar}
+                            setStatusVenceAmanha={setStatusVenceAmanhaInciar}
+                            setStatusVence2={setStatusVence2Inciar}
+                            setStatusVence3={setStatusVence3Inciar}
+                            setStatusVence4={setStatusVence4Iniciar}
+                            title={'A iniciar'}
+                        />
+                        <div className="painel">
+                            <Painel
+                                statusVencido={statusVencidoAgendado}
+                                statusVenceHoje={statusVenceHojeAgendado}
+                                statusVenceAmanha={statusVenceAmanhaAgendado}
+                                statusVence2={statusVence2Agendado}
+                                statusVence3={statusVence3Agendado}
+                                statusVence4={statusVence4Agendado}
+                                setStatusVencido={setStatusVencidoAgendado}
+                                setStatusVenceHoje={setStatusVenceHojeAgendado}
+                                setStatusVenceAmanha={setStatusVenceAmanhaAgendado}
+                                setStatusVence2={setStatusVence2Agendado}
+                                setStatusVence3={setStatusVence3Agendado}
+                                setStatusVence4={setStatusVence4Agendado}
+                                title={'Agendado'}
+                            />
+                        </div>
+                        <div className="painel">
+                            <Painel
+                                statusVencido={statusVencidoAgc}
+                                statusVenceHoje={statusVenceHojeAgc}
+                                statusVenceAmanha={statusVenceAmanhaAgc}
+                                statusVence2={statusVence2Agc}
+                                statusVence3={statusVence3Agc}
+                                statusVence4={statusVence4Agc}
+                                setStatusVencido={setStatusVencidoAgc}
+                                setStatusVenceHoje={setStatusVenceHojeAgc}
+                                setStatusVenceAmanha={setStatusVenceAmanhaAgc}
+                                setStatusVence2={setStatusVence2Agc}
+                                setStatusVence3={setStatusVence3Agc}
+                                setStatusVence4={setStatusVence4Agc}
+                                title={'Aguardando Contato'}
+                            />
+                        </div>
+                        <div className="painel">
+                            <Painel
+                                statusVencido={statusVencidoAgd}
+                                statusVenceHoje={statusVenceHojeAgd}
+                                statusVenceAmanha={statusVenceAmanhaAgd}
+                                statusVence2={statusVence2Agd}
+                                statusVence3={statusVence3Agd}
+                                statusVence4={statusVence4Agd}
+                                setStatusVencido={setStatusVencidoAgd}
+                                setStatusVenceHoje={setStatusVenceHojeAgd}
+                                setStatusVenceAmanha={setStatusVenceAmanhaAgd}
+                                setStatusVence2={setStatusVence2Agd}
+                                setStatusVence3={setStatusVence3Agd}
+                                setStatusVence4={setStatusVence4Agd}
+                                title={'Aguardando Doc'}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </>
+    )
+}
+
+export default PainelProcessos

@@ -1,0 +1,30 @@
+.painel-processos {
+    display: flex;
+}
+
+.filtros-painel {
+    margin-left: 1rem;
+}
+
+.filtros-painel input {
+    width: 30%;
+    padding: 5px;
+}
+
+.filtros-painel select {
+    padding: 5px;
+    margin: 10px;
+    border: 1px solid gray;
+
+}
+
+.section-painel-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.filtros-painel button {
+    padding: 8px;
+}
+

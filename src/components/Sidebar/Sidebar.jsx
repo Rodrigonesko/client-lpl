@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt } from "react-icons/fa";
+import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
@@ -68,6 +68,10 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/liminares/uploadAj'>Upload</Link></MenuItem>
                                     <MenuItem><Link to='/liminares/reportAj'>Report</Link></MenuItem>
                                 </SubMenu>
+                            </SubMenu>
+                            <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
+                                    <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
+                                    <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
                             </SubMenu>
                         </Menu>
                     </ProSidebar>

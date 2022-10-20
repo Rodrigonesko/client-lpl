@@ -1,0 +1,52 @@
+.change {
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.painel h4 {
+    padding-left: 1rem;
+}
+
+.vencido,
+.vence-hoje,
+.vence-amanha,
+.vence-2-dias,
+.vence-3-dias,
+.vence-4-dias {
+    margin: 10px;
+}
+
+.vencido .change {
+    background-color: red;
+    color: white;
+}
+
+.vence-hoje .change {
+    background-color: yellow;
+}
+
+.vence-amanha .change {
+    background-color: gray;
+    color: white;
+}
+
+.vence-2-dias .change {
+    background-color: darkgray;
+    color: white;
+}
+
+.vence-3-dias .change {
+    background-color: lightgray;
+    color: black;
+}
+
+.painel table {
+    font-size: small;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.painel table th, td {
+    padding: 3px;
+}
