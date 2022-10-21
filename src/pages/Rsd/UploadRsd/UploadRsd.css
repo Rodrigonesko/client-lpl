@@ -1,0 +1,13 @@
+.pedidos-tabela {
+    margin-top: 50px;
+    height: 50vh;
+    overflow: auto;
+}
+
+.table-novos-pedidos {
+    text-align: center;   
+}
+
+.result {
+    text-align: center;
+}
