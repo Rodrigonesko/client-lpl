@@ -8,6 +8,7 @@ const UploadRsd = () => {
 
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
+    const [valorCorte, setValorCorte] = useState(20000)
 
     const send = async e => {
         e.preventDefault()
@@ -17,6 +18,7 @@ const UploadRsd = () => {
             let formData = new FormData()
 
             formData.append('file', file, file.name)
+            formData.append('corte', valorCorte)
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
@@ -46,6 +48,10 @@ const UploadRsd = () => {
                         <div>
                             <label htmlFor="file-rn">Arquivo: </label>
                             <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
+                        </div>
+                        <div>
+                            <label htmlFor="valor-corte">Valor de Corte: </label>
+                            <input type="number" defaultValue={valorCorte} name='valor-corte' id='valor-corte' onKeyUp={e => setValorCorte(e.target.value)} />
                         </div>
                         <div className="container-btns">
                             <button className="btn" onClick={send} >Enviar</button>
