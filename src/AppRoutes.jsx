@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
 import UploadRsd from "./pages/Rsd/UploadRsd/UploadRsd";
+import FichaBeneficiario from "./pages/Rsd/FichaBeneficiario/FichaBeneficiario";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -130,6 +131,10 @@ const AppRoutes = () => {
                 <Route exact path="/rsd/UploadArquivo" element={<ProtectedRoute>
                     <UploadRsd />
                 </ProtectedRoute>} />
+                <Route path="/rsd/FichaBeneficiario/:mo" element={<ProtectedRoute>
+                    <FichaBeneficiario />
+                </ProtectedRoute>} />
+
 
             </Routes>
         </AuthProvider>

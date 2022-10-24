@@ -43,7 +43,11 @@ const UploadRsd = () => {
 
     const subir = async () => {
         try {
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, {pedidos}, { withCredentials: true })
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, { pedidos }, { withCredentials: true })
+
+            if (result.status == 200) {
+                setStatus(`Foram adicionados ${result.data.pedidos.length} pedidos`)
+            }
 
             console.log(result);
 
@@ -90,6 +94,7 @@ const UploadRsd = () => {
                         <thead>
                             <tr>
                                 <th>Pedido</th>
+                                <th>Nome</th>
                                 <th>Protocolo</th>
                                 <th>Valor apresentado</th>
                             </tr>

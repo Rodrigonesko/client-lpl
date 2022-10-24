@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaAngleDown } from 'react-icons/fa'
+import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Painel from "../../../components/Painel/Painel";
 import './PainelProcessos.css'
@@ -34,6 +35,47 @@ const PainelProcessos = () => {
     const [statusVence3Agd, setStatusVence3Agd] = useState(false)
     const [statusVence4Agd, setStatusVence4Agd] = useState(false)
 
+    const [protocolos, setProtocolos] = useState([])
+
+    const [aIniciar, setAiniciar] = useState([])
+    const [agendados, setAgendados] = useState([])
+    const [aguardandoContatos, setAguardandoContatos] = useState([])
+    const [aguardandoDocs, setAguardandoDocs] = useState([])
+
+    const [teste, setTeste] = useState('')
+
+    const buscarProtocolos = async () => {
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolos`, { withCredentials: true })
+
+            console.log(result);
+
+            setTeste('ola')
+
+            setProtocolos(result.data.protocolos)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const setStatusProtocolo = async () => {
+        protocolos.forEach(e => {
+            if (e.idStatus === 'A iniciar') {
+                setAiniciar(aIniciar => [...aIniciar, e])
+            }
+        })
+
+        console.log(protocolos);
+    }
+
+
+
+    useEffect(() => {
+        buscarProtocolos()
+        setStatusProtocolo()
+    }, [teste])
+
     return (
         <>
             <Sidebar></Sidebar>
@@ -64,6 +106,8 @@ const PainelProcessos = () => {
                             setStatusVence3={setStatusVence3Inciar}
                             setStatusVence4={setStatusVence4Iniciar}
                             title={'A iniciar'}
+                            protocolos={aIniciar}
+
                         />
                         <div className="painel">
                             <Painel
@@ -80,6 +124,7 @@ const PainelProcessos = () => {
                                 setStatusVence3={setStatusVence3Agendado}
                                 setStatusVence4={setStatusVence4Agendado}
                                 title={'Agendado'}
+                                protocolos={agendados}
                             />
                         </div>
                         <div className="painel">
@@ -97,6 +142,7 @@ const PainelProcessos = () => {
                                 setStatusVence3={setStatusVence3Agc}
                                 setStatusVence4={setStatusVence4Agc}
                                 title={'Aguardando Contato'}
+                                protocolos={aguardandoContatos}
                             />
                         </div>
                         <div className="painel">
@@ -114,6 +160,7 @@ const PainelProcessos = () => {
                                 setStatusVence3={setStatusVence3Agd}
                                 setStatusVence4={setStatusVence4Agd}
                                 title={'Aguardando Doc'}
+                                protocolos={aguardandoDocs}
                             />
                         </div>
                     </div>
