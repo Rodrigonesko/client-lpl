@@ -1,0 +1,35 @@
+.section-cadastro-beneficiario-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 3%;
+}
+
+.cadastro-beneficiario-container {}
+
+.titulo-informacoes-gerais,
+.titulo-pedidos-reembolso {
+    margin: 1rem 0;
+}
+
+.titulo-informacoes-gerais span,
+.titulo-pedidos-reembolso span {
+    background-color: lightgray;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.informacoes-gerais {
+    font-weight: bold;
+}
+
+#atualizar-informacoes-beneficiario {
+    padding: 10px;
+}
+
+.numero-protocolo {
+    cursor: pointer;
+}
+
+.none {
+    display: none;
+}

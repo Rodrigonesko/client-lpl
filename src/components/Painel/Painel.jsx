@@ -28,7 +28,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
         if (moment(hoje).toDate() >= moment(e.dataSla).toDate()) {
             qtdVencidos++
         }
-        if (moment(hoje).format('YYYY-MM-DD') === moment(e.dataSla).toDate('YYYY-MM-DD')) {
+        if (moment(hoje).format('YYYY-MM-DD') === moment(e.dataSla).format('YYYY-MM-DD')) {
             qtdVenceHoje++
         }
 
@@ -128,10 +128,10 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
 
                                         let hoje = new Date()
 
-                                        if (moment(hoje).format('YYYY-MM-DD') === moment(e.dataSla).toDate('YYYY-MM-DD')) {
+                                        if (moment(hoje).format('YYYY-MM-DD') === moment(e.dataSla).format('YYYY-MM-DD')) {
                                             return (
                                                 <tr key={e._id} >
-                                                    <td>{e.mo}</td>
+                                                    <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
                                                 </tr>
                                             )
