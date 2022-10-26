@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
 import UploadRsd from "./pages/Rsd/UploadRsd/UploadRsd";
 import FichaBeneficiario from "./pages/Rsd/FichaBeneficiario/FichaBeneficiario";
+import EditarPedido from "./pages/Rsd/EditarPedido/EditarPedido";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -133,6 +134,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/rsd/FichaBeneficiario/:mo" element={<ProtectedRoute>
                     <FichaBeneficiario />
+                </ProtectedRoute>} />
+                <Route path="/rsd/EditarPedido/:pedido" element={<ProtectedRoute>
+                    <EditarPedido />
                 </ProtectedRoute>} />
 
 

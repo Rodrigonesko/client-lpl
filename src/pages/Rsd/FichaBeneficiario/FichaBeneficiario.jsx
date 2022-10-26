@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { FaAngleDown } from 'react-icons/fa'
 import Axios from "axios";
+import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './FichaBeneficiario.css'
 import moment from "moment/moment";
@@ -9,6 +10,7 @@ import moment from "moment/moment";
 const FichaBeneficiario = () => {
 
     const { mo } = useParams()
+    const { name } = useContext(AuthContext)
 
     const [nome, setNome] = useState('')
     const [cpf, setCpf] = useState('')
@@ -19,7 +21,6 @@ const FichaBeneficiario = () => {
     const [fone3, setFone3] = useState('')
     const [contratoEmpresa, setContratoEmpresa] = useState('')
     const [msg, setMsg] = useState('')
-
 
     const [protocolos, setProtocolos] = useState([])
     const [pedidos, setPedidos] = useState([])
@@ -47,7 +48,7 @@ const FichaBeneficiario = () => {
 
     }
 
-    const buscarPedidos = async (element, statusPedidos, protocolo) => {
+    const buscarPedidos = async (element, statusPedidos, protocolo, responsavel) => {
         try {
             let divPedidos = element.parentElement.nextSibling
 
@@ -60,7 +61,9 @@ const FichaBeneficiario = () => {
                 divPedidos.classList.remove('none')
 
                 result.data.pedidos.forEach(e => {
+
                     let tr = document.createElement('tr')
+
                     let tdPedido = document.createElement('td')
                     let tdStatus = document.createElement('td')
                     let tdValorApresentado = document.createElement('td')
@@ -93,6 +96,21 @@ const FichaBeneficiario = () => {
                     tr.appendChild(tdCrm)
                     tr.appendChild(tdNf)
                     tr.appendChild(tdIrregular)
+
+                    if (responsavel == name) {
+                        let tdEditar = document.createElement('td')
+                        let tdInativar = document.createElement('td')
+                        let buttonEditar = document.createElement('a')
+                        buttonEditar.textContent = 'Editar'
+                        buttonEditar.href = `/rsd/EditarPedido/${e.numero}`
+                        let buttonInativar = document.createElement('a')
+                        buttonInativar.textContent = 'Inativar'
+
+                        tdEditar.appendChild(buttonEditar)
+                        tdInativar.appendChild(buttonInativar)
+                        tr.appendChild(tdEditar)
+                        tr.appendChild(tdInativar)
+                    }
 
                     divPedidos.firstChild.firstChild.firstChild.children[1].appendChild(tr)
 
@@ -131,6 +149,17 @@ const FichaBeneficiario = () => {
 
         } catch (error) {
 
+        }
+    }
+
+    const assumirPedido = async (protocolo) => {
+        try {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/protocolos/assumir`, { analista: name, protocolo: protocolo }, { withCredentials: true })
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -221,6 +250,11 @@ const FichaBeneficiario = () => {
                                     protocolos.map(e => {
 
                                         let statusPedidos = false
+                                        let responsavel = false
+
+                                        if (e.analista == name) {
+                                            responsavel = true
+                                        }
 
                                         if (e.idStatus === 'A iniciar') {
                                             return (
@@ -228,15 +262,15 @@ const FichaBeneficiario = () => {
                                                     <tr key={e._id}>
                                                         <td onClick={x => {
                                                             statusPedidos = changeState(statusPedidos)
-                                                            buscarPedidos(x.target, statusPedidos, e.numero)
+                                                            buscarPedidos(x.target, statusPedidos, e.numero, e.analista)
 
                                                         }} className="numero-protocolo"><FaAngleDown /> {e.numero}</td>
                                                         <td>{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                         <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
                                                         <td>{e.idStatus}</td>
                                                         <td></td>
-                                                        <td></td>
-                                                        <td><button>Assumir</button></td>
+                                                        <td>{e.analista}</td>
+                                                        <td><button onClick={() => { assumirPedido(e.numero) }}>Assumir</button></td>
                                                     </tr>
                                                     <tr key={e.numero} className='none'>
                                                         <td colSpan={10}>
@@ -259,6 +293,11 @@ const FichaBeneficiario = () => {
                                                                     <tbody>
 
                                                                     </tbody>
+                                                                    {
+                                                                        responsavel && (
+                                                                            <button>Novo Pedido</button>
+                                                                        )
+                                                                    }
                                                                 </table>
                                                             </div>
                                                         </td>
