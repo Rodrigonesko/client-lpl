@@ -2,46 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import './EditarPedido.css'
+import './CriarPedido.css'
 
-const EditarPedido = () => {
+const CriarPedido = () => {
 
-    const { pedido } = useParams()
+    const { protocolo } = useParams()
     const navigate = useNavigate()
 
+    const [pedido, setPedido] = useState('')
     const [valorApresentado, setValorApresentado] = useState('')
     const [valorReembolsado, setValorReembolsado] = useState('')
     const [cnpj, setCnpj] = useState('')
     const [clinica, setClinica] = useState('')
     const [nf, setNf] = useState('')
-    const [protocolo, setProtocolo] = useState('')
     const [mo, setMo] = useState('')
-
-    console.log(pedido);
-
-    const buscarPedido = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedido/${pedido}`, { withCredentials: true })
-
-            console.log(result);
-
-            setValorApresentado(result.data.result.valorApresentado)
-            setValorReembolsado(result.data.result.valorReembolsado)
-            setCnpj(result.data.result.cnpj)
-            setClinica(result.data.result.clinica)
-            setNf(result.data.result.nf)
-            let pro = result.data.result.protocolo
-
-            const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/${pro}`, {withCredentials: true})
-
-            setMo(buscaMo.data.result.mo)
-
-            
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const buscarClinica = async e => {
         try {
@@ -57,13 +31,16 @@ const EditarPedido = () => {
         }
     }
 
-    const salvarPedido = async e => {
+    const criarPedido = async e => {
         try {
 
             e.preventDefault()
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/editar`, {
+            console.log(pedido, valorApresentado, valorReembolsado, cnpj, clinica, cnpj);
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pedido/criar`, {
                 pedido,
+                protocolo,
                 valorApresentado,
                 valorReembolsado,
                 cnpj,
@@ -80,8 +57,18 @@ const EditarPedido = () => {
         }
     }
 
+    const buscaMo = async () => {
+        try {
+            const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/${protocolo}`, { withCredentials: true })
+
+            setMo(buscaMo.data.result.mo)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
-        buscarPedido()
+        buscaMo()
     }, [])
 
     return (
@@ -95,15 +82,15 @@ const EditarPedido = () => {
                     <form>
                         <div className="editar-pedido-input">
                             <label htmlFor="pedido">Número Pedido</label>
-                            <input type="text" id="pedido" placeholder="Pedido" disabled defaultValue={pedido} />
+                            <input type="text" id="pedido" placeholder="Pedido" onKeyUp={e => setPedido(e.target.value)} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="valor-apresentado">Valor Apresentado</label>
-                            <input type="text" id="valor-apresentado" placeholder="Valor Apresentado" defaultValue={valorApresentado} />
+                            <input type="text" id="valor-apresentado" placeholder="Valor Apresentado" onKeyUp={e => setValorApresentado(e.target.value)} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="valor-reembolsado">Valor Reembolsado</label>
-                            <input type="text" id="valor-reembolsado" placeholder="Valor Reembolsado" defaultValue={valorReembolsado} />
+                            <input type="text" id="valor-reembolsado" placeholder="Valor Reembolsado" onKeyUp={e => setValorReembolsado(e.target.value)} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="cnpj">CNPJ</label>
@@ -114,14 +101,14 @@ const EditarPedido = () => {
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="clinica">Clinica</label>
-                            <input type="text" id="clinica" placeholder="Clinica" defaultValue={clinica} onKeyUp={e=>setClinica(e.target.value)} />
+                            <input type="text" id="clinica" placeholder="Clinica" defaultValue={clinica} onKeyUp={e => setClinica(e.target.value)} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="nf">NF</label>
                             <input type="text" id="nf" placeholder="NF" defaultValue={nf} onKeyUp={e => setNf(e.target.value)} />
                         </div>
                         <div className="editar-pedido-input">
-                            <button onClick={salvarPedido}>Salvar</button>
+                            <button onClick={criarPedido} >Criar</button>
                         </div>
                     </form>
                 </div>
@@ -130,4 +117,4 @@ const EditarPedido = () => {
     )
 }
 
-export default EditarPedido
+export default CriarPedido

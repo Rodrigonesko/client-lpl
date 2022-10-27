@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { FaAngleDown } from 'react-icons/fa'
 import Axios from "axios";
 import AuthContext from "../../../context/AuthContext";
@@ -70,10 +70,9 @@ const FichaBeneficiario = () => {
                     let tdValorReembolsado = document.createElement('td')
                     let tdCnpj = document.createElement('td')
                     let tdClinica = document.createElement('td')
-                    let tdProfissional = document.createElement('td')
-                    let tdCrm = document.createElement('td')
                     let tdNf = document.createElement('td')
                     let tdIrregular = document.createElement('td')
+                    let tdBotoes = document.createElement('td')
 
                     tdPedido.textContent = e.numero
                     tdStatus.textContent = e.status
@@ -81,8 +80,6 @@ const FichaBeneficiario = () => {
                     tdValorReembolsado.textContent = e.valorReembolsado
                     tdCnpj.textContent = e.cnpj
                     tdClinica.textContent = e.clinica
-                    tdProfissional.textContent = e.profissional
-                    tdCrm.textContent = e.crm
                     tdNf.textContent = e.nf
                     tdIrregular.textContent = e.irregular
 
@@ -92,10 +89,9 @@ const FichaBeneficiario = () => {
                     tr.appendChild(tdValorReembolsado)
                     tr.appendChild(tdCnpj)
                     tr.appendChild(tdClinica)
-                    tr.appendChild(tdProfissional)
-                    tr.appendChild(tdCrm)
                     tr.appendChild(tdNf)
                     tr.appendChild(tdIrregular)
+                    tr.appendChild(tdBotoes)
 
                     if (responsavel == name) {
                         let tdEditar = document.createElement('td')
@@ -108,8 +104,8 @@ const FichaBeneficiario = () => {
 
                         tdEditar.appendChild(buttonEditar)
                         tdInativar.appendChild(buttonInativar)
-                        tr.appendChild(tdEditar)
-                        tr.appendChild(tdInativar)
+                        tdBotoes.appendChild(tdEditar)
+                        tdBotoes.appendChild(tdInativar)
                     }
 
                     divPedidos.firstChild.firstChild.firstChild.children[1].appendChild(tr)
@@ -284,10 +280,9 @@ const FichaBeneficiario = () => {
                                                                             <th>R$ Reembolsado</th>
                                                                             <th>CNPJ</th>
                                                                             <th>Clínica</th>
-                                                                            <th>Profissional</th>
-                                                                            <th>CRM</th>
                                                                             <th>NF</th>
                                                                             <th>Irregular</th>
+                                                                            <th></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -295,7 +290,7 @@ const FichaBeneficiario = () => {
                                                                     </tbody>
                                                                     {
                                                                         responsavel && (
-                                                                            <button>Novo Pedido</button>
+                                                                            <Link to={`/rsd/CriarPedido/${e.numero}`} >Novo Pedido</Link>
                                                                         )
                                                                     }
                                                                 </table>
@@ -310,7 +305,7 @@ const FichaBeneficiario = () => {
                             </tbody>
                         </table>
                         <div>
-                            <button>Novo Protocolo</button>
+                            <Link to={`/rsd/CriarProtocolo/${mo}`}>Novo Protocolo</Link>
                             <button>Criar Pacote</button>
                         </div>
                     </div>
