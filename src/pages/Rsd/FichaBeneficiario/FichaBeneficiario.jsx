@@ -6,6 +6,7 @@ import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './FichaBeneficiario.css'
 import moment from "moment/moment";
+import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 
 const FichaBeneficiario = () => {
 
@@ -24,6 +25,9 @@ const FichaBeneficiario = () => {
 
     const [protocolos, setProtocolos] = useState([])
     const [pedidos, setPedidos] = useState([])
+    const [pedidoPac, setPedidoPac] = useState([])
+
+
 
     const changeState = state => {
         state = !state
@@ -45,6 +49,35 @@ const FichaBeneficiario = () => {
         setFone2(result.data.pessoa.fone2)
         setFone3(result.data.pessoa.fone3)
         setContratoEmpresa(result.data.pessoa.contratoEmpresa)
+
+        const pacotes = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
+
+        setPedidos(pacotes.data.pacotes)
+
+        let pedidosPacote = []
+
+        pedidosPacote = pacotes.data.pacotes.filter((item, pos, array) => {
+            return array.map(x => x.pacote).indexOf(item.pacote) === pos
+        })
+
+        setPedidoPac(pedidosPacote)
+
+    }
+
+    const teste = async () => {
+        let checkbox = document.getElementsByClassName('checkbox-pedido')
+
+        let pedidos = []
+
+        for (const item of checkbox) {
+            if (item.checked) {
+                pedidos.push(item.value)
+            }
+        }
+
+        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pacote/criar`, { pedidos }, { withCredentials: true })
+
+        console.log(result);
 
     }
 
@@ -73,6 +106,7 @@ const FichaBeneficiario = () => {
                     let tdNf = document.createElement('td')
                     let tdIrregular = document.createElement('td')
                     let tdBotoes = document.createElement('td')
+                    let tdCheckbox = document.createElement('td')
 
                     tdPedido.textContent = e.numero
                     tdStatus.textContent = e.status
@@ -92,20 +126,26 @@ const FichaBeneficiario = () => {
                     tr.appendChild(tdNf)
                     tr.appendChild(tdIrregular)
                     tr.appendChild(tdBotoes)
+                    tr.appendChild(tdCheckbox)
 
                     if (responsavel == name) {
                         let tdEditar = document.createElement('td')
-                        let tdInativar = document.createElement('td')
+                        //  let tdInativar = document.createElement('td')
                         let buttonEditar = document.createElement('a')
+                        let checkbox = document.createElement('input')
+                        checkbox.setAttribute('type', 'checkbox')
+
                         buttonEditar.textContent = 'Editar'
                         buttonEditar.href = `/rsd/EditarPedido/${e.numero}`
-                        let buttonInativar = document.createElement('a')
-                        buttonInativar.textContent = 'Inativar'
+                        buttonEditar.classList.add('btn-editar-pedido')
+                        // let buttonInativar = document.createElement('a')
+                        //buttonInativar.textContent = 'Inativar'
 
                         tdEditar.appendChild(buttonEditar)
-                        tdInativar.appendChild(buttonInativar)
+                        //tdInativar.appendChild(buttonInativar)
                         tdBotoes.appendChild(tdEditar)
-                        tdBotoes.appendChild(tdInativar)
+                        //tdBotoes.appendChild(tdInativar)
+                        tdCheckbox.innerHTML = `<input type='checkbox' class='checkbox-pedido' value='${e.numero}'>`
                     }
 
                     divPedidos.firstChild.firstChild.firstChild.children[1].appendChild(tr)
@@ -266,7 +306,7 @@ const FichaBeneficiario = () => {
                                                         <td>{e.idStatus}</td>
                                                         <td></td>
                                                         <td>{e.analista}</td>
-                                                        <td><button onClick={() => { assumirPedido(e.numero) }}>Assumir</button></td>
+                                                        <td><button className="assumir-protocolo-btn" onClick={() => { assumirPedido(e.numero) }}>Assumir</button></td>
                                                     </tr>
                                                     <tr key={e.numero} className='none'>
                                                         <td colSpan={10}>
@@ -274,7 +314,7 @@ const FichaBeneficiario = () => {
                                                                 <table className="table">
                                                                     <thead className="table-header">
                                                                         <tr>
-                                                                            <th>pedido</th>
+                                                                            <th>Pedido</th>
                                                                             <th>Status</th>
                                                                             <th>R$ Apresentado</th>
                                                                             <th>R$ Reembolsado</th>
@@ -283,17 +323,19 @@ const FichaBeneficiario = () => {
                                                                             <th>NF</th>
                                                                             <th>Irregular</th>
                                                                             <th></th>
+                                                                            <th></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
 
                                                                     </tbody>
-                                                                    {
-                                                                        responsavel && (
-                                                                            <Link to={`/rsd/CriarPedido/${e.numero}`} >Novo Pedido</Link>
-                                                                        )
-                                                                    }
+
                                                                 </table>
+                                                                {
+                                                                    responsavel && (
+                                                                        <Link className="btn-criar-pedido" to={`/rsd/CriarPedido/${e.numero}`} >Novo Pedido</Link>
+                                                                    )
+                                                                }
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -305,25 +347,71 @@ const FichaBeneficiario = () => {
                             </tbody>
                         </table>
                         <div>
-                            <Link to={`/rsd/CriarProtocolo/${mo}`}>Novo Protocolo</Link>
-                            <button>Criar Pacote</button>
+                            <Link className="btn-criar-protocolo" to={`/rsd/CriarProtocolo/${mo}`}>Novo Protocolo</Link>
+                            <button className="btn-criar-pacote" onClick={teste} >Criar Pacote</button>
                         </div>
                     </div>
 
-                    <div>
+                    <div className="titulo-informacoes-gerais">
                         <span>Pacotes</span>
                     </div>
                     <div className="pacotes">
-                        <table>
-                            <thead>
+                        <table className="table">
+                            <thead className="table-header">
                                 <tr>
                                     <th>ID LPL</th>
                                     <th>ANS</th>
                                     <th>Status</th>
                                     <th>Analista</th>
-
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                {
+                                    pedidoPac.map(e => {
+
+                                        let responsavel = false
+
+                                        if (name === e.analista) {
+                                            responsavel = true
+                                        }
+
+                                        if (e.status != 'A iniciar') {
+                                            return (
+                                                <>
+                                                    <tr>
+                                                        <td>{e.pacote}</td>
+                                                        <td>{e.ans}</td>
+                                                        <td>{e.status}</td>
+                                                        <td>{e.analista}</td>
+                                                        <td>
+                                                            {
+                                                                responsavel ? (
+                                                                    null
+                                                                ) : (
+                                                                    <button>Assumir Processo</button>
+                                                                )
+                                                            }
+
+                                                        </td>
+                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`}>Verificar Processamento</Link></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={10}>
+                                                            <div>
+                                                                <TabelaProtocolo pedidos={pedidos}>
+
+                                                                </TabelaProtocolo>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                            )
+                                        }
+                                    })
+                                }
+                            </tbody>
                         </table>
                     </div>
                 </div>

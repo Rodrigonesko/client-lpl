@@ -2,9 +2,8 @@
     display: flex;
     justify-content: center;
     padding: 0 3%;
+    width: 100%;
 }
-
-.cadastro-beneficiario-container {}
 
 .titulo-informacoes-gerais,
 .titulo-pedidos-reembolso {
@@ -32,4 +31,31 @@
 
 .none {
     display: none;
+}
+
+.assumir-protocolo-btn {
+    padding: 7px;
+    border-radius: 2px;
+    background-color: gray;
+    color: white;
+    font-weight: 500;
+    border: none;
+}
+
+.btn-criar-pedido, .btn-editar-pedido, .btn-criar-protocolo, .btn-criar-pacote {
+    position: relative;
+    top: 3%;
+    padding: 7px;
+    margin: 1rem;
+    text-decoration: none;
+    width: 10%;
+    background-color: gray;
+    color: white;
+    border-radius: 3px;
+    transition: 200ms;
+    font-size: 15px;
+}
+
+.btn-criar-pedido:hover, .btn-editar-pedido:hover, .btn-criar-protocolo:hover, .btn-criar-pacote:hover {
+    background-color: rgb(53, 69, 206);
 }

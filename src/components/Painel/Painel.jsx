@@ -90,7 +90,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                         if (moment(hoje).toDate() >= moment(e.dataSla).toDate()) {
                                             return (
                                                 <tr key={e._id} >
-                                                    <td>{e.mo}</td>
+                                                    <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
                                                 </tr>
                                             )
