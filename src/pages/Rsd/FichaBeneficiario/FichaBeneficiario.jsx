@@ -7,6 +7,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import './FichaBeneficiario.css'
 import moment from "moment/moment";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
+import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
 
 const FichaBeneficiario = () => {
 
@@ -23,23 +24,12 @@ const FichaBeneficiario = () => {
     const [contratoEmpresa, setContratoEmpresa] = useState('')
     const [msg, setMsg] = useState('')
 
-    const [protocolos, setProtocolos] = useState([])
     const [pedidos, setPedidos] = useState([])
-    const [pedidoPac, setPedidoPac] = useState([])
-
-
-
-    const changeState = state => {
-        state = !state
-        console.log(state);
-
-        return state
-    }
+    const [protocolos, setProtocolos] = useState([])
+    const [pacotes, setPacotes] = useState([])
 
     const buscarMo = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
-
-        console.log(result);
 
         setNome(result.data.pessoa.nome)
         setCpf(result.data.pessoa.cpf)
@@ -50,153 +40,25 @@ const FichaBeneficiario = () => {
         setFone3(result.data.pessoa.fone3)
         setContratoEmpresa(result.data.pessoa.contratoEmpresa)
 
-        const pacotes = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
+        const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
 
-        setPedidos(pacotes.data.pacotes)
+        setPedidos(resultPedidos.data.pedidos)
 
-        let pedidosPacote = []
+        let arrAuxProtocolos = resultPedidos.data.pedidos.filter((item, pos, array) => {
+            return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+        })
 
-        pedidosPacote = pacotes.data.pacotes.filter((item, pos, array) => {
+        setProtocolos(arrAuxProtocolos)
+
+        let arrAuxPacotes = resultPedidos.data.pedidos.filter((item, pos, array) => {
             return array.map(x => x.pacote).indexOf(item.pacote) === pos
         })
 
-        setPedidoPac(pedidosPacote)
+        setPacotes(arrAuxPacotes)
 
-    }
-
-    const teste = async () => {
-        let checkbox = document.getElementsByClassName('checkbox-pedido')
-
-        let pedidos = []
-
-        for (const item of checkbox) {
-            if (item.checked) {
-                pedidos.push(item.value)
-            }
-        }
-
-        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pacote/criar`, { pedidos }, { withCredentials: true })
-
-        console.log(result);
-
-    }
-
-    const buscarPedidos = async (element, statusPedidos, protocolo, responsavel) => {
-        try {
-            let divPedidos = element.parentElement.nextSibling
-
-            if (statusPedidos === true) {
-                console.log(protocolo);
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/${protocolo}`, { withCredentials: true })
-
-                console.log(result);
-
-                divPedidos.classList.remove('none')
-
-                result.data.pedidos.forEach(e => {
-
-                    let tr = document.createElement('tr')
-
-                    let tdPedido = document.createElement('td')
-                    let tdStatus = document.createElement('td')
-                    let tdValorApresentado = document.createElement('td')
-                    let tdValorReembolsado = document.createElement('td')
-                    let tdCnpj = document.createElement('td')
-                    let tdClinica = document.createElement('td')
-                    let tdNf = document.createElement('td')
-                    let tdIrregular = document.createElement('td')
-                    let tdBotoes = document.createElement('td')
-                    let tdCheckbox = document.createElement('td')
-
-                    tdPedido.textContent = e.numero
-                    tdStatus.textContent = e.status
-                    tdValorApresentado.textContent = e.valorApresentado
-                    tdValorReembolsado.textContent = e.valorReembolsado
-                    tdCnpj.textContent = e.cnpj
-                    tdClinica.textContent = e.clinica
-                    tdNf.textContent = e.nf
-                    tdIrregular.textContent = e.irregular
-
-                    tr.appendChild(tdPedido)
-                    tr.appendChild(tdStatus)
-                    tr.appendChild(tdValorApresentado)
-                    tr.appendChild(tdValorReembolsado)
-                    tr.appendChild(tdCnpj)
-                    tr.appendChild(tdClinica)
-                    tr.appendChild(tdNf)
-                    tr.appendChild(tdIrregular)
-                    tr.appendChild(tdBotoes)
-                    tr.appendChild(tdCheckbox)
-
-                    if (responsavel == name) {
-                        let tdEditar = document.createElement('td')
-                        //  let tdInativar = document.createElement('td')
-                        let buttonEditar = document.createElement('a')
-                        let checkbox = document.createElement('input')
-                        checkbox.setAttribute('type', 'checkbox')
-
-                        buttonEditar.textContent = 'Editar'
-                        buttonEditar.href = `/rsd/EditarPedido/${e.numero}`
-                        buttonEditar.classList.add('btn-editar-pedido')
-                        // let buttonInativar = document.createElement('a')
-                        //buttonInativar.textContent = 'Inativar'
-
-                        tdEditar.appendChild(buttonEditar)
-                        //tdInativar.appendChild(buttonInativar)
-                        tdBotoes.appendChild(tdEditar)
-                        //tdBotoes.appendChild(tdInativar)
-                        tdCheckbox.innerHTML = `<input type='checkbox' class='checkbox-pedido' value='${e.numero}'>`
-                    }
-
-                    divPedidos.firstChild.firstChild.firstChild.children[1].appendChild(tr)
-
-                })
+        console.log(arrAuxPacotes);
 
 
-            } else {
-                console.log('fecha');
-                divPedidos.classList.add('none')
-                let trPedidos = divPedidos.firstChild.firstChild.firstChild.children[1]
-                Object.values(trPedidos.children).forEach(e => {
-                    trPedidos.removeChild(e)
-                })
-
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const buscarProtocolos = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolos/${mo}`, { withCredentials: true })
-
-            setProtocolos(result.data.protocolos)
-
-            console.log(result);
-        } catch (error) {
-
-        }
-    }
-
-    const buscarPacotes = async () => {
-        try {
-
-        } catch (error) {
-
-        }
-    }
-
-    const assumirPedido = async (protocolo) => {
-        try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/protocolos/assumir`, { analista: name, protocolo: protocolo }, { withCredentials: true })
-
-            console.log(result);
-
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     const atualizarInformacoes = async () => {
@@ -220,9 +82,73 @@ const FichaBeneficiario = () => {
 
     }
 
+    const mostrarPedidos = e => {
+        let trPedidos = e.target.parentElement.nextSibling
+
+        trPedidos.classList.toggle('none')
+    }
+
+    const marcarProtocolo = e => {
+
+        let colecaoPedidos = e.target.parentElement.parentElement.nextSibling.firstChild.firstChild.firstChild.children[1].children
+
+        if (e.target.checked) {
+
+            for (const tr of colecaoPedidos) {
+                tr.lastChild.firstChild.checked = true
+            }
+
+        } else {
+            for (const tr of colecaoPedidos) {
+                tr.lastChild.firstChild.checked = false
+            }
+        }
+    }
+
+    const criarPacote = async e => {
+        try {
+
+            let checkboxs = document.getElementsByClassName('checkbox-pedido')
+
+            let arrPedidos = []
+
+            for (const item of checkboxs) {
+                if (item.checked) {
+                    arrPedidos.push(item.value)
+                }
+
+            }
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pacote/criar`, { arrPedidos }, { withCredentials: true })
+
+            if (result.status === 200) {
+                window.location.reload();
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const assumirPacote = async e => {
+        try {
+
+            console.log(e.target.value, name);
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/assumir`, { name: name, pacote: e.target.value }, { withCredentials: true })
+
+            if (result.status == 200) {
+                window.location.reload();
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         buscarMo()
-        buscarProtocolos()
     }, [])
 
     return (
@@ -277,7 +203,6 @@ const FichaBeneficiario = () => {
                                     <th>Data Pagamento</th>
                                     <th>Status</th>
                                     <th>Data Status</th>
-                                    <th>Analista</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -285,70 +210,36 @@ const FichaBeneficiario = () => {
                                 {
                                     protocolos.map(e => {
 
-                                        let statusPedidos = false
-                                        let responsavel = false
-
-                                        if (e.analista == name) {
-                                            responsavel = true
-                                        }
-
-                                        if (e.idStatus === 'A iniciar') {
+                                        if (e.status === 'A iniciar') {
                                             return (
                                                 <>
-                                                    <tr key={e._id}>
-                                                        <td onClick={x => {
-                                                            statusPedidos = changeState(statusPedidos)
-                                                            buscarPedidos(x.target, statusPedidos, e.numero, e.analista)
-
-                                                        }} className="numero-protocolo"><FaAngleDown /> {e.numero}</td>
+                                                    <tr key={e.protocolo}>
+                                                        <td onClick={e => {
+                                                            mostrarPedidos(e)
+                                                        }} className="td-protocolo"> <FaAngleDown />{e.protocolo}</td>
                                                         <td>{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                         <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
-                                                        <td>{e.idStatus}</td>
-                                                        <td></td>
-                                                        <td>{e.analista}</td>
-                                                        <td><button className="assumir-protocolo-btn" onClick={() => { assumirPedido(e.numero) }}>Assumir</button></td>
+                                                        <td>{e.status}</td>
+                                                        <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
+                                                        <td> <input type="checkbox" value={e.protocolo} className='checkbox-protocolo' onClick={marcarProtocolo} /> </td>
                                                     </tr>
-                                                    <tr key={e.numero} className='none'>
-                                                        <td colSpan={10}>
-                                                            <div>
-                                                                <table className="table">
-                                                                    <thead className="table-header">
-                                                                        <tr>
-                                                                            <th>Pedido</th>
-                                                                            <th>Status</th>
-                                                                            <th>R$ Apresentado</th>
-                                                                            <th>R$ Reembolsado</th>
-                                                                            <th>CNPJ</th>
-                                                                            <th>Clínica</th>
-                                                                            <th>NF</th>
-                                                                            <th>Irregular</th>
-                                                                            <th></th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
+                                                    <tr key={e._id} className="none">
+                                                        <TabelaPedido className='' protocolo={e.protocolo} pedidos={pedidos}>
 
-                                                                    </tbody>
-
-                                                                </table>
-                                                                {
-                                                                    responsavel && (
-                                                                        <Link className="btn-criar-pedido" to={`/rsd/CriarPedido/${e.numero}`} >Novo Pedido</Link>
-                                                                    )
-                                                                }
-                                                            </div>
-                                                        </td>
+                                                        </TabelaPedido>
                                                     </tr>
                                                 </>
+
                                             )
                                         }
+
                                     })
                                 }
                             </tbody>
                         </table>
                         <div>
                             <Link className="btn-criar-protocolo" to={`/rsd/CriarProtocolo/${mo}`}>Novo Protocolo</Link>
-                            <button className="btn-criar-pacote" onClick={teste} >Criar Pacote</button>
+                            <button className="btn-criar-pacote" onClick={criarPacote} >Criar Pacote</button>
                         </div>
                     </div>
 
@@ -369,42 +260,22 @@ const FichaBeneficiario = () => {
                             </thead>
                             <tbody>
                                 {
-                                    pedidoPac.map(e => {
-
-                                        let responsavel = false
-
-                                        if (name === e.analista) {
-                                            responsavel = true
-                                        }
-
-                                        if (e.status != 'A iniciar') {
+                                    pacotes.map(e => {
+                                        if (e.statusPacote != 'Não iniciado') {
                                             return (
                                                 <>
                                                     <tr>
-                                                        <td>{e.pacote}</td>
-                                                        <td>{e.ans}</td>
-                                                        <td>{e.status}</td>
+                                                        <td className="td-pacote" onClick={mostrarPedidos} ><FaAngleDown></FaAngleDown> {e.pacote}</td>
+                                                        <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
+                                                        <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
-                                                        <td>
-                                                            {
-                                                                responsavel ? (
-                                                                    null
-                                                                ) : (
-                                                                    <button>Assumir Processo</button>
-                                                                )
-                                                            }
-
-                                                        </td>
-                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`}>Verificar Processamento</Link></td>
+                                                        <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
+                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td colSpan={10}>
-                                                            <div>
-                                                                <TabelaProtocolo pedidos={pedidos}>
+                                                    <tr className="none">
+                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote}>
 
-                                                                </TabelaProtocolo>
-                                                            </div>
-                                                        </td>
+                                                        </TabelaProtocolo>
                                                     </tr>
                                                 </>
                                             )

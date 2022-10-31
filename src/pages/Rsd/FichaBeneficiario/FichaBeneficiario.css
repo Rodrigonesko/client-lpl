@@ -3,6 +3,8 @@
     justify-content: center;
     padding: 0 3%;
     width: 100%;
+    height: 100vh;
+    overflow: auto;
 }
 
 .titulo-informacoes-gerais,
@@ -25,7 +27,15 @@
     padding: 10px;
 }
 
-.numero-protocolo {
+.pedidos-reembolso table {
+    width: 100%;
+}
+
+.pedidos-reembolso table td {
+    text-align: center;
+}
+
+.td-protocolo, .td-pacote {
     cursor: pointer;
 }
 
@@ -33,7 +43,7 @@
     display: none;
 }
 
-.assumir-protocolo-btn {
+.btn-assumir-pacote {
     padding: 7px;
     border-radius: 2px;
     background-color: gray;
@@ -42,7 +52,11 @@
     border: none;
 }
 
-.btn-criar-pedido, .btn-editar-pedido, .btn-criar-protocolo, .btn-criar-pacote {
+.btn-criar-pedido,
+.btn-editar-pedido,
+.btn-criar-protocolo,
+.btn-criar-pacote,
+.btn-verificar-processamento {
     position: relative;
     top: 3%;
     padding: 7px;
@@ -56,6 +70,10 @@
     font-size: 15px;
 }
 
-.btn-criar-pedido:hover, .btn-editar-pedido:hover, .btn-criar-protocolo:hover, .btn-criar-pacote:hover {
+
+.btn-criar-pedido:hover,
+.btn-editar-pedido:hover,
+.btn-criar-protocolo:hover,
+.btn-criar-pacote:hover {
     background-color: rgb(53, 69, 206);
 }
