@@ -7,17 +7,28 @@ import AuthContext from "../../../context/AuthContext";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
-import Modal from '../../../components/Modal/Modal'
+import Modal from 'react-modal'
 import './ProcessamentoPacote.css'
 import moment from "moment";
+
+Modal.setAppElement('#root')
 
 const ProcessamentoPacote = () => {
 
     const { mo, idPacote } = useParams()
 
+    const [modalIsOpen, setModalIsOpen] = useState(false)
     const [pedidos, setPedidos] = useState([])
     const [protocolos, setProtocolos] = useState([])
+    const [gravacao, setGravacao] = useState()
+    const [arquivos, setArquivos] = useState([])
 
+    const openModal = () => {
+        setModalIsOpen(true)
+    }
+    const closeModal = () => {
+        setModalIsOpen(false)
+    }
     const buscarPedidos = async () => {
         try {
 
@@ -39,9 +50,56 @@ const ProcessamentoPacote = () => {
             console.log(error);
         }
     }
+    const anexarGravacao = async e => {
+
+        e.preventDefault()
+
+        try {
+
+            let formData = new FormData()
+
+            formData.append('file', gravacao, gravacao.name)
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/gravacao/anexar/${idPacote}`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+
+            if (result.status === 200) {
+                closeModal()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const buscarArquivos = async e => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
+
+            setArquivos(result.data.arquivos)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const downloadArquivo = async e => {
+        try {
+            
+            console.log(e.target.textContent);
+
+            const arquivo = e.target.textContent
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/download/${idPacote}/${arquivo}`, {withCredentials: true})
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         buscarPedidos()
+        buscarArquivos()
     }, [])
 
     return (
@@ -175,23 +233,53 @@ const ProcessamentoPacote = () => {
                                 <table className="table">
                                     <thead className="table-header">
                                         <tr>
-                                            <th>nome</th>
+                                            <th>Nome</th>
                                             <th>Data</th>
                                             <th>Tipo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        {
+                                            arquivos.map(e => {
+                                                return (
+                                                    <tr key={e._id}>
+                                                        <td> <span onClick={downloadArquivo} >{e.arquivo}</span></td>
+                                                        <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
+                                                        <td>{e.tipo}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
                                     </tbody>
                                 </table>
-                                <button>Anexar Gravação</button>
-                                <button>Anexar arquivo</button>
+                                <button onClick={openModal} >Anexar Arquivo</button>
                                 <button>Salvar</button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <div className="title">
+                        <h2>Anexar Gravação</h2>
+                    </div>
+                    <form action="" encType="multipart/form-data" method="post">
+                        <div className="content-modal-gravacao">
+                            <input type="file" name="gravacao" id="gravacao" onChange={e => setGravacao(e.target.files[0])} />
+                        </div>
+                        <div className="btns-modal">
+                            <button onClick={anexarGravacao} >Anexar</button>
+                            <button onClick={() => {
+                                closeModal()
+                            }}>Fechar</button>
+                        </div>
+                    </form>
 
+                </Modal>
             </section>
         </>
     )
