@@ -22,6 +22,9 @@ const ProcessamentoPacote = () => {
     const [protocolos, setProtocolos] = useState([])
     const [gravacao, setGravacao] = useState()
     const [arquivos, setArquivos] = useState([])
+    const [formasPagamento, setFormasPagamento] = useState([])
+    const [statusFinalizacao, setStatusFinalizacao] = useState([])
+    const [houveSucesso, setHouveSucesso] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -32,8 +35,6 @@ const ProcessamentoPacote = () => {
     const buscarPedidos = async () => {
         try {
 
-            console.log(idPacote);
-
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
 
             setPedidos(result.data.pedidos)
@@ -43,8 +44,6 @@ const ProcessamentoPacote = () => {
             })
 
             setProtocolos(arrAuxProtocolos)
-
-            console.log(arrAuxProtocolos);
 
         } catch (error) {
             console.log(error);
@@ -81,14 +80,58 @@ const ProcessamentoPacote = () => {
             console.log(error);
         }
     }
-    const downloadArquivo = async e => {
+    const download = (url, filename) => {
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+            })
+            .catch(console.error);
+    }
+    const buscarFormasPagamento = async () => {
         try {
-            
-            console.log(e.target.textContent);
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/formasPagamento`, { withCredentials: true })
 
-            const arquivo = e.target.textContent
+            setFormasPagamento(result.data.formasPagamento)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/download/${idPacote}/${arquivo}`, {withCredentials: true})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const buscarStatusFinalizacao = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/statusFinalizacoes`, { withCredentials: true })
+
+            setStatusFinalizacao(result.data.statusFinalizacoes)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const mostrarPedidos = e => {
+        let trPedidos = e.target.parentElement.nextSibling
+
+        trPedidos.classList.toggle('none')
+    }
+    const mostrarProcessamento = () => {
+
+        document.getElementById('tr-processamento-1').classList.remove('none')
+
+    }
+    const salvar = async () => {
+        try {
+            console.log('teste');
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
+                pacote: idPacote,
+                sucesso: houveSucesso
+            }, {
+                withCredentials: true
+            })
 
             console.log(result);
 
@@ -100,6 +143,8 @@ const ProcessamentoPacote = () => {
     useEffect(() => {
         buscarPedidos()
         buscarArquivos()
+        buscarFormasPagamento()
+        buscarStatusFinalizacao()
     }, [])
 
     return (
@@ -136,13 +181,13 @@ const ProcessamentoPacote = () => {
                                         return (
                                             <>
                                                 <tr key={e.protocolo}>
-                                                    <td> <FaAngleDown /> {e.protocolo}</td>
+                                                    <td className="td-protocolo" onClick={mostrarPedidos} > <FaAngleDown /> {e.protocolo}</td>
                                                     <td>{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                     <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
                                                     <td>{e.statusPacote}</td>
                                                     <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
                                                 </tr>
-                                                <tr>
+                                                <tr className="none" >
                                                     <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} />
                                                 </tr>
                                             </>
@@ -153,7 +198,7 @@ const ProcessamentoPacote = () => {
                         </table>
                     </div>
                     <div className="btns-processamento">
-                        <button>Iniciar Processamento</button>
+                        <button onClick={mostrarProcessamento} className="iniciar-processamento-btn">Iniciar Processamento</button>
                         <button>Reapresentação de Protocolo Indefirido</button>
                         <input type="checkbox" name="prioridade-dossie" id="prioridade-dossie" />
                         <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label>
@@ -164,40 +209,126 @@ const ProcessamentoPacote = () => {
                                 <span>Roteiro</span>
                             </div>
                             <div className="table-roteiro">
-                                <table className="table">
+                                <table className="table tabela-roteiro">
                                     <tbody>
-                                        <tr>
+                                        <tr className="none" id="tr-processamento-1">
                                             <td>1°</td>
                                             <td>
                                                 <p>Houve sucesso no Contato com o beneficiário?</p>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" value={`Sim`} />
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" value={`Sim`} onClick={e => {
+                                                    setHouveSucesso(e.target.value)
+                                                }} />
                                                 <label htmlFor="contato-beneficiario-sim">Sim</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} />
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {
+                                                    setHouveSucesso(e.target.value)
+                                                }} />
                                                 <label htmlFor="contato-beneficiario-nao">Não</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} />
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} onClick={e => {
+                                                    setHouveSucesso(e.target.value)
+                                                }} />
                                                 <label htmlFor="contato-beneficiario-agendar">Necessário Agendar Horario</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sem-retorno" value={`Sem Retorno de Contato`} />
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sem-retorno" value={`Sem Retorno de Contato`} onClick={e => {
+                                                    setHouveSucesso(e.target.value)
+                                                }} />
                                                 <label htmlFor="contato-beneficiario-sem-retorno">Sem Retorno de Contato</label>
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" />
+                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                    document.getElementById('tr-processamento-2').classList.toggle('none')
+                                                }} />
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr className="none" id="tr-processamento-2">
                                             <td>2°</td>
                                             <td>
                                                 <p><strong>SELO CONTATO</strong></p>
                                                 <p>Informar nome completo do beneficiário no início do contato. Se identifique como funcionário da Operadora Informar que a ligação é gravada e pedir para confirmar algumas informações, como 3 últimos números do CPF, ano de nascimento e idade.</p>
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" />
+                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                    document.getElementById('tr-processamento-3').classList.toggle('none')
+                                                }} />
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr className="none" id="tr-processamento-3">
                                             <td>3°</td>
                                             <td>
                                                 <p><strong>MOTIVO CONTATO</strong></p>
                                                 <p>Reembolso referente ao atendimento da clínica TAL, realizado no dia XX, no valor de R$ XX. Confirmar se o beneficiário reconhece esse atendimento e cobrança?</p>
+                                                {
+                                                    pedidos.map(e => {
+                                                        return (
+                                                            <>
+                                                                <p>Pedido <strong>{e.numero}</strong>, NF <strong>{e.nf}</strong>, Clínica <strong>{e.clinica}</strong>, Valor Apresentado <strong>R$ {e.valorApresentado}</strong></p>
+                                                                <input type="radio" name={`confirma-${e.numero}`} id={`confirma-sim-${e.numero}`} />
+                                                                <label htmlFor={`confirma-sim-${e.numero}`}>Sim</label>
+                                                                <input type="radio" name={`confirma-${e.numero}`} id={`confirma-nao-${e.numero}`} />
+                                                                <label htmlFor={`confirma-nao-${e.numero}`}>Não</label>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                    document.getElementById('tr-processamento-4').classList.toggle('none')
+                                                }} />
+                                            </td>
+                                        </tr>
+                                        <tr className="none" id="tr-processamento-4">
+                                            <td>4°</td>
+                                            <td>
+                                                <p><strong>CONFIRMAÇÃO SERVIÇO</strong></p>
+                                                <p>Questionar como foi realizado e solicitar envio do comprovante/declaração em até 5 dias úteis e deixa-lo ciente que o pedido poderá ser cancelado caso a documentação não seja enviada. Questionar ao beneficiário como ficou acordado o pagamento destes serviços junto a clínica:</p>
+                                                {
+                                                    pedidos.map(e => {
+                                                        return (
+                                                            <>
+                                                                <p>Pedido: <strong>{e.numero}</strong></p>
+                                                                {
+                                                                    formasPagamento.map(formaPagamento => {
+                                                                        return (
+                                                                            <>
+                                                                                <input type="radio" name={`forma-pagamento-${e.numero}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} />
+                                                                                <label htmlFor={`forma-pagamento-${e.numero}-${formaPagamento.nome}`}>{formaPagamento.nome}</label>
+                                                                            </>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                    document.getElementById('tr-processamento-5').classList.toggle('none')
+                                                }} />
+                                            </td>
+                                        </tr>
+                                        <tr className="none" id="tr-processamento-5">
+                                            <td>5°</td>
+                                            <td>
+                                                <p><strong>FINALIZAÇÃO</strong></p>
+                                                {
+                                                    pedidos.map(e => {
+                                                        return (
+                                                            <>
+                                                                <p>Pedido: <strong>{e.numero}</strong></p>
+                                                                {
+                                                                    statusFinalizacao.map(statusFinalizacao => {
+                                                                        return (
+                                                                            <>
+                                                                                <input type="radio" name={`finalizacao-${e.numero}`} id={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`} value={statusFinalizacao.descricao} />
+                                                                                <label htmlFor={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`}>{statusFinalizacao.descricao}</label>
+                                                                            </>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </>
+                                                        )
+                                                    })
+                                                }
                                             </td>
                                             <td>
                                                 <input type="checkbox" name="" id="" />
@@ -243,7 +374,9 @@ const ProcessamentoPacote = () => {
                                             arquivos.map(e => {
                                                 return (
                                                     <tr key={e._id}>
-                                                        <td> <span onClick={downloadArquivo} >{e.arquivo}</span></td>
+                                                        <td> <span className="link-arquivo" onClick={() => {
+                                                            download(`${process.env.REACT_APP_API_KEY}/uploads/rsd/gravacoes/${idPacote}`, e.arquivo)
+                                                        }} >{e.arquivo}</span></td>
                                                         <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
                                                         <td>{e.tipo}</td>
                                                     </tr>
@@ -253,7 +386,7 @@ const ProcessamentoPacote = () => {
                                     </tbody>
                                 </table>
                                 <button onClick={openModal} >Anexar Arquivo</button>
-                                <button>Salvar</button>
+                                <button onClick={salvar} >Salvar</button>
                             </div>
                         </div>
                     </div>

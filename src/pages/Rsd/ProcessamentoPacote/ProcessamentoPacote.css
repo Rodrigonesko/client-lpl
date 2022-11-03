@@ -1,15 +1,67 @@
-.roteiro-container { 
-    display: flex;
- }
+.section-processamento-pacote-container {
+   height: 100vh;
+   overflow: auto;
+   padding: 1rem;
+   width: 100%;
+}
 
- .roteiro {
-    width: 70%;
- }
+.roteiro-container {
+   display: flex;
+}
 
- .agenda-processamento {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
- }
+.roteiro {
+   width: 70%;
+}
+
+.agenda-processamento {
+   width: 30%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.link-arquivo {
+   font-weight: 600;
+   color: rgb(48, 115, 202);
+   transition: 200ms;
+}
+
+.link-arquivo:hover {
+   cursor: pointer;
+   text-decoration: underline;
+}
+
+.tabela-roteiro {
+   font-size: 14px;
+}
+
+.tabela-roteiro td {
+   padding: 1rem;
+   border: 1px solid black;
+}
+
+.tabela-roteiro td p {
+   padding: 1rem;
+}
+
+.tabela-roteiro td input {
+   margin: 1rem;
+}
+
+.pedidos-reembolso-container {
+   margin-bottom: 1rem;
+}
+
+.btns-processamento button {
+   margin-right: 1rem;
+}
+
+.iniciar-processamento-btn {
+   padding: 7px;
+   border-radius: 2px;
+   background-color: gray;
+   color: white;
+   font-weight: 500;
+   border: none;
+}
