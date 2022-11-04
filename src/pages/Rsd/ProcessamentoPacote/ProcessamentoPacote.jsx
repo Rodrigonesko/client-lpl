@@ -13,6 +13,10 @@ import moment from "moment";
 
 Modal.setAppElement('#root')
 
+let motivoContato = new Map()
+let confirmacaoServico = new Map()
+let finalizacao = new Map()
+
 const ProcessamentoPacote = () => {
 
     const { mo, idPacote } = useParams()
@@ -25,6 +29,7 @@ const ProcessamentoPacote = () => {
     const [formasPagamento, setFormasPagamento] = useState([])
     const [statusFinalizacao, setStatusFinalizacao] = useState([])
     const [houveSucesso, setHouveSucesso] = useState('')
+    const [agenda, setAgenda] = useState([])
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -124,20 +129,82 @@ const ProcessamentoPacote = () => {
     }
     const salvar = async () => {
         try {
-            console.log('teste');
+
+            let motivosContato = []
+            let servicos = []
+            let finalizacoes = []
+
+            motivoContato.forEach((item, chave) => {
+                motivosContato.push([chave, item])
+            })
+
+            confirmacaoServico.forEach((item, chave) => {
+                servicos.push([chave, item])
+            })
+
+            finalizacao.forEach((item, chave) => {
+                finalizacoes.push([chave, item])
+            })
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
                 pacote: idPacote,
-                sucesso: houveSucesso
+                sucesso: houveSucesso,
+                motivoContato: motivosContato,
+                confirmacaoServico: servicos,
+                finalizacao: finalizacoes
             }, {
                 withCredentials: true
             })
 
-            console.log(result);
+            window.location.reload()
 
         } catch (error) {
             console.log(error);
         }
+    }
+    const verificarMotivoContato = e => {
+
+        let valor = e.target.value
+        let nome = e.target.name
+        let split = nome.split('-')
+        let pedido = split[1]
+
+        motivoContato.set(pedido, valor)
+
+    }
+    const verificarServico = e => {
+
+        let valor = e.target.value
+        let split = e.target.name.split('-')
+        let pedido = split[2]
+
+        confirmacaoServico.set(pedido, valor)
+
+    }
+    const verificarFinalizacao = e => {
+
+        let valor = e.target.value
+        let split = e.target.name.split('-')
+        let pedido = split[1]
+
+        finalizacao.set(pedido, valor)
+
+    }
+    const buscarAgenda = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
+
+            setAgenda(result.data.agenda)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const verificarStatusPacote = async () => {
+        pedidos.map(e => {
+            console.log(e);
+        })
     }
 
     useEffect(() => {
@@ -145,6 +212,8 @@ const ProcessamentoPacote = () => {
         buscarArquivos()
         buscarFormasPagamento()
         buscarStatusFinalizacao()
+        buscarAgenda()
+        verificarStatusPacote()
     }, [])
 
     return (
@@ -257,15 +326,20 @@ const ProcessamentoPacote = () => {
                                                 <p>Reembolso referente ao atendimento da clínica TAL, realizado no dia XX, no valor de R$ XX. Confirmar se o beneficiário reconhece esse atendimento e cobrança?</p>
                                                 {
                                                     pedidos.map(e => {
-                                                        return (
-                                                            <>
-                                                                <p>Pedido <strong>{e.numero}</strong>, NF <strong>{e.nf}</strong>, Clínica <strong>{e.clinica}</strong>, Valor Apresentado <strong>R$ {e.valorApresentado}</strong></p>
-                                                                <input type="radio" name={`confirma-${e.numero}`} id={`confirma-sim-${e.numero}`} />
-                                                                <label htmlFor={`confirma-sim-${e.numero}`}>Sim</label>
-                                                                <input type="radio" name={`confirma-${e.numero}`} id={`confirma-nao-${e.numero}`} />
-                                                                <label htmlFor={`confirma-nao-${e.numero}`}>Não</label>
-                                                            </>
-                                                        )
+
+                                                        if (!e.statusFinalizacao) {
+                                                            return (
+                                                                <>
+                                                                    <p>Pedido <strong>{e.numero}</strong>, NF <strong>{e.nf}</strong>, Clínica <strong>{e.clinica}</strong>, Valor Apresentado <strong>R$ {e.valorApresentado}</strong></p>
+                                                                    <input type="radio" name={`confirma-${e.numero}`} id={`confirma-sim-${e.numero}`} onClick={verificarMotivoContato} value='Sim' />
+                                                                    <label htmlFor={`confirma-sim-${e.numero}`}>Sim</label>
+                                                                    <input type="radio" name={`confirma-${e.numero}`} id={`confirma-nao-${e.numero}`} onClick={verificarMotivoContato} value='Não' />
+                                                                    <label htmlFor={`confirma-nao-${e.numero}`}>Não</label>
+                                                                </>
+                                                            )
+                                                        }
+
+
                                                     })
                                                 }
                                             </td>
@@ -282,21 +356,24 @@ const ProcessamentoPacote = () => {
                                                 <p>Questionar como foi realizado e solicitar envio do comprovante/declaração em até 5 dias úteis e deixa-lo ciente que o pedido poderá ser cancelado caso a documentação não seja enviada. Questionar ao beneficiário como ficou acordado o pagamento destes serviços junto a clínica:</p>
                                                 {
                                                     pedidos.map(e => {
-                                                        return (
-                                                            <>
-                                                                <p>Pedido: <strong>{e.numero}</strong></p>
-                                                                {
-                                                                    formasPagamento.map(formaPagamento => {
-                                                                        return (
-                                                                            <>
-                                                                                <input type="radio" name={`forma-pagamento-${e.numero}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} />
-                                                                                <label htmlFor={`forma-pagamento-${e.numero}-${formaPagamento.nome}`}>{formaPagamento.nome}</label>
-                                                                            </>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </>
-                                                        )
+
+                                                        if (!e.statusFinalizacao) {
+                                                            return (
+                                                                <>
+                                                                    <p>Pedido: <strong>{e.numero}</strong></p>
+                                                                    {
+                                                                        formasPagamento.map(formaPagamento => {
+                                                                            return (
+                                                                                <>
+                                                                                    <input type="radio" name={`forma-pagamento-${e.numero}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} onClick={verificarServico} />
+                                                                                    <label htmlFor={`forma-pagamento-${e.numero}-${formaPagamento.nome}`}>{formaPagamento.nome}</label>
+                                                                                </>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </>
+                                                            )
+                                                        }
                                                     })
                                                 }
                                             </td>
@@ -312,21 +389,23 @@ const ProcessamentoPacote = () => {
                                                 <p><strong>FINALIZAÇÃO</strong></p>
                                                 {
                                                     pedidos.map(e => {
-                                                        return (
-                                                            <>
-                                                                <p>Pedido: <strong>{e.numero}</strong></p>
-                                                                {
-                                                                    statusFinalizacao.map(statusFinalizacao => {
-                                                                        return (
-                                                                            <>
-                                                                                <input type="radio" name={`finalizacao-${e.numero}`} id={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`} value={statusFinalizacao.descricao} />
-                                                                                <label htmlFor={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`}>{statusFinalizacao.descricao}</label>
-                                                                            </>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </>
-                                                        )
+                                                        if (!e.statusFinalizacao) {
+                                                            return (
+                                                                <>
+                                                                    <p>Pedido: <strong>{e.numero}</strong></p>
+                                                                    {
+                                                                        statusFinalizacao.map(statusFinalizacao => {
+                                                                            return (
+                                                                                <>
+                                                                                    <input type="radio" name={`finalizacao-${e.numero}`} id={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`} value={statusFinalizacao.descricao} onClick={verificarFinalizacao} />
+                                                                                    <label htmlFor={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`}>{statusFinalizacao.descricao}</label>
+                                                                                </>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </>
+                                                            )
+                                                        }
                                                     })
                                                 }
                                             </td>
@@ -352,7 +431,17 @@ const ProcessamentoPacote = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        {
+                                            agenda.map(e => {
+                                                return (
+                                                    <tr key={e._id}>
+                                                        <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
+                                                        <td>{e.usuario}</td>
+                                                        <td>{e.parecer}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
                                     </tbody>
                                 </table>
                                 <button>Escrevar na Agenda</button>
