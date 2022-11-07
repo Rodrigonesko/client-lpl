@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const TabelaPedido = ({ pedidos, protocolo }) => {
+const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
 
-    console.log(pedidos);
+    console.log(`O pacote pedido é: ${pacote}`);
 
     return (
         <>
@@ -27,7 +27,8 @@ const TabelaPedido = ({ pedidos, protocolo }) => {
                         <tbody>
                             {
                                 pedidos.map(e => {
-                                    if (protocolo === e.protocolo) {
+                                    if (protocolo === e.protocolo && e.pacote === pacote ) {
+
                                         return (
                                             <tr>
                                                 <td>{e.numero}</td>
@@ -38,7 +39,7 @@ const TabelaPedido = ({ pedidos, protocolo }) => {
                                                 <td>{e.clinica}</td>
                                                 <td>{e.nf}</td>
                                                 <td>{e.irregular}</td>
-                                                <td><Link to={`/rsd/EditarPedido/${e.numero}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
                                                 {
                                                     e.statusPacote === 'Não iniciado' ? (
                                                         <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>

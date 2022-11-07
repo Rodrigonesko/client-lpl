@@ -36,6 +36,7 @@ const PainelProcessos = () => {
     const [statusVence4Agd, setStatusVence4Agd] = useState(false)
 
     const [protocolos, setProtocolos] = useState([])
+    const [pedidos, setPedidos] = useState([])
 
     const [aIniciar, setAiniciar] = useState([])
     const [agendados, setAgendados] = useState([])
@@ -59,22 +60,46 @@ const PainelProcessos = () => {
         }
     }
 
-    const setStatusProtocolo = async () => {
-        protocolos.forEach(e => {
-            if (e.idStatus === 'A iniciar') {
+    const setStatusPedido = async () => {
+        pedidos.forEach(e => {
+            if (e.status === 'A iniciar') {
                 setAiniciar(aIniciar => [...aIniciar, e])
+            }
+            if (e.status === 'Agendado') {
+                setAgendados(agendados => [...agendados, e])
+            }
+            if(e.status === 'Aguardando Retorno Contato'){
+                setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
+            }
+            if(e.status === 'Aguardando Documento Original'){
+                setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
             }
         })
 
         console.log(protocolos);
     }
 
+    const buscarPedidos = async () => {
+        try {
 
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/naoFinalizados`, { withCredentials: true })
+
+            console.log(result);
+
+            setTeste('ola')
+
+            setPedidos(result.data.pedidos)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
+        buscarPedidos()
         buscarProtocolos()
-        setStatusProtocolo()
-    }, [teste])
+        setStatusPedido()
+    }, [JSON.stringify(pedidos)])
 
     return (
         <>

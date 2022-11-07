@@ -257,7 +257,7 @@ const ProcessamentoPacote = () => {
                                                     <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
                                                 </tr>
                                                 <tr className="none" >
-                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} />
+                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={idPacote} />
                                                 </tr>
                                             </>
                                         )

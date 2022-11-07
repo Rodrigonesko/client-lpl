@@ -14,10 +14,8 @@ const EditarPedido = () => {
     const [cnpj, setCnpj] = useState('')
     const [clinica, setClinica] = useState('')
     const [nf, setNf] = useState('')
-    const [protocolo, setProtocolo] = useState('')
     const [mo, setMo] = useState('')
-
-    console.log(pedido);
+    const [pedidoEditado, setPedidoEditado] = useState('')
 
     const buscarPedido = async () => {
         try {
@@ -30,13 +28,8 @@ const EditarPedido = () => {
             setCnpj(result.data.result.cnpj)
             setClinica(result.data.result.clinica)
             setNf(result.data.result.nf)
-            let pro = result.data.result.protocolo
-
-            const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/${pro}`, {withCredentials: true})
-
-            setMo(buscaMo.data.result.mo)
-
-            
+            setPedidoEditado(result.data.result.numero)
+            setMo(result.data.result.mo)
 
         } catch (error) {
             console.log(error);
@@ -68,7 +61,8 @@ const EditarPedido = () => {
                 valorReembolsado,
                 cnpj,
                 clinica,
-                nf
+                nf,
+                pedidoEditado
             }, { withCredentials: true })
 
             if (result.status === 200) {
@@ -95,7 +89,9 @@ const EditarPedido = () => {
                     <form>
                         <div className="editar-pedido-input">
                             <label htmlFor="pedido">Número Pedido</label>
-                            <input type="text" id="pedido" placeholder="Pedido" disabled defaultValue={pedido} />
+                            <input type="text" id="pedido" placeholder="Pedido" defaultValue={pedidoEditado} onChange={e => {
+                                setPedidoEditado(e.target.value)
+                            }} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="valor-apresentado">Valor Apresentado</label>
@@ -114,7 +110,7 @@ const EditarPedido = () => {
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="clinica">Clinica</label>
-                            <input type="text" id="clinica" placeholder="Clinica" defaultValue={clinica} onKeyUp={e=>setClinica(e.target.value)} />
+                            <input type="text" id="clinica" placeholder="Clinica" defaultValue={clinica} onKeyUp={e => setClinica(e.target.value)} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="nf">NF</label>

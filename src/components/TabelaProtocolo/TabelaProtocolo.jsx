@@ -3,9 +3,11 @@ import { FaAngleDown } from "react-icons/fa";
 import moment from "moment/moment";
 import TabelaPedido from "../TabelaPedido/TabelaPedido";
 
-const TabelaProtocolo = ({ pedidos, pacote }) => {
+const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false }) => {
 
     const [protocolos, setProtocolos] = useState([])
+
+    console.log(`O pacote é: ${verificaPacote}`);
 
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
@@ -49,7 +51,7 @@ const TabelaProtocolo = ({ pedidos, pacote }) => {
                                                     <td>{e.status}</td>
                                                 </tr>
                                                 <tr className="none">
-                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo}>
+                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote}>
 
                                                     </TabelaPedido>
                                                 </tr>

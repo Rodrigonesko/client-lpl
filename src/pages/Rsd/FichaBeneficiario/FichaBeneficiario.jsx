@@ -44,7 +44,13 @@ const FichaBeneficiario = () => {
 
         setPedidos(resultPedidos.data.pedidos)
 
-        let arrAuxProtocolos = resultPedidos.data.pedidos.filter((item, pos, array) => {
+        let auxProtocolos = resultPedidos.data.pedidos.filter((item, pos, array) => {
+            return item.status === 'A iniciar'
+        })
+
+        console.log(auxProtocolos);
+
+        let arrAuxProtocolos = auxProtocolos.filter((item, pos, array) => {
             return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
         })
 
@@ -273,7 +279,7 @@ const FichaBeneficiario = () => {
                                                         <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
                                                     </tr>
                                                     <tr className="none">
-                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote}>
+                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} >
 
                                                         </TabelaProtocolo>
                                                     </tr>
