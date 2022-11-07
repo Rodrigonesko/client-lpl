@@ -95,11 +95,15 @@ const EditarPedido = () => {
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="valor-apresentado">Valor Apresentado</label>
-                            <input type="text" id="valor-apresentado" placeholder="Valor Apresentado" defaultValue={valorApresentado} />
+                            <input type="text" id="valor-apresentado" placeholder="Valor Apresentado" defaultValue={valorApresentado} onChange={e => {
+                                setValorApresentado(e.target.value)
+                            }} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="valor-reembolsado">Valor Reembolsado</label>
-                            <input type="text" id="valor-reembolsado" placeholder="Valor Reembolsado" defaultValue={valorReembolsado} />
+                            <input type="text" id="valor-reembolsado" placeholder="Valor Reembolsado" defaultValue={valorReembolsado} onChange={e => {
+                                setValorReembolsado(e.target.value)
+                            }} />
                         </div>
                         <div className="editar-pedido-input">
                             <label htmlFor="cnpj">CNPJ</label>

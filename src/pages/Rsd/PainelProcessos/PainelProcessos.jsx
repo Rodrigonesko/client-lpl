@@ -35,7 +35,6 @@ const PainelProcessos = () => {
     const [statusVence3Agd, setStatusVence3Agd] = useState(false)
     const [statusVence4Agd, setStatusVence4Agd] = useState(false)
 
-    const [protocolos, setProtocolos] = useState([])
     const [pedidos, setPedidos] = useState([])
 
     const [aIniciar, setAiniciar] = useState([])
@@ -45,38 +44,25 @@ const PainelProcessos = () => {
 
     const [teste, setTeste] = useState('')
 
-    const buscarProtocolos = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolos`, { withCredentials: true })
-
-            console.log(result);
-
-            setTeste('ola')
-
-            setProtocolos(result.data.protocolos)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const [pesquisa, setPesquisa] = useState('')
 
     const setStatusPedido = async () => {
         pedidos.forEach(e => {
+
             if (e.status === 'A iniciar') {
                 setAiniciar(aIniciar => [...aIniciar, e])
             }
             if (e.status === 'Agendado') {
                 setAgendados(agendados => [...agendados, e])
             }
-            if(e.status === 'Aguardando Retorno Contato'){
+            if (e.status === 'Aguardando Retorno Contato') {
                 setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
             }
-            if(e.status === 'Aguardando Documento Original'){
+            if (e.status === 'Aguardando Documento Original') {
                 setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
             }
         })
 
-        console.log(protocolos);
     }
 
     const buscarPedidos = async () => {
@@ -84,11 +70,44 @@ const PainelProcessos = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/naoFinalizados`, { withCredentials: true })
 
-            console.log(result);
+            setPedidos(result.data.pedidos)
 
-            setTeste('ola')
+            setTeste('teste')
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const pesquisaFiltro = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/filtro/${pesquisa}`, { withCredentials: true })
 
             setPedidos(result.data.pedidos)
+
+            setAiniciar([])
+            setAgendados([])
+            setAguardandoContatos([])
+            setAguardandoDocs([])
+
+            result.data.pedidos.forEach(e => {
+
+                console.log(e);
+
+                if (e.status === 'A iniciar') {
+                    setAiniciar(aIniciar => [...aIniciar, e])
+                }
+                if (e.status === 'Agendado') {
+                    setAgendados(agendados => [...agendados, e])
+                }
+                if (e.status === 'Aguardando Retorno Contato') {
+                    setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
+                }
+                if (e.status === 'Aguardando Documento Original') {
+                    setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
+                }
+            })
 
         } catch (error) {
             console.log(error);
@@ -97,9 +116,8 @@ const PainelProcessos = () => {
 
     useEffect(() => {
         buscarPedidos()
-        buscarProtocolos()
         setStatusPedido()
-    }, [JSON.stringify(pedidos)])
+    }, [teste])
 
     return (
         <>
@@ -110,11 +128,11 @@ const PainelProcessos = () => {
                         <h3>Painel Processos</h3>
                     </div>
                     <div className="filtros-painel">
-                        <input type="text" placeholder="Marca ótica, nome, CPF, Protocolo" />
+                        <input type="text" placeholder="Marca ótica, nome, CPF, Protocolo" onChange={e => setPesquisa(e.target.value)} />
                         <select name="analista" id="analista">
                             <option value="">Analista</option>
                         </select>
-                        <button>Pesquisar</button>
+                        <button onClick={pesquisaFiltro} >Pesquisar</button>
                     </div>
                     <div className="painel-processos">
                         <Painel

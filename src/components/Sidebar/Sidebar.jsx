@@ -71,6 +71,9 @@ const Sidebar = () => {
                             </SubMenu>
                             <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
                                     <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
+                                    <MenuItem><Link to='/rsd/CriarPedidoIndividual/'>Criar Pedido/Protocolo</Link></MenuItem>
+                                    <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
+                                    <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>
                                     <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
                             </SubMenu>
                         </Menu>

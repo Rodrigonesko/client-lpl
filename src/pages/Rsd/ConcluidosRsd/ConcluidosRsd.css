@@ -1,0 +1,20 @@
+.section-concluidos-rsd-container {
+    padding: 1rem;
+    width: 100%;
+}
+
+.pesquisa-concluidos-rsd {
+    margin-bottom: 1rem;
+}
+
+.pesquisa-concluidos-rsd input {
+    width: 30%;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.pesquisa-concluidos-rsd button {
+    padding: 5px;
+    border-radius: 2px;
+
+}

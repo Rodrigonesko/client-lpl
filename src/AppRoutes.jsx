@@ -18,6 +18,11 @@ import EditarPedido from "./pages/Rsd/EditarPedido/EditarPedido";
 import CriarPedido from "./pages/Rsd/CriarPedido/CriarPedido";
 import CriarProtocolo from "./pages/Rsd/CriarProtocolo/CriarProtocolo";
 import ProcessamentoPacote from "./pages/Rsd/ProcessamentoPacote/ProcessamentoPacote";
+import CriarPedidoIndividual from "./pages/Rsd/CriarPedidoIndividual/CriarPedidoIndividual";
+import OperadorasBeneficiario from "./pages/Rsd/OperadorasBeneficiario/OperadorasBeneficiario";
+import CriarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/CriarOperadoraBeneficiario/CriarOperadoraBeneficiario";
+import EditarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/EditarOperadoraBeneficiario/EditarOperadoraBeneficiario";
+import ConcluidosRsd from "./pages/Rsd/ConcluidosRsd/ConcluidosRsd";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -150,7 +155,21 @@ const AppRoutes = () => {
                 <Route path="/rsd/ProcessamentoPacote/:mo/:idPacote" element={<ProtectedRoute>
                     <ProcessamentoPacote />
                 </ProtectedRoute>} />
-
+                <Route path="/rsd/CriarPedidoIndividual/" element={<ProtectedRoute>
+                    <CriarPedidoIndividual />
+                </ProtectedRoute>} />
+                <Route path="/rsd/OperadoraBeneficiario/" element={<ProtectedRoute>
+                    <OperadorasBeneficiario />
+                </ProtectedRoute>} />
+                <Route path="/rsd/OperadoraBeneficiario/Criar" element={<ProtectedRoute>
+                    <CriarOperadoraBeneficiario />
+                </ProtectedRoute>} />
+                <Route path="/rsd/OperadoraBeneficiario/Editar/:id" element={<ProtectedRoute>
+                    <EditarOperadoraBeneficiario />
+                </ProtectedRoute>} />
+                <Route path="/rsd/Concluidos" element={<ProtectedRoute>
+                    <ConcluidosRsd />
+                </ProtectedRoute>} />
 
             </Routes>
         </AuthProvider>

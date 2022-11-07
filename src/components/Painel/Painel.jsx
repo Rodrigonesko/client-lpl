@@ -11,7 +11,10 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
         setStatus(!status)
     }
 
+    let total = 0
+
     protocolos = protocolos.filter((item, pos, array) => {
+        
         return array.map(x => x.mo).indexOf(item.mo) === pos
     })
 
@@ -23,6 +26,8 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
     let qtdVence4 = 0
 
     protocolos.forEach(e => {
+
+        
         let hoje = new Date()
 
         if (moment(hoje).toDate() >= moment(e.dataSla).toDate()) {
@@ -55,13 +60,13 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
         if (moment(hoje).format('YYYY-MM-DD') <= moment(e.dataSla).format('YYYY-MM-DD')) {
             qtdVence4++
         }
-
-
     })
+
+    total = qtdVencidos + qtdVenceHoje + qtdVenceAmanha + qtdVence2 + qtdVence3 + qtdVence4
 
     return (
         <div className="painel">
-            <h4>{title}</h4>
+            <h4>{title} ({total})</h4>
             <div className="vencido">
                 <div className="change" onClick={() => {
                     handleChange(statusVencido, setStatusVencido)
@@ -81,6 +86,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                             </thead>
                             <tbody>
                                 {
+                                    
                                     protocolos.map(e => {
 
                                         //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${e.mo}`, {withCredentials: true})
