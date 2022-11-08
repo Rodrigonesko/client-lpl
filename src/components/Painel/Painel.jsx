@@ -14,7 +14,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
     let total = 0
 
     protocolos = protocolos.filter((item, pos, array) => {
-        
+
         return array.map(x => x.mo).indexOf(item.mo) === pos
     })
 
@@ -27,7 +27,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
 
     protocolos.forEach(e => {
 
-        
+
         let hoje = new Date()
 
         if (moment(hoje).toDate() >= moment(e.dataSla).toDate()) {
@@ -86,7 +86,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                             </thead>
                             <tbody>
                                 {
-                                    
+
                                     protocolos.map(e => {
 
                                         //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${e.mo}`, {withCredentials: true})
@@ -222,7 +222,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
 
                                             return (
                                                 <tr key={e._id} >
-                                                    <td>{e.mo}</td>
+                                                    <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
                                                 </tr>
                                             )
@@ -265,7 +265,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
 
                                             return (
                                                 <tr key={e._id} >
-                                                    <td>{e.mo}</td>
+                                                    <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
                                                 </tr>
                                             )
@@ -307,7 +307,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
 
                                             return (
                                                 <tr key={e._id} >
-                                                    <td>{e.mo}</td>
+                                                    <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
                                                 </tr>
                                             )

@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 
 const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
 
-    console.log(`O pacote pedido é: ${pacote}`);
-
     return (
         <>
             <td colSpan={10} >
@@ -33,8 +31,8 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
                                             <tr>
                                                 <td>{e.numero}</td>
                                                 <td>{e.status}</td>
-                                                <td>{e.valorApresentado}</td>
-                                                <td>{e.valorReembolsado}</td>
+                                                <td>{Number(e.valorApresentado).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                                <td>{Number(e.valorReembolsado).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
                                                 <td>{e.cnpj}</td>
                                                 <td>{e.clinica}</td>
                                                 <td>{e.nf}</td>
