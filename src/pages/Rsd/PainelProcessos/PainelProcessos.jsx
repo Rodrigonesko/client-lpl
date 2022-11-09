@@ -52,13 +52,13 @@ const PainelProcessos = () => {
             if (e.status === 'A iniciar') {
                 setAiniciar(aIniciar => [...aIniciar, e])
             }
-            if (e.status === 'Agendado') {
+            if (e.status === 'Em andamento') {
                 setAgendados(agendados => [...agendados, e])
             }
             if (e.status === 'Aguardando Retorno Contato') {
                 setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
             }
-            if (e.status === 'Aguardando Documento Original') {
+            if (e.status === 'Aguardando Comprovante') {
                 setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
             }
         })
@@ -98,13 +98,13 @@ const PainelProcessos = () => {
                 if (e.status === 'A iniciar') {
                     setAiniciar(aIniciar => [...aIniciar, e])
                 }
-                if (e.status === 'Agendado') {
+                if (e.status === 'Em andamento') {
                     setAgendados(agendados => [...agendados, e])
                 }
                 if (e.status === 'Aguardando Retorno Contato') {
                     setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
                 }
-                if (e.status === 'Aguardando Documento Original') {
+                if (e.status === 'Aguardando Comprovante') {
                     setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
                 }
             })

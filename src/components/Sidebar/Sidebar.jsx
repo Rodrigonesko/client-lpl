@@ -75,6 +75,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
                                     <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>
                                     <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
+                                    <MenuItem><Link to='/rsd/Relatorio'>Relatório</Link></MenuItem>
                             </SubMenu>
                         </Menu>
                     </ProSidebar>
@@ -90,7 +91,6 @@ const Sidebar = () => {
                     <div className="div-toggle">
                         <FaAngleDoubleRight className="toggle" onClick={toggleMenu} />
                     </div>
-
                 )
             }
 

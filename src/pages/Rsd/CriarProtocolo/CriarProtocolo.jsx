@@ -10,7 +10,9 @@ const CriarProtocolo = () => {
     const [protocolo, setProtocolo] = useState('')
     const [dataSolicitacao, setDataSolicitacao] = useState('')
     const [dataPagamento, setDataPagamento] = useState('')
+    const [pedido, setPedido] = useState('')
     const [operadora, setOperadora] = useState('')
+    const [operadoras, setOperadoras] = useState([])
 
     const navigate = useNavigate()
 
@@ -23,7 +25,9 @@ const CriarProtocolo = () => {
             protocolo,
             dataSolicitacao,
             dataPagamento,
-            mo
+            mo,
+            pedido,
+            operadora
         }, {
             withCredentials: true
         })
@@ -35,8 +39,18 @@ const CriarProtocolo = () => {
 
     }
 
-    useEffect(() => {
+    const buscarOperadoras = async e => {
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadoras`, { withCredentials: true })
 
+            setOperadoras(result.data.operadoras)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        buscarOperadoras()
     }, [])
 
     return (
@@ -66,9 +80,22 @@ const CriarProtocolo = () => {
                         </div>
                         <div className="input-criar-protocolo">
                             <label htmlFor="operadora">Operadora Beneficiário</label>
-                            <select name="operadora" id="operadora">
-                                <option value=""></option>
+                            <select name="operadora" id="operadora" onChange={e => {
+                                setOperadora(e.target.value)
+                            }} >
+                                <option value="">Operadora Beneficiário</option>
+                                {
+                                    operadoras.map(e => {
+                                        return (
+                                            <option value={e.descricao}>{e.descricao}</option>
+                                        )
+                                    })
+                                }
                             </select>
+                        </div>
+                        <div className="input-criar-protocolo">
+                            <label htmlFor="pedido">Pedido</label>
+                            <input type="text" name="pedido" id="pedido" placeholder="Numero do Pedido" onChange={e => setPedido(e.target.value)} />
                         </div>
                         <div className="criar-protocolo-btn">
                             <button onClick={criarProtocolo}>Criar</button>

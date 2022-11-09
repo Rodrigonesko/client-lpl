@@ -39,7 +39,7 @@ const EditarPedido = () => {
     const buscarClinica = async e => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/clinica/busca`, { cnpj: cnpj }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/clinica/busca`, { cnpj: e }, { withCredentials: true })
 
             console.log(result);
 
@@ -109,7 +109,7 @@ const EditarPedido = () => {
                             <label htmlFor="cnpj">CNPJ</label>
                             <input type="text" id="cnpj" placeholder="CNPJ" defaultValue={cnpj} onKeyUp={e => {
                                 setCnpj(e.target.value)
-                                buscarClinica()
+                                buscarClinica(e.target.value)
                             }} />
                         </div>
                         <div className="editar-pedido-input">

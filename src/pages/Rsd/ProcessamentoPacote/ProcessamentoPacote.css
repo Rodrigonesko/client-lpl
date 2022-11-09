@@ -65,3 +65,16 @@
    font-weight: 500;
    border: none;
 }
+
+.form-agenda {
+   display: flex;
+   flex-direction: column;
+}
+
+#comentario {
+   padding: 1rem;
+}
+
+.titulo-modal-agenda {  
+   margin: 1rem;
+}

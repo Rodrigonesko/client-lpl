@@ -22,6 +22,7 @@ const ProcessamentoPacote = () => {
     const { mo, idPacote } = useParams()
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [modalAgenda, setModalAgenda] = useState(false)
     const [pedidos, setPedidos] = useState([])
     const [protocolos, setProtocolos] = useState([])
     const [gravacao, setGravacao] = useState()
@@ -30,6 +31,8 @@ const ProcessamentoPacote = () => {
     const [statusFinalizacao, setStatusFinalizacao] = useState([])
     const [houveSucesso, setHouveSucesso] = useState('')
     const [agenda, setAgenda] = useState([])
+    const [finalizado, setFinalizado] = useState(true)
+    const [parecer, setParecer] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -37,6 +40,15 @@ const ProcessamentoPacote = () => {
     const closeModal = () => {
         setModalIsOpen(false)
     }
+
+    const openModalAgenda = () => {
+        setModalAgenda(true)
+    }
+
+    const closeModalAgenda = () => {
+        setModalAgenda(false)
+    }
+
     const buscarPedidos = async () => {
         try {
 
@@ -49,6 +61,10 @@ const ProcessamentoPacote = () => {
             })
 
             setProtocolos(arrAuxProtocolos)
+
+            if (result.data.pedidos[0].statusPacote === 'Finalizado') {
+                setFinalizado(false)
+            }
 
         } catch (error) {
             console.log(error);
@@ -67,7 +83,7 @@ const ProcessamentoPacote = () => {
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/gravacao/anexar/${idPacote}`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
             if (result.status === 200) {
-                closeModal()
+                window.location.reload()
             }
 
         } catch (error) {
@@ -207,6 +223,27 @@ const ProcessamentoPacote = () => {
         })
     }
 
+    const enviarComentarioAgenda = async e => {
+        try {
+
+            e.preventDefault()
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/agenda/novoParecer`, {
+                pacote: idPacote,
+                parecer
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         buscarPedidos()
         buscarArquivos()
@@ -247,6 +284,7 @@ const ProcessamentoPacote = () => {
                             <tbody>
                                 {
                                     protocolos.map(e => {
+
                                         return (
                                             <>
                                                 <tr key={e.protocolo}>
@@ -267,8 +305,12 @@ const ProcessamentoPacote = () => {
                         </table>
                     </div>
                     <div className="btns-processamento">
-                        <button onClick={mostrarProcessamento} className="iniciar-processamento-btn">Iniciar Processamento</button>
-                        <button>Reapresentação de Protocolo Indefirido</button>
+                        {
+                            finalizado ? (
+                                <button onClick={mostrarProcessamento} className="iniciar-processamento-btn">Iniciar Processamento</button>
+                            ) : null
+                        }
+
                         <input type="checkbox" name="prioridade-dossie" id="prioridade-dossie" />
                         <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label>
                     </div>
@@ -327,11 +369,11 @@ const ProcessamentoPacote = () => {
                                                 {
                                                     pedidos.map(e => {
 
-                                                        if (!e.statusFinalizacao) {
+                                                        if (e.fase !== 'Finalizado') {
                                                             return (
                                                                 <>
                                                                     <p>Pedido <strong>{e.numero}</strong>, NF <strong>{e.nf}</strong>, Clínica <strong>{e.clinica}</strong>, Valor Apresentado <strong>R$ {e.valorApresentado}</strong></p>
-                                                                    <input type="radio" name={`confirma-${e.numero}`} id={`confirma-sim-${e.numero}`} onClick={verificarMotivoContato} value='Sim' />
+                                                                    <input type="radio" name={`confirma-${e.numero}`} id={`confirma-sim-${e.numero}`} onClick={verificarMotivoContato} value='Sim' defaultChecked={e.reconhece} />
                                                                     <label htmlFor={`confirma-sim-${e.numero}`}>Sim</label>
                                                                     <input type="radio" name={`confirma-${e.numero}`} id={`confirma-nao-${e.numero}`} onClick={verificarMotivoContato} value='Não' />
                                                                     <label htmlFor={`confirma-nao-${e.numero}`}>Não</label>
@@ -357,15 +399,22 @@ const ProcessamentoPacote = () => {
                                                 {
                                                     pedidos.map(e => {
 
-                                                        if (!e.statusFinalizacao) {
+                                                        if (e.fase !== 'Finalizado') {
                                                             return (
                                                                 <>
                                                                     <p>Pedido: <strong>{e.numero}</strong></p>
                                                                     {
                                                                         formasPagamento.map(formaPagamento => {
+
+                                                                            let checkFormaPagameto = false
+
+                                                                            if (e.formaPagamento === formaPagamento.nome) {
+                                                                                checkFormaPagameto = true
+                                                                            }
+
                                                                             return (
                                                                                 <>
-                                                                                    <input type="radio" name={`forma-pagamento-${e.numero}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} onClick={verificarServico} />
+                                                                                    <input type="radio" name={`forma-pagamento-${e.numero}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} onClick={verificarServico} defaultChecked={checkFormaPagameto} />
                                                                                     <label htmlFor={`forma-pagamento-${e.numero}-${formaPagamento.nome}`}>{formaPagamento.nome}</label>
                                                                                 </>
                                                                             )
@@ -389,7 +438,7 @@ const ProcessamentoPacote = () => {
                                                 <p><strong>FINALIZAÇÃO</strong></p>
                                                 {
                                                     pedidos.map(e => {
-                                                        if (!e.statusFinalizacao) {
+                                                        if (e.fase !== 'Finalizado') {
                                                             return (
                                                                 <>
                                                                     <p>Pedido: <strong>{e.numero}</strong></p>
@@ -444,7 +493,7 @@ const ProcessamentoPacote = () => {
                                         }
                                     </tbody>
                                 </table>
-                                <button>Escrevar na Agenda</button>
+                                <button onClick={openModalAgenda} >Escrevar na Agenda</button>
                             </div>
                             <div className="titulo-informacoes-gerais">
                                 <span>Arquivos</span>
@@ -499,6 +548,22 @@ const ProcessamentoPacote = () => {
                                 closeModal()
                             }}>Fechar</button>
                         </div>
+                    </form>
+                </Modal>
+                <Modal
+                    isOpen={modalAgenda}
+                    onRequestClose={closeModalAgenda}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <div className="title titulo-modal-agenda">
+                        <h2>Agenda</h2>
+                    </div>
+                    <form action="" encType="multipart/form-data" method="post" className="form-agenda">
+                        <textarea name="comentario" id="comentario" cols="40" rows="6" onChange={e => setParecer(e.target.value)}>
+                        </textarea>
+                        <button onClick={enviarComentarioAgenda}>Salvar</button>
+
                     </form>
 
                 </Modal>

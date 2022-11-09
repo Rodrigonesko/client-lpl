@@ -23,6 +23,7 @@ import OperadorasBeneficiario from "./pages/Rsd/OperadorasBeneficiario/Operadora
 import CriarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/CriarOperadoraBeneficiario/CriarOperadoraBeneficiario";
 import EditarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/EditarOperadoraBeneficiario/EditarOperadoraBeneficiario";
 import ConcluidosRsd from "./pages/Rsd/ConcluidosRsd/ConcluidosRsd";
+import RelatorioRsd from "./pages/Rsd/RelatorioRsd/RelatorioRsd";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -170,6 +171,10 @@ const AppRoutes = () => {
                 <Route path="/rsd/Concluidos" element={<ProtectedRoute>
                     <ConcluidosRsd />
                 </ProtectedRoute>} />
+                <Route path="/rsd/Relatorio" element={<ProtectedRoute>
+                    <RelatorioRsd />
+                </ProtectedRoute>} />
+
 
             </Routes>
         </AuthProvider>

@@ -1,7 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Axios from 'axios'
+import './TabelaPedido.css'
 
 const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
+
+    const devolvidoAmil = async e => {
+        try {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/devolverAmil`, {
+                pedido: e
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
+
+            window.location.reload()
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -25,19 +44,26 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
                         <tbody>
                             {
                                 pedidos.map(e => {
-                                    if (protocolo === e.protocolo && e.pacote === pacote ) {
+                                    if (protocolo === e.protocolo && e.pacote === pacote) {
 
                                         return (
                                             <tr>
                                                 <td>{e.numero}</td>
                                                 <td>{e.status}</td>
-                                                <td>{Number(e.valorApresentado).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
-                                                <td>{Number(e.valorReembolsado).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                                <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
                                                 <td>{e.cnpj}</td>
                                                 <td>{e.clinica}</td>
                                                 <td>{e.nf}</td>
                                                 <td>{e.irregular}</td>
-                                                <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                {
+                                                    e.fase !== 'Finalizado' ? (
+                                                        <>
+                                                            <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                            <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
+                                                        </>
+                                                    ) : null
+                                                }
                                                 {
                                                     e.statusPacote === 'Não iniciado' ? (
                                                         <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
@@ -50,9 +76,14 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
                                 })
                             }
                         </tbody>
+                        <div className="div-criar-pedido">
+                            <Link className="btn-criar-pedido" to={`/rsd/CriarPedido/${protocolo}`}>Novo Pedido</Link>
+                        </div>
 
                     </table>
+
                 </div>
+
             </td>
         </>
     )
