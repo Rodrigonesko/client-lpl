@@ -26,7 +26,7 @@ const UploadRsd = () => {
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
-            //console.log(result);
+            console.log(result.data.pedidos);
 
             if (result.status == 200) {
                 setStatus(`Novos pedidos: ${result.data.pedidos.length}`)

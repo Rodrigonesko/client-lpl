@@ -77,7 +77,8 @@ const FichaBeneficiario = () => {
             fone2,
             fone3,
             contratoEmpresa,
-            mo
+            mo,
+            cpf
         }, {
             withCredentials: true
         })
@@ -181,7 +182,7 @@ const FichaBeneficiario = () => {
                                 <tr>
                                     <td>Marca Ótica: {mo}</td>
                                     <td>Nome: {nome}</td>
-                                    <td>CPF: {cpf}</td>
+                                    <td>CPF: <input type="text" name="cpf" id="cpf" defaultValue={cpf} onChange={e => setCpf(e.target.value)} /></td>
                                     <td>Data Nascimento: <input type="date" defaultValue={dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
                                     <td>E-mail: <input type="email" name="email" id="email" defaultValue={email} onChange={e => setEmail(e.target.value)} /></td>
                                 </tr>
