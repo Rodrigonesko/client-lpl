@@ -8,6 +8,7 @@ import './FichaBeneficiario.css'
 import moment from "moment/moment";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
+import { IMaskInput } from "react-imask";
 
 const FichaBeneficiario = () => {
 
@@ -92,7 +93,11 @@ const FichaBeneficiario = () => {
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
 
-        trPedidos.classList.toggle('none')
+        if (!trPedidos.classList.contains('data')) {
+            trPedidos.classList.toggle('none')
+        } else {
+            console.log(trPedidos.parentElement.nextSibling.classList.toggle('none'));
+        }
     }
 
     const marcarProtocolo = e => {
@@ -123,7 +128,6 @@ const FichaBeneficiario = () => {
                 if (item.checked) {
                     arrPedidos.push(item.value)
                 }
-
             }
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pacote/criar`, { arrPedidos }, { withCredentials: true })
@@ -182,14 +186,38 @@ const FichaBeneficiario = () => {
                                 <tr>
                                     <td>Marca Ótica: {mo}</td>
                                     <td>Nome: {nome}</td>
-                                    <td>CPF: <input type="text" name="cpf" id="cpf" defaultValue={cpf} onChange={e => setCpf(e.target.value)} /></td>
+                                    <td>CPF: <IMaskInput
+                                        mask="000.000.000-00"
+                                        placeholder="Digite o seu CPF"
+                                        name="cpf" id="cpf"
+                                        defaultValue={cpf}
+                                        onChange={e => setCpf(e.target.value)}
+                                    /></td>
                                     <td>Data Nascimento: <input type="date" defaultValue={dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
                                     <td>E-mail: <input type="email" name="email" id="email" defaultValue={email} onChange={e => setEmail(e.target.value)} /></td>
                                 </tr>
                                 <tr>
-                                    <td>Fone 1: <input type="text" defaultValue={fone1} onChange={e => setFone1(e.target.value)} /></td>
-                                    <td>Fone 2: <input type="text" defaultValue={fone2} onChange={e => setFone2(e.target.value)} /></td>
-                                    <td>Fone 3: <input type="text" defaultValue={fone3} onChange={e => setFone3(e.target.value)} /></td>
+                                    <td>Fone 1: <IMaskInput
+                                        mask="(00)00000-0000"
+                                        placeholder="Telefone"
+                                        name="fone1" id="fone1"
+                                        defaultValue={fone1}
+                                        onChange={e => setFone1(e.target.value)}
+                                    /></td>
+                                    <td>Fone 2: <IMaskInput
+                                        mask="(00)00000-0000"
+                                        placeholder="Telefone"
+                                        name="fone2" id="fone2"
+                                        defaultValue={fone1}
+                                        onChange={e => setFone2(e.target.value)}
+                                    /></td>
+                                    <td>Fone 3: <IMaskInput
+                                        mask="(00)00000-0000"
+                                        placeholder="Telefone"
+                                        name="fone3" id="fone3"
+                                        defaultValue={fone3}
+                                        onChange={e => setFone3(e.target.value)}
+                                    /></td>
                                     <td>Contrato/Empresa <input type="text" defaultValue={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} /></td>
                                 </tr>
                                 <tr>
@@ -224,7 +252,7 @@ const FichaBeneficiario = () => {
                                                         <td onClick={e => {
                                                             mostrarPedidos(e)
                                                         }} className="td-protocolo"> <FaAngleDown />{e.protocolo}</td>
-                                                        <td>{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
+                                                        <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                         <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
                                                         <td>{e.status}</td>
                                                         <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
@@ -273,14 +301,14 @@ const FichaBeneficiario = () => {
                                             return (
                                                 <>
                                                     <tr>
-                                                        <td className="td-pacote" onClick={mostrarPedidos} ><FaAngleDown></FaAngleDown> {e.pacote}</td>
-                                                        <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
+                                                        <td className="td-pacote" onClick={mostrarPedidos} > <FaAngleDown /> {e.pacote}</td>
+                                                        <td className="data">{moment(e.createdAt).format('DD/MM/YYYY')}</td>
                                                         <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
                                                         <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
                                                         <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
                                                     </tr>
-                                                    <tr className="none">
+                                                    <tr className="none teste">
                                                         <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} >
 
                                                         </TabelaProtocolo>

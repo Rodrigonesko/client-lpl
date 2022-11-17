@@ -9,10 +9,15 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false }) => {
 
     console.log(`O pacote é: ${verificaPacote}`);
 
+
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
 
-        trPedidos.classList.toggle('none')
+        if (!trPedidos.classList.contains('data')) {
+            trPedidos.classList.toggle('none')
+        } else {
+            console.log(trPedidos.parentElement.nextSibling.classList.toggle('none'));
+        }
     }
 
 
@@ -46,7 +51,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false }) => {
                                             <>
                                                 <tr>
                                                     <td onClick={mostrarPedidos} className="td-protocolo" ><FaAngleDown></FaAngleDown> {e.protocolo}</td>
-                                                    <td>{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
+                                                    <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                     <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
                                                     <td>{e.status}</td>
                                                 </tr>

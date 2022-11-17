@@ -47,6 +47,8 @@ const RelatorioRsd = () => {
             xls += "</thead>"
             xls += "<tbody>"
 
+            setMsg('Gerando Arquivo')
+
             result.data.pedidos.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e.pacote}</td>`
@@ -82,6 +84,8 @@ const RelatorioRsd = () => {
             a.download = 'relatorio rsd.xls'
             a.click()
 
+            setMsg('Arquivo gerado!')
+
             // const ws = XLSX.utils.json_to_sheet(result.data.pedidos)
             // const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
             // XLSX.writeFile(wb, 'reportRSD.xlsx')
@@ -89,6 +93,7 @@ const RelatorioRsd = () => {
 
         } catch (error) {
             console.log(error);
+            setMsg('Algo deu errado')
         }
     }
 
@@ -121,6 +126,11 @@ const RelatorioRsd = () => {
                     </div>
                     <div>
                         <button onClick={gerarRelatorio} >Gerar Relatório</button>
+                    </div>
+                    <div>
+                        {
+                            <span>{msg}</span>
+                        }
                     </div>
                 </div>
                 <form action="" method="post" encType="multipart/form-data">

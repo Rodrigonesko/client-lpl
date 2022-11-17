@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate } from "react-icons/fa";
+import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
@@ -70,12 +70,16 @@ const Sidebar = () => {
                                 </SubMenu>
                             </SubMenu>
                             <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
-                                    <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
-                                    <MenuItem><Link to='/rsd/CriarPedidoIndividual/'>Criar Pedido/Protocolo</Link></MenuItem>
-                                    <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
-                                    <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>
-                                    <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
-                                    <MenuItem><Link to='/rsd/Relatorio'>Relatório</Link></MenuItem>
+                                <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
+                                <MenuItem><Link to='/rsd/CriarPedidoIndividual/'>Criar Pedido/Protocolo</Link></MenuItem>
+                                <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
+                                <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>
+                                <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
+                                <MenuItem><Link to='/rsd/Relatorio'>Relatório</Link></MenuItem>
+                                <MenuItem><Link to='/rsd/agd'>AGD</Link></MenuItem>
+                            </SubMenu>
+                            <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
+                                <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                             </SubMenu>
                         </Menu>
                     </ProSidebar>

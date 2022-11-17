@@ -136,7 +136,11 @@ const ProcessamentoPacote = () => {
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
 
-        trPedidos.classList.toggle('none')
+        if (!trPedidos.classList.contains('data')) {
+            trPedidos.classList.toggle('none')
+        } else {
+            console.log(trPedidos.parentElement.nextSibling.classList.toggle('none'));
+        }
     }
     const mostrarProcessamento = () => {
 
@@ -222,7 +226,6 @@ const ProcessamentoPacote = () => {
             console.log(e);
         })
     }
-
     const enviarComentarioAgenda = async e => {
         try {
 
@@ -231,6 +234,23 @@ const ProcessamentoPacote = () => {
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/agenda/novoParecer`, {
                 pacote: idPacote,
                 parecer
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const voltarFase = async e => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/voltarFase`, {
+                pacote: idPacote
             }, {
                 withCredentials: true
             })
@@ -289,7 +309,7 @@ const ProcessamentoPacote = () => {
                                             <>
                                                 <tr key={e.protocolo}>
                                                     <td className="td-protocolo" onClick={mostrarPedidos} > <FaAngleDown /> {e.protocolo}</td>
-                                                    <td>{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
+                                                    <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                     <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
                                                     <td>{e.statusPacote}</td>
                                                     <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
@@ -308,7 +328,9 @@ const ProcessamentoPacote = () => {
                         {
                             finalizado ? (
                                 <button onClick={mostrarProcessamento} className="iniciar-processamento-btn">Iniciar Processamento</button>
-                            ) : null
+                            ) : (
+                                <button onClick={voltarFase} className="iniciar-processamento-btn">Voltar Fase</button>
+                            )
                         }
 
                         <input type="checkbox" name="prioridade-dossie" id="prioridade-dossie" />

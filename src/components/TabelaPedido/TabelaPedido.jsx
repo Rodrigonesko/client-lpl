@@ -77,7 +77,12 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
                             }
                         </tbody>
                         <div className="div-criar-pedido">
-                            <Link className="btn-criar-pedido" to={`/rsd/CriarPedido/${protocolo}`}>Novo Pedido</Link>
+                            {
+                                pedidos[0].statusPacote != 'Finalizado' ? (
+                                    <Link className="btn-criar-pedido" to={`/rsd/CriarPedido/${protocolo}`}>Novo Pedido</Link>
+                                ) : null
+                            }
+
                         </div>
 
                     </table>

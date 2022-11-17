@@ -33,10 +33,9 @@ const CriarPedido = () => {
 
     const criarPedido = async e => {
         try {
-
             e.preventDefault()
 
-            console.log(pedido, valorApresentado, valorReembolsado, cnpj, clinica, cnpj);
+            console.log(pedido, valorApresentado, valorReembolsado, cnpj, clinica, cnpj, mo);
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pedido/criar`, {
                 pedido,
@@ -45,7 +44,8 @@ const CriarPedido = () => {
                 valorReembolsado,
                 cnpj,
                 clinica,
-                nf
+                nf,
+                mo
             }, { withCredentials: true })
 
             if (result.status === 200) {
@@ -59,9 +59,10 @@ const CriarPedido = () => {
 
     const buscaMo = async () => {
         try {
-            const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/${protocolo}`, { withCredentials: true })
-
-            setMo(buscaMo.data.result.mo)
+            console.log(protocolo);
+            const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/mo/${protocolo}`, { withCredentials: true })
+            console.log(buscaMo);
+            setMo(buscaMo.data.pedido.mo)
         } catch (error) {
             console.log(error);
         }

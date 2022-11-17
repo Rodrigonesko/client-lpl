@@ -9,6 +9,15 @@ import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
+/* Elegibilidade */
+
+import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
+import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
+import PreProcessamento from "./pages/Elegibilidade/PreProcessamento/PreProcessamento";
+import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
+import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
+import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
+
 /* RSD */
 
 import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
@@ -24,6 +33,7 @@ import CriarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/Criar
 import EditarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/EditarOperadoraBeneficiario/EditarOperadoraBeneficiario";
 import ConcluidosRsd from "./pages/Rsd/ConcluidosRsd/ConcluidosRsd";
 import RelatorioRsd from "./pages/Rsd/RelatorioRsd/RelatorioRsd";
+import Agd from "./pages/Rsd/Agd/Agd";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -174,7 +184,15 @@ const AppRoutes = () => {
                 <Route path="/rsd/Relatorio" element={<ProtectedRoute>
                     <RelatorioRsd />
                 </ProtectedRoute>} />
+                <Route path="/rsd/agd" element={<ProtectedRoute>
+                    <Agd />
+                </ProtectedRoute>} />
 
+                {/*Elegibilidade*/}
+
+                <Route path="/elegibilidade/upload" element={<ProtectedRoute>
+                    <UploadElegibilidade/>
+                </ProtectedRoute>} />
 
             </Routes>
         </AuthProvider>
