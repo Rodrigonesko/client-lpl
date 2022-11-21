@@ -33,6 +33,16 @@ const ProcessamentoPacote = () => {
     const [agenda, setAgenda] = useState([])
     const [finalizado, setFinalizado] = useState(true)
     const [parecer, setParecer] = useState('')
+    const [naoContato, setNaoContato] = useState(false)
+    const [justificativa, setJustificativa] = useState('')
+    const [dataSelo, setDataSelo] = useState('')
+
+    /* Status de contato */
+
+    const [contatoSim, setContatoSim] = useState(false)
+    const [contatoNao, setContatoNao] = useState(false)
+    const [contatoAgendar, setContatoAgendar] = useState(false)
+    const [contatoNaoEntrado, setContatoNaoEntrado] = useState(false)
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -65,6 +75,22 @@ const ProcessamentoPacote = () => {
             if (result.data.pedidos[0].statusPacote === 'Finalizado') {
                 setFinalizado(false)
             }
+
+            if (result.data.pedidos[0].contato == 'Não foi entrado em contato') {
+                setNaoContato(true)
+                setContatoNaoEntrado(true)
+            }
+            if (result.data.pedidos[0].contato == 'Sim') {
+                setContatoSim(true)
+            }
+            if (result.data.pedidos[0].contato == 'Não') {
+                setContatoNao(true)
+            }
+            if (result.data.pedidos[0].contato == 'Necessário Agendar Horario') {
+                setContatoAgendar(true)
+            }
+
+            setJustificativa(result.data.pedidos[0].justificativa)
 
         } catch (error) {
             console.log(error);
@@ -171,7 +197,9 @@ const ProcessamentoPacote = () => {
                 sucesso: houveSucesso,
                 motivoContato: motivosContato,
                 confirmacaoServico: servicos,
-                finalizacao: finalizacoes
+                finalizacao: finalizacoes,
+                justificativa,
+                dataSelo
             }, {
                 withCredentials: true
             })
@@ -221,11 +249,6 @@ const ProcessamentoPacote = () => {
             console.log(error);
         }
     }
-    const verificarStatusPacote = async () => {
-        pedidos.map(e => {
-            console.log(e);
-        })
-    }
     const enviarComentarioAgenda = async e => {
         try {
 
@@ -263,6 +286,42 @@ const ProcessamentoPacote = () => {
             console.log(error);
         }
     }
+    const verificarProcessamento = (pedidos) => {
+        let checkbox1 = document.getElementById('checkbox-processamento-1')
+        let checkbox2 = document.getElementById('checkbox-processamento-2')
+        let checkbox3 = document.getElementById('checkbox-processamento-3')
+        let checkbox4 = document.getElementById('checkbox-processamento-4')
+        let checkbox5 = document.getElementById('checkbox-processamento-5')
+        let tr1 = document.getElementById('tr-processamento-1')
+        let tr2 = document.getElementById('tr-processamento-2')
+        let tr3 = document.getElementById('tr-processamento-3')
+        let tr4 = document.getElementById('tr-processamento-4')
+        let tr5 = document.getElementById('tr-processamento-5')
+
+        pedidos.forEach(e => {
+            if (e.dataSelo != undefined) {
+                tr2.classList.toggle('none')
+                checkbox1.checked = true
+                return
+            }
+        })
+
+        pedidos.forEach(e => {
+            if (e.reconhece) {
+                tr3.classList.toggle('none')
+                checkbox2.checked = true
+            }
+        })
+
+        pedidos.forEach(e => {
+            if (e.formaPagamento != undefined) {
+                tr4.classList.toggle('none')
+                checkbox3.checked = true
+            }
+        })
+
+
+    }
 
     useEffect(() => {
         buscarPedidos()
@@ -270,7 +329,6 @@ const ProcessamentoPacote = () => {
         buscarFormasPagamento()
         buscarStatusFinalizacao()
         buscarAgenda()
-        verificarStatusPacote()
     }, [])
 
     return (
@@ -327,7 +385,10 @@ const ProcessamentoPacote = () => {
                     <div className="btns-processamento">
                         {
                             finalizado ? (
-                                <button onClick={mostrarProcessamento} className="iniciar-processamento-btn">Iniciar Processamento</button>
+                                <button onClick={() => {
+                                    mostrarProcessamento()
+                                    verificarProcessamento(pedidos)
+                                }} className="iniciar-processamento-btn">Iniciar Processamento</button>
                             ) : (
                                 <button onClick={voltarFase} className="iniciar-processamento-btn">Voltar Fase</button>
                             )
@@ -348,25 +409,44 @@ const ProcessamentoPacote = () => {
                                             <td>1°</td>
                                             <td>
                                                 <p>Houve sucesso no Contato com o beneficiário?</p>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" value={`Sim`} onClick={e => {
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" defaultChecked={contatoSim} value={`Sim`} onClick={e => {
                                                     setHouveSucesso(e.target.value)
+                                                    setNaoContato(false)
                                                 }} />
                                                 <label htmlFor="contato-beneficiario-sim">Sim</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} defaultChecked={contatoNao} onClick={e => {
                                                     setHouveSucesso(e.target.value)
+                                                    setNaoContato(false)
                                                 }} />
                                                 <label htmlFor="contato-beneficiario-nao">Não</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} onClick={e => {
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} defaultChecked={contatoAgendar} onClick={e => {
                                                     setHouveSucesso(e.target.value)
+                                                    setNaoContato(false)
                                                 }} />
                                                 <label htmlFor="contato-beneficiario-agendar">Necessário Agendar Horario</label>
                                                 <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sem-retorno" value={`Sem Retorno de Contato`} onClick={e => {
                                                     setHouveSucesso(e.target.value)
+                                                    setNaoContato(false)
                                                 }} />
                                                 <label htmlFor="contato-beneficiario-sem-retorno">Sem Retorno de Contato</label>
+                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao-foi-entrado-contato" value={`Não foi entrado em contato`} defaultChecked={contatoNaoEntrado} onClick={e => {
+                                                    setHouveSucesso(e.target.value)
+                                                    setNaoContato(true)
+                                                }} />
+                                                <label htmlFor="contato-beneficiario-nao-foi-entrado-contato">Não foi entrado em contato</label>
+                                                {
+                                                    naoContato ? (
+                                                        <div>
+                                                            <label htmlFor="justificativa-contato">Justificativa por não entrar em contato: </label>
+                                                            <input type="text" id="justificativa-contato" name='justificativa-contato' defaultValue={justificativa} onChange={e => {
+                                                                setJustificativa(e.target.value)
+                                                            }} />
+                                                        </div>
+                                                    ) : null
+                                                }
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                <input type="checkbox" name="" id="checkbox-processamento-1" onClick={() => {
                                                     document.getElementById('tr-processamento-2').classList.toggle('none')
                                                 }} />
                                             </td>
@@ -378,8 +458,10 @@ const ProcessamentoPacote = () => {
                                                 <p>Informar nome completo do beneficiário no início do contato. Se identifique como funcionário da Operadora Informar que a ligação é gravada e pedir para confirmar algumas informações, como 3 últimos números do CPF, ano de nascimento e idade.</p>
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                <input type="checkbox" name="" id="checkbox-processamento-2" onClick={() => {
                                                     document.getElementById('tr-processamento-3').classList.toggle('none')
+                                                    setDataSelo(new Date())
+                                                    console.log(dataSelo);
                                                 }} />
                                             </td>
                                         </tr>
@@ -408,7 +490,7 @@ const ProcessamentoPacote = () => {
                                                 }
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                <input type="checkbox" name="" id="checkbox-processamento-3" onClick={() => {
                                                     document.getElementById('tr-processamento-4').classList.toggle('none')
                                                 }} />
                                             </td>
@@ -449,7 +531,7 @@ const ProcessamentoPacote = () => {
                                                 }
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" onClick={() => {
+                                                <input type="checkbox" name="" id="checkbox-processamento-4" onClick={() => {
                                                     document.getElementById('tr-processamento-5').classList.toggle('none')
                                                 }} />
                                             </td>
@@ -481,7 +563,7 @@ const ProcessamentoPacote = () => {
                                                 }
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="" id="" />
+                                                <input type="checkbox" name="" id="checkbox-processamento-5" />
                                             </td>
                                         </tr>
                                     </tbody>

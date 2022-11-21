@@ -35,6 +35,7 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
         }
         if (moment(hoje).format('YYYY-MM-DD') === moment(e.dataSla).format('YYYY-MM-DD')) {
             qtdVenceHoje++
+            console.log(e);
         }
 
         hoje = moment(hoje).add(1, 'days').toDate()

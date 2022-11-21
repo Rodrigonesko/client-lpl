@@ -34,6 +34,7 @@ import EditarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/Edit
 import ConcluidosRsd from "./pages/Rsd/ConcluidosRsd/ConcluidosRsd";
 import RelatorioRsd from "./pages/Rsd/RelatorioRsd/RelatorioRsd";
 import Agd from "./pages/Rsd/Agd/Agd";
+import FichaBeneficiarioConcluidos from "./pages/Rsd/FichaBeneficiarioConcluidos/FichaBeneficiarioConcluidos";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -187,11 +188,15 @@ const AppRoutes = () => {
                 <Route path="/rsd/agd" element={<ProtectedRoute>
                     <Agd />
                 </ProtectedRoute>} />
+                <Route path="/rsd/FichaBeneficiarioConcluidos/:mo" element={<ProtectedRoute>
+                    <FichaBeneficiarioConcluidos />
+                </ProtectedRoute>} />
+
 
                 {/*Elegibilidade*/}
 
                 <Route path="/elegibilidade/upload" element={<ProtectedRoute>
-                    <UploadElegibilidade/>
+                    <UploadElegibilidade />
                 </ProtectedRoute>} />
 
             </Routes>

@@ -51,7 +51,7 @@ const ConcluidosRsd = () => {
                                     concluidos.map(e => {
                                         return (
                                             <tr key={e._id}>
-                                                <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
+                                                <td><Link to={`/rsd/FichaBeneficiarioConcluidos/${e.mo}`}>{e.mo}</Link></td>
                                                 <td>{e.pessoa}</td>
                                                 <td>{e.numero}</td>
                                             </tr>

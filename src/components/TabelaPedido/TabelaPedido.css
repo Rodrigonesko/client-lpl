@@ -1,3 +1,13 @@
 .div-criar-pedido { 
     margin: 1rem;
 }
+
+.table-pedidos {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.btn-criar-pedido {
+    width: 100%;
+    display: block;
+}
