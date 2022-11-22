@@ -1,0 +1,23 @@
+.info-pessoa-entrevista {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-pergunta {
+    width: 100%;
+    border: 1px solid gray;
+    padding: 8px;
+    border-radius: 3px;
+}
+
+.div-pergunta {
+    margin: 1rem;
+}
+
+.div-pergunta label {
+    margin-bottom: 5px;
+}
+
+.label-pergunta {
+    margin-bottom: 10px;
+}

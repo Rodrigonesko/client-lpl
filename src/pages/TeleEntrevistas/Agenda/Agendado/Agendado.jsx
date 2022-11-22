@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
+import { Link } from "react-router-dom";
 import Axios from 'axios'
 import moment from "moment";
 import './Agendado.css'
@@ -115,7 +116,7 @@ const Agendado = () => {
                                                 <td>{e.sexo}</td>
                                                 <td>{e.enfermeiro}</td>
                                                 <td>
-                                                    <button>Formulario</button>
+                                                    <Link to={`/entrevistas/formulario/${e._id}`}>Formulario</Link>
                                                     <button>Reagendar</button>
                                                 </td>
                                             </tr>

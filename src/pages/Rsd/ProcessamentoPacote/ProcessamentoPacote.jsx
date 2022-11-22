@@ -298,27 +298,54 @@ const ProcessamentoPacote = () => {
         let tr4 = document.getElementById('tr-processamento-4')
         let tr5 = document.getElementById('tr-processamento-5')
 
-        pedidos.forEach(e => {
+        for (const e of pedidos) {
             if (e.dataSelo != undefined) {
                 tr2.classList.toggle('none')
                 checkbox1.checked = true
-                return
+                console.log(e.dataSelo);
+                break;
             }
-        })
+        }
 
-        pedidos.forEach(e => {
+        for (const e of pedidos) {
             if (e.reconhece) {
                 tr3.classList.toggle('none')
                 checkbox2.checked = true
+                break
             }
-        })
+        }
 
-        pedidos.forEach(e => {
+        for (const e of pedidos) {
             if (e.formaPagamento != undefined) {
                 tr4.classList.toggle('none')
                 checkbox3.checked = true
+                break
             }
-        })
+        }
+
+        // pedidos.forEach(e => {
+        //     if (e.dataSelo != undefined) {
+        //         tr2.classList.toggle('none')
+        //         checkbox1.checked = true
+        //         console.log(e.dataSelo);
+        //         return
+        //     }
+        // })
+
+        // pedidos.forEach(e => {
+        //     if (e.reconhece) {
+        //         tr3.classList.toggle('none')
+        //         checkbox2.checked = true
+        //         return
+        //     }
+        // })
+
+        // pedidos.forEach(e => {
+        //     if (e.formaPagamento != undefined) {
+        //         tr4.classList.toggle('none')
+        //         checkbox3.checked = true
+        //     }
+        // })
 
 
     }

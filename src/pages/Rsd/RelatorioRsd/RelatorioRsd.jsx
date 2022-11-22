@@ -68,9 +68,13 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.cnpj}</td>`
                 xls += `<td>${e.clinica}</td>`
                 xls += `<td>${e.contratoEmpresa}</td>`
-                xls += `<td>data selo?</td>`
+                if(e.dataSelo == undefined){
+                    xls += `<td></td>`
+                } else {
+                    xls += `<td>${moment(e.dataSelo).format('DD/MM/YYYY')}</td>`
+                }
                 xls += `<td>${e.formaPagamento}</td>`
-                xls += `<td></td>`
+                xls += `<td>${e.prioridadeDossie}</td>`
                 xls += `<td>${e.nf}</td>`
                 xls += `<td>${e.dataConclusao}</td>`
                 xls += `</tr>`
@@ -133,7 +137,7 @@ const RelatorioRsd = () => {
                         }
                     </div>
                 </div>
-                <form action="" method="post" encType="multipart/form-data">
+                {/* <form action="" method="post" encType="multipart/form-data">
                     <div className="title">
                         <h2>Upload</h2>
                     </div>
@@ -144,8 +148,9 @@ const RelatorioRsd = () => {
                     <div className="container-btns">
                         <button className="btn" onClick={send} >Enviar</button>
                     </div>
-                </form>
+                </form> */}
             </section>
+            
         </>
     )
 }
