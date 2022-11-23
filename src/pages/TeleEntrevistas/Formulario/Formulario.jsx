@@ -4,11 +4,25 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
+import Pergunta from "../../../components/Pergunta/Pergunta";
+import subPergunta from "../../../components/SubPergunta/SubPergunta";
 import './Formulario.css'
+
+let respostas = {
+
+}
+
+let subRespostas = {
+
+}
+
+let simOuNao = {
+
+}
 
 const Formulario = () => {
 
-    const {id} = useParams()
+    const { id } = useParams()
 
     const [perguntas, setPerguntas] = useState([])
     const [pessoa, setPessoa] = useState({})
@@ -19,8 +33,6 @@ const Formulario = () => {
 
             setPerguntas(result.data.perguntas)
 
-            console.log(result);
-
         } catch (error) {
             console.log(error);
         }
@@ -30,13 +42,40 @@ const Formulario = () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/pessoa/${id}`, { withCredentials: true })
 
-            console.log(result);
-
             setPessoa(result.data.pessoa)
 
-            console.log(result.data.pessoa._id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-            console.log(pessoa);
+    const handleChange = (item) => {
+        respostas[`${item.id}`] = item.value
+    }
+
+    const handleChangeSub = (item) => {
+        subRespostas[`${item.id}`] = item.value
+    }
+
+    const handleSimOuNao = (item) => {
+        let split = item.name.split('-')
+        simOuNao[`${split[1]}`] = item.value
+    }
+
+    const enviarDados = async () => {
+        try {
+            console.log(respostas);
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/formulario`, {
+                respostas: respostas,
+                subRespostas: subRespostas,
+                pessoa,
+                simOuNao
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -64,7 +103,7 @@ const Formulario = () => {
                         <div className="title">
                             <h3>Questionário Médico</h3>
                         </div>
-                        <InfoPessoaEntrevista></InfoPessoaEntrevista>
+                        <InfoPessoaEntrevista pessoa={pessoa}></InfoPessoaEntrevista>
                     </div>
                     <div className="observacoes-entrevista">
                         <div className="title">
@@ -74,14 +113,17 @@ const Formulario = () => {
                     <div className="formulario">
                         {
                             perguntas.map(e => {
+
                                 return (
-                                    <div key={e._id} className='div-pergunta'>
-                                        <label htmlFor={e._id} className='label-pergunta'>{e.pergunta}</label>
-                                        <input type="text" name={`pergunta-${e._id}`} id={e._id} className="input-pergunta" />
-                                    </div>
+                                    <>
+                                        <Pergunta handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
+                                    </>
                                 )
                             })
                         }
+                    </div>
+                    <div className="btn-enviar-form-btn">
+                        <button onClick={enviarDados} >Enviar</button>
                     </div>
                 </div>
             </section>

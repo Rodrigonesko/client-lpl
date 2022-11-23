@@ -1,6 +1,26 @@
+.section-formulario-container{
+    height: 100vh;
+    overflow: auto;
+    padding: 1rem;
+    background-color: gray;
+}
+
 .info-pessoa-entrevista {
     display: flex;
     justify-content: space-between;
+    background-color: white;
+}
+
+.formulario-container .title {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.roteiro-container-entrevista {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 3px;
 }
 
 .input-pergunta {
@@ -12,6 +32,9 @@
 
 .div-pergunta {
     margin: 1rem;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 3px;
 }
 
 .div-pergunta label {
@@ -20,4 +43,8 @@
 
 .label-pergunta {
     margin-bottom: 10px;
+}
+
+.sub-pergunta {
+    padding: 1rem;
 }

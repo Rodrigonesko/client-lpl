@@ -1,27 +1,27 @@
 import React from "react";
 
-const InfoPessoaEntrevista = () => {
+const InfoPessoaEntrevista = ({pessoa}) => {
     return (
         <div className="info-pessoa-entrevista">
             <div>
                 <label htmlFor="">Nome: </label>
-                <strong>NOME</strong>
+                <strong>{pessoa.nome}</strong>
             </div>
             <div>
                 <label htmlFor="">CPF: </label>
-                <strong>121687489</strong>
+                <strong>{pessoa.cpf}</strong>
             </div>
             <div>
                 <label htmlFor="">Proposta: </label>
-                <strong>165498798</strong>
+                <strong>{pessoa.proposta}</strong>
             </div>
             <div>
                 <label htmlFor="">Telefone: </label>
-                <strong>54648498</strong>
+                <strong>{pessoa.telefone}</strong>
             </div>
             <div>
                 <label htmlFor="">Data Nascimento: </label>
-                <strong>05/06/2001</strong>
+                <strong>{pessoa.dataNascimento}</strong>
             </div>
         </div>
     )
