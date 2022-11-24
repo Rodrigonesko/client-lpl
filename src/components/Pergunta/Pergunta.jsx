@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SubPergunta from "../SubPergunta/SubPergunta";
 
-const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao }) => {
+const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao,  }) => {
 
     const [radioSimouNao, setRadioSimOuNao] = useState(false)
 

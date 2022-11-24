@@ -110,7 +110,7 @@ const RelatorioRsd = () => {
 
             formData.append('file', file, file.name)
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pedidosAntigos`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/upload/cids`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
             console.log(result);
 
@@ -137,7 +137,7 @@ const RelatorioRsd = () => {
                         }
                     </div>
                 </div>
-                {/* <form action="" method="post" encType="multipart/form-data">
+                <form action="" method="post" encType="multipart/form-data">
                     <div className="title">
                         <h2>Upload</h2>
                     </div>
@@ -148,7 +148,7 @@ const RelatorioRsd = () => {
                     <div className="container-btns">
                         <button className="btn" onClick={send} >Enviar</button>
                     </div>
-                </form> */}
+                </form>
             </section>
             
         </>
