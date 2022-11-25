@@ -54,7 +54,7 @@ const Sidebar = () => {
                                     <MenuItem>Anexar</MenuItem>
                                     <MenuItem>Ajustar Horarios</MenuItem>
                                 </SubMenu>
-                                <MenuItem>Propostas</MenuItem>
+                                <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>

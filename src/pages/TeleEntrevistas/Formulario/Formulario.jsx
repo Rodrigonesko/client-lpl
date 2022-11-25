@@ -6,28 +6,17 @@ import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/Rot
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
 import Pergunta from "../../../components/Pergunta/Pergunta";
 import gerarPdf from "../Pdf/Pdf";
+import Modal from 'react-modal'
 
 import './Formulario.css'
 
-let respostas = {
-
-}
-
-let subRespostas = {
-
-}
-
-let simOuNao = {
-
-}
-
-let arrCids = [
-
-]
+Modal.setAppElement('#root')
 
 const Formulario = () => {
 
     const { id } = useParams()
+
+    const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const [perguntas, setPerguntas] = useState([])
     const [pessoa, setPessoa] = useState({})
@@ -36,6 +25,29 @@ const Formulario = () => {
     const [divergencia, setDivergencia] = useState(false)
     const [cids, setCids] = useState([])
     const [cidsSelecionados, setCidsSelecionados] = useState([])
+
+    let respostas = {
+
+    }
+
+    let subRespostas = {
+
+    }
+
+    let simOuNao = {
+
+    }
+
+    let arrCids = {
+
+    }
+
+    const openModal = () => {
+        setModalIsOpen(true)
+    }
+    const closeModal = () => {
+        setModalIsOpen(false)
+    }
 
     const buscarPerguntas = async () => {
         try {
@@ -56,9 +68,6 @@ const Formulario = () => {
             setFormulario(result.data.pessoa.formulario)
             setSexo(result.data.pessoa.sexo)
 
-
-
-
         } catch (error) {
             console.log(error);
         }
@@ -70,11 +79,13 @@ const Formulario = () => {
 
     const handleChangeSub = (item) => {
         subRespostas[`${item.id}`] = item.value
+        console.log(subRespostas);
     }
 
     const handleSimOuNao = (item) => {
         let split = item.name.split('-')
         simOuNao[`${split[1]}`] = item.value
+        console.log(simOuNao);
     }
 
     const enviarDados = async () => {
@@ -90,9 +101,11 @@ const Formulario = () => {
                 withCredentials: true
             })
 
-            console.log(result);
+            gerarPdf(pessoa.proposta, pessoa.nome)
 
-            gerarPdf()
+            if (result.status === 200) {
+                openModal()
+            }
 
         } catch (error) {
             console.log(error);
@@ -126,7 +139,7 @@ const Formulario = () => {
 
         if (item.checked == false) {
             let indice = arrCids.indexOf(item.value)
-            arrCids.splice(indice, 1) 
+            arrCids.splice(indice, 1)
             console.log(arrCids);
         }
 
@@ -139,7 +152,7 @@ const Formulario = () => {
     useEffect(() => {
         buscarPerguntas()
         buscarInfoPessoa()
-    }, [JSON.stringify(cidsSelecionados)])
+    }, [])
 
     return (
         <>
@@ -232,11 +245,11 @@ const Formulario = () => {
                                 <div className="divergencias-container">
                                     <div className="div-pergunta">
                                         <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
-                                        <input type="text" name="pergunta-qual-divergencia" id="pergunta-divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
+                                        <input type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
                                     </div>
                                     <div className="div-pergunta">
                                         <label htmlFor="pergunta-patologias" className="label-pergunta">Por que o beneficiario não informou na ds essas patologias?</label>
-                                        <input type="text" name="pergunta-patologias" id="pergunta-patologias" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
+                                        <input type="text" name="pergunta-patologias" id="patologias" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
                                     </div>
                                     <div className="div-pergunta">
                                         <label htmlFor="cid">CID:</label>
@@ -248,7 +261,7 @@ const Formulario = () => {
                                         <div id="cids-selecionados">
                                             {
                                                 cidsSelecionados.map(item => {
-                                                    return(
+                                                    return (
                                                         <div>
                                                             <span>{item}</span>
                                                         </div>
@@ -280,6 +293,19 @@ const Formulario = () => {
                         <button onClick={enviarDados} >Enviar</button>
                     </div>
                 </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <div className="title">
+                        <h2>Entrevista Realizada e Salva com Sucesso!</h2>
+                    </div>
+                    <button onClick={() => {
+                        closeModal()
+                    }}>Ok</button>
+                </Modal>
             </section>
         </>
     )

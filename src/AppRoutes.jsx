@@ -43,6 +43,8 @@ import Agendar from "./pages/TeleEntrevistas/Agenda/Agendar/Agendar";
 import Agendado from "./pages/TeleEntrevistas/Agenda/Agendado/Agendado";
 import Mensagens from "./pages/TeleEntrevistas/Agenda/Mensagens/Mensagens";
 import Formulario from "./pages/TeleEntrevistas/Formulario/Formulario";
+import EntrevistasRealizadas from "./pages/TeleEntrevistas/EntrevistasRealizadas/EntrevistasRealizadas";
+import EditarEntrevista from "./pages/TeleEntrevistas/EditarEntrevista/EditarEntrevista";
 
 /* -----------------  Liminares ----------------- */
 
@@ -123,6 +125,12 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/formulario/:id" element={<ProtectedRoute>
                     <Formulario />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/propostas" element={<ProtectedRoute>
+                    <EntrevistasRealizadas />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/propostas/editar/:id" element={<ProtectedRoute>
+                    <EditarEntrevista />
                 </ProtectedRoute>} />
 
 
