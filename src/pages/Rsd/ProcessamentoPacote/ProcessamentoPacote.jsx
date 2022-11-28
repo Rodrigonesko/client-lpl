@@ -694,9 +694,7 @@ const ProcessamentoPacote = () => {
                         <textarea name="comentario" id="comentario" cols="40" rows="6" onChange={e => setParecer(e.target.value)}>
                         </textarea>
                         <button onClick={enviarComentarioAgenda}>Salvar</button>
-
                     </form>
-
                 </Modal>
             </section>
         </>

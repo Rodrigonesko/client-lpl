@@ -111,7 +111,7 @@ const EditarEntrevista = () => {
                             </tr>
                         </table>
                     </div>
-                    <div className="perguntas-container">
+                    <div className="perguntas-container"> 
                         {
                             perguntas.map(e => {
                                 if (e.formulario == dadosEntrevista.tipoFormulario) {

@@ -51,7 +51,7 @@ const gerarPdf = async (proposta, nome) => {
             { text: 'Por que o beneficiario não informou na ds essas patologias:', margin: [20, 0, 20, 0] },
             { text: result.data.result[0].patologias, bold: true, margin: [20, 0, 20, 0] },
             { text: 'Cids', margin: [20, 0, 20, 0] },
-            { text: 'tal tal tal', margin: [20, 0, 20, 0] }
+            { text: result.data.result[0].cids, margin: [20, 0, 20, 0] }
         ]
     } else {
         divergencias = [

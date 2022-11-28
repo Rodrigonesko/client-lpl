@@ -12,6 +12,9 @@ import './Formulario.css'
 
 Modal.setAppElement('#root')
 
+let arrCids = [
+    
+]
 const Formulario = () => {
 
     const { id } = useParams()
@@ -38,9 +41,7 @@ const Formulario = () => {
 
     }
 
-    let arrCids = {
 
-    }
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -96,7 +97,8 @@ const Formulario = () => {
                 subRespostas: subRespostas,
                 pessoa,
                 simOuNao,
-                cids: arrCids
+                cids: arrCids,
+                divergencia
             }, {
                 withCredentials: true
             })
@@ -105,6 +107,7 @@ const Formulario = () => {
 
             if (result.status === 200) {
                 openModal()
+                arrCids = {}
             }
 
         } catch (error) {

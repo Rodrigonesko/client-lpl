@@ -51,8 +51,8 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/agenda/agendados'>Agendados</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/agenda/mensagens'>Mensagens</Link></MenuItem>
-                                    <MenuItem>Anexar</MenuItem>
-                                    <MenuItem>Ajustar Horarios</MenuItem>
+                                    <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
+                                    <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
                                 </SubMenu>
                                 <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>

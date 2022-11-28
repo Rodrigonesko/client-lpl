@@ -60,6 +60,17 @@ const Agendado = () => {
 
     }
 
+    const reagendar = async (id) => {
+        try {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reagendar`, {id}, {withCredentials: true})
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         searchPropostas()
         searchEnfermeiro()
@@ -117,7 +128,7 @@ const Agendado = () => {
                                                 <td>{e.enfermeiro}</td>
                                                 <td>
                                                     <Link to={`/entrevistas/formulario/${e._id}`}>Formulario</Link>
-                                                    <button>Reagendar</button>
+                                                    <button onClick={()=>reagendar(e._id)} >Reagendar</button>
                                                 </td>
                                             </tr>
                                         )
