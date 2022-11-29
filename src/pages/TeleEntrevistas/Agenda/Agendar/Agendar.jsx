@@ -48,7 +48,7 @@ const Agendar = () => {
             let qtd = 0
             
             propostas.forEach(e => {
-                if (e.status != 'Concluido' && e.agendado !== 'agendado') {
+                if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
                     qtd++
                 }
             })
