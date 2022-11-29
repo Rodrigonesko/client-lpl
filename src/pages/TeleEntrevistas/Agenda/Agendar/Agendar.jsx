@@ -11,6 +11,9 @@ const Agendar = () => {
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
+    const [modalCancelar, setModalCancelar] = useState(false)
+    const [modalExcluir, setModalExcluir] = useState(false)
+
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
     const [dataGerar, setDataGerar] = useState('')
@@ -24,6 +27,13 @@ const Agendar = () => {
 
     const [qtdNaoAgendado, setQtdNaoAgendado] = useState(0)
 
+    const [propostaCancelar, setPropostaCancelar] = useState('')
+    const [nomeCancelar, setNomeCancelar] = useState('')
+    const [idCancelar, setIdCancelar] = useState('')
+
+    const [propostaExcluir, setPropostaExcluir] = useState('')
+    const [nomeExcluir, setNomeExcluir] = useState('')
+    const [idExcluir, setIdExcluir] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -31,6 +41,22 @@ const Agendar = () => {
 
     const closeModal = () => {
         setModalIsOpen(false)
+    }
+
+    const openModalCancelar = () => {
+        setModalCancelar(true)
+    }
+
+    const closeModalCancelar = () => {
+        setModalCancelar(false)
+    }
+
+    const openModalExcluir = () => {
+        setModalExcluir(true)
+    }
+
+    const closeModalExcluir = () => {
+        setModalExcluir(false)
     }
 
     const ajustarDia = (data) => {
@@ -46,9 +72,9 @@ const Agendar = () => {
             setPropostas(result.data.propostas)
 
             let qtd = 0
-            
+
             propostas.forEach(e => {
-                if (e.status != 'Concluido' && e.agendado !== 'agendado') {
+                if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
                     qtd++
                 }
             })
@@ -138,6 +164,32 @@ const Agendar = () => {
 
 
     }
+
+    const cancelar = async () => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar }, { withCredentials: true })
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const excluir = async () => {
+        try {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/excluir`, { id: idExcluir }, { withCredentials: true })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         searchPropostas()
         searchEnfermeiros()
@@ -212,6 +264,10 @@ const Agendar = () => {
                     <div className="title">
                         <h3>Não Agendados: {qtdNaoAgendado}</h3>
                     </div>
+                    <div>
+                        <button>Relatorio Propostas</button>
+                        <button>Relatorio Não Realizadas</button>
+                    </div>
                     <div className="nao-agendados">
                         <table className="table">
                             <thead className="table-header">
@@ -228,7 +284,7 @@ const Agendar = () => {
                             <tbody>
                                 {
                                     propostas.map(e => {
-                                        if (e.status != 'Concluido' && e.agendado !== 'agendado') {
+                                        if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
                                             return (
                                                 <tr key={e._id}>
                                                     <td>{e.vigencia}</td>
@@ -237,7 +293,17 @@ const Agendar = () => {
                                                     <td>{e.dataNascimento}</td>
                                                     <td>{e.sexo}</td>
                                                     <td>{e.telefone}</td>
-                                                    <td><button className="btn-cancelar">Cancelar</button></td>
+                                                    <td><button className="btn-cancelar" onClick={() => {
+                                                        setPropostaCancelar(e.proposta)
+                                                        setNomeCancelar(e.nome)
+                                                        setIdCancelar(e._id)
+                                                        openModalCancelar()
+                                                    }}>Cancelar</button><button className="btn-cancelar" onClick={() => {
+                                                        setPropostaExcluir(e.proposta)
+                                                        setNomeExcluir(e.nome)
+                                                        setIdExcluir(e._id)
+                                                        openModalExcluir()
+                                                    }}>Excluir</button></td>
                                                 </tr>
                                             )
                                         }
@@ -259,6 +325,38 @@ const Agendar = () => {
                         closeModal()
                         window.location.reload();
                     }}>Fechar</button>
+                </Modal>
+                <Modal
+                    isOpen={modalCancelar}
+                    onRequestClose={closeModal}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <h2>Deseja cancelar a proposta: {propostaCancelar} da pessoa: {nomeCancelar}?</h2>
+                    <button onClick={() => {
+                        closeModalCancelar()
+                    }}>Fechar</button>
+                    <button className="btn-cancelar" onClick={() => {
+                        cancelar()
+                        closeModalCancelar()
+                        window.location.reload();
+                    }}>Cancelar</button>
+                </Modal>
+                <Modal
+                    isOpen={modalExcluir}
+                    onRequestClose={closeModal}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <h2>Deseja <strong>*EXCLUIR*</strong> a proposta: {propostaExcluir} da pessoa: {nomeExcluir}?</h2>
+                    <button onClick={() => {
+                        closeModalExcluir()
+                    }}>Fechar</button>
+                    <button className="btn-cancelar" onClick={() => {
+                        excluir()
+                        closeModalExcluir()
+                        //window.location.reload();
+                    }}>EXCLUIR</button>
                 </Modal>
             </section>
         </>

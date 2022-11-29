@@ -21,6 +21,63 @@ const EntrevistasRealizadas = () => {
         }
     }
 
+    const gerarRelatorio = async () => {
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Id</th>"
+            xls += "<th>Proposta</th>"
+            xls += "<th>Tipo Contrato</th>"
+            xls += "<th>Data Entrevista</th>"
+            xls += "<th>Nome</th>"
+            xls += "<th>Cpf</th>"
+            xls += "<th>Data Nascimento</th>"
+            xls += "<th>Idade</th>"
+            xls += "<th>Feito Por</th>"
+            xls += "<th>Divergencia</th>"
+            xls += "<th>Qual</th>"
+            xls += "<th>Cids</th>"
+            xls += "</tr></thead><tbody>"
+
+
+            result.data.entrevistas.forEach(e => {
+                xls += "<tr>"
+                xls += `<td>${e._id}</td>`
+                xls += `<td>${e.proposta}</td>`
+                xls += `<td>${e.tipoContrato}</td>`
+                xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.nome}</td>`
+                xls += `<td>${e.cpf}</td>`
+                xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.idade}</td>`
+                xls += `<td>${e.responsavel}</td>`
+                if (e.divergencia) {
+                    xls += `<td>Sim</td>`
+                } else {
+                    xls += `<td>Não</td>`
+                }
+
+                xls += `<td>${e.divergencia}</td>`
+                xls += `<td>${e.cids}</td>`
+                xls += `</tr>`
+            })
+
+            xls += "</tbody></table>"
+
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = 'Relatorio Propostas.xls'
+            a.click()
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         buscarEntrevistas()
     }, [])
@@ -36,7 +93,7 @@ const EntrevistasRealizadas = () => {
                     <label htmlFor="proposta">Proposta: </label>
                     <input type="text" name="proposta" id="proposta" />
 
-                    <button>Relatório</button>
+                    <button onClick={gerarRelatorio}>Relatório</button>
                 </div>
                 <div className="entrevistas-realizadas">
                     <table className='table'>
@@ -62,7 +119,7 @@ const EntrevistasRealizadas = () => {
                                             <td>{e.nome}</td>
                                             <td>{e.cpf}</td>
                                             <td>{e.dataNascimento}</td>
-                                            <td><Link to={`/entrevistas/propostas/editar/${e._id}`}>Editar</Link> <button onClick={()=>{ gerarPdf( e.proposta, e.nome) }} >PDF</button> </td>
+                                            <td><Link to={`/entrevistas/propostas/editar/${e._id}`}>Editar</Link> <button onClick={() => { gerarPdf(e.proposta, e.nome) }} >PDF</button> </td>
                                         </tr>
                                     )
                                 })
