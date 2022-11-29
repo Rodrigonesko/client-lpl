@@ -190,6 +190,55 @@ const Agendar = () => {
         }
     }
 
+    const relatorioPropostas = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Data Recebimento</th>"
+            xls += "<th>Data Vigencia</th>"
+            xls += "<th>Proposta</th>"
+            xls += "<th>Nome</th>"
+            xls += "<th>Cpf</th>"
+            xls += "<th>Data Nascimento</th>"
+            xls += "<th>Administrador</th>"
+            xls += "<th>Risco</th>"
+            xls += "<th>Sinistralidade</th>"
+            xls += "<th>Divergencia</th>"
+            xls += "<th>Cid Irregularidade</th>"
+            xls += "<th>Observação</th>"
+            xls += "<th>Status</th>"
+            xls += "<th>Cid Identificado</th>"
+            xls += "<th>Horario</th>"
+            xls += "<th>Idade</th>"
+            xls += "<th>Sexo</th>"
+            xls += "<th>Telefone</th>"
+            xls += "<th>DS 1</th>"
+            xls += "<th>DS 2</th>"
+            xls += "<th>DS 3</th>"
+            xls += "<th>DS 4</th>"
+            xls += "<th>DS 5</th>"
+            xls += "<th>DS 6</th>"
+            xls += "<th>DS 7</th>"
+            xls += "<th>DS 8</th>"
+            xls += "<th>DS 9</th>"
+            xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+
+            result.data.propostas.map(e => {
+                xls += "<tr>"
+            })
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         searchPropostas()
         searchEnfermeiros()
