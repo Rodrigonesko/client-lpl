@@ -21,10 +21,27 @@ const gerarPdf = async (proposta, nome) => {
     const perguntas = resultPerguntas.data.perguntas.map(e => {
 
         if (e.formulario === result.data.result[0].tipoFormulario && e.categoria === 'questionario') {
-            return [
-                { text: e.pergunta, margin: [20, 0, 20, 0] },
-                { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
-            ]
+            if (e.sexo != 'M' && e.sexo != 'F') {
+                return [
+                    { text: e.pergunta, margin: [20, 0, 20, 0] },
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                ]
+            }
+            if (e.sexo == 'M' && result.data.result[0].sexo == 'M') {
+                return [
+                    { text: e.pergunta, margin: [20, 0, 20, 0] },
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                ]
+            }
+
+            if (e.sexo == 'F' && result.data.result[0].sexo == 'F') {
+                return [
+                    { text: e.pergunta, margin: [20, 0, 20, 0] },
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                ]
+            }
+
+
         }
 
     })

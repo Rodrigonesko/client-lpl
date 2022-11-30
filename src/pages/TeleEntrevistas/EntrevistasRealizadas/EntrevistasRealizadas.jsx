@@ -51,7 +51,7 @@ const EntrevistasRealizadas = () => {
                 xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.nome}</td>`
                 xls += `<td>${e.cpf}</td>`
-                xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.dataNascimento}</td>`
                 xls += `<td>${e.idade}</td>`
                 xls += `<td>${e.responsavel}</td>`
                 if (e.divergencia) {
@@ -104,7 +104,7 @@ const EntrevistasRealizadas = () => {
                                 <th>Data Entrevista</th>
                                 <th>Nome</th>
                                 <th>CPF</th>
-                                <th>Data Nascimento</th>
+                                <th>Idade</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -118,7 +118,7 @@ const EntrevistasRealizadas = () => {
                                             <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
                                             <td>{e.nome}</td>
                                             <td>{e.cpf}</td>
-                                            <td>{e.dataNascimento}</td>
+                                            <td>{e.idade}</td>
                                             <td><Link to={`/entrevistas/propostas/editar/${e._id}`}>Editar</Link> <button onClick={() => { gerarPdf(e.proposta, e.nome) }} >PDF</button> </td>
                                         </tr>
                                     )

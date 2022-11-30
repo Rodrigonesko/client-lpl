@@ -6,7 +6,7 @@
     overflow: auto;
 }
 
-.agendados-container {  
+.agendados-container {
 
     height: 100vh;
     text-align: center;
@@ -14,4 +14,29 @@
 
 .filtros-agendados {
     padding: 1rem;
+}
+
+.link-formulario {
+    text-decoration: none;
+    background-color: rgb(28, 119, 204);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    transition: 200ms;
+}
+
+.link-formulario:hover {
+    background-color: rgb(22, 95, 163);
+}
+
+.botao-reagendar {
+    padding: 5px;
+    border-radius: 3px;
+    background-color: rgb(255, 217, 0);
+    font-size: 1em;
+    border: none;
+}
+
+.botao-reagendar:hover {
+    background-color: rgb(197, 168, 4);
 }

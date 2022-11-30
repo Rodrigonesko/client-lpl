@@ -29,7 +29,7 @@ const Agendado = () => {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
 
             let proposal = result.data.propostas.filter(e => {
-                return e.status != 'Concluido' && e.agendado == 'agendado'
+                return e.status != 'Concluído' && e.agendado == 'agendado'
             })
 
             setPropostas(proposal)
@@ -56,19 +56,32 @@ const Agendado = () => {
 
     }
 
-    const alterarTelefone = async () => {
+    const alterarTelefone = async (telefone, id) => {
+        try {
+            
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, {id, telefone}, {withCredentials: true})
 
+            console.log(result);
+            
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const reagendar = async (id) => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reagendar`, {id}, {withCredentials: true})
-
-            console.log(result);
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reagendar`, { id }, { withCredentials: true })
+            if (result.status === 200) {
+                window.location.reload()
+            }
 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const teste = () => {
+        console.log('apsoidapsdipaos');
     }
 
     useEffect(() => {
@@ -121,14 +134,16 @@ const Agendado = () => {
                                                 <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
                                                 <td>{moment(e.dataEntrevista).format('HH:mm:ss')}</td>
                                                 <td>{e.proposta}</td>
-                                                <td> <input type="text" defaultValue={e.telefone} /></td>
+                                                <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
                                                 <td>{e.nome}</td>
                                                 <td>{e.idade}</td>
                                                 <td>{e.sexo}</td>
                                                 <td>{e.enfermeiro}</td>
                                                 <td>
-                                                    <Link to={`/entrevistas/formulario/${e._id}`}>Formulario</Link>
-                                                    <button onClick={()=>reagendar(e._id)} >Reagendar</button>
+                                                    <Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link>
+                                                    <button className="botao-reagendar" onClick={() => {
+                                                        reagendar(e._id)
+                                                    }} >Reagendar</button>
                                                 </td>
                                             </tr>
                                         )

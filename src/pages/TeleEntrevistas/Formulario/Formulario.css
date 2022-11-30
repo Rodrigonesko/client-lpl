@@ -1,4 +1,4 @@
-.section-formulario-container{
+.section-formulario-container {
     height: 100vh;
     overflow: auto;
     padding: 1rem;
@@ -21,6 +21,14 @@
     background-color: white;
     padding: 1rem;
     border-radius: 3px;
+}
+
+.roteiro-container-entrevista p {
+    padding: 5px 0;
+}
+
+.roteiro-container-entrevista input {
+    margin: 4px;
 }
 
 .input-pergunta {
@@ -52,4 +60,27 @@
 .cids-container {
     background-color: white;
     padding: 1rem;
+}
+
+.modal-info {
+    height: 80vh;
+    overflow: auto;
+}
+
+.info-adicional {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.info-adicional button {
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.indicador-imc {
+    padding: 1rem;
+    background-color: rgb(247, 119, 119);
+    border: 2px solid red;
+    color: darkred;
 }

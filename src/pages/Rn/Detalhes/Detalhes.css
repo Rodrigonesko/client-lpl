@@ -105,7 +105,6 @@ input {
     bottom: 0;
     right: 0;
     left: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -120,6 +119,7 @@ input {
     transition: 200ms;
     border-radius: 12px;
     text-align: center;
+    opacity: 1;
 }
 
 .modal-content p {

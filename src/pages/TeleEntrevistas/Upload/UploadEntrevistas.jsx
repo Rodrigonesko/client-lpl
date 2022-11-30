@@ -39,7 +39,7 @@ const UploadRn = () => {
                 let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
 
                 result.forEach(e => {
-                    let telefone = `(${e.__EMPTY_1}) ${e.__EMPTY_2}`
+                    let telefone = `(${e.NUM_DDD_CEL}) ${e.NUM_CEL}`
                     let proposta = e.NUM_PROPOSTA
                     let nome = e.NOME_ASSOCIADO
 
