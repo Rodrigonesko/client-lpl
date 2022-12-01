@@ -143,32 +143,54 @@ const Formulario = () => {
 
         if (item.id === 'peso') {
             pesoInput = (item.value)
+            imc = pesoInput / (alturaInput * alturaInput)
+
+            let indicadorImc
+
+            if (imc >= 40) {
+                indicadorImc = 'OBESIDADE III'
+            }
+            if (imc >= 35 && imc <= 39.99) {
+                indicadorImc = 'OBESIDADE II'
+            }
+            if (imc >= 30 && imc <= 34.99) {
+                indicadorImc = 'OBESIDADE I'
+            }
+
+            console.log(indicadorImc, imc);
+
+            if (imc >= 30) {
+                let span = document.createElement('span')
+                span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
+                document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
+            }
         }
         if (item.id === 'altura') {
             alturaInput = (item.value)
+            imc = pesoInput / (alturaInput * alturaInput)
+
+            let indicadorImc
+
+            if (imc >= 40) {
+                indicadorImc = 'OBESIDADE III'
+            }
+            if (imc >= 35 && imc <= 39.99) {
+                indicadorImc = 'OBESIDADE II'
+            }
+            if (imc >= 30 && imc <= 34.99) {
+                indicadorImc = 'OBESIDADE I'
+            }
+
+            console.log(indicadorImc, imc);
+
+            if (imc >= 30) {
+                let span = document.createElement('span')
+                span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
+                document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
+            }
         }
 
-        imc = pesoInput / (alturaInput * alturaInput)
 
-        let indicadorImc
-
-        if (imc >= 40) {
-            indicadorImc = 'OBESIDADE III'
-        }
-        if (imc >= 35 && imc <= 39.99) {
-            indicadorImc = 'OBESIDADE II'
-        }
-        if (imc >= 30 && imc <= 34.99) {
-            indicadorImc = 'OBESIDADE I'
-        }
-
-        console.log(indicadorImc, imc);
-
-        if (imc >= 30) {
-            let span = document.createElement('span')
-            span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
-            document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
-        }
     }
 
     const handleChangeSub = (item) => {

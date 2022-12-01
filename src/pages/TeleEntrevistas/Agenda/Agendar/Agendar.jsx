@@ -264,7 +264,7 @@ const Agendar = () => {
             var a = document.createElement('a');
             var data_type = 'data:application/vnd.ms-excel';
             a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-            a.download = 'relatorio rsd.xls'
+            a.download = 'Relatório Propostas.xls'
             a.click()
 
 

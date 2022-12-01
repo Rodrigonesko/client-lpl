@@ -110,7 +110,7 @@ const RelatorioRsd = () => {
 
             formData.append('file', file, file.name)
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/upload/cids`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/upload/dadosEntrevista`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
             console.log(result);
 
