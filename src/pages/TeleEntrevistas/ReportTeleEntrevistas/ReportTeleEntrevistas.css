@@ -1,0 +1,13 @@
+.section-report-entrevista-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.report-entrevistas {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 3px;
+}

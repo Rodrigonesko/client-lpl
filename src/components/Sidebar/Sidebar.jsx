@@ -57,10 +57,12 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                                 {
                                     accessLevel != 'false' ? (
-                                        <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
+                                        <MenuItem><Link to='/entrevistas/faturamento'>Faturamento</Link></MenuItem>
                                     ) : null
                                 }
-                                <MenuItem><Link to='/entrevistas/faturamento'>Faturamento</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/report'>Report</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
+
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>
                                 <SubMenu title='Liminares'>
