@@ -10,6 +10,7 @@ const Agendado = () => {
 
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
+    const [qtdAgendado, setQtdAgendado] = useState(0)
 
     const searchEnfermeiro = async () => {
         try {
@@ -33,6 +34,8 @@ const Agendado = () => {
             })
 
             setPropostas(proposal)
+            console.log(proposal.length);
+            setQtdAgendado(proposal.length)
 
         } catch (error) {
             console.log(error);
@@ -110,6 +113,9 @@ const Agendado = () => {
                                 })
                             }
                         </select>
+                    </div>
+                    <div className="qtd-agendados">
+                        <h3>Agendado: {qtdAgendado}</h3>
                     </div>
                     <div className="agendados">
                         <table className="table">

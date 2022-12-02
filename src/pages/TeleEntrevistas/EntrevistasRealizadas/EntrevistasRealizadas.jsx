@@ -48,7 +48,7 @@ const EntrevistasRealizadas = () => {
                 xls += `<td>${e._id}</td>`
                 xls += `<td>${e.proposta}</td>`
                 xls += `<td>${e.tipoContrato}</td>`
-                xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.nome}</td>`
                 xls += `<td>${e.cpf}</td>`
                 xls += `<td>${e.dataNascimento}</td>`
@@ -115,7 +115,7 @@ const EntrevistasRealizadas = () => {
                                         <tr key={e._id}>
                                             <td>{e._id}</td>
                                             <td>{e.proposta}</td>
-                                            <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
+                                            <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
                                             <td>{e.nome}</td>
                                             <td>{e.cpf}</td>
                                             <td>{e.idade}</td>

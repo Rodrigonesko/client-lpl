@@ -17,17 +17,21 @@ const ReportTeleEntrevistas = () => {
             let quantidadeAgendar = 0
             let quantidadeAgendado = 0
 
+            let propostasNaoAgendadas = []
+
             result.data.propostas.forEach(e => {
                 if(e.agendado === 'agendado') {
                     quantidadeAgendado++
                 } else {
                     quantidadeAgendar++
+                    propostasNaoAgendadas.push(e)
                 }
             })
 
             setAAgendar(quantidadeAgendar)
             setAgendadas(quantidadeAgendado)
             setTotal(quantidadeAgendado + quantidadeAgendar)
+            console.log(propostasNaoAgendadas);
 
         } catch (error) {
             console.log(error);
