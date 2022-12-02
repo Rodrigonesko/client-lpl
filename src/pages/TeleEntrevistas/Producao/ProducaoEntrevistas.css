@@ -1,0 +1,17 @@
+.section-producao-entrevistas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.producao-entrevistas table {
+    text-align: center;
+    border-collapse: collapse;
+    border-radius: 3px;
+}
+
+.producao-entrevistas th {
+    padding: 2px;
+}

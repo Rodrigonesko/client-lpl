@@ -62,6 +62,7 @@ const Sidebar = () => {
                                 }
                                 <MenuItem><Link to='/entrevistas/report'>Report</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/producao'>Produção</Link></MenuItem>
 
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>
