@@ -6,7 +6,15 @@
 
 }
 
-.producao-entrevistas table {
+.producao-rn, .producao-entrevistas {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.producao-entrevistas table,  .producao-rn table{
     text-align: center;
     border-collapse: collapse;
     border-radius: 3px;
@@ -16,17 +24,9 @@
     padding: 2px;
 }
 
-.producao-entrevistas td:hover {
+.producao-entrevistas td:hover, .producao-rn td:hover {
     background: rgb(228, 227, 227);
     cursor: pointer;
     transition: 200ms;
 }
 
-.show {
-    transition: 500ms;
-    opacity: 1;
-}
-
-.hide {
-    opacity: 0;
-}

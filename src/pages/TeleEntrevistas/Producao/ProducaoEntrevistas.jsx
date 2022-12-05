@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
+import TabelaProducao from "./TabelaProducao/TabelaProducao";
 import './ProducaoEntrevistas.css'
 import moment from "moment";
 import $ from 'jquery'
@@ -10,6 +11,9 @@ const ProducaoEntrevistas = () => {
     const [quantidadeMesAno, setQuantidadeMesAno] = useState({})
     const [analistasQuantidadeTotalMes, setAnalistasQuantidadeTotalMes] = useState({})
     const [analistaQuantidadeDia, setAnalistaQuantidadeDia] = useState({})
+    const [quantidadeMesAnoRn, setQuantidadeMesAnoRn] = useState({})
+    const [analistasQuantidadeTotalMesRn, setAnalistasQuantidadeTotalMesRn] = useState({})
+    const [analistaQuantidadeDiaRn, setAnalistaQuantidadeDiaRn] = useState({})
     const [mesAno, setMesAno] = useState('')
     const [analista, setAnalista] = useState('')
 
@@ -23,6 +27,9 @@ const ProducaoEntrevistas = () => {
             setQuantidadeMesAno(result.data.quantidadeMesAno)
             setAnalistasQuantidadeTotalMes(result.data.quantidadeAnalistaMesAno);
             setAnalistaQuantidadeDia(result.data.quantidadeAnalistaDia)
+            setQuantidadeMesAnoRn(result.data.quantidadeMesAnoRn)
+            setAnalistasQuantidadeTotalMesRn(result.data.quantidadeAnalistaMesAnoRn);
+            setAnalistaQuantidadeDiaRn(result.data.quantidadeAnalistaDiaRn)
 
             console.log(result.data.quantidadeAnalistaDia);
 
@@ -34,13 +41,15 @@ const ProducaoEntrevistas = () => {
     const mostrarDadosAnalistaTotalMes = (e) => {
         try {
             let trProducaoMes = document.getElementById('producao-total-mes')
-            if (trProducaoMes.classList.contains('hide')) {
-                trProducaoMes.classList.add('show')
-                trProducaoMes.classList.remove('hide')
-                setMesAno(e)
-            } else {
-                trProducaoMes.classList.add('hide')
-            }
+            // if (trProducaoMes.classList.contains('hide')) {
+            //     trProducaoMes.classList.add('show')
+            //     trProducaoMes.classList.remove('hide')
+            //     setMesAno(e)
+            // } else {
+            //     trProducaoMes.classList.add('hide')
+            // }
+            $('#producao-total-mes').toggle('fast')
+            setMesAno(e)
         } catch (error) {
             console.log(error);
         }
@@ -51,16 +60,19 @@ const ProducaoEntrevistas = () => {
             console.log(e)
             setAnalista(e)
             let tr = document.getElementById(`producao-dia-${e}`)
-            let trs = document.getElementsByClassName('producao-dia')
-            if(tr.classList.contains(`hide`)){
-                Object.values(trs).forEach(item => {
-                    console.log(item.classList.add('hide'));
-                })
-                tr.classList.add(`show`)
-                tr.classList.remove(`hide`)
-            } else {
-                tr.classList.add(`hide`)
-            }
+            let trs = $('.producao-dia').hide('fast')
+            // Object.values(trs).forEach(item => {
+            //     console.log(item.cl);
+            // })
+            $(`#producao-dia-${e}`).toggle('fast')
+
+            // if (tr.classList.contains(`hide`)) {
+            //     // tr.classList.add(`show`)
+            //     // tr.classList.remove(`hide`)
+            //     $(`#producao-dia-${e}`).toggle('fast')
+            // } else {
+            //     tr.classList.add(`hide`)
+            // }
         } catch (error) {
             console.log(error);
         }
@@ -75,11 +87,11 @@ const ProducaoEntrevistas = () => {
             <Sidebar></Sidebar>
             <section className="section-producao-entrevistas-container">
                 <div className="producao-entrevistas-container">
-                    <div className="title">
+                    <div className="title producao-entrevistas">
                         <h3>Produção Entrevistas</h3>
                     </div>
                     <div className="producao-entrevistas">
-                        <table className="table">
+                        {/* <table className="table">
                             <thead className="table-header">
                                 <tr>
                                     <th></th>
@@ -105,7 +117,7 @@ const ProducaoEntrevistas = () => {
                                         })
                                     }
                                 </tr>
-                                <tr className="hide" id="producao-total-mes">
+                                <tr className="none" id="producao-total-mes">
                                     <td colspan={Object.keys(quantidadeMesAno).length + 1}>
                                         <div>
                                             <table className="table" border={1}>
@@ -127,7 +139,7 @@ const ProducaoEntrevistas = () => {
                                                                                 mostrarDadosAnalistaDia(e, element.target)
                                                                             }}>{analistasQuantidadeTotalMes[e][mesAno]}</td>
                                                                         </tr>
-                                                                        <tr id={`producao-dia-${e}`} className='hide producao-dia'>
+                                                                        <tr id={`producao-dia-${e}`} className='none producao-dia'>
                                                                             <td colspan='30'>
                                                                                 <div>
                                                                                     <table className="table" border={1}>
@@ -153,7 +165,7 @@ const ProducaoEntrevistas = () => {
                                                                                         </thead>
                                                                                         <tbody>
                                                                                             <tr>
-                                                                                                <td>quantidade total</td>
+                                                                                                <td>Quantidade/Dia</td>
                                                                                                 {
                                                                                                     Object.keys(analistaQuantidadeDia).map((analistaKey) => {
                                                                                                         let td
@@ -170,12 +182,6 @@ const ProducaoEntrevistas = () => {
                                                                                                     })
                                                                                                 }
                                                                                             </tr>
-                                                                                            <tr>
-                                                                                                <td>rn</td>
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td>tele entrevistas</td>
-                                                                                            </tr>
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </div>
@@ -191,10 +197,20 @@ const ProducaoEntrevistas = () => {
                                             </table>
                                         </div>
                                     </td>
-
                                 </tr>
                             </tbody>
-                        </table>
+                        </table> */}
+                        <TabelaProducao quantidadeMesAno={quantidadeMesAno} analistasQuantidadeTotalMes={analistasQuantidadeTotalMes} analistaQuantidadeDia={analistaQuantidadeDia} idProducaoMes='producao-mes-entrevistas' idProducaoDia='producao-dia-entrevistas' >
+
+                        </TabelaProducao>
+                    </div>
+                    <div className="title producao-rn">
+                        <h3>Produção Rns</h3>
+                    </div>
+                    <div className="producao-rn">
+                        <TabelaProducao quantidadeMesAno={quantidadeMesAnoRn} analistasQuantidadeTotalMes={analistasQuantidadeTotalMesRn} analistaQuantidadeDia={analistaQuantidadeDiaRn} idProducaoMes='producao-mes-rns' idProducaoDia='producao-dia-rns' >
+
+                        </TabelaProducao>
                     </div>
                 </div>
 

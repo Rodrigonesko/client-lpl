@@ -159,12 +159,7 @@ const Agendar = () => {
             console.log(error);
         }
     }
-
-    const countNaoAgendados = async () => {
-
-
-    }
-
+    
     const cancelar = async () => {
         try {
 
