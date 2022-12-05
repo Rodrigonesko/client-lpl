@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './ProducaoEntrevistas.css'
+import moment from "moment";
+import $ from 'jquery'
 
 const ProducaoEntrevistas = () => {
 
     const [quantidadeMesAno, setQuantidadeMesAno] = useState({})
     const [analistasQuantidadeTotalMes, setAnalistasQuantidadeTotalMes] = useState({})
+    const [analistaQuantidadeDia, setAnalistaQuantidadeDia] = useState({})
+    const [mesAno, setMesAno] = useState('')
+    const [analista, setAnalista] = useState('')
 
     const buscarDados = async () => {
         try {
@@ -17,7 +22,45 @@ const ProducaoEntrevistas = () => {
 
             setQuantidadeMesAno(result.data.quantidadeMesAno)
             setAnalistasQuantidadeTotalMes(result.data.quantidadeAnalistaMesAno);
+            setAnalistaQuantidadeDia(result.data.quantidadeAnalistaDia)
 
+            console.log(result.data.quantidadeAnalistaDia);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const mostrarDadosAnalistaTotalMes = (e) => {
+        try {
+            let trProducaoMes = document.getElementById('producao-total-mes')
+            if (trProducaoMes.classList.contains('hide')) {
+                trProducaoMes.classList.add('show')
+                trProducaoMes.classList.remove('hide')
+                setMesAno(e)
+            } else {
+                trProducaoMes.classList.add('hide')
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const mostrarDadosAnalistaDia = async (e, tr) => {
+        try {
+            console.log(e)
+            setAnalista(e)
+            let tr = document.getElementById(`producao-dia-${e}`)
+            let trs = document.getElementsByClassName('producao-dia')
+            if(tr.classList.contains(`hide`)){
+                Object.values(trs).forEach(item => {
+                    console.log(item.classList.add('hide'));
+                })
+                tr.classList.add(`show`)
+                tr.classList.remove(`hide`)
+            } else {
+                tr.classList.add(`hide`)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -36,8 +79,8 @@ const ProducaoEntrevistas = () => {
                         <h3>Produção Entrevistas</h3>
                     </div>
                     <div className="producao-entrevistas">
-                        <table border={1}>
-                            <thead>
+                        <table className="table">
+                            <thead className="table-header">
                                 <tr>
                                     <th></th>
                                     {
@@ -53,18 +96,20 @@ const ProducaoEntrevistas = () => {
                                 <tr>
                                     <td>Total</td>
                                     {
-                                        Object.values(quantidadeMesAno).map(e => {
+                                        Object.keys(quantidadeMesAno).map(e => {
                                             return (
-                                                <td>{e}</td>
+                                                <td onClick={(() => {
+                                                    mostrarDadosAnalistaTotalMes(e)
+                                                })} >{quantidadeMesAno[e]}</td>
                                             )
                                         })
                                     }
                                 </tr>
-                                <tr>
-                                    <td colspan='2'>
+                                <tr className="hide" id="producao-total-mes">
+                                    <td colspan={Object.keys(quantidadeMesAno).length + 1}>
                                         <div>
-                                            <table border={1}>
-                                                <thead>
+                                            <table className="table" border={1}>
+                                                <thead className="table-header">
                                                     <tr>
                                                         <th>Analista</th>
                                                         <th>Quantidade</th>
@@ -73,156 +118,63 @@ const ProducaoEntrevistas = () => {
                                                 <tbody>
                                                     {
                                                         Object.keys(analistasQuantidadeTotalMes).map(e => {
-                                                            console.log(analistasQuantidadeTotalMes[e]['05/2022']);
-                                                            if (analistasQuantidadeTotalMes[e]['05/2022']) {
+                                                            if (analistasQuantidadeTotalMes[e][mesAno]) {
                                                                 return (
                                                                     <>
-                                                                        <tr>
+                                                                        <tr >
                                                                             <td>{e}</td>
-                                                                            <td>{analistasQuantidadeTotalMes[e]['05/2022']}</td>
+                                                                            <td onClick={(element) => {
+                                                                                mostrarDadosAnalistaDia(e, element.target)
+                                                                            }}>{analistasQuantidadeTotalMes[e][mesAno]}</td>
                                                                         </tr>
-                                                                        <tr>
+                                                                        <tr id={`producao-dia-${e}`} className='hide producao-dia'>
                                                                             <td colspan='30'>
                                                                                 <div>
-                                                                                    <table border={1}>
-                                                                                        <thead>
+                                                                                    <table className="table" border={1}>
+                                                                                        <thead className="table-header">
                                                                                             <tr>
-                                                                                                <th></th>
-                                                                                                <th>01</th>
-                                                                                                <th>02</th>
-                                                                                                <th>03</th>
-                                                                                                <th>04</th>
-                                                                                                <th>05</th>
-                                                                                                <th>06</th>
-                                                                                                <th>07</th>
-                                                                                                <th>08</th>
-                                                                                                <th>09</th>
-                                                                                                <th>10</th>
-                                                                                                <th>11</th>
-                                                                                                <th>12</th>
-                                                                                                <th>13</th>
-                                                                                                <th>14</th>
-                                                                                                <th>15</th>
-                                                                                                <th>16</th>
-                                                                                                <th>17</th>
-                                                                                                <th>18</th>
-                                                                                                <th>19</th>
-                                                                                                <th>20</th>
-                                                                                                <th>21</th>
-                                                                                                <th>22</th>
-                                                                                                <th>23</th>
-                                                                                                <th>24</th>
-                                                                                                <th>25</th>
-                                                                                                <th>26</th>
-                                                                                                <th>27</th>
-                                                                                                <th>28</th>
-                                                                                                <th>29</th>
-                                                                                                <th>30</th>
-                                                                                                <th>31</th>
+                                                                                                <th>Dia</th>
+                                                                                                {
+                                                                                                    Object.keys(analistaQuantidadeDia).map((analistaKey) => {
+                                                                                                        let td
+                                                                                                        if (analistaKey === analista) {
+                                                                                                            td = Object.keys(analistaQuantidadeDia[analistaKey]).map(data => {
+                                                                                                                if (moment(data).format('MM/YYYY') === mesAno) {
+                                                                                                                    return (
+                                                                                                                        <th>{moment(data).format('DD')}</th>
+                                                                                                                    )
+                                                                                                                }
+                                                                                                            })
+                                                                                                        }
+                                                                                                        return td
+                                                                                                    })
+                                                                                                }
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
                                                                                             <tr>
                                                                                                 <td>quantidade total</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
-                                                                                                <td>18</td>
-                                                                                                <td>6</td>
-                                                                                                <td>7</td>
-                                                                                                <td>10</td>
+                                                                                                {
+                                                                                                    Object.keys(analistaQuantidadeDia).map((analistaKey) => {
+                                                                                                        let td
+                                                                                                        if (analistaKey === analista) {
+                                                                                                            td = Object.keys(analistaQuantidadeDia[analistaKey]).map(data => {
+                                                                                                                if (moment(data).format('MM/YYYY') === mesAno) {
+                                                                                                                    return (
+                                                                                                                        <td>{analistaQuantidadeDia[analistaKey][data]}</td>
+                                                                                                                    )
+                                                                                                                }
+                                                                                                            })
+                                                                                                        }
+                                                                                                        return td
+                                                                                                    })
+                                                                                                }
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td>rn</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
-                                                                                                <td>6</td>
-                                                                                                <td>5</td>
-                                                                                                <td>4</td>
-                                                                                                <td>5</td>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td>tele entrevistas</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>1</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
-                                                                                                <td>3</td>
-                                                                                                <td>5</td>
-                                                                                                <td>12</td>
                                                                                             </tr>
                                                                                         </tbody>
                                                                                     </table>
