@@ -20,6 +20,7 @@ const Agendar = () => {
     const [datasEntrevista, setDatasEntrevista] = useState([])
     const [enfermeiro, setEnfermeiro] = useState('')
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
+    const [horarios, setHorarios] = useState([])
     const [msg, setMsg] = useState('')
 
     const [beneficiario, setBeneficiario] = useState('')
@@ -141,6 +142,19 @@ const Agendar = () => {
         }
     }
 
+    const buscarHorariosDisp = async () => {
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horarios/disponiveis`, { withCredentials: true })
+
+            console.log(result);
+
+            setHorarios(result.data.horarios)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const agendar = async () => {
         try {
             console.log(beneficiario, enfermeiro, dataEntrevista);
@@ -159,7 +173,7 @@ const Agendar = () => {
             console.log(error);
         }
     }
-    
+
     const cancelar = async () => {
         try {
 
@@ -322,6 +336,7 @@ const Agendar = () => {
     useEffect(() => {
         searchPropostas()
         searchEnfermeiros()
+        buscarHorariosDisp()
 
     }, [qtdNaoAgendado])
 
@@ -441,6 +456,18 @@ const Agendar = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="horarios-disponiveis-container">
+                        <div className="title">
+                            <h3>Horarios Disponíveis</h3>
+                        </div>
+                        {
+                            horarios.map(e => {
+                                console.log(e);
+                            })
+                        }
+                    </div>
+
+
                 </div>
                 <Modal
                     isOpen={modalIsOpen}

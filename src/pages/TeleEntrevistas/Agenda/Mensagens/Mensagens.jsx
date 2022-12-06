@@ -14,7 +14,6 @@ const Mensagens = () => {
 
     const gerarMensagens = () => {
         try {
-            console.log('oii');
             buscarPropostas()
             buscarHorarios(dataMensagem)
 
