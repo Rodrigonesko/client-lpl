@@ -54,3 +54,9 @@
 .btn-cancelar:hover {
     background-color: darkred;
 }
+
+.horarios-disponiveis-card {
+    margin: 1rem 0;
+    border: 1px solid gray;
+    padding: 1rem;
+}

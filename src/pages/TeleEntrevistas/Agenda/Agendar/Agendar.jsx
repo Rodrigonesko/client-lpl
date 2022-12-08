@@ -4,6 +4,7 @@ import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Agendar.css'
 import moment from "moment";
 import Modal from "react-modal";
+import {Link} from 'react-router-dom'
 
 Modal.setAppElement('#root')
 
@@ -20,7 +21,7 @@ const Agendar = () => {
     const [datasEntrevista, setDatasEntrevista] = useState([])
     const [enfermeiro, setEnfermeiro] = useState('')
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
-    const [horarios, setHorarios] = useState([])
+    const [horarios, setHorarios] = useState({})
     const [msg, setMsg] = useState('')
 
     const [beneficiario, setBeneficiario] = useState('')
@@ -31,6 +32,7 @@ const Agendar = () => {
     const [propostaCancelar, setPropostaCancelar] = useState('')
     const [nomeCancelar, setNomeCancelar] = useState('')
     const [idCancelar, setIdCancelar] = useState('')
+    const [motivoCancelar, setMotivoCancelar] = useState('Sem Sucesso de Contato!')
 
     const [propostaExcluir, setPropostaExcluir] = useState('')
     const [nomeExcluir, setNomeExcluir] = useState('')
@@ -135,6 +137,8 @@ const Agendar = () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${enfermeiro}/${ajustarDia(dia)}`, { withCredentials: true })
 
+            console.log(result);
+
             setHorariosDisponiveis(result.data.horarios)
 
         } catch (error) {
@@ -148,7 +152,7 @@ const Agendar = () => {
 
             console.log(result);
 
-            setHorarios(result.data.horarios)
+            setHorarios(result.data.obj)
 
         } catch (error) {
             console.log(error);
@@ -177,7 +181,7 @@ const Agendar = () => {
     const cancelar = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar, motivoCancelamento: motivoCancelar }, { withCredentials: true })
 
             console.log(result);
 
@@ -333,6 +337,18 @@ const Agendar = () => {
         }
     }
 
+    const alterarTelefone = async (telefone, id) => {
+        try {
+            
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, {id, telefone}, {withCredentials: true})
+
+            console.log(result);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         searchPropostas()
         searchEnfermeiros()
@@ -423,20 +439,22 @@ const Agendar = () => {
                                     <th>Sexo</th>
                                     <th>Telefone</th>
                                     <th>Cancelar</th>
+                                    <th>Formulario</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     propostas.map(e => {
                                         if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
+                                            console.log(e);
                                             return (
                                                 <tr key={e._id}>
-                                                    <td>{e.vigencia}</td>
+                                                    <td>{moment(e.vigencia).format('DD/MM/YYYY')}</td>
                                                     <td>{e.proposta}</td>
                                                     <td>{e.nome}</td>
                                                     <td>{e.dataNascimento}</td>
                                                     <td>{e.sexo}</td>
-                                                    <td>{e.telefone}</td>
+                                                    <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
                                                     <td><button className="btn-cancelar" onClick={() => {
                                                         setPropostaCancelar(e.proposta)
                                                         setNomeCancelar(e.nome)
@@ -448,6 +466,7 @@ const Agendar = () => {
                                                         setIdExcluir(e._id)
                                                         openModalExcluir()
                                                     }}>Excluir</button></td>
+                                                    <td><Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link></td>
                                                 </tr>
                                             )
                                         }
@@ -461,13 +480,23 @@ const Agendar = () => {
                             <h3>Horarios Disponíveis</h3>
                         </div>
                         {
-                            horarios.map(e => {
-                                console.log(e);
+                            Object.keys(horarios).map(data => {
+                                return (
+                                    <div className="horarios-disponiveis-card">
+                                        <span>Horários disponíveis para o dia <strong>{data}</strong></span>
+                                        <br />
+                                        {
+                                            horarios[data].map(horario => {
+                                                return (
+                                                    <span>{horario} - </span>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                )
                             })
                         }
                     </div>
-
-
                 </div>
                 <Modal
                     isOpen={modalIsOpen}
@@ -489,6 +518,12 @@ const Agendar = () => {
                     overlayClassName='modal-overlay'
                     className='modal-content'>
                     <h2>Deseja cancelar a proposta: {propostaCancelar} da pessoa: {nomeCancelar}?</h2>
+                    <div>
+                        <select name="motivo-cancelamento" id="motivo-cancelamento" onChange={e=>setMotivoCancelar(e.target.value)} >
+                            <option value="Sem Sucesso de Contato!">Sem Sucesso de Contato!</option>
+                            <option value="Beneficiario Solicitou o Cancelamento">Beneficiario Solicitou o Cancelamento</option>
+                        </select>
+                    </div>
                     <button onClick={() => {
                         closeModalCancelar()
                     }}>Fechar</button>

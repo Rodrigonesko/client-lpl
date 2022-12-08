@@ -50,6 +50,7 @@ import Horarios from "./pages/TeleEntrevistas/Agenda/Horarios/Horarios";
 import FaturamentoEntrevistas from "./pages/TeleEntrevistas/FaturamentoEntrevistas/FaturamentoEntrevistas";
 import ReportTeleEntrevistas from "./pages/TeleEntrevistas/ReportTeleEntrevistas/ReportTeleEntrevistas";
 import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoEntrevistas";
+import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgendadas";
 
 /* -----------------  Liminares ----------------- */
 
@@ -154,6 +155,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/producao" element={<ProtectedRoute>
                     <ProducaoEntrevistas />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/reportAgendadas" element={<ProtectedRoute>
+                    <ReportAgendadas />
                 </ProtectedRoute>} />
 
                 {/* Liminares Routes */}

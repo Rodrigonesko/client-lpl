@@ -30,7 +30,7 @@ const Agendado = () => {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
 
             let proposal = result.data.propostas.filter(e => {
-                return e.status != 'Concluído' && e.agendado == 'agendado'
+                return e.status != 'Concluído' && e.agendado == 'agendado' && e.status != 'Cancelado'
             })
 
             setPropostas(proposal)
@@ -135,24 +135,28 @@ const Agendado = () => {
                             <tbody>
                                 {
                                     propostas.map(e => {
-                                        return (
-                                            <tr key={e._id}>
-                                                <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
-                                                <td>{moment(e.dataEntrevista).format('HH:mm:ss')}</td>
-                                                <td>{e.proposta}</td>
-                                                <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
-                                                <td>{e.nome}</td>
-                                                <td>{e.idade}</td>
-                                                <td>{e.sexo}</td>
-                                                <td>{e.enfermeiro}</td>
-                                                <td>
-                                                    <Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link>
-                                                    <button className="botao-reagendar" onClick={() => {
-                                                        reagendar(e._id)
-                                                    }} >Reagendar</button>
-                                                </td>
-                                            </tr>
-                                        )
+
+                                        if(e.status != 'Concluído' && e.agendado == 'agendado' && e.status != 'Cancelado'){
+                                            return (
+                                            
+                                                <tr key={e._id}>
+                                                    <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
+                                                    <td>{moment(e.dataEntrevista).format('HH:mm:ss')}</td>
+                                                    <td>{e.proposta}</td>
+                                                    <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
+                                                    <td>{e.nome}</td>
+                                                    <td>{e.idade}</td>
+                                                    <td>{e.sexo}</td>
+                                                    <td>{e.enfermeiro}</td>
+                                                    <td>
+                                                        <Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link>
+                                                        <button className="botao-reagendar" onClick={() => {
+                                                            reagendar(e._id)
+                                                        }} >Reagendar</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
                                     })
                                 }
                             </tbody>
