@@ -1,0 +1,29 @@
+.section-producao-diaria-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.producao-diaria {
+    border-radius: 15px;
+    background: #f0f0f0;
+    box-shadow: 15px 15px 40px #bebebe,
+        -15px -15px 40px #ffffff;
+    padding: 1rem;
+}
+
+.producao-diaria table {
+    text-align: center;
+}
+
+.busca-data-producao {  
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 1rem;
+}
+
+.busca-data-producao button {
+    padding: 6px;
+}

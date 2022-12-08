@@ -51,6 +51,8 @@ import FaturamentoEntrevistas from "./pages/TeleEntrevistas/FaturamentoEntrevist
 import ReportTeleEntrevistas from "./pages/TeleEntrevistas/ReportTeleEntrevistas/ReportTeleEntrevistas";
 import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoEntrevistas";
 import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgendadas";
+import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
+import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
 
 /* -----------------  Liminares ----------------- */
 
@@ -159,6 +161,12 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/reportAgendadas" element={<ProtectedRoute>
                     <ReportAgendadas />
                 </ProtectedRoute>} />
+                <Route exact path="/entrevistas/producaoDiaria" element={<ProtectedRoute>
+                    <ProducaoDiariaTele />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/cid/adicionar" element={<ProtectedRoute>
+                    <AdicionarCid />
+                </ProtectedRoute>} />
 
                 {/* Liminares Routes */}
 
@@ -230,11 +238,19 @@ const AppRoutes = () => {
                     <FichaBeneficiarioConcluidos />
                 </ProtectedRoute>} />
 
-
                 {/*Elegibilidade*/}
 
                 <Route path="/elegibilidade/upload" element={<ProtectedRoute>
                     <UploadElegibilidade />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/analiseDocumentos" element={<ProtectedRoute>
+                    <AnaliseDocumentos />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/preProcessamento" element={<ProtectedRoute>
+                    <PreProcessamento />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/analise" element={<ProtectedRoute>
+                    <AnaliseElegibilidade />
                 </ProtectedRoute>} />
 
             </Routes>

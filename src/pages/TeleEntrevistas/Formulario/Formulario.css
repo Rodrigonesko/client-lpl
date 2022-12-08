@@ -84,3 +84,7 @@
     border: 2px solid red;
     color: darkred;
 }
+
+.formulario-container .title button {
+    padding: 6px;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Agendar.css'
@@ -6,9 +6,13 @@ import moment from "moment";
 import Modal from "react-modal";
 import {Link} from 'react-router-dom'
 
+import AuthContext from "../../../../context/AuthContext";
+
 Modal.setAppElement('#root')
 
 const Agendar = () => {
+
+    const { accessLevel } = useContext(AuthContext)
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
@@ -37,6 +41,8 @@ const Agendar = () => {
     const [propostaExcluir, setPropostaExcluir] = useState('')
     const [nomeExcluir, setNomeExcluir] = useState('')
     const [idExcluir, setIdExcluir] = useState('')
+
+    const [novaVigencia, setNovaVigencia] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -449,7 +455,7 @@ const Agendar = () => {
                                             console.log(e);
                                             return (
                                                 <tr key={e._id}>
-                                                    <td>{moment(e.vigencia).format('DD/MM/YYYY')}</td>
+                                                    <td><input type="date" name="" id="" disabled={ accessLevel != 'false' ? (false) : (true)} defaultValue={e.vigencia}/><button>Alterar</button></td>
                                                     <td>{e.proposta}</td>
                                                     <td>{e.nome}</td>
                                                     <td>{e.dataNascimento}</td>

@@ -59,13 +59,14 @@ const Sidebar = () => {
                                     accessLevel != 'false' ? (<>
                                         <MenuItem><Link to='/entrevistas/faturamento'>Faturamento</Link></MenuItem>
                                         <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
+                                        <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>
                                     </>
                                     ) : null
                                 }
                                 <MenuItem><Link to='/entrevistas/report'>Report</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/producao'>Produção</Link></MenuItem>
-
+                                <MenuItem><Link to='/entrevistas/cid/adicionar'>Adicionar Cid</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>
                                 <SubMenu title='Liminares'>
@@ -89,6 +90,9 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/rsd/agd'>AGD</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
+                                <MenuItem><Link to='/elegibilidade/analiseDocumentos'>Analise Documentos</Link></MenuItem>
+                                <MenuItem><Link to='/elegibilidade/preProcessamento'>Pré Processamento</Link></MenuItem>
+                                <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
                                 <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                             </SubMenu>
                         </Menu>

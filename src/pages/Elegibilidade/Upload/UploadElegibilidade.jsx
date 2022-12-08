@@ -8,7 +8,7 @@ const UploadElegibilidade = () => {
 
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
-
+    
     const send = async e => {
         e.preventDefault()
 
@@ -22,10 +22,10 @@ const UploadElegibilidade = () => {
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
-            console.log(result.data.pedidos);
+            console.log(result.data);
 
             if (result.status == 200) {
-                setStatus(`Novos pedidos: ${result.data.pedidos.length}`)
+                setStatus(`Novos pedidos: ${result.data.qtd}`)
             }
 
         } catch (error) {

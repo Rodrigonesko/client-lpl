@@ -69,6 +69,8 @@ const Formulario = () => {
     const [resp, setResp] = useState({})
     const [simnao, setSimNao] = useState({})
 
+    const [novoFormulario, setNovoFormulario] = useState('')
+
     let alturaInput, pesoInput
 
     const openModal = () => {
@@ -256,15 +258,20 @@ const Formulario = () => {
 
     const adicionarCids = (item) => {
 
+        let div = document.getElementById('cids-selecionados')
+
         if (item.checked == true) {
             arrCids.push(item.value)
-            console.log(arrCids);
+            let div1 = document.createElement('div')
+            let span = document.createElement('span')
+            span.textContent = item.value
+            div1.appendChild(span)
+            div.appendChild(div1)
         }
 
         if (item.checked == false) {
             let indice = arrCids.indexOf(item.value)
             arrCids.splice(indice, 1)
-            console.log(arrCids);
         }
 
     }
@@ -276,6 +283,31 @@ const Formulario = () => {
         } else {
             div.classList.add('none')
             console.log('oi');
+        }
+    }
+
+    const alterarFormulario = async () => {
+        try {
+            console.log(novoFormulario);
+
+            if (!novoFormulario == '') {
+                const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/alterarFormulario`, {
+                    formulario: novoFormulario,
+                    id: id
+                }, {
+                    withCredentials: true
+                })
+
+                if (result.status === 200) {
+                    window.location.reload()
+                }
+
+            } else {
+                return
+            }
+
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -291,6 +323,14 @@ const Formulario = () => {
                 <div className="formulario-container">
                     <div className="title">
                         <h3>Entrevista Qualificativa</h3>
+                        <label htmlFor="alterar-formulario">Alterar Formulario</label>
+                        <select name="alterar-formulario" id="alterar-formulario" onChange={e => setNovoFormulario(e.target.value)}>
+                            <option value=""></option>
+                            <option value="adulto">Adulto</option>
+                            <option value="0-2 anos">0-2 anos</option>
+                            <option value="2-8 anos">2-8 anos</option>
+                        </select>
+                        <button onClick={alterarFormulario}>Alterar</button>
                     </div>
                     <div className="info-adicional">
                         <button onClick={openModalInfo}>Informações Adicionais</button>
@@ -369,14 +409,6 @@ const Formulario = () => {
                             <option value={false}>Não</option>
                             <option value={true}>Sim</option>
                         </select>
-                        {/* <input type="radio" name="identifica-divergencia" id="identifica-divergencia-sim" value={true} onClick={e => {
-                            mostraDivergencia(e.target.value)
-                        }} />
-                        <label htmlFor="identifica-divergencia-sim">Sim</label>
-                        <input type="radio" name="identifica-divergencia" id="identifica-divergencia-nao" value={false} onClick={e => {
-                            mostraDivergencia(e.target.value)
-                        }} />
-                        <label htmlFor="identifica-divergencia-nao">Não</label> */}
                     </div>
 
 
@@ -401,7 +433,7 @@ const Formulario = () => {
 
                                 <h4>Cids Selecionados: </h4>
                                 <div id="cids-selecionados">
-                                    {
+                                    {/* {
                                         cidsSelecionados.map(item => {
                                             return (
                                                 <div>
@@ -409,7 +441,7 @@ const Formulario = () => {
                                                 </div>
                                             )
                                         })
-                                    }
+                                    } */}
                                 </div>
 
                             </div>
@@ -428,7 +460,6 @@ const Formulario = () => {
                             </div>
                         </div>
                     </div>
-
 
                     <div id="indicador-obesidade">
 
