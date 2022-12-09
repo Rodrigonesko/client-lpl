@@ -1,0 +1,31 @@
+.section-pre-processamento-detalhes {
+    overflow: auto;
+    height: 100vh;
+    width: 100%;
+}
+
+.container-pre-processamento {
+    padding: 1rem;
+}
+
+.sub-bloco-pre-processamento {
+    padding: 1rem;
+    border: 1px solid gray;
+}
+
+.sub-bloco-pre-processamento div {
+    margin: 0.8rem;
+}
+
+.input-radio-box label {  
+    margin: 0 10px;
+}
+
+.input-box-pre-processamento input {
+    width: 50%;
+    margin-left: 10px;
+}
+
+.documentos-termo {
+    display: flex;
+}

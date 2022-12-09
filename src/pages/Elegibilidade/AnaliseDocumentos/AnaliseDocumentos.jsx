@@ -8,12 +8,11 @@ const AnaliseDocumentos = () => {
 
     const [propostas, setPropostas] = useState([''])
     const [total, setTotal] = useState(0)
+    const [analistas, setAnalistas] = useState([])
 
     const buscarPropostas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analiseDoc`, {withCredentials: true})
-
-            console.log(result);
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analiseDoc`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.total)
@@ -23,8 +22,40 @@ const AnaliseDocumentos = () => {
         }
     }
 
+    const buscarAnalistas = async () => {
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
+
+            setAnalistas(result.data.analistas)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const atribuirAnalista = async (analista, id) => {
+        try {
+
+            if(analista === ''){
+                return
+            }
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/preProcessamento`, {
+                analista,
+                id
+            }, {
+                withCredentials: true
+            })
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         buscarPropostas()
+        buscarAnalistas()
     }, [])
 
     return (
@@ -60,7 +91,20 @@ const AnaliseDocumentos = () => {
                                                 <td>{moment(e.dataImportacao).format('DD/MM/YYYY')}</td>
                                                 <td>{e.vigencia}</td>
                                                 <td>{e.nome}</td>
-                                                <td>analista</td>
+                                                <td>
+                                                    <select name="analistas" id="analistas" onChange={(item)=>{
+                                                        atribuirAnalista(item.target.value, e._id)
+                                                    }}>
+                                                        <option value=""></option>
+                                                        {
+                                                            analistas.map(analista => {
+                                                                return (
+                                                                    <option value={analista.name}>{analista.name}</option>
+                                                                )
+                                                            })
+                                                        }
+                                                    </select>
+                                                </td>
                                             </tr>
                                         )
                                     })
