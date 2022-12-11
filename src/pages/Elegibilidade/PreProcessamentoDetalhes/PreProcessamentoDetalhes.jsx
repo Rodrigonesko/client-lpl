@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import DadosPreProcessamento from "./DadosPreProcessamento";
 import DocumentosTermo from "./DocumentosTermo";
+import DadosAngariador from "./DadosAngariador";
 import Axios from 'axios'
 import { useParams } from "react-router-dom";
 import $ from 'jquery'
@@ -25,6 +26,13 @@ const PreProcessamentoDetalhes = () => {
     const [planoAnterior, setPlanoAnterior] = useState()
     const [observacoes, setObservacoes] = useState('')
 
+    const [cpfCorretor, setCpfCorretor] = useState('')
+    const [nomeCorretor, setNomeCorretor] = useState('')
+    const [telefoneCorretor, setTelefoneCorretor] = useState('')
+    const [cpfSupervisor, setCpfSupervisor] = useState('')
+    const [nomeSupervisor, setNomeSupervisor] = useState('')
+    const [telefoneSupervisor, setTelefoneSupervisor] = useState('')
+
     const buscarDados = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
@@ -42,6 +50,13 @@ const PreProcessamentoDetalhes = () => {
             setVinculados(result.data.proposta.vinculados)
             setPlanoAnterior(result.data.proposta.planoAnterior)
             setObservacoes(result.data.proposta.observacoes)
+
+            setCpfCorretor(result.data.proposta.cpfCorretor)
+            setNomeCorretor(result.data.proposta.nomeCorretor)
+            setTelefoneCorretor(result.data.proposta.telefoneCorretor)
+            setCpfSupervisor(result.data.proposta.cpfSupervisor)
+            setNomeSupervisor(result.data.proposta.nomeSupervisor)
+            setTelefoneSupervisor(result.data.proposta.telefoneSupervisor)
 
 
         } catch (error) {
@@ -83,20 +98,32 @@ const PreProcessamentoDetalhes = () => {
                             setCusto={setCustoAmil}
                         />
                         <DocumentosTermo
-
                             documentoIdentificacao={proposta.documentoIdentificacao}
                             setDocumentoIdentificacao={setDocumentoIdentificacao}
                             declaracaoAssociado={proposta.declaracaoAssociado}
-                            setDeclaracaoAssociado={ setDeclaracaoAssociado}
+                            setDeclaracaoAssociado={setDeclaracaoAssociado}
                             vinculadosSimNao={proposta.vinculadosSimNao}
-                            setVinculadosSimNao = {setVinculadosSimNao}
+                            setVinculadosSimNao={setVinculadosSimNao}
                             vinculados={proposta.vinculados}
-                            setVinculados = {setVinculados}
+                            setVinculados={setVinculados}
                             planoAnterior={proposta.planoAnterior}
                             setPlanoAnterior={setPlanoAnterior}
                             observacoes={proposta.observacoes}
                             setObservacoes={setObservacoes}
-
+                        />
+                        <DadosAngariador
+                            cpfCorretor={cpfCorretor}
+                            setCpfCorretor={setCpfCorretor}
+                            nomeCorretor={nomeCorretor}
+                            setNomeCorretor={setNomeCorretor}
+                            telefoneCorretor={telefoneCorretor}
+                            setTelefoneCorretor={setTelefoneCorretor}
+                            cpfSupervisor={cpfSupervisor}
+                            setCpfSupervisor={setCpfSupervisor}
+                            nomeSupervisor={nomeSupervisor}
+                            setNomeSupervisor={setNomeSupervisor}
+                            telefoneSupervisor={telefoneSupervisor}
+                            setTelefoneSupervisor={setTelefoneSupervisor}
                         />
                         <button onClick={teste}>teste</button>
 
