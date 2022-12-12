@@ -8,7 +8,7 @@ const DadosPreProcessamento = ({ analista, entidade, planoAmil, setEntidade, set
     }
 
     const mostrarPlanoAmil = (value) => {
-        if (value === 'true') {
+        if (value === 'Sim') {
             $('#div-plano-amil-sim').show('fast')
         } else {
             $('#div-plano-amil-sim').hide('fast')
@@ -39,12 +39,12 @@ const DadosPreProcessamento = ({ analista, entidade, planoAmil, setEntidade, set
                 </div>
                 <div>
                     <label htmlFor="">Plano Amil: </label>
-                    <input type="radio" name="plano-amil" id="plano-amil-sim" defaultChecked={planoAmil} value={true} onClick={e => {
+                    <input type="radio" name="plano-amil" id="plano-amil-sim" defaultChecked={planoAmil === 'Sim' ? (true) : (false)} value={'Sim'} onClick={e => {
                         handleChange(setPlanoAmil, e.target.value)
                         mostrarPlanoAmil(e.target.value)
                     }} />
                     <label htmlFor="plano-amil-sim">Sim</label>
-                    <input type="radio" name="plano-amil" id="plano-amil-nao" value={false} defaultChecked={(planoAmil != undefined || planoAmil === true) ? (false) : (true)} onClick={e => {
+                    <input type="radio" name="plano-amil" id="plano-amil-nao" value={'Não'} defaultChecked={planoAmil === 'Não' ? (true) : (false)} onClick={e => {
                         handleChange(setPlanoAmil, e.target.value)
                         mostrarPlanoAmil(e.target.value)
                     }} />

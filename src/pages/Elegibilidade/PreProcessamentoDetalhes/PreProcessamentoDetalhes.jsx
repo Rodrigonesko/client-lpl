@@ -15,9 +15,9 @@ const PreProcessamentoDetalhes = () => {
     const [proposta, setProposta] = useState({})
     const [entidade, setEntidade] = useState('')
     const [planoAmil, setPlanoAmil] = useState()
-    const [dataInicioAmil, setDataInicioAmil] = useState('')
-    const [dataFimAmil, setDataFimAmil] = useState('')
-    const [custoAmil, setCustoAmil] = useState('')
+    const [dataInicioPlanoAmil, setDataInicioAmil] = useState('')
+    const [dataFimPlanoAmil, setDataFimAmil] = useState('')
+    const [custoPlanoAmil, setCustoAmil] = useState('')
 
     const [documentoIdentificacao, setDocumentoIdentificacao] = useState()
     const [declaracaoAssociado, setDeclaracaoAssociado] = useState()
@@ -64,8 +64,80 @@ const PreProcessamentoDetalhes = () => {
         }
     }
 
-    const teste = () => {
-        console.log(entidade, planoAmil, dataInicioAmil, dataFimAmil, custoAmil);
+    const salvarDados = async () => {
+        try {
+
+            const dados = {
+                proposta,
+                entidade,
+                planoAmil,
+                dataInicioPlanoAmil,
+                dataFimPlanoAmil,
+                custoPlanoAmil,
+                documentoIdentificacao,
+                declaracaoAssociado,
+                vinculadosSimNao,
+                vinculados,
+                planoAnterior,
+                observacoes,
+                cpfCorretor,
+                nomeCorretor,
+                telefoneCorretor,
+                cpfSupervisor,
+                nomeSupervisor,
+                telefoneSupervisor
+            }
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/preProcessamento/salvar`, {
+                dados,
+                id,
+                proxFase: false
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const enviarProxFase = async () => {
+        try {
+            const dados = {
+                proposta,
+                entidade,
+                planoAmil,
+                dataInicioPlanoAmil,
+                dataFimPlanoAmil,
+                custoPlanoAmil,
+                documentoIdentificacao,
+                declaracaoAssociado,
+                vinculadosSimNao,
+                vinculados,
+                planoAnterior,
+                observacoes,
+                cpfCorretor,
+                nomeCorretor,
+                telefoneCorretor,
+                cpfSupervisor,
+                nomeSupervisor,
+                telefoneSupervisor
+            }
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/preProcessamento/salvar`, {
+                dados,
+                id,
+                proxFase: true
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
@@ -90,11 +162,11 @@ const PreProcessamentoDetalhes = () => {
                             setEntidade={setEntidade}
                             planoAmil={proposta.planoAmil}
                             setPlanoAmil={setPlanoAmil}
-                            dataInicio={proposta.dataInicioAmil}
+                            dataInicio={proposta.dataInicioPlanoAmil}
                             setDataInicio={setDataInicioAmil}
-                            dataFim={proposta.dataFimAmil}
+                            dataFim={proposta.dataFimPlanoAmil}
                             setDataFim={setDataFimAmil}
-                            custo={proposta.custoAmil}
+                            custo={proposta.custoPlanoAmil}
                             setCusto={setCustoAmil}
                         />
                         <DocumentosTermo
@@ -125,7 +197,8 @@ const PreProcessamentoDetalhes = () => {
                             telefoneSupervisor={telefoneSupervisor}
                             setTelefoneSupervisor={setTelefoneSupervisor}
                         />
-                        <button onClick={teste}>teste</button>
+                        <button onClick={salvarDados}>Salvar</button>
+                        <button onClick={enviarProxFase} >Enviar</button>
 
                     </div>
                 </div>
