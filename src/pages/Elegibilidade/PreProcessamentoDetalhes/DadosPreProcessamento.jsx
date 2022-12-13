@@ -16,10 +16,10 @@ const DadosPreProcessamento = ({ analista, entidade, planoAmil, setEntidade, set
     }
 
     useEffect(() => {
-        if (planoAmil) {
+        if (planoAmil === 'Sim') {
             $('#div-plano-amil-sim').show('fast')
         }
-    }, [])
+    }, [planoAmil])
 
     return (
         <div className="container-pre-processamento">
@@ -39,15 +39,37 @@ const DadosPreProcessamento = ({ analista, entidade, planoAmil, setEntidade, set
                 </div>
                 <div>
                     <label htmlFor="">Plano Amil: </label>
-                    <input type="radio" name="plano-amil" id="plano-amil-sim" defaultChecked={planoAmil === 'Sim' ? (true) : (false)} value={'Sim'} onClick={e => {
-                        handleChange(setPlanoAmil, e.target.value)
-                        mostrarPlanoAmil(e.target.value)
-                    }} />
+                    {
+                        planoAmil === 'Sim' ? (
+                            <input type="radio" name="plano-amil" id="plano-amil-sim" defaultChecked value={'Sim'} onClick={e => {
+                                handleChange(setPlanoAmil, e.target.value)
+                                mostrarPlanoAmil(e.target.value)
+                            }} />
+                        ) : (
+                            <input type="radio" name="plano-amil" id="plano-amil-sim" value={'Sim'} onClick={e => {
+                                handleChange(setPlanoAmil, e.target.value)
+                                mostrarPlanoAmil(e.target.value)
+                            }} />
+                        )
+                    }
+
                     <label htmlFor="plano-amil-sim">Sim</label>
-                    <input type="radio" name="plano-amil" id="plano-amil-nao" value={'Não'} defaultChecked={planoAmil === 'Não' ? (true) : (false)} onClick={e => {
-                        handleChange(setPlanoAmil, e.target.value)
-                        mostrarPlanoAmil(e.target.value)
-                    }} />
+
+                    {
+                        planoAmil === 'Não' ? (
+                            <input type="radio" name="plano-amil" id="plano-amil-nao" value={'Não'} defaultChecked onClick={e => {
+                                handleChange(setPlanoAmil, e.target.value)
+                                mostrarPlanoAmil(e.target.value)
+                            }} />
+                        ) : (
+                            <input type="radio" name="plano-amil" id="plano-amil-nao" value={'Não'} onClick={e => {
+                                handleChange(setPlanoAmil, e.target.value)
+                                mostrarPlanoAmil(e.target.value)
+                            }} />
+                        )
+                    }
+
+
                     <label htmlFor="plano-amil-nao">Não</label>
                 </div>
                 <div className="none" id="div-plano-amil-sim">

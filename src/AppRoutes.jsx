@@ -55,6 +55,9 @@ import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgend
 import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
 import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
 
+import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
+import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
+
 /* -----------------  Liminares ----------------- */
 
 import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
@@ -169,7 +172,15 @@ const AppRoutes = () => {
                     <AdicionarCid />
                 </ProtectedRoute>} />
 
-                {/* Liminares Routes */}
+                <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>
+                    <Pdf2 />
+                </ProtectedRoute>}/>
+
+                <Route exact path="/entrevistas/migrarBase" element={<ProtectedRoute>
+                    <MigracaoTele />
+                </ProtectedRoute>} />
+
+                    {/* Liminares Routes */}
 
                 <Route exact path="/liminares/upload" element={<ProtectedRoute>
                     <UploadLiminar />

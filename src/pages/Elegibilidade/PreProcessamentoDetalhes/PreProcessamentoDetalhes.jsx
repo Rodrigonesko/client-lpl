@@ -4,13 +4,20 @@ import DadosPreProcessamento from "./DadosPreProcessamento";
 import DocumentosTermo from "./DocumentosTermo";
 import DadosAngariador from "./DadosAngariador";
 import Axios from 'axios'
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import $ from 'jquery'
 import './PreProcessamentoDetalhes.css'
+import Modal from 'react-modal'
+
+Modal.setAppElement('#root')
 
 const PreProcessamentoDetalhes = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
+
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [modalProxFase, setModalProxFase] = useState(false)
 
     const [proposta, setProposta] = useState({})
     const [entidade, setEntidade] = useState('')
@@ -32,6 +39,16 @@ const PreProcessamentoDetalhes = () => {
     const [cpfSupervisor, setCpfSupervisor] = useState('')
     const [nomeSupervisor, setNomeSupervisor] = useState('')
     const [telefoneSupervisor, setTelefoneSupervisor] = useState('')
+
+    const [faltaDoc, setFaltaDoc] = useState('')
+
+    const openModal = () => {
+        setModalIsOpen(true)
+    }
+
+    const closeModal = () => {
+        setModalIsOpen(false)
+    }
 
     const buscarDados = async () => {
         try {
@@ -58,6 +75,7 @@ const PreProcessamentoDetalhes = () => {
             setNomeSupervisor(result.data.proposta.nomeSupervisor)
             setTelefoneSupervisor(result.data.proposta.telefoneSupervisor)
 
+            setFaltaDoc(result.data.proposta.faltaDoc)
 
         } catch (error) {
             console.log(error);
@@ -68,7 +86,6 @@ const PreProcessamentoDetalhes = () => {
         try {
 
             const dados = {
-                proposta,
                 entidade,
                 planoAmil,
                 dataInicioPlanoAmil,
@@ -85,7 +102,8 @@ const PreProcessamentoDetalhes = () => {
                 telefoneCorretor,
                 cpfSupervisor,
                 nomeSupervisor,
-                telefoneSupervisor
+                telefoneSupervisor,
+                faltaDoc
             }
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/preProcessamento/salvar`, {
@@ -96,7 +114,9 @@ const PreProcessamentoDetalhes = () => {
                 withCredentials: true
             })
 
-            console.log(result);
+            if (result.status === 200) {
+                openModal()
+            }
 
         } catch (error) {
             console.log(error);
@@ -106,7 +126,6 @@ const PreProcessamentoDetalhes = () => {
     const enviarProxFase = async () => {
         try {
             const dados = {
-                proposta,
                 entidade,
                 planoAmil,
                 dataInicioPlanoAmil,
@@ -123,7 +142,8 @@ const PreProcessamentoDetalhes = () => {
                 telefoneCorretor,
                 cpfSupervisor,
                 nomeSupervisor,
-                telefoneSupervisor
+                telefoneSupervisor,
+                faltaDoc
             }
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/preProcessamento/salvar`, {
@@ -134,7 +154,9 @@ const PreProcessamentoDetalhes = () => {
                 withCredentials: true
             })
 
-            console.log(result);
+            if (result.status === 200) {
+                navigate('/elegibilidade/preProcessamento')
+            }
         } catch (error) {
             console.log(error);
         }
@@ -154,7 +176,7 @@ const PreProcessamentoDetalhes = () => {
                     </div>
                     <div className="pre-processamento-detalhes">
                         <div className="title">
-                            <h3>1029381 - RODRIGO ONESKO DIAS</h3>
+                            <h3>{proposta.proposta} - {proposta.nome}</h3>
                         </div>
                         <DadosPreProcessamento
                             analista={proposta.analistaPreProcessamento}
@@ -198,10 +220,53 @@ const PreProcessamentoDetalhes = () => {
                             setTelefoneSupervisor={setTelefoneSupervisor}
                         />
                         <button onClick={salvarDados}>Salvar</button>
-                        <button onClick={enviarProxFase} >Enviar</button>
+                        <button onClick={() => setModalProxFase(true)} >Enviar</button>
 
                     </div>
                 </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <h2>Dados Salvos com sucesso!</h2>
+                    <button onClick={closeModal}>Ok</button>
+                </Modal>
+                <Modal
+                    isOpen={modalProxFase}
+                    onRequestClose={() => setModalProxFase(false)}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <h2>Enviar proposta para próxima fase</h2>
+                    <div className="falta-doc-elegi">
+                        <input type="radio" name="falta-doc" id="falta-doc" value={'Sim'} onClick={e => { setFaltaDoc(e.target.value) }} />
+                        <label htmlFor="falta-doc">Falta Documento</label>
+                        <input type="radio" name="falta-doc" id="doc-ok" value={'Não'} onClick={e => { setFaltaDoc(e.target.value) }} />
+                        <label htmlFor="doc-ok">Documentos OK</label>
+                        <input type="radio" name="falta-doc" id="sem-anexos" value={'Sem Anexos'} onClick={e => { setFaltaDoc(e.target.value) }} />
+                        <label htmlFor="sem-anexos">Sem Anexos</label>
+                    </div>
+                    <div className="anexou-amil">
+                        <label htmlFor="anexou">Anexou no SisAmil?</label>
+                        <input onClick={e => {
+                            if (e.target.checked) {
+                                $("#enviar-prox-fase").show('fast')
+                            } else {
+                                $("#enviar-prox-fase").hide('fast')
+                            }
+                        }} type="checkbox" name="anexou" id="anexou" />
+                        <label htmlFor="anexou">Sim</label>
+                    </div>
+                    <div id="enviar-prox-fase" className="none">
+                        <button onClick={() => setModalProxFase(false)}>Fechar</button>
+                        <button onClick={enviarProxFase} >Enviar</button>
+                    </div>
+
+                </Modal>
             </section>
         </>
     )

@@ -4,7 +4,11 @@ import Axios from 'axios'
 import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import Modal from 'react-modal'
+import html2canvas from 'html2canvas'
+import jsPdf from 'jspdf'
 import './EditarEntrevista.css'
+
+
 
 Modal.setAppElement('#root')
 
@@ -19,6 +23,20 @@ const EditarEntrevista = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
+
+    const gerarPdf = () => {
+        const domElement = document.getElementById("proposta-container");
+        html2canvas(domElement, {
+            onclone: document => {
+                document.getElementById("print")
+            }
+        }).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPdf();
+            pdf.addImage(imgData, "JPEG", 10, 10);
+            pdf.save(`${new Date().toISOString()}.pdf`);
+        });
+    }
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -65,7 +83,7 @@ const EditarEntrevista = () => {
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id }, { withCredentials: true })
 
-            if(result.status === 200){
+            if (result.status === 200) {
                 openModal()
             }
 
@@ -83,7 +101,7 @@ const EditarEntrevista = () => {
         <>
             <Sidebar></Sidebar>
             <section className='section-editar-proposta-container'>
-                <div className='editar-proposta-container'>
+                <div className='editar-proposta-container' id='proposta-container'>
                     <div className="title">
                         <h3>Editar Dados Entrevista</h3>
                     </div>
@@ -111,7 +129,7 @@ const EditarEntrevista = () => {
                             </tr>
                         </table>
                     </div>
-                    <div className="perguntas-container"> 
+                    <div className="perguntas-container">
                         {
                             perguntas.map(e => {
                                 if (e.formulario == dadosEntrevista.tipoFormulario) {
@@ -127,6 +145,7 @@ const EditarEntrevista = () => {
                     </div>
                     <div>
                         <button onClick={salvar}>Salvar</button>
+                        <button onClick={gerarPdf}>Gerar PDf</button>
                     </div>
                 </div>
                 <Modal

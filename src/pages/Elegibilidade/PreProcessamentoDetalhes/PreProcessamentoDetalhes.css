@@ -17,7 +17,7 @@
     margin: 0.8rem;
 }
 
-.input-radio-box label {  
+.input-radio-box label {
     margin: 0 10px;
 }
 
@@ -28,4 +28,20 @@
 
 .documentos-termo {
     display: flex;
+}
+
+.falta-doc-elegi {
+    margin: 1rem;
+}
+
+.falta-doc-elegi label {
+    margin-right: 12px;
+}
+
+.falta-doc-elegi input {
+    margin-right: 5px;
+}
+
+.anexou-amil label {
+    margin: 7px;
 }

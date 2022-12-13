@@ -138,13 +138,7 @@ const PreProcessamento = () => {
                                                 <td>{moment(e.dataImportacao).format('DD/MM/YYYY')}</td>
                                                 <td>{e.vigencia}</td>
                                                 <td>{e.nome}</td>
-                                                {
-                                                    e.faltaDoc === undefined ? (
-                                                        <td></td>
-                                                    ) : (
-                                                        <td>{e.faltaDoic}</td>
-                                                    )
-                                                }
+                                                <td>{e.faltaDoc}</td>
                                                 <td>
                                                     <select name="analistas" id="analistas" onChange={(item) => {
                                                         atribuirAnalista(item.target.value, e._id)
@@ -159,7 +153,7 @@ const PreProcessamento = () => {
                                                     </select>
                                                 </td>
                                                 <td>{e.status}</td>
-                                                <td><Link  to={`/elegibilidade/preProcessamento/detalhes/${e._id}`} >Detalhes</Link></td>
+                                                <td><Link to={`/elegibilidade/preProcessamento/detalhes/${e._id}`} >Detalhes</Link></td>
                                             </tr>
                                         )
                                     })

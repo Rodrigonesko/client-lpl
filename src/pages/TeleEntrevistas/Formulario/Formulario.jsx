@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
+import jsPDF from "jspdf";
 import Axios from 'axios'
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
@@ -31,6 +32,7 @@ let simOuNao = {
 const Formulario = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [modalInfo, setModalInfo] = useState(false)
@@ -226,6 +228,7 @@ const Formulario = () => {
             })
 
             gerarPdf(pessoa.proposta, pessoa.nome)
+            //navigate(`/entrevistas/pdf2/${pessoa.proposta}/${pessoa.nome}`)
 
             if (result.status === 200) {
                 openModal()
