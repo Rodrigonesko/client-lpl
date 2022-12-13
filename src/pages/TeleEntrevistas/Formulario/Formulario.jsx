@@ -1,7 +1,6 @@
 import React, { useState, useEffect, } from "react";
-import jsPDF from "jspdf";
 import Axios from 'axios'
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
@@ -32,7 +31,6 @@ let simOuNao = {
 const Formulario = () => {
 
     const { id } = useParams()
-    const navigate = useNavigate()
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [modalInfo, setModalInfo] = useState(false)
@@ -43,7 +41,6 @@ const Formulario = () => {
     const [sexo, setSexo] = useState('')
     const [divergencia, setDivergencia] = useState(false)
     const [cids, setCids] = useState([])
-    const [cidsSelecionados, setCidsSelecionados] = useState([])
     const [habitos, setHabitos] = useState(true)
 
     const [riscoBeneficiaro, setRiscoBeneficiario] = useState('')
@@ -408,6 +405,13 @@ const Formulario = () => {
                         <label htmlFor="identifica-divergencia" className="label-pergunta">Identifica Divergência?</label>
                         <select name="identifica-divergencia" id="identifica-divergencia" onChange={e => {
                             mostraDivergencia(e.target.value)
+                            console.log(e.target.value);
+                            if(e.target.value === 'true'){
+                                setDivergencia(true)
+                            } else {
+                                setDivergencia(false)
+                            }
+                            
                         }}>
                             <option value={false}>Não</option>
                             <option value={true}>Sim</option>
@@ -436,15 +440,7 @@ const Formulario = () => {
 
                                 <h4>Cids Selecionados: </h4>
                                 <div id="cids-selecionados">
-                                    {/* {
-                                        cidsSelecionados.map(item => {
-                                            return (
-                                                <div>
-                                                    <span>{item}</span>
-                                                </div>
-                                            )
-                                        })
-                                    } */}
+       
                                 </div>
 
                             </div>

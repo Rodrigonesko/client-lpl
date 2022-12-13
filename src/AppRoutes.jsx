@@ -18,6 +18,7 @@ import PreProcessamentoDetalhes from "./pages/Elegibilidade/PreProcessamentoDeta
 import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
 import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
 import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
+import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
 
 /* RSD */
 
@@ -174,13 +175,13 @@ const AppRoutes = () => {
 
                 <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>
                     <Pdf2 />
-                </ProtectedRoute>}/>
+                </ProtectedRoute>} />
 
                 <Route exact path="/entrevistas/migrarBase" element={<ProtectedRoute>
                     <MigracaoTele />
                 </ProtectedRoute>} />
 
-                    {/* Liminares Routes */}
+                {/* Liminares Routes */}
 
                 <Route exact path="/liminares/upload" element={<ProtectedRoute>
                     <UploadLiminar />
@@ -266,6 +267,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analise" element={<ProtectedRoute>
                     <AnaliseElegibilidade />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/analise/detalhes/:id" element={<ProtectedRoute>
+                    <AnaliseElegibilidadeDetalhes />
                 </ProtectedRoute>} />
 
             </Routes>

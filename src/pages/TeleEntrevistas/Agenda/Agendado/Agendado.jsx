@@ -27,15 +27,10 @@ const Agendado = () => {
 
     const searchPropostas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
 
-            let proposal = result.data.propostas.filter(e => {
-                return e.status != 'Concluído' && e.agendado == 'agendado' && e.status != 'Cancelado'
-            })
-
-            setPropostas(proposal)
-            console.log(proposal.length);
-            setQtdAgendado(proposal.length)
+            setPropostas(result.data.propostas)
+            setQtdAgendado(result.data.propostas.length)
 
         } catch (error) {
             console.log(error);
@@ -81,10 +76,6 @@ const Agendado = () => {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    const teste = () => {
-        console.log('apsoidapsdipaos');
     }
 
     useEffect(() => {

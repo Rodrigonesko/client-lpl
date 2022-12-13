@@ -4,7 +4,7 @@ import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Agendar.css'
 import moment from "moment";
 import Modal from "react-modal";
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import AuthContext from "../../../../context/AuthContext";
 
@@ -76,19 +76,19 @@ const Agendar = () => {
 
     const searchPropostas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoAgendadas`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
 
-            let qtd = 0
+            // let qtd = 0
 
-            propostas.forEach(e => {
-                if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
-                    qtd++
-                }
-            })
+            // propostas.forEach(e => {
+            //     if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
+            //         qtd++
+            //     }
+            // })
 
-            setQtdNaoAgendado(qtd)
+            setQtdNaoAgendado(result.data.total)
 
         } catch (error) {
             console.log(error);
@@ -345,11 +345,11 @@ const Agendar = () => {
 
     const alterarTelefone = async (telefone, id) => {
         try {
-            
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, {id, telefone}, {withCredentials: true})
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, { id, telefone }, { withCredentials: true })
 
             console.log(result);
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -451,31 +451,29 @@ const Agendar = () => {
                             <tbody>
                                 {
                                     propostas.map(e => {
-                                        if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
-                                            console.log(e);
-                                            return (
-                                                <tr key={e._id}>
-                                                    <td><input type="date" name="" id="" disabled={ accessLevel != 'false' ? (false) : (true)} defaultValue={e.vigencia}/><button>Alterar</button></td>
-                                                    <td>{e.proposta}</td>
-                                                    <td>{e.nome}</td>
-                                                    <td>{e.dataNascimento}</td>
-                                                    <td>{e.sexo}</td>
-                                                    <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
-                                                    <td><button className="btn-cancelar" onClick={() => {
-                                                        setPropostaCancelar(e.proposta)
-                                                        setNomeCancelar(e.nome)
-                                                        setIdCancelar(e._id)
-                                                        openModalCancelar()
-                                                    }}>Cancelar</button><button className="btn-cancelar" onClick={() => {
-                                                        setPropostaExcluir(e.proposta)
-                                                        setNomeExcluir(e.nome)
-                                                        setIdExcluir(e._id)
-                                                        openModalExcluir()
-                                                    }}>Excluir</button></td>
-                                                    <td><Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link></td>
-                                                </tr>
-                                            )
-                                        }
+                                        return (
+                                            <tr key={e._id}>
+                                                <td><input type="date" name="" id="" disabled={accessLevel != 'false' ? (false) : (true)} defaultValue={e.vigencia} /><button>Alterar</button></td>
+                                                <td>{e.proposta}</td>
+                                                <td>{e.nome}</td>
+                                                <td>{e.dataNascimento}</td>
+                                                <td>{e.sexo}</td>
+                                                <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
+                                                <td><button className="btn-cancelar" onClick={() => {
+                                                    setPropostaCancelar(e.proposta)
+                                                    setNomeCancelar(e.nome)
+                                                    setIdCancelar(e._id)
+                                                    openModalCancelar()
+                                                }}>Cancelar</button><button className="btn-cancelar" onClick={() => {
+                                                    setPropostaExcluir(e.proposta)
+                                                    setNomeExcluir(e.nome)
+                                                    setIdExcluir(e._id)
+                                                    openModalExcluir()
+                                                }}>Excluir</button></td>
+                                                <td><Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link></td>
+                                            </tr>
+                                        )
+
                                     })
                                 }
                             </tbody>
@@ -525,7 +523,7 @@ const Agendar = () => {
                     className='modal-content'>
                     <h2>Deseja cancelar a proposta: {propostaCancelar} da pessoa: {nomeCancelar}?</h2>
                     <div>
-                        <select name="motivo-cancelamento" id="motivo-cancelamento" onChange={e=>setMotivoCancelar(e.target.value)} >
+                        <select name="motivo-cancelamento" id="motivo-cancelamento" onChange={e => setMotivoCancelar(e.target.value)} >
                             <option value="Sem Sucesso de Contato!">Sem Sucesso de Contato!</option>
                             <option value="Beneficiario Solicitou o Cancelamento">Beneficiario Solicitou o Cancelamento</option>
                         </select>

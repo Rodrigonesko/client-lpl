@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
+import moment from "moment/moment";
 
 const Anexos = () => {
 
@@ -61,7 +62,7 @@ const Anexos = () => {
                                     propostas.map(e => {
                                         return (
                                             <tr key={e._id}>
-                                                <td>{e.vigencia}</td>
+                                                <td>{moment(e.vigencia).format('DD/MM/YYYY')}</td>
                                                 <td>{e.proposta}</td>
                                                 <td>{e.nome}</td>
                                                 <td>{e.tipoContrato}</td>
