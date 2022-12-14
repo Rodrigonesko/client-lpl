@@ -44,6 +44,25 @@ const MigracaoTele = () => {
 
     }
 
+    const sendEntrevistas = async (e) => {
+        try {
+
+            e.preventDefault()
+
+            let formData = new FormData()
+
+            formData.append('file', file, file.name)
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/upload/dadosEntrevista`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     return (
         <>
             <Sidebar></Sidebar>
@@ -57,7 +76,7 @@ const MigracaoTele = () => {
                 </div>
                 <div className="container-btns">
                     <button className="btn" onClick={send} >Propostas</button>
-                    <button className="btn">Dados Entrevista</button>
+                    <button className="btn" onClick={sendEntrevistas}>Dados Entrevista</button>
                     <button className="btn" onClick={sendCids} >Cids</button>
                 </div>
             </form>

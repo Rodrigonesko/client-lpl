@@ -5,6 +5,7 @@ import moment from "moment/moment";
 import { useParams } from "react-router-dom";
 import './AnaliseElegibilidadeDetalhes.css'
 import StatusGeral from "./StatusGeral";
+import DadosElegibilidade from "./DadosElegebilidade";
 
 const AnaliseElegibilidadeDetalhes = () => {
 
@@ -53,6 +54,17 @@ const AnaliseElegibilidadeDetalhes = () => {
                             status2Analise={proposta.status2Analise}
                             status3Analise={proposta.status3Analise}
                         />
+                        <DadosElegibilidade
+                        proposta={proposta.proposta}
+                        vigencia={moment(proposta.vigencia).format('DD/MM/YYYY')}
+                        nome={proposta.nome}
+                        administradora={proposta.administradora}
+                        numeroVidas={proposta.numeroVidas}
+                        entidade={proposta.entidade}
+                        dataImportacao={moment(proposta.dataImportacao).format('DD/MM/YYYY')}
+                        tipoVinculo={proposta.tipoVinculo}
+                        statusMotor={proposta.statusMotor}
+                         />
                     </div>
                 </div>
             </section>
