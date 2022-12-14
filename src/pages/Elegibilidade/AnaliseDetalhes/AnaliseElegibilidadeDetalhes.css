@@ -1,0 +1,22 @@
+.section-analise-detalhes {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+}
+
+.container-analise-detalhes {
+    padding: 1rem;
+}
+
+.sub-bloco-analise-detalhes {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid gray;
+}
+.sub-bloco-analise-detalhes input {
+    margin-right: 2rem;
+}
+
+.sub-bloco-analise-detalhes div {
+    margin: 0.8rem;
+}
