@@ -7,6 +7,7 @@ import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoP
 import Pergunta from "../../../components/Pergunta/Pergunta";
 import gerarPdf from "../Pdf/Pdf";
 import Modal from 'react-modal'
+import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 
 import './Formulario.css'
 
@@ -63,10 +64,6 @@ const Formulario = () => {
     const [cidAnterior1, setCidAnterior1] = useState('')
     const [cidAnterior2, setCidAnterior2] = useState('')
     const [cidAnterior3, setCidAnterior3] = useState('')
-
-    const [subResp, setSubResp] = useState({})
-    const [resp, setResp] = useState({})
-    const [simnao, setSimNao] = useState({})
 
     const [novoFormulario, setNovoFormulario] = useState('')
 
@@ -138,7 +135,6 @@ const Formulario = () => {
 
     const handleChange = (item) => {
         respostas[`${item.id}`] = item.value
-        setResp(respostas)
 
         let imc
 
@@ -159,6 +155,9 @@ const Formulario = () => {
             }
 
             console.log(indicadorImc, imc);
+
+            document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
+
 
             if (imc >= 30) {
                 let span = document.createElement('span')
@@ -182,6 +181,8 @@ const Formulario = () => {
                 indicadorImc = 'OBESIDADE I'
             }
 
+            document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
+
             console.log(indicadorImc, imc);
 
             if (imc >= 30) {
@@ -197,8 +198,6 @@ const Formulario = () => {
     const handleChangeSub = (item) => {
         subRespostas[`${item.id}`] = item.value
         console.log(subRespostas);
-        setSubResp(subRespostas)
-
     }
 
     const handleSimOuNao = (item) => {
@@ -345,6 +344,7 @@ const Formulario = () => {
                     <div className="observacoes-entrevista">
                         <div className="title">
                             <h3>Observações</h3>
+                            <h4>IMC: <span id="imc"></span></h4>
                         </div>
                     </div>
                     <div className="formulario">
@@ -406,12 +406,12 @@ const Formulario = () => {
                         <select name="identifica-divergencia" id="identifica-divergencia" onChange={e => {
                             mostraDivergencia(e.target.value)
                             console.log(e.target.value);
-                            if(e.target.value === 'true'){
+                            if (e.target.value === 'true') {
                                 setDivergencia(true)
                             } else {
                                 setDivergencia(false)
                             }
-                            
+
                         }}>
                             <option value={false}>Não</option>
                             <option value={true}>Sim</option>
@@ -440,7 +440,7 @@ const Formulario = () => {
 
                                 <h4>Cids Selecionados: </h4>
                                 <div id="cids-selecionados">
-       
+
                                 </div>
 
                             </div>
@@ -482,71 +482,35 @@ const Formulario = () => {
                 </Modal>
                 <Modal
                     isOpen={modalInfo}
-                    onRequestClose={closeModal}
+                    onRequestClose={closeModalInfo}
                     contentLabel="Exemplo"
                     overlayClassName='modal-overlay'
                     className='modal-content modal-info' >
                     <div className="title">
                         <h2>Informações do beneficiario!</h2>
                     </div>
-                    <div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">Risco Beneficiário</label>
-                            <input type="text" className="input-pergunta" defaultValue={riscoBeneficiaro} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">Risco Imc</label>
-                            <input type="text" className="input-pergunta" defaultValue={riscoImc} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">Sinistral</label>
-                            <input type="text" className="input-pergunta" defaultValue={sinistral} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">Tipo Associado</label>
-                            <input type="text" className="input-pergunta" defaultValue={tipoAssociado} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">Grupo Carência</label>
-                            <input type="text" className="input-pergunta" defaultValue={grupoCarencia} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 1</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds1} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 2</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds2} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 3</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds3} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 4</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds4} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 5</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds5} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 6</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds6} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 7</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds7} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 8</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds8} disabled />
-                        </div>
-                        <div className="div-pergunta">
-                            <label htmlFor="">DS 9</label>
-                            <input type="text" className="input-pergunta" defaultValue={ds9} disabled />
-                        </div>
-                    </div>
+                    <InfoAdicionais
+                        riscoBeneficiaro={riscoBeneficiaro}
+                        riscoImc={riscoImc}
+                        sinistral={sinistral}
+                        tipoAssociado={tipoAssociado}
+                        grupoCarencia={grupoCarencia}
+                        ds1={ds1}
+                        ds2={ds2}
+                        ds3={ds3}
+                        ds4={ds4}
+                        ds5={ds5}
+                        ds6={ds6}
+                        ds7={ds7}
+                        ds8={ds8}
+                        ds9={ds9}
+                        peso={peso}
+                        altura={altura}
+                        imc={imc}
+                        cidAnterior1={cidAnterior1}
+                        cidAnterior2={cidAnterior2}
+                        cidAnterior3={cidAnterior3}
+                    />
                     <button onClick={() => {
                         closeModalInfo()
                     }}>Ok</button>

@@ -6,7 +6,7 @@ const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao,  }) => 
     const [radioSimouNao, setRadioSimOuNao] = useState(false)
 
     return (
-        <div key={item._id} className='div-pergunta'>
+        <div key={item._id} className={`div-pergunta ${item.name}`}>
             <label htmlFor={item.name} className='label-pergunta'>{item.pergunta}</label>
             <input type="text" name={`pergunta-${item._id}`} id={item.name} className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
             {

@@ -56,11 +56,11 @@ const Agendado = () => {
 
     const alterarTelefone = async (telefone, id) => {
         try {
-            
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, {id, telefone}, {withCredentials: true})
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, { id, telefone }, { withCredentials: true })
 
             console.log(result);
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -73,6 +73,19 @@ const Agendado = () => {
                 window.location.reload()
             }
 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const alterarSexo = async (id, sexo) => {
+        try {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/alterarSexo`, {
+                id,
+                sexo
+            }, {
+                withCredentials: true
+            })
         } catch (error) {
             console.log(error);
         }
@@ -127,9 +140,9 @@ const Agendado = () => {
                                 {
                                     propostas.map(e => {
 
-                                        if(e.status != 'Concluído' && e.agendado == 'agendado' && e.status != 'Cancelado'){
+                                        if (e.status != 'Concluído' && e.agendado == 'agendado' && e.status != 'Cancelado') {
                                             return (
-                                            
+
                                                 <tr key={e._id}>
                                                     <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
                                                     <td>{moment(e.dataEntrevista).format('HH:mm:ss')}</td>
@@ -137,7 +150,11 @@ const Agendado = () => {
                                                     <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
                                                     <td>{e.nome}</td>
                                                     <td>{e.idade}</td>
-                                                    <td>{e.sexo}</td>
+                                                    <td>
+                                                        <select onChange={item => alterarSexo(e._id, item.target.value)} >
+                                                            <option value="M" selected={e.sexo === 'M'}>M</option>
+                                                            <option value="F" selected={e.sexo === 'F'} >F</option>
+                                                        </select> </td>
                                                     <td>{e.enfermeiro}</td>
                                                     <td>
                                                         <Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link>

@@ -32,17 +32,10 @@ const Mensagens = () => {
 
     const buscarPropostas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoAgendadas`, { withCredentials: true })
 
-            let arrAux = []
-
-            result.data.propostas.forEach(e => {
-                if (e.agendado != 'agendado') {
-                    arrAux.push(e)
-                }
-            })
-
-            setPropostas(arrAux)
+            setPropostas(result.data.propostas)
+            console.log(result.data.propostas.length);
 
         } catch (error) {
             console.log(error);

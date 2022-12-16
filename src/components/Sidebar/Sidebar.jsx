@@ -12,7 +12,7 @@ const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(true)
 
-    const { accessLevel } = useContext(AuthContext)
+    const { accessLevel, name } = useContext(AuthContext)
 
     const toggleMenu = () => {
         console.log('toggle');
@@ -51,21 +51,29 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/agenda/agendados'>Agendados</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/agenda/mensagens'>Mensagens</Link></MenuItem>
-                                    <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
-                                    <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
+                                    <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>{
+                                        accessLevel != 'false' ? (
+                                            <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
+                                        ) : null
+                                    }
                                 </SubMenu>
                                 <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                                 {
                                     accessLevel != 'false' ? (<>
-                                        <MenuItem><Link to='/entrevistas/faturamento'>Faturamento</Link></MenuItem>
+
                                         <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
                                         <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>
+                                        <MenuItem><Link to='/entrevistas/producao'>Produção</Link></MenuItem>
                                     </>
+                                    ) : null
+                                }
+                                {
+                                    name === 'Administrador' ? (
+                                        <MenuItem><Link to='/entrevistas/faturamento'>Faturamento</Link></MenuItem>
                                     ) : null
                                 }
                                 <MenuItem><Link to='/entrevistas/report'>Report</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
-                                <MenuItem><Link to='/entrevistas/producao'>Produção</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/cid/adicionar'>Adicionar Cid</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>

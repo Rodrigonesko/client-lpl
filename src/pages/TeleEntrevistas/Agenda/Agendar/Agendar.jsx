@@ -355,6 +355,20 @@ const Agendar = () => {
         }
     }
 
+    const alterarVigencia = async (vigencia, id) => {
+        try {
+            console.log(vigencia);
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/vigencia/update`, { id, vigencia }, { withCredentials: true })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         searchPropostas()
         searchEnfermeiros()
@@ -453,7 +467,11 @@ const Agendar = () => {
                                     propostas.map(e => {
                                         return (
                                             <tr key={e._id}>
-                                                <td><input type="date" name="" id="" disabled={accessLevel != 'false' ? (false) : (true)} defaultValue={e.vigencia} /><button>Alterar</button></td>
+                                                <td><input type="date" name="" id="" defaultValue={e.vigencia} /><button disabled={accessLevel != 'false' ? (false) : (true)} onClick={
+                                                    item => {
+                                                        alterarVigencia(item.target.parentElement.firstChild.value, e._id)
+                                                    }
+                                                }  >Alterar</button></td>
                                                 <td>{e.proposta}</td>
                                                 <td>{e.nome}</td>
                                                 <td>{e.dataNascimento}</td>
