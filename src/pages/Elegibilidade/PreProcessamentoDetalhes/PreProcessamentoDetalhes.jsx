@@ -41,6 +41,7 @@ const PreProcessamentoDetalhes = () => {
     const [telefoneSupervisor, setTelefoneSupervisor] = useState('')
 
     const [faltaDoc, setFaltaDoc] = useState('')
+    const [msg, setMsg] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -158,7 +159,10 @@ const PreProcessamentoDetalhes = () => {
                 navigate('/elegibilidade/preProcessamento')
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data.msg);
+            setModalProxFase(false)
+            setMsg(error.response.data.msg)
+
         }
     }
 
@@ -178,6 +182,15 @@ const PreProcessamentoDetalhes = () => {
                         <div className="title">
                             <h3>{proposta.proposta} - {proposta.nome}</h3>
                         </div>
+
+                        {
+                            msg !== '' ? (
+                                <div className="msg">
+                                    <span>{msg}</span>
+                                </div>
+                            ) : null
+                        }
+
                         <DadosPreProcessamento
                             analista={proposta.analistaPreProcessamento}
                             entidade={proposta.entidade}
