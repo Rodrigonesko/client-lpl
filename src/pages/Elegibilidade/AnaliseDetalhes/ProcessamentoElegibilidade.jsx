@@ -10,6 +10,7 @@ const ProcessamentoElegibilidade = ({
     statusContrato118,
     prc,
     setPrc,
+    prcs,
     planoAnterior,
     ligacao,
     setLigacao,
@@ -43,7 +44,7 @@ const ProcessamentoElegibilidade = ({
                             <label htmlFor="sisamil-deacordo">Sisamil de Acordo com a Proposta?</label>
                             <input type="checkbox" name="sisamil-deacordo" id="sisamil-deacordo" checked={sisAmilDeacordo === 'Sim'} value='Sim' onChange={e => {
                                 handleChange(setSisAmilDeacordo, e.target.value)
-                                if(e.target.checked){
+                                if (e.target.checked) {
                                     handleChange(setSisAmilDeacordo, 'Sim')
                                 } else {
                                     handleChange(setSisAmilDeacordo, 'Não')
@@ -67,6 +68,13 @@ const ProcessamentoElegibilidade = ({
                                 handleChange(setPrc, e.target.value)
                             }} >
                                 <option value=""></option>
+                                {
+                                    prcs.map(e => {
+                                        return (
+                                            < option selected={e.descricao === prc} value={e.descricao} > {e.descricao}</option>
+                                        )
+                                    })
+                                }
                             </select>
                             <label htmlFor="">Plano Anterior: </label>
                             {
@@ -172,7 +180,7 @@ const ProcessamentoElegibilidade = ({
                 </div>
 
             </div>
-        </div>
+        </div >
     )
 }
 

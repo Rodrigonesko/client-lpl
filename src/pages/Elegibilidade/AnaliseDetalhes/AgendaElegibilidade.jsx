@@ -1,9 +1,25 @@
 import React from "react";
+import moment from "moment/moment";
+import Axios from 'axios'
 
 const AgendaElegibilidade = ({ setComentario, agenda }) => {
 
     const handleChange = (set, value) => {
         set(value)
+    }
+
+    const excluirComentario = async (id) => {
+        try {
+
+            const result = await Axios.delete(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${id}`, { withCredentials: true })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -32,9 +48,14 @@ const AgendaElegibilidade = ({ setComentario, agenda }) => {
                         {
                             agenda.map(e => {
                                 return (
-                                    <td>
-                                        oii
-                                    </td>
+                                    <tr>
+                                        <td>{e.analista}</td>
+                                        <td>{moment(e.createdAt).format('DD/MM/YYYY hh:mm')}</td>
+                                        <td>{e.comentario}</td>
+                                        <td><button onClick={() => {
+                                            excluirComentario(e._id)
+                                        }} >Excluir</button></td>
+                                    </tr>
                                 )
                             })
                         }

@@ -8,6 +8,8 @@ import StatusGeral from "./StatusGeral";
 import DadosElegibilidade from "./DadosElegebilidade";
 import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 import AgendaElegibilidade from "./AgendaElegibilidade";
+import Modal from 'react-modal'
+Modal.setAppElement('#root')
 
 const AnaliseElegibilidadeDetalhes = () => {
 
@@ -24,6 +26,9 @@ const AnaliseElegibilidadeDetalhes = () => {
     const [statusContrato118, setStatusContrato118] = useState(false)
     const [comentario, setComentario] = useState('')
     const [agenda, setAgenda] = useState([])
+    const [prcs, setPrcs] = useState([])
+
+    const [modalSalvar, setModalSalvar] = useState(false)
 
     const buscarDados = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
@@ -57,6 +62,15 @@ const AnaliseElegibilidadeDetalhes = () => {
             setProposta(result.data.proposta)
 
         }
+
+        const resultAgenda = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${result.data.proposta.proposta}`, { withCredentials: true })
+
+        setAgenda(resultAgenda.data.agenda)
+
+        const resultPrcs = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/prc`, {withCredentials: true})
+
+        setPrcs(resultPrcs.data.prc)
+
     }
 
     const salvarDados = async () => {
@@ -69,12 +83,17 @@ const AnaliseElegibilidadeDetalhes = () => {
                 prc,
                 ligacao,
                 site,
-                comentario
+                comentario,
+                proposta: proposta.proposta
             }, {
                 withCredentials: true
             })
 
             console.log(result);
+
+            if (result.status === 200) {
+                setModalSalvar(true)
+            }
 
             //console.log(sisAmilDeacordo, contrato, prc, ligacao, site, comentario);
 
@@ -82,6 +101,8 @@ const AnaliseElegibilidadeDetalhes = () => {
             console.log(error);
         }
     }
+
+    
 
     useEffect(() => {
         buscarDados()
@@ -143,16 +164,30 @@ const AnaliseElegibilidadeDetalhes = () => {
                             faltaDoc={proposta.faltaDoc}
                             statusContrato600={statusContrato600}
                             statusContrato118={statusContrato118}
+                            prcs = {prcs}
                         />
                         <AgendaElegibilidade
                             setComentario={setComentario}
                             agenda={agenda}
                         />
                         <div className="btn-detalhes-elegi">
-                            <button onClick={salvarDados} >Salvar</button>
+                            <button className="btn-padrao-azul" onClick={salvarDados} >Salvar</button>
                         </div>
                     </div>
                 </div>
+                <Modal
+                    isOpen={modalSalvar}
+                    onRequestClose={() => setModalSalvar(false)}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <h2>Dados Salvos com sucesso!</h2>
+                    <button onClick={() => {
+                        setModalSalvar(false)
+                        window.location.reload()
+                    }}>Ok</button>
+                </Modal>
             </section>
         </>
     )
