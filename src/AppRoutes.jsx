@@ -71,6 +71,16 @@ import UploadAj from "./pages/ProjetoAj/Upload/UploadAj";
 import AndamentoAj from "./pages/ProjetoAj/Andamento/AndamentoAj";
 import ReportAj from "./pages/ProjetoAj/Report/ReportAj";
 
+/* Urgencia Emergencia */
+
+import UploadUrgenciaEmergencia from "./pages/UrgenciaEmergencia/Upload/UploadUrgenciaEmergencia";
+import UrgenciaEmergencia from "./pages/UrgenciaEmergencia/UrgenciaEmergencia/UrgenciaEmergencia";
+import UrgenciaEmergenciaDetalhes from "./pages/UrgenciaEmergencia/UrgenciaEmergenciaDetalhes/UrgenciaEmergenciaDetalhes";
+import UrgenciaEmergenciaProducao from "./pages/UrgenciaEmergencia/Producao/UrgenciaEmergenciaProducao";
+import UrgenciaEmergenciaTodos from "./pages/UrgenciaEmergencia/Todos/UrgenciaEmergenciaTodos";
+
+/*  --------------------------- */
+
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
 import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
@@ -270,6 +280,24 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analise/detalhes/:id" element={<ProtectedRoute>
                     <AnaliseElegibilidadeDetalhes />
+                </ProtectedRoute>} />
+
+                {/* Urgência Emergência*/}
+
+                <Route path="/urgenciaEmergencia/upload" element={<ProtectedRoute>
+                    <UploadUrgenciaEmergencia />
+                </ProtectedRoute>} />
+                <Route path="/urgenciaEmergencia/andamento" element={<ProtectedRoute>
+                    <UrgenciaEmergencia />
+                </ProtectedRoute>} />
+                <Route path="/urgenciaEmergencia/detalhes/:id" element={<ProtectedRoute>
+                    <UrgenciaEmergenciaDetalhes />
+                </ProtectedRoute>} />
+                <Route path="/urgenciaEmergencia/todos" element={<ProtectedRoute>
+                    <UrgenciaEmergenciaTodos />
+                </ProtectedRoute>} />
+                <Route path="/urgenciaEmergencia/producao" element={<ProtectedRoute>
+                    <UrgenciaEmergenciaProducao />
                 </ProtectedRoute>} />
 
             </Routes>

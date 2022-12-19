@@ -60,3 +60,12 @@
 .filtros-padrao-elegi {
   padding: 1rem;
 }
+
+.section-padrao-tabela {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #F3F4F6;
+  overflow: auto;
+  height: 100vh;
+}

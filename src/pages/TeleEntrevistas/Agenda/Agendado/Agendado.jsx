@@ -38,7 +38,7 @@ const Agendado = () => {
     }
 
     const filtroEnfermeiro = async enfermeiro => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
 
         setPropostas([])
 
@@ -132,8 +132,8 @@ const Agendado = () => {
                                     <th>Nome</th>
                                     <th>Idade</th>
                                     <th>Sexo</th>
-                                    <th>Enfermeiro</th>
-                                    <th>Botoes</th>
+                                    <th>Analista</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>

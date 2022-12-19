@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
+import { RiAlarmWarningLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
@@ -75,6 +76,13 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/report'>Report</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/cid/adicionar'>Adicionar Cid</Link></MenuItem>
+                            </SubMenu>
+                            <SubMenu title="Urgência & Emergência" icon={<RiAlarmWarningLine />} >
+                                <MenuItem><Link to='/urgenciaEmergencia/andamento'>Em andamento</Link></MenuItem>
+                                <MenuItem><Link to='/urgenciaEmergencia/todos'>Todos</Link></MenuItem>
+                                <MenuItem><Link to='/urgenciaEmergencia/producao'>Produção</Link></MenuItem>
+                                <MenuItem><Link to='/urgenciaEmergencia/upload'>Upload</Link></MenuItem>
+                                
                             </SubMenu>
                             <SubMenu title='Liminares' icon={<FaGavel />}>
                                 <SubMenu title='Liminares'>

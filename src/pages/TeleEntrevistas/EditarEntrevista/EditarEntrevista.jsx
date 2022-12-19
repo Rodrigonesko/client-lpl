@@ -24,20 +24,6 @@ const EditarEntrevista = () => {
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
 
-    const gerarPdf = () => {
-        const domElement = document.getElementById("proposta-container");
-        html2canvas(domElement, {
-            onclone: document => {
-                document.getElementById("print")
-            }
-        }).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPdf();
-            pdf.addImage(imgData, "JPEG", 10, 10);
-            pdf.save(`${new Date().toISOString()}.pdf`);
-        });
-    }
-
     const openModal = () => {
         setModalIsOpen(true)
     }
@@ -142,10 +128,31 @@ const EditarEntrevista = () => {
                                 }
                             })
                         }
+                        <div id="divergencia-container">
+
+                            <div className="perguntas-habitos-container title">
+                                <h3>Identificação de divergências</h3>
+                            </div>
+                            <div className="divergencias-container">
+                                <div className="div-pergunta">
+                                    <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
+                                    <textarea type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} defaultValue={dadosEntrevista.divergencia} />
+                                </div>
+                                <div className="div-pergunta">
+                                    <label htmlFor="pergunta-patologias" className="label-pergunta">Por que o beneficiario não informou na ds essas patologias?</label>
+                                    <textarea type="text" name="pergunta-patologias" id="patologias" className="input-pergunta" onKeyUp={e => handleChange(e.target)} defaultValue={dadosEntrevista.patologias} />
+                                </div>
+                                <div className="div-pergunta">
+                                    <label htmlFor="cids">CID:</label>
+                                    <textarea type="text" name="cids" id="cids" className="input-pergunta" defaultValue={dadosEntrevista.cids} onChange={e => {
+                                        handleChange(e.target)
+                                    }} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <button onClick={salvar}>Salvar</button>
-                        <button onClick={gerarPdf}>Gerar PDf</button>
                     </div>
                 </div>
                 <Modal

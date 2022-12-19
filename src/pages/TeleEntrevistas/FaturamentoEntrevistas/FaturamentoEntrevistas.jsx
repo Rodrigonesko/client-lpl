@@ -196,7 +196,7 @@ const FaturamentoEntrevistas = () => {
                                                 <td>{e.proposta}</td>
                                                 <td>{e.nome}</td>
                                                 <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
-                                                <td><input type="checkbox" name="" id="" className="check-faturado" defaultChecked={e.nf} /></td>
+                                                <td><input type="checkbox" name="" id="" className="check-faturado" checked={e.faturado === 'Faturado'}/></td>
                                                 <td><input type="text" name="" id="" className="td-nf" defaultValue={e.nf} /></td>
                                             </tr>
                                         )
