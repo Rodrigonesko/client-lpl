@@ -8,6 +8,12 @@
     padding: 1rem;
 }
 
+.info-proposta-container {
+    border: 1px solid black;
+    margin: 1rem;
+    padding: 0.7rem;
+}
+
 .sub-bloco-analise-detalhes {
     margin-top: 1rem;
     padding: 1rem;
@@ -19,4 +25,42 @@
 
 .sub-bloco-analise-detalhes div {
     margin: 0.8rem;
+}
+
+.sub-bloco-analise {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.color-red {
+    color: red;
+}
+
+.color-green {
+    color: green;
+}
+
+.card-analise input, .card-analise select {
+    margin: 0 10px;
+}
+
+#dados-plano-amil strong {
+    margin: 0 10px;
+}
+
+#agenda-elegibilidade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+#agenda-elegibilidade .title {
+    text-align: center;
+}
+
+#agenda-elegibilidade div {
+    margin: 0.7rem;
 }

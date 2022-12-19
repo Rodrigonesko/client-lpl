@@ -6,6 +6,10 @@ import { useParams } from "react-router-dom";
 import './AnaliseElegibilidadeDetalhes.css'
 import StatusGeral from "./StatusGeral";
 import DadosElegibilidade from "./DadosElegebilidade";
+import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
+import AgendaElegibilidade from "./AgendaElegibilidade";
+import Modal from 'react-modal'
+Modal.setAppElement('#root')
 
 const AnaliseElegibilidadeDetalhes = () => {
 
@@ -13,9 +17,39 @@ const AnaliseElegibilidadeDetalhes = () => {
 
     const [proposta, setProposta] = useState({})
 
+    const [sisAmilDeacordo, setSisAmilDeacordo] = useState('')
+    const [contrato, setContrato] = useState('')
+    const [prc, setPrc] = useState('')
+    const [ligacao, setLigacao] = useState('')
+    const [site, setSite] = useState('')
+    const [statusContrato600, setStatusContrato600] = useState(false)
+    const [statusContrato118, setStatusContrato118] = useState(false)
+    const [comentario, setComentario] = useState('')
+    const [agenda, setAgenda] = useState([])
+    const [prcs, setPrcs] = useState([])
+
+    const [modalSalvar, setModalSalvar] = useState(false)
+
     const buscarDados = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
         setProposta(result.data.proposta)
+
+        console.log(result.data.proposta.sisAmilDeacordo);
+
+        setSisAmilDeacordo(result.data.proposta.sisAmilDeacordo)
+        setContrato(result.data.proposta.contrato)
+        setPrc(result.data.proposta.prc)
+        setLigacao(result.data.proposta.ligacao)
+        setSite(result.data.proposta.site)
+
+        if (result.data.proposta.contrato === '600') {
+            setStatusContrato600(true)
+            console.log(result.data.proposta.contrato);
+        }
+        if (result.data.proposta.contrato === '118') {
+            setStatusContrato118(true)
+            console.log(result.data.proposta.contrato);
+        }
 
         if (result.data.proposta.status === 'A iniciar') {
             await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/alterarStatus`, {
@@ -26,8 +60,49 @@ const AnaliseElegibilidadeDetalhes = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
             setProposta(result.data.proposta)
+
+        }
+
+        const resultAgenda = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${result.data.proposta.proposta}`, { withCredentials: true })
+
+        setAgenda(resultAgenda.data.agenda)
+
+        const resultPrcs = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/prc`, {withCredentials: true})
+
+        setPrcs(resultPrcs.data.prc)
+
+    }
+
+    const salvarDados = async () => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/salvarDadosAnalise`, {
+                id,
+                sisAmilDeacordo,
+                contrato,
+                prc,
+                ligacao,
+                site,
+                comentario,
+                proposta: proposta.proposta
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
+
+            if (result.status === 200) {
+                setModalSalvar(true)
+            }
+
+            //console.log(sisAmilDeacordo, contrato, prc, ligacao, site, comentario);
+
+        } catch (error) {
+            console.log(error);
         }
     }
+
+    
 
     useEffect(() => {
         buscarDados()
@@ -55,18 +130,64 @@ const AnaliseElegibilidadeDetalhes = () => {
                             status3Analise={proposta.status3Analise}
                         />
                         <DadosElegibilidade
-                        proposta={proposta.proposta}
-                        vigencia={moment(proposta.vigencia).format('DD/MM/YYYY')}
-                        nome={proposta.nome}
-                        administradora={proposta.administradora}
-                        numeroVidas={proposta.numeroVidas}
-                        entidade={proposta.entidade}
-                        dataImportacao={moment(proposta.dataImportacao).format('DD/MM/YYYY')}
-                        tipoVinculo={proposta.tipoVinculo}
-                        statusMotor={proposta.statusMotor}
-                         />
+                            proposta={proposta.proposta}
+                            vigencia={moment(proposta.vigencia).format('DD/MM/YYYY')}
+                            nome={proposta.nome}
+                            administradora={proposta.administradora}
+                            numeroVidas={proposta.numeroVidas}
+                            entidade={proposta.entidade}
+                            dataImportacao={moment(proposta.dataImportacao).format('DD/MM/YYYY')}
+                            tipoVinculo={proposta.tipoVinculo}
+                            statusMotor={proposta.statusMotor}
+                        />
+                        <ProcessamentoElegibilidade
+                            sisAmilDeacordo={sisAmilDeacordo}
+                            setSisAmilDeacordo={setSisAmilDeacordo}
+                            contrato={contrato}
+                            setContrato={setContrato}
+                            prc={prc}
+                            setPrc={setPrc}
+                            ligacao={ligacao}
+                            setLigacao={setLigacao}
+                            site={site}
+                            setSite={setSite}
+                            planoAnterior={proposta.planoAnterior}
+                            observacoes={proposta.observacoes}
+                            documentoIdentificacao={proposta.documentoIdentificacao}
+                            declaracaoAssociado={proposta.declaracaoAssociado}
+                            vinculadosSimNao={proposta.vinculadosSimNao}
+                            vinculados={proposta.vinculados}
+                            planoAmil={proposta.planoAmil}
+                            dataInicioPlanoAmil={moment(proposta.dataInicioPlanoAmil).format('DD/MM/YYYY')}
+                            dataFimPlanoAmil={moment(proposta.dataFimPlanoAmil).format('DD/MM/YYYY')}
+                            custoPlanoAmil={proposta.custoPlanoAmil}
+                            faltaDoc={proposta.faltaDoc}
+                            statusContrato600={statusContrato600}
+                            statusContrato118={statusContrato118}
+                            prcs = {prcs}
+                        />
+                        <AgendaElegibilidade
+                            setComentario={setComentario}
+                            agenda={agenda}
+                        />
+                        <div className="btn-detalhes-elegi">
+                            <button className="btn-padrao-azul" onClick={salvarDados} >Salvar</button>
+                        </div>
                     </div>
                 </div>
+                <Modal
+                    isOpen={modalSalvar}
+                    onRequestClose={() => setModalSalvar(false)}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <h2>Dados Salvos com sucesso!</h2>
+                    <button onClick={() => {
+                        setModalSalvar(false)
+                        window.location.reload()
+                    }}>Ok</button>
+                </Modal>
             </section>
         </>
     )
