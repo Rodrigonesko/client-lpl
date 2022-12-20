@@ -1,0 +1,27 @@
+.section-u-e-detalhes {
+    height: 100vh;
+    overflow: auto;
+    width: 100%;
+}
+
+.u-e-detalhes {
+    border: 1px solid black;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.box-u-e {
+    margin: 1rem;
+}
+
+.box-u-e strong, .box-u-e input {
+    margin-right: 15px;
+}
+
+.box-u-e input {
+    width: 15%;
+}
+
+.box-u-e textarea {
+    padding: 8px;
+}
