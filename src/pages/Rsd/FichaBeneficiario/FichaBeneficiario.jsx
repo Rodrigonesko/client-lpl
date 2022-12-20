@@ -297,7 +297,7 @@ const FichaBeneficiario = () => {
                             <tbody>
                                 {
                                     pacotes.map(e => {
-                                        if (e.statusPacote != 'Não iniciado') {
+                                        if (e.statusPacote != 'Não iniciado' && e.statusPacote != 'Finalizado') {
                                             return (
                                                 <>
                                                     <tr>
@@ -309,7 +309,7 @@ const FichaBeneficiario = () => {
                                                         <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
                                                     </tr>
                                                     <tr className="none teste">
-                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} >
+                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} finalizados={false} >
 
                                                         </TabelaProtocolo>
 

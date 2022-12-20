@@ -3,7 +3,7 @@ import { FaAngleDown } from "react-icons/fa";
 import moment from "moment/moment";
 import TabelaPedido from "../TabelaPedido/TabelaPedido";
 
-const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false }) => {
+const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados, todos }) => {
 
     const [protocolos, setProtocolos] = useState([])
 
@@ -56,7 +56,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false }) => {
                                                     <td>{e.status}</td>
                                                 </tr>
                                                 <tr className="none">
-                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote}>
+                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote} finalizados={finalizados} todos={todos} >
 
                                                     </TabelaPedido>
                                                 </tr>

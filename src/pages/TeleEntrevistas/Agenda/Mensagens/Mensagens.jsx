@@ -100,9 +100,15 @@ const Mensagens = () => {
                                     <div className="mensagem">
                                         {e.saudacao}
                                         <br />
+                                        <br />
                                         {e.parte1} {e.parte2} {e.parte3}
                                         <br />
-                                        {e.parte4} {e.parte5} {e.parte6}
+                                        {e.parte4} {e.parte5}
+                                        <br />
+                                        {e.parte6}
+                                        <br />
+                                        <br />
+                                        {e.parte8}
                                         <br />
                                         <br />
                                         {e.parte7}

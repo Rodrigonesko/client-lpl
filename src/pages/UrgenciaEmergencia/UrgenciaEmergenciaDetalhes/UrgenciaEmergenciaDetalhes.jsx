@@ -175,7 +175,12 @@ const UrgenciaEmergenciaDetalhes = () => {
                         </div>
                         <div>
                             <button onClick={salvarInfo} >Salvar</button>
-                            <button onClick={concluir} >Concluir</button>
+                            {
+                                proposta.status === 'Andamento' ? (
+                                    <button onClick={concluir} >Concluir</button>
+                                ) : null
+                            }
+
                         </div>
                     </div>
                 </div>

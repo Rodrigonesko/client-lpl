@@ -79,7 +79,7 @@ const Sidebar = () => {
                             </SubMenu>
                             <SubMenu title="Urgência & Emergência" icon={<RiAlarmWarningLine />} >
                                 <MenuItem><Link to='/urgenciaEmergencia/andamento'>Em andamento</Link></MenuItem>
-                                <MenuItem><Link to='/urgenciaEmergencia/todos'>Todos</Link></MenuItem>
+                                <MenuItem><Link to='/urgenciaEmergencia/todos'>Concluídos</Link></MenuItem>
                                 <MenuItem><Link to='/urgenciaEmergencia/producao'>Produção</Link></MenuItem>
                                 <MenuItem><Link to='/urgenciaEmergencia/upload'>Upload</Link></MenuItem>
                                 

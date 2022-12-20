@@ -192,6 +192,10 @@ const ProcessamentoPacote = () => {
                 finalizacoes.push([chave, item])
             })
 
+            console.log(motivoContato);
+            console.log(servicos);
+            console.log(finalizacoes);
+
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
                 pacote: idPacote,
                 sucesso: houveSucesso,
@@ -322,32 +326,6 @@ const ProcessamentoPacote = () => {
                 break
             }
         }
-
-        // pedidos.forEach(e => {
-        //     if (e.dataSelo != undefined) {
-        //         tr2.classList.toggle('none')
-        //         checkbox1.checked = true
-        //         console.log(e.dataSelo);
-        //         return
-        //     }
-        // })
-
-        // pedidos.forEach(e => {
-        //     if (e.reconhece) {
-        //         tr3.classList.toggle('none')
-        //         checkbox2.checked = true
-        //         return
-        //     }
-        // })
-
-        // pedidos.forEach(e => {
-        //     if (e.formaPagamento != undefined) {
-        //         tr4.classList.toggle('none')
-        //         checkbox3.checked = true
-        //     }
-        // })
-
-
     }
 
     useEffect(() => {
@@ -400,7 +378,7 @@ const ProcessamentoPacote = () => {
                                                     <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
                                                 </tr>
                                                 <tr className="none" >
-                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={idPacote} />
+                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={idPacote} todos={true} />
                                                 </tr>
                                             </>
                                         )
@@ -436,31 +414,96 @@ const ProcessamentoPacote = () => {
                                             <td>1°</td>
                                             <td>
                                                 <p>Houve sucesso no Contato com o beneficiário?</p>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" defaultChecked={contatoSim} value={`Sim`} onClick={e => {
-                                                    setHouveSucesso(e.target.value)
-                                                    setNaoContato(false)
-                                                }} />
-                                                <label htmlFor="contato-beneficiario-sim">Sim</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} defaultChecked={contatoNao} onClick={e => {
-                                                    setHouveSucesso(e.target.value)
-                                                    setNaoContato(false)
-                                                }} />
-                                                <label htmlFor="contato-beneficiario-nao">Não</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} defaultChecked={contatoAgendar} onClick={e => {
-                                                    setHouveSucesso(e.target.value)
-                                                    setNaoContato(false)
-                                                }} />
-                                                <label htmlFor="contato-beneficiario-agendar">Necessário Agendar Horario</label>
+
+                                                {
+                                                    contatoSim ? (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" defaultChecked={true} value={`Sim`} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(false)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-sim">Sim</label>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sim" value={`Sim`} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(false)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-sim">Sim</label>
+                                                        </>
+                                                    )
+                                                }
+
+                                                {
+                                                    contatoNao ? (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} defaultChecked={true} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(false)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-nao">Não</label>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(false)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-nao">Não</label>
+                                                        </>
+                                                    )
+                                                }
+
+                                                {
+                                                    contatoAgendar ? (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} defaultChecked={true} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(false)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-agendar">Necessário Agendar Horario</label>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-agendar" value={`Necessário Agendar Horario`} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(false)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-agendar">Necessário Agendar Horario</label>
+                                                        </>
+                                                    )
+                                                }
+
+
+
                                                 <input type="radio" name="contato-beneficiario" id="contato-beneficiario-sem-retorno" value={`Sem Retorno de Contato`} onClick={e => {
                                                     setHouveSucesso(e.target.value)
                                                     setNaoContato(false)
                                                 }} />
                                                 <label htmlFor="contato-beneficiario-sem-retorno">Sem Retorno de Contato</label>
-                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao-foi-entrado-contato" value={`Não foi entrado em contato`} defaultChecked={contatoNaoEntrado} onClick={e => {
-                                                    setHouveSucesso(e.target.value)
-                                                    setNaoContato(true)
-                                                }} />
-                                                <label htmlFor="contato-beneficiario-nao-foi-entrado-contato">Não foi entrado em contato</label>
+
+                                                {
+                                                    contatoNaoEntrado ? (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao-foi-entrado-contato" value={`Não foi entrado em contato`} defaultChecked={true} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(true)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-nao-foi-entrado-contato">Não foi entrado em contato</label>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao-foi-entrado-contato" value={`Não foi entrado em contato`} onClick={e => {
+                                                                setHouveSucesso(e.target.value)
+                                                                setNaoContato(true)
+                                                            }} />
+                                                            <label htmlFor="contato-beneficiario-nao-foi-entrado-contato">Não foi entrado em contato</label>
+                                                        </>
+                                                    )
+                                                }
+
+
                                                 {
                                                     naoContato ? (
                                                         <div>

@@ -23,6 +23,7 @@ const EditarEntrevista = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
+    const [houveDivergencia, setHouveDivergencia] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -49,6 +50,9 @@ const EditarEntrevista = () => {
 
             setDadosEntrevista(result.data.proposta)
 
+            setHouveDivergencia(result.data.proposta.houveDivergencia)
+            console.log(result.data.proposta.houveDivergencia);
+
             console.log(result);
 
         } catch (error) {
@@ -64,10 +68,10 @@ const EditarEntrevista = () => {
         }
     }
 
-    const salvar = async (item) => {
+    const salvar = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia }, { withCredentials: true })
 
             if (result.status === 200) {
                 openModal()
@@ -134,6 +138,15 @@ const EditarEntrevista = () => {
                                 <h3>Identificação de divergências</h3>
                             </div>
                             <div className="divergencias-container">
+                                <div className="div-pergunta">
+                                    <label htmlFor="pergunta-divergencia" className="label-pergunta">Houve Divergência?</label>
+                                    <select name="" id="" onChange={e => {
+                                        setHouveDivergencia(e.target.value)
+                                    }} >
+                                        <option value="Não" selected={dadosEntrevista.houveDivergencia === 'Não'} >Não</option>
+                                        <option value="Sim" selected={dadosEntrevista.houveDivergencia === 'Sim'} >Sim</option>
+                                    </select>
+                                </div>
                                 <div className="div-pergunta">
                                     <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
                                     <textarea type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} defaultValue={dadosEntrevista.divergencia} />

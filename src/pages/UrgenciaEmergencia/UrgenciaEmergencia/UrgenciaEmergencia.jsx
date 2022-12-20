@@ -11,7 +11,7 @@ const UrgenciaEmergencia = () => {
     const buscarPropostas = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/andamento`, {withCredentials: true})
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/andamento`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)

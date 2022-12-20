@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from 'axios'
 import './TabelaPedido.css'
 
-const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
+const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados, todos }) => {
 
     const [prioridade, setPrioridade] = useState(false)
 
@@ -45,7 +45,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
         try {
 
             console.log(pedido, prioridade.target.checked);
-            
+
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/prioridadeDossie`, {
                 pedido: pedido,
                 prioridade: prioridade.target.checked
@@ -83,42 +83,121 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote }) => {
                             {
                                 pedidos.map(e => {
                                     if (protocolo === e.protocolo && e.pacote === pacote) {
-                        
-                                        return (
-                                            <tr>
-                                                <td>{e.numero}</td>
-                                                <td>{e.status}</td>
-                                                <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
-                                                <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
-                                                <td>{e.cnpj}</td>
-                                                <td>{e.clinica}</td>
-                                                <td>{e.nf}</td>
-                                                <td>{e.irregular}</td>
-                                                {
-                                                    e.fase !== 'Finalizado' ? (
-                                                        <>
-                                                            <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
-                                                            <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
-                                                        </>
-                                                    ) : (
-                                                        <td>
-                                                            <button className="botao-padrao-cinza" onClick={() => {
-                                                                voltarFase(e.numero)
-                                                            }} >Voltar Fase</button>
-                                                        </td>
-                                                    )
-                                                }
-                                                {
-                                                    e.statusPacote === 'Não iniciado' ? (
-                                                        <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
-                                                    ) : (
-                                                        <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => { 
-                                                            definirPrioridadeDossie(e.numero, element) }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
-                                                    )
-                                                }
+                                        if (finalizados && e.status === 'Finalizado') {
+                                            return (
+                                                <tr>
+                                                    <td>{e.numero}</td>
+                                                    <td>{e.status}</td>
+                                                    <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td>{e.cnpj}</td>
+                                                    <td>{e.clinica}</td>
+                                                    <td>{e.nf}</td>
+                                                    <td>{e.irregular}</td>
+                                                    {
+                                                        e.fase !== 'Finalizado' ? (
+                                                            <>
+                                                                <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
+                                                            </>
+                                                        ) : (
+                                                            <td>
+                                                                <button className="botao-padrao-cinza" onClick={() => {
+                                                                    voltarFase(e.numero)
+                                                                }} >Voltar Fase</button>
+                                                            </td>
+                                                        )
+                                                    }
+                                                    {
+                                                        e.statusPacote === 'Não iniciado' ? (
+                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
+                                                        ) : (
+                                                            <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => {
+                                                                definirPrioridadeDossie(e.numero, element)
+                                                            }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
+                                                        )
+                                                    }
 
-                                            </tr>
-                                        )
+                                                </tr>
+                                            )
+                                        }
+                                        if (!finalizados && e.status !== 'Finalizado') {
+                                            return (
+                                                <tr>
+                                                    <td>{e.numero}</td>
+                                                    <td>{e.status}</td>
+                                                    <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td>{e.cnpj}</td>
+                                                    <td>{e.clinica}</td>
+                                                    <td>{e.nf}</td>
+                                                    <td>{e.irregular}</td>
+                                                    {
+                                                        e.fase !== 'Finalizado' ? (
+                                                            <>
+                                                                <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
+                                                            </>
+                                                        ) : (
+                                                            <td>
+                                                                <button className="botao-padrao-cinza" onClick={() => {
+                                                                    voltarFase(e.numero)
+                                                                }} >Voltar Fase</button>
+                                                            </td>
+                                                        )
+                                                    }
+                                                    {
+                                                        e.statusPacote === 'Não iniciado' ? (
+                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
+                                                        ) : (
+                                                            <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => {
+                                                                definirPrioridadeDossie(e.numero, element)
+                                                            }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
+                                                        )
+                                                    }
+
+                                                </tr>
+                                            )
+                                        }
+                                        if (todos) {
+                                            return (
+                                                <tr>
+                                                    <td>{e.numero}</td>
+                                                    <td>{e.status}</td>
+                                                    <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td>{e.cnpj}</td>
+                                                    <td>{e.clinica}</td>
+                                                    <td>{e.nf}</td>
+                                                    <td>{e.irregular}</td>
+                                                    {
+                                                        e.fase !== 'Finalizado' ? (
+                                                            <>
+                                                                <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
+                                                            </>
+                                                        ) : (
+                                                            <td>
+                                                                <button className="botao-padrao-cinza" onClick={() => {
+                                                                    voltarFase(e.numero)
+                                                                }} >Voltar Fase</button>
+                                                            </td>
+                                                        )
+                                                    }
+                                                    {
+                                                        e.statusPacote === 'Não iniciado' ? (
+                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
+                                                        ) : (
+                                                            <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => {
+                                                                definirPrioridadeDossie(e.numero, element)
+                                                            }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
+                                                        )
+                                                    }
+
+                                                </tr>
+                                            )
+                                        }
+
                                     }
                                 })
                             }

@@ -255,7 +255,7 @@ const FichaBeneficiarioConcluidos = () => {
                                                         <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
                                                     </tr>
                                                     <tr className="none teste">
-                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} >
+                                                        <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} finalizados={true} >
 
                                                         </TabelaProtocolo>
 
