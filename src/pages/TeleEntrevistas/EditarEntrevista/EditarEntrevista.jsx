@@ -4,8 +4,6 @@ import Axios from 'axios'
 import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import Modal from 'react-modal'
-import html2canvas from 'html2canvas'
-import jsPdf from 'jspdf'
 import './EditarEntrevista.css'
 
 
@@ -122,7 +120,7 @@ const EditarEntrevista = () => {
                     <div className="perguntas-container">
                         {
                             perguntas.map(e => {
-                                if (e.formulario == dadosEntrevista.tipoFormulario) {
+                                if (e.formulario === dadosEntrevista.tipoFormulario) {
                                     return (
                                         <div className='title'>
                                             <label htmlFor={e.name}>{e.pergunta}</label>

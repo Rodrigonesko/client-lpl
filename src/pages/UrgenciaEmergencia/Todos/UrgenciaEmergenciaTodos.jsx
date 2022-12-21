@@ -62,7 +62,11 @@ const UrgenciaEmergenciaTodos = () => {
                 xls += `<td>${e.nomeAssociado}</td>`
                 xls += `<td>${moment(e.dataNascimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.idade}</td>`
-                xls += `<td>${e.responsavel}</td>`
+                if (e.responsavel === undefined) {
+                    xls += `<td></td>`
+                } else {
+                    xls += `<td>${e.responsavel}</td>`
+                }
                 xls += `<td>${e.telefone}</td>`
                 xls += `<td>${e.email}</td>`
                 xls += `<td>${moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>`
@@ -71,7 +75,11 @@ const UrgenciaEmergenciaTodos = () => {
                 xls += `<td>${e.descricaoCid}</td>`
                 xls += `<td>${e.sitAutoriz}</td>`
                 xls += `<td>${e.relatorioMedico}</td>`
-                xls += `<td>${e.obsUnder}</td>`
+                if (e.obsUnder === undefined) {
+                    xls += `<td></td>`
+                } else {
+                    xls += `<td>${e.obsUnder}</td>`
+                }
                 if (e.contato1 === undefined) {
                     xls += `<td></td>`
                 } else {
@@ -151,7 +159,11 @@ const UrgenciaEmergenciaTodos = () => {
             xls += `<td>${e.nomeAssociado}</td>`
             xls += `<td>${moment(e.dataNascimento).format('DD/MM/YYYY')}</td>`
             xls += `<td>${e.idade}</td>`
-            xls += `<td>${e.responsavel}</td>`
+            if (e.responsavel === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${e.responsavel}</td>`
+            }
             xls += `<td>${e.telefone}</td>`
             xls += `<td>${e.email}</td>`
             xls += `<td>${moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>`
@@ -160,7 +172,11 @@ const UrgenciaEmergenciaTodos = () => {
             xls += `<td>${e.descricaoCid}</td>`
             xls += `<td>${e.sitAutoriz}</td>`
             xls += `<td>${e.relatorioMedico}</td>`
-            xls += `<td>${e.obsUnder}</td>`
+            if (e.obsUnder === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${e.obsUnder}</td>`
+            }
             if (e.contato1 === undefined) {
                 xls += `<td></td>`
             } else {

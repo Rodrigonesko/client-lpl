@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import Axios from 'axios'
-import moment from "moment";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Mensagens.css'
-
-let numPropostas = 0
-
 const Mensagens = () => {
 
-    const [horarios, setHorarios] = useState([])
     const [propostas, setPropostas] = useState([])
     const [dataMensagem, setDataMensagem] = useState('')
     const [mensagens, setMensagens] = useState([])
@@ -20,60 +15,6 @@ const Mensagens = () => {
             console.log(result);
 
             setMensagens(result.data.msgs)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const buscarHorarios = (date) => {
-        try {
-            console.log(date);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const buscarPropostas = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoAgendadas`, { withCredentials: true })
-
-            setPropostas(result.data.propostas)
-            console.log(result.data.propostas.length);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const ajustarDiaSemana = date => {
-        try {
-
-            switch (date) {
-                case 'Monday':
-                    return 'Segunda'
-                    break;
-                case 'Tuesday':
-                    return 'Terça'
-                    break;
-                case 'Wednesday':
-                    return 'Quarta'
-                    break;
-                case 'Thursday':
-                    return 'Quinta'
-                    break;
-                case 'Friday':
-                    return 'Sexta'
-                    break;
-                case 'Saturday':
-                    return 'Sábado'
-                    break;
-                case 'Sunday':
-                    return 'Domingo'
-                    break;
-                default:
-                    break;
-            }
 
         } catch (error) {
             console.log(error);

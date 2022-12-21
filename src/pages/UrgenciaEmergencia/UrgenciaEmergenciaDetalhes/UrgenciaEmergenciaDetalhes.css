@@ -25,3 +25,7 @@
 .box-u-e textarea {
     padding: 8px;
 }
+
+.box-u-e button {
+    margin: 0 10px;
+}

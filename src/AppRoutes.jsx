@@ -78,6 +78,7 @@ import UrgenciaEmergencia from "./pages/UrgenciaEmergencia/UrgenciaEmergencia/Ur
 import UrgenciaEmergenciaDetalhes from "./pages/UrgenciaEmergencia/UrgenciaEmergenciaDetalhes/UrgenciaEmergenciaDetalhes";
 import UrgenciaEmergenciaProducao from "./pages/UrgenciaEmergencia/Producao/UrgenciaEmergenciaProducao";
 import UrgenciaEmergenciaTodos from "./pages/UrgenciaEmergencia/Todos/UrgenciaEmergenciaTodos";
+import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/UrgenciaEmergenciaAnexar";
 
 /*  --------------------------- */
 
@@ -295,6 +296,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/urgenciaEmergencia/todos" element={<ProtectedRoute>
                     <UrgenciaEmergenciaTodos />
+                </ProtectedRoute>} />
+                <Route path="/urgenciaEmergencia/anexar" element={<ProtectedRoute>
+                    <UrgenciaEmergenciaAnexar />
                 </ProtectedRoute>} />
                 <Route path="/urgenciaEmergencia/producao" element={<ProtectedRoute>
                     <UrgenciaEmergenciaProducao />
