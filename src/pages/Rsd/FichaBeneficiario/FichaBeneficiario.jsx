@@ -312,7 +312,6 @@ const FichaBeneficiario = () => {
                                                         <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} finalizados={false} >
 
                                                         </TabelaProtocolo>
-
                                                     </tr>
                                                 </>
                                             )

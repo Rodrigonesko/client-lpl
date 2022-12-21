@@ -54,14 +54,17 @@ const EntrevistasRealizadas = () => {
                 xls += `<td>${e.dataNascimento}</td>`
                 xls += `<td>${e.idade}</td>`
                 xls += `<td>${e.responsavel}</td>`
+                xls += `<td>${e.houveDivergencia}</td>`
                 if (e.divergencia) {
-                    xls += `<td>Sim</td>`
+                    xls += `<td>${e.divergencia}</td>` 
                 } else {
-                    xls += `<td>Não</td>`
+                    xls += `<td></td>`
                 }
-
-                xls += `<td>${e.divergencia}</td>`
-                xls += `<td>${e.cids}</td>`
+                if (e.cids) {
+                    xls += `<td>${e.cids}</td>` 
+                } else {
+                    xls += `<td></td>`
+                }
                 xls += `</tr>`
             })
 
