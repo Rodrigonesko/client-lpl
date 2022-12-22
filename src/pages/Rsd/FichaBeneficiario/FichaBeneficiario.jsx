@@ -9,6 +9,7 @@ import moment from "moment/moment";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
 import { IMaskInput } from "react-imask";
+import $ from 'jquery'
 
 const FichaBeneficiario = () => {
 
@@ -94,9 +95,9 @@ const FichaBeneficiario = () => {
         let trPedidos = e.target.parentElement.nextSibling
 
         if (!trPedidos.classList.contains('data')) {
-            trPedidos.classList.toggle('none')
+            $(trPedidos).toggle('fast')
         } else {
-            console.log(trPedidos.parentElement.nextSibling.classList.toggle('none'));
+            $(trPedidos.parentElement.nextSibling).toggle('fast')
         }
     }
 

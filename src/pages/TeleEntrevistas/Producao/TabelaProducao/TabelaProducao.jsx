@@ -102,15 +102,17 @@ const TabelaProducao = ({ quantidadeMesAno, analistasQuantidadeTotalMes, analist
                                                                                         Object.keys(analistaQuantidadeDia).map((analistaKey) => {
                                                                                             let td
                                                                                             if (analistaKey === analista) {
+                                                                                                console.log(analistaKey, analista);
                                                                                                 td = Object.keys(analistaQuantidadeDia[analistaKey]).map(data => {
                                                                                                     if (moment(data).format('MM/YYYY') === mesAno) {
-                                                                                                        console.log(data);
                                                                                                         return (
                                                                                                             <th>{moment(data).format('DD')}</th>
                                                                                                         )
                                                                                                     }
                                                                                                 })
                                                                                             }
+
+                                                                                            console.log(td);
                                                                                             return td
                                                                                         })
                                                                                     }
@@ -123,6 +125,7 @@ const TabelaProducao = ({ quantidadeMesAno, analistasQuantidadeTotalMes, analist
                                                                                         Object.keys(analistaQuantidadeDia).map((analistaKey) => {
                                                                                             let td
                                                                                             if (analistaKey === analista) {
+                                                                                                console.log(analista, analistaKey);
                                                                                                 td = Object.keys(analistaQuantidadeDia[analistaKey]).map(data => {
                                                                                                     if (moment(data).format('MM/YYYY') === mesAno) {
                                                                                                         console.log(analistaQuantidadeDia[analistaKey][data]);

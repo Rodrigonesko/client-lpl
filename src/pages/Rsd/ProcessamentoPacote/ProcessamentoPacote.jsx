@@ -374,7 +374,7 @@ const ProcessamentoPacote = () => {
                                                     <td className="td-protocolo" onClick={mostrarPedidos} > <FaAngleDown /> {e.protocolo}</td>
                                                     <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                     <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
-                                                    <td>{e.statusPacote}</td>
+                                                    <td>{e.statusProtocolo}</td>
                                                     <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
                                                 </tr>
                                                 <tr className="none" >

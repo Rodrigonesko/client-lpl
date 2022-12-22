@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import moment from "moment/moment";
 import TabelaPedido from "../TabelaPedido/TabelaPedido";
+import $ from 'jquery'
 
 const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados, todos }) => {
 
@@ -14,9 +15,9 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
         let trPedidos = e.target.parentElement.nextSibling
 
         if (!trPedidos.classList.contains('data')) {
-            trPedidos.classList.toggle('none')
+            $(trPedidos).toggle('fast')
         } else {
-            console.log(trPedidos.parentElement.nextSibling.classList.toggle('none'));
+            $(trPedidos.parentElement.nextSibling).toggle('fast')
         }
     }
 
@@ -47,21 +48,42 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                                 protocolos.map(e => {
 
                                     if (e.pacote === pacote) {
-                                        return (
-                                            <>
-                                                <tr>
-                                                    <td onClick={mostrarPedidos} className="td-protocolo" ><FaAngleDown></FaAngleDown> {e.protocolo}</td>
-                                                    <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
-                                                    <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
-                                                    <td>{e.status}</td>
-                                                </tr>
-                                                <tr className="none">
-                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote} finalizados={finalizados} todos={todos} >
+                                        console.log(finalizados, e.statusPacote);
+                                        if (finalizados && e.statusProtocolo === 'Finalizado') {
+                                            return (
+                                                <>
+                                                    <tr>
+                                                        <td onClick={mostrarPedidos} className="td-protocolo" ><FaAngleDown></FaAngleDown> {e.protocolo}</td>
+                                                        <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
+                                                        <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
+                                                        <td>{e.statusProtocolo}</td>
+                                                    </tr>
+                                                    <tr className="none">
+                                                        <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote} finalizados={finalizados} todos={todos} >
 
-                                                    </TabelaPedido>
-                                                </tr>
-                                            </>
-                                        )
+                                                        </TabelaPedido>
+                                                    </tr>
+                                                </>
+                                            )
+                                        } 
+                                        if (!finalizados && e.statusProtocolo !== 'Finalizado') {
+                                            return (
+                                                <>
+                                                    <tr>
+                                                        <td onClick={mostrarPedidos} className="td-protocolo" ><FaAngleDown></FaAngleDown> {e.protocolo}</td>
+                                                        <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
+                                                        <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
+                                                        <td>{e.statusProtocolo}</td>
+                                                    </tr>
+                                                    <tr className="none">
+                                                        <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote} finalizados={finalizados} todos={todos} >
+
+                                                        </TabelaPedido>
+                                                    </tr>
+                                                </>
+                                            )
+                                        }
+
                                     }
                                 })
                             }

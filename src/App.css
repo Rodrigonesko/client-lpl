@@ -36,6 +36,41 @@
 .pro-sidebar {
   height: 100%;
   position: relative;
+  
+}
+
+.slidein {
+  animation-duration: 0.5s;
+  animation-name: slidein;
+  width: 360px;
+  min-width: 360px;
+}
+
+.slideout {
+  animation-duration: 0.5s;
+  animation-name: slideout;
+  width: 0;
+  min-width: 0;
+}
+
+@keyframes slidein {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 360px;
+  }
+}
+
+@keyframes slideout {
+  from {
+    width: 360px;
+  }
+
+  to {
+    width: 0%;
+  }
 }
 
 .div-toggle {

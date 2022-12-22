@@ -58,7 +58,7 @@ const PainelProcessos = () => {
             if (e.status === 'Aguardando Retorno Contato') {
                 setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
             }
-            if (e.status === 'Aguardando Comprovante') {
+            if (e.status === 'Aguardando Docs') {
                 setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
             }
         })
