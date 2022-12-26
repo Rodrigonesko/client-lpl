@@ -3,7 +3,6 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-
 }
 
 .producao-rn, .producao-entrevistas {
@@ -12,12 +11,14 @@
     justify-content: center;
     align-items: center;
     margin-top: 1rem;
+    flex-direction: column;
 }
 
 .producao-entrevistas table,  .producao-rn table{
     text-align: center;
     border-collapse: collapse;
     border-radius: 3px;
+    overflow: auto;
 }
 
 .producao-entrevistas th {
@@ -30,3 +31,13 @@
     transition: 200ms;
 }
 
+.center-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.width-100 {
+    width: 100%;
+}

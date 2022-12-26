@@ -29,6 +29,9 @@ const AnaliseElegibilidadeDetalhes = () => {
     const [prcs, setPrcs] = useState([])
 
     const [modalSalvar, setModalSalvar] = useState(false)
+    const [modalEnviarUnder, setModalEnviarUnder] = useState(false)
+    const [modalEnviarCancelamento, setModalEnviarCancelamento] = useState(false)
+    const [modalDevolucao, setModalDevolucao] = useState(false)
 
     const buscarDados = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
@@ -67,7 +70,7 @@ const AnaliseElegibilidadeDetalhes = () => {
 
         setAgenda(resultAgenda.data.agenda)
 
-        const resultPrcs = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/prc`, {withCredentials: true})
+        const resultPrcs = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/prc`, { withCredentials: true })
 
         setPrcs(resultPrcs.data.prc)
 
@@ -101,8 +104,6 @@ const AnaliseElegibilidadeDetalhes = () => {
             console.log(error);
         }
     }
-
-    
 
     useEffect(() => {
         buscarDados()
@@ -164,7 +165,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                             faltaDoc={proposta.faltaDoc}
                             statusContrato600={statusContrato600}
                             statusContrato118={statusContrato118}
-                            prcs = {prcs}
+                            prcs={prcs}
                         />
                         <AgendaElegibilidade
                             setComentario={setComentario}
@@ -172,6 +173,12 @@ const AnaliseElegibilidadeDetalhes = () => {
                         />
                         <div className="btn-detalhes-elegi">
                             <button className="btn-padrao-azul" onClick={salvarDados} >Salvar</button>
+                            <button className="btn-padrao-verde">Enviar Under</button>
+                            <button className="btn-padrao-vermelho">Enviar Cancelamento</button>
+                            <button className="btn-padrao-amarelo">1° Devolução</button>
+                            <button className="btn-padrao-amarelo">2° Devolução</button>
+                            <button className="btn-padrao-amarelo">3° Devolução</button>
+                            <button className="btn-padrao-vermelho">Cancelar</button>
                         </div>
                     </div>
                 </div>

@@ -28,6 +28,35 @@
   border: none;
 }
 
+.btn-padrao-vermelho {
+  background-color: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 200ms;
+  border: none;
+}
+
+.btn-padrao-amarelo {
+  background-color: rgb(255, 238, 0);
+  color: black;
+  font-weight: 600;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 200ms;
+  border: none;
+}
+
+.btn-padrao-amarelo:hover {
+  background-color: rgb(202, 189, 0);
+  color: black;
+
+}
+
+.btn-padrao-vermelho:hover {
+  background-color: darkred;
+}
+
 .btn-padrao-verde:hover {
   background-color: rgb(17, 87, 17);
 }

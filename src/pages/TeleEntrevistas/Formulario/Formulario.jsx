@@ -158,11 +158,15 @@ const Formulario = () => {
 
             document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
 
-
             if (imc >= 30) {
                 let span = document.createElement('span')
                 span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
                 document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
+            } 
+
+            if(imc < 30) {
+                let divIndicadorObesidade = document.getElementById('indicador-obesidade')
+                divIndicadorObesidade.removeChild(divIndicadorObesidade.firstChild)
             }
         }
         if (item.id === 'altura') {
@@ -242,7 +246,7 @@ const Formulario = () => {
     const buscarCids = async (cid) => {
         try {
 
-            if (cid === '') {
+            if (cid === '' || cid.length <= 2 ) {
                 setCids([])
             } else {
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/cids/pesquisa/${cid}`, { withCredentials: true })
@@ -264,6 +268,7 @@ const Formulario = () => {
             let div1 = document.createElement('div')
             let span = document.createElement('span')
             span.textContent = item.value
+            div1.setAttribute('id', item.value)
             div1.appendChild(span)
             div.appendChild(div1)
         }
@@ -271,6 +276,9 @@ const Formulario = () => {
         if (item.checked == false) {
             let indice = arrCids.indexOf(item.value)
             arrCids.splice(indice, 1)
+            let divRetirada = document.getElementById(item.value)
+            console.log(divRetirada);
+            divRetirada.parentNode.removeChild(divRetirada)
         }
 
     }

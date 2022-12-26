@@ -64,3 +64,7 @@
 #agenda-elegibilidade div {
     margin: 0.7rem;
 }
+
+.btn-detalhes-elegi button {
+    margin: 0 10px;
+}

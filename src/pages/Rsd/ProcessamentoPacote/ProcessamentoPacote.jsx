@@ -531,7 +531,6 @@ const ProcessamentoPacote = () => {
                                                 <input type="checkbox" name="" id="checkbox-processamento-2" onClick={() => {
                                                     document.getElementById('tr-processamento-3').classList.toggle('none')
                                                     setDataSelo(new Date())
-                                                    console.log(dataSelo);
                                                 }} />
                                             </td>
                                         </tr>
@@ -554,8 +553,6 @@ const ProcessamentoPacote = () => {
                                                                 </>
                                                             )
                                                         }
-
-
                                                     })
                                                 }
                                             </td>

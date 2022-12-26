@@ -1,53 +1,35 @@
-import React, { useState } from "react";
+import React from "react";
 import $ from 'jquery'
 import moment from "moment/moment";
+const TabelaProducao = ({ producao }) => {
 
-const TabelaProducao = ({ quantidadeMesAno, analistasQuantidadeTotalMes, analistaQuantidadeDia, idProducaoMes, idProducaoDia }) => {
-
-
-    const [analista, setAnalista] = useState('')
-    const [mesAno, setMesAno] = useState('')
-
-    const mostrarDadosAnalistaTotalMes = (e) => {
-        try {
-            if (!document.getElementById(`${idProducaoMes}`).classList.contains('show-producao-mes')) {
-                $(`#${idProducaoMes}`).show('fast')
-                document.getElementById(`${idProducaoMes}`).classList.add('show-producao-mes')
-            } else {
-                $(`#${idProducaoMes}`).hide('fast')
-                document.getElementById(`${idProducaoMes}`).classList.remove('show-producao-mes')
-            }
-
-            setMesAno(e)
-        } catch (error) {
-            console.log(error);
+    const mostrarDadosMes = (item) => {
+        let trs = document.getElementsByClassName(item)
+        for (const e of trs) {
+            $(e).toggle('fast')
         }
+
+        let qtdDia = document.getElementsByClassName('qtd-dia')
+        for (const obj of qtdDia) {
+            $(obj).hide('fast')
+        }
+
     }
 
-    const mostrarDadosAnalistaDia = async (e, tr) => {
-        try {
-            console.log(e)
-            setAnalista(e)
-            $('.producao-dia').hide('fast')
-            $(`#${idProducaoDia}-${e}`).toggle('fast')
-
-
-        } catch (error) {
-            console.log(error);
-        }
+    const mostrarDadosDia = (item) => {
+        let tr = document.getElementById(item.className)
+        $(tr).toggle('fast')
     }
 
     return (
-        <>
-
+        <div className="producao-entrevistas">
             <table className="table">
                 <thead className="table-header">
                     <tr>
-                        <th>Datas</th>
                         {
-                            Object.keys(quantidadeMesAno).map(e => {
+                            producao.map(item => {
                                 return (
-                                    <th>{e}</th>
+                                    <th>{item.data}</th>
                                 )
                             })
                         }
@@ -55,108 +37,74 @@ const TabelaProducao = ({ quantidadeMesAno, analistasQuantidadeTotalMes, analist
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Total</td>
                         {
-                            Object.keys(quantidadeMesAno).map(e => {
+                            producao.map(item => {
                                 return (
-                                    <td onClick={(() => {
-                                        mostrarDadosAnalistaTotalMes(e)
-                                    })} >{quantidadeMesAno[e]}</td>
+                                    <>
+                                        <td id={item.data} onClick={e => {
+                                            mostrarDadosMes(e.target.id)
+                                        }}>{item.quantidade}</td>
+                                    </>
+
                                 )
                             })
                         }
                     </tr>
-                    <tr className="none" id={idProducaoMes}>
-                        <td colspan={Object.keys(quantidadeMesAno).length + 1}>
-                            <div>
-                                <h4>Período: {mesAno}</h4>
-                                <table className="table" border={1}>
-                                    <thead className="table-header">
-
-                                        <tr>
-                                            <th>Analista</th>
-                                            <th>Quantidade</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        {
-                                            Object.keys(analistasQuantidadeTotalMes).map(e => {
-                                                if (analistasQuantidadeTotalMes[e][mesAno]) {
-                                                    return (
-                                                        <>
-                                                            <tr >
-                                                                <td>{e}</td>
-                                                                <td onClick={(element) => {
-                                                                    mostrarDadosAnalistaDia(e, element.target)
-                                                                }}>{analistasQuantidadeTotalMes[e][mesAno]}</td>
-                                                            </tr>
-                                                            <tr id={`${idProducaoDia}-${e}`} className='none producao-dia'>
-                                                                <td colspan='30'>
-                                                                    <div>
-                                                                        <table className="table" border={1}>
-                                                                            <thead className="table-header">
-                                                                                <tr>
-                                                                                    <th>Dia</th>
-                                                                                    {
-                                                                                        Object.keys(analistaQuantidadeDia).map((analistaKey) => {
-                                                                                            let td
-                                                                                            if (analistaKey === analista) {
-                                                                                                console.log(analistaKey, analista);
-                                                                                                td = Object.keys(analistaQuantidadeDia[analistaKey]).map(data => {
-                                                                                                    if (moment(data).format('MM/YYYY') === mesAno) {
-                                                                                                        return (
-                                                                                                            <th>{moment(data).format('DD')}</th>
-                                                                                                        )
-                                                                                                    }
-                                                                                                })
-                                                                                            }
-
-                                                                                            console.log(td);
-                                                                                            return td
-                                                                                        })
-                                                                                    }
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td>Quantidade/Dia</td>
-                                                                                    {
-                                                                                        Object.keys(analistaQuantidadeDia).map((analistaKey) => {
-                                                                                            let td
-                                                                                            if (analistaKey === analista) {
-                                                                                                console.log(analista, analistaKey);
-                                                                                                td = Object.keys(analistaQuantidadeDia[analistaKey]).map(data => {
-                                                                                                    if (moment(data).format('MM/YYYY') === mesAno) {
-                                                                                                        console.log(analistaQuantidadeDia[analistaKey][data]);
-                                                                                                        return (
-                                                                                                            <td>{analistaQuantidadeDia[analistaKey][data]}</td>
-                                                                                                        )
-                                                                                                    }
-                                                                                                })
-                                                                                            }
-                                                                                            return td
-                                                                                        })
-                                                                                    }
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </>
-                                                    )
-                                                }
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
-        </>
+            <br />
+            <table className="table">
+                <thead className="table-header">
+                    <tr>
+                        <th>Mês/Ano</th>
+                        <th>Analista</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {
+                        producao.map(item => {
+                            return item.quantidadeAnalistaMes.map(e => {
+                                return (
+                                    <>
+                                        <tr className={`${item.data} none`} >
+                                            <td>{item.data}</td>
+                                            <td>{e.analista}</td>
+                                            <td className={`${item.data}-${e.analista}`} onClick={(td) => { mostrarDadosDia(td.target) }} >{e.quantidade}</td>
+                                        </tr>
+
+                                        <tr id={`${item.data}-${e.analista}`} className='none qtd-dia'>
+                                            <div className="center-table">
+                                                <table className="table">
+                                                    <thead className="table-header">
+                                                        <tr>
+                                                            <th>Dia</th>
+                                                            <th>Quantidade</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody >
+                                                        {
+                                                            e.quantidadeAnalistaDia.map(elem => {
+                                                                return (
+                                                                    <tr >
+                                                                        <td className="width-100" >{moment(elem.data).format('DD/MM/YYYY')}</td>
+                                                                        <td>{elem.quantidade}</td>
+                                                                    </tr>
+                                                                )
+                                                            })
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </tr>
+                                    </>
+                                )
+                            })
+                        })
+                    }
+                </tbody>
+            </table>
+        </div>
     )
 }
 
