@@ -20,6 +20,10 @@ const Horarios = () => {
     const [dataReabrirHorario, setDataReabrirHorario] = useState('')
     const [horariosNaoDisponiveis, setHorariosDisponiveis] = useState([])
 
+    const [responsavelExcecao, setResponsavelExcecao] = useState('')
+    const [diaExcecao, setDiaExcecao] = useState('')
+    const [horarioExcecao, setHorarioExcecao] = useState('')
+
     const openModal = () => {
         setModalIsOpen(true)
     }
@@ -110,6 +114,27 @@ const Horarios = () => {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reabrirHorarios`, { horarios, data: dataReabrirHorario, responsavel: responsavelReabrirHorario }, { withCredentials: true })
 
             if (result.status === 200) {
+                openModal()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const abrirNovoHorario = async () => {
+        try {
+            console.log(responsavelExcecao, diaExcecao, horarioExcecao);
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/horario/novo`, {
+                responsavel: responsavelExcecao,
+                dia: diaExcecao,
+                horario: horarioExcecao
+            }, {
+                withCredentials: true
+            })
+
+            if(result.status === 200){
                 openModal()
             }
 
@@ -219,6 +244,31 @@ const Horarios = () => {
                         </ul>
                     </div>
                     <button onClick={reabrirHorarios}>Reabrir Horarios</button>
+                </div>
+                <div>
+                    <div className="title">
+                        <h3>Abrir novo horário</h3>
+                    </div>
+                    <div>
+                        <label htmlFor="">Responsável: </label>
+                        <select name="" id="" onChange={e => {
+                            setResponsavelExcecao(e.target.value)
+                        }} >
+                            <option value=""></option>
+                            {
+                                responsaveis.map(e => {
+                                    return (
+                                        <option value={e.name}>{e.name}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                        <label htmlFor="">Data: </label>
+                        <input type="date" name="" id="" onChange={e => setDiaExcecao(e.target.value)} />
+                        <label htmlFor="">Horário: </label>
+                        <input type="time" name="" id="" onChange={e => setHorarioExcecao(e.target.value)} />
+                        <button onClick={abrirNovoHorario} >Abrir</button>
+                    </div>
                 </div>
                 <Modal
                     isOpen={modalIsOpen}

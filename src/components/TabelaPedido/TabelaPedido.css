@@ -7,7 +7,19 @@
     text-align: center;
 }
 
+.table-pedidos input {
+    text-align: center;
+}
+
 .btn-criar-pedido {
     width: 100%;
     display: block;
+}
+
+.small-width {
+    width: 50px;
+}
+
+.medium-width {
+    width: 100px;
 }

@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from 'axios'
 import './TabelaPedido.css'
+import Modal from 'react-modal'
+import $ from 'jquery'
+
+Modal.setAppElement('#root')
 
 const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados, todos }) => {
 
     const [prioridade, setPrioridade] = useState(false)
+    const [modalSalvar, setModalSalvar] = useState(false)
 
     const devolvidoAmil = async e => {
         try {
@@ -54,6 +59,52 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
             })
 
             console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const editarPedido = async (id, pedido, cnpj, clinica, nf, valorApresentado, valorReembolsado, element) => {
+        try {
+
+            //console.log(element.target.parentElement.parentElement);
+
+            let tr = element.target.parentElement.parentElement.children[5].firstChild.value
+
+            clinica = tr
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/editar`, {
+                pedido: id,
+                pedidoEditado: pedido,
+                nf,
+                cnpj,
+                clinica,
+                valorApresentado,
+                valorReembolsado
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                setModalSalvar(true)
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const buscarClinica = async (cnpj, id) => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/clinica/busca`, { cnpj: cnpj }, { withCredentials: true })
+
+            console.log(cnpj, id);
+
+            console.log(result);
+
+            document.getElementById(`clinica-${id}`).value = result.data.clinica.descricao
 
         } catch (error) {
             console.log(error);
@@ -124,18 +175,23 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                         if (!finalizados && e.status !== 'Finalizado') {
                                             return (
                                                 <tr>
-                                                    <td>{e.numero}</td>
+                                                    <td><input type="text" name="" id="" className="numero-pedido medium-width" defaultValue={e.numero} onChange={(element) => { e.numero = element.target.value }} /></td>
                                                     <td>{e.status}</td>
                                                     <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
                                                     <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
-                                                    <td>{e.cnpj}</td>
-                                                    <td>{e.clinica}</td>
-                                                    <td>{e.nf}</td>
+                                                    <td><input type="text" name="" id="" className="cnpj-pedido" defaultValue={e.cnpj} onKeyUp={(element) => {
+                                                        e.cnpj = element.target.value
+                                                        buscarClinica(element.target.value, e._id)
+                                                    }} /></td>
+                                                    <td><input type="text" name="" id={`clinica-${e._id}`} className="clinica-pedido" defaultValue={e.clinica} onChange={(element) => { e.clinica = element.target.value }} /></td>
+                                                    <td><input type="text" name="" id="" className="nf-pedido small-width" defaultValue={e.nf} onChange={(element) => { e.nf = element.target.value }} /></td>
                                                     <td>{e.irregular}</td>
                                                     {
                                                         e.fase !== 'Finalizado' ? (
                                                             <>
-                                                                <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
+                                                                <td><button className="btn-padrao-verde" onClick={(element) => {
+                                                                    editarPedido(e._id, e.numero, e.cnpj, e.clinica, e.nf, e.valorApresentado, e.valorReembolsado, element)
+                                                                }} >Salvar</button></td>
                                                                 <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
                                                             </>
                                                         ) : (
@@ -212,6 +268,19 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                     </table>
                 </div>
             </td>
+            <Modal
+                isOpen={modalSalvar}
+                onRequestClose={() => { setModalSalvar(false) }}
+                contentLabel="Exemplo"
+                overlayClassName='modal-overlay'
+                className='modal-content'>
+                <div className="btns-modal">
+                    <h3>Pedido Editado com sucesso!</h3>
+                    <button onClick={() => {
+                        setModalSalvar(false)
+                    }}>Fechar</button>
+                </div>
+            </Modal>
         </>
     )
 }

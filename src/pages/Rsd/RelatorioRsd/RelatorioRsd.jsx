@@ -90,34 +90,11 @@ const RelatorioRsd = () => {
 
             setMsg('Arquivo gerado!')
 
-            // const ws = XLSX.utils.json_to_sheet(result.data.pedidos)
-            // const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
-            // XLSX.writeFile(wb, 'reportRSD.xlsx')
-
 
         } catch (error) {
             console.log(error);
             setMsg('Algo deu errado')
         }
-    }
-
-    const send = async e => {
-        try {
-
-            e.preventDefault()
-
-            let formData = new FormData()
-
-            formData.append('file', file, file.name)
-
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/upload/propostas`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
-
-            console.log(result);
-
-        } catch (error) {
-            console.log(error);
-        }
-
     }
 
     return (
@@ -137,18 +114,6 @@ const RelatorioRsd = () => {
                         }
                     </div>
                 </div>
-                <form action="" method="post" encType="multipart/form-data">
-                    <div className="title">
-                        <h2>Upload</h2>
-                    </div>
-                    <div>
-                        <label htmlFor="file-rn">Arquivo: </label>
-                        <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
-                    </div>
-                    <div className="container-btns">
-                        <button className="btn" onClick={send} >Enviar</button>
-                    </div>
-                </form>
             </section>
             
         </>

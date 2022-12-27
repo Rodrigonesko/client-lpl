@@ -298,7 +298,7 @@ const FichaBeneficiario = () => {
                             <tbody>
                                 {
                                     pacotes.map(e => {
-                                        if (e.statusPacote != 'Não iniciado' && e.statusPacote != 'Finalizado') {
+                                        if (e.statusPacote !== 'Não iniciado' && e.statusPacote !== 'Finalizado' && e.statusPacote !== 'Cancelado' && e.statusPacote !== 'Comprovante Correto' ) {
                                             return (
                                                 <>
                                                     <tr>

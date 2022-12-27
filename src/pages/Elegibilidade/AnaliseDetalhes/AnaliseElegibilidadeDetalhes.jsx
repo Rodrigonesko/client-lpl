@@ -9,6 +9,7 @@ import DadosElegibilidade from "./DadosElegebilidade";
 import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 import AgendaElegibilidade from "./AgendaElegibilidade";
 import Modal from 'react-modal'
+import ModalEnviarUnder from "./Modals/ModalEnviarUnder";
 Modal.setAppElement('#root')
 
 const AnaliseElegibilidadeDetalhes = () => {
@@ -173,7 +174,9 @@ const AnaliseElegibilidadeDetalhes = () => {
                         />
                         <div className="btn-detalhes-elegi">
                             <button className="btn-padrao-azul" onClick={salvarDados} >Salvar</button>
-                            <button className="btn-padrao-verde">Enviar Under</button>
+                            <button className="btn-padrao-verde" onClick={() => {
+                                setModalEnviarUnder(true)
+                            }} >Enviar Under</button>
                             <button className="btn-padrao-vermelho">Enviar Cancelamento</button>
                             <button className="btn-padrao-amarelo">1° Devolução</button>
                             <button className="btn-padrao-amarelo">2° Devolução</button>
@@ -194,6 +197,15 @@ const AnaliseElegibilidadeDetalhes = () => {
                         setModalSalvar(false)
                         window.location.reload()
                     }}>Ok</button>
+                </Modal>
+                <Modal
+                    isOpen={modalEnviarUnder}
+                    onRequestClose={() => setModalEnviarUnder(false)}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <ModalEnviarUnder setModal={setModalEnviarUnder} ></ModalEnviarUnder>
                 </Modal>
             </section>
         </>

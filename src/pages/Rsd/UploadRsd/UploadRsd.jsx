@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import * as XLSX from 'xlsx';
 import Axios from 'axios'
+import Modal from 'react-modal'
 import './UploadRsd.css'
 
+Modal.setAppElement('#root')
 
 const UploadRsd = () => {
 
@@ -11,6 +13,8 @@ const UploadRsd = () => {
     const [status, setStatus] = useState('')
     const [valorCorte, setValorCorte] = useState(20000)
     const [pedidos, setPedidos] = useState([])
+    const [modal, setModal] = useState(false)
+    const [totalPedido, setTotalPedidos] = useState(0)
 
     const send = async e => {
         e.preventDefault()
@@ -47,6 +51,8 @@ const UploadRsd = () => {
 
             if (result.status == 200) {
                 setStatus(`Foram adicionados ${result.data.pedidos.length} pedidos`)
+                setTotalPedidos(result.data.pedidos.length)
+                setModal(true)
             }
 
             console.log(result);
@@ -115,7 +121,22 @@ const UploadRsd = () => {
                         </tbody>
                     </table>
                 </div>
-
+                <Modal
+                    isOpen={modal}
+                    onRequestClose={() => { setModal(false) }}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'>
+                    <div className="title">
+                        <h2>Pedidos subidos com sucesso!</h2>
+                        <h2>Total: </h2>
+                    </div>
+                    <div className="btns-modal">
+                        <button onClick={() => {
+                            setModal(false)
+                        }}>Fechar</button>
+                    </div>
+                </Modal>
             </section>
         </>
 
