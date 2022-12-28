@@ -25,6 +25,9 @@ const ProcessamentoPacote = () => {
     const [modalAgenda, setModalAgenda] = useState(false)
     const [pedidos, setPedidos] = useState([])
     const [protocolos, setProtocolos] = useState([])
+    const [statusPacote, setStatusPacote] = useState('')
+    const [numeroTentativa, setNumeroTentativa] = useState('')
+    const [retornoContato, setRetornoContato] = useState(false)
     const [gravacao, setGravacao] = useState()
     const [arquivos, setArquivos] = useState([])
     const [formasPagamento, setFormasPagamento] = useState([])
@@ -72,8 +75,22 @@ const ProcessamentoPacote = () => {
 
             setProtocolos(arrAuxProtocolos)
 
+            setStatusPacote(result.data.pedidos[0].statusPacote)
+
             if (result.data.pedidos[0].statusPacote === 'Finalizado') {
                 setFinalizado(false)
+            }
+
+            if (result.data.pedidos[0].statusPacote === '2° Tentativa') {
+                setNumeroTentativa('2° Tentativa')
+            }
+
+            if (result.data.pedidos[0].statusPacote === '3° Tentativa') {
+                setNumeroTentativa('3° Tentativa')
+            }
+
+            if (result.data.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
+                setRetornoContato(true)
             }
 
             if (result.data.pedidos[0].contato == 'Não foi entrado em contato') {
@@ -109,6 +126,7 @@ const ProcessamentoPacote = () => {
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/gravacao/anexar/${idPacote}`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
             if (result.status === 200) {
+                salvar()
                 window.location.reload()
             }
 
@@ -350,6 +368,9 @@ const ProcessamentoPacote = () => {
                     <InformacoesGerais
                         mo={mo}
                     />
+                    <div className="title">
+                        <h3>Status Pacote: {statusPacote}</h3>
+                    </div>
                     <div className="titulo-informacoes-gerais">
                         <span>Pedidos de Reembolso</span>
                     </div>
@@ -413,7 +434,7 @@ const ProcessamentoPacote = () => {
                                         <tr className="none" id="tr-processamento-1">
                                             <td>1°</td>
                                             <td>
-                                                <p>Houve sucesso no Contato com o beneficiário?</p>
+                                                <p>Houve sucesso no Contato com o beneficiário? {numeroTentativa}</p>
 
                                                 {
                                                     contatoSim ? (
@@ -437,13 +458,41 @@ const ProcessamentoPacote = () => {
 
                                                 {
                                                     contatoNao ? (
-                                                        <>
-                                                            <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} defaultChecked={true} onClick={e => {
-                                                                setHouveSucesso(e.target.value)
-                                                                setNaoContato(false)
-                                                            }} />
-                                                            <label htmlFor="contato-beneficiario-nao">Não</label>
-                                                        </>
+                                                        numeroTentativa === '2° Tentativa' ? (
+
+                                                            <>
+                                                                <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {
+                                                                    setHouveSucesso(e.target.value)
+                                                                    setNaoContato(false)
+                                                                }} />
+                                                                <label htmlFor="contato-beneficiario-nao">Não</label>
+                                                            </>
+
+                                                        ) : (
+                                                            numeroTentativa === '3° Tentativa' ? (
+
+                                                                <>
+                                                                    <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {
+                                                                        setHouveSucesso(e.target.value)
+                                                                        setNaoContato(false)
+                                                                    }} />
+                                                                    <label htmlFor="contato-beneficiario-nao">Não</label>
+                                                                </>
+
+                                                            ) : (
+                                                                retornoContato ? (
+                                                                    <>
+                                                                        <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} defaultChecked={true} onClick={e => {
+                                                                            setHouveSucesso(e.target.value)
+                                                                            setNaoContato(false)
+                                                                        }} />
+                                                                        <label htmlFor="contato-beneficiario-nao">Não</label>
+                                                                    </>
+
+                                                                ) : null
+                                                            )
+                                                        )
+
                                                     ) : (
                                                         <>
                                                             <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {

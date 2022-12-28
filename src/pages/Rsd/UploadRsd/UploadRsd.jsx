@@ -55,8 +55,6 @@ const UploadRsd = () => {
                 setModal(true)
             }
 
-            console.log(result);
-
         } catch (error) {
             console.log(error);
             setStatus('Algo deu errado')
@@ -112,7 +110,7 @@ const UploadRsd = () => {
                                         <tr>
                                             <td>{e[0]}</td>
                                             <td>{e[8]}</td>
-                                            <td>{e[11]}</td>
+                                            <td>{e[11]}'</td>
                                             <td>{e[9]}</td>
                                         </tr>
                                     )
@@ -128,12 +126,12 @@ const UploadRsd = () => {
                     overlayClassName='modal-overlay'
                     className='modal-content'>
                     <div className="title">
-                        <h2>Pedidos subidos com sucesso!</h2>
-                        <h2>Total: </h2>
+                        <h2>{status}</h2>
                     </div>
                     <div className="btns-modal">
                         <button onClick={() => {
                             setModal(false)
+                            window.location.reload()
                         }}>Fechar</button>
                     </div>
                 </Modal>

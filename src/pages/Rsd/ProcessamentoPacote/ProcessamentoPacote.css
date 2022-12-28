@@ -11,6 +11,7 @@
 
 .roteiro {
    width: 70%;
+   margin-right: 30px;
 }
 
 .agenda-processamento {
@@ -71,10 +72,18 @@
    flex-direction: column;
 }
 
+.tabela-agenda {
+   width: 100%;
+}
+
 #comentario {
    padding: 1rem;
 }
 
 .titulo-modal-agenda {  
    margin: 1rem;
+}
+
+.tabela-arquivos {
+   width: 100%;
 }

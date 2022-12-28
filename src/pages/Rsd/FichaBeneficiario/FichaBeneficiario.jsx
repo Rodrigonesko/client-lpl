@@ -203,21 +203,21 @@ const FichaBeneficiario = () => {
                                         placeholder="Telefone"
                                         name="fone1" id="fone1"
                                         defaultValue={fone1}
-                                        onChange={e => setFone1(e.target.value)}
+                                        onKeyUp={e => setFone1(e.target.value)}
                                     /></td>
                                     <td>Fone 2: <IMaskInput
                                         mask="(00)00000-0000"
                                         placeholder="Telefone"
                                         name="fone2" id="fone2"
-                                        defaultValue={fone1}
-                                        onChange={e => setFone2(e.target.value)}
+                                        defaultValue={fone2}
+                                        onKeyUp={e => setFone2(e.target.value)}
                                     /></td>
                                     <td>Fone 3: <IMaskInput
                                         mask="(00)00000-0000"
                                         placeholder="Telefone"
                                         name="fone3" id="fone3"
                                         defaultValue={fone3}
-                                        onChange={e => setFone3(e.target.value)}
+                                        onKeyUp={e => setFone3(e.target.value)}
                                     /></td>
                                     <td>Contrato/Empresa <input type="text" defaultValue={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} /></td>
                                 </tr>

@@ -209,8 +209,9 @@ const UrgenciaEmergenciaDetalhes = () => {
                                 setRetorno(e.target.value)
                             }}>
                                 <option value=""></option>
-                                <option value="Sim" selected={proposta.retorno === 'Sim'} >Sim</option>
-                                <option value="Não" selected={proposta.retorno === 'Não'} >Não</option>
+                                <option value="Sim, retificou" selected={proposta.retorno === 'Sim, retificou'} >Sim, retificou</option>
+                                <option value="Não aceitou retificar" selected={proposta.retorno === 'Não aceitou retificar'} >Não aceitou retificar</option>
+                                <option value="Sem sucesso de contato" selected={proposta.retorno === 'Sem sucesso de contato'} >Sem sucesso de contato</option>
                             </select>
                         </div>
                         <div className="box-u-e" >
