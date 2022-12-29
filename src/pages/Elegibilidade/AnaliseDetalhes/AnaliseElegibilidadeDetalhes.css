@@ -68,3 +68,18 @@
 .btn-detalhes-elegi button {
     margin: 0 10px;
 }
+
+.motivos-devolucao-container {
+    display: flex;
+    text-align: start;
+    justify-content: center;
+    align-items: center;
+}
+
+.motivos-devolucao-container div {
+    margin: 10px;
+}
+
+.motivos-devolucao-container div input {
+    margin-right: 4px;
+}

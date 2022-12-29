@@ -8,9 +8,6 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
 
     const [protocolos, setProtocolos] = useState([])
 
-    console.log(`O pacote é: ${verificaPacote}`);
-
-
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
 
@@ -26,6 +23,8 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
         let protocolosFiltrados = pedidos.filter((item, pos, array) => {
             return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
         })
+
+        console.log(protocolosFiltrados);
 
         setProtocolos(protocolosFiltrados)
     }, [])
@@ -46,9 +45,8 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                         <tbody>
                             {
                                 protocolos.map(e => {
-
+                                    console.log(finalizados, e.statusProtocolo);
                                     if (e.pacote === pacote) {
-                                        console.log(finalizados, e.statusPacote);
                                         if (finalizados && e.statusProtocolo === 'Finalizado') {
                                             return (
                                                 <>
@@ -65,7 +63,8 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                                                     </tr>
                                                 </>
                                             )
-                                        } 
+                                        }
+
                                         if (!finalizados && e.statusProtocolo !== 'Finalizado') {
                                             return (
                                                 <>

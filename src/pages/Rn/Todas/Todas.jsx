@@ -192,33 +192,33 @@ const Todas = () => {
             //         contato3 = moment(e.dataContato3).format('DD/MM/YYYY') + ' ' + e.horarioContato3
             //     }
 
-                // xls += "<tr>"
-                // if(e.dataConclusao === undefined){
-                //     xls += `<td></td>`
-                // } else {
-                //     xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
-                // }
-                // xls += `<td>${e.beneficiario}</td>`
-                // xls += `<td>${e.mo}</td>`
-                // xls += `<td>${e.proposta}</td>`
-                // xls += `<td>${e.vigencia}</td>`
-                // xls += `<td>${e.pedido}</td>`
-                // xls += `<td>${e.tipo}</td>`
-                // xls += `<td>${e.filial}</td>`
-                // xls += `<td>${e.idade}</td>`
-                // xls += `<td>${e.dataRecebimento}</td>`
-                // xls += `<td>${e.procedimento}</td>`
-                // xls += `<td>${e.doenca}</td>`
-                // xls += `<td>${e.cid}</td>`
-                // xls += `<td>${e.periodo}</td>`
-                // xls += `<td>${e.prc}</td>`
-                // xls += `<td>${e.telefones}</td>`
-                // xls += `<td>${e.email}</td>`
-                // xls += `<td>${e.contato1}</td>`
-                // xls += `<td>${e.contato2}</td>`
-                // xls += `<td>${e.contato3}</td>`
-                // xls += `<td>${e.observacoes}</td>`
-                // xls += `</tr>`
+            // xls += "<tr>"
+            // if(e.dataConclusao === undefined){
+            //     xls += `<td></td>`
+            // } else {
+            //     xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+            // }
+            // xls += `<td>${e.beneficiario}</td>`
+            // xls += `<td>${e.mo}</td>`
+            // xls += `<td>${e.proposta}</td>`
+            // xls += `<td>${e.vigencia}</td>`
+            // xls += `<td>${e.pedido}</td>`
+            // xls += `<td>${e.tipo}</td>`
+            // xls += `<td>${e.filial}</td>`
+            // xls += `<td>${e.idade}</td>`
+            // xls += `<td>${e.dataRecebimento}</td>`
+            // xls += `<td>${e.procedimento}</td>`
+            // xls += `<td>${e.doenca}</td>`
+            // xls += `<td>${e.cid}</td>`
+            // xls += `<td>${e.periodo}</td>`
+            // xls += `<td>${e.prc}</td>`
+            // xls += `<td>${e.telefones}</td>`
+            // xls += `<td>${e.email}</td>`
+            // xls += `<td>${e.contato1}</td>`
+            // xls += `<td>${e.contato2}</td>`
+            // xls += `<td>${e.contato3}</td>`
+            // xls += `<td>${e.observacoes}</td>`
+            // xls += `</tr>`
 
             //     return (
             //         {
@@ -317,6 +317,14 @@ const Todas = () => {
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
         XLSX.writeFile(wb, 'reportRn.xlsx')
 
+    }
+
+    const reportGerencial = () => {
+        try {
+            
+        } catch (error) {
+            
+        }
     }
 
 

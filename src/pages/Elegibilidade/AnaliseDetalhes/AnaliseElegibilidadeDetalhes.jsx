@@ -10,6 +10,9 @@ import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 import AgendaElegibilidade from "./AgendaElegibilidade";
 import Modal from 'react-modal'
 import ModalEnviarUnder from "./Modals/ModalEnviarUnder";
+import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
+import ModalDevolucao from "./Modals/ModalDevolucao";
+
 Modal.setAppElement('#root')
 
 const AnaliseElegibilidadeDetalhes = () => {
@@ -177,10 +180,18 @@ const AnaliseElegibilidadeDetalhes = () => {
                             <button className="btn-padrao-verde" onClick={() => {
                                 setModalEnviarUnder(true)
                             }} >Enviar Under</button>
-                            <button className="btn-padrao-vermelho">Enviar Cancelamento</button>
-                            <button className="btn-padrao-amarelo">1° Devolução</button>
-                            <button className="btn-padrao-amarelo">2° Devolução</button>
-                            <button className="btn-padrao-amarelo">3° Devolução</button>
+                            <button className="btn-padrao-vermelho" onClick={() => {
+                                setModalEnviarCancelamento(true)
+                            }} >Enviar Cancelamento</button>
+                            <button className="btn-padrao-amarelo" onClick={() => {
+                                setModalDevolucao(true)
+                            }} >1° Devolução</button>
+                            <button className="btn-padrao-amarelo" onClick={() => {
+                                setModalDevolucao(true)
+                            }} >2° Devolução</button>
+                            <button className="btn-padrao-amarelo" onClick={() => {
+                                setModalDevolucao(true)
+                            }} >3° Devolução</button>
                             <button className="btn-padrao-vermelho">Cancelar</button>
                         </div>
                     </div>
@@ -206,6 +217,24 @@ const AnaliseElegibilidadeDetalhes = () => {
                     className='modal-content'
                 >
                     <ModalEnviarUnder setModal={setModalEnviarUnder} ></ModalEnviarUnder>
+                </Modal>
+                <Modal
+                    isOpen={modalEnviarCancelamento}
+                    onRequestClose={() => setModalEnviarCancelamento(false)}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <ModalEnviarCancelamento setModal={setModalEnviarCancelamento} ></ModalEnviarCancelamento>
+                </Modal>
+                <Modal
+                    isOpen={modalDevolucao}
+                    onRequestClose={() => setModalDevolucao(false)}
+                    contentLabel="Exemplo"
+                    overlayClassName='modal-overlay'
+                    className='modal-content'
+                >
+                    <ModalDevolucao setModal={setModalDevolucao} ></ModalDevolucao>
                 </Modal>
             </section>
         </>
