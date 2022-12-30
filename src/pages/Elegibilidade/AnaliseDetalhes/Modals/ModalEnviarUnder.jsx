@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import $ from 'jquery'
 import Axios from 'axios'
+import { useParams } from "react-router-dom";
 
 const ModalEnviarUnder = ({ setModal }) => {
+
+    const {id} = useParams()
 
     const [erroSistema, setErroSistema] = useState(false)
 
@@ -14,9 +17,18 @@ const ModalEnviarUnder = ({ setModal }) => {
         }
     }
 
-    const enviarUnder = () => {
+    const enviarUnder = async () => {
         try {
-            console.log(erroSistema);
+            
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/enviarUnder`, {
+                id,
+                erroSistema
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
+
         } catch (error) {
             console.log(error);
         }

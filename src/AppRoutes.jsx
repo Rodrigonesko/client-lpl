@@ -87,6 +87,10 @@ import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
 import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 
+/* Provisório */
+
+import ContatosProvisorio from "./pages/Provisorio/ContatosProvisorio";
+
 import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -306,6 +310,12 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/urgenciaEmergencia/producao" element={<ProtectedRoute>
                     <UrgenciaEmergenciaProducao />
+                </ProtectedRoute>} />
+
+                {/* provisorio */}
+
+                <Route path="/provisorio/contatos" element={<ProtectedRoute>
+                    <ContatosProvisorio />
                 </ProtectedRoute>} />
 
             </Routes>
