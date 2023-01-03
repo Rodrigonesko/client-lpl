@@ -31,9 +31,20 @@ const ContatosProvisorio = () => {
             let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
 
             result.forEach(e => {
-                let telefone = `(${e.NUM_DDD_CEL}) ${e.NUM_CEL}`
-                let proposta = e.NUM_PROPOSTA
-                let nome = e.NOME_ASSOCIADO
+
+                let telefone = e.Telefone.toString();
+
+                let numero = telefone.slice(2)
+
+                let ddd = telefone.slice(0, 2)
+
+                telefone = `(${ddd}) ${numero}`
+
+                //let telefone = `(${e.NUM_DDD_CEL}) ${e.NUM_CEL}`
+                let mo = e.MO
+                let nome = e.NOME
+
+                console.log(telefone,ddd, numero , mo, nome);
 
                 let data = new Date()
 
@@ -44,8 +55,8 @@ const ContatosProvisorio = () => {
                 let mes = dataArr[1]
                 let ano = dataArr[2]
 
-                csv += `${mes}/${ano} - ${proposta} - ${nome}`
-                csv += `;${mes}/${ano} - ${proposta} - ${nome}`
+                csv += `${mes}/${ano} - ${mo} - ${nome}`
+                csv += `;${mes}/${ano} - ${mo} - ${nome}`
                 csv += `;;;;;;;;;;;;;;;;;;;;;;;;;;`
                 csv += `;* myContacts;`
                 csv += `; ${telefone}`

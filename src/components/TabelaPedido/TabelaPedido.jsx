@@ -177,7 +177,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                 <tr>
                                                     <td><input type="text" name="" id="" className="numero-pedido medium-width" defaultValue={e.numero} onChange={(element) => { e.numero = element.target.value }} /></td>
                                                     <td>{e.status}</td>
-                                                    <td>{Number(e.valorApresentado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                                                    <td><input type="text" name="" id="" defaultValue={e.valorApresentado} onChange={(element) => { e.valorApresentado = element.target.value }} /></td>
                                                     <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
                                                     <td><input type="text" name="" id="" className="cnpj-pedido" defaultValue={e.cnpj} onKeyUp={(element) => {
                                                         e.cnpj = element.target.value

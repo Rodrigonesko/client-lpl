@@ -159,6 +159,24 @@ const FichaBeneficiario = () => {
         }
     }
 
+    const devolverPacote = async e => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/devolver`, {
+                pacote: e
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         buscarMo()
     }, [])
@@ -298,7 +316,7 @@ const FichaBeneficiario = () => {
                             <tbody>
                                 {
                                     pacotes.map(e => {
-                                        if (e.statusPacote !== 'Não iniciado' && e.statusPacote !== 'Finalizado' && e.statusPacote !== 'Cancelado' && e.statusPacote !== 'Comprovante Correto' ) {
+                                        if (e.statusPacote !== 'Não iniciado' && e.statusPacote !== 'Finalizado' && e.statusPacote !== 'Cancelado' && e.statusPacote !== 'Comprovante Correto') {
                                             return (
                                                 <>
                                                     <tr>
@@ -307,7 +325,7 @@ const FichaBeneficiario = () => {
                                                         <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
                                                         <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
-                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
+                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link> <button onClick={() => { devolverPacote(e.pacote) }} className="botao-padrao-cinza">Devolvido Amil</button></td>
                                                     </tr>
                                                     <tr className="none teste">
                                                         <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} finalizados={false} >

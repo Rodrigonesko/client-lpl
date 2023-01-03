@@ -115,6 +115,9 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                         </SubMenu>
+                        <SubMenu title='Contatos Reembolso'>
+                            <MenuItem><Link to='/provisorio/contatos'>Gerar contatos</Link></MenuItem>
+                        </SubMenu>
                     </Menu>
                 </ProSidebar>
 

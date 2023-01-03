@@ -3,6 +3,7 @@ import { FaAngleDown } from "react-icons/fa";
 import moment from "moment/moment";
 import TabelaPedido from "../TabelaPedido/TabelaPedido";
 import $ from 'jquery'
+import Axios from 'axios'
 
 const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados, todos }) => {
 
@@ -15,6 +16,27 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
             $(trPedidos).toggle('fast')
         } else {
             $(trPedidos.parentElement.nextSibling).toggle('fast')
+        }
+    }
+
+    const devolverProtocolo = async (protocolo, pacote) => {
+        try {
+
+            console.log(protocolo, pacote);
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/devolver`, {
+                protocolo,
+                pacote
+            }, {
+                withCredentials: true
+            })
+
+            if(result.status === 200){
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -40,6 +62,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                                 <th>Data Solicitação</th>
                                 <th>Data Pagamento</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,6 +96,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                                                         <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
                                                         <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
                                                         <td>{e.statusProtocolo}</td>
+                                                        <td><button onClick={() => devolverProtocolo(e.protocolo, e.pacote)} className="botao-padrao-cinza" >Devolvido Amil</button></td>
                                                     </tr>
                                                     <tr className="none">
                                                         <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote} finalizados={finalizados} todos={todos} >

@@ -7,17 +7,32 @@ import moment from "moment/moment";
 const RelatorioRsd = () => {
 
     const [msg, setMsg] = useState('')
-    const [file, setFile] = useState()
+    const [aPartir, setAPartir] = useState('')
+    const [ate, setAte] = useState('')
 
     const gerarRelatorio = async () => {
         try {
 
             setMsg('Buscando Dados...')
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
+            let result
 
-            console.log(result);
+            if (aPartir === '' && ate === '') {
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
+            } 
 
+            if (aPartir === '' && ate !== '') {
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, {withCredentials: true})
+            }
+
+            if (aPartir !== '' && ate === '') {
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
+            }
+            
+            if(aPartir !== '' && ate !== '') {
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${ate}`, {withCredentials: true})
+            }
+            
             let xls = '\ufeff'
             xls += "<table border='1'>"
             xls += "<thead><tr>"
@@ -68,7 +83,7 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.cnpj}</td>`
                 xls += `<td>${e.clinica}</td>`
                 xls += `<td>${e.contratoEmpresa}</td>`
-                if(e.dataSelo == undefined){
+                if (e.dataSelo == undefined) {
                     xls += `<td></td>`
                 } else {
                     xls += `<td>${moment(e.dataSelo).format('DD/MM/YYYY')}</td>`
@@ -106,6 +121,16 @@ const RelatorioRsd = () => {
                         Relatório RSD
                     </div>
                     <div>
+                        <div>
+                            <label htmlFor="">A partir de: </label>
+                            <input type="date" name="" id="" onChange={e => setAPartir(e.target.value)} />
+                        </div>
+                        <div>
+                            <label htmlFor="">Até: </label>
+                            <input type="date" name="" id="" onChange={e => setAte(e.target.value)} />
+                        </div>
+                    </div>
+                    <div>
                         <button onClick={gerarRelatorio} >Gerar Relatório</button>
                     </div>
                     <div>
@@ -115,7 +140,7 @@ const RelatorioRsd = () => {
                     </div>
                 </div>
             </section>
-            
+
         </>
     )
 }
