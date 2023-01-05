@@ -10,6 +10,10 @@ import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
 import { IMaskInput } from "react-imask";
 import $ from 'jquery'
+import Modal from 'react-modal'
+
+Modal.setAppElement('#root')
+
 
 const FichaBeneficiario = () => {
 
@@ -29,6 +33,8 @@ const FichaBeneficiario = () => {
     const [pedidos, setPedidos] = useState([])
     const [protocolos, setProtocolos] = useState([])
     const [pacotes, setPacotes] = useState([])
+
+    const [modalInativarPacote, setModalInativarPacote] = useState(false)
 
     const buscarMo = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
@@ -325,7 +331,7 @@ const FichaBeneficiario = () => {
                                                         <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
                                                         <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
-                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link> <button onClick={() => { devolverPacote(e.pacote) }} className="botao-padrao-cinza">Devolvido Amil</button></td>
+                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link> <button onClick={() => { devolverPacote(e.pacote) }} className="botao-padrao-cinza">Inativar</button></td>
                                                     </tr>
                                                     <tr className="none teste">
                                                         <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} finalizados={false} >
@@ -342,6 +348,27 @@ const FichaBeneficiario = () => {
                     </div>
                 </div>
             </section>
+            <Modal
+                isOpen={modalInativarPacote}
+                onRequestClose={() => { setModalInativarPacote(false) }}
+                contentLabel="Exemplo"
+                overlayClassName='modal-overlay'
+                className='modal-content'
+            >
+                <div className="title titulo-modal-agenda">
+                    <h2>Motivo de inativação</h2>
+                </div>
+                <div>
+                    <select name="" id="">
+                        <option value="devolvido">devolvido</option>
+                        <option value="duplicidade">duplicidade</option>
+                    </select>
+                </div>
+                <div>
+                    <button>Inativar</button>
+                </div>
+
+            </Modal>
         </>
     )
 }
