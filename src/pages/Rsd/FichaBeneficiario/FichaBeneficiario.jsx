@@ -35,6 +35,7 @@ const FichaBeneficiario = () => {
     const [pacotes, setPacotes] = useState([])
 
     const [modalInativarPacote, setModalInativarPacote] = useState(false)
+    const [inativarPacote, setInativarPacote] = useState('')
 
     const buscarMo = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
@@ -168,10 +169,13 @@ const FichaBeneficiario = () => {
     const devolverPacote = async e => {
         try {
 
+            const motivoInativo = document.getElementById('motivo-inativo-pacote').value
+
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/devolver`, {
-                pacote: e
+                pacote: e,
+                motivoInativo
             }, {
-                withCredentials: true
+                withCredentials: true,
             })
 
             if (result.status === 200) {
@@ -331,7 +335,10 @@ const FichaBeneficiario = () => {
                                                         <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
                                                         <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
-                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link> <button onClick={() => { devolverPacote(e.pacote) }} className="botao-padrao-cinza">Inativar</button></td>
+                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link> <button onClick={() => {
+                                                            setModalInativarPacote(true)
+                                                            setInativarPacote(e.pacote)
+                                                        }} className="botao-padrao-cinza">Inativar</button></td>
                                                     </tr>
                                                     <tr className="none teste">
                                                         <TabelaProtocolo pedidos={pedidos} pacote={e.pacote} verificaPacote={true} finalizados={false} >
@@ -359,15 +366,16 @@ const FichaBeneficiario = () => {
                     <h2>Motivo de inativação</h2>
                 </div>
                 <div>
-                    <select name="" id="">
+                    <select name="motivo-inativo-pacote" id="motivo-inativo-pacote">
                         <option value="devolvido">devolvido</option>
                         <option value="duplicidade">duplicidade</option>
                     </select>
                 </div>
                 <div>
-                    <button>Inativar</button>
+                    <button value={inativarPacote} onClick={e => {
+                        devolverPacote(e.target.value)
+                    }} >Inativar</button>
                 </div>
-
             </Modal>
         </>
     )

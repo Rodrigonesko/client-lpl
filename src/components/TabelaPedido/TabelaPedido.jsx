@@ -11,18 +11,24 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
 
     const [prioridade, setPrioridade] = useState(false)
     const [modalSalvar, setModalSalvar] = useState(false)
+    const [modalInativar, setModalInativar] = useState(false)
+    const [inativarPedido, setInativarPedido] = useState('')
 
     const devolvidoAmil = async e => {
         try {
+
+            const motivoInativo = document.getElementById('motivo-inativo-pedido').value
+
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/devolverAmil`, {
-                pedido: e
+                pedido: e,
+                motivoInativo
             }, {
                 withCredentials: true
             })
 
-            console.log(result);
-
-            window.location.reload()
+            if (result.status === 200) {
+                window.location.reload()
+            }
 
         } catch (error) {
             console.log(error);
@@ -192,7 +198,10 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                                 <td><button className="btn-padrao-verde" onClick={(element) => {
                                                                     editarPedido(e._id, e.numero, e.cnpj, e.clinica, e.nf, e.valorApresentado, e.valorReembolsado, element)
                                                                 }} >Salvar</button></td>
-                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
+                                                                <td><button className="botao-padrao-cinza" onClick={() => {
+                                                                    setModalInativar(true)
+                                                                    setInativarPedido(e.numero)
+                                                                }} >Inativar</button></td>
                                                             </>
                                                         ) : (
                                                             <td>
@@ -230,7 +239,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                         e.fase !== 'Finalizado' ? (
                                                             <>
                                                                 <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
-                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Devolvido Amil</button></td>
+                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Inativar</button></td>
                                                             </>
                                                         ) : (
                                                             <td>
@@ -279,6 +288,28 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                     <button onClick={() => {
                         setModalSalvar(false)
                     }}>Fechar</button>
+                </div>
+            </Modal>
+            <Modal
+                isOpen={modalInativar}
+                onRequestClose={() => { setModalInativar(false) }}
+                contentLabel="Exemplo"
+                overlayClassName='modal-overlay'
+                className='modal-content'
+            >
+                <div className="title titulo-modal-agenda">
+                    <h2>Motivo de inativação</h2>
+                </div>
+                <div>
+                    <select name="motivo-inativo-pedido" id="motivo-inativo-pedido">
+                        <option value="devolvido">devolvido</option>
+                        <option value="duplicidade">duplicidade</option>
+                    </select>
+                </div>
+                <div>
+                    <button value={inativarPedido} onClick={e => {
+                        devolvidoAmil(e.target.value)
+                    }} >Inativar</button>
                 </div>
             </Modal>
         </>
