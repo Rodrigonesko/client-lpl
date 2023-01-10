@@ -80,14 +80,6 @@ const Agendar = () => {
 
             setPropostas(result.data.propostas)
 
-            // let qtd = 0
-
-            // propostas.forEach(e => {
-            //     if (e.status != 'Concluido' && e.agendado !== 'agendado' && e.status !== 'Cancelado') {
-            //         qtd++
-            //     }
-            // })
-
             setQtdNaoAgendado(result.data.total)
 
         } catch (error) {
@@ -101,8 +93,6 @@ const Agendar = () => {
 
             setEnfermeiros(result.data.enfermeiros)
 
-            console.log(enfermeiros);
-
         } catch (error) {
             console.log(error);
         }
@@ -111,8 +101,6 @@ const Agendar = () => {
     const gerarHorarios = async () => {
         try {
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/gerarHorarios`, { dataGerar }, { withCredentials: true })
-
-            console.log(result);
 
             if (result.status === 200) {
                 setMsg('Horario gerados com sucesso!')
@@ -169,8 +157,6 @@ const Agendar = () => {
         try {
             console.log(beneficiario, enfermeiro, dataEntrevista);
             let horario = document.getElementById('horario').value
-
-            console.log(horario);
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { beneficiario: beneficiario, enfermeiro: enfermeiro, data: dataEntrevista, horario: horario }, { withCredentials: true })
 

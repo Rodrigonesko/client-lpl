@@ -122,7 +122,7 @@ const EntrevistasRealizadas = () => {
                                             <td>{e.nome}</td>
                                             <td>{e.cpf}</td>
                                             <td>{e.idade}</td>
-                                            <td><Link to={`/entrevistas/propostas/editar/${e._id}`}>Editar</Link> <button onClick={() => { gerarPdf(e.proposta, e.nome) }} >PDF</button> </td>
+                                            <td><Link to={`/entrevistas/propostas/editar/${e._id}`} className='btn-padrao-azul' >Editar</Link> <button onClick={() => { gerarPdf(e.proposta, e.nome) }} className='btn-padrao-vermelho' >PDF</button> </td>
                                         </tr>
                                     )
                                 })

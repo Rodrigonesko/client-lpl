@@ -3,6 +3,8 @@ import Axios from 'axios'
 import * as XLSX from "xlsx";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment/moment";
+import RelatorioQualidadeLigacoes from "./QualidadeLigacoes/RelatorioQualidadeLigacoes";
+import './RelatorioRsd.css'
 
 const RelatorioRsd = () => {
 
@@ -22,11 +24,11 @@ const RelatorioRsd = () => {
             } 
 
             if (aPartir === '' && ate !== '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, {withCredentials: true})
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, {withCredentials: true})
             }
 
             if (aPartir !== '' && ate === '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, { withCredentials: true })
             }
             
             if(aPartir !== '' && ate !== '') {
@@ -58,6 +60,8 @@ const RelatorioRsd = () => {
             xls += "<th>Marcação para Dossie</th>"
             xls += "<th>Número Nota Fiscal</th>"
             xls += "<th>Data Conclusão Pedido</th>"
+            xls += "<th>Responsável</th>"
+            xls += "<th>Quem anexou</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -72,7 +76,7 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.statusGerencial}</td>`
                 xls += `<td>${moment(e.createdAt).format('MM/YYYY')}</td>`
                 xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
-                xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.dataConclusao}</td>`
                 xls += `<td>${e.operador}</td>`
                 xls += `<td>${e.protocolo}</td>`
                 xls += `<td>${e.numero}</td>`
@@ -83,7 +87,7 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.cnpj}</td>`
                 xls += `<td>${e.clinica}</td>`
                 xls += `<td>${e.contratoEmpresa}</td>`
-                if (e.dataSelo == undefined) {
+                if (e.dataSelo === undefined) {
                     xls += `<td></td>`
                 } else {
                     xls += `<td>${moment(e.dataSelo).format('DD/MM/YYYY')}</td>`
@@ -91,7 +95,15 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.formaPagamento}</td>`
                 xls += `<td>${e.prioridadeDossie}</td>`
                 xls += `<td>${e.nf}</td>`
-                xls += `<td>${e.dataConclusao}</td>`
+
+                if(e.dataConclusao === undefined){
+                    xls += `<td></td>`
+                } else {
+                    xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+                }
+                xls += `<td>${e.analista}</td>`
+                xls += `<td>${e.quemAnexou}</td>`
+
                 xls += `</tr>`
             })
 
@@ -115,12 +127,12 @@ const RelatorioRsd = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section>
-                <div>
+            <section className="section-relatorio-rsd">
+                <div className="container-relatorio-rsd">
                     <div className="title">
-                        Relatório RSD
+                        <h3>Relatório RSD</h3>
                     </div>
-                    <div>
+                    <div className="datas-relatorio-rsd">
                         <div>
                             <label htmlFor="">A partir de: </label>
                             <input type="date" name="" id="" onChange={e => setAPartir(e.target.value)} />
@@ -131,7 +143,7 @@ const RelatorioRsd = () => {
                         </div>
                     </div>
                     <div>
-                        <button onClick={gerarRelatorio} >Gerar Relatório</button>
+                        <button className="btn-padrao-azul" onClick={gerarRelatorio} >Gerar Relatório</button>
                     </div>
                     <div>
                         {
@@ -139,6 +151,7 @@ const RelatorioRsd = () => {
                         }
                     </div>
                 </div>
+                {/* <RelatorioQualidadeLigacoes></RelatorioQualidadeLigacoes> */}
             </section>
 
         </>

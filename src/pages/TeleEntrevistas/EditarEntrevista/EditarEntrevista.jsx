@@ -22,6 +22,7 @@ const EditarEntrevista = () => {
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
     const [houveDivergencia, setHouveDivergencia] = useState('')
+    const [dataNascimento, setDataNascimento] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -49,9 +50,8 @@ const EditarEntrevista = () => {
             setDadosEntrevista(result.data.proposta)
 
             setHouveDivergencia(result.data.proposta.houveDivergencia)
-            console.log(result.data.proposta.houveDivergencia);
-
-            console.log(result);
+            
+            setDataNascimento(result.data.proposta.dataNascimento)
 
         } catch (error) {
             console.log(error);
@@ -69,7 +69,7 @@ const EditarEntrevista = () => {
     const salvar = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento }, { withCredentials: true })
 
             if (result.status === 200) {
                 openModal()
@@ -113,7 +113,7 @@ const EditarEntrevista = () => {
                             </tr>
                             <tr>
                                 <td>Data Nascimento</td>
-                                <td>{moment(dadosEntrevista.dataNascimento).format('DD/MM/YYYY')}</td>
+                                <td><input type="text" name="" id="" defaultValue={dadosEntrevista.dataNascimento} onChange={e=>setDataNascimento(e.target.value)} /></td>
                             </tr>
                         </table>
                     </div>
