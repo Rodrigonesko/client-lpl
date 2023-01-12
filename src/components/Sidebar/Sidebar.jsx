@@ -106,6 +106,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
                             <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>
                             <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
+                            <MenuItem><Link to='/Rsd/UploadQuarentena'>Upload Quarentena</Link></MenuItem>
                             <MenuItem><Link to='/rsd/Relatorio'>Relatório</Link></MenuItem>
                             <MenuItem><Link to='/rsd/agd'>AGD</Link></MenuItem>
                         </SubMenu>
@@ -117,6 +118,7 @@ const Sidebar = () => {
                         </SubMenu>
                         <SubMenu title='Contatos Reembolso'>
                             <MenuItem><Link to='/provisorio/contatos'>Gerar contatos</Link></MenuItem>
+                            <MenuItem><Link to='/provisorio/contatos2'>Gerar contatos2</Link></MenuItem>
                         </SubMenu>
                         <SubMenu title='Reembolso Whatsapp'>
                             <MenuItem><Link to='/whatsapp/aenviar'>A Enviar</Link></MenuItem>

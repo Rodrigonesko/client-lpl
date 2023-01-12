@@ -373,7 +373,7 @@ const Agendar = () => {
                     <div className="gerar-horarios">
                         <label htmlFor="">Selecionar dia para entrevistas</label>
                         <input type="date" name="" id="" onChange={e => setDataGerar(e.target.value)} />
-                        <button className="btn-gerar-horarios" onClick={gerarHorarios} >Gerar</button>
+                        <button className="btn-padrao-azul" onClick={gerarHorarios} >Gerar</button>
                     </div>
                     <div className="agendar">
                         <select name="nome" id="nome" onChange={e => setBeneficiario(e.target.value)} >
@@ -425,7 +425,7 @@ const Agendar = () => {
                                 })
                             }
                         </select>
-                        <button className="btn-agendar" onClick={agendar}>Agendar</button>
+                        <button className="btn-padrao-azul" onClick={agendar}>Agendar</button>
                     </div>
                     <div className="title">
                         <h3>Não Agendados: {qtdNaoAgendado}</h3>
@@ -453,7 +453,7 @@ const Agendar = () => {
                                     propostas.map(e => {
                                         return (
                                             <tr key={e._id}>
-                                                <td><input type="date" name="" id="" defaultValue={e.vigencia} /><button disabled={accessLevel != 'false' ? (false) : (true)} onClick={
+                                                <td><input type="date" name="" id="" defaultValue={e.vigencia} /><button className="btn-padrao-amarelo" disabled={accessLevel != 'false' ? (false) : (true)} onClick={
                                                     item => {
                                                         alterarVigencia(item.target.parentElement.firstChild.value, e._id)
                                                     }
@@ -463,17 +463,20 @@ const Agendar = () => {
                                                 <td>{e.dataNascimento}</td>
                                                 <td>{e.sexo}</td>
                                                 <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
-                                                <td><button className="btn-cancelar" onClick={() => {
-                                                    setPropostaCancelar(e.proposta)
-                                                    setNomeCancelar(e.nome)
-                                                    setIdCancelar(e._id)
-                                                    openModalCancelar()
-                                                }}>Cancelar</button><button className="btn-cancelar" onClick={() => {
-                                                    setPropostaExcluir(e.proposta)
-                                                    setNomeExcluir(e.nome)
-                                                    setIdExcluir(e._id)
-                                                    openModalExcluir()
-                                                }}>Excluir</button></td>
+                                                <td>
+                                                    <button className="btn-padrao-vermelho" onClick={() => {
+                                                        setPropostaCancelar(e.proposta)
+                                                        setNomeCancelar(e.nome)
+                                                        setIdCancelar(e._id)
+                                                        openModalCancelar()
+                                                    }}>Cancelar</button>
+                                                    <span> </span>
+                                                    <button className="btn-padrao-vermelho" onClick={() => {
+                                                        setPropostaExcluir(e.proposta)
+                                                        setNomeExcluir(e.nome)
+                                                        setIdExcluir(e._id)
+                                                        openModalExcluir()
+                                                    }}>Excluir</button></td>
                                                 <td><Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link></td>
                                             </tr>
                                         )

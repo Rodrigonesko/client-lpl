@@ -7,6 +7,7 @@ import AuthContext from "../../../context/AuthContext";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
+import RoteiroRsd from "./RoteiroRsd/RoteiroRsd";
 import Modal from 'react-modal'
 import './ProcessamentoPacote.css'
 import moment from "moment";
@@ -435,7 +436,6 @@ const ProcessamentoPacote = () => {
                                             <td>1°</td>
                                             <td>
                                                 <p>Houve sucesso no Contato com o beneficiário? {numeroTentativa}</p>
-
                                                 {
                                                     contatoSim ? (
                                                         <>
@@ -470,7 +470,6 @@ const ProcessamentoPacote = () => {
 
                                                         ) : (
                                                             numeroTentativa === '3° Tentativa' ? (
-
                                                                 <>
                                                                     <input type="radio" name="contato-beneficiario" id="contato-beneficiario-nao" value={`Não`} onClick={e => {
                                                                         setHouveSucesso(e.target.value)

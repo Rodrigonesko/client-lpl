@@ -3,7 +3,7 @@ import Axios from 'axios'
 import * as XLSX from "xlsx";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment/moment";
-import RelatorioQualidadeLigacoes from "./QualidadeLigacoes/RelatorioQualidadeLigacoes";
+import RelatorioQuarentena from "./Quarentena/RelatorioQuarentena";
 import './RelatorioRsd.css'
 
 const RelatorioRsd = () => {
@@ -21,20 +21,20 @@ const RelatorioRsd = () => {
 
             if (aPartir === '' && ate === '') {
                 result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
-            } 
+            }
 
             if (aPartir === '' && ate !== '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, {withCredentials: true})
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, { withCredentials: true })
             }
 
             if (aPartir !== '' && ate === '') {
                 result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, { withCredentials: true })
             }
-            
-            if(aPartir !== '' && ate !== '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${ate}`, {withCredentials: true})
+
+            if (aPartir !== '' && ate !== '') {
+                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${ate}`, { withCredentials: true })
             }
-            
+
             let xls = '\ufeff'
             xls += "<table border='1'>"
             xls += "<thead><tr>"
@@ -62,6 +62,7 @@ const RelatorioRsd = () => {
             xls += "<th>Data Conclusão Pedido</th>"
             xls += "<th>Responsável</th>"
             xls += "<th>Quem anexou</th>"
+            xls += "<th>Fila</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -96,13 +97,14 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.prioridadeDossie}</td>`
                 xls += `<td>${e.nf}</td>`
 
-                if(e.dataConclusao === undefined){
+                if (e.dataConclusao === undefined) {
                     xls += `<td></td>`
                 } else {
                     xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
                 }
                 xls += `<td>${e.analista}</td>`
                 xls += `<td>${e.quemAnexou}</td>`
+                xls += `<td>${e.fila}</td>`
 
                 xls += `</tr>`
             })

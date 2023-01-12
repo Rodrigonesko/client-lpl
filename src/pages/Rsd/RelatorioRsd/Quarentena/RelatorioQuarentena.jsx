@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Axios from 'axios'
 import moment from 'moment/moment'
 
-const RelatorioQualidadeLigacoes = () => {
+const RelatorioQuarentena = () => {
 
     const [msg, setMsg] = useState('')
     const [aPartir, setAPartir] = useState('')
@@ -101,4 +101,4 @@ const RelatorioQualidadeLigacoes = () => {
     )
 }
 
-export default RelatorioQualidadeLigacoes
+export default RelatorioQuarentena

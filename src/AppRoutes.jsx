@@ -24,6 +24,7 @@ import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/
 
 import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
 import UploadRsd from "./pages/Rsd/UploadRsd/UploadRsd";
+import UploadQuarentena from "./pages/Rsd/Upload/UploadQuarentena";
 import FichaBeneficiario from "./pages/Rsd/FichaBeneficiario/FichaBeneficiario";
 import EditarPedido from "./pages/Rsd/EditarPedido/EditarPedido";
 import CriarPedido from "./pages/Rsd/CriarPedido/CriarPedido";
@@ -97,6 +98,7 @@ import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 /* Provisório */
 
 import ContatosProvisorio from "./pages/Provisorio/ContatosProvisorio";
+import ContatosProvisorios2 from "./pages/Provisorio/ContatosProvisorios2";
 
 import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
@@ -232,6 +234,9 @@ const AppRoutes = () => {
                 <Route exact path="/rsd/UploadArquivo" element={<ProtectedRoute>
                     <UploadRsd />
                 </ProtectedRoute>} />
+                <Route exact path="/rsd/UploadQuarentena" element={<ProtectedRoute>
+                    <UploadQuarentena />
+                </ProtectedRoute>} />
                 <Route path="/rsd/FichaBeneficiario/:mo" element={<ProtectedRoute>
                     <FichaBeneficiario />
                 </ProtectedRoute>} />
@@ -334,6 +339,9 @@ const AppRoutes = () => {
 
                 <Route path="/provisorio/contatos" element={<ProtectedRoute>
                     <ContatosProvisorio />
+                </ProtectedRoute>} />
+                <Route path="/provisorio/contatos2" element={<ProtectedRoute>
+                    <ContatosProvisorios2 />
                 </ProtectedRoute>} />
 
             </Routes>
