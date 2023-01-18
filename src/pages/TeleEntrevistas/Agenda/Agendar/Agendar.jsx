@@ -144,8 +144,6 @@ const Agendar = () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horarios/disponiveis`, { withCredentials: true })
 
-            console.log(result);
-
             setHorarios(result.data.obj)
 
         } catch (error) {

@@ -1,14 +1,16 @@
 import React, { useState, useContext } from "react";
 import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
-import { RiAlarmWarningLine } from 'react-icons/ri'
+import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
-import { Link } from 'react-router-dom'
-import $ from 'jquery'
+import { Link, useNavigate } from 'react-router-dom'
+import Axios from 'axios'
 import AuthContext from "../../context/AuthContext";
 import 'react-pro-sidebar/dist/css/styles.css'
 
 const Sidebar = () => {
+
+    const navigate = useNavigate()
 
     const [isOpen, setIsOpen] = useState(true)
 
@@ -17,10 +19,18 @@ const Sidebar = () => {
     const toggleMenu = () => {
         console.log('toggle');
         setIsOpen(!isOpen)
-        // $('#sidebar').toggle('fast')
         let side = document.getElementById('sidebar')
         side.classList.toggle('slidein')
         side.classList.toggle('slideout')
+    }
+
+    const logout = async () => {
+        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
+
+        if (result.status === 200) {
+            navigate('/login')
+        }
+
     }
 
     return (
@@ -125,7 +135,9 @@ const Sidebar = () => {
                             <MenuItem><Link to='/whatsapp/enviado'>Enviado e não finalizado</Link></MenuItem>
                             <MenuItem><Link to='/whatsapp/upload'>Upload</Link></MenuItem>
                         </SubMenu>
-
+                        <MenuItem icon={<RiLogoutBoxRLine />}>
+                            <a onClick={logout}>Sair</a>
+                        </MenuItem>
                     </Menu>
                 </ProSidebar>
 
