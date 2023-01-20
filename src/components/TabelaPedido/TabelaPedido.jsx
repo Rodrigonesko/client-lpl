@@ -20,7 +20,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
             const motivoInativo = document.getElementById('motivo-inativo-pedido').value
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/devolverAmil`, {
-                pedido: e,
+                id: e,
                 motivoInativo
             }, {
                 withCredentials: true
@@ -43,9 +43,9 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                 withCredentials: true
             })
 
-            console.log(result);
-
-            window.location.reload()
+            if (result.status === 200) {
+                window.location.reload()
+            }
 
         } catch (error) {
             console.log(error);
@@ -55,16 +55,12 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
     const definirPrioridadeDossie = async (pedido, prioridade) => {
         try {
 
-            console.log(pedido, prioridade.target.checked);
-
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/prioridadeDossie`, {
                 pedido: pedido,
                 prioridade: prioridade.target.checked
             }, {
                 withCredentials: true
             })
-
-            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -200,7 +196,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                                 }} >Salvar</button></td>
                                                                 <td><button className="botao-padrao-cinza" onClick={() => {
                                                                     setModalInativar(true)
-                                                                    setInativarPedido(e.numero)
+                                                                    setInativarPedido(e._id)
                                                                 }} >Inativar</button></td>
                                                             </>
                                                         ) : (
@@ -239,7 +235,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                         e.fase !== 'Finalizado' ? (
                                                             <>
                                                                 <td><Link to={`/rsd/EditarPedido/${e._id}`} className='btn-editar-pedido'>Editar</Link></td>
-                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e.numero)} >Inativar</button></td>
+                                                                <td><button className="botao-padrao-cinza" onClick={() => devolvidoAmil(e._id)} >Inativar</button></td>
                                                             </>
                                                         ) : (
                                                             <td>

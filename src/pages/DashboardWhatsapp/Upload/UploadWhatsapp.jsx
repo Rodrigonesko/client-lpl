@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import * as XLSX from 'xlsx';
+import { Button } from "@material-ui/core";
 
 const UploadWhatsapp = () => {
 
@@ -56,7 +57,9 @@ const UploadWhatsapp = () => {
                             <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
                         </div>
                         <div className="container-btns">
-                            <button className="btn" onClick={send} >Enviar</button>
+                            <Button variant="contained" color="primary" onClick={send} >
+                                Enviar
+                            </Button>
                         </div>
                     </form>
                 </div>
