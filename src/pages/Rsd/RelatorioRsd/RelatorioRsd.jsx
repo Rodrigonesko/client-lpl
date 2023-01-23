@@ -63,6 +63,7 @@ const RelatorioRsd = () => {
             xls += "<th>Responsável</th>"
             xls += "<th>Quem anexou</th>"
             xls += "<th>Fila</th>"
+            xls += '<th>Motivo inativo</th>'
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -70,6 +71,9 @@ const RelatorioRsd = () => {
             setMsg('Gerando Arquivo')
 
             result.data.pedidos.forEach(e => {
+
+                let valorApresentado = e.valorApresentado - 0
+
                 xls += "<tr>"
                 xls += `<td>${e.pacote}</td>`
                 xls += `<td>${e.fase}</td>`
@@ -79,12 +83,12 @@ const RelatorioRsd = () => {
                 xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.dataConclusao}</td>`
                 xls += `<td>${e.operador}</td>`
-                xls += `<td>${e.protocolo}</td>`
+                xls += `<td>${e.protocolo}'</td>`
                 xls += `<td>${e.numero}</td>`
                 xls += `<td>${e.mo}</td>`
                 xls += `<td>${e.pessoa}</td>`
                 xls += `<td>${moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>`
-                xls += `<td>${e.valorApresentado}</td>`
+                xls += `<td>${valorApresentado?.toLocaleString('pt-br', {minimumFractionDigits: 2})}</td>`
                 xls += `<td>${e.cnpj}</td>`
                 xls += `<td>${e.clinica}</td>`
                 xls += `<td>${e.contratoEmpresa}</td>`
@@ -105,6 +109,7 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.analista}</td>`
                 xls += `<td>${e.quemAnexou}</td>`
                 xls += `<td>${e.fila}</td>`
+                xls += `<td>${e.motivoInativo}</td>`
 
                 xls += `</tr>`
             })

@@ -22,6 +22,7 @@ const CriarPedidoIndividual = () => {
     const [dataSolicitacao, setDataSolicitacao] = useState('')
     const [dataPagamento, setDataPagamento] = useState('')
     const [pedido, setPedido] = useState('')
+    const [fila, setFila] = useState('')
 
     const buscarMo = async (marcaOtica) => {
         try {
@@ -62,7 +63,8 @@ const CriarPedidoIndividual = () => {
                 protocolo,
                 dataSolicitacao,
                 dataPagamento,
-                pedido
+                pedido,
+                fila
             }, {
                 withCredentials: true
             })
@@ -194,6 +196,16 @@ const CriarPedidoIndividual = () => {
                                 <input type="text" id="pedido" placeholder="Número do Pedido" onChange={e => {
                                     setPedido(e.target.value)
                                 }} />
+                            </div>
+                            <div className="input-box-criar-pedido">
+                                <label htmlFor="fila">Fila: </label>
+                                <select name="fila" id="fila" style={{width: '300px'}} onChange={(e)=>{
+                                    setFila(e.target.value)
+                                }}>
+                                    <option value=""></option>
+                                    <option value="RSD">RSD</option>
+                                    <option value="Quarentena">Quarentena</option>
+                                </select>
                             </div>
                         </div>
                         <div>

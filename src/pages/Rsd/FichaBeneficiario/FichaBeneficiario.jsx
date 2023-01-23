@@ -369,6 +369,7 @@ const FichaBeneficiario = () => {
                     <select name="motivo-inativo-pacote" id="motivo-inativo-pacote">
                         <option value="devolvido">devolvido</option>
                         <option value="duplicidade">duplicidade</option>
+                        <option value="VIP">VIP</option>
                     </select>
                 </div>
                 <div>

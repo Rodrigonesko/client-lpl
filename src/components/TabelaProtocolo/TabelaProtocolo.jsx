@@ -139,6 +139,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                     <select name="motivo-inativo-protocolo" id="motivo-inativo-protocolo">
                         <option value="devolvido">devolvido</option>
                         <option value="duplicidade">duplicidade</option>
+                        <option value="VIP">VIP</option>
                     </select>
                 </div>
                 <div>

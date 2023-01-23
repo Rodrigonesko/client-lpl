@@ -238,27 +238,27 @@ const ProcessamentoPacote = () => {
         let valor = e.target.value
         let nome = e.target.name
         let split = nome.split('-')
-        let pedido = split[1]
+        let id = split[1]
 
-        motivoContato.set(pedido, valor)
+        motivoContato.set(id, valor)
 
     }
     const verificarServico = e => {
 
         let valor = e.target.value
         let split = e.target.name.split('-')
-        let pedido = split[2]
+        let id = split[2]
 
-        confirmacaoServico.set(pedido, valor)
+        confirmacaoServico.set(id, valor)
 
     }
     const verificarFinalizacao = e => {
 
         let valor = e.target.value
         let split = e.target.name.split('-')
-        let pedido = split[1]
+        let id = split[1]
 
-        finalizacao.set(pedido, valor)
+        finalizacao.set(id, valor)
 
     }
     const buscarAgenda = async () => {
@@ -594,9 +594,9 @@ const ProcessamentoPacote = () => {
                                                             return (
                                                                 <>
                                                                     <p>Pedido <strong>{e.numero}</strong>, NF <strong>{e.nf}</strong>, Clínica <strong>{e.clinica}</strong>, Valor Apresentado <strong>R$ {e.valorApresentado}</strong></p>
-                                                                    <input type="radio" name={`confirma-${e.numero}`} id={`confirma-sim-${e.numero}`} onClick={verificarMotivoContato} value='Sim' defaultChecked={e.reconhece} />
+                                                                    <input type="radio" name={`confirma-${e._id}`} id={`confirma-sim-${e.numero}`} onClick={verificarMotivoContato} value='Sim' defaultChecked={e.reconhece} />
                                                                     <label htmlFor={`confirma-sim-${e.numero}`}>Sim</label>
-                                                                    <input type="radio" name={`confirma-${e.numero}`} id={`confirma-nao-${e.numero}`} onClick={verificarMotivoContato} value='Não' />
+                                                                    <input type="radio" name={`confirma-${e._id}`} id={`confirma-nao-${e.numero}`} onClick={verificarMotivoContato} value='Não' />
                                                                     <label htmlFor={`confirma-nao-${e.numero}`}>Não</label>
                                                                 </>
                                                             )
@@ -633,7 +633,7 @@ const ProcessamentoPacote = () => {
 
                                                                             return (
                                                                                 <>
-                                                                                    <input type="radio" name={`forma-pagamento-${e.numero}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} onClick={verificarServico} defaultChecked={checkFormaPagameto} />
+                                                                                    <input type="radio" name={`forma-pagamento-${e._id}`} id={`forma-pagamento-${e.numero}-${formaPagamento.nome}`} value={formaPagamento.nome} onClick={verificarServico} defaultChecked={checkFormaPagameto} />
                                                                                     <label htmlFor={`forma-pagamento-${e.numero}-${formaPagamento.nome}`}>{formaPagamento.nome}</label>
                                                                                 </>
                                                                             )
@@ -665,7 +665,7 @@ const ProcessamentoPacote = () => {
                                                                         statusFinalizacao.map(statusFinalizacao => {
                                                                             return (
                                                                                 <>
-                                                                                    <input type="radio" name={`finalizacao-${e.numero}`} id={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`} value={statusFinalizacao.descricao} onClick={verificarFinalizacao} />
+                                                                                    <input type="radio" name={`finalizacao-${e._id}`} id={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`} value={statusFinalizacao.descricao} onClick={verificarFinalizacao} />
                                                                                     <label htmlFor={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`}>{statusFinalizacao.descricao}</label>
                                                                                 </>
                                                                             )

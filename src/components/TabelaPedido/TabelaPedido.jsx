@@ -130,6 +130,8 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                 <th>Irregular</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
+                                <th>Fila</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,7 +165,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                     }
                                                     {
                                                         e.statusPacote === 'Não iniciado' ? (
-                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
+                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e._id} className='checkbox-pedido' /></td>
                                                         ) : (
                                                             <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => {
                                                                 definirPrioridadeDossie(e.numero, element)
@@ -209,13 +211,14 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                     }
                                                     {
                                                         e.statusPacote === 'Não iniciado' ? (
-                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
+                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e._id} className='checkbox-pedido' /></td>
                                                         ) : (
                                                             <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => {
                                                                 definirPrioridadeDossie(e.numero, element)
                                                             }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
                                                         )
                                                     }
+                                                    <td>{e.fila}</td>
 
                                                 </tr>
                                             )
@@ -247,14 +250,14 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                     }
                                                     {
                                                         e.statusPacote === 'Não iniciado' ? (
-                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e.numero} className='checkbox-pedido' /></td>
+                                                            <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e._id} className='checkbox-pedido' /></td>
                                                         ) : (
                                                             <td><input type="checkbox" name="prioridade-dossie" id={`prioridade-dossie-${e.numero}`} defaultChecked={e.prioridadeDossie} onClick={element => {
                                                                 definirPrioridadeDossie(e.numero, element)
                                                             }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
                                                         )
                                                     }
-
+                                                    <td>{e.fila}</td>
                                                 </tr>
                                             )
                                         }
@@ -300,6 +303,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                     <select name="motivo-inativo-pedido" id="motivo-inativo-pedido">
                         <option value="devolvido">devolvido</option>
                         <option value="duplicidade">duplicidade</option>
+                        <option value="VIP">VIP</option>
                     </select>
                 </div>
                 <div>

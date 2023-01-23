@@ -127,13 +127,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                         </SubMenu>
                         <SubMenu title='Contatos Reembolso'>
-                            <MenuItem><Link to='/provisorio/contatos'>Gerar contatos</Link></MenuItem>
-                            <MenuItem><Link to='/provisorio/contatos2'>Gerar contatos2</Link></MenuItem>
-                        </SubMenu>
-                        <SubMenu title='Reembolso Whatsapp'>
-                            <MenuItem><Link to='/whatsapp/aenviar'>A Enviar</Link></MenuItem>
-                            <MenuItem><Link to='/whatsapp/enviado'>Enviado e não finalizado</Link></MenuItem>
-                            <MenuItem><Link to='/whatsapp/upload'>Upload</Link></MenuItem>
+                            <MenuItem><Link to='/provisorio/contatos'>Gerar contatos Gar</Link></MenuItem>
                         </SubMenu>
                         <MenuItem icon={<RiLogoutBoxRLine />}>
                             <a onClick={logout}>Sair</a>

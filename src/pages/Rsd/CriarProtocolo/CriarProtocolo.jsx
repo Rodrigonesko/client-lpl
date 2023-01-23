@@ -97,6 +97,14 @@ const CriarProtocolo = () => {
                             <label htmlFor="pedido">Pedido</label>
                             <input type="text" name="pedido" id="pedido" placeholder="Numero do Pedido" onChange={e => setPedido(e.target.value)} />
                         </div>
+                        {/* <div className="input-criar-protocolo">
+                            <label htmlFor="fila">Fila: </label>
+                            <select name="fila" id="fila">
+                                <option value=""></option>
+                                <option value="RSD">RSD</option>
+                                <option value="Quarentena">Quarentena</option>
+                            </select>
+                        </div> */}
                         <div className="criar-protocolo-btn">
                             <button onClick={criarProtocolo}>Criar</button>
                         </div>

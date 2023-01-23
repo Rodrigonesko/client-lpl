@@ -16,6 +16,7 @@ const CriarPedido = () => {
     const [clinica, setClinica] = useState('')
     const [nf, setNf] = useState('')
     const [mo, setMo] = useState('')
+    const [fila, setFila] = useState('')
 
     const buscarClinica = async e => {
         try {
@@ -45,7 +46,8 @@ const CriarPedido = () => {
                 cnpj,
                 clinica,
                 nf,
-                mo
+                mo,
+                fila
             }, { withCredentials: true })
 
             if (result.status === 200) {
@@ -107,6 +109,16 @@ const CriarPedido = () => {
                         <div className="editar-pedido-input">
                             <label htmlFor="nf">NF</label>
                             <input type="text" id="nf" placeholder="NF" defaultValue={nf} onKeyUp={e => setNf(e.target.value)} />
+                        </div>
+                        <div className="editar-pedido-input">
+                            <label htmlFor="fila">Fila: </label>
+                            <select name="fila" id="fila" style={{ width: '300px' }} onChange={(e) => {
+                                setFila(e.target.value)
+                            }}>
+                                <option value=""></option>
+                                <option value="RSD">RSD</option>
+                                <option value="Quarentena">Quarentena</option>
+                            </select>
                         </div>
                         <div className="editar-pedido-input">
                             <button onClick={criarPedido} >Criar</button>

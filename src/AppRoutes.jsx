@@ -83,12 +83,6 @@ import UrgenciaEmergenciaTodos from "./pages/UrgenciaEmergencia/Todos/UrgenciaEm
 import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/UrgenciaEmergenciaAnexar";
 
 
-/* Whatsapp */
-
-import UploadWhatsapp from "./pages/DashboardWhatsapp/Upload/UploadWhatsapp";
-import AEnviar from "./pages/DashboardWhatsapp/AEnviar/AEnviar";
-import EnviadoMsgWhatsapp from "./pages/DashboardWhatsapp/Enviado/EnviadoMsgWhatsapp";
-
 /*  --------------------------- */
 
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
@@ -321,19 +315,6 @@ const AppRoutes = () => {
                 <Route path="/urgenciaEmergencia/producao" element={<ProtectedRoute>
                     <UrgenciaEmergenciaProducao />
                 </ProtectedRoute>} />
-
-                {/* Whatsapp */}
-
-                <Route path="/whatsapp/upload" element={<ProtectedRoute>
-                    <UploadWhatsapp />
-                </ProtectedRoute>} />
-                <Route path="/whatsapp/aenviar" element={<ProtectedRoute>
-                    <AEnviar />
-                </ProtectedRoute>} />
-                <Route path="/whatsapp/enviado" element={<ProtectedRoute>
-                    <EnviadoMsgWhatsapp />
-                </ProtectedRoute>} />
-
 
                 {/* provisorio */}
 
