@@ -130,8 +130,9 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                 <th>Irregular</th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
                                 <th>Fila</th>
+                                <th></th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -209,6 +210,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                             </td>
                                                         )
                                                     }
+                                                    <td>{e.fila}</td>
                                                     {
                                                         e.statusPacote === 'Não iniciado' ? (
                                                             <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e._id} className='checkbox-pedido' /></td>
@@ -218,7 +220,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                             }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
                                                         )
                                                     }
-                                                    <td>{e.fila}</td>
+
 
                                                 </tr>
                                             )
@@ -248,6 +250,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                             </td>
                                                         )
                                                     }
+                                                    <td>{e.fila}</td>
                                                     {
                                                         e.statusPacote === 'Não iniciado' ? (
                                                             <td><input type="checkbox" name="checkbox-pedido" id={e.numero} value={e._id} className='checkbox-pedido' /></td>
@@ -257,7 +260,6 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                             }} /><label htmlFor={`prioridade-dossie-${e.numero}`}> Prioridade Dossiê</label></td>
                                                         )
                                                     }
-                                                    <td>{e.fila}</td>
                                                 </tr>
                                             )
                                         }

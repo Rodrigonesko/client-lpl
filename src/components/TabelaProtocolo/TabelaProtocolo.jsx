@@ -49,13 +49,20 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
 
 
     useEffect(() => {
-        let protocolosFiltrados = pedidos.filter((item, pos, array) => {
-            return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+        let protocolos = []
+
+        Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${pacote}`, { withCredentials: true }).then(e => {
+            console.log(e.data.pedidos);
+            protocolos = e.data.pedidos
+
+            protocolos = protocolos.filter((item, pos, array) => {
+                return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+            })
+
+            console.log(protocolos);
+
+            setProtocolos(protocolos)
         })
-
-        console.log(protocolosFiltrados);
-
-        setProtocolos(protocolosFiltrados)
     }, [])
 
     return (
