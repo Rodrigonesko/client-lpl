@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import moment from "moment/moment";
 import Axios from 'axios'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Snackbar, makeStyles, Grid } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -65,13 +67,13 @@ const PreProcessamento = () => {
 
     const buscarPropostaFiltrada = async (proposta) => {
         try {
-            
-            if(proposta === ''){
+
+            if (proposta === '') {
                 buscarPropostas()
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/preProcessamento/proposta/${proposta}`, {withCredentials: true})
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/preProcessamento/proposta/${proposta}`, { withCredentials: true })
 
             setPropostas(result.data.proposta)
 
@@ -94,73 +96,83 @@ const PreProcessamento = () => {
                     <div className="title">
                         <h3>Análise de Documentos (Atrbuição Pré Processamento)</h3>
                     </div>
-                    <div className="filtros-padrao-elegi">
-                        <label htmlFor="proposta-analise-doc">Proposta: </label>
-                        <input type="text" id="proposta-analise-doc" onKeyUp={e => (
+                    <div className="filtros-padrao-elegi" style={{display: 'flex', alignItems:'center'}}>
+                        <TextField label="Proposta" type="text" id="proposta-analise-doc" onKeyUp={e => (
                             buscarPropostaFiltrada(e.target.value)
                         )} />
-                        <span>Total: <strong>{total}</strong> </span>
-                        <label htmlFor="">Filtrar por analista:</label>
-                        <select name="" id="" onChange={e => {
-                            buscarPropostasAnalista(e.target.value)
-                        }}>
-                            <option value=""></option>
-                            <option value="Todos">Todos</option>
-                            {
-                                analistas.map(analista => {
-                                    return (
-                                        <option value={analista.name} >{analista.name}</option>
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
-                    <div className="analise-documentos">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Proposta</th>
-                                    <th>Data Importação</th>
-                                    <th>Início Vigência</th>
-                                    <th>Nome Titular</th>
-                                    <th>Sem Documentos</th>
-                                    <th>Analista</th>
-                                    <th>Status Proposta</th>
-                                    <th>Detalhes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <span style={{margin: '0 20px'}} >Total: <strong>{total}</strong> </span>
+                        <FormControl>
+                            <InputLabel id="filtro-analista">Analista</InputLabel>
+                            <Select style={{ minWidth: '90px' }} labelId='filtro-analista' onChange={e => {
+                                buscarPropostasAnalista(e.target.value)
+                            }}>
+                                <MenuItem value="">
+                                    <em>Analista</em>
+                                </MenuItem>
+                                <MenuItem value="Todos">Todos</MenuItem>
                                 {
-                                    propostas.map(e => {
+                                    analistas.map(analista => {
                                         return (
-                                            <tr>
-                                                <td>{e.proposta}</td>
-                                                <td>{moment(e.dataImportacao).format('DD/MM/YYYY')}</td>
-                                                <td>{e.vigencia}</td>
-                                                <td>{e.nome}</td>
-                                                <td>{e.faltaDoc}</td>
-                                                <td>
-                                                    <select name="analistas" id="analistas" onChange={(item) => {
-                                                        atribuirAnalista(item.target.value, e._id)
-                                                    }}>
-                                                        {
-                                                            analistas.map(analista => {
-                                                                return (
-                                                                    <option value={analista.name} selected={e.analistaPreProcessamento === analista.name ? (true) : (false)} >{analista.name}</option>
-                                                                )
-                                                            })
-                                                        }
-                                                    </select>
-                                                </td>
-                                                <td>{e.status}</td>
-                                                <td><Link to={`/elegibilidade/preProcessamento/detalhes/${e._id}`} >Detalhes</Link></td>
-                                            </tr>
+                                            <MenuItem value={analista.name} >{analista.name}</MenuItem>
                                         )
                                     })
                                 }
-                            </tbody>
-                        </table>
+                            </Select>
+                        </FormControl>
+
                     </div>
+                    <TableContainer>
+                        <Table stickyHeader aria-label="sticky table" >
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Proposta</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Data Importação</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Início Vigência</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Nome Titular</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Sem Documentos</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Analista</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Status Proposta</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Detalhes</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    propostas.map(e => {
+                                        return (
+                                            <TableRow hover tabIndex={-1} key={e._id}>
+                                                <TableCell>{e.proposta}</TableCell>
+                                                <TableCell>{moment(e.dataImportacao).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{e.nome}</TableCell>
+                                                <TableCell>{e.faltaDoc}</TableCell>
+                                                <TableCell>
+                                                    <FormControl>
+                                                        <InputLabel id="analista">Analista</InputLabel>
+                                                        <Select style={{ minWidth: '90px' }} labelId="analista" name="analistas" onChange={(item) => {
+                                                            atribuirAnalista(item.target.value, e._id)
+                                                        }}>
+                                                            <MenuItem value="">
+                                                                <em>Analista</em>
+                                                            </MenuItem>
+                                                            {
+                                                                analistas.map(analista => {
+                                                                    return (
+                                                                        <MenuItem value={analista.name} selected={e.analistaPreProcessamento === analista.name ? (true) : (false)} >{analista.name}</MenuItem>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Select>
+                                                    </FormControl>
+                                                </TableCell>
+                                                <TableCell>{e.status}</TableCell>
+                                                <TableCell><Link to={`/elegibilidade/preProcessamento/detalhes/${e._id}`} className='btn-padrao-azul' >Detalhes</Link></TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </div>
             </section>
         </>

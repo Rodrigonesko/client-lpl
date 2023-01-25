@@ -48,10 +48,6 @@ input {
     border-bottom: 1px solid black;
 }
 
-#email {
-    width: 60%;
-}
-
 .observacoes {
     display: flex;
     flex-direction: column;

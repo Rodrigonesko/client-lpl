@@ -226,7 +226,7 @@ const Detalhes = () => {
                         </div>
                         <div className="info-box">
                             <label htmlFor="email">Email Beneficiário: </label>
-                            <input type="email" id="email" name="email" defaultValue={dados.email} onChange={e => setEmail(e.target.value)} />
+                            <input type="email" id="email" name="email" style={{width: '60%'}} defaultValue={dados.email} onChange={e => setEmail(e.target.value)} />
                         </div>
                     </div>
                     <div className="info-proposta">

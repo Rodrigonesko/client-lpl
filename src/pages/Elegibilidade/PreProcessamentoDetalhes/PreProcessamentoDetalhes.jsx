@@ -86,6 +86,8 @@ const PreProcessamentoDetalhes = () => {
     const salvarDados = async () => {
         try {
 
+            console.log(entidade, planoAmil);
+
             const dados = {
                 entidade,
                 planoAmil,

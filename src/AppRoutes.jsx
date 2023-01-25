@@ -83,11 +83,12 @@ import UrgenciaEmergenciaTodos from "./pages/UrgenciaEmergencia/Todos/UrgenciaEm
 import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/UrgenciaEmergenciaAnexar";
 
 
-/*  --------------------------- */
+/* Admin */
 
 import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
 import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
+import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 
 /* Provisório */
 
@@ -137,6 +138,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/graphicos/liminares" element={<ProtectedRoute>
                     <LiminaresGraphs />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/resetPassword" element={<ProtectedRoute>
+                    <ResetPassword />
                 </ProtectedRoute>} />
 
                 {/* Tele entrevista Routes */}
