@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
+import { Alert, AlertTitle } from "@mui/material";
 import './UploadRn.css'
 import * as XLSX from 'xlsx';
 import Axios from 'axios'
@@ -29,7 +30,7 @@ const UploadRn = () => {
 
             const send = await Axios.post(`${process.env.REACT_APP_API_KEY}/rn/upload`, { result }, { withCredentials: true })
 
-            if(send.status === 200){
+            if (send.status === 200) {
                 setStatus(send.data.message)
                 console.log(send);
             }
@@ -49,7 +50,10 @@ const UploadRn = () => {
             <section className="section-upload-container">
                 {status != '' ? (
                     <div className="result">
-                        <p>{status}</p>
+                        <Alert severity="success" variant="filled">
+                            <AlertTitle>Sucesso</AlertTitle>
+                            {status}
+                        </Alert>
                     </div>
                 ) : null}
                 <div className="upload-container">

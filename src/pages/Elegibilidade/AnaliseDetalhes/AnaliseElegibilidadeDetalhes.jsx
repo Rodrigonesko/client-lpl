@@ -8,12 +8,24 @@ import StatusGeral from "./StatusGeral";
 import DadosElegibilidade from "./DadosElegebilidade";
 import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 import AgendaElegibilidade from "./AgendaElegibilidade";
-import Modal from 'react-modal'
+import { Modal, Button, Box, Typography } from "@mui/material";
 import ModalEnviarUnder from "./Modals/ModalEnviarUnder";
 import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalDevolucao from "./Modals/ModalDevolucao";
 
-Modal.setAppElement('#root')
+// Modal.setAppElement('#root')
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '500',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 const AnaliseElegibilidadeDetalhes = () => {
 
@@ -197,45 +209,60 @@ const AnaliseElegibilidadeDetalhes = () => {
                     </div>
                 </div>
                 <Modal
-                    isOpen={modalSalvar}
-                    onRequestClose={() => setModalSalvar(false)}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'
+                    open={modalSalvar}
+                    onClose={() => { setModalSalvar(false) }}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
                 >
-                    <h2>Dados Salvos com sucesso!</h2>
-                    <button onClick={() => {
-                        setModalSalvar(false)
-                        window.location.reload()
-                    }}>Ok</button>
+                    <Box sx={style}>
+                        <Box component='span' sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Dados salvos com sucesso
+                            </Typography>
+                        </Box>
+                        <Box component="span" sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+                            <Button variant="contained" color="success" onClick={() => { setModalSalvar(false) }}>Ok</Button>
+                        </Box>
+                    </Box>
                 </Modal>
                 <Modal
-                    isOpen={modalEnviarUnder}
-                    onRequestClose={() => setModalEnviarUnder(false)}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'
+                    open={modalEnviarUnder}
+                    onClose={() => setModalEnviarUnder(false)}
                 >
-                    <ModalEnviarUnder setModal={setModalEnviarUnder} ></ModalEnviarUnder>
+                    <Box sx={style}>
+                        <ModalEnviarUnder setModal={setModalEnviarUnder} ></ModalEnviarUnder>
+                    </Box>
+
                 </Modal>
                 <Modal
-                    isOpen={modalEnviarCancelamento}
-                    onRequestClose={() => setModalEnviarCancelamento(false)}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'
+                    open={modalEnviarCancelamento}
+                    onClose={() => setModalEnviarCancelamento(false)}
                 >
-                    <ModalEnviarCancelamento setModal={setModalEnviarCancelamento} ></ModalEnviarCancelamento>
+                    <Box sx={style}>
+                        <ModalEnviarCancelamento setModal={setModalEnviarCancelamento} ></ModalEnviarCancelamento>
+                    </Box>
+
                 </Modal>
                 <Modal
-                    isOpen={modalDevolucao}
-                    onRequestClose={() => setModalDevolucao(false)}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'
+                    open={modalDevolucao}
+                    onClose={() => setModalDevolucao(false)}
                 >
-                    <ModalDevolucao setModal={setModalDevolucao} ></ModalDevolucao>
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '80%',
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                        <ModalDevolucao setModal={setModalDevolucao} ></ModalDevolucao>
+                    </Box>
+
                 </Modal>
+
             </section>
         </>
     )

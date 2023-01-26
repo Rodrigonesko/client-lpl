@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { Container, TextField, Typography, Button, Snackbar } from '@material-ui/core'
-import { Alert } from "@material-ui/lab";
-import { Autocomplete } from '@material-ui/lab'
+import { Container, TextField, Typography, Button, Snackbar, Alert, Autocomplete } from '@mui/material'
 
 const ResetPassword = () => {
 

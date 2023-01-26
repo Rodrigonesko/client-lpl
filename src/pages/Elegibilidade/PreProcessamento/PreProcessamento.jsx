@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import moment from "moment/moment";
 import Axios from 'axios'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Snackbar, makeStyles, Grid } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Snackbar, makeStyles, Grid, Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -97,13 +96,13 @@ const PreProcessamento = () => {
                         <h3>Análise de Documentos (Atrbuição Pré Processamento)</h3>
                     </div>
                     <div className="filtros-padrao-elegi" style={{display: 'flex', alignItems:'center'}}>
-                        <TextField label="Proposta" type="text" id="proposta-analise-doc" onKeyUp={e => (
+                        <TextField variant="standard" label="Proposta" type="text" id="proposta-analise-doc" onKeyUp={e => (
                             buscarPropostaFiltrada(e.target.value)
                         )} />
                         <span style={{margin: '0 20px'}} >Total: <strong>{total}</strong> </span>
                         <FormControl>
                             <InputLabel id="filtro-analista">Analista</InputLabel>
-                            <Select style={{ minWidth: '90px' }} labelId='filtro-analista' onChange={e => {
+                            <Select variant="standard" style={{ minWidth: '100px' }} labelId='filtro-analista' onChange={e => {
                                 buscarPropostasAnalista(e.target.value)
                             }}>
                                 <MenuItem value="">
@@ -148,7 +147,7 @@ const PreProcessamento = () => {
                                                 <TableCell>
                                                     <FormControl>
                                                         <InputLabel id="analista">Analista</InputLabel>
-                                                        <Select style={{ minWidth: '90px' }} labelId="analista" name="analistas" onChange={(item) => {
+                                                        <Select variant="standard" style={{ minWidth: '100px' }} labelId="analista" name="analistas" onChange={(item) => {
                                                             atribuirAnalista(item.target.value, e._id)
                                                         }}>
                                                             <MenuItem value="">

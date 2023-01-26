@@ -2,21 +2,12 @@ import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, makeStyles } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar } from "@mui/material";
+import { Alert } from "@mui/material";
 import './AnaliseDocumentos.css'
 
-const useStyles = makeStyles({
-    root: {
-        width: '100%',
-    },
-    container: {
-        maxHeight: 440,
-    },
-});
-
 const AnaliseDocumentos = () => {
-    const classes = useStyles();
+
     const [propostas, setPropostas] = useState([''])
     const [total, setTotal] = useState(0)
     const [analistas, setAnalistas] = useState([])
@@ -90,10 +81,10 @@ const AnaliseDocumentos = () => {
                         <h3>Análise de Documentos (Atrbuição Pré Processamento)</h3>
                     </div>
                     <Box className="filtros-padrao-elegi">
-                        <TextField type="text" id="proposta-analise-doc" label="Proposta" />
+                        <TextField type="text" id="proposta-analise-doc" label="Proposta" variant="standard" />
                         <span>Total: <strong>{total}</strong> </span>
                     </Box>
-                    <Paper className={classes.root}>
+                    <Paper>
                         <TableContainer style={{ borderRadius: '6px' }}>
                             <Table stickyHeader aria-label="sticky table" >
                                 <TableHead>
@@ -117,7 +108,7 @@ const AnaliseDocumentos = () => {
                                                     <TableCell >
                                                         <FormControl>
                                                             <InputLabel id="demo-simple-select-label">Analista</InputLabel>
-                                                            <Select style={{ minWidth: '90px' }} labelId="demo-simple-select-label" name="analistas" id="analistas" onChange={(item) => {
+                                                            <Select style={{ minWidth: '100px' }} variant="standard" labelId="demo-simple-select-label" name="analistas" id="analistas" onChange={(item) => {
                                                                 atribuirAnalista(item.target.value, e._id)
                                                             }}>
                                                                 <MenuItem value="">

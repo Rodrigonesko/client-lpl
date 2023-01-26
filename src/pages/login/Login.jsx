@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom'
-import { Button, TextField } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Button, TextField } from "@mui/material";
+import { Alert, AlertTitle } from "@mui/material";
 import AuthContext from "../../context/AuthContext";
 import Axios from 'axios'
 import logo from '../../imgs/logo.png'
