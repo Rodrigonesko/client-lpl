@@ -5,7 +5,7 @@ import './Agendar.css'
 import moment from "moment";
 import Modal from "react-modal";
 import { Link } from 'react-router-dom'
-
+import TabelaAgendar from "../../../../components/TabelaAgendar/TabelaAgendar";
 import AuthContext from "../../../../context/AuthContext";
 
 Modal.setAppElement('#root')
@@ -20,6 +20,7 @@ const Agendar = () => {
     const [modalExcluir, setModalExcluir] = useState(false)
 
     const [propostas, setPropostas] = useState([])
+    const [rns, setRns] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
     const [dataGerar, setDataGerar] = useState('')
     const [datasEntrevista, setDatasEntrevista] = useState([])
@@ -77,6 +78,12 @@ const Agendar = () => {
     const searchPropostas = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoAgendadas`, { withCredentials: true })
+
+            const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, {withCredentials: true})
+
+            console.log(resultRns);
+
+            setRns(resultRns.data.result)
 
             setPropostas(result.data.propostas)
 
@@ -484,6 +491,11 @@ const Agendar = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    <TabelaAgendar propostas={rns}>
+
+                    </TabelaAgendar>
+
                     <div className="horarios-disponiveis-container">
                         <div className="title">
                             <h3>Horarios Disponíveis</h3>
@@ -555,7 +567,7 @@ const Agendar = () => {
                     <button className="btn-cancelar" onClick={() => {
                         excluir()
                         closeModalExcluir()
-                        //window.location.reload();
+                        window.location.reload();
                     }}>EXCLUIR</button>
                 </Modal>
             </section>

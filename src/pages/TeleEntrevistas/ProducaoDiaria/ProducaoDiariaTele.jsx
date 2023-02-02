@@ -9,6 +9,7 @@ const ProducaoDiariaTele = () => {
     const [producao, setProducao] = useState([])
     const [total, setTotal] = useState(0)
     const [data, setData] = useState('')
+    const [totalRn, setTotalRn] = useState(0)
 
     const buscarDados = async () => {
         try {
@@ -67,6 +68,7 @@ const ProducaoDiariaTele = () => {
                                             <tr>
                                                 <td>{item.analista}</td>
                                                 <td>{item.quantidade}</td>
+                                                <td>{item.quantidadeRn}</td>
                                             </tr>
                                         )
                                     })
@@ -74,6 +76,7 @@ const ProducaoDiariaTele = () => {
                                 <tr>
                                     <th>Total</th>
                                     <th>{total}</th>
+                                    <th>{totalRn}</th>
                                 </tr>
                             </tbody>
                         </table>
