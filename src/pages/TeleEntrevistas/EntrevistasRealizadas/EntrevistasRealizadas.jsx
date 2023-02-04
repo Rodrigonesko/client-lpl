@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
+import { Button, TextField, Box, Form } from '@mui/material'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import './EntrevistasRealizadas.css'
@@ -56,12 +57,12 @@ const EntrevistasRealizadas = () => {
                 xls += `<td>${e.responsavel}</td>`
                 xls += `<td>${e.houveDivergencia}</td>`
                 if (e.divergencia) {
-                    xls += `<td>${e.divergencia}</td>` 
+                    xls += `<td>${e.divergencia}</td>`
                 } else {
                     xls += `<td></td>`
                 }
                 if (e.cids) {
-                    xls += `<td>${e.cids}</td>` 
+                    xls += `<td>${e.cids}</td>`
                 } else {
                     xls += `<td></td>`
                 }
@@ -82,7 +83,7 @@ const EntrevistasRealizadas = () => {
     }
 
     useEffect(() => {
-        buscarEntrevistas()
+        //buscarEntrevistas()
     }, [])
 
     return <>
@@ -92,17 +93,17 @@ const EntrevistasRealizadas = () => {
                 <div className="title">
                     <h3>Entrevistas Realizadas</h3>
                 </div>
-                <div className="filtros-entrevistas-realizadas">
-                    <label htmlFor="proposta">Proposta: </label>
-                    <input type="text" name="proposta" id="proposta" />
-
-                    <button onClick={gerarRelatorio}>Relatório</button>
-                </div>
+                <Box display='flex' justifyContent='space-between' m={2}>
+                    <Box display='flex'>
+                        <TextField id="proposta" label="proposta, nome ou cpf" variant="standard" />
+                        <Button variant='contained'>Buscar</Button>
+                    </Box>
+                    <Button variant="contained" onClick={gerarRelatorio}>Relatório</Button>
+                </Box>
                 <div className="entrevistas-realizadas">
                     <table className='table'>
                         <thead className='table-header'>
                             <tr>
-                                <th>ID LPL</th>
                                 <th>Proposta</th>
                                 <th>Data Entrevista</th>
                                 <th>Nome</th>
@@ -112,11 +113,10 @@ const EntrevistasRealizadas = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {
+                            {/* {
                                 entrevistas.map(e => {
                                     return (
                                         <tr key={e._id}>
-                                            <td>{e._id}</td>
                                             <td>{e.proposta}</td>
                                             <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
                                             <td>{e.nome}</td>
@@ -126,7 +126,7 @@ const EntrevistasRealizadas = () => {
                                         </tr>
                                     )
                                 })
-                            }
+                            } */}
                         </tbody>
                     </table>
                 </div>
