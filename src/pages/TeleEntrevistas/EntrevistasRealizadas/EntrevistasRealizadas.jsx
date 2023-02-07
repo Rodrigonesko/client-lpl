@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { Button, TextField, Box, Form } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
 import moment from 'moment'
 import './EntrevistasRealizadas.css'
 import gerarPdf from '../Pdf/Pdf'
@@ -10,12 +9,37 @@ import gerarPdf from '../Pdf/Pdf'
 const EntrevistasRealizadas = () => {
 
     const [entrevistas, setEntrevistas] = useState([])
+    const [pesquisa, setPesquisa] = useState('');
+    const [loading, setLoading] = useState(false)
+
+    const alterarSexo = async (id, sexo) => {
+        try {
+
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/alterarSexo`, {
+                id, sexo
+            }, {
+                withCredentials: true
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const buscarEntrevistas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
 
-            setEntrevistas(result.data.entrevistas)
+            setLoading(true)
+
+            if (pesquisa.length < 3) {
+                return
+            }
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/${pesquisa}`, { withCredentials: true })
+
+            setLoading(false)
+
+            setEntrevistas(result.data.result)
 
         } catch (error) {
             console.log(error);
@@ -24,6 +48,10 @@ const EntrevistasRealizadas = () => {
 
     const gerarRelatorio = async () => {
         try {
+
+
+            setLoading(true)
+
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
 
             let xls = '\ufeff'
@@ -42,7 +70,6 @@ const EntrevistasRealizadas = () => {
             xls += "<th>Qual</th>"
             xls += "<th>Cids</th>"
             xls += "</tr></thead><tbody>"
-
 
             result.data.entrevistas.forEach(e => {
                 xls += "<tr>"
@@ -77,14 +104,12 @@ const EntrevistasRealizadas = () => {
             a.download = 'Relatorio Propostas.xls'
             a.click()
 
+            setLoading(false)
+
         } catch (error) {
             console.log(error);
         }
     }
-
-    useEffect(() => {
-        //buscarEntrevistas()
-    }, [])
 
     return <>
         <Sidebar></Sidebar>
@@ -93,43 +118,59 @@ const EntrevistasRealizadas = () => {
                 <div className="title">
                     <h3>Entrevistas Realizadas</h3>
                 </div>
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '49%' }} />
+                    ) : null
+                }
                 <Box display='flex' justifyContent='space-between' m={2}>
                     <Box display='flex'>
-                        <TextField id="proposta" label="proposta, nome ou cpf" variant="standard" />
-                        <Button variant='contained'>Buscar</Button>
+                        <TextField id="proposta" label="proposta, nome ou cpf" variant="standard" onChange={e => {
+                            setPesquisa(e.target.value)
+                        }} />
+                        <Button onClick={buscarEntrevistas} variant='contained'>Buscar</Button>
                     </Box>
                     <Button variant="contained" onClick={gerarRelatorio}>Relatório</Button>
                 </Box>
-                <div className="entrevistas-realizadas">
-                    <table className='table'>
-                        <thead className='table-header'>
-                            <tr>
-                                <th>Proposta</th>
-                                <th>Data Entrevista</th>
-                                <th>Nome</th>
-                                <th>CPF</th>
-                                <th>Idade</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* {
+                <TableContainer className="entrevistas-realizadas">
+                    <Table className='table'>
+                        <TableHead className='table-header'>
+                            <TableRow>
+                                <TableCell>Proposta</TableCell>
+                                <TableCell>Data Entrevista</TableCell>
+                                <TableCell>Nome</TableCell>
+                                <TableCell>CPF</TableCell>
+                                <TableCell>Idade</TableCell>
+                                <TableCell>Sexo</TableCell>
+                                <TableCell>Editar</TableCell>
+                                <TableCell>PDF</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
                                 entrevistas.map(e => {
                                     return (
-                                        <tr key={e._id}>
-                                            <td>{e.proposta}</td>
-                                            <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
-                                            <td>{e.nome}</td>
-                                            <td>{e.cpf}</td>
-                                            <td>{e.idade}</td>
-                                            <td><Link to={`/entrevistas/propostas/editar/${e._id}`} className='btn-padrao-azul' >Editar</Link> <button onClick={() => { gerarPdf(e.proposta, e.nome) }} className='btn-padrao-vermelho' >PDF</button> </td>
-                                        </tr>
+                                        <TableRow key={e._id}>
+                                            <TableCell>{e.proposta}</TableCell>
+                                            <TableCell>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
+                                            <TableCell>{e.nome}</TableCell>
+                                            <TableCell>{e.cpf}</TableCell>
+                                            <TableCell>{e.idade}</TableCell>
+                                            <TableCell>
+                                                <select onChange={item => alterarSexo(e._id, item.target.value)} >
+                                                    <option value="M" selected={e.sexo === 'M'}>M</option>
+                                                    <option value="F" selected={e.sexo === 'F'} >F</option>
+                                                </select>
+                                            </TableCell>
+                                            <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
+                                            <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
+                                        </TableRow>
                                     )
                                 })
-                            } */}
-                        </tbody>
-                    </table>
-                </div>
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
         </section>
     </>

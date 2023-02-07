@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Link } from "react-router-dom";
 import Axios from 'axios'
-import moment from "moment";
+import { Typography, Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from "@mui/material";
+import RnsAgendadas from "../../../../components/Agendadas/RnsAgendadas";
+import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 
 
@@ -11,6 +12,8 @@ const Agendado = () => {
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
     const [qtdAgendado, setQtdAgendado] = useState(0)
+    const [rns, setRns] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const searchEnfermeiro = async () => {
         try {
@@ -28,9 +31,11 @@ const Agendado = () => {
     const searchPropostas = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
+            const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
-            setQtdAgendado(result.data.propostas.length)
+            setRns(resultRn.data.rns)
+            setQtdAgendado(result.data.propostas.length + resultRn.data.rns.length)
 
         } catch (error) {
             console.log(error);
@@ -38,9 +43,11 @@ const Agendado = () => {
     }
 
     const filtroEnfermeiro = async enfermeiro => {
+        setLoading(true)
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
-
+        const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
         setPropostas([])
+        setRns([])
 
         if (enfermeiro === 'Todos') {
             searchPropostas()
@@ -52,43 +59,14 @@ const Agendado = () => {
             }
         })
 
-    }
-
-    const alterarTelefone = async (telefone, id) => {
-        try {
-
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, { id, telefone }, { withCredentials: true })
-
-            console.log(result);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const reagendar = async (id) => {
-        try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reagendar`, { id }, { withCredentials: true })
-            if (result.status === 200) {
-                window.location.reload()
+        Object.values(resultRn.data.rns).forEach(e => {
+            if (e.responsavel === enfermeiro) {
+                setRns(rns => [...rns, e])
             }
+        })
 
-        } catch (error) {
-            console.log(error);
-        }
-    }
+        setLoading(false)
 
-    const alterarSexo = async (id, sexo) => {
-        try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/alterarSexo`, {
-                id,
-                sexo
-            }, {
-                withCredentials: true
-            })
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     useEffect(() => {
@@ -99,77 +77,47 @@ const Agendado = () => {
     return (
         <>
             <Sidebar></Sidebar>
+            {
+                loading ? (
+                    <CircularProgress style={{ position: 'absolute', top: '50%', left: '49%' }} />
+                ) : null
+            }
             <section className="section-agendados-container">
                 <div className="agendados-container">
-                    <div className="title">
-                        <h3>Agendados: </h3>
-                    </div>
-                    <div className="filtros-agendados">
-                        <select name="enfermeiros" id="enfermeiros" onChange={e => {
-                            filtroEnfermeiro(e.target.value)
-                        }}>
-                            <option value="Todos">Todos</option>
-                            {
-                                enfermeiros.map(e => {
-                                    return (
-                                        <option key={e._id} value={e.name}>{e.name}</option>
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
-                    <div className="qtd-agendados">
-                        <h3>Agendado: {qtdAgendado}</h3>
-                    </div>
-                    <div className="agendados">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Data Entrevista</th>
-                                    <th>Horário</th>
-                                    <th>Proposta</th>
-                                    <th>Telefone</th>
-                                    <th>Nome</th>
-                                    <th>Idade</th>
-                                    <th>Sexo</th>
-                                    <th>Analista</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <Typography variant="h5" m={3}>
+                        Agendados Tele e Rn - Total: {qtdAgendado}
+                    </Typography>
+                    <Box>
+                        <FormControl size='small'>
+                            <InputLabel>Analista</InputLabel>
+                            <Select
+                                defaultValue=''
+                                style={{ minWidth: '100px' }}
+                                labelId='label-analista'
+                                id='select-analista'
+                                label="Analista"
+                                onChange={e => {
+                                    filtroEnfermeiro(e.target.value)
+                                }}
+                            >
+                                <MenuItem key='todos' value='Todos'>Todos</MenuItem>
                                 {
-                                    propostas.map(e => {
-
-                                        if (e.status != 'Concluído' && e.agendado == 'agendado' && e.status != 'Cancelado') {
-                                            return (
-
-                                                <tr key={e._id}>
-                                                    <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
-                                                    <td>{moment(e.dataEntrevista).format('HH:mm:ss')}</td>
-                                                    <td>{e.proposta}</td>
-                                                    <td> <input type="text" defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} /></td>
-                                                    <td>{e.nome}</td>
-                                                    <td>{e.idade}</td>
-                                                    <td>
-                                                        <select onChange={item => alterarSexo(e._id, item.target.value)} >
-                                                            <option value="M" selected={e.sexo === 'M'}>M</option>
-                                                            <option value="F" selected={e.sexo === 'F'} >F</option>
-                                                        </select> </td>
-                                                    <td>{e.enfermeiro}</td>
-                                                    <td>
-                                                        <Link to={`/entrevistas/formulario/${e._id}`} className='link-formulario'>Formulario</Link>
-                                                        <button className="botao-reagendar" onClick={() => {
-                                                            reagendar(e._id)
-                                                        }} >Reagendar</button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
+                                    enfermeiros.map(e => {
+                                        return (
+                                            <MenuItem key={e._id} value={e.name}>{e.name}</MenuItem>
+                                        )
                                     })
                                 }
-                            </tbody>
-                        </table>
-                    </div>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <TeleAgendadas propostas={propostas}>
+
+                    </TeleAgendadas>
+
+                    <RnsAgendadas propostas={rns}>
+
+                    </RnsAgendadas>
                 </div>
             </section>
         </>

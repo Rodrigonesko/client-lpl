@@ -82,6 +82,19 @@ const TabelaAgendarTele = ({ propostas }) => {
         }
     }
 
+    const alterarSexo = async (id, sexo) => {
+        try {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/alterarSexo`, {
+                id,
+                sexo
+            }, {
+                withCredentials: true
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <Typography variant='h4' width='100%'>
@@ -118,7 +131,12 @@ const TabelaAgendarTele = ({ propostas }) => {
                                         <TableCell>{row.proposta}</TableCell>
                                         <TableCell>{row.nome}</TableCell>
                                         <TableCell>{moment(row.dataNascimento).format('DD/MM/YYYY')}</TableCell>
-                                        <TableCell>{row.sexo}</TableCell>
+                                        <TableCell>
+                                            <select onChange={item => alterarSexo(row._id, item.target.value)} >
+                                                <option value="M" selected={row.sexo === 'M'}>M</option>
+                                                <option value="F" selected={row.sexo === 'F'} >F</option>
+                                            </select>
+                                        </TableCell>
                                         <TableCell>
                                             <TextField size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
                                         </TableCell>

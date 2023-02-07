@@ -54,12 +54,12 @@ const Sidebar = () => {
                             ) : null
                         }
 
-                        <SubMenu title="Rn" icon={<FaHeadset />}>
-                            <MenuItem><Link to='/rn/upload'>Upload</Link></MenuItem>
+                        {/* <SubMenu title="Rn" icon={<FaHeadset />}>
+                     
                             <MenuItem><Link to='/rn/rns'>Rns</Link></MenuItem>
-                            <MenuItem><Link to='/rn/todas'>Todas</Link></MenuItem>
+                            
                             <MenuItem><Link to='/rn/uploadConfirmadas'>Upload Confirmadas</Link></MenuItem>
-                        </SubMenu>
+                        </SubMenu> */}
                         <SubMenu title="Tele Entrevistas" icon={<FaClipboard />}>
                             <SubMenu title='Agenda' icon={<FaCalendar />}>
                                 <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
@@ -72,6 +72,7 @@ const Sidebar = () => {
                                 }
                             </SubMenu>
                             <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
+                            <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
                             {
                                 accessLevel != 'false' ? (<>
 
@@ -88,6 +89,7 @@ const Sidebar = () => {
                             }
                             <MenuItem><Link to='/entrevistas/report'>Report</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
+                            <MenuItem><Link to='/rn/upload'>Upload Rn</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/cid/adicionar'>Adicionar Cid</Link></MenuItem>
                         </SubMenu>
                         <SubMenu title="Urgência & Emergência" icon={<RiAlarmWarningLine />} >

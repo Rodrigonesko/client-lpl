@@ -51,7 +51,7 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { id: idProposta, responsavel, data: dataEntrevista, horario: horarioEntrevista }, { withCredentials: true })
 
             if (result.status === 200) {
-                console.log('ola');
+                window.location.reload()
             }
 
         } catch (error) {
