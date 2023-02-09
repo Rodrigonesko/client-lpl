@@ -102,7 +102,7 @@ const TabelaAgendarTele = ({ propostas }) => {
             </Typography>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
+                    <TableHead className='table-header' >
                         <TableRow>
                             <TableCell>Data Vigência</TableCell>
                             <TableCell>Proposta</TableCell>

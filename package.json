@@ -12,7 +12,6 @@
     "chart.js": "^3.9.1",
     "dotenv": "^16.0.2",
     "faker": "^6.6.6",
-    "fs": "^0.0.1-security",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
     "jquery": "^3.6.1",

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
-import { Typography, Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from "@mui/material";
-import RnsAgendadas from "../../../../components/Agendadas/RnsAgendadas";
+import { Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from "@mui/material";
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
+import moment from "moment";
 
 
 const Agendado = () => {
@@ -12,7 +12,6 @@ const Agendado = () => {
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
     const [qtdAgendado, setQtdAgendado] = useState(0)
-    const [rns, setRns] = useState([])
     const [loading, setLoading] = useState(false)
 
     const searchEnfermeiro = async () => {
@@ -20,8 +19,6 @@ const Agendado = () => {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, { withCredentials: true })
 
             setEnfermeiros(result.data.enfermeiros)
-
-            console.log(enfermeiros);
 
         } catch (error) {
             console.log(error);
@@ -33,8 +30,42 @@ const Agendado = () => {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
             const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 
-            setPropostas(result.data.propostas)
-            setRns(resultRn.data.rns)
+            let arr = []
+
+            for (const item of result.data.propostas) {
+                arr.push({
+                    dataEntrevista: item.dataEntrevista,
+                    proposta: item.proposta,
+                    telefone: item.telefone,
+                    nome: item.nome,
+                    idade: item.idade,
+                    sexo: item.sexo,
+                    enfermeiro: item.enfermeiro,
+                    _id: item._id,
+                    tipo: 'Tele'
+                })
+            }
+
+            for (const item of resultRn.data.rns) {
+                arr.push({
+                    dataEntrevista: item.dataEntrevista,
+                    proposta: item.proposta,
+                    telefone: item.telefones,
+                    nome: item.beneficiario,
+                    idade: item.idade,
+                    enfermeiro: item.responsavel,
+                    _id: item._id,
+                    tipo: 'Rn'
+                })
+            }
+
+            arr.sort(function compare(a, b) {
+                if (moment(a.dataEntrevista) < moment(b.dataEntrevista)) return -1;
+                if (moment(a.dataEntrevista) > moment(b.dataEntrevista)) return 1;
+                return 0;
+            })
+
+            setPropostas(arr)
             setQtdAgendado(result.data.propostas.length + resultRn.data.rns.length)
 
         } catch (error) {
@@ -46,22 +77,51 @@ const Agendado = () => {
         setLoading(true)
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
         const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
+
+        let arr = []
+
+        for (const item of result.data.propostas) {
+            arr.push({
+                dataEntrevista: item.dataEntrevista,
+                proposta: item.proposta,
+                telefone: item.telefone,
+                nome: item.nome,
+                idade: item.idade,
+                sexo: item.sexo,
+                enfermeiro: item.enfermeiro,
+                _id: item._id,
+                tipo: 'Tele'
+            })
+        }
+
+        for (const item of resultRn.data.rns) {
+            arr.push({
+                dataEntrevista: item.dataEntrevista,
+                proposta: item.proposta,
+                telefone: item.telefones,
+                nome: item.beneficiario,
+                idade: item.idade,
+                enfermeiro: item.responsavel,
+                _id: item._id,
+                tipo: 'Rn'
+            })
+        }
+
+        arr.sort(function compare(a, b) {
+            if (moment(a.dataEntrevista) < moment(b.dataEntrevista)) return -1;
+            if (moment(a.dataEntrevista) > moment(b.dataEntrevista)) return 1;
+            return 0;
+        })
+
         setPropostas([])
-        setRns([])
 
         if (enfermeiro === 'Todos') {
             searchPropostas()
         }
 
-        Object.values(result.data.propostas).forEach(e => {
+        arr.forEach(e => {
             if (e.enfermeiro === enfermeiro) {
                 setPropostas(propostas => [...propostas, e])
-            }
-        })
-
-        Object.values(resultRn.data.rns).forEach(e => {
-            if (e.responsavel === enfermeiro) {
-                setRns(rns => [...rns, e])
             }
         })
 
@@ -84,10 +144,7 @@ const Agendado = () => {
             }
             <section className="section-agendados-container">
                 <div className="agendados-container">
-                    <Typography variant="h5" m={3}>
-                        Agendados Tele e Rn - Total: {qtdAgendado}
-                    </Typography>
-                    <Box>
+                    <Box mt={3}>
                         <FormControl size='small'>
                             <InputLabel>Analista</InputLabel>
                             <Select
@@ -111,13 +168,7 @@ const Agendado = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <TeleAgendadas propostas={propostas}>
-
-                    </TeleAgendadas>
-
-                    <RnsAgendadas propostas={rns}>
-
-                    </RnsAgendadas>
+                    <TeleAgendadas propostas={propostas} />
                 </div>
             </section>
         </>
