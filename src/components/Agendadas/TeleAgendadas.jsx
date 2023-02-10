@@ -41,6 +41,20 @@ const TeleAgendadas = ({ propostas }) => {
         }
     }
 
+    const alterarTelefoneRn = async (id, telefone) => {
+        try {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/alterarTelefone`, {
+                id,
+                telefone
+            }, {
+                withCredentials: true
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const alterarSexo = async (id, sexo) => {
         try {
             await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/alterarSexo`, {
@@ -112,7 +126,9 @@ const TeleAgendadas = ({ propostas }) => {
                                             <TableCell>{moment(e.dataEntrevista).format('HH:mm:ss')}</TableCell>
                                             <TableCell>{e.proposta}</TableCell>
                                             <TableCell>
-                                                {e.telefone}
+                                                <TextField size="small" variant='standard' defaultValue={e.telefone} onChange={item => {
+                                                    alterarTelefoneRn(e._id, item.target.value)
+                                                }} />
                                             </TableCell>
                                             <TableCell>{e.nome}</TableCell>
                                             <TableCell>{e.idade}</TableCell>

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
+import { FaExchangeAlt, FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
@@ -40,6 +40,7 @@ const Sidebar = () => {
                 <ProSidebar className="" id="sidebar">
                     <Menu iconShape="square">
                         <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
+                        <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
                         {
                             accessLevel != 'false' ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >

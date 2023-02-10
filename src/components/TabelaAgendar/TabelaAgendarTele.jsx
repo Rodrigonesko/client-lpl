@@ -130,7 +130,7 @@ const TabelaAgendarTele = ({ propostas }) => {
                                         </TableCell>
                                         <TableCell>{row.proposta}</TableCell>
                                         <TableCell>{row.nome}</TableCell>
-                                        <TableCell>{moment(row.dataNascimento).format('DD/MM/YYYY')}</TableCell>
+                                        <TableCell>{row.dataNascimento}</TableCell>
                                         <TableCell>
                                             <select onChange={item => alterarSexo(row._id, item.target.value)} >
                                                 <option value="M" selected={row.sexo === 'M'}>M</option>

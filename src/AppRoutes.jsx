@@ -95,6 +95,10 @@ import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import ContatosProvisorio from "./pages/Provisorio/ContatosProvisorio";
 import ContatosProvisorios2 from "./pages/Provisorio/ContatosProvisorios2";
 
+/* Controle ativicades  */
+
+import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
+
 import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -327,6 +331,12 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/provisorio/contatos2" element={<ProtectedRoute>
                     <ContatosProvisorios2 />
+                </ProtectedRoute>} />
+
+                {/* Controle de Atividades */}
+
+                <Route path="/controleAtividades" element={<ProtectedRoute>
+                    <ControleAtividades />
                 </ProtectedRoute>} />
 
             </Routes>

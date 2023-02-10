@@ -44,6 +44,21 @@ const TabelaAgendarRn = ({ propostas }) => {
         }
     }
 
+    const alterarTelefone = async (id, telefone) => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/alterarTelefone`, {
+                id,
+                telefone
+            }, {
+                withCredentials: true
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <Container >
             <Typography variant="h4" margin='1rem'>
@@ -69,7 +84,9 @@ const TabelaAgendarRn = ({ propostas }) => {
                                         <TableCell>{moment(row.vigencia).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{row.proposta}</TableCell>
                                         <TableCell>{row.beneficiario}</TableCell>
-                                        <TableCell><TextField size="small" variant="standard" defaultValue={row.telefones}></TextField></TableCell>
+                                        <TableCell><TextField size="small" variant="standard" defaultValue={row.telefones} onChange={e => {
+                                            alterarTelefone(row._id, e.target.value)
+                                        }}></TextField></TableCell>
                                         <TableCell><Button variant="contained" onClick={() => {
                                             setProposta(row.proposta)
                                             setBeneficiario(row.beneficiario)
