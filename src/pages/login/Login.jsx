@@ -30,8 +30,12 @@ const Login = () => {
             console.log(result);
             if (result.status === 200) {
                 const authToken = result.data.token
-                console.log(authToken);
                 setAuthToken(authToken)
+                await Axios.post(`${process.env.REACT_APP_API_KEY}/controleAtividade/iniciarPadrao`, {
+                    name: result.data.user
+                }, {
+                    withCredentials: true
+                })
                 navigate('/')
 
             }
