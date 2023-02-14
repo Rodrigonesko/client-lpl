@@ -1,7 +1,22 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
+import { Button, TextField, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Menu, } from "@mui/material";
 import './Create.css'
+
+const atividades = [
+    'Gerência',
+    'Sistemas',
+    'Elegibilidade',
+    'Liminares',
+    'RSD',
+    'Sindicância',
+    'Tele Entrevista',
+    'Callback',
+    'Ti/Infra'
+]
+
+
 const Create = () => {
 
     const [email, setEmail] = useState('')
@@ -12,23 +27,23 @@ const Create = () => {
     const [responseMessage, setResponseMessage] = useState('')
 
 
-    const toggleAdmin = ()=>{
+    const toggleAdmin = () => {
         setAdmin(!admin)
     }
 
-    const cadastrar = async e=>{
+    const cadastrar = async e => {
         e.preventDefault()
 
         try {
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/users`, {email, name, password, confirmPassword, accessLevel: admin}, {withCredentials: true})
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/users`, { email, name, password, confirmPassword, accessLevel: admin }, { withCredentials: true })
 
-            if(result.status === 201){
+            if (result.status === 201) {
                 setResponseMessage('Usuario Criado com Sucesso!')
             }
 
         } catch (error) {
             setResponseMessage(error.response.data.message)
-            
+
         }
 
     }
@@ -36,7 +51,7 @@ const Create = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-create-container">
+            <Box display='flex' justifyContent='center' alignItems='center' width='100%'>
 
                 {responseMessage && (
                     <div className="warning">
@@ -45,38 +60,56 @@ const Create = () => {
                 )}
 
 
-                <div className="create-container">
-                    <div className="title">
+                <Box>
+                    <Box display='flex' justifyContent='center' alignItems='center'>
                         <h3>Criar usuario</h3>
-                    </div>
-                    <form action="" method="post" className="form-create">
-                        <div className="input-box">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" name="email" id="email" placeholder="email" onChange={e=>setEmail(e.target.value)} />
-                        </div>
-                        <div className="input-box">
-                            <label htmlFor="name">Nome</label>
-                            <input type="text" name="name" id="name" placeholder="Nome" onChange={e=>setName(e.target.value)} />
-                        </div>
-                        <div className="input-box">
-                            <label htmlFor="password">Senha</label>
-                            <input type="password" name="password" id="password" placeholder="Senha" onChange={e=>setPassword(e.target.value)} />
-                        </div>
-                        <div className="input-box">
-                            <label htmlFor="confirmPassword">Confirmar Senha</label>
-                            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Senha" onChange={e=>setConfirmPassword(e.target.value)} />
-                        </div>
-                        <div className="input-box">
-                            <label htmlFor="admin">Administrador?</label>
-                            <input type="checkbox" name="admin" id="admin" onClick={toggleAdmin} />
-                        </div>
-                        <div className="btn-box">
-                            <button onClick={cadastrar}>Cadastrar</button>
-                        </div>
+                    </Box>
+                    <Box>
+                        <Box m={2} >
+                            <TextField variant="filled" label="E-mail" type="email" name="email" id="email" onChange={e => setEmail(e.target.value)} />
+                        </Box>
+                        <Box m={2}>
+                            <TextField variant="filled" type="text" label='Nome' name="name" id="name" onChange={e => setName(e.target.value)} />
+                        </Box>
+                        <Box m={2}>
+                            <TextField variant="filled" type="password" label='Senha' name="password" id="password" onChange={e => setPassword(e.target.value)} />
+                        </Box>
+                        <Box m={2}>
+                            <TextField variant="filled" type="password" label='Confirmar senha' name="confirmPassword" id="confirmPassword" onChange={e => setConfirmPassword(e.target.value)} />
+                        </Box>
+                        <Box m={2}>
+                            <FormControl variant='filled'>
+                                <InputLabel id="label-atividade">Atividade Principal</InputLabel>
+                                <Select
+                                    labelId="label-atividade"
+                                    id='select-atividade'
+                                    style={{ minWidth: '200px' }}
+                                    label='Atividade Principal'
+                                    defaultValue=''
+                                >
+                                    <MenuItem>
+                                        <em>
+                                            Atividade Principal
+                                        </em>
+                                    </MenuItem>
+                                    {
+                                        atividades.map(atividade => (<MenuItem key={atividade} value={atividade}>{atividade}</MenuItem>))
+                                    }
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box m={2}>
+                            <FormGroup>
+                                <FormControlLabel control={<Checkbox />} label='Admin' onClick={toggleAdmin} />
+                            </FormGroup>
+                        </Box>
+                        <Box display='flex' justifyContent='center' alignItems='center'>
+                            <Button variant='contained' onClick={cadastrar}>Cadastrar</Button>
+                        </Box>
 
-                    </form>
-                </div>
-            </section>
+                    </Box>
+                </Box>
+            </Box>
         </>
     )
 

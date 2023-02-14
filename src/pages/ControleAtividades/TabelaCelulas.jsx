@@ -1,25 +1,35 @@
 import React from 'react'
+import Axios from 'axios'
 import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Button } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-function createData(celula, quantidade) {
-    return {
-        celula,
-        quantidade,
-        history: [
-            {
-                analista: 'Rodrigo',
-            },
-            {
-                analista: 'Fernanda',
-            },
-        ],
-    };
+async function assumirAtividade(atividade) {
+    const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/controleAtividade/assumir`, {
+        atividade
+    }, {
+        withCredentials: true
+    })
+
+    if (result.status === 200) {
+        window.location.reload()
+    }
+}
+
+async function encerrarAtividade() {
+    const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/controleAtividade/encerrar`, {
+
+    }, {
+        withCredentials: true
+    })
+
+    if (result.status === 200) {
+        window.location.reload()
+    }
 }
 
 function Row(props) {
-    const { row } = props;
+    const { row, atividade } = props;
     const [open, setOpen] = React.useState(false);
 
     return (
@@ -38,7 +48,20 @@ function Row(props) {
                     {row.celula}
                 </TableCell>
                 <TableCell align="right">{row.quantidade}</TableCell>
-                <TableCell align="right"><Button variant='contained' size='small'>Assumir Atividade</Button></TableCell>
+                <TableCell align="right">
+                    {
+                        atividade === row.celula ? (
+                            <Button variant='contained' color='error' size='small' onClick={() => encerrarAtividade()}>Encerrar Atividade</Button>
+                        ) : (
+                            null
+                        )
+                    }
+                    {
+                        atividade === 'Nenhuma' ? (
+                            <Button variant='contained' size='small' onClick={() => assumirAtividade(row.celula)}>Assumir Atividade</Button>
+                        ) : null
+                    }
+                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -54,10 +77,10 @@ function Row(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {row.history.map((historyRow) => (
-                                        <TableRow key={historyRow.analista}>
+                                    {row.analistas.map((analista) => (
+                                        <TableRow key={analista}>
                                             <TableCell component="th" scope="row">
-                                                {historyRow.analista}
+                                                {analista}
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -70,16 +93,8 @@ function Row(props) {
         </React.Fragment>
     );
 }
+const TabelaCelulas = ({ report, atividadeAtual }) => {
 
-const rows = [
-    createData('Elegibilidade', 4),
-    createData('Callback', 3),
-    createData('RSD', 2),
-    createData('Liminares', 5),
-    createData('Tele Entrevista', 5),
-];
-
-const TabelaCelulas = () => {
     return (
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
@@ -92,8 +107,8 @@ const TabelaCelulas = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <Row key={row.name} row={row} />
+                    {report.map((row) => (
+                        <Row key={row.celula} row={row} atividade={atividadeAtual} />
                     ))}
                 </TableBody>
             </Table>
