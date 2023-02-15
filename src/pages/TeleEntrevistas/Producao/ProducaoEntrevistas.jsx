@@ -7,7 +7,7 @@ import './ProducaoEntrevistas.css'
 const ProducaoEntrevistas = () => {
 
     const [producao, setProducao] = useState([])
-    const [producaoRns, setProducaoRns] = useState([])
+    // const [producaoRns, setProducaoRns] = useState([])
 
     const buscarDados = async () => {
         try {
@@ -18,7 +18,7 @@ const ProducaoEntrevistas = () => {
 
             setProducao(result.data.arrQuantidadeTotalMes)
 
-            setProducaoRns(result.data.arrRns)
+            // setProducaoRns(result.data.arrRns)
 
 
         } catch (error) {

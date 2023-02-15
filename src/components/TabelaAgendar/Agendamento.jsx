@@ -8,8 +8,6 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
     const [responsavel, setResponsavel] = useState('')
     const [datasEntrevista, setDatasEntrevista] = useState([])
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
-
-    const [beneficiario, setBeneficiario] = useState('')
     const [dataEntrevista, setDataEntrevista] = useState('')
     const [horarioEntrevista, setHorarioEntrevista] = useState('')
 

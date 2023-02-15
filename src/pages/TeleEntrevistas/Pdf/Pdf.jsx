@@ -12,7 +12,7 @@ const gerarPdf = async (proposta, nome) => {
 
     let tituloHabitos
 
-    if (result.data.result[0].tipoFormulario == 'adulto') {
+    if (result.data.result[0].tipoFormulario === 'adulto') {
         tituloHabitos = [
             { text: 'HÁBITOS E HISTÓRICO FAMILIAR', fontSize: 20, margin: 20 },
         ]
@@ -21,28 +21,29 @@ const gerarPdf = async (proposta, nome) => {
     const perguntas = resultPerguntas.data.perguntas.map(e => {
 
         if (e.formulario === result.data.result[0].tipoFormulario && e.categoria === 'questionario') {
-            if (e.sexo != 'M' && e.sexo != 'F') {
+            if (e.sexo !== 'M' && e.sexo !== 'F') {
                 return [
                     { text: e.pergunta, margin: [20, 0, 20, 0] },
                     { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
                 ]
             }
-            if (e.sexo == 'M' && result.data.result[0].sexo == 'M') {
-                return [
-                    { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
-                ]
-            }
-
-            if (e.sexo == 'F' && result.data.result[0].sexo == 'F') {
+            if (e.sexo === 'M' && result.data.result[0].sexo === 'M') {
                 return [
                     { text: e.pergunta, margin: [20, 0, 20, 0] },
                     { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
                 ]
             }
 
+            if (e.sexo === 'F' && result.data.result[0].sexo === 'F') {
+                return [
+                    { text: e.pergunta, margin: [20, 0, 20, 0] },
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                ]
+            }
 
         }
+
+        return null
 
     })
 
@@ -55,11 +56,13 @@ const gerarPdf = async (proposta, nome) => {
             ]
         }
 
+        return null
+
     })
 
     let divergencias
 
-    if (result.data.result[0].divergencia != undefined) {
+    if (result.data.result[0].divergencia !== undefined) {
         divergencias = [
             { text: 'Identifica divergencia? ', margin: [20, 0, 20, 0] },
             { text: 'Sim', bold: true, margin: [20, 0, 20, 0] },
@@ -76,13 +79,6 @@ const gerarPdf = async (proposta, nome) => {
             { text: 'Não', bold: true, margin: [20, 0, 20, 0] },
         ]
     }
-
-    const reportTitle = [{
-        text: 'Clientes',
-        fontSize: 15,
-        bold: true,
-        margin: [5, 20, 0, 45] //Left, top, right, bottom
-    }]
 
     const details = [
         {

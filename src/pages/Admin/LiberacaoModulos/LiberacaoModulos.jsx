@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-
+import { Autocomplete, TextField, Button, Box } from "@mui/material";
 
 const LiberacaoModulos = () => {
 
@@ -16,8 +16,9 @@ const LiberacaoModulos = () => {
     const [saida1, setSaida1] = useState('')
     const [entrada2, setEntrada2] = useState('')
     const [saida2, setSaida2] = useState('')
+    const [emails, setEmails] = useState([])
 
-    const buscarEmail = async e => {
+    const buscarEmail = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/infoUser/${email}`, { withCredentials: true })
 
@@ -81,20 +82,45 @@ const LiberacaoModulos = () => {
         }
     }
 
+    useEffect(() => {
+        const buscarEmails = async () => {
+            try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users`, { withCredentials: true })
+
+                setEmails(result.data)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        buscarEmails()
+    }, [])
+
     return (
         <>
             <Sidebar />
-            <section>
-                <div>
+            <section style={{ width: '100%' }}>
+                <div style={{ width: '100%' }}>
                     <div className="title">
                         Liberação de Módulos
                     </div>
-                    <div className="email-container">
-                        <label htmlFor="email">Email Usuario</label>
-                        <input type="text" name="email" id="email" placeholder="Email" onKeyUp={e => setEmail(e.target.value)} />
-                        <button onClick={buscarEmail}>Buscar</button>
-                    </div>
-                    <div>
+                    <Box display='flex' m={2}>
+                        <Autocomplete
+                            size="small"
+                            disablePortal
+                            id="email-auto-complete"
+                            options={emails}
+                            onChange={(event, item) => {
+                                setEmail(item.email);
+                            }}
+                            getOptionLabel={emails => emails.email}
+                            sx={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label='Email' />}
+                        />
+                        <Button style={{marginLeft: '30px'}} variant='contained' onClick={buscarEmail}>Buscar</Button>
+                    </Box>
+                    <div >
                         {
                             msg
                         }

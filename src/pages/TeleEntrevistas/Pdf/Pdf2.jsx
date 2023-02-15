@@ -1,4 +1,3 @@
-import jsPDF from "jspdf";
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
 import { useParams } from 'react-router-dom'
@@ -10,7 +9,7 @@ const Pdf2 = () => {
 
     const { proposta, nome } = useParams()
 
-    console.log(proposta,nome);
+    console.log(proposta, nome);
 
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
@@ -29,19 +28,7 @@ const Pdf2 = () => {
         });
     }
 
-    const buscarDadosEntrevista = async () => {
-        try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista/${proposta}/${nome}`, { withCredentials: true })
-
-            setDadosEntrevista(result.data.result[0])
-
-            console.log(result);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 
     const buscarPerguntas = async () => {
@@ -56,10 +43,25 @@ const Pdf2 = () => {
     }
 
     useEffect(() => {
+
+        const buscarDadosEntrevista = async () => {
+            try {
+
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista/${proposta}/${nome}`, { withCredentials: true })
+
+                setDadosEntrevista(result.data.result[0])
+
+                console.log(result);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarDadosEntrevista()
         buscarPerguntas()
         gerarPdf()
-    }, [])
+    }, [nome, proposta])
 
     return (
         <section className='section-editar-proposta-container' id='pdf'>
@@ -94,13 +96,15 @@ const Pdf2 = () => {
                 <div className="perguntas-container">
                     {
                         perguntas.map(e => {
-                            if (e.formulario == dadosEntrevista.tipoFormulario) {
+                            if (e.formulario === dadosEntrevista.tipoFormulario) {
                                 return (
                                     <div className='title'>
                                         <label htmlFor={e.name}>{e.pergunta}</label>
                                         <textarea type="text" name="" id={e.name} defaultValue={dadosEntrevista[e.name]} className='input-pergunta' />
                                     </div>
                                 )
+                            } else {
+                                return null
                             }
                         })
                     }

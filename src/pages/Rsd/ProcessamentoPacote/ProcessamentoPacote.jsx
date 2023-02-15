@@ -3,11 +3,8 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { useParams } from "react-router-dom";
 import { FaAngleDown } from "react-icons/fa";
 import Axios from 'axios'
-import AuthContext from "../../../context/AuthContext";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
-import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
-import RoteiroRsd from "./RoteiroRsd/RoteiroRsd";
 import Modal from 'react-modal'
 import './ProcessamentoPacote.css'
 import moment from "moment";
@@ -63,57 +60,7 @@ const ProcessamentoPacote = () => {
         setModalAgenda(false)
     }
 
-    const buscarPedidos = async () => {
-        try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
-
-            setPedidos(result.data.pedidos)
-
-            let arrAuxProtocolos = result.data.pedidos.filter((item, pos, array) => {
-                return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
-            })
-
-            setProtocolos(arrAuxProtocolos)
-
-            setStatusPacote(result.data.pedidos[0].statusPacote)
-
-            if (result.data.pedidos[0].statusPacote === 'Finalizado') {
-                setFinalizado(false)
-            }
-
-            if (result.data.pedidos[0].statusPacote === '2° Tentativa') {
-                setNumeroTentativa('2° Tentativa')
-            }
-
-            if (result.data.pedidos[0].statusPacote === '3° Tentativa') {
-                setNumeroTentativa('3° Tentativa')
-            }
-
-            if (result.data.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
-                setRetornoContato(true)
-            }
-
-            if (result.data.pedidos[0].contato == 'Não foi entrado em contato') {
-                setNaoContato(true)
-                setContatoNaoEntrado(true)
-            }
-            if (result.data.pedidos[0].contato == 'Sim') {
-                setContatoSim(true)
-            }
-            if (result.data.pedidos[0].contato == 'Não') {
-                setContatoNao(true)
-            }
-            if (result.data.pedidos[0].contato == 'Necessário Agendar Horario') {
-                setContatoAgendar(true)
-            }
-
-            setJustificativa(result.data.pedidos[0].justificativa)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
     const anexarGravacao = async e => {
 
         e.preventDefault()
@@ -135,17 +82,7 @@ const ProcessamentoPacote = () => {
             console.log(error);
         }
     }
-    const buscarArquivos = async e => {
-        try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
-
-            setArquivos(result.data.arquivos)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
     const download = (url, filename) => {
         fetch(url)
             .then(response => response.blob())
@@ -215,7 +152,7 @@ const ProcessamentoPacote = () => {
             console.log(servicos);
             console.log(finalizacoes);
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
                 pacote: idPacote,
                 sucesso: houveSucesso,
                 motivoContato: motivosContato,
@@ -261,17 +198,7 @@ const ProcessamentoPacote = () => {
         finalizacao.set(id, valor)
 
     }
-    const buscarAgenda = async () => {
-        try {
-
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
-
-            setAgenda(result.data.agenda)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    
     const enviarComentarioAgenda = async e => {
         try {
 
@@ -313,16 +240,16 @@ const ProcessamentoPacote = () => {
         let checkbox1 = document.getElementById('checkbox-processamento-1')
         let checkbox2 = document.getElementById('checkbox-processamento-2')
         let checkbox3 = document.getElementById('checkbox-processamento-3')
-        let checkbox4 = document.getElementById('checkbox-processamento-4')
-        let checkbox5 = document.getElementById('checkbox-processamento-5')
-        let tr1 = document.getElementById('tr-processamento-1')
+        // let checkbox4 = document.getElementById('checkbox-processamento-4')
+        // let checkbox5 = document.getElementById('checkbox-processamento-5')
+        // let tr1 = document.getElementById('tr-processamento-1')
         let tr2 = document.getElementById('tr-processamento-2')
         let tr3 = document.getElementById('tr-processamento-3')
         let tr4 = document.getElementById('tr-processamento-4')
-        let tr5 = document.getElementById('tr-processamento-5')
+        // let tr5 = document.getElementById('tr-processamento-5')
 
         for (const e of pedidos) {
-            if (e.dataSelo != undefined) {
+            if (e.dataSelo !== undefined) {
                 tr2.classList.toggle('none')
                 checkbox1.checked = true
                 console.log(e.dataSelo);
@@ -339,7 +266,7 @@ const ProcessamentoPacote = () => {
         }
 
         for (const e of pedidos) {
-            if (e.formaPagamento != undefined) {
+            if (e.formaPagamento !== undefined) {
                 tr4.classList.toggle('none')
                 checkbox3.checked = true
                 break
@@ -348,12 +275,89 @@ const ProcessamentoPacote = () => {
     }
 
     useEffect(() => {
+
+        const buscarAgenda = async () => {
+            try {
+    
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
+    
+                setAgenda(result.data.agenda)
+    
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        const buscarArquivos = async e => {
+            try {
+    
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
+    
+                setArquivos(result.data.arquivos)
+    
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        const buscarPedidos = async () => {
+            try {
+    
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
+    
+                setPedidos(result.data.pedidos)
+    
+                let arrAuxProtocolos = result.data.pedidos.filter((item, pos, array) => {
+                    return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+                })
+    
+                setProtocolos(arrAuxProtocolos)
+    
+                setStatusPacote(result.data.pedidos[0].statusPacote)
+    
+                if (result.data.pedidos[0].statusPacote === 'Finalizado') {
+                    setFinalizado(false)
+                }
+    
+                if (result.data.pedidos[0].statusPacote === '2° Tentativa') {
+                    setNumeroTentativa('2° Tentativa')
+                }
+    
+                if (result.data.pedidos[0].statusPacote === '3° Tentativa') {
+                    setNumeroTentativa('3° Tentativa')
+                }
+    
+                if (result.data.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
+                    setRetornoContato(true)
+                }
+    
+                if (result.data.pedidos[0].contato === 'Não foi entrado em contato') {
+                    setNaoContato(true)
+                    setContatoNaoEntrado(true)
+                }
+                if (result.data.pedidos[0].contato === 'Sim') {
+                    setContatoSim(true)
+                }
+                if (result.data.pedidos[0].contato === 'Não') {
+                    setContatoNao(true)
+                }
+                if (result.data.pedidos[0].contato === 'Necessário Agendar Horario') {
+                    setContatoAgendar(true)
+                }
+    
+                setJustificativa(result.data.pedidos[0].justificativa)
+    
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarPedidos()
         buscarArquivos()
         buscarFormasPagamento()
         buscarStatusFinalizacao()
         buscarAgenda()
-    }, [])
+    }, [idPacote])
 
     return (
         <>

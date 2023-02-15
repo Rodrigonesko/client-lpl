@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import moment from "moment/moment";
-import { IMaskInput } from "react-imask";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './FaturamentoEntrevistas.css'
 import Modal from 'react-modal'
+import { CircularProgress, Button, TextField, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 
 Modal.setAppElement('#root')
 
@@ -15,6 +15,7 @@ const FaturamentoEntrevistas = () => {
     const [notaFiscalPreencher, setNotaFiscalPreencher] = useState('')
     const [status, setStatus] = useState('todos')
     const [data, setData] = useState('todos')
+    const [loading, setLoading] = useState(false)
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -25,9 +26,13 @@ const FaturamentoEntrevistas = () => {
 
     const buscarNaoFaturados = async () => {
         try {
+
+            setLoading(true)
+
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoFaturadas`, { withCredentials: true })
 
             setEntrevistas(result.data.entrevistas)
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -52,26 +57,30 @@ const FaturamentoEntrevistas = () => {
     const realizarFaturamento = async () => {
         try {
 
+            setLoading(true)
+
             let nfs = document.getElementsByClassName('td-nf')
             let checkbox = document.getElementsByClassName('check-faturado')
             let ids = document.getElementsByClassName('id-faturamento')
+            let tipos = document.getElementsByClassName('tipo')
 
             let faturar = []
 
             for (let i = 0; i < checkbox.length; i++) {
 
                 if (checkbox[i].checked) {
-                    faturar.push([nfs[i].value, ids[i].textContent])
+                    faturar.push([{ nf: nfs[i].value, id: ids[i].textContent, tipo: tipos[i].textContent }])
                 }
             }
+
+            console.log(faturar);
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/faturar`, { entrevistas: faturar }, { withCredentials: true })
 
             if (result.status === 200) {
                 openModal()
+                setLoading(false)
             }
-
-            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -81,6 +90,8 @@ const FaturamentoEntrevistas = () => {
     const pesquisar = async () => {
         try {
             console.log(status, data);
+
+            setLoading(true)
 
             if (data === '') {
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/faturamento/filtros/${status}/todos`, { withCredentials: true })
@@ -92,18 +103,27 @@ const FaturamentoEntrevistas = () => {
                 setEntrevistas(result.data.entrevistas)
             }
 
+            setLoading(false)
+
         } catch (error) {
             console.log(error);
         }
     }
 
     const gerarRelatorio = async () => {
+
+        setLoading(true)
+
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+        const reusltRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/concluidas`, {
+            withCredentials: true
+        })
 
         let xls = '\ufeff'
         xls += "<table border='1'>"
         xls += "<thead><tr>"
         xls += "<th>Id</th>"
+        xls += "<th>Tipó</th>"
         xls += "<th>Proposta</th>"
         xls += "<th>Nome</th>"
         xls += "<th>Data Entrevista</th>"
@@ -115,9 +135,31 @@ const FaturamentoEntrevistas = () => {
         result.data.entrevistas.forEach(e => {
             xls += "<tr>"
             xls += `<td>${e._id}</td>`
+            xls += `<td>Tele</td>`
             xls += `<td>${e.proposta}</td>`
             xls += `<td>${e.nome}</td>`
             xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+            xls += `<td>${e.faturado}</td>`
+            if (e.nf === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${e.nf}</td>`
+            }
+            if (e.dataFaturamento === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${moment(e.dataFaturamento).format('DD/MM/YYYY')}</td>`
+            }
+            xls += `</tr>`
+        })
+
+        reusltRn.data.result.forEach(e => {
+            xls += "<tr>"
+            xls += `<td>${e._id}</td>`
+            xls += `<td>Rn</td>`
+            xls += `<td>${e.proposta}</td>`
+            xls += `<td>${e.beneficiario}</td>`
+            xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
             xls += `<td>${e.faturado}</td>`
             if (e.nf === undefined) {
                 xls += `<td></td>`
@@ -139,6 +181,8 @@ const FaturamentoEntrevistas = () => {
         a.href = data_type + ', ' + xls.replace(/ /g, '%20');
         a.download = 'Relatorio Faturamento.xls'
         a.click()
+
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -154,31 +198,50 @@ const FaturamentoEntrevistas = () => {
                         <h3>Faturamento</h3>
                     </div>
                     <div className="filtros-faturamento-entrevistas">
-                        <label htmlFor="">Status</label>
-                        <select name="" id="" onChange={e => { setStatus(e.target.value) }}>
-                            <option value="todos"></option>
-                            <option value='Faturado'>Faturado</option>
-                            <option value='Não faturado'>Não Faturado</option>
-                        </select>
+                        <FormControl variant='standard'>
+                            <InputLabel id='status'>Status</InputLabel>
+                            <Select
+                                labelId="status"
+                                id='select-status'
+                                label='Status'
+                                style={{minWidth: '100px'}}
+                                onChange={e => {
+                                    setStatus(e.target.value)
+                                }}
+                            >
+                                <MenuItem value='todos'>
+                                    <em>
+                                        
+                                    </em>
+                                </MenuItem>
+                                <MenuItem value='Faturado'>Faturado</MenuItem>
+                                <MenuItem value='Não faturado'>Não faturado</MenuItem>
+                            </Select>
+                        </FormControl>
                         <label htmlFor="mes-ano">Mes/Ano</label>
-                        <IMaskInput
-                            mask="00-0000"
-                            placeholder="mes-ano"
+                        <TextField
+                            variant='standard'
+                            type='month'
                             name="mes-ano" id="mes-ano"
                             onChange={e => setData(e.target.value)}
                         />
-                        <button onClick={pesquisar}>Filtrar</button>
-                        <label htmlFor="nota-fiscal">Preencher NFs</label>
-                        <input type="text" id="nota-fiscal" onChange={e => setNotaFiscalPreencher(e.target.value)} />
-                        <button onClick={preencherNotasFiscais}>Preencher</button>
-                        <button onClick={marcarTodos}>Marcar Todos</button>
-                        <button onClick={gerarRelatorio}>Report</button>
+                        <Button variant='contained' onClick={pesquisar}>Filtrar</Button>
+                        <TextField variant='standard' type="text" id="nota-fiscal" onChange={e => setNotaFiscalPreencher(e.target.value)} label='Preencher NF' />
+                        <Button variant='contained' onClick={preencherNotasFiscais}>Preencher</Button>
+                        <Button variant='contained' onClick={marcarTodos}>Marcar Todos</Button>
+                        <Button variant='contained' onClick={gerarRelatorio}>Report</Button>
                     </div>
                     <div className="entrevistas-faturamento">
+                        {
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '40%' }} />
+                            ) : null
+                        }
                         <table className="table">
                             <thead className="table-header">
                                 <tr>
                                     <th>ID</th>
+                                    <th>Tipo</th>
                                     <th>Proposta</th>
                                     <th>Nome</th>
                                     <th>Data Entrevista</th>
@@ -193,10 +256,11 @@ const FaturamentoEntrevistas = () => {
                                         return (
                                             <tr key={e._id}>
                                                 <td className="id-faturamento">{e._id}</td>
+                                                <td className="tipo">{e.tipo}</td>
                                                 <td>{e.proposta}</td>
                                                 <td>{e.nome}</td>
-                                                <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
-                                                <td><input type="checkbox" name="" id="" className="check-faturado" checked={e.faturado === 'Faturado'}/></td>
+                                                <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
+                                                <td><input type="checkbox" name="" id="" className="check-faturado" defaultChecked={e.faturado === 'Faturado'} /></td>
                                                 <td><input type="text" name="" id="" className="td-nf" defaultValue={e.nf} /></td>
                                             </tr>
                                         )

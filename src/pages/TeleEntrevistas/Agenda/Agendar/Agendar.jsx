@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import { Typography } from "@mui/material";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
@@ -7,14 +7,14 @@ import TabelaAgendarTele from "../../../../components/TabelaAgendar/TabelaAgenda
 import BotoesRelatorios from "../../../../components/TabelaAgendar/BotoesRelatorio";
 import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
-import HorariosDisponiveis from "../../../../components/TabelaAgendar/HorariosDisponiveis";
-import AuthContext from "../../../../context/AuthContext";
+// import HorariosDisponiveis from "../../../../components/TabelaAgendar/HorariosDisponiveis";
+// import AuthContext from "../../../../context/AuthContext";
 
 import './Agendar.css'
 
 const Agendar = () => {
 
-    const { accessLevel } = useContext(AuthContext)
+    // const { accessLevel } = useContext(AuthContext)
 
     const [propostas, setPropostas] = useState([])
     const [rns, setRns] = useState([])
@@ -23,7 +23,6 @@ const Agendar = () => {
 
     const [horarios, setHorarios] = useState({})
 
-    const [qtdNaoAgendado, setQtdNaoAgendado] = useState(0)
 
     const searchPropostas = async () => {
         try {
@@ -60,7 +59,7 @@ const Agendar = () => {
 
             setPropostasTotal(arrTotal)
 
-            setQtdNaoAgendado(result.data.total)
+            (result.data.total)
 
         } catch (error) {
             console.log(error);

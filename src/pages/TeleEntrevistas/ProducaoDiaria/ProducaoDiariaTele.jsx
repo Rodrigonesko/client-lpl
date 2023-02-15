@@ -9,12 +9,12 @@ const ProducaoDiariaTele = () => {
     const [producao, setProducao] = useState([])
     const [total, setTotal] = useState(0)
     const [data, setData] = useState('')
-    const [totalRn, setTotalRn] = useState(0)
+    // const [totalRn, setTotalRn] = useState(0)
 
     const buscarDados = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${moment(new Date).format('YYYY-MM-DD')}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${moment().format('YYYY-MM-DD')}`, { withCredentials: true })
 
             setProducao(result.data.producao)
             setTotal(result.data.total)
@@ -76,7 +76,7 @@ const ProducaoDiariaTele = () => {
                                 <tr>
                                     <th>Total</th>
                                     <th>{total}</th>
-                                    <th>{totalRn}</th>
+                                    <th>0</th>
                                 </tr>
                             </tbody>
                         </table>

@@ -11,7 +11,6 @@ const Agendado = () => {
 
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
-    const [qtdAgendado, setQtdAgendado] = useState(0)
     const [loading, setLoading] = useState(false)
 
     const searchEnfermeiro = async () => {
@@ -66,7 +65,6 @@ const Agendado = () => {
             })
 
             setPropostas(arr)
-            setQtdAgendado(result.data.propostas.length + resultRn.data.rns.length)
 
         } catch (error) {
             console.log(error);

@@ -75,6 +75,8 @@ const Horarios = () => {
                     return e.value
                 }
 
+                return null
+
             })
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: dataFecharHorario, responsavel: responsavelFecharHorario, horarios: values }, { withCredentials: true })
@@ -109,6 +111,8 @@ const Horarios = () => {
                 if (e.checked) {
                     return e.value
                 }
+
+                return null
             })
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reabrirHorarios`, { horarios, data: dataReabrirHorario, responsavel: responsavelReabrirHorario }, { withCredentials: true })

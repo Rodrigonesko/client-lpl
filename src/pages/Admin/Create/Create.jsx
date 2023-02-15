@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
-import { Button, TextField, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Menu, } from "@mui/material";
+import { Button, TextField, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Snackbar, Alert } from "@mui/material";
 import './Create.css'
 
 const atividades = [
@@ -19,12 +19,13 @@ const atividades = [
 
 const Create = () => {
 
+    const [snack, setSnack] = useState(false);
+    const [error, setError] = useState(false)
+    const [message, setMessage] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
     const [admin, setAdmin] = useState(false)
-    const [responseMessage, setResponseMessage] = useState('')
+    const [atividade, setAtividade] = useState('')
 
 
     const toggleAdmin = () => {
@@ -34,16 +35,22 @@ const Create = () => {
     const cadastrar = async e => {
         e.preventDefault()
 
+
+
+
         try {
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/users`, { email, name, password, confirmPassword, accessLevel: admin }, { withCredentials: true })
+
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/users`, { email, name, accessLevel: admin, atividade }, { withCredentials: true })
 
             if (result.status === 201) {
-                setResponseMessage('Usuario Criado com Sucesso!')
+                setSnack(true)
             }
 
         } catch (error) {
-            setResponseMessage(error.response.data.message)
-
+            setMessage(error.response.data.message)
+            setError(true)
+            console.log(error);
         }
 
     }
@@ -52,14 +59,6 @@ const Create = () => {
         <>
             <Sidebar></Sidebar>
             <Box display='flex' justifyContent='center' alignItems='center' width='100%'>
-
-                {responseMessage && (
-                    <div className="warning">
-                        {responseMessage}
-                    </div>
-                )}
-
-
                 <Box>
                     <Box display='flex' justifyContent='center' alignItems='center'>
                         <h3>Criar usuario</h3>
@@ -72,12 +71,6 @@ const Create = () => {
                             <TextField variant="filled" type="text" label='Nome' name="name" id="name" onChange={e => setName(e.target.value)} />
                         </Box>
                         <Box m={2}>
-                            <TextField variant="filled" type="password" label='Senha' name="password" id="password" onChange={e => setPassword(e.target.value)} />
-                        </Box>
-                        <Box m={2}>
-                            <TextField variant="filled" type="password" label='Confirmar senha' name="confirmPassword" id="confirmPassword" onChange={e => setConfirmPassword(e.target.value)} />
-                        </Box>
-                        <Box m={2}>
                             <FormControl variant='filled'>
                                 <InputLabel id="label-atividade">Atividade Principal</InputLabel>
                                 <Select
@@ -86,6 +79,10 @@ const Create = () => {
                                     style={{ minWidth: '200px' }}
                                     label='Atividade Principal'
                                     defaultValue=''
+                                    onChange={e => {
+                                        console.log(e.target.value);
+                                        setAtividade(e.target.value)
+                                    }}
                                 >
                                     <MenuItem>
                                         <em>
@@ -106,7 +103,24 @@ const Create = () => {
                         <Box display='flex' justifyContent='center' alignItems='center'>
                             <Button variant='contained' onClick={cadastrar}>Cadastrar</Button>
                         </Box>
-
+                        <Snackbar
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            open={snack}
+                            onClose={() => setSnack(false)}
+                        >
+                            <Alert onClose={() => setSnack(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                Usuário criado com sucesso!
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            open={error}
+                            onClose={() => setError(false)}
+                        >
+                            <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
+                                {message}
+                            </Alert>
+                        </Snackbar>
                     </Box>
                 </Box>
             </Box>

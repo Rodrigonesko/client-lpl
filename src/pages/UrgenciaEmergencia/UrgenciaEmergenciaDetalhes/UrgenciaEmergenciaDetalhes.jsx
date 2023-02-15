@@ -21,20 +21,7 @@ const UrgenciaEmergenciaDetalhes = () => {
     const [retorno, setRetorno] = useState('')
     const [observacoes, setObservacoes] = useState('')
 
-    const buscarInfoProposta = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/detalhes/${id}`, { withCredentials: true })
 
-            setProposta(result.data.proposta)
-            setEmail(result.data.proposta.email)
-            setTelefone(result.data.proposta.telefone)
-            setRetorno(result.data.proposta.retorno)
-            setObservacoes(result.data.proposta.observacoes)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const salvarInfo = async () => {
         try {
@@ -117,8 +104,23 @@ const UrgenciaEmergenciaDetalhes = () => {
     }
 
     useEffect(() => {
+        const buscarInfoProposta = async () => {
+            try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/detalhes/${id}`, { withCredentials: true })
+
+                setProposta(result.data.proposta)
+                setEmail(result.data.proposta.email)
+                setTelefone(result.data.proposta.telefone)
+                setRetorno(result.data.proposta.retorno)
+                setObservacoes(result.data.proposta.observacoes)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarInfoProposta()
-    }, [])
+    }, [id])
 
     return (
         <>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import * as XLSX from 'xlsx';
 import Axios from 'axios'
 import Modal from 'react-modal'
 
@@ -10,7 +9,6 @@ const UploadQuarentena = () => {
 
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
-    const [valorCorte, setValorCorte] = useState(20000)
     const [pedidos, setPedidos] = useState([])
     const [modal, setModal] = useState(false)
     const [totalPedido, setTotalPedidos] = useState(0)
@@ -23,7 +21,6 @@ const UploadQuarentena = () => {
             let formData = new FormData()
 
             formData.append('file', file, file.name)
-            formData.append('corte', valorCorte)
 
             setStatus('Enviando...')
 
@@ -31,7 +28,7 @@ const UploadQuarentena = () => {
 
             console.log(result.data.pedidos);
 
-            if (result.status == 200) {
+            if (result.status === 200) {
                 setStatus(`Novos pedidos: ${result.data.pedidos.length}`)
             }
 
@@ -48,7 +45,7 @@ const UploadQuarentena = () => {
         try {
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, { pedidos }, { withCredentials: true })
 
-            if (result.status == 200) {
+            if (result.status === 200) {
                 setStatus(`Foram adicionados ${result.data.pedidos.length} pedidos`)
                 setTotalPedidos(result.data.pedidos.length)
                 setModal(true)
@@ -64,11 +61,11 @@ const UploadQuarentena = () => {
         <>
             <Sidebar />
             <section className="section-upload-container">
-                {status != '' ? (
+                {status !== '' ? (
                     <div className="result">
                         <p>{status}</p>
                         {
-                            status != 'Enviando...' ? (
+                            status !== 'Enviando...' ? (
                                 <button onClick={subir}>Subir</button>
                             ) : null
                         }

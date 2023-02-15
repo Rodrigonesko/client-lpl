@@ -42,21 +42,7 @@ const EditarEntrevista = () => {
         }
     }
 
-    const buscarDadosEntrevista = async () => {
-        try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, { withCredentials: true })
-
-            setDadosEntrevista(result.data.proposta)
-
-            setHouveDivergencia(result.data.proposta.houveDivergencia)
-            
-            setDataNascimento(result.data.proposta.dataNascimento)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const handleChange = async (item) => {
         try {
@@ -81,9 +67,26 @@ const EditarEntrevista = () => {
     }
 
     useEffect(() => {
+
+        const buscarDadosEntrevista = async () => {
+            try {
+
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, { withCredentials: true })
+
+                setDadosEntrevista(result.data.proposta)
+
+                setHouveDivergencia(result.data.proposta.houveDivergencia)
+
+                setDataNascimento(result.data.proposta.dataNascimento)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarPerguntas()
         buscarDadosEntrevista()
-    }, [])
+    }, [id])
 
     return (
         <>
@@ -113,7 +116,7 @@ const EditarEntrevista = () => {
                             </tr>
                             <tr>
                                 <td>Data Nascimento</td>
-                                <td><input type="text" name="" id="" defaultValue={dadosEntrevista.dataNascimento} onChange={e=>setDataNascimento(e.target.value)} /></td>
+                                <td><input type="text" name="" id="" defaultValue={dadosEntrevista.dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
                             </tr>
                         </table>
                     </div>
@@ -128,6 +131,8 @@ const EditarEntrevista = () => {
                                         </div>
                                     )
                                 }
+
+                                return null
                             })
                         }
                         <div id="divergencia-container">

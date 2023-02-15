@@ -13,7 +13,7 @@ const UrgenciaEmergenciaProducao = () => {
     const buscarDados = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/producao/${moment(new Date).format('YYYY-MM-DD')}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/producao/${moment().format('YYYY-MM-DD')}`, { withCredentials: true })
 
             setProducao(result.data.producao)
             setTotal(result.data.total)

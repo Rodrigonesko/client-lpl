@@ -94,44 +94,7 @@ const Formulario = () => {
         }
     }
 
-    const buscarInfoPessoa = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/pessoa/${id}`, { withCredentials: true })
 
-            setPessoa(result.data.pessoa)
-            setFormulario(result.data.pessoa.formulario)
-            setSexo(result.data.pessoa.sexo)
-            if (result.data.pessoa.formulario != 'adulto') {
-                setHabitos(false)
-            }
-
-            console.log(result);
-
-            setRiscoBeneficiario(result.data.pessoa.riscoBeneficiario)
-            setRiscoImc(result.data.pessoa.riscoImc)
-            setSinistral(result.data.pessoa.sinistral)
-            setTipoAssociado(result.data.pessoa.tipoAssociado)
-            setGrupoCarencia(result.data.pessoa.grupoCarencia)
-            setDs1(result.data.pessoa.d1)
-            setDs2(result.data.pessoa.d2)
-            setDs3(result.data.pessoa.d3)
-            setDs4(result.data.pessoa.d4)
-            setDs5(result.data.pessoa.d5)
-            setDs6(result.data.pessoa.d6)
-            setDs7(result.data.pessoa.d7)
-            setDs8(result.data.pessoa.d8)
-            setDs9(result.data.pessoa.d9)
-            setPeso(result.data.pessoa.peso)
-            setAltura(result.data.pessoa.altura)
-            setImc(result.data.pessoa.imc)
-            setCidAnterior1(result.data.pessoa.cid1)
-            setCidAnterior2(result.data.pessoa.cid2)
-            setCidAnterior3(result.data.pessoa.cid3)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const handleChange = (item) => {
         respostas[`${item.id}`] = item.value
@@ -162,9 +125,9 @@ const Formulario = () => {
                 let span = document.createElement('span')
                 span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
                 document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
-            } 
+            }
 
-            if(imc < 30) {
+            if (imc < 30) {
                 let divIndicadorObesidade = document.getElementById('indicador-obesidade')
                 divIndicadorObesidade.removeChild(divIndicadorObesidade.firstChild)
             }
@@ -246,7 +209,7 @@ const Formulario = () => {
     const buscarCids = async (cid) => {
         try {
 
-            if (cid === '' || cid.length <= 2 ) {
+            if (cid === '' || cid.length <= 2) {
                 setCids([])
             } else {
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/cids/pesquisa/${cid}`, { withCredentials: true })
@@ -263,7 +226,7 @@ const Formulario = () => {
 
         let div = document.getElementById('cids-selecionados')
 
-        if (item.checked == true) {
+        if (item.checked === true) {
             arrCids.push(item.value)
             let div1 = document.createElement('div')
             let span = document.createElement('span')
@@ -273,7 +236,7 @@ const Formulario = () => {
             div.appendChild(div1)
         }
 
-        if (item.checked == false) {
+        if (item.checked === false) {
             let indice = arrCids.indexOf(item.value)
             arrCids.splice(indice, 1)
             let divRetirada = document.getElementById(item.value)
@@ -297,7 +260,7 @@ const Formulario = () => {
         try {
             console.log(novoFormulario);
 
-            if (!novoFormulario == '') {
+            if (!novoFormulario === '') {
                 const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/alterarFormulario`, {
                     formulario: novoFormulario,
                     id: id
@@ -319,9 +282,49 @@ const Formulario = () => {
     }
 
     useEffect(() => {
+
+        const buscarInfoPessoa = async () => {
+            try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/pessoa/${id}`, { withCredentials: true })
+
+                setPessoa(result.data.pessoa)
+                setFormulario(result.data.pessoa.formulario)
+                setSexo(result.data.pessoa.sexo)
+                if (result.data.pessoa.formulario !== 'adulto') {
+                    setHabitos(false)
+                }
+
+                console.log(result);
+
+                setRiscoBeneficiario(result.data.pessoa.riscoBeneficiario)
+                setRiscoImc(result.data.pessoa.riscoImc)
+                setSinistral(result.data.pessoa.sinistral)
+                setTipoAssociado(result.data.pessoa.tipoAssociado)
+                setGrupoCarencia(result.data.pessoa.grupoCarencia)
+                setDs1(result.data.pessoa.d1)
+                setDs2(result.data.pessoa.d2)
+                setDs3(result.data.pessoa.d3)
+                setDs4(result.data.pessoa.d4)
+                setDs5(result.data.pessoa.d5)
+                setDs6(result.data.pessoa.d6)
+                setDs7(result.data.pessoa.d7)
+                setDs8(result.data.pessoa.d8)
+                setDs9(result.data.pessoa.d9)
+                setPeso(result.data.pessoa.peso)
+                setAltura(result.data.pessoa.altura)
+                setImc(result.data.pessoa.imc)
+                setCidAnterior1(result.data.pessoa.cid1)
+                setCidAnterior2(result.data.pessoa.cid2)
+                setCidAnterior3(result.data.pessoa.cid3)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarPerguntas()
         buscarInfoPessoa()
-    }, [])
+    }, [id])
 
     return (
         <>
@@ -359,30 +362,32 @@ const Formulario = () => {
                         {
                             perguntas.map(e => {
 
-                                if (e.formulario == formulario && e.categoria == 'questionario') {
+                                if (e.formulario === formulario && e.categoria === 'questionario') {
 
-                                    if (e.sexo != 'M' && e.sexo != 'F') {
+                                    if (e.sexo !== 'M' && e.sexo !== 'F') {
                                         return (
                                             <>
                                                 <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
                                             </>
                                         )
                                     }
-                                    if (e.sexo == 'M' && sexo == 'M') {
+                                    if (e.sexo === 'M' && sexo === 'M') {
                                         return (
                                             <>
                                                 <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
                                             </>
                                         )
                                     }
-                                    if (e.sexo == 'F' && sexo == 'F') {
+                                    if (e.sexo === 'F' && sexo === 'F') {
                                         return (
                                             <>
                                                 <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
                                             </>
                                         )
                                     }
-                                }
+                                } 
+
+                                return null
                             })
                         }
                     </div>
@@ -395,13 +400,15 @@ const Formulario = () => {
                                 <div className="formulario">
                                     {
                                         perguntas.map(e => {
-                                            if (e.formulario == 'adulto' && e.categoria == 'habitos') {
+                                            if (e.formulario === 'adulto' && e.categoria === 'habitos') {
                                                 return (
                                                     <>
                                                         <Pergunta handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
                                                     </>
                                                 )
                                             }
+
+                                            return null
                                         })
                                     }
                                 </div>

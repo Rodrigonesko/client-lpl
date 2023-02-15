@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import Axios from 'axios'
-import * as XLSX from "xlsx";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment/moment";
-import RelatorioQuarentena from "./Quarentena/RelatorioQuarentena";
 import './RelatorioRsd.css'
 
 const RelatorioRsd = () => {

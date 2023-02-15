@@ -4,7 +4,6 @@ import Sidebar from "../../../../components/Sidebar/Sidebar";
 import './Mensagens.css'
 const Mensagens = () => {
 
-    const [propostas, setPropostas] = useState([])
     const [dataMensagem, setDataMensagem] = useState('')
     const [mensagens, setMensagens] = useState([])
 
