@@ -32,22 +32,25 @@ const EditarOperadoraBeneficiario = () => {
         }
     }
 
-    const buscarOperadora = async () => {
-        try {
-
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadora/${id}`, {withCredentials: true})
-
-            setDescricao(result.data.operadora.descricao)
-            setSla(result.data.operadora.sla)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     useEffect(() => {
+
+        const buscarOperadora = async () => {
+            try {
+
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadora/${id}`, { withCredentials: true })
+
+                setDescricao(result.data.operadora.descricao)
+                setSla(result.data.operadora.sla)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+
         buscarOperadora()
-    }, [])
+    }, [id])
 
     return (
         <>

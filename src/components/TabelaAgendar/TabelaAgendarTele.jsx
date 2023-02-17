@@ -100,8 +100,8 @@ const TabelaAgendarTele = ({ propostas }) => {
             <Typography variant='h4' width='100%'>
                 Tele: {propostas.length}
             </Typography>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Box>
+                <table className="table">
                     <thead className='table-header' >
                         <tr>
                             <td>Data Vigência</td>
@@ -121,7 +121,7 @@ const TabelaAgendarTele = ({ propostas }) => {
                                 return (
                                     <tr key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                         <td>
-                                            <input type='date' defaultValue={row.vigencia} />
+                                            <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
                                             <Button size="small" color='warning' variant='contained' onClick={
                                                 item => {
                                                     alterarVigencia(item.target.parentElement.firstChild.firstChild.firstChild.value, row._id)
@@ -138,7 +138,7 @@ const TabelaAgendarTele = ({ propostas }) => {
                                             </select>
                                         </td>
                                         <td>
-                                            <input type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
+                                            <TextField size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
                                         </td>
                                         <td>
                                             <Button variant="contained" onClick={() => {
@@ -170,8 +170,9 @@ const TabelaAgendarTele = ({ propostas }) => {
                             })
                         }
                     </tbody>
-                </Table>
-                <Modal
+                </table>
+            </Box>
+            <Modal
                     open={modalExcluir}
                     onClose={() => setModalExcluir(false)}
                     aria-labelledby="modal-modal-title"
@@ -229,7 +230,6 @@ const TabelaAgendarTele = ({ propostas }) => {
                         </Box>
                     </Box>
                 </Modal>
-            </TableContainer>
         </>
 
     )

@@ -59,7 +59,7 @@ const UploadConfirmadas = () => {
         <>
             <Sidebar />
             <section className="section-upload-container">
-                {status != '' ? (
+                {status !== '' ? (
                     <div className="result">
                         <p>{status}</p>
                     </div>

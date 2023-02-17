@@ -605,6 +605,8 @@ const ProcessamentoPacote = () => {
                                                                 </>
                                                             )
                                                         }
+
+                                                        return null
                                                     })
                                                 }
                                             </td>
@@ -646,6 +648,8 @@ const ProcessamentoPacote = () => {
                                                                 </>
                                                             )
                                                         }
+
+                                                        return null
                                                     })
                                                 }
                                             </td>
@@ -678,6 +682,8 @@ const ProcessamentoPacote = () => {
                                                                 </>
                                                             )
                                                         }
+
+                                                        return null
                                                     })
                                                 }
                                             </td>

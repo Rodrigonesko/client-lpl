@@ -17,24 +17,6 @@ const EditarPedido = () => {
     const [mo, setMo] = useState('')
     const [pedidoEditado, setPedidoEditado] = useState('')
 
-    const buscarPedido = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedido/${pedido}`, { withCredentials: true })
-
-            console.log(result);
-
-            setValorApresentado(result.data.result.valorApresentado)
-            setValorReembolsado(result.data.result.valorReembolsado)
-            setCnpj(result.data.result.cnpj)
-            setClinica(result.data.result.clinica)
-            setNf(result.data.result.nf)
-            setPedidoEditado(result.data.result.numero)
-            setMo(result.data.result.mo)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const buscarClinica = async e => {
         try {
@@ -75,8 +57,29 @@ const EditarPedido = () => {
     }
 
     useEffect(() => {
+
+        const buscarPedido = async () => {
+            try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedido/${pedido}`, { withCredentials: true })
+    
+                console.log(result);
+    
+                setValorApresentado(result.data.result.valorApresentado)
+                setValorReembolsado(result.data.result.valorReembolsado)
+                setCnpj(result.data.result.cnpj)
+                setClinica(result.data.result.clinica)
+                setNf(result.data.result.nf)
+                setPedidoEditado(result.data.result.numero)
+                setMo(result.data.result.mo)
+    
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    
+
         buscarPedido()
-    }, [])
+    }, [pedido])
 
     return (
         <>

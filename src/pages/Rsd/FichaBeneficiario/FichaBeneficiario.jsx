@@ -37,44 +37,7 @@ const FichaBeneficiario = () => {
     const [modalInativarPacote, setModalInativarPacote] = useState(false)
     const [inativarPacote, setInativarPacote] = useState('')
 
-    const buscarMo = async () => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
 
-        setNome(result.data.pessoa.nome)
-        setCpf(result.data.pessoa.cpf)
-        setDataNascimento(result.data.pessoa.dataNascimento)
-        setEmail(result.data.pessoa.email)
-        setFone1(result.data.pessoa.fone1)
-        setFone2(result.data.pessoa.fone2)
-        setFone3(result.data.pessoa.fone3)
-        setContratoEmpresa(result.data.pessoa.contratoEmpresa)
-
-        const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
-
-        setPedidos(resultPedidos.data.pedidos)
-
-        let auxProtocolos = resultPedidos.data.pedidos.filter((item, pos, array) => {
-            return item.status === 'A iniciar'
-        })
-
-        console.log(auxProtocolos);
-
-        let arrAuxProtocolos = auxProtocolos.filter((item, pos, array) => {
-            return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
-        })
-
-        setProtocolos(arrAuxProtocolos)
-
-        let arrAuxPacotes = resultPedidos.data.pedidos.filter((item, pos, array) => {
-            return array.map(x => x.pacote).indexOf(item.pacote) === pos
-        })
-
-        setPacotes(arrAuxPacotes)
-
-        console.log(arrAuxPacotes);
-
-
-    }
 
     const atualizarInformacoes = async () => {
         console.log(dataNascimento, email, fone1, fone2, fone3, contratoEmpresa, mo);
@@ -156,7 +119,7 @@ const FichaBeneficiario = () => {
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/assumir`, { name: name, pacote: e.target.value }, { withCredentials: true })
 
-            if (result.status == 200) {
+            if (result.status === 200) {
                 window.location.reload();
             }
 
@@ -188,8 +151,48 @@ const FichaBeneficiario = () => {
     }
 
     useEffect(() => {
+
+        const buscarMo = async () => {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
+
+            setNome(result.data.pessoa.nome)
+            setCpf(result.data.pessoa.cpf)
+            setDataNascimento(result.data.pessoa.dataNascimento)
+            setEmail(result.data.pessoa.email)
+            setFone1(result.data.pessoa.fone1)
+            setFone2(result.data.pessoa.fone2)
+            setFone3(result.data.pessoa.fone3)
+            setContratoEmpresa(result.data.pessoa.contratoEmpresa)
+
+            const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
+
+            setPedidos(resultPedidos.data.pedidos)
+
+            let auxProtocolos = resultPedidos.data.pedidos.filter((item, pos, array) => {
+                return item.status === 'A iniciar'
+            })
+
+            console.log(auxProtocolos);
+
+            let arrAuxProtocolos = auxProtocolos.filter((item, pos, array) => {
+                return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+            })
+
+            setProtocolos(arrAuxProtocolos)
+
+            let arrAuxPacotes = resultPedidos.data.pedidos.filter((item, pos, array) => {
+                return array.map(x => x.pacote).indexOf(item.pacote) === pos
+            })
+
+            setPacotes(arrAuxPacotes)
+
+            console.log(arrAuxPacotes);
+
+
+        }
+
         buscarMo()
-    }, [])
+    }, [mo])
 
     return (
         <>
@@ -298,6 +301,7 @@ const FichaBeneficiario = () => {
                                             )
                                         }
 
+                                        return null
                                     })
                                 }
                             </tbody>
@@ -348,6 +352,8 @@ const FichaBeneficiario = () => {
                                                 </>
                                             )
                                         }
+
+                                        return null
                                     })
                                 }
                             </tbody>

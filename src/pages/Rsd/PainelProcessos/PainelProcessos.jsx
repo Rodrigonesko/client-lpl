@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FaAngleDown } from 'react-icons/fa'
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Painel from "../../../components/Painel/Painel";
@@ -46,24 +45,7 @@ const PainelProcessos = () => {
 
     const [pesquisa, setPesquisa] = useState('')
 
-    const setStatusPedido = async () => {
-        pedidos.forEach(e => {
 
-            if (e.status === 'A iniciar') {
-                setAiniciar(aIniciar => [...aIniciar, e])
-            }
-            if (e.status === 'Em andamento') {
-                setAgendados(agendados => [...agendados, e])
-            }
-            if (e.status === 'Aguardando Retorno Contato') {
-                setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
-            }
-            if (e.status === 'Aguardando Docs') {
-                setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
-            }
-        })
-
-    }
 
     const buscarPedidos = async () => {
         try {
@@ -115,6 +97,26 @@ const PainelProcessos = () => {
     }
 
     useEffect(() => {
+
+        const setStatusPedido = async () => {
+            pedidos.forEach(e => {
+
+                if (e.status === 'A iniciar') {
+                    setAiniciar(aIniciar => [...aIniciar, e])
+                }
+                if (e.status === 'Em andamento') {
+                    setAgendados(agendados => [...agendados, e])
+                }
+                if (e.status === 'Aguardando Retorno Contato') {
+                    setAguardandoContatos(aguardandoContatos => [...aguardandoContatos, e])
+                }
+                if (e.status === 'Aguardando Docs') {
+                    setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
+                }
+            })
+
+        }
+
         buscarPedidos()
         setStatusPedido()
     }, [teste])

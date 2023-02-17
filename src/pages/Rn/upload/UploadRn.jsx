@@ -48,7 +48,7 @@ const UploadRn = () => {
         <>
             <Sidebar />
             <section className="section-upload-container">
-                {status != '' ? (
+                {status !== '' ? (
                     <div className="result">
                         <Alert severity="success" variant="filled">
                             <AlertTitle>Sucesso</AlertTitle>

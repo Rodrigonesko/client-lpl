@@ -59,20 +59,23 @@ const CriarPedido = () => {
         }
     }
 
-    const buscaMo = async () => {
-        try {
-            console.log(protocolo);
-            const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/mo/${protocolo}`, { withCredentials: true })
-            console.log(buscaMo);
-            setMo(buscaMo.data.pedido.mo)
-        } catch (error) {
-            console.log(error);
-        }
-    }
+
 
     useEffect(() => {
+
+        const buscaMo = async () => {
+            try {
+                console.log(protocolo);
+                const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/mo/${protocolo}`, { withCredentials: true })
+                console.log(buscaMo);
+                setMo(buscaMo.data.pedido.mo)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscaMo()
-    }, [])
+    }, [protocolo])
 
     return (
         <>

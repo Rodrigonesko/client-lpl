@@ -57,6 +57,7 @@ import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoEntrev
 import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgendadas";
 import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
 import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
+import Implantacao from "./pages/TeleEntrevistas/Agenda/Implantacao/Implantacao";
 
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
@@ -196,6 +197,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/cid/adicionar" element={<ProtectedRoute>
                     <AdicionarCid />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/implantacao" element={<ProtectedRoute>
+                    <Implantacao />
                 </ProtectedRoute>} />
 
                 <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>

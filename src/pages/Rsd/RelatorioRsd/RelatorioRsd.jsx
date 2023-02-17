@@ -62,6 +62,7 @@ const RelatorioRsd = () => {
             xls += "<th>Quem anexou</th>"
             xls += "<th>Fila</th>"
             xls += '<th>Motivo inativo</th>'
+            xls += '<th>ID</th>'
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -79,7 +80,12 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.statusGerencial}</td>`
                 xls += `<td>${moment(e.createdAt).format('MM/YYYY')}</td>`
                 xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
-                xls += `<td>${e.dataConclusao}</td>`
+                if(e.dataConclusao === undefined){
+                    xls += `<td></td>`
+                } else {
+                    xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+                }
+
                 xls += `<td>${e.operador}</td>`
                 xls += `<td>${e.protocolo}'</td>`
                 xls += `<td>${e.numero}</td>`
@@ -108,6 +114,7 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.quemAnexou}</td>`
                 xls += `<td>${e.fila}</td>`
                 xls += `<td>${e.motivoInativo}</td>`
+                xls += `<td>${e._id}</td>`
 
                 xls += `</tr>`
             })

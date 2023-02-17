@@ -7,6 +7,7 @@ import TabelaAgendarTele from "../../../../components/TabelaAgendar/TabelaAgenda
 import BotoesRelatorios from "../../../../components/TabelaAgendar/BotoesRelatorio";
 import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
+import { CircularProgress } from "@mui/material";
 // import HorariosDisponiveis from "../../../../components/TabelaAgendar/HorariosDisponiveis";
 // import AuthContext from "../../../../context/AuthContext";
 
@@ -20,12 +21,16 @@ const Agendar = () => {
     const [rns, setRns] = useState([])
     const [propostasTotal, setPropostasTotal] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const [horarios, setHorarios] = useState({})
 
 
     const searchPropostas = async () => {
         try {
+
+            setLoading(true)
+
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoAgendadas`, { withCredentials: true })
 
             const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
@@ -59,7 +64,7 @@ const Agendar = () => {
 
             setPropostasTotal(arrTotal)
 
-            (result.data.total)
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -99,6 +104,11 @@ const Agendar = () => {
         <>
             <Sidebar />
             <section className="section-agendamento-container">
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', right: '50%', top: '50%' }} />
+                    ) : null
+                }
                 <div className="agendamento-container">
                     <Typography variant="h5">
                         <h3>Agendamento de Horários</h3>

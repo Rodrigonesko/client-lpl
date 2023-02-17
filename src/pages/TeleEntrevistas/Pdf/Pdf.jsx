@@ -122,7 +122,7 @@ const gerarPdf = async (proposta, nome) => {
         footer: rodape
     }
 
-    pdfMake.createPdf(docDefinitions).download()
+    pdfMake.createPdf(docDefinitions).download(`${nome}.pdf`)
 
 }
 

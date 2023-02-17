@@ -32,7 +32,7 @@ const CriarProtocolo = () => {
             withCredentials: true
         })
 
-        if (result.status == 200) {
+        if (result.status === 200) {
             navigate(`/rsd/FichaBeneficiario/${mo}`)
         }
         console.log(result);

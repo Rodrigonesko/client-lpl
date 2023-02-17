@@ -176,8 +176,7 @@ const Formulario = () => {
     const enviarDados = async () => {
         try {
 
-            console.log(respostas);
-            console.log(subRespostas);
+            console.log(divergencia, arrCids);
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/formulario`, {
                 respostas: respostas,
@@ -191,15 +190,12 @@ const Formulario = () => {
             })
 
             gerarPdf(pessoa.proposta, pessoa.nome)
-            //navigate(`/entrevistas/pdf2/${pessoa.proposta}/${pessoa.nome}`)
 
             if (result.status === 200) {
                 openModal()
-                arrCids = []
-                respostas = {}
-                subRespostas = {}
-                simOuNao = {}
             }
+
+
 
         } catch (error) {
             console.log(error);
@@ -252,15 +248,12 @@ const Formulario = () => {
             div.classList.remove('none')
         } else {
             div.classList.add('none')
-            console.log('oi');
         }
     }
 
     const alterarFormulario = async () => {
         try {
-            console.log(novoFormulario);
-
-            if (!novoFormulario === '') {
+            if (novoFormulario !== '') {
                 const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/alterarFormulario`, {
                     formulario: novoFormulario,
                     id: id
@@ -385,7 +378,7 @@ const Formulario = () => {
                                             </>
                                         )
                                     }
-                                } 
+                                }
 
                                 return null
                             })

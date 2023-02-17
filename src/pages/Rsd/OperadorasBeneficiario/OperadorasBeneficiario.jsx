@@ -56,7 +56,7 @@ const OperadorasBeneficiario = () => {
                                                 <td>{e.descricao}</td>
                                                 <td>{e.sla}</td>
                                                 <td>{e.ativo}</td>
-                                                <td><a href="" >Ativar/Desativar</a ></td>
+                                                <td>Ativar/Desativar</td>
                                                 <td><Link className="link-editar-operadora" to={`/rsd/OperadoraBeneficiario/editar/${e._id}`} >Editar</Link ></td>
                                             </tr>
                                         )

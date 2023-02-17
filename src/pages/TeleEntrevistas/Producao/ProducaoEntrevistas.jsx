@@ -2,31 +2,39 @@ import React, { useEffect, useState } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import TabelaProducao from "./TabelaProducao/TabelaProducao";
+import TabelaProducaoMui from "./TabelaProducao/TabelaProducaoMui";
 import './ProducaoEntrevistas.css'
+import { CircularProgress } from "@mui/material";
 
 const ProducaoEntrevistas = () => {
 
     const [producao, setProducao] = useState([])
-    // const [producaoRns, setProducaoRns] = useState([])
-
-    const buscarDados = async () => {
-        try {
-
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producao`, { withCredentials: true })
-
-            console.log(result);
-
-            setProducao(result.data.arrQuantidadeTotalMes)
-
-            // setProducaoRns(result.data.arrRns)
-
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const [loading, setLoading] = useState(false)
+    const [producaoRns, setProducaoRns] = useState([])
 
     useEffect(() => {
+
+        const buscarDados = async () => {
+            try {
+
+                setLoading(true)
+
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producao`, { withCredentials: true })
+
+                setProducao(result.data.arrQuantidadeTotalMes)
+
+                console.log(result.data.arrRns);
+
+                setProducaoRns(result.data.arrRns)
+
+                setLoading(false)
+
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarDados()
     }, [])
 
@@ -38,7 +46,19 @@ const ProducaoEntrevistas = () => {
                     <div className="title producao-entrevistas">
                         <h3>Produção Entrevistas</h3>
                     </div>
-                    <TabelaProducao producao={producao}></TabelaProducao>
+                    {
+                        loading ? (
+                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} />
+                        ) : null
+                    }
+                    {/* <TabelaProducao producao={producao}></TabelaProducao> */}
+
+                    <TabelaProducaoMui producao={producao}></TabelaProducaoMui>
+{/* 
+                    <TabelaProducaoMui producao={producaoRns}></TabelaProducaoMui> */}
+
+                    <br />
+
                 </div>
 
             </section>

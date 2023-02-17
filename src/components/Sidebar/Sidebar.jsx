@@ -66,7 +66,9 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/agenda/agendados'>Agendados</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/agenda/mensagens'>Mensagens</Link></MenuItem>
-                                <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>{
+                                <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/implantacao'>Implatação</Link></MenuItem>
+                                {
                                     accessLevel != 'false' ? (
                                         <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
                                     ) : null
