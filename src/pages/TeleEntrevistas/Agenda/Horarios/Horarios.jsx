@@ -3,6 +3,7 @@ import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Modal from 'react-modal'
 import "./Horarios.css"
+import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography } from "@mui/material";
 
 Modal.setAppElement('#root')
 
@@ -138,7 +139,7 @@ const Horarios = () => {
                 withCredentials: true
             })
 
-            if(result.status === 200){
+            if (result.status === 200) {
                 openModal()
             }
 
@@ -154,33 +155,42 @@ const Horarios = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-horarios-container">
-                <div className="horarios-container">
+            <Container className="section-horarios-container">
+                <Box className="horarios-container">
                     <div className="title">
                         <h3>Ajustar Horários</h3>
                     </div>
-                </div>
-                <div className="fechar-dia">
-                    <div className="title">
-                        <h4>Fechar Dia</h4>
-                    </div>
-                    <div>
-                        <label htmlFor="enfermeira-dia">Responsável</label>
-                        <select name="enfermeira-dia" id="enfermeira-dia" onChange={e => setResponsavelFecharDia(e.target.value)}>
-                            <option value="">Responsável</option>
+                </Box>
+                <Paper elevation={3} style={{ padding: '20px' }} >
+                    <Typography variant='h6' m={1}>
+                        Fechar Dia
+                    </Typography>
+                    <FormControl style={{ minWidth: '150px', marginRight: '20px' }} size='small'>
+                        <InputLabel id="responsavel">Responsável</InputLabel>
+                        <Select
+                            labelId='responsavel'
+                            id="select-responsavel"
+                            label='Responsável'
+                            onChange={e => setResponsavelFecharDia(e.target.value)}
+                        >
+                            <MenuItem>
+                                <em>
+                                    Responsável
+                                </em>
+                            </MenuItem>
                             {
                                 responsaveis.map(e => {
                                     return (
-                                        <option value={e.name}>{e.name}</option>
+                                        <MenuItem value={e.name}>{e.name}</MenuItem>
                                     )
                                 })
                             }
-                        </select>
-                        <label htmlFor="data-fechar-dia">Selecionar Dia</label>
-                        <input type="date" name="data-fechar-dia" id="data-fechar-dia" onChange={e => setDataFecharDia(e.target.value)} />
-                        <button onClick={fecharDia} >Fechar Dia</button>
-                    </div>
-                </div>
+                        </Select>
+                    </FormControl>
+                    <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => setDataFecharDia(e.target.value)} label='Dia' focused />
+                    <Button variant="contained"  onClick={fecharDia} >Fechar Dia</Button>
+                </Paper>
+
                 <div className="title">
                     <h4>Fechar Horarios</h4>
                 </div>
@@ -214,7 +224,7 @@ const Horarios = () => {
                             }
                         </ul>
                     </div>
-                    <button onClick={fecharHorarios} >Fechar Horarios</button>
+                    <Button variant="contained" size="small" onClick={fecharHorarios} >Fechar Horarios</Button>
                 </div>
                 <div className="title">
                     <h4>Reabrir Horarios</h4>
@@ -247,7 +257,7 @@ const Horarios = () => {
                             }
                         </ul>
                     </div>
-                    <button onClick={reabrirHorarios}>Reabrir Horarios</button>
+                    <Button variant="contained" size="small" onClick={reabrirHorarios}>Reabrir Horarios</Button>
                 </div>
                 <div>
                     <div className="title">
@@ -271,7 +281,7 @@ const Horarios = () => {
                         <input type="date" name="" id="" onChange={e => setDiaExcecao(e.target.value)} />
                         <label htmlFor="">Horário: </label>
                         <input type="time" name="" id="" onChange={e => setHorarioExcecao(e.target.value)} />
-                        <button onClick={abrirNovoHorario} >Abrir</button>
+                        <Button variant="contained" size="small" onClick={abrirNovoHorario} >Abrir</Button>
                     </div>
                 </div>
                 <Modal
@@ -282,13 +292,13 @@ const Horarios = () => {
                     className='modal-content'>
                     <div className="title">
                         <h2>Horaios Ajustados com sucesso!</h2>
-                        <button onClick={() => {
+                        <Button onClick={() => {
                             closeModal()
                             window.location.reload()
-                        }}>Fechar</button>
+                        }}>Fechar</Button>
                     </div>
                 </Modal>
-            </section>
+            </Container>
         </>
     )
 }

@@ -5,6 +5,9 @@ import { useParams } from "react-router-dom";
 import moment from "moment/moment";
 import './UrgenciaEmergenciaDetalhes.css'
 import Modal from 'react-modal'
+import { Button, Box, Container, TextField, Accordion, AccordionDetails, AccordionSummary, Typography, List, ListItem, ListItemText } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 Modal.setAppElement('#root')
 
@@ -20,8 +23,6 @@ const UrgenciaEmergenciaDetalhes = () => {
     const [email, setEmail] = useState('')
     const [retorno, setRetorno] = useState('')
     const [observacoes, setObservacoes] = useState('')
-
-
 
     const salvarInfo = async () => {
         try {
@@ -114,6 +115,10 @@ const UrgenciaEmergenciaDetalhes = () => {
                 setRetorno(result.data.proposta.retorno)
                 setObservacoes(result.data.proposta.observacoes)
 
+                const tel = document.getElementById('telefone')
+                tel.value = result.data.proposta.telefone
+                document.getElementById('email').value = result.data.proposta.email
+
             } catch (error) {
                 console.log(error);
             }
@@ -127,62 +132,207 @@ const UrgenciaEmergenciaDetalhes = () => {
             <Sidebar></Sidebar>
             <section className="section-u-e-detalhes">
                 <div className="u-e-detalhes-container">
-                    <div className="title">
+                    <Box m={2} className="title">
                         <h3>Urgência & Emergência</h3>
-                    </div>
-                    <div className="u-e-detalhes" >
+                    </Box>
+                    <Container className="u-e-detalhes" >
                         <div className="title">
-                            <h3>Proposta: {proposta.proposta} - {proposta.status} {proposta.analista}</h3>
+                            <h3>Pedido: {proposta.pedido} - {proposta.status} - {proposta.analista}</h3>
                         </div>
-                        <div className="box-u-e" >
-                            <label htmlFor="">Nome: </label>
-                            <strong>{proposta.nomeAssociado}</strong>
-                            <label htmlFor="">MO: </label>
-                            <strong>{proposta.nomeAssociado}</strong>
-                            <label htmlFor="">Data Inclusão: </label>
-                            <strong>{moment(proposta.dataInclusao).format('DD/MM/YYYY')}</strong>
-                            <label htmlFor="">Data Recebimento: </label>
-                            <strong>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</strong>
-                        </div>
-                        <div className="box-u-e"  >
-                            <label htmlFor="">Data Nascimento: </label>
-                            <strong>{moment(proposta.dataNascimento).format('DD/MM/YYYY')}</strong>
-                            <label htmlFor="">Idade: </label>
-                            <strong>{proposta.idade}</strong>
-                            <label htmlFor="">Responsável: </label>
-                            <strong>{proposta.responsavel}</strong>
-                            <label htmlFor="">Data Solicitação: </label>
-                            <strong>{moment(proposta.dataSolicitacao).format('DD/MM/YYYY')}</strong>
-                        </div>
-                        <div className="box-u-e"  >
-                            <label htmlFor="telefone">Telefone: </label>
-                            <input type="text" name="telefone" id="telefone" defaultValue={proposta.telefone} onKeyUp={e => { setTelefone(e.target.value) }} />
-                            <label htmlFor="email">Email: </label>
-                            <input type="text" name="email" id="" defaultValue={proposta.email} onKeyUp={e => { setEmail(e.target.value) }} />
-                            <label htmlFor="">Cid: </label>
-                            <strong>{proposta.cid} </strong>
-                            <label htmlFor="">Descrição Cid: </label>
-                            <strong>{proposta.descricaoCid} </strong>
-                        </div>
-                        <div className="box-u-e" >
-                            <label htmlFor="">Nome Prestador: </label>
-                            <strong>{proposta.nomePrestador} </strong>
-                            <label htmlFor="">Sit Autoriz: </label>
-                            <strong>{proposta.sitAutoriz} </strong>
-                            <label htmlFor="">Relatório Médico: </label>
-                            <strong>{proposta.relatorioMedico} </strong>
-                            <label htmlFor="">Obs Under: </label>
-                            <strong>{proposta.obsUnder} </strong>
-                        </div>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Nome: </label>
+                                <strong>{proposta.nomeAssociado}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">MO: </label>
+                                <strong>{proposta.numAssociado}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Data Inclusão: </label>
+                                <strong>{moment(proposta.dataInclusao).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Data Recebimento: </label>
+                                <strong>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Data Nascimento: </label>
+                                <strong>{moment(proposta.dataNascimento).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Idade: </label>
+                                <strong>{proposta.idade}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Data Adesão: </label>
+                                <strong>{moment(proposta.dataAdesao).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Data Solicitação: </label>
+                                <strong>{moment(proposta.dataSolicitacao).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                        </Box>
+
+                        <Box m={2} display='flex' alignItems='center'>
+                            <Box marginRight={2}>
+                                <label htmlFor="">DDD: </label>
+                                <strong>{proposta.ddd}</strong>
+                            </Box>
+                            <Box width='100%'>
+                                <TextField focused variant='standard' size='small' style={{ width: '50%' }} label='Telefone' type="text" name="telefone" id="telefone" onKeyUp={e => { setTelefone(e.target.value) }} />
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' alignItems='center' >
+                            <Box width='100%'>
+                                <TextField focused variant='standard' size='small' label='E-mail' style={{ width: '50%' }} type="text" name="email" id="email" onKeyUp={e => { setEmail(e.target.value) }} />
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Nome do Plano: </label>
+                                <strong>{proposta.nomePlano}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Tipo Contrato: </label>
+                                <strong>{proposta.tipoContrato}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Cod Prc: </label>
+                                <strong>{proposta.prc}</strong>
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography><strong>IND RESP</strong></Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Box>
+                                        <List>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`1 - ${proposta.indResp1}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`2 - ${proposta.indResp2}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`3 - ${proposta.indResp3}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`4 - ${proposta.indResp4}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`5 - ${proposta.indResp5}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`6 - ${proposta.indResp6}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`7 - ${proposta.indResp7}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`8 - ${proposta.indResp8}`}
+                                                />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={`9 - ${proposta.indResp9}`}
+                                                />
+                                            </ListItem>
+                                        </List>
+                                    </Box>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Data Solicitação: </label>
+                                <strong>{moment(proposta.dataSolicitacao).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Idade na Solic: </label>
+                                <strong>{proposta.idadeSolic}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Data Autor: </label>
+                                <strong>{moment(proposta.dataAutorizacao).format('DD/MM/YYYY')}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Ind Carater: </label>
+                                <strong>{proposta.indCarater}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Nome Prestador: </label>
+                                <strong>{proposta.nomePrestador}</strong>
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Cid Principal: </label>
+                                <strong>{proposta.cidPrin}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Nome Cid Principal: </label>
+                                <strong>{proposta.nomeCidPrin}</strong>
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Cid Secundario: </label>
+                                <strong>{proposta.cidSec}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Nome Cid Secundario: </label>
+                                <strong>{proposta.nomeCidSec}</strong>
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Sit Autoriz: </label>
+                                <strong>{proposta.sitAutoriz}</strong>
+                            </Box>
+                            <Box>
+                                <label htmlFor="">Nome Tratamento: </label>
+                                <strong>{proposta.nomeTratamento}</strong>
+                            </Box>
+                        </Box>
+                        <Box m={2} display='flex' justifyContent='space-between' >
+                            <Box>
+                                <label htmlFor="">Info Relatório Médico: </label>
+                                <strong>{proposta.relatorioMedico}</strong>
+                            </Box>
+                        </Box>
                         <div className="box-u-e" >
                             <label htmlFor="contato-1">1° Contato: </label>
                             <strong>{proposta.contato1 ? (moment(proposta.contato1).format('DD/MM/YYYY HH:mm')) : null}</strong>
                             {
                                 !proposta.contato1 ? (
 
-                                    <button className="btn-padrao-azul" value={'contato1'} onClick={e => {
+                                    <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato1'} onClick={e => {
                                         atribuirContato(e.target.value)
-                                    }} >1° Contato</button>
+                                    }} >1° Contato</Button>
                                 ) : null
                             }
 
@@ -190,9 +340,9 @@ const UrgenciaEmergenciaDetalhes = () => {
                             <strong>{proposta.contato2 ? (moment(proposta.contato2).format('DD/MM/YYYY HH:mm')) : null}</strong>
                             {
                                 !proposta.contato2 ? (
-                                    <button className="btn-padrao-azul" value={'contato2'} onClick={e => {
+                                    <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato2'} onClick={e => {
                                         atribuirContato(e.target.value)
-                                    }} >2° Contato</button>
+                                    }} >2° Contato</Button>
                                 ) : null
                             }
 
@@ -200,9 +350,9 @@ const UrgenciaEmergenciaDetalhes = () => {
                             <strong>{proposta.contato3 ? (moment(proposta.contato3).format('DD/MM/YYYY HH:mm')) : null}</strong>
                             {
                                 !proposta.contato3 ? (
-                                    <button className="btn-padrao-azul" value={'contato3'} onClick={e => {
+                                    <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato3'} onClick={e => {
                                         atribuirContato(e.target.value)
-                                    }} >3° Contato</button>
+                                    }} >3° Contato</Button>
                                 ) : null
                             }
 
@@ -222,15 +372,15 @@ const UrgenciaEmergenciaDetalhes = () => {
                             <textarea name="" id="" cols="60" rows="5" defaultValue={proposta.observacoes} onKeyUp={e => { setObservacoes(e.target.value) }} ></textarea>
                         </div>
                         <div>
-                            <button onClick={salvarInfo} >Salvar</button>
+                            <Button variant='contained' onClick={salvarInfo} style={{ marginRight: '10px' }} >Salvar</Button>
                             {
                                 proposta.status === 'Andamento' ? (
-                                    <button onClick={concluir} >Concluir</button>
+                                    <Button color="success" variant='contained' onClick={concluir} >Concluir</Button>
                                 ) : null
                             }
 
                         </div>
-                    </div>
+                    </Container>
                 </div>
             </section>
             <Modal
@@ -241,10 +391,10 @@ const UrgenciaEmergenciaDetalhes = () => {
                 className='modal-content'
             >
                 <h2>Dados Salvos com sucesso!</h2>
-                <button onClick={() => {
+                <Button variant="contained" size='small' onClick={() => {
                     setModalSalvar(false)
                     window.location.reload()
-                }}>Ok</button>
+                }}>Ok</Button>
             </Modal>
         </>
     )

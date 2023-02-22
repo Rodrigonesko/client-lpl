@@ -1,22 +1,27 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
+import { CircularProgress } from "@mui/material";
 
 const UploadUrgenciaEmergencia = () => {
 
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const send = async e => {
         e.preventDefault()
 
         try {
 
+            setLoading(true)
+
             let formData = new FormData()
 
             formData.append('file', file, file.name)
 
             setStatus('Enviando...')
+
 
             console.log(formData);
 
@@ -28,6 +33,8 @@ const UploadUrgenciaEmergencia = () => {
                 setStatus(`${result.data.quantidade} novas propostas adicionadas!`)
             }
 
+            setLoading(false)
+
         } catch (error) {
             console.log(error);
             setStatus('Algo deu errado')
@@ -38,6 +45,13 @@ const UploadUrgenciaEmergencia = () => {
         <>
             <Sidebar></Sidebar>
             <section className="section-upload-container">
+
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute' }} />
+                    ) : null
+                }
+
                 <div className="upload-container">
                     {
                         status !== '' ? (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import TabelaProducao from "./TabelaProducao/TabelaProducao";
+// import TabelaProducao from "./TabelaProducao/TabelaProducao";
 import TabelaProducaoMui from "./TabelaProducao/TabelaProducaoMui";
 import './ProducaoEntrevistas.css'
 import { CircularProgress } from "@mui/material";

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Container, Box } from "@mui/material";
 import Axios from 'axios'
 
 const UrgenciaEmergenciaAnexar = () => {
@@ -46,42 +47,42 @@ const UrgenciaEmergenciaAnexar = () => {
         <>
             <Sidebar></Sidebar>
             <section className="section-padrao-tabela">
-                <div className="container-padrao-tabela">
-                    <div className="title">
+                <Container >
+                    <Box m={2} className="title">
                         <h3>Urgência & Emergência</h3>
-                    </div>
-                    <div>
+                    </Box>
+                    <Box m={2}>
                         <h3>Em andamento: {total}</h3>
-                    </div>
-                    <div>
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Nome Associado</th>
-                                    <th>Mo</th>
-                                    <th>Proposta</th>
-                                    <th>Retificou?</th>
-                                    <th>Observações</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    </Box>
+                    <TableContainer component={Paper}>
+                        <Table className="table">
+                            <TableHead className="table-header">
+                                <TableRow>
+                                    <TableCell>Nome Associado</TableCell>
+                                    <TableCell>Mo</TableCell>
+                                    <TableCell>Pedido</TableCell>
+                                    <TableCell>Retificou?</TableCell>
+                                    <TableCell>Observações</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {propostas.map(e => {
                                     return (
-                                        <tr>
-                                            <td>{e.nomeAssociado}</td>
-                                            <td>{e.numAssociado}</td>
-                                            <td>{e.proposta}</td>
-                                            <td>{e.retorno}</td>
-                                            <td>{e.observacoes}</td>
-                                            <td><button className="btn-padrao-verde" onClick={()=>concluir(e._id)} >Concluir</button></td>
-                                        </tr>
+                                        <TableRow>
+                                            <TableCell>{e.nomeAssociado}</TableCell>
+                                            <TableCell>{e.numAssociado}</TableCell>
+                                            <TableCell>{e.pedido}</TableCell>
+                                            <TableCell>{e.retorno}</TableCell>
+                                            <TableCell>{e.observacoes}</TableCell>
+                                            <TableCell><Button variant="contained" color="success" size="small" className="btn-padrao-verde" onClick={() => concluir(e._id)} >Concluir</Button></TableCell>
+                                        </TableRow>
                                     )
                                 })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
             </section>
         </>
     )

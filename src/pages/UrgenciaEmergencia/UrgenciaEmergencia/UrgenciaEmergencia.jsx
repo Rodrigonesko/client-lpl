@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
-import { Link } from "react-router-dom";
+import { CircularProgress ,Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Container, Box } from "@mui/material";
+
 
 const UrgenciaEmergencia = () => {
 
     const [propostas, setPropostas] = useState([])
     const [total, setTotal] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const buscarPropostas = async () => {
         try {
+
+            setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/andamento`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)
+
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -29,42 +35,47 @@ const UrgenciaEmergencia = () => {
         <>
             <Sidebar></Sidebar>
             <section className="section-padrao-tabela">
-                <div className="container-padrao-tabela">
-                    <div className="title">
+                {
+                    loading ? (
+                        <CircularProgress style={{position: 'absolute', top: '50%', }} />
+                    ) : null
+                }
+                <Container>
+                    <Box m={2}>
                         <h3>Urgência & Emergência</h3>
-                    </div>
-                    <div>
+                    </Box>
+                    <Box m={2}>
                         <h3>Em andamento: {total}</h3>
-                    </div>
-                    <div>
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Nome Associado</th>
-                                    <th>Mo</th>
-                                    <th>Proposta</th>
-                                    <th>Idade</th>
-                                    <th>Telefone</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    </Box>
+                    <TableContainer component={Paper}>
+                        <Table className="table">
+                            <TableHead className="table-header">
+                                <TableRow>
+                                    <TableCell>Nome Associado</TableCell>
+                                    <TableCell>Mo</TableCell>
+                                    <TableCell>Pedido</TableCell>
+                                    <TableCell>Idade</TableCell>
+                                    <TableCell>Telefone</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {propostas.map(e => {
                                     return (
-                                        <tr>
-                                            <td>{e.nomeAssociado}</td>
-                                            <td>{e.numAssociado}</td>
-                                            <td>{e.proposta}</td>
-                                            <td>{e.idade}</td>
-                                            <td>{e.telefone}</td>
-                                            <td><Link to={`/urgenciaEmergencia/detalhes/${e._id}`}>Detalhes</Link></td>
-                                        </tr>
+                                        <TableRow>
+                                            <TableCell>{e.nomeAssociado}</TableCell>
+                                            <TableCell>{e.numAssociado}</TableCell>
+                                            <TableCell>{e.pedido}</TableCell>
+                                            <TableCell>{e.idade}</TableCell>
+                                            <TableCell>{e.telefone}</TableCell>
+                                            <TableCell><Button size="small" variant='contained' href={`/urgenciaEmergencia/detalhes/${e._id}`}>Detalhes</Button></TableCell>
+                                        </TableRow>
                                     )
                                 })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
             </section>
         </>
     )
