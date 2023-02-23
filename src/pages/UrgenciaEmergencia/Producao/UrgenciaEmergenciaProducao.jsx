@@ -1,30 +1,36 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-//import './ProducaoDiariaTele.css'
 import moment from "moment";
-import { Container, Box, Typography, Card, CardContent, Table, TableHead, TableBody, TableRow, TableCell, TextField, Button } from "@mui/material";
-import TabelaProducaoMui from "../../TeleEntrevistas/Producao/TabelaProducao/TabelaProducaoMui";
+import { Container, Box, Button, CircularProgress } from "@mui/material";
+import TabelaProducaoMui from "../../../components/TabelaProducaoMui/TabelaProducaoMui";
+import ProducaoDiariaMui from "../../../components/TabelaProducaoMui/ProducaoDiariaMui";
 
 const UrgenciaEmergenciaProducao = () => {
 
     const [producao, setProducao] = useState([])
+    const [producaoTotal, setProducaoTotal] = useState([])
     const [total, setTotal] = useState(0)
     const [data, setData] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const buscarDados = async () => {
         try {
 
+            setLoading(true)
+
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/producao/${moment().format('YYYY-MM-DD')}`, { withCredentials: true })
 
-            // const result2 = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/producaoTotal`, {
-            //     withCredentials: true
-            // })
+            const result2 = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/producaoTotal`, {
+                withCredentials: true
+            })
 
-            // console.log(result2);
 
+            setProducaoTotal(result2.data.arrQuantidadeTotalMes)
             setProducao(result.data.producao)
             setTotal(result.data.total)
+
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -44,6 +50,9 @@ const UrgenciaEmergenciaProducao = () => {
 
     const relatorio = async () => {
         try {
+
+            setLoading(true)
+
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/todas`, { withCredentials: true })
 
             let xls = '\ufeff'
@@ -64,10 +73,12 @@ const UrgenciaEmergenciaProducao = () => {
 
             xls += "</tbody></table>"
 
+            setLoading(false)
+
             var a = document.createElement('a');
             var data_type = 'data:application/vnd.ms-excel';
             a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-            a.download = 'Relatorio Urgencia Emergencia.xls'
+            a.download = 'Producao Urgencia Emergencia.xls'
             a.click()
 
         } catch (error) {
@@ -84,48 +95,19 @@ const UrgenciaEmergenciaProducao = () => {
         <>
             <Sidebar></Sidebar>
             <Container>
-                <Button onClick={relatorio} variant='contained' style={{ position: 'absolute', top: '20px', right: '30px' }} >Relatório</Button>
-                <Box>
-                    <Box width='50%'>
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} />
+                    ) : null
+                }
 
-                        <Card>
-                            <CardContent>
-                                <Typography variant="h6" align='center'>
-                                    Produção Diaria
-                                </Typography>
-                                <Box m={1} display='flex' justifyContent='center'>
-                                    <TextField type='date' size="small" onChange={e => { setData(e.target.value) }} focused label='Data' />
-                                    <Button variant="contained" size="small" onClick={buscarDadosData} >Buscar</Button>
-                                </Box>
-                                <Table>
-                                    <TableHead >
-                                        <TableRow>
-                                            <TableCell>Analista</TableCell>
-                                            <TableCell>Quantidade</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            producao.map(item => {
-                                                return (
-                                                    <TableRow>
-                                                        <TableCell>{item.analista}</TableCell>
-                                                        <TableCell>{item.quantidade}</TableCell>
-                                                    </TableRow>
-                                                )
-                                            })
-                                        }
-                                        <TableRow>
-                                            <TableCell>Total</TableCell>
-                                            <TableCell>{total}</TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </CardContent>
-                        </Card>
+                <Button onClick={relatorio} variant='contained' style={{ position: 'absolute', top: '20px', right: '30px' }} >Relatório</Button>
+                <Box display='flex' m={2} justifyContent='space-around' alignItems='center'>
+                    <Box width='50%'>
+                        <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData} ></ProducaoDiariaMui>
                     </Box>
                     <Box>
-
+                        <TabelaProducaoMui producao={producaoTotal}></TabelaProducaoMui>
                     </Box>
                 </Box>
             </Container>

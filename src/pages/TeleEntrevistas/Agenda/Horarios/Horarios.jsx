@@ -3,7 +3,7 @@ import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Modal from 'react-modal'
 import "./Horarios.css"
-import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography } from "@mui/material";
+import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, IconButton } from "@mui/material";
 
 Modal.setAppElement('#root')
 
@@ -72,8 +72,9 @@ const Horarios = () => {
             let horariosArr = document.getElementsByClassName('horarios-disponiveis')
 
             let values = Object.values(horariosArr).map(e => {
-                if (e.checked) {
-                    return e.value
+
+                if (e.firstChild.checked) {
+                    return e.firstChild.value
                 }
 
                 return null
@@ -109,12 +110,14 @@ const Horarios = () => {
             let arr = document.getElementsByClassName('horario-reabrir')
 
             let horarios = Object.values(arr).map(e => {
-                if (e.checked) {
-                    return e.value
+                if (e.firstChild.checked) {
+                    return e.firstChild.value
                 }
 
                 return null
             })
+
+            console.log(horarios);
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reabrirHorarios`, { horarios, data: dataReabrirHorario, responsavel: responsavelReabrirHorario }, { withCredentials: true })
 
@@ -161,7 +164,7 @@ const Horarios = () => {
                         <h3>Ajustar Horários</h3>
                     </div>
                 </Box>
-                <Paper elevation={3} style={{ padding: '20px' }} >
+                <Paper elevation={3} style={{ padding: '20px', margin: '10px' }} >
                     <Typography variant='h6' m={1}>
                         Fechar Dia
                     </Typography>
@@ -188,102 +191,155 @@ const Horarios = () => {
                         </Select>
                     </FormControl>
                     <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => setDataFecharDia(e.target.value)} label='Dia' focused />
-                    <Button variant="contained"  onClick={fecharDia} >Fechar Dia</Button>
+                    <Button variant="contained" onClick={fecharDia} >Fechar Dia</Button>
                 </Paper>
-
-                <div className="title">
-                    <h4>Fechar Horarios</h4>
-                </div>
-                <div className="fechar-horario">
-                    <label htmlFor="responsavel-fechar-horario">Responsável</label>
-                    <select name="responsavel-fechar-horario" id="responsavel-fechar-horario" onChange={e => {
-                        setResponsavelFecharHorario(e.target.value)
-                    }}>
-                        <option value="">Responsável</option>
-                        {
-                            responsaveis.map(e => {
-                                return (
-                                    <option value={e.name}>{e.name}</option>
-                                )
-                            })
-                        }
-                    </select>
-                    <label htmlFor="dia-fechar-horario">Selecionar Dia</label>
-                    <input type="date" name="dia-fechar-horario" id="dia-fechar-horario" onChange={e => {
-                        setDataFecharHorario(e.target.value)
-                        buscarHorariosDisponiveis(e.target.value)
-                    }} />
-                    <div>
-                        <ul>
-                            {
-                                horariosDisponiveis.map(e => {
-                                    return (
-                                        <li><input className="horarios-disponiveis" type="checkbox" name={`fechar-${e}`} id={`fechar-${e}`} value={e} /><label htmlFor={`fechar-${e}`} >{e}</label></li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </div>
-                    <Button variant="contained" size="small" onClick={fecharHorarios} >Fechar Horarios</Button>
-                </div>
-                <div className="title">
-                    <h4>Reabrir Horarios</h4>
-                </div>
-                <div className="reabrir-horario">
-                    <label htmlFor="responsavel-reabrir-horario">Responsável</label>
-                    <select name="responsavel-reabrir-horario" id="responsavel-reabrir-horario" onChange={e => { setResponsavelReabrirHorario(e.target.value) }}>
-                        <option value="">Responsável</option>
-                        {
-                            responsaveis.map(e => {
-                                return (
-                                    <option value={e.name}>{e.name}</option>
-                                )
-                            })
-                        }
-                    </select>
-                    <label htmlFor="dia-reabrir-horario">Selecionar Dia</label>
-                    <input type="date" name="dia-reabrir-horario" id="dia-reabrir-horario" onChange={e => {
-                        setDataReabrirHorario(e.target.value)
-                        buscarHorariosNaoDisponiveis(e.target.value)
-                    }} />
-                    <div>
-                        <ul>
-                            {
-                                horariosNaoDisponiveis.map(e => {
-                                    return (
-                                        <li><input className="horario-reabrir" type="checkbox" name={`reabrir-${e}`} id={`reabrir-${e}`} value={e} /> <label htmlFor={`reabrir-${e}`}>{e}</label> </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </div>
-                    <Button variant="contained" size="small" onClick={reabrirHorarios}>Reabrir Horarios</Button>
-                </div>
-                <div>
-                    <div className="title">
-                        <h3>Abrir novo horário</h3>
-                    </div>
-                    <div>
-                        <label htmlFor="">Responsável: </label>
-                        <select name="" id="" onChange={e => {
-                            setResponsavelExcecao(e.target.value)
-                        }} >
-                            <option value=""></option>
+                <Paper style={{ padding: '20px', margin: '10px' }} elevation={3}>
+                    <Typography variant='h6' m={1}>
+                        Fechar Horários
+                    </Typography>
+                    <FormControl style={{ minWidth: '150px', marginRight: '20px' }} size='small'>
+                        <InputLabel id="responsavel-fechar-horario">Responsável</InputLabel>
+                        <Select
+                            labelId='responsavel-fechar-horario'
+                            id="select-responsavel-fechar-horario"
+                            label='Responsável'
+                            onChange={e => {
+                                setResponsavelFecharHorario(e.target.value)
+                            }}
+                        >
+                            <MenuItem>
+                                <em>
+                                    Responsável
+                                </em>
+                            </MenuItem>
                             {
                                 responsaveis.map(e => {
                                     return (
-                                        <option value={e.name}>{e.name}</option>
+                                        <MenuItem value={e.name}>{e.name}</MenuItem>
                                     )
                                 })
                             }
-                        </select>
-                        <label htmlFor="">Data: </label>
-                        <input type="date" name="" id="" onChange={e => setDiaExcecao(e.target.value)} />
-                        <label htmlFor="">Horário: </label>
-                        <input type="time" name="" id="" onChange={e => setHorarioExcecao(e.target.value)} />
-                        <Button variant="contained" size="small" onClick={abrirNovoHorario} >Abrir</Button>
-                    </div>
-                </div>
+                        </Select>
+                    </FormControl>
+                    <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => {
+                        setDataFecharHorario(e.target.value)
+                        buscarHorariosDisponiveis(e.target.value)
+                    }} label='Dia' focused />
+                    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
+                        {
+                            horariosDisponiveis.map(value => {
+                                const labelId = `checkbox-list-label-${value}`;
+                                return (
+                                    <ListItem
+                                        key={value}
+                                        disablePadding
+                                    >
+                                        <ListItemButton role={undefined} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    value={value}
+                                                    className="horarios-disponiveis"
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText id={labelId} primary={`${value}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                )
+                            })
+                        }
+                    </List >
+                    <Button variant="contained" size="small" onClick={fecharHorarios} >Fechar Horarios</Button>
+                </Paper>
+                <Paper style={{ padding: '20px', margin: '10px' }} elevation={3}>
+                    <Typography variant='h6' m={1}>
+                        Reabrir Horários
+                    </Typography>
+                    <FormControl style={{ minWidth: '150px', marginRight: '20px' }} size='small'>
+                        <InputLabel id="responsavel-fechar-horario">Responsável</InputLabel>
+                        <Select
+                            labelId='responsavel-fechar-horario'
+                            id="select-responsavel-fechar-horario"
+                            label='Responsável'
+                            onChange={e => { setResponsavelReabrirHorario(e.target.value) }}
+                        >
+                            <MenuItem>
+                                <em>
+                                    Responsável
+                                </em>
+                            </MenuItem>
+                            {
+                                responsaveis.map(e => {
+                                    return (
+                                        <MenuItem value={e.name}>{e.name}</MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </FormControl>
+                    <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => {
+                        setDataReabrirHorario(e.target.value)
+                        buscarHorariosNaoDisponiveis(e.target.value)
+                    }} label='Dia' focused />
+                    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
+                        {
+                            horariosNaoDisponiveis.map(value => {
+                                const labelId = `checkbox-list-label-${value}`;
+                                return (
+                                    <ListItem
+                                        key={value}
+                                        disablePadding
+                                    >
+                                        <ListItemButton role={undefined} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    value={value}
+                                                    className="horario-reabrir"
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText id={labelId} primary={`${value}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                )
+                            })
+                        }
+                    </List >
+                    <Button variant="contained" size="small" onClick={reabrirHorarios}>Reabrir Horarios</Button>
+                </Paper>
+                <Paper style={{ padding: '20px', margin: '10px' }} elevation={3}>
+                    <Typography variant='h6' m={1}>
+                        Abrir Novo Horário
+                    </Typography>
+                    <FormControl style={{ minWidth: '150px', marginRight: '20px' }} size='small'>
+                        <InputLabel id="responsavel-fechar-horario">Responsável</InputLabel>
+                        <Select
+                            labelId='responsavel-fechar-horario'
+                            id="select-responsavel-fechar-horario"
+                            label='Responsável'
+                            onChange={e => {
+                                setResponsavelExcecao(e.target.value)
+                            }}
+                        >
+                            <MenuItem>
+                                <em>
+                                    Responsável
+                                </em>
+                            </MenuItem>
+                            {
+                                responsaveis.map(e => {
+                                    return (
+                                        <MenuItem value={e.name}>{e.name}</MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </FormControl>
+                    <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => setDiaExcecao(e.target.value)} label='Dia' focused />
+                    <TextField style={{ marginRight: '20px' }} size='small' type='time' label='Horário' focused onChange={e => setHorarioExcecao(e.target.value)} />
+                    <Button variant="contained" onClick={abrirNovoHorario} >Abrir</Button>
+
+                </Paper>
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -292,7 +348,7 @@ const Horarios = () => {
                     className='modal-content'>
                     <div className="title">
                         <h2>Horaios Ajustados com sucesso!</h2>
-                        <Button onClick={() => {
+                        <Button variant='contained' onClick={() => {
                             closeModal()
                             window.location.reload()
                         }}>Fechar</Button>

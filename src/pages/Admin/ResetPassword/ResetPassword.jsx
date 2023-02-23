@@ -23,13 +23,11 @@ const ResetPassword = () => {
             withCredentials: true
         })
 
-        console.log(inputEmail.current);
+        if (result.status === 200) {
+            setSnackOpen(true)
+        }
 
-        // if (result.status === 200) {
-        //     setSnackOpen(true)
-        // }
-
-        // console.log(result);
+        console.log(result);
     }
 
 

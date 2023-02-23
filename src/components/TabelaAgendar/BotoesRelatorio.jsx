@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Axios from "axios";
-import { Button, Box } from "@mui/material";
+import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
 
 const BotoesRelatorios = () => {
 
+    const [loading, setLoading] = useState(false)
+
     const relatorioPropostas = async () => {
         try {
+
+            setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
 
@@ -39,13 +43,14 @@ const BotoesRelatorios = () => {
             xls += "<th>DS 7</th>"
             xls += "<th>DS 8</th>"
             xls += "<th>DS 9</th>"
+            xls += "<th>Status</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
 
             result.data.propostas.map(e => {
                 xls += "<tr>"
-                xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.proposta}</td>`
                 xls += `<td>${e.nome}</td>`
@@ -62,15 +67,16 @@ const BotoesRelatorios = () => {
                 xls += `<td>${e.idade}</td>`
                 xls += `<td>${e.sexo}</td>`
                 xls += `<td>${e.telefone}</td>`
-                xls += `<td>${e.d1}</td>`
-                xls += `<td>${e.d2}</td>`
-                xls += `<td>${e.d3}</td>`
-                xls += `<td>${e.d4}</td>`
-                xls += `<td>${e.d5}</td>`
-                xls += `<td>${e.d6}</td>`
-                xls += `<td>${e.d7}</td>`
-                xls += `<td>${e.d8}</td>`
-                xls += `<td>${e.d9}</td>`
+                xls += `<td>${e.d1?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d2?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d3?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d4?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d5?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d6?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d7?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d8?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.d9?.replaceAll('#', ' ')}</td>`
+                xls += `<td>${e.status}</td>`
                 xls += `</tr>`
             })
 
@@ -82,6 +88,8 @@ const BotoesRelatorios = () => {
             a.download = 'Relatório Propostas.xls'
             a.click()
 
+            setLoading(false)
+
 
         } catch (error) {
             console.log(error);
@@ -90,6 +98,8 @@ const BotoesRelatorios = () => {
 
     const relatorioNaoRealizadas = async () => {
         try {
+
+            setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
 
@@ -134,6 +144,8 @@ const BotoesRelatorios = () => {
             a.download = 'Relatório Não Realizadas.xls'
             a.click()
 
+            setLoading(false)
+
         } catch (error) {
             console.log(error);
         }
@@ -141,6 +153,11 @@ const BotoesRelatorios = () => {
 
     return (
         <Box width='50%' display='flex' justifyContent='space-around' margin='1rem'>
+            {
+                loading ? (
+                    <CircularProgress style={{ position: 'absolute' }} />
+                ) : null
+            }
             <Button variant='contained' onClick={relatorioPropostas}>Relatório Propostas</Button>
             <Button variant='contained' onClick={relatorioNaoRealizadas}>Relatório Não Realizadas</Button>
         </Box>

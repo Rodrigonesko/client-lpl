@@ -110,7 +110,7 @@ const TabelaProducaoMui = ({ producao }) => {
 
     return (
         <>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={{maxWidth: '400px'}}>
                 <Table aria-label='collapsible table' className='table'>
                     <TableHead class='table-header'>
                         <TableRow>

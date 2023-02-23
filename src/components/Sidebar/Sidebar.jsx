@@ -103,7 +103,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/urgenciaEmergencia/upload'>Upload</Link></MenuItem>
 
                         </SubMenu>
-                        <SubMenu title='Liminares' icon={<FaGavel />}>
+                        {/* <SubMenu title='Liminares' icon={<FaGavel />}>
                             <SubMenu title='Liminares'>
                                 <MenuItem><Link to='/liminares/andamento'>Em andamento</Link></MenuItem>
                                 <MenuItem><Link to='/liminares/upload'>Upload</Link></MenuItem>
@@ -114,7 +114,7 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/liminares/uploadAj'>Upload</Link></MenuItem>
                                 <MenuItem><Link to='/liminares/reportAj'>Report</Link></MenuItem>
                             </SubMenu>
-                        </SubMenu>
+                        </SubMenu> */}
                         <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
                             <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
                             <MenuItem><Link to='/rsd/CriarPedidoIndividual/'>Criar Pedido/Protocolo</Link></MenuItem>
@@ -131,9 +131,9 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                         </SubMenu>
-                        <SubMenu title='Contatos Reembolso'>
+                        {/* <SubMenu title='Contatos Reembolso'>
                             <MenuItem><Link to='/provisorio/contatos'>Gerar contatos Gar</Link></MenuItem>
-                        </SubMenu>
+                        </SubMenu> */}
                         <MenuItem icon={<RiLogoutBoxRLine />}>
                             <a onClick={logout}>Sair</a>
                         </MenuItem>
