@@ -198,7 +198,7 @@ const ProcessamentoPacote = () => {
         finalizacao.set(id, valor)
 
     }
-    
+
     const enviarComentarioAgenda = async e => {
         try {
 
@@ -278,11 +278,11 @@ const ProcessamentoPacote = () => {
 
         const buscarAgenda = async () => {
             try {
-    
+
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
-    
+
                 setAgenda(result.data.agenda)
-    
+
             } catch (error) {
                 console.log(error);
             }
@@ -290,11 +290,11 @@ const ProcessamentoPacote = () => {
 
         const buscarArquivos = async e => {
             try {
-    
+
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
-    
+
                 setArquivos(result.data.arquivos)
-    
+
             } catch (error) {
                 console.log(error);
             }
@@ -302,35 +302,35 @@ const ProcessamentoPacote = () => {
 
         const buscarPedidos = async () => {
             try {
-    
+
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
-    
+
                 setPedidos(result.data.pedidos)
-    
+
                 let arrAuxProtocolos = result.data.pedidos.filter((item, pos, array) => {
                     return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
                 })
-    
+
                 setProtocolos(arrAuxProtocolos)
-    
+
                 setStatusPacote(result.data.pedidos[0].statusPacote)
-    
+
                 if (result.data.pedidos[0].statusPacote === 'Finalizado') {
                     setFinalizado(false)
                 }
-    
+
                 if (result.data.pedidos[0].statusPacote === '2° Tentativa') {
                     setNumeroTentativa('2° Tentativa')
                 }
-    
+
                 if (result.data.pedidos[0].statusPacote === '3° Tentativa') {
                     setNumeroTentativa('3° Tentativa')
                 }
-    
+
                 if (result.data.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
                     setRetornoContato(true)
                 }
-    
+
                 if (result.data.pedidos[0].contato === 'Não foi entrado em contato') {
                     setNaoContato(true)
                     setContatoNaoEntrado(true)
@@ -344,9 +344,9 @@ const ProcessamentoPacote = () => {
                 if (result.data.pedidos[0].contato === 'Necessário Agendar Horario') {
                     setContatoAgendar(true)
                 }
-    
+
                 setJustificativa(result.data.pedidos[0].justificativa)
-    
+
             } catch (error) {
                 console.log(error);
             }
@@ -742,7 +742,7 @@ const ProcessamentoPacote = () => {
                                                 return (
                                                     <tr key={e._id}>
                                                         <td> <span className="link-arquivo" onClick={() => {
-                                                            download(`${process.env.REACT_APP_API_KEY}/uploads/rsd/gravacoes/${idPacote}`, e.arquivo)
+                                                            download(`${process.env.REACT_APP_API_KEY}/rsd/download/${idPacote}/${e.arquivo}`, e.arquivo)
                                                         }} >{e.arquivo}</span></td>
                                                         <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
                                                         <td>{e.tipo}</td>

@@ -44,6 +44,7 @@ const BotoesRelatorios = () => {
             xls += "<th>DS 8</th>"
             xls += "<th>DS 9</th>"
             xls += "<th>Status</th>"
+            xls += "<th>Data Conclusão</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -77,6 +78,12 @@ const BotoesRelatorios = () => {
                 xls += `<td>${e.d8?.replaceAll('#', ' ')}</td>`
                 xls += `<td>${e.d9?.replaceAll('#', ' ')}</td>`
                 xls += `<td>${e.status}</td>`
+                if (e.dataConclusao) {
+                    xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+                } else {
+                    xls += `<td></td>`
+                }
+
                 xls += `</tr>`
             })
 
