@@ -21,15 +21,6 @@ const Todas = () => {
 
     }
 
-    const searchRn = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
-            setRns(result.data)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const transformData = () => {
         try {
 
@@ -100,7 +91,6 @@ const Todas = () => {
 
     const reportGerencial = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/report`, { withCredentials: true })
 
             let xls = '\ufeff'
 
@@ -128,23 +118,10 @@ const Todas = () => {
             xls += "<th>3° Contato</th>"
             xls += "<th>Observações</th>"
             xls += "<th>Responsável</th>"
+            xls += "<th>Cancelado</th>"
             xls += "</tr></thead><tbody>"
 
             rns.forEach(e => {
-
-                let contato1, contato2, contato3
-
-                if (e.dataContato1 !== undefined) {
-                    contato1 = moment(e.dataContato1).format('DD/MM/YYYY') + ' ' + e.horarioContato1
-                }
-
-                if (e.dataContato2 !== undefined) {
-                    contato2 = moment(e.dataContato2).format('DD/MM/YYYY') + ' ' + e.horarioContato2
-                }
-
-                if (e.dataContato3 !== undefined) {
-                    contato3 = moment(e.dataContato3).format('DD/MM/YYYY') + ' ' + e.horarioContato3
-                }
 
                 xls += "<tr>"
                 if (e.dataConclusao === undefined) {
@@ -173,6 +150,11 @@ const Todas = () => {
                 xls += `<td>${e.contato3}</td>`
                 xls += `<td>${e.observacoes}</td>`
                 xls += `<td>${e.responsavel}</td>`
+                if (e.cancelado) {
+                    xls += `<td>${e.cancelado}</td>`
+                } else {
+                    xls += `<td></td>`
+                }
                 xls += `</tr>`
             })
 
@@ -189,8 +171,17 @@ const Todas = () => {
         }
     }
 
-
     useEffect(() => {
+
+        const searchRn = async () => {
+            try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
+                setRns(result.data)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         searchRn()
     }, [])
 

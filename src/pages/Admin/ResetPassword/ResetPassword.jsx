@@ -11,11 +11,6 @@ const ResetPassword = () => {
     const [email, setEmail] = useState('');
     const [snackOpen, setSnackOpen] = useState(false)
 
-    const buscarEmails = async () => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users`, { withCredentials: true })
-        setEmails(result.data)
-    }
-
     const resetPassword = async () => {
         const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/resetPassword`, {
             email
@@ -32,6 +27,12 @@ const ResetPassword = () => {
 
 
     useEffect(() => {
+
+        const buscarEmails = async () => {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users`, { withCredentials: true })
+            setEmails(result.data)
+        }
+
         buscarEmails()
     }, [])
 

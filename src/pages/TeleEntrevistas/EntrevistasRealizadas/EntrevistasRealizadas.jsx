@@ -1,16 +1,32 @@
 import React, { useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
+import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Modal, Typography } from '@mui/material'
 import moment from 'moment'
 import './EntrevistasRealizadas.css'
 import gerarPdf from '../Pdf/Pdf'
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 const EntrevistasRealizadas = () => {
 
     const [entrevistas, setEntrevistas] = useState([])
     const [pesquisa, setPesquisa] = useState('');
     const [loading, setLoading] = useState(false)
+    const [modalVoltar, setModalVoltar] = useState(false)
+    const [id, setId] = useState('')
+    const [nome, setNome] = useState('')
+    const [proposta, setpProposta] = useState('')
 
     const alterarSexo = async (id, sexo) => {
         try {
@@ -46,10 +62,26 @@ const EntrevistasRealizadas = () => {
         }
     }
 
-    const gerarRelatorio = async () => {
+    const voltarEntrevista = async () => {
         try {
 
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/voltar`, {
+                id
+            }, {
+                withCredentials: true
+            })
 
+            if (result.status === 200) {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const gerarRelatorio = async () => {
+        try {
             setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
@@ -144,6 +176,7 @@ const EntrevistasRealizadas = () => {
                                 <TableCell>CPF</TableCell>
                                 <TableCell>Idade</TableCell>
                                 <TableCell>Sexo</TableCell>
+                                <TableCell>Voltar</TableCell>
                                 <TableCell>Editar</TableCell>
                                 <TableCell>PDF</TableCell>
                             </TableRow>
@@ -164,6 +197,18 @@ const EntrevistasRealizadas = () => {
                                                     <option value="F" selected={e.sexo === 'F'} >F</option>
                                                 </select>
                                             </TableCell>
+                                            <TableCell>
+                                                {
+                                                    e.cancelado ? (
+                                                        <Button variant='contained' size='small' onClick={() => {
+                                                            setId(e._id)
+                                                            setNome(e.nome)
+                                                            setpProposta(e.proposta)
+                                                            setModalVoltar(true)
+                                                        }} >Voltar</Button>
+                                                    ) : null
+                                                }
+                                            </TableCell>
                                             <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
                                             <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
                                         </TableRow>
@@ -173,6 +218,22 @@ const EntrevistasRealizadas = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Modal
+                    open={modalVoltar}
+                    onClose={() => { setModalVoltar(false) }}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Deseja voltar a proposta: {proposta} do beneficiário: {nome}
+                        </Typography>
+                        <Box m={2} display='flex' justifyContent='space-around'>
+                            <Button variant='contained' onClick={voltarEntrevista}>Sim</Button>
+                            <Button variant='contained' color='inherit' onClick={() => setModalVoltar(false)}>Não</Button>
+                        </Box>
+                    </Box>
+                </Modal>
             </div>
         </section>
     </>

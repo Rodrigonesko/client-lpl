@@ -49,7 +49,7 @@ const TabelaAgendarRn = ({ propostas }) => {
     const alterarTelefone = async (id, telefone) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/alterarTelefone`, {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/alterarTelefone`, {
                 id,
                 telefone
             }, {
@@ -69,6 +69,10 @@ const TabelaAgendarRn = ({ propostas }) => {
             }, {
                 withCredentials: true
             })
+
+            if (result.status === 200) {
+                window.location.reload()
+            }
 
         } catch (error) {
             console.log(error);
@@ -143,7 +147,7 @@ const TabelaAgendarRn = ({ propostas }) => {
                             </Typography>
                             <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
                                 <Button variant='contained' onClick={() => { setCancelar(false) }}>Fechar</Button>
-                                <Button color="error" variant='contained' >Cancelar</Button>
+                                <Button color="error" variant='contained' onClick={cancelarRn} >Cancelar</Button>
                             </Typography>
                         </Box>
                     </Box>
