@@ -146,3 +146,8 @@
   overflow: auto;
   height: 100vh;
 }
+
+.scrollable {
+  height: 100vh;
+  overflow-y: auto;
+}

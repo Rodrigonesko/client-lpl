@@ -16,6 +16,8 @@ const LiberacaoModulos = () => {
     const [saida2, setSaida2] = useState('')
     const [emails, setEmails] = useState([])
     const [usuario, setUsuario] = useState('')
+    const [atividadePrincipal, setAtividadePrincipal] = useState('')
+
     const atividades = [
         'Gerência',
         'Sistemas',
@@ -26,10 +28,12 @@ const LiberacaoModulos = () => {
         'Callback',
         'Ti/Infra'
     ]
-    const [atividadePrincipal, setAtividadePrincipal] = useState('')
 
     const buscarEmail = async () => {
         try {
+
+            setBusca(false)
+
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/infoUser/${email}`, { withCredentials: true })
 
             if (result.data.user !== null) {
@@ -72,7 +76,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, { email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2 }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, { email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal }, { withCredentials: true })
 
             if (result.status === 200) {
                 setMsg('Modulos atualizados com sucesso!')
@@ -175,6 +179,9 @@ const LiberacaoModulos = () => {
                                             label='Atividade'
                                             labelId="atividade"
                                             defaultValue={atividadePrincipal}
+                                            onChange={e => {
+                                                setAtividadePrincipal(e.target.value)
+                                            }}
                                         >
                                             <MenuItem>
                                                 <em>
@@ -197,7 +204,6 @@ const LiberacaoModulos = () => {
                             </Paper>
                         )
                     }
-
                 </Box>
             </Container>
         </>

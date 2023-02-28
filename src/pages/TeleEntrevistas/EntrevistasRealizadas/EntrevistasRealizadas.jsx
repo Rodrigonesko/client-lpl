@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Modal, Typography } from '@mui/material'
+import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Modal, Typography, Container } from '@mui/material'
 import moment from 'moment'
-import './EntrevistasRealizadas.css'
 import gerarPdf from '../Pdf/Pdf'
 
 const style = {
@@ -147,11 +146,11 @@ const EntrevistasRealizadas = () => {
 
     return <>
         <Sidebar></Sidebar>
-        <section className='section-entrevistas-realizadas-container'>
-            <div className='entrevistas-realizadas-container'>
-                <div className="title">
-                    <h3>Entrevistas Realizadas</h3>
-                </div>
+        <Container className='scrollable'>
+            <Box m={2}>
+                <Typography variant='h6'>
+                    Entrevistas Realizadas
+                </Typography>
                 {
                     loading ? (
                         <CircularProgress style={{ position: 'absolute', top: '50%', left: '49%' }} />
@@ -234,8 +233,8 @@ const EntrevistasRealizadas = () => {
                         </Box>
                     </Box>
                 </Modal>
-            </div>
-        </section>
+            </Box>
+        </Container>
     </>
 }
 
