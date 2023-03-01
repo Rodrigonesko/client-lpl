@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import { Table, TableBody, td, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
-import moment from "moment/moment";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton } from "@mui/material";
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import PropTypes from 'prop-types';
 import Axios from 'axios'
+import { useTheme } from '@mui/material/styles';
 
 const style = {
     position: 'absolute',
@@ -15,8 +20,84 @@ const style = {
     p: 4,
 };
 
+function TablePaginationActions(props) {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton
+                onClick={handleBackButtonClick}
+                disabled={page === 0}
+                aria-label="previous page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </Box>
+    );
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+};
 
 const TabelaAgendarTele = ({ propostas }) => {
+
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - propostas.length) : 0;
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const [modalCancelar, setModalCancelar] = useState(false);
     const [modalExcluir, setModalExcluir] = useState(false);
@@ -100,136 +181,168 @@ const TabelaAgendarTele = ({ propostas }) => {
             <Typography variant='h4' width='100%'>
                 Tele: {propostas.length}
             </Typography>
-            <Box>
-                <table className="table">
-                    <thead className='table-header' >
-                        <tr>
-                            <td>Data Vigência</td>
-                            <td>Proposta</td>
-                            <td>Nome</td>
-                            <td>Data Nascimento</td>
-                            <td>Sexo</td>
-                            <td>Telefone</td>
-                            <td>Cancelar</td>
-                            <td>Excluir</td>
-                            <td>Formulario</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            propostas.map(row => {
-                                return (
-                                    <tr key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <td>
-                                            <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
-                                            <Button size="small" color='warning' variant='contained' onClick={
-                                                item => {
-                                                    alterarVigencia(item.target.parentElement.firstChild.firstChild.firstChild.value, row._id)
-                                                }
-                                            }>Alterar</Button>
-                                        </td>
-                                        <td>{row.proposta}</td>
-                                        <td>{row.nome}</td>
-                                        <td>{row.dataNascimento}</td>
-                                        <td>
-                                            <select onChange={item => alterarSexo(row._id, item.target.value)} >
-                                                <option value="M" selected={row.sexo === 'M'}>M</option>
-                                                <option value="F" selected={row.sexo === 'F'} >F</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <TextField size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
-                                        </td>
-                                        <td>
-                                            <Button variant="contained" onClick={() => {
-                                                setPropostaCancelar(row.proposta)
-                                                setBeneficiarioCancelar(row.nome)
-                                                setIdCancelar(row._id)
-                                                setModalCancelar(true)
-                                            }} color="error" size="small">
-                                                Cancelar
-                                            </Button>
-                                        </td>
-                                        <td>
-                                            <Button variant="contained" onClick={() => {
-                                                setPropostaExcluir(row.proposta)
-                                                setBeneficiarioExcluir(row.nome)
-                                                setIdCExcluir(row._id)
-                                                setModalExcluir(true)
-                                            }} color="error" size="small">
-                                                Excluir
-                                            </Button>
-                                        </td>
-                                        <td>
-                                            <Button variant="contained" href={`/entrevistas/formulario/${row._id}`} >
-                                                Formulario
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
-            </Box>
+            <TableContainer>
+                <Table sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
+                    <TableHead className="table-header">
+                        <TableRow>
+                            <TableCell>Vigência</TableCell>
+                            <TableCell>Proposta</TableCell>
+                            <TableCell>Nome</TableCell>
+                            <TableCell>Data Nascimento</TableCell>
+                            <TableCell>Sexo</TableCell>
+                            <TableCell>Telefone</TableCell>
+                            <TableCell>Cancelar</TableCell>
+                            <TableCell>Excluir</TableCell>
+                            <TableCell>Formulario</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {(rowsPerPage > 0
+                            ? propostas.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : propostas
+                        ).map((row) => (
+                            <TableRow key={row._id}>
+                                <TableCell component="th" scope="row">
+                                    <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
+                                    <Button size="small" color='warning' variant='contained' onClick={
+                                        item => {
+                                            alterarVigencia(item.target.parentElement.firstChild.firstChild.firstChild.value, row._id)
+                                        }
+                                    }>Alterar</Button>
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.proposta}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.nome}
+                                </TableCell>
+                                <TableCell>
+                                    {row.dataNascimento}
+                                </TableCell>
+                                <TableCell>
+                                    <select onChange={item => alterarSexo(row._id, item.target.value)} >
+                                        <option value="M" selected={row.sexo === 'M'}>M</option>
+                                        <option value="F" selected={row.sexo === 'F'} >F</option>
+                                    </select>
+                                </TableCell>
+                                <TableCell>
+                                    <TextField size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="contained" onClick={() => {
+                                        setPropostaCancelar(row.proposta)
+                                        setBeneficiarioCancelar(row.nome)
+                                        setIdCancelar(row._id)
+                                        setModalCancelar(true)
+                                    }} color="error" size="small">
+                                        Cancelar
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="contained" onClick={() => {
+                                        setPropostaExcluir(row.proposta)
+                                        setBeneficiarioExcluir(row.nome)
+                                        setIdCExcluir(row._id)
+                                        setModalExcluir(true)
+                                    }} color="error" size="small">
+                                        Excluir
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="contained" href={`/entrevistas/formulario/${row._id}`} >
+                                        Formulario
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                                colSpan={3}
+                                count={propostas.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: {
+                                        'aria-label': 'Linhas por página',
+                                    },
+                                    native: true,
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
             <Modal
-                    open={modalExcluir}
-                    onClose={() => setModalExcluir(false)}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
-                            <Typography variant="h6" component="div">
-                                Deseja *EXCLUIR* a proposta: {propostaExcluir}
-                            </Typography>
-                            <Typography variant="h7" component="div" margin='10px'>
-                                Do beneficiario: {beneficiarioExcluir}
-                            </Typography>
-                            <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
-                                <Button variant='contained' onClick={() => setModalExcluir(false)}>Fechar</Button>
-                                <Button color="error" variant='contained' onClick={excluir}>Excluir</Button>
-                            </Typography>
-                        </Box>
+                open={modalExcluir}
+                onClose={() => setModalExcluir(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
+                        <Typography variant="h6" component="div">
+                            Deseja *EXCLUIR* a proposta: {propostaExcluir}
+                        </Typography>
+                        <Typography variant="h7" component="div" margin='10px'>
+                            Do beneficiario: {beneficiarioExcluir}
+                        </Typography>
+                        <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
+                            <Button variant='contained' onClick={() => setModalExcluir(false)}>Fechar</Button>
+                            <Button color="error" variant='contained' onClick={excluir}>Excluir</Button>
+                        </Typography>
                     </Box>
-                </Modal>
-                <Modal
-                    open={modalCancelar}
-                    onClose={() => setModalCancelar(false)}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
-                            <Typography variant="h6" component="div">
-                                Deseja Cancelar a proposta: {propostaCancelar}
-                            </Typography>
-                            <Typography variant="h7" component="div" margin='10px' marginBottom='30px'>
-                                Do beneficiario: {beneficiarioCancelar}
-                            </Typography>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Motivo cancelamento</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    label="Motivo cancelamento"
-                                    size="small"
-                                    onChange={e => {
-                                        console.log(e.target.value);
-                                        setMotivoCancelar(e.target.value)
-                                    }}
-                                >
-                                    <MenuItem value='Sem Sucesso de Contato!'>Sem Sucesso de Contato!</MenuItem>
-                                    <MenuItem value='Beneficiario Solicitou o Cancelamento'>Beneficiario Solicitou o Cancelamento</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
-                                <Button variant='contained' onClick={() => setModalCancelar(false)}>Fechar</Button>
-                                <Button color="error" variant='contained' onClick={cancelar}>Cancelar</Button>
-                            </Typography>
-                        </Box>
+                </Box>
+            </Modal>
+            <Modal
+                open={modalCancelar}
+                onClose={() => setModalCancelar(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
+                        <Typography variant="h6" component="div">
+                            Deseja Cancelar a proposta: {propostaCancelar}
+                        </Typography>
+                        <Typography variant="h7" component="div" margin='10px' marginBottom='30px'>
+                            Do beneficiario: {beneficiarioCancelar}
+                        </Typography>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Motivo cancelamento</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Motivo cancelamento"
+                                size="small"
+                                onChange={e => {
+                                    console.log(e.target.value);
+                                    setMotivoCancelar(e.target.value)
+                                }}
+                            >
+                                <MenuItem value='Sem Sucesso de Contato!'>Sem Sucesso de Contato!</MenuItem>
+                                <MenuItem value='Beneficiario Solicitou o Cancelamento'>Beneficiario Solicitou o Cancelamento</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
+                            <Button variant='contained' onClick={() => setModalCancelar(false)}>Fechar</Button>
+                            <Button color="error" variant='contained' onClick={cancelar}>Cancelar</Button>
+                        </Typography>
                     </Box>
-                </Modal>
+                </Box>
+            </Modal>
         </>
 
     )

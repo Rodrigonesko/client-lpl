@@ -151,3 +151,9 @@
   height: 100vh;
   overflow-y: auto;
 }
+
+.scroll-table-agenda {
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
