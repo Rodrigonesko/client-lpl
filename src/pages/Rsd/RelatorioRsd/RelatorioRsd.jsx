@@ -80,7 +80,7 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.statusGerencial}</td>`
                 xls += `<td>${moment(e.createdAt).format('MM/YYYY')}</td>`
                 xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
-                if(e.dataConclusao === undefined){
+                if (e.dataConclusao === undefined) {
                     xls += `<td></td>`
                 } else {
                     xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
@@ -92,7 +92,12 @@ const RelatorioRsd = () => {
                 xls += `<td>${e.mo}</td>`
                 xls += `<td>${e.pessoa}</td>`
                 xls += `<td>${moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>`
-                xls += `<td>${valorApresentado?.toLocaleString('pt-br', {minimumFractionDigits: 2})}</td>`
+                if (isNaN(valorApresentado)) {
+                    xls += `<td>${e.valorApresentado}</td>`
+                } else {
+                    xls += `<td>${valorApresentado?.toLocaleString('pt-br', { minimumFractionDigits: 2 })}</td>`
+                }
+
                 xls += `<td>${e.cnpj}</td>`
                 xls += `<td>${e.clinica}</td>`
                 xls += `<td>${e.contratoEmpresa}</td>`

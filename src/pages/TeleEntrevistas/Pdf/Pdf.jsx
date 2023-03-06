@@ -80,6 +80,12 @@ const gerarPdf = async (proposta, nome) => {
         ]
     }
 
+    let responsavel = result.data.result[0].responsavel
+
+    if (responsavel === 'Thaynara Santos' || responsavel === 'Cecilia Belli' || responsavel === 'Jéssica Wachesk') {
+        responsavel += ' Supervisionado por: Roberta Alexandre'
+    }
+
     const details = [
         {
             table: {
@@ -100,7 +106,7 @@ const gerarPdf = async (proposta, nome) => {
         { text: 'Tipo de teleatendimento:', margin: [20, 0, 20, 0] },
         { text: 'Telefone \n\n', bold: true, margin: [20, 0, 20, 0] },
         ...divergencias,
-        { text: `\n\n Entrevista realizada por: ${result.data.result[0].responsavel}`, bold: true, margin: [20, 0, 20, 0] }
+        { text: `\n\n Entrevista realizada por: ${responsavel}`, bold: true, margin: [20, 0, 20, 0] }
     ]
 
     const rodape = (currentPage, pageCount) => {

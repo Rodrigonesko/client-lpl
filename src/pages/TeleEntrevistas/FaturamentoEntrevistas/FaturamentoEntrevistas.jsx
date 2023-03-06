@@ -73,8 +73,6 @@ const FaturamentoEntrevistas = () => {
                 }
             }
 
-            console.log(faturar);
-
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/faturar`, { entrevistas: faturar }, { withCredentials: true })
 
             if (result.status === 200) {
@@ -89,7 +87,6 @@ const FaturamentoEntrevistas = () => {
 
     const pesquisar = async () => {
         try {
-            console.log(status, data);
 
             setLoading(true)
 
@@ -118,12 +115,14 @@ const FaturamentoEntrevistas = () => {
         const reusltRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/concluidas`, {
             withCredentials: true
         })
+        const resultUe = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas`, { withCredentials: true })
 
         let xls = '\ufeff'
         xls += "<table border='1'>"
         xls += "<thead><tr>"
         xls += "<th>Id</th>"
-        xls += "<th>Tipó</th>"
+        xls += "<th>Analista</th>"
+        xls += "<th>Tipo</th>"
         xls += "<th>Proposta</th>"
         xls += "<th>Nome</th>"
         xls += "<th>Data Entrevista</th>"
@@ -135,10 +134,11 @@ const FaturamentoEntrevistas = () => {
         result.data.entrevistas.forEach(e => {
             xls += "<tr>"
             xls += `<td>${e._id}</td>`
+            xls += `<td>${e.responsavel}</td>`
             xls += `<td>Tele</td>`
             xls += `<td>${e.proposta}</td>`
             xls += `<td>${e.nome}</td>`
-            xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+            xls += `<td>${moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>`
             xls += `<td>${e.faturado}</td>`
             if (e.nf === undefined) {
                 xls += `<td></td>`
@@ -156,9 +156,32 @@ const FaturamentoEntrevistas = () => {
         reusltRn.data.result.forEach(e => {
             xls += "<tr>"
             xls += `<td>${e._id}</td>`
+            xls += `<td>${e.responsavel}</td>`
             xls += `<td>Rn</td>`
             xls += `<td>${e.proposta}</td>`
             xls += `<td>${e.beneficiario}</td>`
+            xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+            xls += `<td>${e.faturado}</td>`
+            if (e.nf === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${e.nf}</td>`
+            }
+            if (e.dataFaturamento === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${moment(e.dataFaturamento).format('DD/MM/YYYY')}</td>`
+            }
+            xls += `</tr>`
+        })
+
+        resultUe.data.propostas.forEach(e => {
+            xls += "<tr>"
+            xls += `<td>${e._id}</td>`
+            xls += `<td>${e.analista}</td>`
+            xls += `<td>UE</td>`
+            xls += `<td>${e.pedido}</td>`
+            xls += `<td>${e.nomeAssociado}</td>`
             xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
             xls += `<td>${e.faturado}</td>`
             if (e.nf === undefined) {
@@ -204,14 +227,14 @@ const FaturamentoEntrevistas = () => {
                                 labelId="status"
                                 id='select-status'
                                 label='Status'
-                                style={{minWidth: '100px'}}
+                                style={{ minWidth: '100px' }}
                                 onChange={e => {
                                     setStatus(e.target.value)
                                 }}
                             >
                                 <MenuItem value='todos'>
                                     <em>
-                                        
+
                                     </em>
                                 </MenuItem>
                                 <MenuItem value='Faturado'>Faturado</MenuItem>
@@ -241,6 +264,7 @@ const FaturamentoEntrevistas = () => {
                             <thead className="table-header">
                                 <tr>
                                     <th>ID</th>
+                                    <th>Analista</th>
                                     <th>Tipo</th>
                                     <th>Proposta</th>
                                     <th>Nome</th>
@@ -252,10 +276,10 @@ const FaturamentoEntrevistas = () => {
                             <tbody>
                                 {
                                     entrevistas.map(e => {
-                                        console.log(e.nf);
                                         return (
                                             <tr key={e._id}>
                                                 <td className="id-faturamento">{e._id}</td>
+                                                <td>{e.analista}</td>
                                                 <td className="tipo">{e.tipo}</td>
                                                 <td>{e.proposta}</td>
                                                 <td>{e.nome}</td>

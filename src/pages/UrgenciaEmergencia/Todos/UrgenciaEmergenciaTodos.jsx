@@ -203,6 +203,8 @@ const UrgenciaEmergenciaTodos = () => {
         xls += "<th>OBSERVAÇÕES DO CONTATO</th>"
         xls += "<th>Data Recebimento</th>"
         xls += "<th>Data Conclusão</th>"
+        xls += "<th>Status</th>"
+        xls += "<th>Analista</th>"
         xls += "</tr></thead><tbody>"
 
         result.data.propostas.forEach(e => {
@@ -272,7 +274,19 @@ const UrgenciaEmergenciaTodos = () => {
                 xls += `<td>${e.observacoes}</td>`
             }
             xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
-            xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+            if (e.dataConclusao === undefined) {
+                xls += `<td></td>`
+            } else {
+                xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+            }
+            if (e.status === 'Anexar' || e.status === 'Concluído') {
+                xls += `<td>Concluído</td>`
+            } else {
+                xls += `<td>Andamento</td>`
+            }
+
+            xls += `<td>${e.analista}</td>`
+
             xls += `</tr>`
         })
 
