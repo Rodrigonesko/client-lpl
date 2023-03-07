@@ -45,6 +45,7 @@ const BotoesRelatorios = () => {
             xls += "<th>DS 9</th>"
             xls += "<th>Status</th>"
             xls += "<th>Data Conclusão</th>"
+            xls += "<th>Tipo Contrato</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -78,12 +79,13 @@ const BotoesRelatorios = () => {
                 xls += `<td>${e.d8?.replaceAll('#', ' ')}</td>`
                 xls += `<td>${e.d9?.replaceAll('#', ' ')}</td>`
                 xls += `<td>${e.status}</td>`
+
                 if (e.dataConclusao) {
                     xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
                 } else {
                     xls += `<td></td>`
                 }
-
+                xls += `<td>${e.tipoContrato}</td>`
                 xls += `</tr>`
             })
 
@@ -131,7 +133,7 @@ const BotoesRelatorios = () => {
 
             naoRealizadas.forEach(e => {
                 xls += "<tr>"
-                xls += `<td>${moment(e.createtAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.proposta}</td>`
                 xls += `<td>${e.nome}</td>`
