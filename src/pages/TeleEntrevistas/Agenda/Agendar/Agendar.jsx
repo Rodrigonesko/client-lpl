@@ -120,7 +120,7 @@ const Agendar = () => {
 
                     <BotoesRelatorios />
 
-                    <TabelaAgendarTele propostas={propostas}>
+                    <TabelaAgendarTele atualizarTabela={searchPropostas}  propostas={propostas}>
 
                     </TabelaAgendarTele>
 

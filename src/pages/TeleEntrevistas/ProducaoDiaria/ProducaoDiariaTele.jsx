@@ -4,6 +4,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import './ProducaoDiariaTele.css'
 import moment from "moment";
 import ProducaoDiariaMui from "../../../components/TabelaProducaoMui/ProducaoDiariaMui";
+import { Container, Box } from "@mui/material";
 
 const ProducaoDiariaTele = () => {
 
@@ -43,11 +44,11 @@ const ProducaoDiariaTele = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-producao-diaria-container">
-                <div className="producao-diaria-container">
+            <Container>
+                <Box m={3} display='flex' justifyContent='center' alignItems='center'>
                     <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData}></ProducaoDiariaMui>
-                </div>
-            </section>
+                </Box>
+            </Container>
         </>
     )
 }

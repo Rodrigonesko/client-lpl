@@ -11,6 +11,7 @@ const Agendado = () => {
 
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
+    const [responsavel, setResponsavel] = useState('todos')
     const [loading, setLoading] = useState(false)
 
     const searchEnfermeiro = async () => {
@@ -41,7 +42,10 @@ const Agendado = () => {
                     sexo: item.sexo,
                     enfermeiro: item.enfermeiro,
                     _id: item._id,
-                    tipo: 'Tele'
+                    tipo: 'Tele',
+                    contato1: item.contato1,
+                    contato2: item.contato2,
+                    contato3: item.contato3,
                 })
             }
 
@@ -88,7 +92,10 @@ const Agendado = () => {
                 sexo: item.sexo,
                 enfermeiro: item.enfermeiro,
                 _id: item._id,
-                tipo: 'Tele'
+                tipo: 'Tele',
+                contato1: item.contato1,
+                contato2: item.contato2,
+                contato3: item.contato3,
             })
         }
 
@@ -152,6 +159,7 @@ const Agendado = () => {
                                 id='select-analista'
                                 label="Analista"
                                 onChange={e => {
+                                    setResponsavel(e.target.value)
                                     filtroEnfermeiro(e.target.value)
                                 }}
                             >
@@ -166,7 +174,7 @@ const Agendado = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <TeleAgendadas propostas={propostas} />
+                    <TeleAgendadas propostas={propostas} atualizarPropostas={filtroEnfermeiro} analista={responsavel} />
                 </div>
             </section>
         </>

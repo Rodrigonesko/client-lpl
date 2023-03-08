@@ -81,7 +81,7 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const TabelaAgendarTele = ({ propostas }) => {
+const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -176,13 +176,31 @@ const TabelaAgendarTele = ({ propostas }) => {
         }
     }
 
+    const tentativaContato = async (tentativa, id) => {
+        try {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/tentativaContato`, {
+                tentativa,
+                id
+            }, {
+                withCredentials: true
+            })
+
+            atualizarTabela()
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <Typography variant='h4' width='100%'>
                 Tele: {propostas.length}
             </Typography>
             <TableContainer>
-                <Table sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
+                <Table style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
                     <TableHead className="table-header">
                         <TableRow>
                             <TableCell>Vigência</TableCell>
@@ -194,6 +212,9 @@ const TabelaAgendarTele = ({ propostas }) => {
                             <TableCell>Cancelar</TableCell>
                             <TableCell>Excluir</TableCell>
                             <TableCell>Formulario</TableCell>
+                            <TableCell>Contato 1</TableCell>
+                            <TableCell>Contato 2</TableCell>
+                            <TableCell>Contato 3</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -210,13 +231,13 @@ const TabelaAgendarTele = ({ propostas }) => {
                                         }
                                     }>Alterar</Button>
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell align="left">
                                     {row.proposta}
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell align="left">
                                     {row.nome}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell align="left">
                                     {row.dataNascimento}
                                 </TableCell>
                                 <TableCell>
@@ -226,7 +247,7 @@ const TabelaAgendarTele = ({ propostas }) => {
                                     </select>
                                 </TableCell>
                                 <TableCell>
-                                    <TextField size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
+                                    <TextField style={{ minWidth: '200px' }} size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
                                 </TableCell>
                                 <TableCell>
                                     <Button variant="contained" onClick={() => {
@@ -252,6 +273,36 @@ const TabelaAgendarTele = ({ propostas }) => {
                                     <Button variant="contained" href={`/entrevistas/formulario/${row._id}`} >
                                         Formulario
                                     </Button>
+                                </TableCell>
+                                <TableCell>
+                                    {
+                                        row.contato1 ? (
+                                            <span>{row.contato1}</span>
+                                        ) : (
+                                            <Button variant='contained' size="small" onClick={() => {
+                                                tentativaContato('tentativa 1', row._id)
+                                            }} style={{ background: 'blue' }}>1° Contato</Button>
+                                        )
+                                    }
+
+                                </TableCell>
+                                <TableCell>
+                                    {
+                                        row.contato2 === undefined && row.contato1 !== undefined ? (
+                                            <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 2', row._id) }} style={{ background: 'blue' }}>2° Contato</Button>
+                                        ) : (
+                                            <span>{row.contato2}</span>
+                                        )
+                                    }
+                                </TableCell>
+                                <TableCell>
+                                    {
+                                        row.contato3 === undefined & row.contato2 !== undefined ? (
+                                            <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 3', row._id) }} style={{ background: 'blue' }}>3° Contato</Button>
+                                        ) : (
+                                            <span>{row.contato3}</span>
+                                        )
+                                    }
                                 </TableCell>
                             </TableRow>
                         ))}
