@@ -5,6 +5,7 @@ import { Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 import moment from "moment";
+import config from "../../../../config/axiosHeader";
 
 
 const Agendado = () => {
@@ -27,12 +28,15 @@ const Agendado = () => {
 
     const searchPropostas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, { withCredentials: true, headers: config.headers })
             const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 
             let arr = []
 
-            for (const item of result.data.propostas) {
+            for (const item of result.data) {
                 arr.push({
                     dataEntrevista: item.dataEntrevista,
                     proposta: item.proposta,
@@ -70,6 +74,8 @@ const Agendado = () => {
 
             setPropostas(arr)
 
+            setLoading(false)
+
         } catch (error) {
             console.log(error);
         }
@@ -77,7 +83,7 @@ const Agendado = () => {
 
     const filtroEnfermeiro = async enfermeiro => {
         setLoading(true)
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/agendadas`, { withCredentials: true })
+        const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, { withCredentials: true, headers: config.headers })
         const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 
         let arr = []

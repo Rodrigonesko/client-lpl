@@ -8,10 +8,11 @@ import BotoesRelatorios from "../../../../components/TabelaAgendar/BotoesRelator
 import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
 import { CircularProgress } from "@mui/material";
-// import HorariosDisponiveis from "../../../../components/TabelaAgendar/HorariosDisponiveis";
+import config from "../../../../config/axiosHeader";
 // import AuthContext from "../../../../context/AuthContext";
 
 import './Agendar.css'
+
 
 const Agendar = () => {
 
@@ -31,7 +32,7 @@ const Agendar = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoAgendadas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoAgendadas`, { withCredentials: true, headers: config.headers })
 
             const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
 
@@ -120,7 +121,7 @@ const Agendar = () => {
 
                     <BotoesRelatorios />
 
-                    <TabelaAgendarTele atualizarTabela={searchPropostas}  propostas={propostas}>
+                    <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas}>
 
                     </TabelaAgendarTele>
 

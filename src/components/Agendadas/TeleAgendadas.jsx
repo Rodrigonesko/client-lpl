@@ -1,9 +1,11 @@
-import React from "react";
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Typography, CircularProgress } from "@mui/material";
 import moment from "moment";
 import Axios from 'axios'
 
 const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
+
+    const [loading, setLoading] = useState(false)
 
     const tentativaContato = async (tentativa, id) => {
         try {
@@ -25,6 +27,9 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const reagendar = async (id) => {
         try {
+
+            setLoading(true)
+
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reagendar`, { id }, { withCredentials: true })
             if (result.status === 200) {
                 window.location.reload()
@@ -88,6 +93,11 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     return (
         <Box maxWidth='1300px' component={Paper} p={1} elevation={3}>
+            {
+                loading ? (
+                    <CircularProgress style={{ position: 'absolute', top: '50%' }} />
+                ) : null
+            }
             <Typography variant="h5" m={2} width='100%'>
                 Tele e Rn: {propostas.length}
             </Typography>

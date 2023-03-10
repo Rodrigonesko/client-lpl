@@ -47,19 +47,7 @@ const PainelProcessos = () => {
 
 
 
-    const buscarPedidos = async () => {
-        try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/naoFinalizados`, { withCredentials: true })
-
-            setPedidos(result.data.pedidos)
-
-            setTeste('teste')
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const pesquisaFiltro = async () => {
         try {
@@ -97,6 +85,20 @@ const PainelProcessos = () => {
     }
 
     useEffect(() => {
+
+        const buscarPedidos = async () => {
+            try {
+
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/naoFinalizados`, { withCredentials: true })
+
+                setPedidos(result.data.pedidos)
+
+                setTeste('teste')
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
 
         const setStatusPedido = async () => {
             pedidos.forEach(e => {

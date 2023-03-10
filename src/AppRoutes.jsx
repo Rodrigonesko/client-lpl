@@ -62,18 +62,6 @@ import Implantacao from "./pages/TeleEntrevistas/Agenda/Implantacao/Implantacao"
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
 
-/* -----------------  Liminares ----------------- */
-
-import UploadLiminar from "./pages/Liminares/Upload/UploadLiminar";
-import AndamentoLiminar from "./pages/Liminares/Andamento/AndamentoLiminar";
-import ReportLiminar from "./pages/Liminares/Report/ReportLiminar";
-
-/* Projeto AJ */
-
-import UploadAj from "./pages/ProjetoAj/Upload/UploadAj";
-import AndamentoAj from "./pages/ProjetoAj/Andamento/AndamentoAj";
-import ReportAj from "./pages/ProjetoAj/Report/ReportAj";
-
 /* Urgencia Emergencia */
 
 import UploadUrgenciaEmergencia from "./pages/UrgenciaEmergencia/Upload/UploadUrgenciaEmergencia";
@@ -208,28 +196,6 @@ const AppRoutes = () => {
 
                 <Route exact path="/entrevistas/migrarBase" element={<ProtectedRoute>
                     <MigracaoTele />
-                </ProtectedRoute>} />
-
-                {/* Liminares Routes */}
-
-                <Route exact path="/liminares/upload" element={<ProtectedRoute>
-                    <UploadLiminar />
-                </ProtectedRoute>} />
-                <Route exact path="/liminares/andamento" element={<ProtectedRoute>
-                    <AndamentoLiminar />
-                </ProtectedRoute>} />
-                <Route exact path="/liminares/report" element={<ProtectedRoute>
-                    <ReportLiminar />
-
-                </ProtectedRoute>} />
-                <Route exact path="/liminares/uploadAj" element={<ProtectedRoute>
-                    <UploadAj />
-                </ProtectedRoute>} />
-                <Route exact path="/liminares/andamentoAj" element={<ProtectedRoute>
-                    <AndamentoAj />
-                </ProtectedRoute>} />
-                <Route exact path="/liminares/reportAj" element={<ProtectedRoute>
-                    <ReportAj />
                 </ProtectedRoute>} />
 
                 {/* RSD */}

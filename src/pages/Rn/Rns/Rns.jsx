@@ -44,7 +44,7 @@ const Rns = () => {
                             <tbody>
                                 {rns.map(e => {
 
-                                    if (e.status == 'Em andamento') {
+                                    if (e.status === 'Em andamento') {
                                         return (
                                             <tr key={e.proposta}>
                                                 <td>{e.beneficiario}</td>
@@ -55,6 +55,8 @@ const Rns = () => {
                                             </tr>
                                         )
                                     }
+
+                                    return null
 
                                 })}
                             </tbody>

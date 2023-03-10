@@ -26,37 +26,12 @@ const Detalhes = () => {
     const [success, setSuccess] = useState(false)
     const [concluido, setConcluido] = useState(false)
 
-    const openModal = ()=>{
+    const openModal = () => {
         setModalIsOpen(true)
     }
 
-    const closeModal = ()=>{
+    const closeModal = () => {
         setModalIsOpen(false)
-    }
-
-
-    const search = async () => { 
-
-        const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
-        const data = resultado.data
-
-        setDados(data)
-
-        setEmail(dados.email)
-        setData1(data.dataContato1)
-        setData2(data.dataContato2)
-        setData3(data.dataContato3)
-        setHorario1(data.horarioContato1)
-        setHorario2(data.horarioContato2)
-        setHorario3(data.horarioContato3)
-        setObservacoes(data.observacoes)
-
-        if (data.status === 'Concluido') {
-            setConcluido(true)
-        }
-
-
-
     }
 
     const update = async () => {
@@ -119,11 +94,29 @@ const Detalhes = () => {
 
     useEffect(() => {
 
-        search() 
+        const search = async () => {
 
+            const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
+            const data = resultado.data
 
+            setDados(data)
 
-    }, [])
+            setEmail(dados.email)
+            setData1(data.dataContato1)
+            setData2(data.dataContato2)
+            setData3(data.dataContato3)
+            setHorario1(data.horarioContato1)
+            setHorario2(data.horarioContato2)
+            setHorario3(data.horarioContato3)
+            setObservacoes(data.observacoes)
+
+            if (data.status === 'Concluido') {
+                setConcluido(true)
+            }
+        }
+
+        search()
+    }, [dados.email, id])
 
     return (
         <>
@@ -226,7 +219,7 @@ const Detalhes = () => {
                         </div>
                         <div className="info-box">
                             <label htmlFor="email">Email Beneficiário: </label>
-                            <input type="email" id="email" name="email" style={{width: '60%'}} defaultValue={dados.email} onChange={e => setEmail(e.target.value)} />
+                            <input type="email" id="email" name="email" style={{ width: '60%' }} defaultValue={dados.email} onChange={e => setEmail(e.target.value)} />
                         </div>
                     </div>
                     <div className="info-proposta">
@@ -255,7 +248,7 @@ const Detalhes = () => {
                     <div className="buttons">
                         <button onClick={update} className="salvar">Salvar</button>
                         {
-                            !concluido &&(
+                            !concluido && (
                                 <button onClick={openModal} className="concluir">Concluir</button>
                             )
                         }

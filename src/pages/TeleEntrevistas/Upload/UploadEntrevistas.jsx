@@ -4,12 +4,14 @@ import './UploadEntrevistas.css'
 import * as XLSX from 'xlsx';
 import Axios from 'axios'
 import moment from "moment/moment";
-
+import { CircularProgress } from "@mui/material";
+import config from "../../../config/axiosHeader";
 
 const UploadRn = () => {
 
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const send = async e => {
         e.preventDefault()
@@ -24,13 +26,13 @@ const UploadRn = () => {
 
         const result = XLSX.utils.sheet_to_json(worksheet)
 
-
-
         try {
 
             setStatus('Enviando...')
 
-            const send = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/upload`, { result }, { withCredentials: true })
+            setLoading(true)
+
+            const send = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/upload`, { result }, { withCredentials: true, headers: config.headers })
 
             if (send.status === 200) {
                 setStatus(send.data.message)
@@ -66,11 +68,15 @@ const UploadRn = () => {
                 hiddenElement.target = '_blank';
                 hiddenElement.download = 'contatos.csv';
                 hiddenElement.click();
+
             }
+
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
             setStatus('Algo deu errado')
+            setLoading(false)
         }
 
     }
@@ -79,6 +85,11 @@ const UploadRn = () => {
         <>
             <Sidebar />
             <section className="section-upload-container">
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }}></CircularProgress>
+                    ) : null
+                }
                 {status !== '' ? (
                     <div className="result">
                         <p>{status}</p>

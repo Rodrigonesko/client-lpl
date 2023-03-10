@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton } from "@mui/material";
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton } from "@mui/material";
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -7,6 +7,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import PropTypes from 'prop-types';
 import Axios from 'axios'
 import { useTheme } from '@mui/material/styles';
+import config from "../../config/axiosHeader";
 
 const style = {
     position: 'absolute',
@@ -111,8 +112,12 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
     const [beneficiarioExcluir, setBeneficiarioExcluir] = useState('')
     const [idExcluir, setIdCExcluir] = useState('')
 
+    const [loading, setLoading] = useState(false)
+
     const cancelar = async () => {
         try {
+
+            setLoading(true)
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar, motivoCancelamento: motivoCancelar }, { withCredentials: true })
 
@@ -129,7 +134,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const excluir = async () => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/excluir`, { id: idExcluir }, { withCredentials: true })
+
+            setLoading(true)
+
+            const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, { withCredentials: true, headers: config.headers })
 
             if (result.status === 200) {
                 window.location.reload()
@@ -142,7 +150,12 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const alterarVigencia = async (vigencia, id) => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/vigencia/update`, { id, vigencia }, { withCredentials: true })
+
+            setLoading(true)
+
+            console.log(config);
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarVigencia`, { id, vigencia }, { withCredentials: true, headers: config.headers })
 
             if (result.status === 200) {
                 window.location.reload()
@@ -156,7 +169,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, { id, telefone }, { withCredentials: true })
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, { withCredentials: true, headers: config.headers })
 
         } catch (error) {
             console.log(error);
@@ -165,12 +178,18 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const alterarSexo = async (id, sexo) => {
         try {
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/alterarSexo`, {
+
+            setLoading(true)
+
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarSexo`, {
                 id,
                 sexo
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: config.headers
             })
+
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -178,16 +197,24 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const tentativaContato = async (tentativa, id) => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/tentativaContato`, {
+
+            setLoading(true)
+
+            console.log(tentativa, id);
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/tentativaContato`, {
                 tentativa,
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: config.headers
             })
+
+            console.log(result);
 
             atualizarTabela()
 
-            console.log(result);
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -200,6 +227,11 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                 Tele: {propostas.length}
             </Typography>
             <TableContainer>
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
+                    ) : null
+                }
                 <Table style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
                     <TableHead className="table-header">
                         <TableRow>

@@ -3,7 +3,7 @@ import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Modal from 'react-modal'
 import "./Horarios.css"
-import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, IconButton } from "@mui/material";
+import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
 
 Modal.setAppElement('#root')
 

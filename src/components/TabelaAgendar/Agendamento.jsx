@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Axios from 'axios'
-import { Box, TextField, Autocomplete, Select, FormControl, MenuItem, InputLabel, Button } from "@mui/material";
+import { Box, TextField, Autocomplete, Select, FormControl, MenuItem, InputLabel, Button, CircularProgress } from "@mui/material";
 
 const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
 
@@ -10,6 +10,7 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
     const [dataEntrevista, setDataEntrevista] = useState('')
     const [horarioEntrevista, setHorarioEntrevista] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const ajustarDia = (data) => {
         const arr = data.split('/')
@@ -44,7 +45,8 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
 
     const agendar = async () => {
         try {
-            console.log(idProposta, responsavel, dataEntrevista, horarioEntrevista);
+
+            setLoading(true)
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { id: idProposta, responsavel, data: dataEntrevista, horario: horarioEntrevista }, { withCredentials: true })
 
@@ -59,6 +61,7 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
 
     return (
         <Box minWidth='60%' m={2} display='flex' alignItems='center' justifyContent='space-around'>
+
             <Autocomplete
                 fullWidth
                 onChange={(event, newValue) => {
@@ -135,6 +138,11 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
                 </Select>
             </FormControl>
             <Button variant='contained' onClick={agendar}>Agendar</Button>
+            {
+                loading ? (
+                    <CircularProgress />
+                ) : null
+            }
         </Box>
     )
 }

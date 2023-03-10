@@ -11,7 +11,6 @@ const UploadQuarentena = () => {
     const [status, setStatus] = useState('')
     const [pedidos, setPedidos] = useState([])
     const [modal, setModal] = useState(false)
-    const [totalPedido, setTotalPedidos] = useState(0)
 
     const send = async e => {
         e.preventDefault()
@@ -47,7 +46,6 @@ const UploadQuarentena = () => {
 
             if (result.status === 200) {
                 setStatus(`Foram adicionados ${result.data.pedidos.length} pedidos`)
-                setTotalPedidos(result.data.pedidos.length)
                 setModal(true)
             }
 

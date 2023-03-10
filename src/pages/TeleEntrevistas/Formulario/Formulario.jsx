@@ -10,6 +10,7 @@ import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 
 import './Formulario.css'
+import config from "../../../config/axiosHeader";
 
 Modal.setAppElement('#root')
 
@@ -117,8 +118,6 @@ const Formulario = () => {
                 indicadorImc = 'OBESIDADE I'
             }
 
-            console.log(indicadorImc, imc);
-
             document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
 
             if (imc >= 30) {
@@ -150,8 +149,6 @@ const Formulario = () => {
 
             document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
 
-            console.log(indicadorImc, imc);
-
             if (imc >= 30) {
                 let span = document.createElement('span')
                 span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
@@ -164,19 +161,15 @@ const Formulario = () => {
 
     const handleChangeSub = (item) => {
         subRespostas[`${item.id}`] = item.value
-        console.log(subRespostas);
     }
 
     const handleSimOuNao = (item) => {
         let split = item.name.split('-')
         simOuNao[`${split[1]}`] = item.value
-        console.log(simOuNao);
     }
 
     const enviarDados = async () => {
         try {
-
-            console.log(divergencia, arrCids);
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/formulario`, {
                 respostas: respostas,
@@ -194,8 +187,6 @@ const Formulario = () => {
             if (result.status === 200) {
                 openModal()
             }
-
-
 
         } catch (error) {
             console.log(error);
@@ -254,11 +245,12 @@ const Formulario = () => {
     const alterarFormulario = async () => {
         try {
             if (novoFormulario !== '') {
-                const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/alterarFormulario`, {
+                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarFormulario`, {
                     formulario: novoFormulario,
                     id: id
                 }, {
-                    withCredentials: true
+                    withCredentials: true, 
+                    headers: config.headers
                 })
 
                 if (result.status === 200) {
@@ -278,37 +270,37 @@ const Formulario = () => {
 
         const buscarInfoPessoa = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/pessoa/${id}`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/proposta/${id}`, { withCredentials: true, headers: config.headers })
 
-                setPessoa(result.data.pessoa)
-                setFormulario(result.data.pessoa.formulario)
-                setSexo(result.data.pessoa.sexo)
-                if (result.data.pessoa.formulario !== 'adulto') {
+                setPessoa(result.data)
+                setFormulario(result.data.formulario)
+                setSexo(result.data.sexo)
+                if (result.data.formulario !== 'adulto') {
                     setHabitos(false)
                 }
 
                 console.log(result);
 
-                setRiscoBeneficiario(result.data.pessoa.riscoBeneficiario)
-                setRiscoImc(result.data.pessoa.riscoImc)
-                setSinistral(result.data.pessoa.sinistral)
-                setTipoAssociado(result.data.pessoa.tipoAssociado)
-                setGrupoCarencia(result.data.pessoa.grupoCarencia)
-                setDs1(result.data.pessoa.d1)
-                setDs2(result.data.pessoa.d2)
-                setDs3(result.data.pessoa.d3)
-                setDs4(result.data.pessoa.d4)
-                setDs5(result.data.pessoa.d5)
-                setDs6(result.data.pessoa.d6)
-                setDs7(result.data.pessoa.d7)
-                setDs8(result.data.pessoa.d8)
-                setDs9(result.data.pessoa.d9)
-                setPeso(result.data.pessoa.peso)
-                setAltura(result.data.pessoa.altura)
-                setImc(result.data.pessoa.imc)
-                setCidAnterior1(result.data.pessoa.cid1)
-                setCidAnterior2(result.data.pessoa.cid2)
-                setCidAnterior3(result.data.pessoa.cid3)
+                setRiscoBeneficiario(result.data.riscoBeneficiario)
+                setRiscoImc(result.data.riscoImc)
+                setSinistral(result.data.sinistral)
+                setTipoAssociado(result.data.tipoAssociado)
+                setGrupoCarencia(result.data.grupoCarencia)
+                setDs1(result.data.d1)
+                setDs2(result.data.d2)
+                setDs3(result.data.d3)
+                setDs4(result.data.d4)
+                setDs5(result.data.d5)
+                setDs6(result.data.d6)
+                setDs7(result.data.d7)
+                setDs8(result.data.d8)
+                setDs9(result.data.d9)
+                setPeso(result.data.peso)
+                setAltura(result.data.altura)
+                setImc(result.data.imc)
+                setCidAnterior1(result.data.cid1)
+                setCidAnterior2(result.data.cid2)
+                setCidAnterior3(result.data.cid3)
 
             } catch (error) {
                 console.log(error);

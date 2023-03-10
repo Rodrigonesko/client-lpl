@@ -17,7 +17,7 @@ const Implantacao = () => {
                 withCredentials: true
             })
 
-            if(result.status === 200){
+            if (result.status === 200) {
                 window.location.reload()
             }
 
@@ -49,7 +49,7 @@ const Implantacao = () => {
             <Sidebar />
             <Box>
                 <Typography m={2} variant='h5'>
-                    Implantação
+                    Implantação: {propostas.length}
                 </Typography>
                 <TableContainer>
                     <Table className='table'>
