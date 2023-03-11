@@ -12,10 +12,8 @@ import ProtectedRoute from "./ProtectedRoute";
 /* Elegibilidade */
 
 import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
-import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
 import PreProcessamento from "./pages/Elegibilidade/PreProcessamento/PreProcessamento";
 import PreProcessamentoDetalhes from "./pages/Elegibilidade/PreProcessamentoDetalhes/PreProcessamentoDetalhes";
-import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
 import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
 import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
 import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
@@ -58,6 +56,10 @@ import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgend
 import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
 import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
 import Implantacao from "./pages/TeleEntrevistas/Agenda/Implantacao/Implantacao";
+
+import NaoEnviados from "./pages/TeleEntrevistas/Mensagens/NaoEnviados/NaoEnviados";
+import Ajustar from "./pages/TeleEntrevistas/Mensagens/Ajustar/Ajustar";
+import Enviados from "./pages/TeleEntrevistas/Mensagens/Enviados/Enviados";
 
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
@@ -189,6 +191,17 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/implantacao" element={<ProtectedRoute>
                     <Implantacao />
                 </ProtectedRoute>} />
+                <Route exact path="/entrevistas/NaoEnviados" element={<ProtectedRoute>
+                    <NaoEnviados />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/Ajustar" element={<ProtectedRoute>
+                    <Ajustar />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/Enviados" element={<ProtectedRoute>
+                    <Enviados />
+                </ProtectedRoute>} />
+
+
 
                 <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>
                     <Pdf2 />

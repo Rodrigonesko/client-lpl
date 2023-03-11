@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaExchangeAlt, FaHome, FaHeadset, FaClipboard, FaCalendar, FaGavel, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
+import { FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
@@ -42,7 +42,7 @@ const Sidebar = () => {
                         <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
                         <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
                         {
-                            accessLevel != 'false' ? (
+                            accessLevel !== 'false' ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                     <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
@@ -54,13 +54,6 @@ const Sidebar = () => {
                                 </SubMenu>
                             ) : null
                         }
-
-                        {/* <SubMenu title="Rn" icon={<FaHeadset />}>
-                     
-                            <MenuItem><Link to='/rn/rns'>Rns</Link></MenuItem>
-                            
-                            <MenuItem><Link to='/rn/uploadConfirmadas'>Upload Confirmadas</Link></MenuItem>
-                        </SubMenu> */}
                         <SubMenu title="Tele Entrevistas" icon={<FaClipboard />}>
                             <SubMenu title='Agenda' icon={<FaCalendar />}>
                                 <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
@@ -69,15 +62,20 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/implantacao'>Implatação</Link></MenuItem>
                                 {
-                                    accessLevel != 'false' ? (
+                                    accessLevel !== 'false' ? (
                                         <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
                                     ) : null
                                 }
                             </SubMenu>
+                            <SubMenu title='Mensagens'>
+                                <MenuItem><Link to='/entrevistas/naoEnviados'>Não Enviados</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/Ajustar'>Ajustar</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/Enviados'>Enviados</Link></MenuItem>
+                            </SubMenu>
                             <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                             <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
                             {
-                                accessLevel != 'false' ? (<>
+                                accessLevel !== 'false' ? (<>
 
                                     <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>
@@ -103,18 +101,6 @@ const Sidebar = () => {
                             <MenuItem><Link to='/urgenciaEmergencia/upload'>Upload</Link></MenuItem>
 
                         </SubMenu>
-                        {/* <SubMenu title='Liminares' icon={<FaGavel />}>
-                            <SubMenu title='Liminares'>
-                                <MenuItem><Link to='/liminares/andamento'>Em andamento</Link></MenuItem>
-                                <MenuItem><Link to='/liminares/upload'>Upload</Link></MenuItem>
-                                <MenuItem><Link to='/liminares/report'>Report</Link></MenuItem>
-                            </SubMenu>
-                            <SubMenu title='Liminares AJ'>
-                                <MenuItem><Link to='/liminares/andamentoAj'>Em andamento</Link></MenuItem>
-                                <MenuItem><Link to='/liminares/uploadAj'>Upload</Link></MenuItem>
-                                <MenuItem><Link to='/liminares/reportAj'>Report</Link></MenuItem>
-                            </SubMenu>
-                        </SubMenu> */}
                         <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
                             <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
                             <MenuItem><Link to='/rsd/CriarPedidoIndividual/'>Criar Pedido/Protocolo</Link></MenuItem>
@@ -131,9 +117,6 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                         </SubMenu>
-                        {/* <SubMenu title='Contatos Reembolso'>
-                            <MenuItem><Link to='/provisorio/contatos'>Gerar contatos Gar</Link></MenuItem>
-                        </SubMenu> */}
                         <MenuItem icon={<RiLogoutBoxRLine />}>
                             <a onClick={logout}>Sair</a>
                         </MenuItem>
