@@ -32,7 +32,7 @@ const UploadRn = () => {
 
             setLoading(true)
 
-            const send = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/upload`, { result }, { withCredentials: true, headers: config.headers })
+            const send = await Axios.post(`http://10.0.121.55:3002/upload`, { result }, { withCredentials: true, headers: config.headers })
 
             if (send.status === 200) {
                 setStatus(send.data.message)

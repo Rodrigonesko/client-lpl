@@ -32,7 +32,7 @@ const NaoEnviados = () => {
 
             for (const item of propostas) {
                 count++
-                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagem`, {
+                const result = await Axios.put(`http://10.0.121.55:3002/enviarMensagem`, {
                     proposta: item
                 }, {
                     withCredentials: true,
@@ -40,7 +40,7 @@ const NaoEnviados = () => {
                 })
                 console.log(result);
                 setProgressValue((count / propostas.length) * 100)
-                buscarPropostas()
+                // buscarPropostas()
             }
 
         } catch (error) {
