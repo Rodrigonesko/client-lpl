@@ -53,7 +53,7 @@ const NaoEnviados = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoEnviadas`, {
+            const result = await Axios.get(`http://10.0.121.55:3002/naoEnviadas`, {
                 withCredentials: true,
                 headers: config.headers
             })

@@ -105,7 +105,6 @@ const Ajustar = () => {
                                                     } else {
                                                         setAjustados(ajustados.filter(item => item.id !== e._id))
                                                     }
-
                                                 }} /></TableCell>
                                             </TableRow>
                                         )

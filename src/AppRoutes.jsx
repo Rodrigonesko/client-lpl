@@ -60,9 +60,14 @@ import Implantacao from "./pages/TeleEntrevistas/Agenda/Implantacao/Implantacao"
 import NaoEnviados from "./pages/TeleEntrevistas/Mensagens/NaoEnviados/NaoEnviados";
 import Ajustar from "./pages/TeleEntrevistas/Mensagens/Ajustar/Ajustar";
 import Enviados from "./pages/TeleEntrevistas/Mensagens/Enviados/Enviados";
+import ErroAoEnviar from "./pages/TeleEntrevistas/Mensagens/ErroAoEnviar/ErroAoEnviar";
+import AtendimentoHumanizado from "./pages/TeleEntrevistas/Mensagens/NecessárioAtendimento/AtendimentoHumanizado";
+import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/RespostasJanelasHorarios/RespostasJanelasHorarios";
+import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
+
 
 /* Urgencia Emergencia */
 
@@ -200,7 +205,18 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/Enviados" element={<ProtectedRoute>
                     <Enviados />
                 </ProtectedRoute>} />
-
+                <Route exact path="/entrevistas/ErroAoEnviar" element={<ProtectedRoute>
+                    <ErroAoEnviar />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/AtendimentoHumanizado" element={<ProtectedRoute>
+                    <AtendimentoHumanizado />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/RespostasJanelas" element={<ProtectedRoute>
+                    <RespostasJanelasHorarios />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/chat/:whatsapp" element={<ProtectedRoute>
+                    <Chat />
+                </ProtectedRoute>} />
 
 
                 <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>

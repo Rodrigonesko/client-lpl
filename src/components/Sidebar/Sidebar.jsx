@@ -71,6 +71,9 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/naoEnviados'>Não Enviados</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/Ajustar'>Ajustar</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/Enviados'>Enviados</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/ErroAoEnviar'>Erro ao enviar</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/AtendimentoHumanizado'>Atendimento Humanizado</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/RespostasJanelas'>Janelas Escolhidas</Link></MenuItem>
                             </SubMenu>
                             <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                             <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
