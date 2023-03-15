@@ -15,7 +15,10 @@ const Mensagens = () => {
 
                 setLoading(true)
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/mensagens/aaa`)
+                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/gerarMensagens`, {
+                    withCredentials: true,
+                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                })
 
                 console.log(result);
 

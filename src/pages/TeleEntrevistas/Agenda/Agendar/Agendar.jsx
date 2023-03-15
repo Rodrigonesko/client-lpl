@@ -9,14 +9,11 @@ import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
 import { CircularProgress } from "@mui/material";
 import config from "../../../../config/axiosHeader";
-// import AuthContext from "../../../../context/AuthContext";
 
 import './Agendar.css'
 
 
 const Agendar = () => {
-
-    // const { accessLevel } = useContext(AuthContext)
 
     const [propostas, setPropostas] = useState([])
     const [rns, setRns] = useState([])
@@ -128,8 +125,6 @@ const Agendar = () => {
                     <TabelaAgendarRn propostas={rns}>
 
                     </TabelaAgendarRn>
-
-                    {/* <HorariosDisponiveis /> */}
 
                     <div className="horarios-disponiveis-container">
                         <div className="title">

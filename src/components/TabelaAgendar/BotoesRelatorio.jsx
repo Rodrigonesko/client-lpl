@@ -12,7 +12,10 @@ const BotoesRelatorios = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/show`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -150,7 +153,10 @@ const BotoesRelatorios = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/show`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
             const naoRealizadas = result.data.propostas.filter(e => {
                 return e.status !== 'Concluído' && e.status !== 'Cancelado'

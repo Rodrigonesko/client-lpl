@@ -249,8 +249,8 @@ const Formulario = () => {
                     formulario: novoFormulario,
                     id: id
                 }, {
-                    withCredentials: true, 
-                    headers: config.headers
+                    withCredentials: true,
+                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
                 })
 
                 if (result.status === 200) {
@@ -270,7 +270,10 @@ const Formulario = () => {
 
         const buscarInfoPessoa = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/proposta/${id}`, { withCredentials: true, headers: config.headers })
+                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/proposta/${id}`, {
+                    withCredentials: true,
+                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                })
 
                 setPessoa(result.data)
                 setFormulario(result.data.formulario)

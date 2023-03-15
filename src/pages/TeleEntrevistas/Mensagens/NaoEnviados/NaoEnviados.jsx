@@ -32,15 +32,15 @@ const NaoEnviados = () => {
 
             for (const item of propostas) {
                 count++
-                const result = await Axios.put(`http://10.0.121.55:3002/enviarMensagem`, {
+                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagem`, {
                     proposta: item
                 }, {
                     withCredentials: true,
-                    headers: config.headers
+                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
                 })
                 console.log(result);
                 setProgressValue((count / propostas.length) * 100)
-                // buscarPropostas()
+                buscarPropostas()
             }
 
         } catch (error) {
@@ -53,9 +53,9 @@ const NaoEnviados = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`http://10.0.121.55:3002/naoEnviadas`, {
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoEnviadas`, {
                 withCredentials: true,
-                headers: config.headers
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
             })
 
             setPropostas(result.data)

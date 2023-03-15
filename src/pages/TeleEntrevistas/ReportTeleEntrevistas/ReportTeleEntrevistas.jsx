@@ -12,7 +12,10 @@ const ReportTeleEntrevistas = () => {
     const buscarPropostas = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/naoRealizadas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoRealizadas`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
             let quantidadeAgendar = 0
             let quantidadeAgendado = 0
@@ -20,7 +23,7 @@ const ReportTeleEntrevistas = () => {
             let propostasNaoAgendadas = []
 
             result.data.propostas.forEach(e => {
-                if(e.agendado === 'agendado') {
+                if (e.agendado === 'agendado') {
                     quantidadeAgendado++
                 } else {
                     quantidadeAgendar++

@@ -88,7 +88,7 @@ const Agendado = () => {
 
         let arr = []
 
-        for (const item of result.data.propostas) {
+        for (const item of result.data) {
             arr.push({
                 dataEntrevista: item.dataEntrevista,
                 proposta: item.proposta,

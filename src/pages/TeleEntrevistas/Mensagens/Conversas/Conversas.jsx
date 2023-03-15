@@ -1,38 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from "@mui/material";
+import { Container, Box, Typography, Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button, TextField } from "@mui/material";
 import Axios from 'axios'
 import config from "../../../../config/axiosHeader";
 
-const ErroAoEnviar = () => {
+const Conversas = () => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
+    const [pesquisa, setPesquisa] = useState('')
 
-    useEffect(() => {
+    const pesquisar = async (e) => {
+        try {
+            e.preventDefault()
+            setLoading(true)
 
-        const buscarPropostas = async () => {
-            try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/conversas/${pesquisa}`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
+            setPropostas(result.data)
 
-                setLoading(true)
+            setLoading(false)
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/erroMensagem`, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
-                })
-
-                setPropostas(result.data)
-                setLoading(false)
-
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
-            }
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
         }
-
-        buscarPropostas()
-
-    }, [])
+    }
 
     return (
         <>
@@ -40,13 +35,19 @@ const ErroAoEnviar = () => {
             <Container>
                 <Box m={2}>
                     <Typography variant="h5">
-                        Problema ao enviar mensagem: {propostas.length}
+                        Conversas
                     </Typography>
                     {
                         loading ? (
                             <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
                         ) : null
                     }
+                    <Box component={Paper} p={2}>
+                        <form action="" method="post" onSubmit={pesquisar}>
+                            <TextField type='search' style={{ minWidth: '300px' }} label='Proposta, nome ou número' size="small" onChange={e => setPesquisa(e.target.value)} />
+                            <Button type="submit" variant="contained">Pesquisar</Button>
+                        </form>
+                    </Box>
                     <Box>
                         <TableContainer>
                             <Table className="table">
@@ -57,9 +58,9 @@ const ErroAoEnviar = () => {
                                         <TableCell>Cpf</TableCell>
                                         <TableCell>Cpf Titular</TableCell>
                                         <TableCell>Tipo Associado</TableCell>
-                                        <TableCell>Situação</TableCell>
                                         <TableCell>DDD</TableCell>
                                         <TableCell>Celular</TableCell>
+                                        <TableCell>Conversa</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -72,9 +73,9 @@ const ErroAoEnviar = () => {
                                                     <TableCell>{e.cpf}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
                                                     <TableCell>{e.tipoAssociado}</TableCell>
-                                                    <TableCell>{e.situacao}</TableCell>
                                                     <TableCell>{e.ddd}</TableCell>
                                                     <TableCell>{e.celular}</TableCell>
+                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })
@@ -89,4 +90,4 @@ const ErroAoEnviar = () => {
     )
 }
 
-export default ErroAoEnviar
+export default Conversas

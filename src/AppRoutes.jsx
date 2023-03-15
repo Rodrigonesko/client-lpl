@@ -64,6 +64,7 @@ import ErroAoEnviar from "./pages/TeleEntrevistas/Mensagens/ErroAoEnviar/ErroAoE
 import AtendimentoHumanizado from "./pages/TeleEntrevistas/Mensagens/NecessárioAtendimento/AtendimentoHumanizado";
 import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/RespostasJanelasHorarios/RespostasJanelasHorarios";
 import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
+import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
 
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
@@ -216,6 +217,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/chat/:whatsapp" element={<ProtectedRoute>
                     <Chat />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/conversas" element={<ProtectedRoute>
+                    <Conversas />
                 </ProtectedRoute>} />
 
 

@@ -18,7 +18,7 @@ const Ajustar = () => {
                 propostas: ajustados
             }, {
                 withCredentials: true,
-                headers: config.headers
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
             })
 
             if (result.status === 200) {
@@ -39,7 +39,7 @@ const Ajustar = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/ajustar`, {
                 withCredentials: true,
-                headers: config.headers
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
             })
             setPropostas(result.data)
 

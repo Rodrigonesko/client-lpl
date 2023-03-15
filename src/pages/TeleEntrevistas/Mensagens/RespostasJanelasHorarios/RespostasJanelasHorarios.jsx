@@ -87,9 +87,9 @@ const RespostasJanelasHorarios = () => {
 
                 setLoading(true)
 
-                const result = await Axios.get(`http://10.0.121.55:3002/janelasEscolhidas`, {
+                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/janelasEscolhidas`, {
                     withCredentials: true,
-                    headers: config.headers
+                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
                 })
 
                 setPropostas(result.data)

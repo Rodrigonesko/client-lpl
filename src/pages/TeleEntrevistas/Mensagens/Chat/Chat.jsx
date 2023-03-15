@@ -14,9 +14,9 @@ const Chat = () => {
         const buscarMensagens = async () => {
 
             try {
-                const result = await Axios.get(`http://10.0.121.55:3002/chat/${whatsapp}`, {
+                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/chat/${whatsapp}`, {
                     withCredentials: true,
-                    headers: config.headers
+                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
                 })
 
                 setChat(result.data)
