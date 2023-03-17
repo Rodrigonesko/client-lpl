@@ -10,7 +10,7 @@ import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 
 import './Formulario.css'
-import config from "../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 Modal.setAppElement('#root')
 
@@ -250,7 +250,7 @@ const Formulario = () => {
                     id: id
                 }, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
 
                 if (result.status === 200) {
@@ -272,7 +272,7 @@ const Formulario = () => {
             try {
                 const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/proposta/${id}`, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
 
                 setPessoa(result.data)

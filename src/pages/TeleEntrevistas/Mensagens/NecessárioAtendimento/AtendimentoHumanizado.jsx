@@ -3,6 +3,7 @@ import Sidebar from "../../../../components/Sidebar/Sidebar";
 import { Container, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button } from "@mui/material";
 import Axios from 'axios'
 import moment from "moment";
+import { getCookie } from "react-use-cookie";
 
 const AtendimentoHumanizado = () => {
 
@@ -17,7 +18,7 @@ const AtendimentoHumanizado = () => {
             let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
 
             propostas.forEach(e => {
-                let telefone = `(${e.celular}) ${e.ddd}`
+                let telefone = `(${e.ddd}) ${e.celular}`
                 let proposta = e.proposta
                 let nome = e.nome
 
@@ -195,7 +196,7 @@ const AtendimentoHumanizado = () => {
 
                 const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/atendimentoHumanizado`, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
 
                 setPropostas(result.data)
@@ -239,6 +240,7 @@ const AtendimentoHumanizado = () => {
                                         <TableCell>Cpf</TableCell>
                                         <TableCell>Cpf Titular</TableCell>
                                         <TableCell>Tipo Associado</TableCell>
+                                        <TableCell>Data Nascimento</TableCell>
                                         <TableCell>DDD</TableCell>
                                         <TableCell>Celular</TableCell>
                                         <TableCell>Conversa</TableCell>
@@ -254,6 +256,7 @@ const AtendimentoHumanizado = () => {
                                                     <TableCell>{e.cpf}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
                                                     <TableCell>{e.tipoAssociado}</TableCell>
+                                                    <TableCell>{e.dataNascimento}</TableCell>
                                                     <TableCell>{e.ddd}</TableCell>
                                                     <TableCell>{e.celular}</TableCell>
                                                     <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>

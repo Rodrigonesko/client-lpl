@@ -8,7 +8,7 @@ import BotoesRelatorios from "../../../../components/TabelaAgendar/BotoesRelator
 import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
 import { CircularProgress } from "@mui/material";
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 import './Agendar.css'
 
@@ -18,8 +18,8 @@ const Agendar = () => {
     const [propostas, setPropostas] = useState([])
     const [rns, setRns] = useState([])
     const [propostasTotal, setPropostasTotal] = useState([])
-    const [enfermeiros, setEnfermeiros] = useState([])
     const [loading, setLoading] = useState(false)
+    const [datasEntrevista, setDatasEntrevista] = useState([])
 
     const [horarios, setHorarios] = useState({})
 
@@ -29,7 +29,10 @@ const Agendar = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoAgendadas`, { withCredentials: true, headers: config.headers })
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoAgendadas`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
 
             const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
 
@@ -69,17 +72,6 @@ const Agendar = () => {
         }
     }
 
-    const searchEnfermeiros = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, { withCredentials: true })
-
-            setEnfermeiros(result.data.enfermeiros)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const buscarHorariosDisp = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horarios/disponiveis`, { withCredentials: true })
@@ -92,8 +84,17 @@ const Agendar = () => {
     }
 
     useEffect(() => {
+        const buscarDiasDisponiveis = async () => {
+            try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, { withCredentials: true })
+
+                setDatasEntrevista(result.data)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        buscarDiasDisponiveis()
         searchPropostas()
-        searchEnfermeiros()
         buscarHorariosDisp()
 
     }, [])
@@ -114,7 +115,7 @@ const Agendar = () => {
 
                     <GerarHorarios />
 
-                    <Agendamento propostas={propostasTotal} responsaveis={enfermeiros} />
+                    <Agendamento propostas={propostasTotal} dias={datasEntrevista} />
 
                     <BotoesRelatorios />
 

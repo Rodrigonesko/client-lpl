@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import { Container, Box, Modal, FormControl, InputLabel, Select, MenuItem, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button } from "@mui/material";
 import Axios from 'axios'
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const style = {
     position: 'absolute',
@@ -38,25 +38,27 @@ const RespostasJanelasHorarios = () => {
         return `${arr[2]}-${arr[1]}-${arr[0]}`
     }
 
-    const searchDataDisp = async (responsavel) => {
+    const buscarHorarios = async (dia) => {
         try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${ajustarDia(dia)}`, { withCredentials: true })
 
-            setResponsavel(responsavel)
+            console.log(result);
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarDiasDisponiveis/${responsavel}`, { withCredentials: true })
-
-            setDatasEntrevista(result.data.dias)
+            setHorariosDisponiveis(result.data)
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const searchHorariosDisp = async (dia) => {
+    const buscarAnalistasDisponiveis = async (horario) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${responsavel}/${ajustarDia(dia)}`, { withCredentials: true })
 
-            setHorariosDisponiveis(result.data.horarios)
+            console.log(dataEntrevista, horario);
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/analistasDisponiveis/${ajustarDia(dataEntrevista)}/${horario}`, { withCredentials: true })
+
+            setResponsaveis(result.data)
 
         } catch (error) {
             console.log(error);
@@ -79,49 +81,67 @@ const RespostasJanelasHorarios = () => {
         }
     }
 
+    const atendimentoHumanizado = async (id) => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/mandarAtendimentoHumanizado`, {
+                id
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            buscarPropostas()
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    const buscarPropostas = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/janelasEscolhidas`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            setPropostas(result.data)
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
 
-        const buscarPropostas = async () => {
+        const buscarDiasDisponiveis = async () => {
             try {
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, { withCredentials: true })
 
-                setLoading(true)
-
-                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/janelasEscolhidas`, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
-                })
-
-                setPropostas(result.data)
-
-                setLoading(false)
-
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
-            }
-        }
-
-        const buscarResponsaveis = async () => {
-            try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, { withCredentials: true })
-
-                setResponsaveis(result.data.enfermeiros)
-
+                setDatasEntrevista(result.data)
             } catch (error) {
                 console.log(error);
             }
         }
 
         buscarPropostas()
-        buscarResponsaveis()
+        buscarDiasDisponiveis()
 
     }, [])
 
     return (
         <>
             <Sidebar />
-            <Container>
+            <Box>
                 <Box m={2}>
                     <Typography variant="h5">
                         Janela de Horário: {propostas.length}
@@ -140,8 +160,12 @@ const RespostasJanelasHorarios = () => {
                                         <TableCell>Nome</TableCell>
                                         <TableCell>Cpf Titular</TableCell>
                                         <TableCell>Tipo Associado</TableCell>
+                                        <TableCell>Tipo Contrato</TableCell>
+                                        <TableCell>Data Nascimento</TableCell>
                                         <TableCell>Janela Escolhida</TableCell>
                                         <TableCell>Agendar</TableCell>
+                                        <TableCell>Atendimento Humanizado</TableCell>
+                                        <TableCell>Conversa</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -153,6 +177,8 @@ const RespostasJanelasHorarios = () => {
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
                                                     <TableCell>{e.tipoAssociado}</TableCell>
+                                                    <TableCell>{e.tipoContrato}</TableCell>
+                                                    <TableCell>{e.dataNascimento}</TableCell>
                                                     <TableCell>{e.janelaHorario}</TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => {
                                                         setProposta(e.proposta)
@@ -161,6 +187,8 @@ const RespostasJanelasHorarios = () => {
                                                         setId(e._id)
                                                         setModal(true)
                                                     }}>Agendar</Button></TableCell>
+                                                    <TableCell><Button size="small" variant="contained" onClick={() => { atendimentoHumanizado(e._id) }} color='secondary'>Atendimento Humanizado</Button></TableCell>
+                                                    <TableCell><Button size="small" variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })
@@ -182,28 +210,6 @@ const RespostasJanelasHorarios = () => {
                         </Typography>
                         <Box display='flex' justifyContent='space-around' alignItems='center' m={3}>
                             <FormControl size="small">
-                                <InputLabel id="label-responsavel">Responsável</InputLabel>
-                                <Select
-                                    labelId="label-responsavel"
-                                    id="select-responsavel"
-                                    label="Responsável"
-                                    style={{ minWidth: '140px' }}
-                                    onChange={e => {
-                                        searchDataDisp(e.target.value)
-                                    }}
-                                    defaultValue=''
-                                >
-                                    {
-                                        responsaveis.map(e => {
-                                            return (
-                                                <MenuItem key={e._id} value={e.name}>{e.name}</MenuItem>
-                                            )
-                                        })
-                                    }
-
-                                </Select>
-                            </FormControl>
-                            <FormControl size="small">
                                 <InputLabel id="label-dia">Dia</InputLabel>
                                 <Select
                                     defaultValue=''
@@ -212,7 +218,7 @@ const RespostasJanelasHorarios = () => {
                                     id="select-doa"
                                     label="Dia"
                                     onChange={e => {
-                                        searchHorariosDisp(e.target.value)
+                                        buscarHorarios(e.target.value)
                                         setDataEntrevista(e.target.value)
                                     }}
                                 >
@@ -233,7 +239,10 @@ const RespostasJanelasHorarios = () => {
                                     labelId="label-horario"
                                     id="select-horario"
                                     label="Horario"
-                                    onChange={e => setHorarioEntrevista(e.target.value)}
+                                    onChange={e => {
+                                        setHorarioEntrevista(e.target.value)
+                                        buscarAnalistasDisponiveis(e.target.value)
+                                    }}
                                 >
                                     {
                                         horariosDisponiveis.map(e => {
@@ -244,11 +253,33 @@ const RespostasJanelasHorarios = () => {
                                     }
                                 </Select>
                             </FormControl>
+                            <FormControl size="small">
+                                <InputLabel id="label-responsavel">Responsável</InputLabel>
+                                <Select
+                                    labelId="label-responsavel"
+                                    id="select-responsavel"
+                                    label="Responsável"
+                                    style={{ minWidth: '140px' }}
+                                    onChange={e => {
+                                        setResponsavel(e.target.value)
+                                    }}
+                                    defaultValue=''
+                                >
+                                    {
+                                        responsaveis.map(e => {
+                                            return (
+                                                <MenuItem key={e} value={e}>{e}</MenuItem>
+                                            )
+                                        })
+                                    }
+
+                                </Select>
+                            </FormControl>
                             <Button variant="contained" onClick={agendar}>Agendar</Button>
                         </Box>
                     </Box>
                 </Modal>
-            </Container>
+            </Box>
         </>
     )
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle } from "@mui/material";
 import Axios from 'axios'
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const style = {
     position: 'absolute',
@@ -36,7 +36,7 @@ const NaoEnviados = () => {
                     proposta: item
                 }, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
                 console.log(result);
                 setProgressValue((count / propostas.length) * 100)
@@ -55,10 +55,29 @@ const NaoEnviados = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoEnviadas`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             setPropostas(result.data)
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+    }
+
+    const voltarParaAjuste = async (id) => {
+        try {
+            setLoading(true)
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/voltarAjuste`, {
+                id
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            buscarPropostas()
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -98,6 +117,7 @@ const NaoEnviados = () => {
                                     <TableCell>Tipo Associado</TableCell>
                                     <TableCell>DDD</TableCell>
                                     <TableCell>Celular</TableCell>
+                                    <TableCell>Voltar</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -112,6 +132,7 @@ const NaoEnviados = () => {
                                                 <TableCell>{e.tipoAssociado}</TableCell>
                                                 <TableCell>{e.ddd}</TableCell>
                                                 <TableCell>{e.celular}</TableCell>
+                                                <TableCell><Button variant="contained" onClick={() => voltarParaAjuste(e._id)}>Ajustar</Button></TableCell>
                                             </TableRow>
                                         )
                                     })

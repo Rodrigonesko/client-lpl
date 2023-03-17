@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import { Container, Box, Typography, Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button, TextField } from "@mui/material";
 import Axios from 'axios'
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const Conversas = () => {
 
@@ -17,7 +17,7 @@ const Conversas = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/conversas/${pesquisa}`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
             setPropostas(result.data)
 

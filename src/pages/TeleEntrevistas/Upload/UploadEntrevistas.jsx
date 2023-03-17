@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import Axios from 'axios'
 import moment from "moment/moment";
 import { CircularProgress } from "@mui/material";
-import config from "../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const UploadRn = () => {
 
@@ -35,7 +35,7 @@ const UploadRn = () => {
             const send = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/upload`, { result }, {
                 withCredentials: true,
                 headers: {
-                    Authorization: `Bearer ${document.cookie.split('=')[1]}`
+                    Authorization: `Bearer ${getCookie('token')}`
                 }
             })
 

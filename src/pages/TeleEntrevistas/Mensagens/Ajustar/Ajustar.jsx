@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Typography, Box, Button, TextField, Checkbox, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from "@mui/material";
+import { Container, Typography, Box, Alert, Button, TextField, Checkbox, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from "@mui/material";
 import Axios from 'axios'
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const Ajustar = () => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
     const [ajustados, setAjustados] = useState([])
+    const [error, setError] = useState(false)
 
     const ajustar = async () => {
         try {
             setLoading(true)
 
+            console.log(ajustados);
+
+            for (const item of ajustados) {
+                if (!item.cpfTitular) {
+                    setError(true)
+                    setLoading(false)
+                    return
+                }
+            }
+
             const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/ajustar`, {
                 propostas: ajustados
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             if (result.status === 200) {
@@ -39,7 +50,7 @@ const Ajustar = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/ajustar`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
             setPropostas(result.data)
 
@@ -67,6 +78,11 @@ const Ajustar = () => {
                     {
                         loading ? (
                             <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
+                        ) : null
+                    }
+                    {
+                        error ? (
+                            <Alert severity="error">Alguma das propostas está faltando o cpf titular</Alert>
                         ) : null
                     }
                 </Box>

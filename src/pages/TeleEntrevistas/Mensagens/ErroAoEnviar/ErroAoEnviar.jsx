@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import { Container, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from "@mui/material";
 import Axios from 'axios'
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const ErroAoEnviar = () => {
 
@@ -18,7 +18,7 @@ const ErroAoEnviar = () => {
 
                 const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/erroMensagem`, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
 
                 setPropostas(result.data)

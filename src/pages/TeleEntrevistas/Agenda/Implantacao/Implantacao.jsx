@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import moment from 'moment/moment'
-import { Box, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button } from '@mui/material'
+import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button } from '@mui/material'
+import RelatorioPadraoTele from '../../../../components/RelatorioPadraoTele/RelatorioPadraoTele'
 
 const Implantacao = () => {
 
     const [propostas, setPropostas] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const implantar = async (id) => {
         try {
@@ -18,7 +20,7 @@ const Implantacao = () => {
             })
 
             if (result.status === 200) {
-                window.location.reload()
+                buscarPropostas()
             }
 
             console.log(result);
@@ -28,19 +30,33 @@ const Implantacao = () => {
         }
     }
 
-    useEffect(() => {
-        const buscarPropostas = async () => {
-            try {
+    const buscarPropostas = async () => {
+        try {
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
+            setLoading(true)
 
-                setPropostas(result.data)
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
 
-            } catch (error) {
-                console.log(error);
-            }
+            setPropostas(result.data)
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
         }
+    }
 
+    const relatorio = () => {
+        try {
+
+            RelatorioPadraoTele(propostas, 'Relatorio implantacao')
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
         buscarPropostas()
     }, [])
 
@@ -51,6 +67,15 @@ const Implantacao = () => {
                 <Typography m={2} variant='h5'>
                     Implantação: {propostas.length}
                 </Typography>
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
+                    ) : null
+                }
+                <Box m={2}>
+                    <Button onClick={relatorio} variant='contained'>Relatório</Button>
+                </Box>
+
                 <TableContainer>
                     <Table className='table'>
                         <TableHead className='table-header'>

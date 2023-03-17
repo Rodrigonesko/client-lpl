@@ -55,9 +55,10 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/alterarTelefone`, { id, telefone }, { withCredentials: true })
-
-            console.log(result);
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
         } catch (error) {
             console.log(error);

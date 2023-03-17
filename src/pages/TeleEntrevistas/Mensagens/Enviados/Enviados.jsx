@@ -3,6 +3,7 @@ import Sidebar from "../../../../components/Sidebar/Sidebar";
 import { Container, Button, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from "@mui/material";
 import Axios from 'axios'
 import moment from "moment";
+import { getCookie } from "react-use-cookie";
 
 const Enviados = () => {
 
@@ -17,7 +18,7 @@ const Enviados = () => {
             let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
 
             propostas.forEach(e => {
-                let telefone = `(${e.celular}) ${e.ddd}`
+                let telefone = `(${e.ddd}) ${e.celular}`
                 let proposta = e.proposta
                 let nome = e.nome
 
@@ -195,7 +196,7 @@ const Enviados = () => {
 
                 const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/situacao/Enviada`, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
 
                 setPropostas(result.data)
@@ -241,6 +242,7 @@ const Enviados = () => {
                                         <TableCell>Cpf Titular</TableCell>
                                         <TableCell>Tipo Associado</TableCell>
                                         <TableCell>Horario Enviado</TableCell>
+                                        <TableCell>Conversa</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -254,6 +256,7 @@ const Enviados = () => {
                                                     <TableCell>{e.cpfTitular}</TableCell>
                                                     <TableCell>{e.tipoAssociado}</TableCell>
                                                     <TableCell>{e.horarioEnviado}</TableCell>
+                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })

@@ -137,7 +137,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoading(true)
 
-            const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, { withCredentials: true, headers: config.headers })
+            const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
             if (result.status === 200) {
                 window.location.reload()
@@ -155,7 +158,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             console.log(config);
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarVigencia`, { id, vigencia }, { withCredentials: true, headers: config.headers })
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarVigencia`, { id, vigencia }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
             if (result.status === 200) {
                 window.location.reload()
@@ -169,7 +175,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, { withCredentials: true, headers: config.headers })
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
 
         } catch (error) {
             console.log(error);
@@ -186,7 +195,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                 sexo
             }, {
                 withCredentials: true,
-                headers: config.headers
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
             })
 
             setLoading(false)
@@ -207,7 +216,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                 id
             }, {
                 withCredentials: true,
-                headers: config.headers
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
             })
 
             console.log(result);

@@ -5,7 +5,7 @@ import { Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 import moment from "moment";
-import config from "../../../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 
 const Agendado = () => {
@@ -31,7 +31,10 @@ const Agendado = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, { withCredentials: true, headers: config.headers })
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
             const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 
             let arr = []
@@ -83,7 +86,10 @@ const Agendado = () => {
 
     const filtroEnfermeiro = async enfermeiro => {
         setLoading(true)
-        const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, { withCredentials: true, headers: config.headers })
+        const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+        })
         const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 
         let arr = []

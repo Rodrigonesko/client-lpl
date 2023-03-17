@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Axios from 'axios'
 import { Box, TextField, Autocomplete, Select, FormControl, MenuItem, InputLabel, Button, CircularProgress } from "@mui/material";
 
-const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
+const Agendamento = ({ propostas, dias }) => {
 
     const [idProposta, setIdProposta] = useState('')
     const [responsavel, setResponsavel] = useState('')
-    const [datasEntrevista, setDatasEntrevista] = useState([])
+    const [responsaveis, setResponsaveis] = useState([])
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
     const [dataEntrevista, setDataEntrevista] = useState('')
     const [horarioEntrevista, setHorarioEntrevista] = useState('')
@@ -18,25 +18,28 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
         return `${arr[2]}-${arr[1]}-${arr[0]}`
     }
 
-    const searchDataDisp = async (responsavel) => {
+
+    const buscarHorarios = async (dia) => {
         try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${ajustarDia(dia)}`, { withCredentials: true })
 
-            setResponsavel(responsavel)
+            console.log(result);
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarDiasDisponiveis/${responsavel}`, { withCredentials: true })
-
-            setDatasEntrevista(result.data.dias)
+            setHorariosDisponiveis(result.data)
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const searchHorariosDisp = async (dia) => {
+    const buscarAnalistasDisponiveis = async (horario) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${responsavel}/${ajustarDia(dia)}`, { withCredentials: true })
 
-            setHorariosDisponiveis(result.data.horarios)
+            console.log(dataEntrevista, horario);
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/analistasDisponiveis/${ajustarDia(dataEntrevista)}/${horario}`, { withCredentials: true })
+
+            setResponsaveis(result.data)
 
         } catch (error) {
             console.log(error);
@@ -47,6 +50,8 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
         try {
 
             setLoading(true)
+
+            console.log(idProposta, responsavel, dataEntrevista, horarioEntrevista);
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { id: idProposta, responsavel, data: dataEntrevista, horario: horarioEntrevista }, { withCredentials: true })
 
@@ -75,28 +80,6 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
                 size='small'
             />
             <FormControl size="small">
-                <InputLabel id="label-responsavel">Responsável</InputLabel>
-                <Select
-                    labelId="label-responsavel"
-                    id="select-responsavel"
-                    label="Responsável"
-                    style={{ minWidth: '140px' }}
-                    onChange={e => {
-                        searchDataDisp(e.target.value)
-                    }}
-                    defaultValue=''
-                >
-                    {
-                        responsaveis.map(e => {
-                            return (
-                                <MenuItem key={e._id} value={e.name}>{e.name}</MenuItem>
-                            )
-                        })
-                    }
-
-                </Select>
-            </FormControl>
-            <FormControl size="small">
                 <InputLabel id="label-dia">Dia</InputLabel>
                 <Select
                     defaultValue=''
@@ -105,12 +88,12 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
                     id="select-doa"
                     label="Dia"
                     onChange={e => {
-                        searchHorariosDisp(e.target.value)
+                        buscarHorarios(e.target.value)
                         setDataEntrevista(e.target.value)
                     }}
                 >
                     {
-                        datasEntrevista.map(e => {
+                        dias.map(e => {
                             return (
                                 <MenuItem key={e} value={e}>{e}</MenuItem>
                             )
@@ -126,7 +109,10 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
                     labelId="label-horario"
                     id="select-horario"
                     label="Horario"
-                    onChange={e => setHorarioEntrevista(e.target.value)}
+                    onChange={e => {
+                        setHorarioEntrevista(e.target.value)
+                        buscarAnalistasDisponiveis(e.target.value)
+                    }}
                 >
                     {
                         horariosDisponiveis.map(e => {
@@ -135,6 +121,28 @@ const Agendamento = ({ propostas, responsaveis, dias, horarios }) => {
                             )
                         })
                     }
+                </Select>
+            </FormControl>
+            <FormControl size="small">
+                <InputLabel id="label-responsavel">Responsável</InputLabel>
+                <Select
+                    labelId="label-responsavel"
+                    id="select-responsavel"
+                    label="Responsável"
+                    style={{ minWidth: '140px' }}
+                    onChange={e => {
+                        setResponsavel(e.target.value)
+                    }}
+                    defaultValue=''
+                >
+                    {
+                        responsaveis.map(e => {
+                            return (
+                                <MenuItem key={e} value={e}>{e}</MenuItem>
+                            )
+                        })
+                    }
+
                 </Select>
             </FormControl>
             <Button variant='contained' onClick={agendar}>Agendar</Button>

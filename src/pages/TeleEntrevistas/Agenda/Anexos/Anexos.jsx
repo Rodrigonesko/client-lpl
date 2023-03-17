@@ -2,26 +2,31 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import moment from "moment/moment";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Select, FormControl, InputLabel, MenuItem, CircularProgress } from "@mui/material";
 
 const Anexos = () => {
 
     const [propostas, setPropostas] = useState([])
+    const [divergencia, setDivergencia] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const buscarPropostas = async () => {
         try {
+            setLoading(true)
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
 
     const mandarImplatacao = async (id) => {
         try {
-
+            setLoading(true)
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/mandarImplatacao`, {
                 id
             }, {
@@ -29,8 +34,10 @@ const Anexos = () => {
             })
 
             if (result.status === 200) {
-                window.location.reload()
+                buscarPropostas()
             }
+
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -39,14 +46,54 @@ const Anexos = () => {
 
     const anexar = async (id) => {
         try {
+
+            setLoading(true)
+
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { id }, { withCredentials: true })
 
             if (result.status === 200) {
-                window.location.reload()
+                buscarPropostas()
             }
+
+            setLoading(false)
+
 
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const handleChange = async (divergencia) => {
+        try {
+
+            setLoading(true)
+
+            console.log(divergencia);
+
+            setDivergencia(divergencia)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { withCredentials: true })
+
+            if (divergencia === 'Todos') {
+                setPropostas(result.data.propostas)
+                setLoading(false)
+                return
+            }
+
+            let arr = []
+
+            result.data.propostas.forEach(e => {
+                if (e.houveDivergencia === divergencia) {
+                    arr.push(e)
+                }
+            })
+
+            setPropostas(arr)
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
         }
     }
 
@@ -61,6 +108,36 @@ const Anexos = () => {
                 <Box m={2}>
                     <h3>Anexar SisAmil: {propostas.length}</h3>
                 </Box>
+                <Box>
+                    <FormControl style={{ minWidth: '130px' }}>
+                        <InputLabel>Divergência</InputLabel>
+                        <Select
+                            label='Divergência'
+                            value={divergencia}
+                            onChange={
+                                (e) => {
+                                    handleChange(e.target.value)
+                                }
+                            }
+                        >
+                            <MenuItem value='Todos'>
+                                Todos
+                            </MenuItem>
+                            <MenuItem value='Sim'>
+                                Sim
+                            </MenuItem>
+                            <MenuItem value='Não'>
+                                Não
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+                {
+                    loading ? (
+                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
+
+                    ) : null
+                }
                 <Box m={2}>
                     <div className="anexos-sisamil">
                         <table className="table">
