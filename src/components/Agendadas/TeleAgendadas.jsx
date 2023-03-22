@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Typography, CircularProgress } from "@mui/material";
 import moment from "moment";
 import Axios from 'axios'
+import { getCookie } from "react-use-cookie";
 
 const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
@@ -9,11 +10,12 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const tentativaContato = async (tentativa, id) => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/tentativaContato`, {
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/tentativaContato`, {
                 tentativa,
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             atualizarPropostas(analista)
@@ -57,7 +59,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
             await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
         } catch (error) {
@@ -81,11 +83,12 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const alterarSexo = async (id, sexo) => {
         try {
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/proposta/alterarSexo`, {
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarSexo`, {
                 id,
                 sexo
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
         } catch (error) {
             console.log(error);

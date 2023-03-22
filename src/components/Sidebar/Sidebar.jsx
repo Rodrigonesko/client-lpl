@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck } from "react-icons/fa";
+import { FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs'
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
@@ -67,7 +67,7 @@ const Sidebar = () => {
                                     ) : null
                                 }
                             </SubMenu>
-                            <SubMenu title='Mensagens'>
+                            <SubMenu title='Whatsapp' icon={<FaWhatsapp />}>
                                 <MenuItem><Link to='/entrevistas/naoEnviados'>Não Enviados</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/Ajustar'>Ajustar</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/Enviados'>Enviados</Link></MenuItem>

@@ -88,7 +88,7 @@ const Agendado = () => {
         setLoading(true)
         const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, {
             withCredentials: true,
-            headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            headers: { Authorization: `Bearer ${getCookie('token')}` }
         })
         const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
 

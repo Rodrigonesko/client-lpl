@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Axios from 'axios'
 import { useTheme } from '@mui/material/styles';
 import config from "../../config/axiosHeader";
+import { getCookie } from "react-use-cookie";
 
 const style = {
     position: 'absolute',
@@ -139,7 +140,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             if (result.status === 200) {
@@ -160,7 +161,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarVigencia`, { id, vigencia }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             if (result.status === 200) {
@@ -177,7 +178,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
         } catch (error) {
@@ -195,7 +196,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                 sexo
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             setLoading(false)
@@ -216,7 +217,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
 
             console.log(result);

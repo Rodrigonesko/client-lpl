@@ -4,6 +4,8 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import Modal from 'react-modal'
 import './Detalhes.css'
+import { Container, Button, Box, Paper, Alert } from "@mui/material";
+import moment from "moment";
 
 
 Modal.setAppElement('#root')
@@ -92,8 +94,47 @@ const Detalhes = () => {
 
     }
 
-    useEffect(() => {
+    const tentativaContato = async (tentativa) => {
+        try {
 
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/tentativaContato`, {
+                tentativa,
+                id
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                search()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const search = async () => {
+
+        const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
+        const data = resultado.data
+
+        setDados(data)
+
+        setEmail(dados.email)
+        setData1(data.dataContato1)
+        setData2(data.dataContato2)
+        setData3(data.dataContato3)
+        setHorario1(data.horarioContato1)
+        setHorario2(data.horarioContato2)
+        setHorario3(data.horarioContato3)
+        setObservacoes(data.observacoes)
+
+        if (data.status === 'Concluido') {
+            setConcluido(true)
+        }
+    }
+
+    useEffect(() => {
         const search = async () => {
 
             const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
@@ -121,7 +162,7 @@ const Detalhes = () => {
     return (
         <>
             <Sidebar />
-            <section className="section-detalhes-container">
+            <Container>
                 {
                     success && (
                         <div className="success">
@@ -132,15 +173,15 @@ const Detalhes = () => {
                 }
                 {
                     concluido && (
-                        <div className="success">
+                        <Alert severity='success'>
                             Concluido
-                        </div>
+                        </Alert>
                     )
 
                 }
 
 
-                <div className="detalhes-container">
+                <Box component={Paper} elevation={4} p={2}>
 
                     <h3>{dados.pedido}</h3>
 
@@ -224,19 +265,43 @@ const Detalhes = () => {
                     </div>
                     <div className="info-proposta">
                         <div className="info-box">
-                            <label htmlFor="data-contato-1">1° Contato</label>
-                            <input type="date" name="data-contato-1" id="data-contato-1" defaultValue={dados.dataContato1} onChange={e => setData1(e.target.value)} />
-                            <input type="time" name="horario-contato-1" id="horario-contato-1" defaultValue={dados.horarioContato1} onChange={e => setHorario1(e.target.value)} />
+                            <label htmlFor="data-contato-1">1° Contato: </label>
+                            {
+                                dados.dataContato1 ? (
+                                    <>
+                                        <strong>{moment(dados.dataContato1).format('DD/MM/YYYY')}</strong>
+                                        <strong> {dados.horarioContato1}</strong>
+                                    </>
+                                ) : (
+                                    <Button variant="contained" onClick={() => { tentativaContato('tentativa 1') }}>1° Contato</Button>
+                                )
+                            }
                         </div>
                         <div className="info-box">
-                            <label htmlFor="data-contato-2">2° Contato</label>
-                            <input type="date" name="data-contato-2" id="data-contato-2" defaultValue={dados.dataContato2} onChange={e => setData2(e.target.value)} />
-                            <input type="time" name="horario-contato-2" id="horario-contato-2" defaultValue={dados.horarioContato2} onChange={e => setHorario2(e.target.value)} />
+                            <label htmlFor="data-contato-2">2° Contato: </label>
+                            {
+                                dados.dataContato2 ? (
+                                    <>
+                                        <strong>{moment(dados.dataContato2).format('DD/MM/YYYY')}</strong>
+                                        <strong> {dados.horarioContato2}</strong>
+                                    </>
+                                ) : (
+                                    <Button variant="contained" size="small" onClick={() => { tentativaContato('tentativa 2') }}>2° Contato</Button>
+                                )
+                            }
                         </div>
                         <div className="info-box">
-                            <label htmlFor="data-contato-3">3° Contato</label>
-                            <input type="date" name="data-contato-3" id="data-contato-3" defaultValue={dados.dataContato3} onChange={e => setData3(e.target.value)} />
-                            <input type="time" name="horario-contato-3" id="horario-contato-3" defaultValue={dados.horarioContato3} onChange={e => setHorario3(e.target.value)} />
+                            <label htmlFor="data-contato-3">3° Contato: </label>
+                            {
+                                dados.dataContato3 ? (
+                                    <>
+                                        <strong>{moment(dados.dataContato3).format('DD/MM/YYYY')}</strong>
+                                        <strong> {dados.horarioContato3}</strong>
+                                    </>
+                                ) : (
+                                    <Button variant="contained" size="small" onClick={() => { tentativaContato('tentativa 3') }}>3° Contato</Button>
+                                )
+                            }
                         </div>
                     </div>
                     <div className="info-proposta observacoes">
@@ -265,8 +330,8 @@ const Detalhes = () => {
                         <button onClick={closeModal}>Fechar</button>
                         <button className="concluir" onClick={concluir} >Concluir</button>
                     </Modal>
-                </div>
-            </section>
+                </Box>
+            </Container>
         </>
     )
 }

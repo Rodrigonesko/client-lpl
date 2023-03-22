@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Box, Modal, FormControl, InputLabel, Select, MenuItem, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button } from "@mui/material";
+import { Box, Modal, FormControl, InputLabel, Select, MenuItem, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button } from "@mui/material";
 import Axios from 'axios'
 import { getCookie } from "react-use-cookie";
 
@@ -86,7 +86,7 @@ const RespostasJanelasHorarios = () => {
 
             setLoading(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/mandarAtendimentoHumanizado`, {
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/mandarAtendimentoHumanizado`, {
                 id
             }, {
                 withCredentials: true,
@@ -115,6 +115,44 @@ const RespostasJanelasHorarios = () => {
 
             setLoading(false)
 
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    const encerrarAtendimento = async (id) => {
+        try {
+            setLoading(true)
+
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/encerrarAtendimento`, {
+                id
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            buscarPropostas()
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    const assumir = async (id) => {
+        try {
+            setLoading(true)
+
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/assumirConversa`, {
+                id
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            buscarPropostas()
+            setLoading(false)
         } catch (error) {
             console.log(error);
             setLoading(false);
@@ -151,6 +189,16 @@ const RespostasJanelasHorarios = () => {
                             <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
                         ) : null
                     }
+                    {/* <Box m={2}>
+                        <FormControl style={{minWidth: '230px'}}>
+                            <InputLabel>Responsavel Conversa</InputLabel>
+                            <Select 
+                                label='Responsavel Conversa'
+                            >
+                                <MenuItem></MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box> */}
                     <Box>
                         <TableContainer>
                             <Table className="table">
@@ -166,13 +214,16 @@ const RespostasJanelasHorarios = () => {
                                         <TableCell>Agendar</TableCell>
                                         <TableCell>Atendimento Humanizado</TableCell>
                                         <TableCell>Conversa</TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {
                                         propostas.map(e => {
                                             return (
-                                                <TableRow>
+                                                <TableRow style={{backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
                                                     <TableCell>{e.proposta}</TableCell>
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
@@ -189,6 +240,9 @@ const RespostasJanelasHorarios = () => {
                                                     }}>Agendar</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => { atendimentoHumanizado(e._id) }} color='secondary'>Atendimento Humanizado</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    <TableCell>{e.responsavelConversa}</TableCell>
+                                                    <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
+                                                    <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })

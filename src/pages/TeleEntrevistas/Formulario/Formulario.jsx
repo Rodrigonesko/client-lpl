@@ -8,6 +8,7 @@ import Pergunta from "../../../components/Pergunta/Pergunta";
 import gerarPdf from "../Pdf/Pdf";
 import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
+import { Alert } from '@mui/material'
 
 import './Formulario.css'
 import { getCookie } from "react-use-cookie";
@@ -411,8 +412,12 @@ const Formulario = () => {
                             console.log(e.target.value);
                             if (e.target.value === 'true') {
                                 setDivergencia(true)
+                                let divIndicadorObesidade = document.getElementById('indicador-obesidade')
+                                divIndicadorObesidade.classList.add('none')
                             } else {
                                 setDivergencia(false)
+                                let divIndicadorObesidade = document.getElementById('indicador-obesidade')
+                                divIndicadorObesidade.classList.remove('none')
                             }
 
                         }}>
@@ -427,6 +432,9 @@ const Formulario = () => {
                             <h3>Identificação de divergências</h3>
                         </div>
                         <div className="divergencias-container">
+                            <Alert severity='error'>
+                                Notamos que houve divergência para as patologias: A, B, C (listar patologias) em relação ao preenchimento da DS. Para estas, iremos imputar CPT para ficar de acordo com as informações concedidas pelo Senhor(a). As demais coberturas permanecem inalteradas, caso haja necessidade de maior esclarecimentos procure seu corretor.
+                            </Alert>
                             <div className="div-pergunta">
                                 <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
                                 <input type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />

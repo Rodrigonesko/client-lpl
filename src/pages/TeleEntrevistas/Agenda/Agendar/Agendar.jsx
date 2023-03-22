@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios'
-import { Typography } from "@mui/material";
+import { Typography, TextField, Box, Paper, Button } from "@mui/material";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import TabelaAgendarRn from "../../../../components/TabelaAgendar/TabelaAgendarRn";
 import TabelaAgendarTele from "../../../../components/TabelaAgendar/TabelaAgendarTele";
@@ -20,8 +20,35 @@ const Agendar = () => {
     const [propostasTotal, setPropostasTotal] = useState([])
     const [loading, setLoading] = useState(false)
     const [datasEntrevista, setDatasEntrevista] = useState([])
+    const [pesquisa, setPesquisa] = useState('')
 
     const [horarios, setHorarios] = useState({})
+
+    const buscarPessoa = async () => {
+        try {
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoAgendadas`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
+
+            let arrAux = result.data.propostas.filter(elem => {
+                return elem.nome.includes(pesquisa) || elem.proposta.includes(pesquisa)
+            })
+
+            console.log(arrAux);
+
+            setPropostas(arrAux)
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     const searchPropostas = async () => {
@@ -118,6 +145,11 @@ const Agendar = () => {
                     <Agendamento propostas={propostasTotal} dias={datasEntrevista} />
 
                     <BotoesRelatorios />
+
+                    <Box component={Paper} p={2} m={2} width='100%'>
+                        <TextField label='Pessoa ou proposta' size="small" onChange={e => setPesquisa(e.target.value)} />
+                        <Button variant="contained" style={{ marginLeft: '10px' }} onClick={buscarPessoa}>Buscar</Button>
+                    </Box>
 
                     <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas}>
 

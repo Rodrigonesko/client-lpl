@@ -187,27 +187,67 @@ const AtendimentoHumanizado = () => {
         }
     }
 
+    const encerrarAtendimento = async (id) => {
+        try {
+            setLoading(true)
+
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/encerrarHumanizado`, {
+                id
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            buscarPropostas()
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    const assumir = async (id) => {
+        try {
+            setLoading(true)
+
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/assumirConversa`, {
+                id
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            buscarPropostas()
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    const buscarPropostas = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/atendimentoHumanizado`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            setPropostas(result.data)
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
 
-        const buscarPropostas = async () => {
-            try {
 
-                setLoading(true)
-
-                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/atendimentoHumanizado`, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${getCookie('token')}` }
-                })
-
-                setPropostas(result.data)
-
-                setLoading(false)
-
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
-            }
-        }
 
         buscarPropostas()
 
@@ -216,7 +256,7 @@ const AtendimentoHumanizado = () => {
     return (
         <>
             <Sidebar />
-            <Container>
+            <Box>
                 <Box m={2}>
                     <Typography variant="h5">
                         Atendimento Humanizado: {propostas.length}
@@ -244,13 +284,16 @@ const AtendimentoHumanizado = () => {
                                         <TableCell>DDD</TableCell>
                                         <TableCell>Celular</TableCell>
                                         <TableCell>Conversa</TableCell>
+                                        <TableCell>Responsavel</TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {
                                         propostas.map(e => {
                                             return (
-                                                <TableRow>
+                                                <TableRow style={{ backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
                                                     <TableCell>{e.proposta}</TableCell>
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpf}</TableCell>
@@ -260,6 +303,9 @@ const AtendimentoHumanizado = () => {
                                                     <TableCell>{e.ddd}</TableCell>
                                                     <TableCell>{e.celular}</TableCell>
                                                     <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    <TableCell>{e.responsavelConversa}</TableCell>
+                                                    <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
+                                                    <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })
@@ -269,7 +315,7 @@ const AtendimentoHumanizado = () => {
                         </TableContainer>
                     </Box>
                 </Box>
-            </Container>
+            </Box>
         </>
     )
 }

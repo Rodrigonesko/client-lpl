@@ -58,6 +58,13 @@ const Chat = () => {
 
             setChat(result.data)
 
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
+                whatsapp
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
         } catch (error) {
             console.log(error);
         }
