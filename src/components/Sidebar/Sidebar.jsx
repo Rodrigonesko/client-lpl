@@ -118,6 +118,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/rsd/producaoDiaria'>Produção Diaria</Link></MenuItem>
                                 ) : null
                             }
+                            <MenuItem><Link to='/rsd/agd'>AGD</Link></MenuItem>
 
                         </SubMenu>
                         <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>

@@ -1,134 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { v4 as uuidv4 } from "uuid";
 import Axios from 'axios'
-
-const chunkSize = 1048576 * 3;
+import { Container, Box, Button, Typography, Paper, TextField } from "@mui/material";
 
 const Agd = () => {
 
-    const [csvFile, setCsvFile] = useState();
+    const CHUNK_SIZE = 5242880;
+    const [file, setFile] = useState()
 
-    const [showProgress, setShowProgress] = useState(false);
-    const [counter, setCounter] = useState(1);
-    const [fileToBeUpload, setFileToBeUpload] = useState({});
-    const [beginingOfTheChunk, setBeginingOfTheChunk] = useState(0);
-    const [endOfTheChunk, setEndOfTheChunk] = useState(chunkSize);
-    const [progress, setProgress] = useState(0);
-    const [fileGuid, setFileGuid] = useState("");
-    const [fileSize, setFileSize] = useState(0);
-    const [chunkCount, setChunkCount] = useState(0);
-
-    useEffect(() => {
-
-        if (fileSize > 0) {
-            setShowProgress(true);
-            fileUpload(counter);
-        }
-    }, [fileToBeUpload, progress]);
-
-    const getFileContext = (e) => {
-        const _file = e.target.files[0];
-        setFileSize(_file.size);
-        const _totalCount =
-            _file.size % chunkSize == 0
-                ? _file.size / chunkSize
-                : Math.floor(_file.size / chunkSize) + 1; // Total count of chunks will have been upload to finish the file
-        setChunkCount(_totalCount);
-        setFileToBeUpload(_file);
-        const _fileID = uuidv4() + "." + _file.name.split(".").pop();
-        setFileGuid(_fileID);
-    };
-    const fileUpload = () => {
-        setCounter(counter + 1);
-        if (counter <= chunkCount) {
-            var chunk = fileToBeUpload.slice(beginingOfTheChunk, endOfTheChunk);
-            uploadChunk(chunk);
-        }
-    };
-    const uploadChunk = async (chunk) => {
-        try {
-            const response = await Axios.post(
-                "https://localhost:44356/weatherforecast/UploadChunks",
-                chunk,
-                {
-                    params: {
-                        id: counter,
-                        fileName: fileGuid,
-                    },
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-            const data = response.data;
-            if (data.isSuccess) {
-                setBeginingOfTheChunk(endOfTheChunk);
-                setEndOfTheChunk(endOfTheChunk + chunkSize);
-                if (counter == chunkCount) {
-                    console.log("Process is complete, counter", counter);
-                    await uploadCompleted();
-                } else {
-                    var percentage = (counter / chunkCount) * 100;
-                    setProgress(percentage);
-                }
-            } else {
-                console.log("Error Occurred:", data.errorMessage);
-            }
-        } catch (error) {
-            console.log("error", error);
-        }
-    };
-    const uploadCompleted = async () => {
-        var formData = new FormData();
-        formData.append("fileName", fileGuid);
-        const response = await Axios.post(
-            "https://localhost:44356/weatherforecast/UploadComplete",
-            {},
-            {
-                params: {
-                    fileName: fileGuid,
-                },
-                data: formData,
-            }
-        );
-        const data = response.data;
-        if (data.isSuccess) {
-            setProgress(100);
-        }
-    };
-
-    const submit = (element) => {
-        element.preventDefault()
-        const file = csvFile;
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            const text = e.target.result;
-        }
-
-        reader.readAsText(file);
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
     }
+
+    const handleFileUpload = async () => {
+        if (!file) {
+            alert('Selecione um arquivo para fazer upload');
+            return;
+        }
+        let start = 0;
+        let end = CHUNK_SIZE;
+        const url = 'http://localhost:3000/upload'; // substitua pela URL da sua API
+        const config = {
+            headers: {
+                'Content-Type': 'application/octet-stream',
+                'Content-Disposition': `attachment; filename=${file.name}`,
+            },
+        };
+
+        while (start < file.size) {
+            const slice = file.slice(start, end);
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(slice);
+            const buffer = await new Promise((resolve) => {
+                reader.onload = (event) => {
+                    resolve(event.target.result);
+                };
+            });
+
+            const chunk = new Uint8Array(buffer);
+            const formData = new FormData();
+            formData.append('file', chunk);
+
+            console.log(formData);
+
+            //await Axios.post(url, formData, config);
+
+            start = end;
+            end = Math.min(start + CHUNK_SIZE, file.size);
+        }
+
+        alert('Arquivo enviado com sucesso!');
+    };
 
     return (
         <>
             <Sidebar />
-            <section className="section-upload-container">
-                <div className="upload-container">
-                    <form action="" method="post" encType="multipart/form-data">
-                        <div className="title">
-                            <h2>Upload AGD</h2>
-                        </div>
-                        <div>
-                            <label htmlFor="file-rn">Arquivo: </label>
-                            <input type="file" name="file-rn" id="file-rn" onChange={getFileContext} />
-                        </div>
-                        <div className="container-btns">
-                            <button className="btn" onClick={submit}>Enviar</button>
-                        </div>
-                    </form>
-                </div>
-
-
-            </section>
+            <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Box component={Paper} p={3} elevation={3}>
+                    <Typography variant="h5">
+                        Upload de arquivo AGD
+                    </Typography>
+                    <Box display='flex' marginTop={3}>
+                        <TextField type='file' onChange={handleFileChange} />
+                        <Button variant="contained" onClick={handleFileUpload}>Enviar</Button>
+                    </Box>
+                </Box>
+            </Container>
         </>
 
     )
