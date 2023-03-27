@@ -113,7 +113,12 @@ const Sidebar = () => {
                             <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
                             <MenuItem><Link to='/Rsd/UploadQuarentena'>Upload Quarentena</Link></MenuItem>
                             <MenuItem><Link to='/rsd/Relatorio'>Relatório</Link></MenuItem>
-                            <MenuItem><Link to='/rsd/agd'>AGD</Link></MenuItem>
+                            {
+                                accessLevel !== 'false' ? (
+                                    <MenuItem><Link to='/rsd/producaoDiaria'>Produção Diaria</Link></MenuItem>
+                                ) : null
+                            }
+
                         </SubMenu>
                         <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
                             <MenuItem><Link to='/elegibilidade/analiseDocumentos'>Analise Documentos</Link></MenuItem>

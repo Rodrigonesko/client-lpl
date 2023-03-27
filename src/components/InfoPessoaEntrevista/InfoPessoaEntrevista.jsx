@@ -8,6 +8,10 @@ const InfoPessoaEntrevista = ({pessoa}) => {
                 <strong>{pessoa.nome}</strong>
             </div>
             <div>
+                <label htmlFor="">Sexo: </label>
+                <strong>{pessoa.sexo}</strong>
+            </div>
+            <div>
                 <label htmlFor="">CPF: </label>
                 <strong>{pessoa.cpf}</strong>
             </div>

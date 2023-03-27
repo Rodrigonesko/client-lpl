@@ -1,13 +1,13 @@
 import React from 'react'
 import { Card, CardContent, Typography, Box, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
 
-const ProducaoDiariaMui = ({ producao, total, setData, buscarDadosData }) => {
+const ProducaoDiariaMui = ({ producao, total, setData, buscarDadosData, title }) => {
     return (
         <>
             <Card>
                 <CardContent>
                     <Typography variant="h6" align='center'>
-                        Produção Diaria
+                        Produção Diaria {title}
                     </Typography>
                     <Box m={1} display='flex' justifyContent='center'>
                         <TextField type='date' size="small" onChange={e => { setData(e.target.value) }} focused label='Data' />

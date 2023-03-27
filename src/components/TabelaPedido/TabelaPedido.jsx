@@ -9,7 +9,6 @@ Modal.setAppElement('#root')
 
 const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados, todos }) => {
 
-    const [prioridade, setPrioridade] = useState(false)
     const [modalSalvar, setModalSalvar] = useState(false)
     const [modalInativar, setModalInativar] = useState(false)
     const [inativarPedido, setInativarPedido] = useState('')
@@ -184,7 +183,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                     <td>{e.status}</td>
                                                     <td><input type="text" name="" id="" defaultValue={e.valorApresentado} onChange={(element) => { e.valorApresentado = element.target.value }} /></td>
                                                     <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
-                                                    <td><input type="text" name="" id="" className="cnpj-pedido" defaultValue={e.cnpj} onKeyUp={(element) => {
+                                                    <td><input type="text" name="" id="" className="cnpj-pedido" defaultValue={e.cnpj} onChange={(element) => {
                                                         e.cnpj = element.target.value
                                                         buscarClinica(element.target.value, e._id)
                                                     }} /></td>

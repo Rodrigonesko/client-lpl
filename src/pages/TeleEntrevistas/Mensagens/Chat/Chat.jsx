@@ -90,7 +90,6 @@ const Chat = () => {
                             )
                         })
                     }
-
                 </Box>
                 <Box bgcolor='lightgray' border='1px solid gray' p={1}>
                     <form action="" onSubmit={enviar} method="post" style={{ display: 'flex', justifyContent: 'center' }}>

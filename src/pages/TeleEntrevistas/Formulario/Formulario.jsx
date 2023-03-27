@@ -8,7 +8,7 @@ import Pergunta from "../../../components/Pergunta/Pergunta";
 import gerarPdf from "../Pdf/Pdf";
 import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
-import { Alert } from '@mui/material'
+import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress } from '@mui/material'
 
 import './Formulario.css'
 import { getCookie } from "react-use-cookie";
@@ -68,6 +68,8 @@ const Formulario = () => {
     const [cidAnterior3, setCidAnterior3] = useState('')
 
     const [novoFormulario, setNovoFormulario] = useState('')
+
+    const [loading, setLoading] = useState(false)
 
     let alturaInput, pesoInput
 
@@ -245,6 +247,9 @@ const Formulario = () => {
 
     const alterarFormulario = async () => {
         try {
+
+            setLoading(true)
+
             if (novoFormulario !== '') {
                 const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarFormulario`, {
                     formulario: novoFormulario,
@@ -320,16 +325,31 @@ const Formulario = () => {
             <Sidebar></Sidebar>
             <section className="section-formulario-container">
                 <div className="formulario-container">
+                    {
+                        loading ? (
+                            <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
+                        ) : null
+                    }
                     <div className="title">
                         <h3>Entrevista Qualificativa</h3>
-                        <label htmlFor="alterar-formulario">Alterar Formulario</label>
-                        <select name="alterar-formulario" id="alterar-formulario" onChange={e => setNovoFormulario(e.target.value)}>
-                            <option value=""></option>
-                            <option value="adulto">Adulto</option>
-                            <option value="0-2 anos">0-2 anos</option>
-                            <option value="2-8 anos">2-8 anos</option>
-                        </select>
-                        <button onClick={alterarFormulario}>Alterar</button>
+                        <Box display='flex' mt={2}>
+                            <FormControl size="small" style={{ minWidth: '130px' }}>
+                                <InputLabel>Formulário</InputLabel>
+                                <Select
+                                    label='Formulário'
+                                    onChange={e => setNovoFormulario(e.target.value)}
+                                >
+                                    <MenuItem>
+                                        <em>Formulário</em>
+                                    </MenuItem>
+                                    <MenuItem value='adulto-f'>Adulto feminino</MenuItem>
+                                    <MenuItem value='adulto-m'>Adulto masculino</MenuItem>
+                                    <MenuItem value='0-2 anos'>0-2 anos</MenuItem>
+                                    <MenuItem value='2-8 anos'>2-8 ano</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Button style={{ marginLeft: '10px' }} variant="contained" size="small" onClick={alterarFormulario}>Alterar</Button>
+                        </Box>
                     </div>
                     <div className="info-adicional">
                         <button onClick={openModalInfo}>Informações Adicionais</button>
