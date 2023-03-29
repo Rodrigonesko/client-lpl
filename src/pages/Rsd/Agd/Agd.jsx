@@ -17,6 +17,10 @@ const Agd = () => {
 
     const handleFileUpload = async () => {
 
+        setLoading(true)
+
+        await Axios.get(`${process.env.REACT_APP_API_KEY}/amil/removeAll`, { withCredentials: true });
+
         if (!file) {
             alert('Selecione um arquivo para fazer upload');
             return;
@@ -45,6 +49,7 @@ const Agd = () => {
             end = Math.min(start + CHUNK_SIZE, file.size);
         }
 
+        setLoading(false)
 
     }
 

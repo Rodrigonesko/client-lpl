@@ -199,7 +199,11 @@ const Enviados = () => {
                     headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
 
-                setPropostas(result.data)
+                let arr = result.data.filter(e => {
+                    return e.status != 'Concluído' && e.status != 'Cancelado'
+                })
+
+                setPropostas(arr)
 
                 setLoading(false)
 
