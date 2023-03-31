@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Button, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from "@mui/material";
+import { Container, Button, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle } from "@mui/material";
 import Axios from 'axios'
-import moment from "moment";
+import moment from 'moment-business-days'
 import { getCookie } from "react-use-cookie";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 
 const Enviados = () => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
+    const [progressValue, setProgressValue] = useState(0)
 
     const reportContatos = async () => {
         try {
@@ -187,31 +202,69 @@ const Enviados = () => {
         }
     }
 
-    useEffect(() => {
+    const reenviarMensagens = async () => {
+        try {
 
-        const buscarPropostas = async () => {
-            try {
+            //console.log(moment().businessAdd(3).format('YYYY-MM-DD'));
 
-                setLoading(true)
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${moment().businessAdd(1).format('YYYY-MM-DD')}`, { withCredentials: true })
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/situacao/Enviada`, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${getCookie('token')}` }
+            const dia = moment().businessAdd(1).format('DD/MM/YYYY')
+            const horarios = result.data
+
+            let count = 0
+
+            let arr = propostas.filter(proposta => {
+                return moment().diff(moment(proposta.horarioEnviado), 'hours') >= 18
+            }).filter(proposta => {
+                return proposta.tipoAssociado.match(/[a-zA-Z]+/g).join('') === 'Titular'
+            })
+
+            for (const proposta of arr) {
+                count++
+                await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/reenviarMensagens`, {
+                    dia,
+                    horarios,
+                    proposta
+                }, {
+                    withCredentials: true
                 })
-
-                let arr = result.data.filter(e => {
-                    return e.status != 'Concluído' && e.status != 'Cancelado'
-                })
-
-                setPropostas(arr)
-
-                setLoading(false)
-
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
+                setProgressValue((count / arr.length) * 100)
+                buscarPropostas()
             }
+
+
+
+        } catch (error) {
+            console.log(error);
         }
+    }
+
+    const buscarPropostas = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/situacao/Enviada`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
+
+            let arr = result.data.filter(e => {
+                return e.status !== 'Concluído' && e.status !== 'Cancelado'
+            })
+
+            setPropostas(arr)
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
 
         buscarPropostas()
 
@@ -224,9 +277,10 @@ const Enviados = () => {
                 <Box m={2}>
                     <Typography variant="h5">
                         Contatos enviados: {propostas.length}
-                        <Box display='flex' justifyContent='end'>
-                            <Button onClick={reportContatos}>Report Contatos</Button>
-                            <Button variant="contained" onClick={report}>Report</Button>
+                        <Box display='flex' justifyContent='end' m={2}>
+                            <Button variant="contained" onClick={() => setOpenModal(true)} color='secondary' style={{ marginRight: '3px' }}>Reenviar</Button>
+                            <Button onClick={reportContatos} variant='outlined' style={{ marginRight: '3px' }}>Report Contatos</Button>
+                            <Button variant="contained" onClick={report} style={{ marginRight: '3px' }}>Report</Button>
                         </Box>
 
                     </Typography>
@@ -253,13 +307,13 @@ const Enviados = () => {
                                     {
                                         propostas.map(e => {
                                             return (
-                                                <TableRow>
+                                                <TableRow key={e._id}>
                                                     <TableCell>{e.proposta}</TableCell>
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpf}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
                                                     <TableCell>{e.tipoAssociado}</TableCell>
-                                                    <TableCell>{e.horarioEnviado}</TableCell>
+                                                    <TableCell>{moment(e.horarioEnviado).format('DD/MM/YYYY HH:mm')}</TableCell>
                                                     <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                 </TableRow>
                                             )
@@ -270,6 +324,31 @@ const Enviados = () => {
                         </TableContainer>
                     </Box>
                 </Box>
+                <Modal
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Clique abaixo para reenviar as mensagens
+                        </Typography>
+                        <Box m={2}>
+                            <LinearProgress variant="determinate" value={progressValue}></LinearProgress>
+                        </Box>
+                        {
+                            progressValue === 100 ? (
+                                <Alert severity="success">
+                                    <AlertTitle>Sucesso!</AlertTitle>
+                                    Todas as mensagens foram enviadas com sucesso!
+                                </Alert>
+                            ) : null
+                        }
+                        <Box m={1} display='flex' justifyContent='space-around'>
+                            <Button variant="contained" color='inherit' onClick={() => setOpenModal(false)}>Fechar</Button>
+                            <Button variant="contained" color='success' onClick={reenviarMensagens}>Enviar</Button>
+                        </Box>
+                    </Box>
+                </Modal>
             </Container>
         </>
     )

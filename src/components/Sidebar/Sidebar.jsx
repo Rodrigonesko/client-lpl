@@ -17,7 +17,6 @@ const Sidebar = () => {
     const { accessLevel, name } = useContext(AuthContext)
 
     const toggleMenu = () => {
-        console.log('toggle');
         setIsOpen(!isOpen)
         let side = document.getElementById('sidebar')
         side.classList.toggle('slidein')
@@ -30,7 +29,6 @@ const Sidebar = () => {
         if (result.status === 200) {
             navigate('/login')
         }
-
     }
 
     return (
@@ -132,7 +130,6 @@ const Sidebar = () => {
                         </MenuItem>
                     </Menu>
                 </ProSidebar>
-
             }
             {
                 isOpen ? (
