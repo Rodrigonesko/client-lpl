@@ -149,8 +149,8 @@ const UrgenciaEmergenciaDetalhes = () => {
                                 <strong>{proposta.numAssociado}</strong>
                             </Box>
                             <Box>
-                                <label htmlFor="">Data Inclusão: </label>
-                                <strong>{moment(proposta.dataInclusao).format('DD/MM/YYYY')}</strong>
+                                <label htmlFor=""> <strong>Data Atendimento:</strong></label>
+                                <strong>{proposta.dataAtendimento ? moment(proposta.dataAtendimento).format('DD/MM/YYYY') : null}</strong>
                             </Box>
                             <Box>
                                 <label htmlFor="">Data Recebimento: </label>
@@ -168,11 +168,11 @@ const UrgenciaEmergenciaDetalhes = () => {
                             </Box>
                             <Box>
                                 <label htmlFor="">Data Adesão: </label>
-                                <strong>{moment(proposta.dataAdesao).format('DD/MM/YYYY')}</strong>
+                                <strong>{proposta.dataAdesao ? moment(proposta.dataAdesao).format('DD/MM/YYYY') : null}</strong>
                             </Box>
                             <Box>
                                 <label htmlFor="">Data Solicitação: </label>
-                                <strong>{moment(proposta.dataSolicitacao).format('DD/MM/YYYY')}</strong>
+                                <strong>{proposta.dataSolicitacao ? moment(proposta.dataSolicitacao).format('DD/MM/YYYY') : null}</strong>
                             </Box>
                         </Box>
 
@@ -269,7 +269,7 @@ const UrgenciaEmergenciaDetalhes = () => {
                         <Box m={2} display='flex' justifyContent='space-between' >
                             <Box>
                                 <label htmlFor="">Data Solicitação: </label>
-                                <strong>{moment(proposta.dataSolicitacao).format('DD/MM/YYYY')}</strong>
+                                <strong>{proposta.dataSolicitacao ? moment(proposta.dataSolicitacao).format('DD/MM/YYYY') : null}</strong>
                             </Box>
                             <Box>
                                 <label htmlFor="">Idade na Solic: </label>
@@ -277,7 +277,7 @@ const UrgenciaEmergenciaDetalhes = () => {
                             </Box>
                             <Box>
                                 <label htmlFor="">Data Autor: </label>
-                                <strong>{moment(proposta.dataAutorizacao).format('DD/MM/YYYY')}</strong>
+                                <strong>{proposta.dataAutorizacao ? moment(proposta.dataAutorizacao).format('DD/MM/YYYY') : null}</strong>
                             </Box>
                             <Box>
                                 <label htmlFor="">Ind Carater: </label>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import * as XLSX from 'xlsx';
 import Axios from 'axios'
-
+import { Container, Box, Paper, Button, LinearProgress, Typography, TextField, Alert } from "@mui/material";
 
 const UploadElegibilidade = () => {
 
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
-    
+    const [qtd, setQtd] = useState(0)
+
     const send = async e => {
         e.preventDefault()
 
@@ -18,19 +18,20 @@ const UploadElegibilidade = () => {
 
             formData.append('file', file, file.name)
 
-            setStatus('Enviando...')
+            setStatus('Enviando')
 
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
             console.log(result.data);
 
             if (result.status == 200) {
-                setStatus(`Novos pedidos: ${result.data.qtd}`)
+                setStatus('Concluido')
+                setQtd(result.data.qtd)
             }
 
         } catch (error) {
             console.log(error);
-            setStatus('Algo deu errado')
+            setStatus('Erro')
         }
 
     }
@@ -40,27 +41,43 @@ const UploadElegibilidade = () => {
     return (
         <>
             <Sidebar />
-            <section className="section-upload-container">
-                {status != '' ? (
-                    <div className="result">
-                        <p>{status}</p>
-                    </div>
-                ) : null}
-                <div className="upload-container">
-                    <form action="" method="post">
-                        <div className="title">
-                            <h2>Upload Elegibilidade</h2>
-                        </div>
-                        <div>
-                            <label htmlFor="file-rn">Arquivo: </label>
-                            <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
-                        </div>
-                        <div className="container-btns">
-                            <button className="btn" onClick={send} >Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+            <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <form action="" method="post">
+                    <Box p={3} display='flex' justifyContent='center' flexDirection='column' alignItems='center' component={Paper} elevation={4}>
+
+                        <Typography variant="h5">
+                            Upload Elegibilidade
+                        </Typography>
+                        <Box m={1}>
+                            <TextField type="file" onChange={e => setFile(e.target.files[0])} />
+                        </Box>
+                        <Box m={2}>
+                            <Button variant='contained' onClick={send} >Enviar</Button>
+                        </Box>
+                        {
+                            status === 'Enviando' ? (
+                                <LinearProgress style={{ width: '100%' }} />
+                            ) : null
+                        }
+                        {
+                            status === 'Concluido' ? (
+                                <Alert severity="success">
+                                    Foram inseridas {qtd} propostas novas
+                                </Alert>
+                            ) : null
+                        }
+                        {
+                            status === 'Erro' ? (
+                                <Alert severity="error">
+                                    Algo deu errado
+                                </Alert>
+                            ) : null
+                        }
+
+                    </Box>
+                </form>
+
+            </Container>
         </>
 
     )

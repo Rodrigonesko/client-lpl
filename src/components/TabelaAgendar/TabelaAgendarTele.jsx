@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton } from "@mui/material";
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton, Snackbar, Alert } from "@mui/material";
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -108,35 +108,46 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
     const [beneficiarioCancelar, setBeneficiarioCancelar] = useState('')
     const [motivoCancelar, setMotivoCancelar] = useState('Sem Sucesso de Contato!')
     const [idCancelar, setIdCancelar] = useState('')
+    const [loadingCancelar, setLoadingCancelar] = useState(false)
 
     const [propostaExcluir, setPropostaExcluir] = useState('');
     const [beneficiarioExcluir, setBeneficiarioExcluir] = useState('')
     const [idExcluir, setIdCExcluir] = useState('')
 
     const [loading, setLoading] = useState(false)
+    const [openSnack, setOpenSnack] = useState(false)
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenSnack(false);
+    };
 
     const cancelar = async () => {
         try {
 
-            setLoading(true)
+            setLoadingCancelar(true)
 
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar, motivoCancelamento: motivoCancelar }, { withCredentials: true })
 
-            console.log(result);
-
             if (result.status === 200) {
-                window.location.reload()
+                setLoadingCancelar(false)
+                setModalCancelar(false)
+                atualizarTabela()
             }
 
         } catch (error) {
             console.log(error);
+            setLoadingCancelar(false)
         }
     }
 
     const excluir = async () => {
         try {
 
-            setLoading(true)
+            setLoadingCancelar(true)
 
             const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, {
                 withCredentials: true,
@@ -144,11 +155,14 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
             })
 
             if (result.status === 200) {
-                window.location.reload()
+                setLoadingCancelar(false)
+                setModalExcluir(false)
+                atualizarTabela()
             }
 
         } catch (error) {
             console.log(error);
+            setLoadingCancelar(false)
         }
     }
 
@@ -165,11 +179,13 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
             })
 
             if (result.status === 200) {
-                window.location.reload()
+                setOpenSnack(true)
+                setLoading(false)
             }
 
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
 
@@ -394,7 +410,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                         </Typography>
                         <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
                             <Button variant='contained' onClick={() => setModalExcluir(false)}>Fechar</Button>
-                            <Button color="error" variant='contained' onClick={excluir}>Excluir</Button>
+                            <Button color="error" variant='contained' onClick={excluir} disabled={loadingCancelar}>Excluir {loadingCancelar ? <CircularProgress style={{ width: '15px', height: '15px', marginLeft: '10px', color: 'red' }} /> : null}</Button>
                         </Typography>
                     </Box>
                 </Box>
@@ -431,11 +447,16 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                         </FormControl>
                         <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
                             <Button variant='contained' onClick={() => setModalCancelar(false)}>Fechar</Button>
-                            <Button color="error" variant='contained' onClick={cancelar}>Cancelar</Button>
+                            <Button color="error" variant='contained' onClick={cancelar} disabled={loadingCancelar}>Cancelar {loadingCancelar ? <CircularProgress style={{ width: '15px', height: '15px', marginLeft: '10px', color: 'red' }} /> : null}</Button>
                         </Typography>
                     </Box>
                 </Box>
             </Modal>
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} variant="filled" severity="success">
+                    Vigencia alterada com sucesso
+                </Alert>
+            </Snackbar>
         </>
 
     )

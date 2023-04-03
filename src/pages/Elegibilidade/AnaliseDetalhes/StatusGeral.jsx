@@ -1,23 +1,28 @@
 import React from "react";
+import { Box, Paper, TextField, Button, Typography } from "@mui/material";
 
-const StatusGeral = ({statusProposta, status1Analise, status2Analise, status3Analise}) => {
+const StatusGeral = ({ statusProposta, status1Analise, status2Analise, status3Analise }) => {
     return (
-        <div className="container-analise-detalhes">
-            <div className="title">
-                <h4>Status Geral</h4>
-            </div>
-            <div className="sub-bloco-analise-detalhes">
-                <label htmlFor="status-proposta">Status Proposta: </label>
-                <input type="text" name="status-proposta" id="status-proposta" value={statusProposta} readOnly />
-                <label htmlFor="status-1-analise">1° Análise: </label>
-                <input type="text" name="status-1-analise" id="status-1-analise" value={status1Analise} readOnly />
-                <label htmlFor="status-2-analise">2° Análise: </label>
-                <input type="text" name="status-2-analise" id="status-2-analise" value={status2Analise} readOnly />
-                <label htmlFor="status-3-analise">3° Análise: </label>
-                <input type="text" name="status-3-analise" id="status-3-analise" value={status3Analise} readOnly />
-                <button className="btn-padrao-azul" >Propostas</button>
-            </div>
-        </div>
+        <Box component={Paper} elevation={3} p={2} mt={2}>
+            <Typography variant="h6">
+                Status Geral
+            </Typography>
+            <Box mt={2}>
+                <TextField label='Status Proposta' value={statusProposta} focused InputProps={{
+                    readOnly: true,
+                }} size="small" style={{ marginRight: '10px' }} />
+                <TextField label='1° Análise' value={status1Analise} focused InputProps={{
+                    readOnly: true,
+                }} size="small" style={{ marginRight: '10px' }} />
+                <TextField label='2° Análise' value={status2Analise} focused InputProps={{
+                    readOnly: true,
+                }} size="small" style={{ marginRight: '10px' }} />
+                <TextField label='3° Análise' value={status3Analise} focused InputProps={{
+                    readOnly: true,
+                }} size="small" style={{ marginRight: '10px' }} />
+                <Button variant="contained" >Propostas</Button>
+            </Box>
+        </Box>
     )
 }
 

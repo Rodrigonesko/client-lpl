@@ -157,3 +157,9 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.loading {
+  position: absolute;
+  right: 50%;
+  top: 50%;
+}

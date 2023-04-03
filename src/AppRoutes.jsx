@@ -12,8 +12,6 @@ import ProtectedRoute from "./ProtectedRoute";
 /* Elegibilidade */
 
 import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
-import PreProcessamento from "./pages/Elegibilidade/PreProcessamento/PreProcessamento";
-import PreProcessamentoDetalhes from "./pages/Elegibilidade/PreProcessamentoDetalhes/PreProcessamentoDetalhes";
 import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
 import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
 import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
@@ -296,12 +294,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analiseDocumentos" element={<ProtectedRoute>
                     <AnaliseDocumentos />
-                </ProtectedRoute>} />
-                <Route path="/elegibilidade/preProcessamento" exact element={<ProtectedRoute>
-                    <PreProcessamento />
-                </ProtectedRoute>} />
-                <Route path="/elegibilidade/preProcessamento/detalhes/:id" element={<ProtectedRoute>
-                    <PreProcessamentoDetalhes />
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analise" element={<ProtectedRoute>
                     <AnaliseElegibilidade />
