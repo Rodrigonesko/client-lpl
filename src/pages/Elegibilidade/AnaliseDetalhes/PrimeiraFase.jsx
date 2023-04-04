@@ -1,21 +1,38 @@
 import React, { useState } from "react";
-import { Box, Paper, TextField, Typography, IconButton, FormControl, RadioGroup, FormControlLabel, FormLabel, Radio, Button } from "@mui/material";
+import { Box, Paper, TextField, Typography, IconButton, FormControl, RadioGroup, FormControlLabel, FormLabel, Radio, Button, Modal, CircularProgress, Snackbar, Alert } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Axios from "axios";
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'auto',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    borderRadius: '5px',
+    p: 4,
+};
 
-const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorretor, nomeCorretor, telefoneCorretor, cpfSupervisor, nomeSupervisor, telefoneSupervisor, fase1 }) => {
+const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorretor, nomeCorretor, telefoneCorretor, cpfSupervisor, nomeSupervisor, telefoneSupervisor, fase1, id, atualizarDados }) => {
 
     const [open, setOpen] = useState(false)
+    const [modalConcluir, setModalConcluir] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [openSnack, setOpenSnack] = useState(false)
+
+    console.log(fase1);
 
     const [showFase1, setShowFase1] = useState(!fase1);
-    const [showPlanoAmil, setShowPlanoAmil] = useState(false)
+    const [showPlanoAmil, setShowPlanoAmil] = useState(planoAmil === 'Sim')
     const [dataUpdate, setDataUpdate] = useState({
         entidade,
         planoAmil,
-        dataInicio,
-        dataFim,
-        custo,
+        dataInicioPlanoAmil: dataInicio,
+        dataFimPlanoAmil: dataFim,
+        custoPlanoAmil: custo,
         cpfCorretor,
         nomeCorretor,
         telefoneCorretor,
@@ -28,12 +45,52 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
         setShowFase1(!showFase1);
     };
 
-    const salvar = () => {
-        console.log(dataUpdate);
+    const salvar = async () => {
+
+        try {
+            setLoading(true)
+
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/fase1`, {
+                dataUpdate,
+                id
+            }, {
+                withCredentials: true
+            })
+
+            atualizarDados()
+            setOpenSnack(true)
+            setLoading(false)
+
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+
     }
 
-    const concluir = () => {
+    const concluir = async () => {
+        try {
+            setLoading(true)
 
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/fase1`, {
+                dataUpdate,
+                id,
+                concluir: true
+            }, {
+                withCredentials: true
+            })
+
+            atualizarDados()
+            setOpenSnack(true)
+            setLoading(false)
+            setModalConcluir(false)
+
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
     }
 
     return (
@@ -79,9 +136,9 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                             {
                                 showPlanoAmil ? (
                                     <Box p={1} className='slide-down'>
-                                        <TextField label='Data Inicio' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataInicio} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataInicio: e.target.value }) }} />
-                                        <TextField label='Data Fim' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataFim} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataFim: e.target.value }) }} />
-                                        <TextField label='Custo' size='small' style={{ marginRight: '14px' }} value={custo} onChange={(e) => { setDataUpdate({ ...dataUpdate, custo: e.target.value }) }} />
+                                        <TextField label='Data Inicio' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataInicio} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataInicioPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Data Fim' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataFim} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataFimPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Custo' size='small' style={{ marginRight: '14px' }} value={custo} onChange={(e) => { setDataUpdate({ ...dataUpdate, custoPlanoAmil: e.target.value }) }} />
                                     </Box>
                                 ) : null
                             }
@@ -102,12 +159,39 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                             </Box>
                         </Box>
                         <Box m={2}>
-                            <Button style={{ marginRight: '20px' }} variant="contained" onClick={salvar}>Salvar</Button>
-                            <Button variant="contained" color="success" onClick={concluir}>Concluir</Button>
+                            <Button style={{ marginRight: '20px' }} variant="contained" onClick={salvar} disabled={loading}>Salvar {loading ? <CircularProgress style={{ width: '10px', height: '10px', marginLeft: '10px' }} /> : null}</Button>
+                            {
+                                !fase1 ? (
+                                    <Button variant="contained" color="success" onClick={() => { setModalConcluir(true) }}>Concluir</Button>
+                                ) : null
+                            }
                         </Box>
                     </Box>
                 ) : null
             }
+            <Modal
+                open={modalConcluir}
+                onClose={() => setModalConcluir(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
+                        <Typography variant="h6" component="div">
+                            Anexado no Sisamil?
+                        </Typography>
+                        <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
+                            <Button variant='contained' onClick={() => setModalConcluir(false)}>Fechar</Button>
+                            <Button color="success" variant='contained' onClick={concluir} disabled={loading} >Concluir {loading ? <CircularProgress style={{ width: '10px', height: '10px', marginLeft: '10px', color: 'darkgreen' }} /> : null} </Button>
+                        </Typography>
+                    </Box>
+                </Box>
+            </Modal>
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Atualizado com sucesso!
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

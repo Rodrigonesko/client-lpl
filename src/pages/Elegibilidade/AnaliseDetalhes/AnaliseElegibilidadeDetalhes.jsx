@@ -15,6 +15,8 @@ const AnaliseElegibilidadeDetalhes = () => {
     const [proposta, setProposta] = useState({})
 
 
+
+
     useEffect(() => {
 
         const buscarDados = async () => {
@@ -61,6 +63,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                                 nomeSupervisor={proposta.nomeSupervisor}
                                 telefoneSupervisor={proposta.telefoneSupervisor}
                                 fase1={proposta.fase1}
+                                id={id}
                             />
                         ) : null
                     }

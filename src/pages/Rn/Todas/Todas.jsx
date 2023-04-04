@@ -119,6 +119,7 @@ const Todas = () => {
             xls += "<th>Observações</th>"
             xls += "<th>Responsável</th>"
             xls += "<th>Cancelado</th>"
+            xls += "<th>Data Inclusão</th>"
             xls += "</tr></thead><tbody>"
 
             rns.forEach(e => {
@@ -155,6 +156,7 @@ const Todas = () => {
                 } else {
                     xls += `<td></td>`
                 }
+                xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
                 xls += `</tr>`
             })
 

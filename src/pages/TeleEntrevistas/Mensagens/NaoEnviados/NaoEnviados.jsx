@@ -1,20 +1,71 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle } from "@mui/material";
+import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, MenuItem, TextField } from "@mui/material";
 import Axios from 'axios'
 import { getCookie } from "react-use-cookie";
+import moment from "moment";
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 'auto',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    height: '80vh',
+    overflowY: 'auto'
 };
+
+const Modelo1 = ({ data1, data2 }) => {
+    return (
+        <Typography>
+            Prezado Sr.(a) NOME,<br />
+            Somos da equipe de adesão da operadora de saúde Amil e para concluírmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) e precisamos confirmar alguns dados para que a contratação seja concluída. <br />
+            Por gentileza escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a) <br />
+            *{data1}* <br />
+            1. Das 13:00 às 15:00 <br />
+            2. Das 15:00 às 17:00 <br />
+            3. Das 17:00 às 19:00 <br />
+            *{data2}* <br />
+            4. Das 09:00 às 11:00<br />
+            5. Das 11:00 às 13:00<br />
+            6. Das 13:00 às 15:00<br />
+            7. Das 15:00 às 17:00<br />
+            8. Das 17:00 às 19:00<br />
+            Qual o melhor horário?<br />
+            Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
+            Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.<br />
+        </Typography>
+    )
+}
+
+const Modelo2 = ({ data1, data2 }) => {
+    return (
+        <Typography>
+            Prezado Sr.(a) NOME,<br />
+            Somos da equipe de adesão da operadora de saúde Amil e para concluírmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) e precisamos confirmar alguns dados para que a contratação seja concluída. <br />
+            Por gentileza escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a) <br />
+            *{data1}* <br />
+            1. Das 09:00 às 11:00<br />
+            2. Das 11:00 às 13:00<br />
+            3. Das 13:00 às 15:00<br />
+            4. Das 15:00 às 17:00<br />
+            5. Das 17:00 às 19:00<br />
+            *{data2}* <br />
+            6. Das 09:00 às 11:00<br />
+            7. Das 11:00 às 13:00<br />
+            8. Das 13:00 às 15:00<br />
+            9. Das 15:00 às 17:00<br />
+            10. Das 17:00 às 19:00<br />
+            Qual o melhor horário?<br />
+            Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
+            Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.<br />
+        </Typography>
+    )
+}
 
 
 const NaoEnviados = () => {
@@ -24,16 +75,28 @@ const NaoEnviados = () => {
     const [stateModal, setStateModal] = useState(false)
     const [progressValue, setProgressValue] = useState(0)
     const [error, setError] = useState(false)
+    const [modeloEscolhido, setModeloEscolhido] = useState('')
+    const [data1, setData1] = useState('')
+    const [data2, setData2] = useState('')
 
     const enviarMensagens = async () => {
         try {
+
+            if (!modeloEscolhido || !data1 || !data2) {
+                console.log('algum campo vazio');
+                setError(true)
+                return
+            }
 
             let count = 0
 
             for (const item of propostas) {
                 count++
                 const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagem`, {
-                    proposta: item
+                    proposta: item,
+                    modeloEscolhido,
+                    data1: moment(data1).format('DD/MM/YYYY'),
+                    data2: moment(data2).format('DD/MM/YYYY')
                 }, {
                     withCredentials: true,
                     headers: { Authorization: `Bearer ${getCookie('token')}` }
@@ -148,6 +211,53 @@ const NaoEnviados = () => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
+                        <Box component={Paper} p={3} display='flex'>
+                            <Box mr={4}>
+                                <Box>
+                                    <Typography>
+                                        Escolha um modelo de mensagem
+                                    </Typography>
+                                    <FormControl fullWidth size="small" style={{ marginTop: '10px' }}>
+                                        <InputLabel>Modelo</InputLabel>
+                                        <Select
+                                            label='Modelo'
+                                            onChange={e => {
+                                                setModeloEscolhido(e.target.value)
+                                            }}
+                                            value={modeloEscolhido}
+                                        >
+                                            <MenuItem>
+                                                <em>Modelo</em>
+                                            </MenuItem>
+                                            <MenuItem value='Modelo 1'>
+                                                Modelo 1
+                                            </MenuItem>
+                                            <MenuItem value='Modelo 2'>
+                                                Modelo 2
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Box mt={2}>
+                                    <Typography>
+                                        Dias para mensagem:
+                                    </Typography>
+                                    <TextField label='Data 1' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData1(e.target.value)} />
+                                    <TextField label='Data 2' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData2(e.target.value)} />
+                                </Box>
+                            </Box>
+                            <Box ml={2}>
+                                <Typography>
+                                    {
+                                        modeloEscolhido === 'Modelo 1' ? (<Modelo1 data1={moment(data1).format('DD/MM/YYYY')} data2={moment(data2).format('DD/MM/YYYY')} />) : null
+                                    }
+                                    {
+                                        modeloEscolhido === 'Modelo 2' ? (<Modelo2 data1={moment(data1).format('DD/MM/YYYY')} data2={moment(data2).format('DD/MM/YYYY')} />) : null
+                                    }
+                                </Typography>
+                            </Box>
+                        </Box>
+
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Clique abaixo para enviar as mensagens
                         </Typography>
