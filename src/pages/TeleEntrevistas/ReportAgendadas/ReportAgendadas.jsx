@@ -31,12 +31,18 @@ const ReportAgendadas = () => {
                     <div className="report-agendados">
                         {
                             Object.keys(propostas).map(data => {
+
+                                let count = 0
+
                                 return (
                                     <div className="report-agendados-card">
                                         <span>Data: <strong>{data}</strong></span>
                                         <br />
                                         {
                                             Object.keys(propostas[data]).map(analista => {
+
+                                                count += propostas[data][analista]
+
                                                 return (
                                                     <>
                                                         <span>{analista}: {propostas[data][analista]}</span>
@@ -45,6 +51,8 @@ const ReportAgendadas = () => {
                                                 )
                                             })
                                         }
+                                        <br />
+                                        <strong>Total: {count}</strong>
                                     </div>
                                 )
                             })

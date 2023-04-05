@@ -2,28 +2,44 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import moment from 'moment/moment'
-import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button } from '@mui/material'
+import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal } from '@mui/material'
 import RelatorioPadraoTele from '../../../../components/RelatorioPadraoTele/RelatorioPadraoTele'
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'auto',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    borderRadius: '5px',
+    p: 4,
+};
 
 const Implantacao = () => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
 
+    const [modalImplantar, setModalImplantar] = useState(false)
+    const [proposta, setProposta] = useState('')
+    const [nome, setNome] = useState('')
+    const [id, setId] = useState('')
+
     const implantar = async (id) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/implantar`, {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/implantar`, {
                 id
             }, {
                 withCredentials: true
             })
 
-            if (result.status === 200) {
-                buscarPropostas()
-            }
 
-            console.log(result);
+            setModalImplantar(false)
+            buscarPropostas()
+
 
         } catch (error) {
             console.log(error);
@@ -102,7 +118,12 @@ const Implantacao = () => {
                                             <TableCell>{e.houveDivergencia}</TableCell>
                                             <TableCell>{e.cids}</TableCell>
                                             <TableCell>{e.divergencia}</TableCell>
-                                            <TableCell><Button onClick={() => { implantar(e._id) }} color='success' variant='contained' size='small'>Concluir</Button></TableCell>
+                                            <TableCell><Button onClick={() => {
+                                                setModalImplantar(true)
+                                                setProposta(e.proposta)
+                                                setNome(e.nome)
+                                                setId(e._id)
+                                            }} color='success' variant='contained' size='small'>Concluir</Button></TableCell>
                                         </TableRow>
                                     )
                                 })
@@ -110,6 +131,27 @@ const Implantacao = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Modal
+                    open={modalImplantar}
+                    onClose={() => { setModalImplantar(false) }}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Deseja mandar para implantação?
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Proposta: {proposta} - Nome: {nome}
+                        </Typography>
+                        <Box mt={2} display='flex' justifyContent='space-around'>
+                            <Button variant="contained" color='inherit' onClick={() => { setModalImplantar(false) }}>Fechar</Button>
+                            <Button variant="contained" color="success" onClick={() => {
+                                implantar(id)
+                            }}>Implantar</Button>
+                        </Box>
+                    </Box>
+                </Modal>
             </Box>
         </>
     )

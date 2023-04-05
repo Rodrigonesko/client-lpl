@@ -57,7 +57,6 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                 withCredentials: true
             })
 
-            atualizarDados()
             setOpenSnack(true)
             setLoading(false)
 
@@ -81,10 +80,10 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                 withCredentials: true
             })
 
-            atualizarDados()
             setOpenSnack(true)
             setLoading(false)
             setModalConcluir(false)
+            atualizarDados()
 
 
         } catch (error) {
@@ -127,7 +126,7 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                                         e.target.value === 'Sim' ? setShowPlanoAmil(true) : setShowPlanoAmil(false)
                                         setDataUpdate({ ...dataUpdate, planoAmil: e.target.value })
                                     }}
-                                    value={planoAmil}
+                                    value={dataUpdate.planoAmil}
                                 >
                                     <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
                                     <FormControlLabel value="Não" control={<Radio />} label="Não" />
@@ -136,9 +135,9 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                             {
                                 showPlanoAmil ? (
                                     <Box p={1} className='slide-down'>
-                                        <TextField label='Data Inicio' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataInicio} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataInicioPlanoAmil: e.target.value }) }} />
-                                        <TextField label='Data Fim' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataFim} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataFimPlanoAmil: e.target.value }) }} />
-                                        <TextField label='Custo' size='small' style={{ marginRight: '14px' }} value={custo} onChange={(e) => { setDataUpdate({ ...dataUpdate, custoPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Data Inicio' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataUpdate.dataInicio} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataInicioPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Data Fim' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataUpdate.dataFim} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataFimPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Custo' size='small' style={{ marginRight: '14px' }} value={dataUpdate.custo} onChange={(e) => { setDataUpdate({ ...dataUpdate, custoPlanoAmil: e.target.value }) }} />
                                     </Box>
                                 ) : null
                             }
@@ -148,14 +147,14 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                                 Dados Angariador
                             </Typography>
                             <Box p={1}>
-                                <TextField label='CPF Corretor' style={{ marginRight: '10px' }} size='small' value={cpfCorretor} onChange={e => { setDataUpdate({ ...dataUpdate, cpfCorretor: e.target.value }) }} />
-                                <TextField label='Nome Corretor' style={{ marginRight: '10px' }} size='small' value={nomeCorretor} onChange={e => { setDataUpdate({ ...dataUpdate, nomeCorretor: e.target.value }) }} />
-                                <TextField label='Telefone Corretor' style={{ marginRight: '10px' }} size='small' value={telefoneCorretor} onChange={e => { setDataUpdate({ ...dataUpdate, telefoneCorretor: e.target.value }) }} />
+                                <TextField label='CPF Corretor' style={{ marginRight: '10px' }} size='small' value={dataUpdate.cpfCorretor} onChange={e => { setDataUpdate({ ...dataUpdate, cpfCorretor: e.target.value }) }} />
+                                <TextField label='Nome Corretor' style={{ marginRight: '10px' }} size='small' value={dataUpdate.nomeCorretor} onChange={e => { setDataUpdate({ ...dataUpdate, nomeCorretor: e.target.value }) }} />
+                                <TextField label='Telefone Corretor' style={{ marginRight: '10px' }} size='small' value={dataUpdate.telefoneCorretor} onChange={e => { setDataUpdate({ ...dataUpdate, telefoneCorretor: e.target.value }) }} />
                             </Box>
                             <Box p={1}>
-                                <TextField label='CPF Supervisor' style={{ marginRight: '10px' }} size='small' value={cpfSupervisor} onChange={e => { setDataUpdate({ ...dataUpdate, cpfSupervisor: e.target.value }) }} />
-                                <TextField label='Nome Supervisor' style={{ marginRight: '10px' }} size='small' value={nomeSupervisor} onChange={e => { setDataUpdate({ ...dataUpdate, nomeSupervisor: e.target.value }) }} />
-                                <TextField label='Telefone Supervisor' style={{ marginRight: '10px' }} size='small' value={telefoneSupervisor} onChange={e => { setDataUpdate({ ...dataUpdate, telefoneSupervisor: e.target.value }) }} />
+                                <TextField label='CPF Supervisor' style={{ marginRight: '10px' }} size='small' value={dataUpdate.cpfSupervisor} onChange={e => { setDataUpdate({ ...dataUpdate, cpfSupervisor: e.target.value }) }} />
+                                <TextField label='Nome Supervisor' style={{ marginRight: '10px' }} size='small' value={dataUpdate.nomeSupervisor} onChange={e => { setDataUpdate({ ...dataUpdate, nomeSupervisor: e.target.value }) }} />
+                                <TextField label='Telefone Supervisor' style={{ marginRight: '10px' }} size='small' value={dataUpdate.telefoneSupervisor} onChange={e => { setDataUpdate({ ...dataUpdate, telefoneSupervisor: e.target.value }) }} />
                             </Box>
                         </Box>
                         <Box m={2}>

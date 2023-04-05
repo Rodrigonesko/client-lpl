@@ -1,49 +1,53 @@
 import React from "react";
+import { Box, Typography, TextField, Paper } from "@mui/material";
+import moment from "moment";
+
+const inputWidth = {
+    width: '33%'
+}
 
 const DadosElegibilidade = ({
-    proposta,
-    vigencia,
-    nome,
-    administradora,
-    numeroVidas,
-    entidade,
-    dataImportacao,
-    tipoVinculo,
-    statusMotor
+    proposta
 }) => {
     return (
-        <div className="container-analise-detalhes">
-            <div className="title">
-                <h3>Dados</h3>
-                <div className="sub-bloco-analise-detalhes" >
-                    <div>
-                        <label htmlFor="proposta">Proposta: </label>
-                        <input type="text" name="proposta" id="proposta" value={proposta} readOnly />
-                        <label htmlFor="vigencia">Vigência: </label>
-                        <input type="text" name="vigencia" id="vigencia" value={vigencia} readOnly />
-                        <label htmlFor="nome">Titular: </label>
-                        <input type="text" name="nome" id="nome" value={nome} readOnly />
-                    </div>
-                    <div>
-                        <label htmlFor="administradora">Administradora: </label>
-                        <input type="text" name="administradora" id="administradora" value={administradora} readOnly />
-                        <label htmlFor="vidas">Vidas: </label>
-                        <input type="text" name="vidas" id="vidas" value={numeroVidas} readOnly />
-                        <label htmlFor="entidade">Entidade: </label>
-                        <input type="text" name="entidade" id="entidade" value={entidade} readOnly />
-                    </div>
-                    <div>
-                        <label htmlFor="data-lpl">Data LPL: </label>
-                        <input type="text" name="data-lpl" id="data-lpl" value={dataImportacao} readOnly />
-                        <label htmlFor="vinculo">Vinculo: </label>
-                        <input type="text" name="vinculo" id="vinculo" value={tipoVinculo} readOnly />
-                        <label htmlFor="motor">Motor: </label>
-                        <input type="text" name="motor" id="motor" value={statusMotor} readOnly />
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <Box component={Paper} p={2} mt={3} elevation={3}>
+            <Typography variant="h6">
+                Dados
+            </Typography>
+            <Box p={1} display='flex' justifyContent='space-between' >
+                <TextField label='Proposta' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.proposta} sx={inputWidth} />
+                <TextField label='Vigência' size='small' InputProps={{
+                    readOnly: true,
+                }} value={moment(proposta.vigencia).format('DD/MM/YYYY')} sx={inputWidth} />
+                <TextField label='Titular' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.nome} sx={inputWidth} />
+            </Box>
+            <Box p={1} display='flex' justifyContent='space-between' >
+                <TextField label='Administradora' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.administradora} sx={inputWidth} />
+                <TextField label='Vidas' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.vidas} sx={inputWidth} />
+                <TextField label='Entidade' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.entidade} sx={inputWidth} />
+            </Box>
+            <Box p={1} display='flex' justifyContent='space-between' >
+                <TextField label='Data LPL' size='small' InputProps={{
+                    readOnly: true,
+                }} value={moment(proposta.dataImportacao).format('DD/MM/YYYY')} sx={inputWidth} />
+                <TextField label='Vinculo' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.tipoVinculo} sx={inputWidth} />
+                <TextField label='Motor' size='small' InputProps={{
+                    readOnly: true,
+                }} value={proposta.statusMotor} sx={inputWidth} />
+            </Box>
+        </Box>
     )
 }
 

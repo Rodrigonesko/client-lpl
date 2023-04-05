@@ -15,16 +15,13 @@ const AnaliseElegibilidadeDetalhes = () => {
     const [proposta, setProposta] = useState({})
 
 
-
+    const buscarDados = async () => {
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
+        const { proposta } = result.data;
+        setProposta(proposta);
+    }
 
     useEffect(() => {
-
-        const buscarDados = async () => {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
-            const { proposta } = result.data;
-            setProposta(proposta);
-        }
-
         buscarDados()
     }, [])
 
@@ -41,12 +38,16 @@ const AnaliseElegibilidadeDetalhes = () => {
                         {proposta.proposta} - {proposta.nome}
                     </Typography>
 
-                    <StatusGeral
-                        statusProposta={proposta.status}
-                        status1Analise={proposta.status1Analise}
-                        status2Analise={proposta.status2Analise}
-                        status3Analise={proposta.status3Analise}
-                    />
+                    {
+                        Object.keys(proposta).length !== 0 ? (
+                            <StatusGeral
+                                statusProposta={proposta.status}
+                                status1Analise={proposta.status1Analise}
+                                status2Analise={proposta.status2Analise}
+                                status3Analise={proposta.status3Analise}
+                            />
+                        ) : null
+                    }
 
                     {
                         Object.keys(proposta).length !== 0 ? (
@@ -64,13 +65,16 @@ const AnaliseElegibilidadeDetalhes = () => {
                                 telefoneSupervisor={proposta.telefoneSupervisor}
                                 fase1={proposta.fase1}
                                 id={id}
+                                atualizarDados={buscarDados}
                             />
                         ) : null
                     }
 
                     {
                         Object.keys(proposta).length !== 0 ? (
-                            <SegundaFase />
+                            <SegundaFase
+                                proposta={proposta}
+                            />
                         ) : null
                     }
 

@@ -1,186 +1,82 @@
 import React from 'react'
 import { BsCheckCircleFill, BsXCircleFill } from 'react-icons/bs'
+import { Box, Paper, TextField, Typography, FormGroup, FormControlLabel, Checkbox, FormControl, FormLabel, RadioGroup, Radio, MenuItem, Select, InputLabel } from '@mui/material'
 
 const ProcessamentoElegibilidade = ({
-    sisAmilDeacordo,
-    setSisAmilDeacordo,
-    contrato,
-    setContrato,
-    statusContrato600,
-    statusContrato118,
-    prc,
-    setPrc,
-    prcs,
-    planoAnterior,
-    ligacao,
-    setLigacao,
-    site,
-    setSite,
-    observacoes,
-    documentoIdentificacao,
-    declaracaoAssociado,
-    vinculadosSimNao,
-    vinculados,
-    planoAmil,
-    dataInicioPlanoAmil,
-    dataFimPlanoAmil,
-    custoPlanoAmil,
-    faltaDoc
+    proposta
 }) => {
-
-    const handleChange = (set, value) => {
-        set(value)
-    }
-
     return (
-        <div className="container-analise-detalhes">
-            <div className="title">
-                <h3>Análise</h3>
-            </div>
-            <div className="sub-bloco-analise-detalhes">
-                <div className='sub-bloco-analise'>
-                    <div className='card-analise'>
-                        <div>
-                            <label htmlFor="sisamil-deacordo">Sisamil de Acordo com a Proposta?</label>
-                            <input type="checkbox" name="sisamil-deacordo" id="sisamil-deacordo" checked={sisAmilDeacordo === 'Sim'} value='Sim' onChange={e => {
-                                handleChange(setSisAmilDeacordo, e.target.value)
-                                if (e.target.checked) {
-                                    handleChange(setSisAmilDeacordo, 'Sim')
-                                } else {
-                                    handleChange(setSisAmilDeacordo, 'Não')
-                                }
-                            }} />
-                        </div>
-                        <div>
-                            <label htmlFor="">Contrato: </label>
-                            <input type="radio" name="contrato" id="contrato-600" value={600} defaultChecked={statusContrato600} onClick={e => {
-                                handleChange(setContrato, e.target.value)
-                            }} />
-                            <label htmlFor="contrato-600">600</label>
-                            <input type="radio" name="contrato" id="contrato-118" value={118} defaultChecked={statusContrato118} onClick={e => {
-                                handleChange(setContrato, e.target.value)
-                            }} />
-                            <label htmlFor="contrato-118">118</label>
-                        </div>
-                        <div>
-                            <label htmlFor="prc">PRC: </label>
-                            <select name="prc" id="prc" onChange={e => {
-                                handleChange(setPrc, e.target.value)
-                            }} >
-                                <option value=""></option>
-                                {
-                                    prcs.map(e => {
-                                        return (
-                                            < option selected={e.descricao === prc} value={e.descricao} > {e.descricao}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                            <label htmlFor="">Plano Anterior: </label>
-                            {
-                                planoAnterior === 'Sim' ? (
-                                    <BsCheckCircleFill className='color-green' />
-                                ) : (
-                                    <BsXCircleFill className='color-red' />
-                                )
-                            }
-                        </div>
-                        <div>
-                            <label htmlFor="">Comprovação Documento: </label>
-                            <input type="checkbox" name="ligacao" id="ligacao" checked={ligacao === 'Sim'} value='Sim' onClick={e => {
-                                if (e.target.checked) {
-                                    handleChange(setLigacao, 'Sim')
-                                } else {
-                                    handleChange(setLigacao, 'Não')
-                                }
-
-                            }} />
-                            <label htmlFor="ligacao">Ligação</label>
-                            <input type="checkbox" name="site" id="site" value='Sim' checked={site === 'Sim'} onClick={e => {
-                                if (e.target.checked) {
-                                    handleChange(setSite, 'Sim')
-                                } else {
-                                    handleChange(setSite, 'Não')
-                                }
-                            }} />
-                            <label htmlFor="site">Site</label>
-                        </div>
-                        <div>
-                            <label htmlFor="">Observações: </label>
-                            <span>{observacoes}</span>
-                        </div>
-                    </div>
-                    <div className='card-analise' >
-                        <div>
-                            <div>
-                                <label htmlFor="">Documento de Identificação: </label>
-                                {
-                                    documentoIdentificacao === 'Sim' ? (
-                                        <BsCheckCircleFill className='color-green' />
-                                    ) : (
-                                        <BsXCircleFill className='color-red' />
-                                    )
-                                }
-                            </div>
-                            <div>
-                                <label htmlFor="">Declaração Associado ou Carteirinha </label>
-                                {
-                                    declaracaoAssociado === 'Sim' ? (
-                                        <BsCheckCircleFill className='color-green' />
-                                    ) : (
-                                        <BsXCircleFill className='color-red' />
-                                    )
-                                }
-                            </div>
-                            <div>
-                                <label htmlFor="">Tipo de Vinculo: </label>
-                                {
-                                    vinculadosSimNao === 'Sim' ? (
-                                        <BsCheckCircleFill className='color-green' />
-                                    ) : (
-                                        <BsXCircleFill className='color-red' />
-                                    )
-                                }
-                                <label htmlFor="">{vinculados}</label>
-                            </div>
-                            <div>
-                                <label htmlFor="">Plano Amil: </label>
-                                {
-                                    planoAmil === 'Sim' ? (
-                                        <BsCheckCircleFill className='color-green' />
-                                    ) : (
-                                        <BsXCircleFill className='color-red' />
-                                    )
-                                }
-                            </div>
-                            {
-                                planoAmil === 'Sim' ? (
-                                    <div id='dados-plano-amil'>
-                                        <label htmlFor="">Data Inicio Plano Amil: </label>
-                                        <strong>{dataInicioPlanoAmil}</strong>
-                                        <label htmlFor="">Data Fim Plano Amil: </label>
-                                        <strong>{dataFimPlanoAmil}</strong>
-                                        <label htmlFor="">Custo: </label>
-                                        <strong>{custoPlanoAmil}</strong>
-                                    </div>
-                                ) : null
-                            }
-                            <div>
-                                <label htmlFor="">Pré Processamento: </label>
-                                <label htmlFor="">{
-                                    faltaDoc === 'Sim' ? (
-                                        <strong>Falta Documentos</strong>
-                                    ) : (
-                                        <strong>Documentação OK</strong>
-                                    )
-                                }</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div >
+        <Box component={Paper} elevation={3} p={2} mt={1}>
+            <Typography variant='h6'>
+                Análise
+            </Typography>
+            <Box>
+                <Box display='flex' flexDirection='column'>
+                    <FormControlLabel control={<Checkbox defaultChecked />} label="Sisamil de Acordo com a Proposta?" labelPlacement="start" />
+                    <FormControl>
+                        <FormLabel id="demo-radio-buttons-group-label">Contrato</FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-radio-buttons-group-label"
+                            defaultValue="female"
+                            name="radio-buttons-group"
+                        >
+                            <FormControlLabel value="600" control={<Radio />} label="600" />
+                            <FormControlLabel value="118" control={<Radio />} label="118" />
+                        </RadioGroup>
+                    </FormControl>
+                    <FormControl style={{ minWidth: '100px' }} size='small'>
+                        <InputLabel id="demo-simple-select-label">PRC</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="PRC"
+                        >
+                            <MenuItem>
+                                <em>PRC</em>
+                            </MenuItem>
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControlLabel control={<Checkbox defaultChecked />} label="Plano Anterior?" labelPlacement="start" />
+                    <FormControl>
+                        <InputLabel>Comprovação Documento</InputLabel>
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Ligação" labelPlacement="start" />
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Site" labelPlacement="start" />
+                    </FormControl>
+                </Box>
+                <Box>
+                    <FormGroup>
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Documento de Identificação" labelPlacement="start" />
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Declaração Associado ou Carteirinha" labelPlacement="start" />
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Tipo de Vinculo" labelPlacement="start" />
+                        <FormControl style={{ minWidth: '150px' }} size='small'>
+                            <InputLabel id="demo-simple-select-label">Tipo de Vinculo</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Tipo de Vinculo"
+                            >
+                                <MenuItem>
+                                    <em>Tipo de Vinculo</em>
+                                </MenuItem>
+                                <MenuItem value={10}>Ten</MenuItem>
+                                <MenuItem value={20}>Twenty</MenuItem>
+                                <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Plano Amil" labelPlacement="start" />
+                        <Box>
+                            <TextField type='date' focused label='Data inicio' />
+                            <TextField type='date' focused label='Data Fim' />
+                            <TextField focused label='Custo' />
+                        </Box>
+                    </FormGroup>
+                </Box>
+            </Box>
+        </Box>
     )
 }
 

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Box, Paper, Button, Typography, IconButton, } from "@mui/material";
+import { Box, Paper, Button, Typography, IconButton, TextField } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import DadosElegibilidade from "./DadosElegebilidade";
+import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 
-const SegundaFase = () => {
+const SegundaFase = ({ proposta }) => {
 
     const [open, setOpen] = useState(false)
 
@@ -25,10 +27,14 @@ const SegundaFase = () => {
                         setOpen(!open)
                         // handleClick()
                     }}
-                    disabled
+                    disabled={!proposta.fase1}
                 >
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
+            </Box>
+            <Box>
+                <DadosElegibilidade proposta={proposta} />
+                <ProcessamentoElegibilidade />
             </Box>
         </Box>
     )

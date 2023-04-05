@@ -2,13 +2,31 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import moment from "moment/moment";
-import { Button, Box, Select, FormControl, InputLabel, MenuItem, CircularProgress } from "@mui/material";
+import { Button, Box, Select, FormControl, InputLabel, MenuItem, CircularProgress, Modal, Typography } from "@mui/material";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'auto',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    borderRadius: '5px',
+    p: 4,
+};
+
 
 const Anexos = () => {
 
     const [propostas, setPropostas] = useState([])
     const [divergencia, setDivergencia] = useState('')
     const [loading, setLoading] = useState(false)
+    const [modalConcluir, setModalConcluir] = useState(false)
+    const [modalImplantar, setModalImplantar] = useState(false)
+    const [proposta, setProposta] = useState('')
+    const [nome, setNome] = useState('')
+    const [id, setId] = useState('')
 
     const buscarPropostas = async () => {
         try {
@@ -27,17 +45,15 @@ const Anexos = () => {
     const mandarImplatacao = async (id) => {
         try {
             setLoading(true)
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/mandarImplatacao`, {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/mandarImplatacao`, {
                 id
             }, {
                 withCredentials: true
             })
 
-            if (result.status === 200) {
-                buscarPropostas()
-            }
-
+            buscarPropostas()
             setLoading(false)
+            setModalImplantar(false)
 
         } catch (error) {
             console.log(error);
@@ -49,14 +65,12 @@ const Anexos = () => {
 
             setLoading(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { id }, { withCredentials: true })
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { id }, { withCredentials: true })
 
-            if (result.status === 200) {
-                buscarPropostas()
-            }
 
+            buscarPropostas()
             setLoading(false)
-
+            setModalConcluir(false)
 
         } catch (error) {
             console.log(error);
@@ -166,8 +180,18 @@ const Anexos = () => {
                                                 <td>{e.houveDivergencia}</td>
                                                 <td>{e.cids}</td>
                                                 <td>{e.divergencia}</td>
-                                                <td><Button variant='contained' color='success' size='small' onClick={() => { anexar(e._id) }} >Concluir</Button></td>
-                                                <td><Button variant='contained' color='warning' size='small' onClick={() => { mandarImplatacao(e._id) }}>Implantação</Button></td>
+                                                <td><Button variant='contained' color='success' size='small' onClick={() => {
+                                                    setModalConcluir(true)
+                                                    setProposta(e.proposta)
+                                                    setNome(e.nome)
+                                                    setId(e._id)
+                                                }} >Concluir</Button></td>
+                                                <td><Button variant='contained' color='warning' size='small' onClick={() => {
+                                                    setModalImplantar(true)
+                                                    setProposta(e.proposta)
+                                                    setNome(e.nome)
+                                                    setId(e._id)
+                                                }}>Implantação</Button></td>
                                             </tr>
                                         )
                                     })
@@ -176,6 +200,48 @@ const Anexos = () => {
                         </table>
                     </div>
                 </Box>
+                <Modal
+                    open={modalConcluir}
+                    onClose={() => { setModalConcluir(false) }}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Deseja concluir a proposta?
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Proposta: {proposta} - Nome: {nome}
+                        </Typography>
+                        <Box mt={2} display='flex' justifyContent='space-around'>
+                            <Button variant="contained" color='inherit' onClick={() => { setModalConcluir(false) }}>Fechar</Button>
+                            <Button variant="contained" color="success" onClick={() => {
+                                anexar(id)
+                            }}>Concluir</Button>
+                        </Box>
+                    </Box>
+                </Modal>
+                <Modal
+                    open={modalImplantar}
+                    onClose={() => { setModalImplantar(false) }}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Deseja mandar para implantação?
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Proposta: {proposta} - Nome: {nome}
+                        </Typography>
+                        <Box mt={2} display='flex' justifyContent='space-around'>
+                            <Button variant="contained" color='inherit' onClick={() => { setModalImplantar(false) }}>Fechar</Button>
+                            <Button variant="contained" color="warning" onClick={() => {
+                                mandarImplatacao(id)
+                            }}>Implantação</Button>
+                        </Box>
+                    </Box>
+                </Modal>
             </section>
         </>
     )
