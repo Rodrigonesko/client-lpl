@@ -24,10 +24,10 @@ const UploadElegibilidade = () => {
 
             console.log(result.data);
 
-            if (result.status == 200) {
-                setStatus('Concluido')
-                setQtd(result.data.qtd)
-            }
+
+            setStatus('Concluido')
+            setQtd(result.data.qtd)
+
 
         } catch (error) {
             console.log(error);

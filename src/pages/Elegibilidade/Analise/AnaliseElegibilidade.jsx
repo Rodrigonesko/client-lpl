@@ -92,7 +92,7 @@ const AnaliseElegibilidade = () => {
     const atribuir = async (analista, id) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/analise`, {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/analise`, {
                 analista,
                 id
             }, {

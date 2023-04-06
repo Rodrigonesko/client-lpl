@@ -212,7 +212,7 @@ const EntrevistasRealizadas = () => {
                                                 }
                                             </TableCell>
                                             <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
-                                            <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
+                                            <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`}>PDF</Button></TableCell>
                                         </TableRow>
                                     )
                                 })

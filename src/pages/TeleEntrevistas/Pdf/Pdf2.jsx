@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Axios from 'axios'
 import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import html2canvas from 'html2canvas'
 import jsPdf from 'jspdf'
+import jsPDF from 'jspdf'
+import { Container, Box, Paper, Typography, Table, TableRow, TableHead, TableCell, TableContainer } from '@mui/material'
 
 const Pdf2 = () => {
 
@@ -14,22 +16,51 @@ const Pdf2 = () => {
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
 
-    const gerarPdf = () => {
-        const domElement = document.getElementById("pdf");
-        html2canvas(domElement, {
-            onclone: document => {
-                document.getElementById("print")
+    const tableRef = useRef(null);
+
+    const gerarPDF = () => {
+        const table = tableRef.current;
+        const HTML_Width = table.offsetWidth;
+        const HTML_Height = table.offsetHeight;
+        const top_left_margin = 15;
+        const PDF_Width = HTML_Width + top_left_margin * 2;
+        const PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
+        const canvas_image_width = HTML_Width;
+        const canvas_image_height = HTML_Height;
+
+        const totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+        html2canvas(table, { allowTaint: true }).then(function (canvas) {
+            canvas.getContext("2d");
+
+            const imgData = canvas.toDataURL("image/jpeg", 1.0);
+            const pdf = new jsPDF("p", "pt", [PDF_Width, PDF_Height]);
+            pdf.addImage(
+                imgData,
+                "JPG",
+                top_left_margin,
+                top_left_margin,
+                canvas_image_width,
+                canvas_image_height
+            );
+
+            console.log(totalPDFPages);
+
+            for (let i = 1; i <= totalPDFPages; i++) {
+                pdf.addPage(PDF_Width, PDF_Height);
+                pdf.addImage(
+                    imgData,
+                    "JPG",
+                    top_left_margin,
+                    -(PDF_Height * i) + top_left_margin * 4,
+                    canvas_image_width,
+                    canvas_image_height
+                );
             }
-        }).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPdf();
-            pdf.addImage(imgData, "JPEG", 10, 10);
-            pdf.save(`${new Date().toISOString()}.pdf`);
+
+            pdf.save(`callback.pdf`);
         });
-    }
-
-
-
+    };
 
     const buscarPerguntas = async () => {
         try {
@@ -60,57 +91,58 @@ const Pdf2 = () => {
 
         buscarDadosEntrevista()
         buscarPerguntas()
-        gerarPdf()
+        gerarPDF()
     }, [nome, proposta])
 
     return (
-        <section className='section-editar-proposta-container' id='pdf'>
-            <div className='editar-proposta-container' id='proposta-container'>
-                <div className="title">
-                    <h3>Editar Dados Entrevista</h3>
-                </div>
-                <div className="dados-entrevista-editar">
-                    <table border='1'>
-                        <tr>
-                            <td>Data Entrevista</td>
-                            <td>{moment(dadosEntrevista.createdAt).format('DD/MM/YYYY')}</td>
-                        </tr>
-                        <tr>
-                            <td>Nome</td>
-                            <td>{dadosEntrevista.nome}</td>
-                        </tr>
-                        <tr>
-                            <td>CPF</td>
-                            <td>{dadosEntrevista.cpf}</td>
-                        </tr>
-                        <tr>
-                            <td>Proposta</td>
-                            <td>{dadosEntrevista.proposta}</td>
-                        </tr>
-                        <tr>
-                            <td>Data Nascimento</td>
-                            <td>{moment(dadosEntrevista.dataNascimento).format('DD/MM/YYYY')}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div className="perguntas-container">
+        <Container id='pdf' ref={tableRef}> 
+            <Box mt={1}>
+                <Box style={{ width: '40%' }} component={Paper} elevation={6}>
+                    <Table >
+                        <TableRow >
+                            <TableCell>Data Entrevista</TableCell>
+                            <TableCell>{moment(dadosEntrevista.createdAt).format('DD/MM/YYYY')}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Nome</TableCell>
+                            <TableCell>{dadosEntrevista.nome}</TableCell>
+                        </TableRow>
+                        <TableRow >
+                            <TableCell>CPF</TableCell>
+                            <TableCell>{dadosEntrevista.cpf}</TableCell>
+                        </TableRow>
+                        <TableRow >
+                            <TableCell>Proposta</TableCell>
+                            <TableCell>{dadosEntrevista.proposta}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Data Nascimento</TableCell>
+                            <TableCell>{moment(dadosEntrevista.dataNascimento).format('DD/MM/YYYY')}</TableCell>
+                        </TableRow>
+                    </Table>
+                </Box>
+                <Box mt={4}>
                     {
                         perguntas.map(e => {
                             if (e.formulario === dadosEntrevista.tipoFormulario) {
                                 return (
-                                    <div className='title'>
-                                        <label htmlFor={e.name}>{e.pergunta}</label>
-                                        <textarea type="text" name="" id={e.name} defaultValue={dadosEntrevista[e.name]} className='input-pergunta' />
-                                    </div>
+                                    <Box component={Paper} p={2} m={1} elevation={5}>
+                                        <Typography>
+                                            {e.pergunta}
+                                        </Typography>
+                                        <Typography component={Paper} elevation={1} p={2}>
+                                            {dadosEntrevista[e.name]}
+                                        </Typography>
+                                    </Box>
                                 )
                             } else {
                                 return null
                             }
                         })
                     }
-                </div>
-            </div>
-        </section>
+                </Box>
+            </Box>
+        </Container>
     )
 }
 

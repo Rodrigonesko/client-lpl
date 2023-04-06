@@ -133,7 +133,7 @@ const NaoEnviados = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/voltarAjuste`, {
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/voltarAjuste`, {
                 id
             }, {
                 withCredentials: true,

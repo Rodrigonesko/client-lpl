@@ -34,7 +34,7 @@ const SegundaFase = ({ proposta }) => {
             </Box>
             <Box>
                 <DadosElegibilidade proposta={proposta} />
-                <ProcessamentoElegibilidade />
+                <ProcessamentoElegibilidade proposta={proposta} />
             </Box>
         </Box>
     )
