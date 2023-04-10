@@ -162,7 +162,7 @@ const Formulario = () => {
 
     }
 
-    const handleChangeSub = (item) => {
+    const handleChangeSub = async (item) => {
         subRespostas[`${item.id}`] = item.value
     }
 
@@ -460,7 +460,7 @@ const Formulario = () => {
                                 <input type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
                             </div>
                             <div className="div-pergunta">
-                                <label htmlFor="pergunta-patologias" className="label-pergunta">Por que o beneficiario não informou na ds essas patologias?</label>
+                                <label htmlFor="pergunta-patologias" className="label-pergunta">Por que o beneficiário não informou na Declaração de Saúde essas patologias?</label>
                                 <input type="text" name="pergunta-patologias" id="patologias" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
                             </div>
                             <div className="div-pergunta">

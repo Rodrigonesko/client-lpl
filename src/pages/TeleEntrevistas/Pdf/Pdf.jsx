@@ -44,20 +44,20 @@ const gerarPdf = async (proposta, nome) => {
             if (e.sexo !== 'M' && e.sexo !== 'F') {
                 return [
                     { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }
                 ]
             }
             if (e.sexo === 'M' && result.data.result[0].sexo === 'M') {
                 return [
                     { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }
                 ]
             }
 
             if (e.sexo === 'F' && result.data.result[0].sexo === 'F') {
                 return [
                     { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }
                 ]
             }
 
@@ -72,7 +72,7 @@ const gerarPdf = async (proposta, nome) => {
         if (e.formulario === result.data.result[0].tipoFormulario && e.categoria === 'habitos') {
             return [
                 { text: e.pergunta, margin: [20, 0, 20, 0] },
-                { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0] }
+                { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0', border: [true, true, true, true], color: '#0070c0' }
             ]
         }
 
@@ -84,19 +84,24 @@ const gerarPdf = async (proposta, nome) => {
 
     if (result.data.result[0].divergencia !== undefined) {
         divergencias = [
-            { text: 'Identifica divergencia? ', margin: [20, 0, 20, 0] },
-            { text: 'Sim', bold: true, margin: [20, 0, 20, 0] },
-            { text: 'Qual?', margin: [20, 0, 20, 0] },
-            { text: result.data.result[0].divergencia, bold: true, margin: [20, 0, 20, 0] },
-            { text: 'Por que o beneficiario não informou na ds essas patologias:', margin: [20, 0, 20, 0] },
-            { text: result.data.result[0].patologias, bold: true, margin: [20, 0, 20, 0] },
-            { text: 'Cids', margin: [20, 0, 20, 0] },
-            { text: result.data.result[0].cids, margin: [20, 0, 20, 0] }
+            {
+                text: [{ text: 'Identifica divergência? ' }, { text: 'Sim', color: '#0070c0', bold: true, italics: true }], margin: [20, 0, 20, 0]
+            },
+            {
+                text: [{ text: '\nQual? ' }, { text: result.data.result[0].divergencia, bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0]
+            },
+            {
+                text: [{ text: 'Por que o beneficiário não informou na Declaração de Saúde essas patologias: ' }, { text: result.data.result[0].patologias, bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0]
+            },
+            {
+                text: [{ text: 'Cids: ' }, { text: result.data.result[0].cids, margin: [20, 0, 20, 0], italics: true, color: '#0070c0', bold: true }], margin: [20, 0, 20, 0]
+            },
         ]
     } else {
         divergencias = [
-            { text: 'Identifica divergencia?', margin: [20, 0, 20, 0] },
-            { text: 'Não', bold: true, margin: [20, 0, 20, 0] },
+            {
+                text: [{ text: 'Identifica divergencia?' }, { text: 'Não \n', color: '#0070c0', bold: true, italics: true }], margin: [20, 0, 20, 0]
+            }
         ]
     }
 
@@ -108,36 +113,38 @@ const gerarPdf = async (proposta, nome) => {
 
     const details = [
         {
+            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAllBMVEVPFP////9HAP9NEP9VGv9MCv8/AP9qQv+vnP+bhv+EZf9KBP/18v+lkP+/sv+ag/95Wf/h2v+Kbv/b0/9VIf/Euv/8+v/u6v/n4f+Wfv9yTv9vSv/q5f+Hav+yof9kN//Xzv+3p//Rx/+Qd//a0f9cK//Kv/92U/+kkf+7rP/y7v/CtP/f2P+qlv+OdP9bKf9mO/9/YP+/4C8yAAAF7klEQVR4nO2bfVuyMBSHYZPjC1qZima+UamZ9ljf/8s9U4SdDShLofL63f90xWDsZhs729BxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwOxFEJLyfLkVxeDRed2ZhlWRySCT8YLnOhpiO3D29RFHcxowvQNHrujFPFB0S18kh993/2eKdAXrSOtdRjYm6PtT485Uot9rGHUWVeFmG4pEZut6+J16YYZ0bdi/RcMwNxQUaSsEEZ5fYDx0x0Tr30dBwYYYOdWKbVjweXpihpKgWm+OD4MUZ7qLQcau+pMTl8gzV60bwqUXBhtLzPCk/Py994f7K/KSctAwKNPTURM2ZVqtb9Vd8xdJXF/jzanXa3V3JU+R+7tdVmc7lsZkWZajKcl/rBFHG/cWdoF3DUcWKObQj356uKodlbdaMLgwGV41ERD2x7d1V55DkNmfPXUpNdH19B1mooRCvfdegNyUpK5v2gcH9vnD+zcPi6nkYCyuJxiIwLwxqu3pUT2y4srJ03Yc3Mu/rNwbxHTaH3lGIoaBXuyyKtRD3+r/6/ma0OPjfK0dB8zDIuDC4VRVSe8lIcd2QjKbKR/yqV5ghDbNLEwyn+p9o9ka9+P/NG407WVftWK3zUtyN0RtFrQzDzAqMYCm2oeqtuZd9SJvXYimGccP7hLThd+mxvliGIT0cV67zGbrvutwlGB5d5DMavuhKLN6Q6ukCfMOwva7VW2E7nRC0e5NW/XVtvsr+6SC0aEPvzSzQaNKYO5XpOEy/XCND8ZxK6Ic3u1BGQfOZkTJrVemQQo0mS9gklVi4IQ14iZ7uVXFUWOqpIr0bKYmhQ8sn4/CqSsKPX44eXbGkKg9+hOCv3iT0LdpQ3PHC3vKYSlAr01CFWQ1++NEsA39koZHkz9lVd3FS0YbEmk4wt3Kjm0zD3UI8O9wxwzB/qZMGZhKv32TAKNhQ/GNFtQVV8nu2obnKaU0YqJ+X5LEHMyjJkDof50Xs9tzQ0LgxtxZ4TQ3NmQRrMUE5htLTWT1Q1hnchBsKFs29moXgXfvO6qPsTRtPiIs15I1tmrlDyc/ght5QH+9ZHZH1XkueV298v2INSU8AOplVqE7RkyNuKH0371Le20KrepnNsBxDHYPUc3JiIQw35ObWG1PqDUH3ykzi0ULcews21MV8y9lGZ7uVpuEoOf5iGVbyDdkIW4ohb2p5a0RseDMN9cDe/MWGuixBTjd0PB2ImIa6gf9mQ91jcg3ZHu1fNGRlya3D6p82ZHt385x+yOK6emmG7FuMEz83YVHUv5ycxCo55bk0QxZmPJ5tPFzkjfg6bAtLM2Szs+cTDVkUlT1c+Cw6Mx5CkYas77urvBfEcfDmMMmOvFms3C/LkL8f8qLJI+FzC3ebEdUIYzbfZdVcpKFDbJHoS3tgafj8cESpvLyKsSlRY+Ut1pCt4F6fOH3ic/wne+dLCGvBja0rFWrIB8Rm+sF/Cb5O4w4c/rwkTXni/gRKpvOFGvIs3Fl6y/ErmGttbj1e/pM+8VvHjKbx7Qo1NHqP287YVv0C5nqp26xV97uxYrjK2hfcbZuKEgzNb8HcVdZb8Fj4jDwiGHU6I/sgYyuLN+TTzz3Hf+aQxmqnnxNtdhdsyFddd3RPed3QxP0Ya7ulFEOHdDx8sqFD4YeCa+sRlGPo0OZ8ho69QWGghnlzA64kQ0m87Zxo6NDSHvligsaujFRlHb8kQ6XIdipPNXRETktd+NHY4NF1Et58xXD9rdXERLGR3PRkQ5Wbkx4AH9jPWAQNw82+pueRod5E7FuGbAVvkr/gn0RorF63loeg8UNwJsP95123C9ZY27WtGUp4+0/WKl5cskqMHf1LXydZN9EXSS99zEuP6+qe88bj45m+qtl9ZNdt1Gth+Hq39DO/spNSf7YoE7LOyk7JTPrg9B3eeX/+JA8/qDolhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQBn8B/imWPPl829ZAAAAAElFTkSuQmCC',
+            width: 60,
+            height: 50,
+            alignment: 'right',
+            margin: [0, 5]
+        },
+        {
             table: {
                 body: [
-                    ['Data', moment(result.data.result[0].createdAt).format('DD/MM/YYYY')],
-                    ['Nome', `${nome}`],
-                    ['CPF', `${result.data.result[0].cpf}`],
-                    ['Proposta', `${proposta}`],
-                    ['Data Nascimento', `${result.data.result[0].dataNascimento}`]
+                    ['Data Tele Entrevista', { text: moment(result.data.result[0].createdAt).format('DD/MM/YYYY'), color: '#0070c0' }],
+                    ['Nome', { text: `${nome}`, color: '#0070c0' }],
+                    ['CPF', { text: `${result.data.result[0].cpf}`, color: '#0070c0' }],
+                    ['Proposta', { text: `${proposta}`, color: '#0070c0' }],
+                    ['Data Nascimento', { text: `${result.data.result[0].dataNascimento}`, color: '#0070c0' }]
                 ]
             },
             layout: 'header'
-        },
-        {
-            image: 'data:image/png;base64,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',
-            width: 150,
-            height: 150
         },
         '\n\n\n',
         ...perguntas,
         tituloHabitos,
         ...habitos,
-        { text: 'Tipo de teleatendimento:', margin: [20, 0, 20, 0] },
-        { text: 'Telefone \n\n', bold: true, margin: [20, 0, 20, 0] },
+        { text: 'RESUMO \n\n', margin: [20, 0, 20, 0], bold: true },
+        { text: [{ text: 'Tipo de teleatendimento:' }, { text: 'Telefone \n\n', bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0] },
         ...divergencias,
-        { text: `\n\n Entrevista realizada por: ${responsavel}`, bold: true, margin: [20, 0, 20, 0] }
+        { text: `\n\n Entrevista realizada pela profissional de enfermagem ${responsavel} (COREN PR- 001.786.031)`, margin: [20, 0, 20, 0], decoration: "underline" }
     ]
 
     const rodape = (currentPage, pageCount) => {
         return [
             {
-                text: currentPage + ' / ' + pageCount,
+                text: `Página ${currentPage} de ${pageCount}`,
                 alignment: 'right',
                 fontSize: 9,
                 margin: [0, 10, 20, 0]//Left, top, right, bottom
@@ -145,12 +152,22 @@ const gerarPdf = async (proposta, nome) => {
         ]
     }
 
+    const header = () => {
+        return [{
+            image: 'data:image/png;base64,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',
+            width: 60,
+            height: 50,
+            alignment: 'right',
+            margin: [5, 5, 5, 5]
+        }];
+    }
+
     const docDefinitions = {
         pageSize: 'A4',
         pageMargins: [15, 50, 15, 40],
 
         content: [details],
-        footer: rodape
+        footer: rodape,
     }
 
     pdfMake.createPdf(docDefinitions).download(`${nome}.pdf`)

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Modal, Typography, Container } from '@mui/material'
 import moment from 'moment'
 import gerarPdf from '../Pdf/Pdf'
+import Pdf2 from '../Pdf/Pdf2'
 
 const style = {
     position: 'absolute',
@@ -19,6 +20,8 @@ const style = {
 
 const EntrevistasRealizadas = () => {
 
+    const formRef = useRef(null)
+
     const [entrevistas, setEntrevistas] = useState([])
     const [pesquisa, setPesquisa] = useState('');
     const [loading, setLoading] = useState(false)
@@ -26,6 +29,7 @@ const EntrevistasRealizadas = () => {
     const [id, setId] = useState('')
     const [nome, setNome] = useState('')
     const [proposta, setpProposta] = useState('')
+    const [pdf, setPdf] = useState(false)
 
     const alterarSexo = async (id, sexo) => {
         try {
@@ -147,7 +151,11 @@ const EntrevistasRealizadas = () => {
         }
     }
 
-    return <>
+    // const gerarPdf = () => {
+    //     console.log(formRef.current);
+    // }
+
+    return (<>
         <Sidebar></Sidebar>
         <Container className='scrollable'>
             <Box m={2}>
@@ -212,13 +220,15 @@ const EntrevistasRealizadas = () => {
                                                 }
                                             </TableCell>
                                             <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
-                                            <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`}>PDF</Button></TableCell>
+                                            <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`} target='_blank'>PDF</Button></TableCell>
+                                            <TableCell><Button onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF 2</Button></TableCell>
                                         </TableRow>
                                     )
                                 })
                             }
                         </TableBody>
                     </Table>
+
                 </TableContainer>
                 <Modal
                     open={modalVoltar}
@@ -232,13 +242,13 @@ const EntrevistasRealizadas = () => {
                         </Typography>
                         <Box m={2} display='flex' justifyContent='space-around'>
                             <Button variant='contained' onClick={voltarEntrevista}>Sim</Button>
-                            <Button variant='contained' color='inherit' onClick={() => setModalVoltar(false)}>Não</Button>
+                            <Button variant='contained' color='inherit'>Não</Button>
                         </Box>
                     </Box>
                 </Modal>
             </Box>
         </Container>
-    </>
+    </>)
 }
 
 export default EntrevistasRealizadas

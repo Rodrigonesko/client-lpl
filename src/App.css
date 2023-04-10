@@ -163,3 +163,11 @@
   right: 50%;
   top: 50%;
 }
+
+.palavra-incorreta {
+  border: 3px solid red;
+}
+
+.verificando-frase {
+  border-bottom: 4px solid yellow;
+}

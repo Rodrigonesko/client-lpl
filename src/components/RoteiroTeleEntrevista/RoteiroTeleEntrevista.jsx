@@ -15,11 +15,11 @@ const RoteiroTeleEntrevista = () => {
             <p>
                 <div>
                     <input type="radio" name="genero" id="genero-feminino" value='feminino' />
-                    <label htmlFor="genero-feminino">Genero feminino</label>
+                    <label htmlFor="genero-feminino">Gênero feminino</label>
                 </div>
                 <div>
                     <input type="radio" name="genero" id="genero-masculino" value='masculino' />
-                    <label htmlFor="genero-masculino">Genero masculino</label>
+                    <label htmlFor="genero-masculino">Gênero masculino</label>
                 </div>
                 <div>
                     <input type="radio" name="genero" id="outros" value='outros' />

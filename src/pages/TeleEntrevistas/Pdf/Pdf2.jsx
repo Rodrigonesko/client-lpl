@@ -3,9 +3,9 @@ import Axios from 'axios'
 import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import html2canvas from 'html2canvas'
-import jsPdf from 'jspdf'
 import jsPDF from 'jspdf'
-import { Container, Box, Paper, Typography, Table, TableRow, TableHead, TableCell, TableContainer } from '@mui/material'
+import { Button, Container, Box, Paper, Typography, Table, TableRow, TableCell } from '@mui/material'
+import logo from './logo.png'
 
 const Pdf2 = () => {
 
@@ -27,6 +27,7 @@ const Pdf2 = () => {
         const PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
         const canvas_image_width = HTML_Width;
         const canvas_image_height = HTML_Height;
+        const logo_url = logo; // Substitua pela URL da imagem do seu logo
 
         const totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
 
@@ -44,10 +45,10 @@ const Pdf2 = () => {
                 canvas_image_height
             );
 
-            console.log(totalPDFPages);
-
             for (let i = 1; i <= totalPDFPages; i++) {
-                pdf.addPage(PDF_Width, PDF_Height);
+
+                pdf.addPage();
+                console.log('passou');
                 pdf.addImage(
                     imgData,
                     "JPG",
@@ -58,7 +59,9 @@ const Pdf2 = () => {
                 );
             }
 
-            pdf.save(`callback.pdf`);
+
+
+            pdf.save(`${nome} - ${proposta}.pdf`);
         });
     };
 
@@ -91,12 +94,16 @@ const Pdf2 = () => {
 
         buscarDadosEntrevista()
         buscarPerguntas()
-        gerarPDF()
+        // gerarPDF()
     }, [nome, proposta])
 
     return (
-        <Container id='pdf' ref={tableRef}> 
-            <Box mt={1}>
+        <Box>
+            <Box m={2} pb={1} borderBottom='2px solid gray'>
+                <Button variant='contained' onClick={gerarPDF}>Download</Button>
+            </Box>
+            <Box mt={1} ref={tableRef} p={3}>
+                <img src={logo} style={{ width: '150px', height: '150px', borderRadius: '20px', position: 'absolute', right: '10px' }} />
                 <Box style={{ width: '40%' }} component={Paper} elevation={6}>
                     <Table >
                         <TableRow >
@@ -117,20 +124,23 @@ const Pdf2 = () => {
                         </TableRow>
                         <TableRow>
                             <TableCell>Data Nascimento</TableCell>
-                            <TableCell>{moment(dadosEntrevista.dataNascimento).format('DD/MM/YYYY')}</TableCell>
+                            <TableCell>{dadosEntrevista.dataNascimento}</TableCell>
                         </TableRow>
                     </Table>
                 </Box>
                 <Box mt={4}>
+                    <Typography variant='h6'>
+                        Questionário médico
+                    </Typography>
                     {
                         perguntas.map(e => {
-                            if (e.formulario === dadosEntrevista.tipoFormulario) {
+                            if (e.formulario === dadosEntrevista.tipoFormulario && e.categoria === 'questionario' && (dadosEntrevista.sexo === e.sexo || e.sexo === 'N' )) {
                                 return (
                                     <Box component={Paper} p={2} m={1} elevation={5}>
                                         <Typography>
                                             {e.pergunta}
                                         </Typography>
-                                        <Typography component={Paper} elevation={1} p={2}>
+                                        <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
                                             {dadosEntrevista[e.name]}
                                         </Typography>
                                     </Box>
@@ -141,8 +151,90 @@ const Pdf2 = () => {
                         })
                     }
                 </Box>
+                <Box mt={4}>
+                    <Typography variant='h6'>
+                        HÁBITOS E HISTÓRICO FAMILIAR
+                    </Typography>
+                    {
+                        perguntas.map(e => {
+                            if (e.formulario === dadosEntrevista.tipoFormulario && e.categoria === 'habitos') {
+                                return (
+                                    <Box component={Paper} p={2} m={1} elevation={5}>
+                                        <Typography>
+                                            {e.pergunta}
+                                        </Typography>
+                                        <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
+                                            {dadosEntrevista[e.name]}
+                                        </Typography>
+                                    </Box>
+                                )
+                            } else {
+                                return null
+                            }
+                        })
+                    }
+                </Box>
+                <Box mt={4}>
+                    <Typography variant='h6'>
+                        Resumo
+                    </Typography>
+                    <Box component={Paper} p={2} m={1} elevation={5}>
+                        <Typography>
+                            Tipo de atendimento?
+                        </Typography>
+                        <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
+                            Telefone
+                        </Typography>
+                    </Box>
+                    <Box component={Paper} p={2} m={1} elevation={5}>
+                        <Typography>
+                            Houve Divergência?
+                        </Typography>
+                        <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
+                            {dadosEntrevista.houveDivergencia}
+                        </Typography>
+                    </Box>
+                    {
+                        dadosEntrevista.houveDivergencia === 'Sim' ? (
+                            <>
+                                <Box component={Paper} p={2} m={1} elevation={5}>
+                                    <Typography>
+                                        Qual divergência?
+                                    </Typography>
+                                    <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
+                                        {dadosEntrevista.divergencia}
+                                    </Typography>
+                                </Box>
+                                <Box component={Paper} p={2} m={1} elevation={5}>
+                                    <Typography>
+                                        Por que o beneficiario não informou na ds essas patologias?
+                                    </Typography>
+                                    <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
+                                        {dadosEntrevista.patologias}
+                                    </Typography>
+                                </Box>
+                                <Box component={Paper} p={2} m={1} elevation={5}>
+                                    <Typography>
+                                        CIDs
+                                    </Typography>
+                                    <Typography component={Paper} elevation={1} p={2} fontWeight='bold' fontStyle='italic'>
+                                        {dadosEntrevista.cids}
+                                    </Typography>
+                                </Box>
+                            </>
+                        ) : null
+                    }
+                </Box>
+                <br />
+                <br />
+                <Box m={1}>
+                    <Typography style={{ textDecoration: 'underline' }}>
+                        Entrevista realizada pela profissional de enfermagem {dadosEntrevista.responsavel} (COREN PR- 001.786.031)
+                    </Typography>
+                </Box>
             </Box>
-        </Container>
+        </Box>
+
     )
 }
 
