@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Modal, Typography, Container } from '@mui/material'
 import moment from 'moment'
 import gerarPdf from '../Pdf/Pdf'
-import Pdf2 from '../Pdf/Pdf2'
+//import Pdf2 from '../Pdf/Pdf2'
 
 const style = {
     position: 'absolute',
@@ -20,7 +20,7 @@ const style = {
 
 const EntrevistasRealizadas = () => {
 
-    const formRef = useRef(null)
+    //const formRef = useRef(null)
 
     const [entrevistas, setEntrevistas] = useState([])
     const [pesquisa, setPesquisa] = useState('');
@@ -29,7 +29,7 @@ const EntrevistasRealizadas = () => {
     const [id, setId] = useState('')
     const [nome, setNome] = useState('')
     const [proposta, setpProposta] = useState('')
-    const [pdf, setPdf] = useState(false)
+    // const [pdf, setPdf] = useState(false)
 
     const alterarSexo = async (id, sexo) => {
         try {
@@ -151,6 +151,24 @@ const EntrevistasRealizadas = () => {
         }
     }
 
+    const entrevistasQualidade = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/qualidade`, {
+                withCredentials: true
+            })
+
+            setEntrevistas(result.data)
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // const gerarPdf = () => {
     //     console.log(formRef.current);
     // }
@@ -169,12 +187,13 @@ const EntrevistasRealizadas = () => {
                 }
                 <Box display='flex' justifyContent='space-between' m={2}>
                     <Box display='flex'>
-                        <TextField id="proposta" label="proposta, nome ou cpf" variant="standard" onChange={e => {
+                        <TextField id="proposta" size='small' label="proposta, nome ou cpf" variant="standard" onChange={e => {
                             setPesquisa(e.target.value)
                         }} />
-                        <Button onClick={buscarEntrevistas} variant='contained'>Buscar</Button>
+                        <Button type='submit' onClick={buscarEntrevistas} size='small' variant='contained'>Buscar</Button>
+                        <Button variant='contained' onClick={entrevistasQualidade} color='info' size='small' style={{ marginLeft: '20px' }} >Filtrar entrevistas de qualidade</Button>
                     </Box>
-                    <Button variant="contained" onClick={gerarRelatorio}>Relatório</Button>
+                    <Button size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
                 </Box>
                 <TableContainer className="entrevistas-realizadas">
                     <Table className='table'>
@@ -195,7 +214,7 @@ const EntrevistasRealizadas = () => {
                             {
                                 entrevistas.map(e => {
                                     return (
-                                        <TableRow key={e._id}>
+                                        <TableRow key={e._id} style={{ background: e.entrevistaQualidade ? 'lightgreen' : null }}>
                                             <TableCell>{e.proposta}</TableCell>
                                             <TableCell>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{e.nome}</TableCell>
@@ -220,8 +239,8 @@ const EntrevistasRealizadas = () => {
                                                 }
                                             </TableCell>
                                             <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
-                                            <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`} target='_blank'>PDF</Button></TableCell>
-                                            <TableCell><Button onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF 2</Button></TableCell>
+                                            {/* <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`} target='_blank'>PDF</Button></TableCell> */}
+                                            <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
                                         </TableRow>
                                     )
                                 })

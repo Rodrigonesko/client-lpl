@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
-import { Button, Container, Box, Paper, Typography, Table, TableRow, TableCell } from '@mui/material'
+import { Button, Box, Paper, Typography, Table, TableRow, TableCell } from '@mui/material'
 import logo from './logo.png'
 
 const Pdf2 = () => {
@@ -27,7 +27,6 @@ const Pdf2 = () => {
         const PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
         const canvas_image_width = HTML_Width;
         const canvas_image_height = HTML_Height;
-        const logo_url = logo; // Substitua pela URL da imagem do seu logo
 
         const totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
 
@@ -103,7 +102,7 @@ const Pdf2 = () => {
                 <Button variant='contained' onClick={gerarPDF}>Download</Button>
             </Box>
             <Box mt={1} ref={tableRef} p={3}>
-                <img src={logo} style={{ width: '150px', height: '150px', borderRadius: '20px', position: 'absolute', right: '10px' }} />
+                <img src={logo} style={{ width: '150px', height: '150px', borderRadius: '20px', position: 'absolute', right: '10px' }} alt='Logo' />
                 <Box style={{ width: '40%' }} component={Paper} elevation={6}>
                     <Table >
                         <TableRow >

@@ -9,6 +9,8 @@ import gerarPdf from "../Pdf/Pdf";
 import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress } from '@mui/material'
+import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
+import ModalFormulario from "../../../components/ModalFormulario/ModalFormulario";
 
 import './Formulario.css'
 import { getCookie } from "react-use-cookie";
@@ -66,6 +68,7 @@ const Formulario = () => {
     const [cidAnterior1, setCidAnterior1] = useState('')
     const [cidAnterior2, setCidAnterior2] = useState('')
     const [cidAnterior3, setCidAnterior3] = useState('')
+    const [entrevistaQualidade, setEntrevistaQualidade] = useState(false)
 
     const [novoFormulario, setNovoFormulario] = useState('')
 
@@ -171,31 +174,6 @@ const Formulario = () => {
         simOuNao[`${split[1]}`] = item.value
     }
 
-    const enviarDados = async () => {
-        try {
-
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/formulario`, {
-                respostas: respostas,
-                subRespostas: subRespostas,
-                pessoa,
-                simOuNao,
-                cids: arrCids,
-                divergencia
-            }, {
-                withCredentials: true
-            })
-
-            gerarPdf(pessoa.proposta, pessoa.nome)
-
-            if (result.status === 200) {
-                openModal()
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const buscarCids = async (cid) => {
         try {
 
@@ -203,8 +181,8 @@ const Formulario = () => {
                 setCids([])
             } else {
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/cids/pesquisa/${cid}`, { withCredentials: true })
-
                 setCids(result.data.cids)
+
             }
 
         } catch (error) {
@@ -350,6 +328,9 @@ const Formulario = () => {
                             </FormControl>
                             <Button style={{ marginLeft: '10px' }} variant="contained" size="small" onClick={alterarFormulario}>Alterar</Button>
                         </Box>
+
+                        <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
+
                     </div>
                     <div className="info-adicional">
                         <button onClick={openModalInfo}>Informações Adicionais</button>
@@ -494,23 +475,9 @@ const Formulario = () => {
                     <div id="indicador-obesidade">
 
                     </div>
-                    <div className="btn-enviar-form-btn">
-                        <button onClick={enviarDados} >Enviar</button>
-                    </div>
+
                 </div>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'>
-                    <div className="title">
-                        <h2>Entrevista Realizada e Salva com Sucesso!</h2>
-                    </div>
-                    <button onClick={() => {
-                        closeModal()
-                    }}>Ok</button>
-                </Modal>
+                <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
                 <Modal
                     isOpen={modalInfo}
                     onRequestClose={closeModalInfo}
@@ -546,6 +513,7 @@ const Formulario = () => {
                         closeModalInfo()
                     }}>Ok</button>
                 </Modal>
+
             </section>
         </>
     )

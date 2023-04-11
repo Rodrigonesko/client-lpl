@@ -17,6 +17,7 @@ const LiberacaoModulos = () => {
     const [emails, setEmails] = useState([])
     const [usuario, setUsuario] = useState('')
     const [atividadePrincipal, setAtividadePrincipal] = useState('')
+    const [coren, setCoren] = useState('')
 
     const atividades = [
         'Gerência',
@@ -47,6 +48,7 @@ const LiberacaoModulos = () => {
                 setSaida2(result.data.user.horarioSaida2)
                 setUsuario(result.data.user.name)
                 setAtividadePrincipal(result.data.user.atividadePrincipal)
+                setCoren(result.data.user.coren)
 
                 if (result.data.user.enfermeiro === null || result.data.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -76,7 +78,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, { email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, { email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren }, { withCredentials: true })
 
             if (result.status === 200) {
                 setMsg('Modulos atualizados com sucesso!')
@@ -153,6 +155,13 @@ const LiberacaoModulos = () => {
                                         labelPlacement="start"
                                         onChange={e => setEnfermeiro(!enfermeiro)}
                                     />
+                                    {
+                                        enfermeiro ? (
+                                            <Box m={2}>
+                                                <TextField type='text' value={coren} label='Coren' onChange={e => setCoren(e.target.value)} />
+                                            </Box>
+                                        ) : null
+                                    }
                                 </Box>
                                 <Box m={2}>
                                     <h4>Definir carga horária</h4>
@@ -198,6 +207,7 @@ const LiberacaoModulos = () => {
                                         </Select>
                                     </FormControl>
                                 </Box>
+
                                 <Box m={2} className="btn-container">
                                     <Button variant='contained' onClick={liberar}>Liberar</Button>
                                 </Box>
