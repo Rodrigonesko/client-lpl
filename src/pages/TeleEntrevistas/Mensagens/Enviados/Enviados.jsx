@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Button, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle } from "@mui/material";
+import { Container, Button, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle, TextField, Paper } from "@mui/material";
 import Axios from 'axios'
 import moment from 'moment-business-days'
 import { getCookie } from "react-use-cookie";
@@ -24,6 +24,7 @@ const Enviados = () => {
     const [loading, setLoading] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [progressValue, setProgressValue] = useState(0)
+    const [data, setData] = useState('')
 
     const reportContatos = async () => {
         try {
@@ -207,9 +208,9 @@ const Enviados = () => {
 
             //console.log(moment().businessAdd(3).format('YYYY-MM-DD'));
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${moment().businessAdd(1).format('YYYY-MM-DD')}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${data}`, { withCredentials: true })
 
-            const dia = moment().businessAdd(1).format('DD/MM/YYYY')
+            const dia = data
             const horarios = result.data
 
             let count = 0
@@ -329,6 +330,12 @@ const Enviados = () => {
                     onClose={() => setOpenModal(false)}
                 >
                     <Box sx={style}>
+                        <Box component={Paper} p={2} m={1} elevation={3}>
+                            <Typography m={2}>
+                                Selecione o dia para reenviar as mensagens
+                            </Typography>
+                            <TextField type='date' focused label='Data' size="small" onChange={e => setData(e.target.value)} value={data} />
+                        </Box>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Clique abaixo para reenviar as mensagens
                         </Typography>
