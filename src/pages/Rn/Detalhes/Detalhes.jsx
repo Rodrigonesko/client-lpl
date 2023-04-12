@@ -36,6 +36,22 @@ const Detalhes = () => {
         setModalIsOpen(false)
     }
 
+    const duplicada = async () => {
+        try {
+
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/duplicada`, {
+                id
+            }, {
+                withCredentials: true
+            })
+
+            search()
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const update = async () => {
 
         console.log(id);
@@ -311,10 +327,14 @@ const Detalhes = () => {
                         </div>
                     </div>
                     <div className="buttons">
-                        <button onClick={update} className="salvar">Salvar</button>
+                        <Button onClick={update} className="salvar">Salvar</Button>
                         {
                             !concluido && (
-                                <button onClick={openModal} className="concluir">Concluir</button>
+                                <>
+                                    <Button onClick={openModal} className="concluir">Concluir</Button>
+                                    <Button color='warning' variant="contained" style={{ marginLeft: '18px' }} onClick={duplicada} >Duplicada</Button>
+                                </>
+
                             )
                         }
 

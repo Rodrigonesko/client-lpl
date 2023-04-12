@@ -5,10 +5,9 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
 import Pergunta from "../../../components/Pergunta/Pergunta";
-import gerarPdf from "../Pdf/Pdf";
 import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
-import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress } from '@mui/material'
+import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import ModalFormulario from "../../../components/ModalFormulario/ModalFormulario";
 
@@ -37,7 +36,6 @@ const Formulario = () => {
 
     const { id } = useParams()
 
-    const [modalIsOpen, setModalIsOpen] = useState(false)
     const [modalInfo, setModalInfo] = useState(false)
 
     const [perguntas, setPerguntas] = useState([])
@@ -72,16 +70,11 @@ const Formulario = () => {
 
     const [novoFormulario, setNovoFormulario] = useState('')
 
+    const [dicionario, setDicionario] = useState([])
+
     const [loading, setLoading] = useState(false)
 
     let alturaInput, pesoInput
-
-    const openModal = () => {
-        setModalIsOpen(true)
-    }
-    const closeModal = () => {
-        setModalIsOpen(false)
-    }
 
     const openModalInfo = () => {
         setModalInfo(true)
@@ -100,8 +93,6 @@ const Formulario = () => {
             console.log(error);
         }
     }
-
-
 
     const handleChange = (item) => {
         respostas[`${item.id}`] = item.value
@@ -250,6 +241,18 @@ const Formulario = () => {
         }
     }
 
+    const buscarPalavrasDicionario = async () => {
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/dicionario`, {
+            withCredentials: true
+        })
+
+        let arrAux = result.data.map(e => {
+            return e.palavra
+        })
+
+        setDicionario(arrAux)
+    }
+
     useEffect(() => {
 
         const buscarInfoPessoa = async () => {
@@ -294,6 +297,7 @@ const Formulario = () => {
             }
         }
 
+        buscarPalavrasDicionario()
         buscarPerguntas()
         buscarInfoPessoa()
     }, [id])
@@ -434,7 +438,12 @@ const Formulario = () => {
                         </div>
                         <div className="divergencias-container">
                             <Alert severity='error'>
-                                Notamos que houve divergência para as patologias: A, B, C (listar patologias) em relação ao preenchimento da DS. Para estas, iremos imputar CPT para ficar de acordo com as informações concedidas pelo Senhor(a). As demais coberturas permanecem inalteradas, caso haja necessidade de maior esclarecimentos procure seu corretor.
+                                <Typography m={1}>
+                                    Notamos que houve divergência para as patologias: A, B, C (listar patologias) em relação ao preenchimento da DS. Para estas, iremos imputar CPT para ficar de acordo com as informações concedidas pelo Senhor(a). As demais coberturas permanecem inalteradas, caso haja necessidade de maior esclarecimentos procure seu corretor.
+                                </Typography>
+                                <Typography m={1}>
+                                    * Cobertura Parcial Temporária (CPT) aquela que admite, por um período ininterrupto de até 24 meses, a partir da data da contratação ou adesão ao plano privado de assistência à saúde, a suspensão da cobertura de Procedimentos de Alta Complexidade (PAC), leitos de alta tecnologia e procedimentos cirúrgicos, desde que relacionados exclusivamente às doenças ou lesões preexistentes declaradas pelo beneficiário ou seu representante legal. (para os CIDs declarados, não para todo tipo de tratamento)
+                                </Typography>
                             </Alert>
                             <div className="div-pergunta">
                                 <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
@@ -477,7 +486,7 @@ const Formulario = () => {
                     </div>
 
                 </div>
-                <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
+                <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} dicionario={dicionario} />
                 <Modal
                     isOpen={modalInfo}
                     onRequestClose={closeModalInfo}

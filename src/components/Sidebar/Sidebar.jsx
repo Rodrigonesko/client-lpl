@@ -94,6 +94,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                             <MenuItem><Link to='/rn/upload'>Upload Rn</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/cid/adicionar'>Adicionar Cid</Link></MenuItem>
+                            <MenuItem><Link to='/dicionario'>Dicionário</Link></MenuItem>
                         </SubMenu>
                         <SubMenu title="Urgência & Emergência" icon={<RiAlarmWarningLine />} >
                             <MenuItem><Link to='/urgenciaEmergencia/andamento'>Em andamento</Link></MenuItem>

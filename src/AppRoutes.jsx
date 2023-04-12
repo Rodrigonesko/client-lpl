@@ -65,6 +65,8 @@ import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/Resposta
 import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
 
+import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
+
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
 
@@ -219,6 +221,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/conversas" element={<ProtectedRoute>
                     <Conversas />
+                </ProtectedRoute>} />
+                <Route exact path="/dicionario" element={<ProtectedRoute>
+                    <Dicionario />
                 </ProtectedRoute>} />
 
 
