@@ -1,68 +1,141 @@
 import React, { useState } from "react";
-import $ from 'jquery'
 import Axios from 'axios'
+import { Modal, Button, Box, Typography, TextField, Select, FormControl, InputLabel, MenuItem, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
-const ModalEnviarCancelamento = ({ setModal }) => {
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '50%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
+const ModalEnviarCancelamento = () => {
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const [motivoCancelamento, setMotivoCancelamento] = useState('')
-    const [categoria, setCategoria] = useState('')
-    const [evidenciaFraude, setEvidenciaFraude] = useState('')
-
-    const mostrarBtns = (e) => {
-        if (e.checked) {
-            $('#btns-enviar-under').show('fast')
-        } else {
-            $('#btns-enviar-under').hide('fast')
-        }
-    }
-
-    const enviarCancelamento = () => {
-        try {
-            console.log(motivoCancelamento, categoria, evidenciaFraude);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const [categoriaCancelamento, setCategoriaCancelamento] = useState('')
+    const [evidencia, setEvidencia] = useState('')
+    const [anexado, setAnexado] = useState(false)
 
     return (
-        <div>
-            <div>
-                <label htmlFor="">Motivo do Cancelamento</label>
-                <br />
-                <textarea name="" id="" cols="50" rows="4" onKeyDown={e=>setMotivoCancelamento(e.target.value)} ></textarea>
-            </div>
-            <div>
-                <label htmlFor="">Categoria de motivo de cancelamento</label>
-                <select name="" id="" onChange={e=>setCategoria(e.target.value)} >
-                    <option value=""></option>
-                    <option value="À pedido da Adm">À pedido da Adm</option>
-                    <option value="À pedido do Cliente">À pedido do Cliente</option>
-                    <option value="Erro sistema">Erro sistema</option>
-                    <option value="Fraude">Fraude</option>
-                    <option value="Prazo expirado">Prazo expirado</option>
-                    <option value="Situação Especial">Situação Especial</option>
-                    <option value="Under">Under</option>
-                </select>
-            </div>
-            <div>
-                <label htmlFor="">Evidência de Fraude: </label>
-                <select name="" id="" onChange={e=>setEvidenciaFraude(e.target.value)}>
-                    <option value=""></option>
-                    <option value="EMAIL">EMAIL</option>
-                    <option value="LIGAÇÃO">LIGAÇÃO</option>
-                    <option value="CONSULTA SITE">CONSULTA SITE</option>
-                    <option value="ESTADO DIVERGENTE">ESTADO DIVERGENTE</option>
-                </select>
-            </div>
-            <div>
-                <label htmlFor="anexado-sis">Foi anexado os documentos no SisAmil?</label>
-                <input type="checkbox" name="anexado-sis" id="anexado-sis" onClick={(e) => mostrarBtns(e.target)} />
-            </div>
-            <div id="btns-enviar-under" className="none">
-                <button className="botao-padrao-cinza" onClick={() => { setModal(false) }} >Fechar</button>
-                <button className="btn-padrao-vermelho" onClick={()=>enviarCancelamento()} >Cancelar</button>
-            </div>
-        </div>
+        <>
+            <Button color="error" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>Enviar Cancelamento</Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Enviar para cancelamento
+                    </Typography>
+                    <Box>
+                        <Box m={2}>
+                            <TextField
+                                label='Motivo cancelamento'
+                                style={{ marginTop: '20px', width: '80%' }}
+                                multiline
+                                rows={3}
+                                value={motivoCancelamento}
+                                onChange={e => {
+                                    setMotivoCancelamento(e.target.value)
+                                }}
+                            />
+                        </Box>
+                        <Box m={2}>
+                            <FormControl style={{ width: '80%' }} size="small">
+                                <InputLabel>Categoria</InputLabel>
+                                <Select
+                                    value={categoriaCancelamento}
+                                    onChange={e => {
+                                        setCategoriaCancelamento(e.target.value)
+                                    }}
+                                    label='Categoria'
+                                >
+                                    <MenuItem>
+                                        <em>
+                                            Categoria
+                                        </em>
+                                    </MenuItem>
+                                    <MenuItem value='À pedido da Adm'>
+                                        À pedido da Adm
+                                    </MenuItem>
+                                    <MenuItem value='Erro sistema'>
+                                        Erro sistema
+                                    </MenuItem>
+                                    <MenuItem value='Fraude'>
+                                        Fraude
+                                    </MenuItem>
+                                    <MenuItem value='Prazo expirado'>
+                                        Prazo expirado
+                                    </MenuItem>
+                                    <MenuItem value='Situação Especial'>
+                                        Situação Especial
+                                    </MenuItem>
+                                    <MenuItem value='Under'>
+                                        Under
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box m={2}>
+                            <FormControl style={{ width: '80%' }} size="small">
+                                <InputLabel>Evidência</InputLabel>
+                                <Select
+                                    value={evidencia}
+                                    onChange={e => {
+                                        setEvidencia(e.target.value)
+                                    }}
+                                    label='Evidência'
+                                >
+                                    <MenuItem>
+                                        <em>
+                                            Evidência
+                                        </em>
+                                    </MenuItem>
+                                    <MenuItem value='EMAIL'>
+                                        EMAIL
+                                    </MenuItem>
+                                    <MenuItem value='LIGAÇÃO'>
+                                        LIGAÇÃO
+                                    </MenuItem>
+                                    <MenuItem value='CONSULTA SITE'>
+                                        CONSULTA SITE
+                                    </MenuItem>
+                                    <MenuItem value='ESTADO DIVERGENTE'>
+                                        ESTADO DIVERGENTE
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box m={2}>
+                            <FormGroup>
+                                <FormControlLabel control={<Checkbox />} label="Foi anexado no sisAmil?" onChange={e => {
+                                    e.target.checked ? setAnexado(true) : setAnexado(false)
+                                }} />
+                            </FormGroup>
+                        </Box>
+                    </Box>
+                    {
+                        anexado ? (
+                            <Box mt={2}>
+                                <Button variant="contained" color='inherit' style={{ marginRight: '10px' }} onClick={handleClose}>Fechar</Button>
+                                <Button variant="contained" color='error'>Enviar Cancelamento</Button>
+                            </Box>
+                        ) : null
+                    }
+                </Box>
+            </Modal>
+        </>
+
     )
 }
 

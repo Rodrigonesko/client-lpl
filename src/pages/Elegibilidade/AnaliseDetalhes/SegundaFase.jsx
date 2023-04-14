@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Paper, Button, Typography, IconButton, TextField } from "@mui/material";
+import { Box, Paper, Typography, IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DadosElegibilidade from "./DadosElegebilidade";
@@ -8,11 +8,11 @@ import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 const SegundaFase = ({ proposta }) => {
 
     const [open, setOpen] = useState(false)
+    const [show, setShow] = useState(proposta.fase1)
 
-
-    // const handleClick = () => {
-    //     setShowFase1(!showFase1);
-    // };
+    const handleClick = () => {
+        setShow(!show);
+    };
 
     return (
         <Box component={Paper} p={2} mt={3} elevation={3}>
@@ -25,17 +25,21 @@ const SegundaFase = ({ proposta }) => {
                     size="small"
                     onClick={() => {
                         setOpen(!open)
-                        // handleClick()
+                        handleClick()
                     }}
                     disabled={!proposta.fase1}
                 >
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
             </Box>
-            <Box>
-                <DadosElegibilidade proposta={proposta} />
-                <ProcessamentoElegibilidade proposta={proposta} />
-            </Box>
+            {
+                show ? (
+                    <Box>
+                        <DadosElegibilidade proposta={proposta} />
+                        <ProcessamentoElegibilidade proposta={proposta} />
+                    </Box>
+                ) : null
+            }
         </Box>
     )
 }

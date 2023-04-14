@@ -26,16 +26,11 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
     const [palavrasIncorretas, setPalavrasIncorretas] = useState([])
     const [enviado, setEnviado] = useState(false)
 
-    const buscarPalavrasDicionario = async () => {
-
-
-    }
-
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const enviarDados = async () => {
-        buscarPalavrasDicionario()
+
         setPalavrasIncorretas([])
 
         await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/formulario`, {
@@ -85,17 +80,15 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
                 for await (const palavra of palavras) {
                     try {
 
-                        console.log(dicionario);
+                        console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
 
-                        if (dicionario.includes(palavra)) {
+                        if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
                             continue
                         }
 
                         const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
                             withCredentials: true
                         })
-
-                        console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
 
                         if (result.data.length === 0) {
 
@@ -130,18 +123,15 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
 
                 for await (const palavra of palavras) {
                     try {
+                        console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
 
-                        console.log(dicionario);
-
-                        if (dicionario.includes(palavra)) {
+                        if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
                             continue
                         }
 
                         const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
                             withCredentials: true
                         })
-
-                        console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
 
                         if (result.data.length === 0) {
 

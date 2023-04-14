@@ -1,21 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment/moment";
 import Axios from 'axios'
+import { Box, Paper, Typography, TextField, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Alert, Snackbar, IconButton } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-const AgendaElegibilidade = ({ setComentario, agenda }) => {
+const AgendaElegibilidade = ({ agenda, id, buscarAgenda }) => {
 
-    const handleChange = (set, value) => {
-        set(value)
+    const [comentario, setComentario] = useState('')
+    const [openSnack, setOpenSnack] = useState(false)
+    const [open, setOpen] = useState(true)
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
+
+    const enviarComentario = async () => {
+        try {
+
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/comentario`, {
+                comentario,
+                id
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                setOpenSnack(true)
+            }
+
+            setComentario('')
+            buscarAgenda()
+
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const excluirComentario = async (id) => {
         try {
 
-            const result = await Axios.delete(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${id}`, { withCredentials: true })
+            await Axios.delete(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${id}`, { withCredentials: true })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            buscarAgenda()
 
         } catch (error) {
             console.log(error);
@@ -23,46 +51,75 @@ const AgendaElegibilidade = ({ setComentario, agenda }) => {
     }
 
     return (
-        <div id="agenda-elegibilidade">
-            <div>
-                <div className="title">
-                    <h3>Agenda</h3>
-                </div>
-                <div>
-                    <textarea name="comentario-elegi" id="comentario-elegi" cols="60" rows="5" onKeyUp={e => {
-                        handleChange(setComentario, e.target.value)
-                    }} ></textarea>
-                </div>
-            </div>
-            <div>
-                <table className="table">
-                    <thead className="table-header">
-                        <tr>
-                            <th>Analista</th>
-                            <th>Data</th>
-                            <th>Comentario</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            agenda.map(e => {
-                                return (
-                                    <tr>
-                                        <td>{e.analista}</td>
-                                        <td>{moment(e.createdAt).format('DD/MM/YYYY hh:mm')}</td>
-                                        <td>{e.comentario}</td>
-                                        <td><button onClick={() => {
-                                            excluirComentario(e._id)
-                                        }} >Excluir</button></td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <Box component={Paper} p={2} elevation={3} mt={3}>
+            <Box display='flex' alignContent='center' justifyContent='space-between' bgcolor='lightgray' borderRadius='5px' p={1}>
+                <Typography>
+                    Agenda
+                </Typography>
+                <IconButton
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => {
+                        setOpen(!open)
+                        handleClick()
+                    }}
+                >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+            </Box>
+            {
+                open ? (
+                    <>
+                        <Box display='flex' alignItems='center' justifyContent='space-around'>
+                            <TextField
+                                style={{ marginTop: '20px', width: '80%' }}
+                                id="comentario"
+                                label="Agenda"
+                                multiline
+                                rows={2}
+                                placeholder="Comentario..."
+                                value={comentario}
+                                onChange={e => {
+                                    setComentario(e.target.value)
+                                }}
+                            />
+                            <Button onClick={enviarComentario} variant="contained">Enviar</Button>
+                        </Box>
+                        <TableContainer style={{ marginTop: '20px' }}>
+                            <Table style={{ width: '100%' }} className="table">
+                                <TableHead className="table-header">
+                                    <TableRow>
+                                        <TableCell>Data</TableCell>
+                                        <TableCell>Analista</TableCell>
+                                        <TableCell>Comentário</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        agenda.map(e => {
+                                            return (
+                                                <TableRow>
+                                                    <TableCell>{moment(e.data).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
+                                                    <TableCell>{e.analista}</TableCell>
+                                                    <TableCell>{e.comentario}</TableCell>
+                                                    <TableCell><Button color="error" variant="contained" onClick={() => excluirComentario(e._id)} >Excluir</Button></TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </>
+                ) : null
+            }
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Comentario adicionado
+                </Alert>
+            </Snackbar>
+        </Box>
     )
 }
 

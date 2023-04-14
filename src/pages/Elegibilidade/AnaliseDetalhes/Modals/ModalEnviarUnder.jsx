@@ -1,60 +1,62 @@
 import React, { useState } from "react";
-import $ from 'jquery'
 import Axios from 'axios'
-import { useParams } from "react-router-dom";
+import { Modal, Button, Box, Typography, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
-const ModalEnviarUnder = ({ setModal }) => {
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
-    const {id} = useParams()
+const ModalEnviarUnder = () => {
 
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [anexado, setAnexado] = useState(false)
     const [erroSistema, setErroSistema] = useState(false)
 
-    const mostrarBtns = (e) => {
-        if (e.checked) {
-            $('#btns-enviar-under').show('fast')
-        } else {
-            $('#btns-enviar-under').hide('fast')
-        }
-    }
-
-    const enviarUnder = async () => {
-        try {
-            
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/enviarUnder`, {
-                id,
-                erroSistema
-            }, {
-                withCredentials: true
-            })
-
-            console.log(result);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     return (
-        <div>
-            <div>
-                <label htmlFor="anexado-sis">Foi anexado os documentos no SisAmil?</label>
-                <input type="checkbox" name="anexado-sis" id="anexado-sis" onClick={(e) => mostrarBtns(e.target)} />
-            </div>
-            <div>
-                <label htmlFor="erro-sistema">Erro Sistema?</label>
-                <input type="checkbox" name="erro-sistema" id="erro-sistema" onClick={e => {
-                    if (e.target.checked) {
-                        setErroSistema(true)
-                    } else {
-                        setErroSistema(false)
+        <>
+            <Button color="success" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>Enviar Under</Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Enviar para Under
+                    </Typography>
+                    <Box>
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox />} label="Foi anexado no sisAmil?" onChange={e => {
+                                e.target.checked ? setAnexado(true) : setAnexado(false)
+                            }} />
+                            <FormControlLabel control={<Checkbox />} label="Erro sistema?" onChange={e => {
+                                e.target.checked ? setErroSistema(true) : setErroSistema(false)
+                            }} />
+                        </FormGroup>
+                    </Box>
+                    {
+                        anexado ? (
+                            <Box mt={2}>
+                                <Button variant="contained" color='inherit' style={{ marginRight: '10px' }} onClick={handleClose}>Fechar</Button>
+                                <Button variant="contained" color='success'>Enviar Under</Button>
+                            </Box>
+                        ) : null
                     }
-                }} />
-            </div>
-            <div id="btns-enviar-under" className="none">
-                <button className="botao-padrao-cinza" onClick={() => { setModal(false) }} >Fechar</button>
-                <button className="btn-padrao-verde" onClick={()=>enviarUnder()} >Enviar Under</button>
-            </div>
-        </div>
+                </Box>
+            </Modal>
+        </>
+
     )
 }
 

@@ -70,8 +70,6 @@ const Formulario = () => {
 
     const [novoFormulario, setNovoFormulario] = useState('')
 
-    const [dicionario, setDicionario] = useState([])
-
     const [loading, setLoading] = useState(false)
 
     let alturaInput, pesoInput
@@ -241,17 +239,7 @@ const Formulario = () => {
         }
     }
 
-    const buscarPalavrasDicionario = async () => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/dicionario`, {
-            withCredentials: true
-        })
 
-        let arrAux = result.data.map(e => {
-            return e.palavra
-        })
-
-        setDicionario(arrAux)
-    }
 
     useEffect(() => {
 
@@ -297,7 +285,6 @@ const Formulario = () => {
             }
         }
 
-        buscarPalavrasDicionario()
         buscarPerguntas()
         buscarInfoPessoa()
     }, [id])
@@ -486,7 +473,7 @@ const Formulario = () => {
                     </div>
 
                 </div>
-                <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} dicionario={dicionario} />
+                <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
                 <Modal
                     isOpen={modalInfo}
                     onRequestClose={closeModalInfo}

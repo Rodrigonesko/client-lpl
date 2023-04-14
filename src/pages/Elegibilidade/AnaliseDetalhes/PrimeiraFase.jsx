@@ -22,9 +22,6 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
     const [modalConcluir, setModalConcluir] = useState(false)
     const [loading, setLoading] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
-
-    console.log(fase1);
-
     const [showFase1, setShowFase1] = useState(!fase1);
     const [showPlanoAmil, setShowPlanoAmil] = useState(planoAmil === 'Sim')
     const [dataUpdate, setDataUpdate] = useState({
@@ -135,9 +132,9 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                             {
                                 showPlanoAmil ? (
                                     <Box p={1} className='slide-down'>
-                                        <TextField label='Data Inicio' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataUpdate.dataInicio} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataInicioPlanoAmil: e.target.value }) }} />
-                                        <TextField label='Data Fim' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataUpdate.dataFim} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataFimPlanoAmil: e.target.value }) }} />
-                                        <TextField label='Custo' size='small' style={{ marginRight: '14px' }} value={dataUpdate.custo} onChange={(e) => { setDataUpdate({ ...dataUpdate, custoPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Data Inicio' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataUpdate.dataInicioPlanoAmil} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataInicioPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Data Fim' size="small" type='date' focused style={{ marginRight: '14px' }} value={dataUpdate.dataFimPlanoAmil} onChange={(e) => { setDataUpdate({ ...dataUpdate, dataFimPlanoAmil: e.target.value }) }} />
+                                        <TextField label='Custo' size='small' style={{ marginRight: '14px' }} value={dataUpdate.custoPlanoAmil} onChange={(e) => { setDataUpdate({ ...dataUpdate, custoPlanoAmil: e.target.value }) }} />
                                     </Box>
                                 ) : null
                             }

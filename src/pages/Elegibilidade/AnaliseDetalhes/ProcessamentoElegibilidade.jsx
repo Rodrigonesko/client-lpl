@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Paper, TextField, Typography, FormGroup, FormControlLabel, Checkbox, FormControl, FormLabel, RadioGroup, Radio, MenuItem, Select, InputLabel, Button } from '@mui/material'
+import { Box, Paper, TextField, Typography, FormGroup, FormControlLabel, Checkbox, FormControl, FormLabel, RadioGroup, Radio, MenuItem, Select, InputLabel, Button, Alert, Snackbar } from '@mui/material'
 import Axios from 'axios'
 
 const ProcessamentoElegibilidade = ({
@@ -24,6 +24,8 @@ const ProcessamentoElegibilidade = ({
         custoPlanoAmil: proposta.custoPlanoAmil
     })
 
+    const [openSnack, setOpenSnack] = useState(false)
+
     const buscaPrcs = async () => {
         try {
 
@@ -41,7 +43,16 @@ const ProcessamentoElegibilidade = ({
     const salvar = async () => {
         try {
 
-            console.log(dadosAnalise);
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/fase2`, {
+                id: proposta._id,
+                dataUpdate: dadosAnalise
+            }, {
+                withCredentials: true
+            })
+
+            if (result.status === 200) {
+                setOpenSnack(true)
+            }
 
         } catch (error) {
             console.log(error);
@@ -57,6 +68,7 @@ const ProcessamentoElegibilidade = ({
             <Typography variant='h6'>
                 Análise
             </Typography>
+
             <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' flexDirection='column' width='48%'>
                     <FormControlLabel onChange={(e) => {
@@ -99,7 +111,7 @@ const ProcessamentoElegibilidade = ({
                             {
                                 prcs.map(prc => {
                                     return (
-                                        <MenuItem value={prc.descricao} >{prc.descricao}</MenuItem>
+                                        <MenuItem key={prc.descricao} value={prc.descricao} >{prc.descricao}</MenuItem>
                                     )
                                 })
                             }
@@ -143,9 +155,12 @@ const ProcessamentoElegibilidade = ({
                                 <MenuItem>
                                     <em>Tipo de Vinculo</em>
                                 </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                <MenuItem value={'Declaração Matricula'}>Declaração Matricula</MenuItem>
+                                <MenuItem value={'Diploma (frente/verso)'}>Diploma (frente/verso)</MenuItem>
+                                <MenuItem value={'Classista'}>Classista</MenuItem>
+                                <MenuItem value={'Conclusão Curso'}>Conclusão Curso</MenuItem>
+                                <MenuItem value={'Holerite'}>Holerite</MenuItem>
+                                <MenuItem value={'Contrato Social/CNPJ'}>Contrato Social/CNPJ</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControlLabel control={<Checkbox defaultChecked={dadosAnalise.planoAmil === 'Sim'} />} label="Plano Amil" labelPlacement="start" />
@@ -160,6 +175,11 @@ const ProcessamentoElegibilidade = ({
             <Box mt={2}>
                 <Button variant='contained' onClick={salvar}>Salvar</Button>
             </Box>
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Salvo com sucesso
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }
