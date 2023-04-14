@@ -102,7 +102,7 @@ const TabelaAgendarRn = ({ propostas }) => {
                             propostas.map(row => {
                                 return (
                                     <TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <TableCell>{moment(row.vigencia).format('DD/MM/YYYY')}</TableCell>
+                                        <TableCell>{moment(row.vigenciaLpl).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{row.proposta}</TableCell>
                                         <TableCell>{row.beneficiario}</TableCell>
                                         <TableCell><TextField size="small" variant="standard" defaultValue={row.telefones} onChange={e => {
