@@ -210,12 +210,14 @@ const AtendimentoHumanizado = () => {
         try {
             setLoading(true)
 
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/assumirConversa`, {
+            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/assumirConversa`, {
                 id
             }, {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
+
+            console.log(result);
 
             buscarPropostas()
             setLoading(false)

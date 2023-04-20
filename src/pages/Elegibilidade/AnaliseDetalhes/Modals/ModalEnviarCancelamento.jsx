@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, TextField, Select, FormControl, InputLabel, MenuItem, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 const style = {
     position: 'absolute',
@@ -16,6 +17,8 @@ const style = {
 
 const ModalEnviarCancelamento = () => {
 
+    const { id } = useParams()
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -23,6 +26,25 @@ const ModalEnviarCancelamento = () => {
     const [categoriaCancelamento, setCategoriaCancelamento] = useState('')
     const [evidencia, setEvidencia] = useState('')
     const [anexado, setAnexado] = useState(false)
+
+    const enviarCancelamento = async () => {
+        try {
+
+            console.log(motivoCancelamento, categoriaCancelamento, evidencia, id);
+
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/enviarFaseCancelamento`, {
+                motivoCancelamento,
+                categoriaCancelamento,
+                evidencia,
+                id
+            }, {
+                withCredentials: true
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -128,7 +150,7 @@ const ModalEnviarCancelamento = () => {
                         anexado ? (
                             <Box mt={2}>
                                 <Button variant="contained" color='inherit' style={{ marginRight: '10px' }} onClick={handleClose}>Fechar</Button>
-                                <Button variant="contained" color='error'>Enviar Cancelamento</Button>
+                                <Button variant="contained" color='error' onClick={enviarCancelamento}>Enviar Cancelamento</Button>
                             </Box>
                         ) : null
                     }

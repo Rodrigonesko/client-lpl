@@ -6,14 +6,14 @@ import ModalDevolucao from "./Modals/ModalDevolucao";
 import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalCancelamento from "./Modals/ModalCancelamento";
 
-const BotoesElegibilidade = () => {
+const BotoesElegibilidade = ({ atualizarDados }) => {
     return (
         <>
             <Box component={Paper} elevation={3} p={2} mt={3}>
-                <ModalEnviarUnder />
-                <ModalDevolucao />
-                <ModalEnviarCancelamento />
-                <ModalCancelamento />
+                <ModalEnviarUnder atualizarDados={atualizarDados} />
+                <ModalDevolucao atualizarDados={atualizarDados} />
+                <ModalEnviarCancelamento atualizarDados={atualizarDados} />
+                <ModalCancelamento atualizarDados={atualizarDados} />
             </Box>
         </>
     )

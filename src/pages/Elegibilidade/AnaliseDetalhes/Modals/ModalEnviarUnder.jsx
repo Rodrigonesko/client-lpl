@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
@@ -14,13 +15,34 @@ const style = {
     p: 4,
 };
 
-const ModalEnviarUnder = () => {
+const ModalEnviarUnder = ({ atualizarDados }) => {
+
+    const { id } = useParams()
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [anexado, setAnexado] = useState(false)
     const [erroSistema, setErroSistema] = useState(false)
+
+    const enviar = async () => {
+        try {
+
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/enviarUnder`, {
+                id,
+                erroSistema
+            }, {
+                withCredentials: true
+            })
+
+            handleClose()
+            atualizarDados()
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -49,7 +71,7 @@ const ModalEnviarUnder = () => {
                         anexado ? (
                             <Box mt={2}>
                                 <Button variant="contained" color='inherit' style={{ marginRight: '10px' }} onClick={handleClose}>Fechar</Button>
-                                <Button variant="contained" color='success'>Enviar Under</Button>
+                                <Button variant="contained" color='success' onClick={enviar}>Enviar Under</Button>
                             </Box>
                         ) : null
                     }

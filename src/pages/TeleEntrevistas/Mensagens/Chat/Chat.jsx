@@ -16,6 +16,16 @@ const Chat = () => {
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    const gerarMensagemNaoAtendido = async () => {
+        try {
+            
+            
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const enviar = async (e) => {
         try {
             e.preventDefault()
@@ -93,7 +103,7 @@ const Chat = () => {
                 </Box>
                 <Box bgcolor='lightgray' border='1px solid gray' p={1}>
                     <form action="" onSubmit={enviar} method="post" style={{ display: 'flex', justifyContent: 'center' }}>
-                        <TextField inputRef={inputRef} type='text' size='small' onChange={e => {
+                        <TextField inputRef={inputRef} value={mensagem} multiline type='text' size='small' onChange={e => {
                             setMensagem(e.target.value)
 
                         }} placeholder='Mensagem' style={{ width: '90%', marginRight: '3px' }} />
@@ -106,6 +116,15 @@ const Chat = () => {
                         <Alert severity='error' >Erro ao enviar mensagem</Alert>
                     ) : null
                 }
+                <Box component={Paper} p={2} width='30%' >
+                    <Typography>
+                        Mensagem não atendido
+                    </Typography>
+                    <Box display='flex'>
+                        <TextField type='date' size='small' style={{ marginRight: '10px' }} />
+                        <Button variant='contained' color='secondary'>Gerar</Button>
+                    </Box>
+                </Box>
             </Container>
         </>
     )

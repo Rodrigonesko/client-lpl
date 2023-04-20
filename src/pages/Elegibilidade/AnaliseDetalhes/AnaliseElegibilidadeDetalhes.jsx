@@ -21,6 +21,7 @@ const AnaliseElegibilidadeDetalhes = () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
         const { proposta } = result.data;
         setProposta(proposta);
+        console.log(result);
     }
 
     const buscarAgenda = async () => {
@@ -95,7 +96,9 @@ const AnaliseElegibilidadeDetalhes = () => {
                             ) : null
                         }
                         {
-                            <BotoesElegibilidade></BotoesElegibilidade>
+                            <BotoesElegibilidade
+                                atualizarDados={buscarDados}
+                            />
                         }
                         <AgendaElegibilidade id={id} agenda={agenda} buscarAgenda={() => buscarAgenda()} />
 
