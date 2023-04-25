@@ -96,9 +96,14 @@ const AnaliseElegibilidadeDetalhes = () => {
                             ) : null
                         }
                         {
-                            <BotoesElegibilidade
-                                atualizarDados={buscarDados}
-                            />
+
+                            Object.keys(proposta).length !== 0 ? (
+                                <BotoesElegibilidade
+                                    atualizarDados={buscarDados}
+                                    proposta={proposta}
+                                />
+                            ) : null
+
                         }
                         <AgendaElegibilidade id={id} agenda={agenda} buscarAgenda={() => buscarAgenda()} />
 

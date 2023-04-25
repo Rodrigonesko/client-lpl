@@ -64,6 +64,8 @@ import AtendimentoHumanizado from "./pages/TeleEntrevistas/Mensagens/Necessário
 import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/RespostasJanelasHorarios/RespostasJanelasHorarios";
 import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
+import WhatsappTwilio from "./pages/TeleEntrevistas/Mensagens/WhatsappTwilio/WhatsappTwilio";
+import ChatTwilio from "./pages/TeleEntrevistas/Mensagens/Chat/ChatTwilio";
 
 import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
@@ -225,7 +227,12 @@ const AppRoutes = () => {
                 <Route exact path="/dicionario" element={<ProtectedRoute>
                     <Dicionario />
                 </ProtectedRoute>} />
-
+                <Route exact path="/entrevistas/whatsappTwilio" element={<ProtectedRoute>
+                    <WhatsappTwilio />
+                </ProtectedRoute>} />
+                <Route exact path="/entrevistas/chatTwilio/:whatsapp" element={<ProtectedRoute>
+                    <ChatTwilio />
+                </ProtectedRoute>} />
 
                 <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>
                     <Pdf2 />

@@ -315,7 +315,7 @@ const Enviados = () => {
                                                     <TableCell>{e.cpfTitular}</TableCell>
                                                     <TableCell>{e.tipoAssociado}</TableCell>
                                                     <TableCell>{moment(e.horarioEnviado).format('DD/MM/YYYY HH:mm')}</TableCell>
-                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    <TableCell><Button variant="contained" href={e.enviadoTwilio ? `/entrevistas/chatTwilio/${e.whatsapp}` : `/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })

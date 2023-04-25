@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { getCookie } from 'react-use-cookie';
 import moment from 'moment';
 
-const Chat = () => {
+const ChatTwilio = () => {
 
     const inputRef = useRef(null)
 
@@ -18,8 +18,8 @@ const Chat = () => {
 
     const gerarMensagemNaoAtendido = async () => {
         try {
-            
-            
+
+
 
         } catch (error) {
             console.log(error);
@@ -34,7 +34,7 @@ const Chat = () => {
                 return
             }
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/sendMessage`, {
+            const result = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/sendMessageTwilio`, {
                 whatsapp,
                 mensagem
             }, {
@@ -116,7 +116,7 @@ const Chat = () => {
                         <Alert severity='error' >Erro ao enviar mensagem</Alert>
                     ) : null
                 }
-                <Box component={Paper} p={2} width='30%' >
+                {/* <Box component={Paper} p={2} width='30%' >
                     <Typography>
                         Mensagem não atendido
                     </Typography>
@@ -124,10 +124,10 @@ const Chat = () => {
                         <TextField type='date' size='small' style={{ marginRight: '10px' }} />
                         <Button variant='contained' color='secondary'>Gerar</Button>
                     </Box>
-                </Box>
+                </Box> */}
             </Container>
         </>
     )
 }
 
-export default Chat
+export default ChatTwilio

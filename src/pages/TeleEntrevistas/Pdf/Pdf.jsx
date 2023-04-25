@@ -22,7 +22,8 @@ const gerarPdf = async (proposta, nome) => {
         { nome: "Sandra Santos", coren: "COREN PR-001.812.442" },
         { nome: "Eduarda Mayworm", coren: "COREN PR-001.866.786" },
         { nome: "Cristiane Antonioli", coren: "COREN PR-000.356.705" },
-        { nome: "Liliane Antunes Laureano", coren: "COREN PR-001.794.387" }
+        { nome: "Liliane Antunes Laureano", coren: "COREN PR-001.794.387" },
+        { nome: "Michelle Jonsson", coren: "COREN PR-000.552.516" }
     ];
 
     let coren = enfermeiras.find(enfermeira => enfermeira.nome === result.data.result[0].responsavel)?.coren;

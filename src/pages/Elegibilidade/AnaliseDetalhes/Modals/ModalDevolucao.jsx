@@ -17,7 +17,7 @@ const style = {
     overflow: 'auto'
 };
 
-const ModalDevolucao = () => {
+const ModalDevolucao = ({ proposta }) => {
 
     const { id } = useParams()
 

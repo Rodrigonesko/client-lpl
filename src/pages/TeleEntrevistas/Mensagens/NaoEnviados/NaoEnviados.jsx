@@ -92,7 +92,7 @@ const NaoEnviados = () => {
 
             for (const item of propostas) {
                 count++
-                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagem`, {
+                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagemChatPro`, {
                     proposta: item,
                     modeloEscolhido,
                     data1: moment(data1).format('DD/MM/YYYY'),

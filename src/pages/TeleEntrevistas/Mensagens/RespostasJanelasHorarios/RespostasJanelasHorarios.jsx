@@ -223,7 +223,7 @@ const RespostasJanelasHorarios = () => {
                                     {
                                         propostas.map(e => {
                                             return (
-                                                <TableRow style={{backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
+                                                <TableRow style={{ backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
                                                     <TableCell>{e.proposta}</TableCell>
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
@@ -239,7 +239,7 @@ const RespostasJanelasHorarios = () => {
                                                         setModal(true)
                                                     }}>Agendar</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => { atendimentoHumanizado(e._id) }} color='secondary'>Atendimento Humanizado</Button></TableCell>
-                                                    <TableCell><Button size="small" variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    <TableCell><Button size="small" variant="contained" href={e.enviadoTwilio ? `/entrevistas/chatTwilio/${e.whatsapp}` : `/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                     <TableCell>{e.responsavelConversa}</TableCell>
                                                     <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>

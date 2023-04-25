@@ -67,7 +67,7 @@ const Conversas = () => {
                                     {
                                         propostas.map(e => {
                                             return (
-                                                <TableRow>
+                                                <TableRow style={{ background: e.enviadoTwilio ? 'lightGreen' : '' }}>
                                                     <TableCell>{e.proposta}</TableCell>
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpf}</TableCell>
@@ -76,6 +76,7 @@ const Conversas = () => {
                                                     <TableCell>{e.ddd}</TableCell>
                                                     <TableCell>{e.celular}</TableCell>
                                                     <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    <TableCell><Button variant="contained" href={`/entrevistas/chatTwilio/${e.whatsapp}`}>Ver Conversa Twilio</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })

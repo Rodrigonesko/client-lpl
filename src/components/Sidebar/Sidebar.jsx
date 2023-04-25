@@ -73,6 +73,7 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/AtendimentoHumanizado'>Atendimento Humanizado</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/RespostasJanelas'>Janelas Escolhidas</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/conversas'>Conversas</Link></MenuItem>
+                                <MenuItem><Link to='/entrevistas/whatsappTwilio'>Whatsapp Twilio</Link></MenuItem>
                             </SubMenu>
                             <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                             <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
