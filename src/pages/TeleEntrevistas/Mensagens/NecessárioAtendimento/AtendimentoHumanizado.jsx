@@ -304,7 +304,7 @@ const AtendimentoHumanizado = () => {
                                                     <TableCell>{e.dataNascimento}</TableCell>
                                                     <TableCell>{e.ddd}</TableCell>
                                                     <TableCell>{e.celular}</TableCell>
-                                                    <TableCell><Button variant="contained" href={e.enviadoTwilio ? `/entrevistas/chatTwilio/${e.whatsapp}` : `/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
                                                     <TableCell>{e.responsavelConversa}</TableCell>
                                                     <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
