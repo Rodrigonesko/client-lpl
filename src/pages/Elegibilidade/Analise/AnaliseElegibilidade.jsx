@@ -77,7 +77,7 @@ const AnaliseElegibilidade = () => {
                 valorStatus = ''
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/teste?analista=${valorAnalista}&entidade=${valorEntidade}&status=${valorStatus}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroAnalise?analista=${valorAnalista}&entidade=${valorEntidade}&status=${valorStatus}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)

@@ -14,7 +14,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
 import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
 import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
+import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
 import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
+import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
+import ProducaoElegibilidade from "./pages/Elegibilidade/ProducaoElegibilidade/ProducaoElegibilidade";
 
 /* RSD */
 
@@ -310,8 +313,17 @@ const AppRoutes = () => {
                 <Route path="/elegibilidade/analise" element={<ProtectedRoute>
                     <AnaliseElegibilidade />
                 </ProtectedRoute>} />
+                <Route path="/elegibilidade/cancelar" element={<ProtectedRoute>
+                    <CancelarElegibilidade />
+                </ProtectedRoute>} />
                 <Route path="/elegibilidade/analise/detalhes/:id" element={<ProtectedRoute>
                     <AnaliseElegibilidadeDetalhes />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/todos" element={<ProtectedRoute>
+                    <TodosElegibilidade />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/producao" element={<ProtectedRoute>
+                    <ProducaoElegibilidade />
                 </ProtectedRoute>} />
 
                 {/* Urgência Emergência*/}

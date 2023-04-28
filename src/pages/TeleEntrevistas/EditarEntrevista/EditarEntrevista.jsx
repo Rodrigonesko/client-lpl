@@ -23,6 +23,8 @@ const EditarEntrevista = () => {
     const [dadosEntrevista, setDadosEntrevista] = useState({})
     const [houveDivergencia, setHouveDivergencia] = useState('')
     const [dataNascimento, setDataNascimento] = useState('')
+    const [nome, setNome] = useState('')
+    const [cpf, setCpf] = useState('')
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -42,8 +44,6 @@ const EditarEntrevista = () => {
         }
     }
 
-
-
     const handleChange = async (item) => {
         try {
             respostas[`${item.id}`] = item.value
@@ -55,7 +55,7 @@ const EditarEntrevista = () => {
     const salvar = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, { withCredentials: true })
 
             if (result.status === 200) {
                 openModal()
@@ -78,6 +78,10 @@ const EditarEntrevista = () => {
                 setHouveDivergencia(result.data.proposta.houveDivergencia)
 
                 setDataNascimento(result.data.proposta.dataNascimento)
+
+                setNome(result.data.proposta.nome)
+
+                setCpf(result.data.proposta.cpf)
 
             } catch (error) {
                 console.log(error);
@@ -104,11 +108,11 @@ const EditarEntrevista = () => {
                             </tr>
                             <tr>
                                 <td>Nome</td>
-                                <td>{dadosEntrevista.nome}</td>
+                                <td><input type="text" defaultValue={dadosEntrevista.nome} onChange={e => setNome(e.target.value)} /></td>
                             </tr>
                             <tr>
                                 <td>CPF</td>
-                                <td>{dadosEntrevista.cpf}</td>
+                                <td><input type="text" defaultValue={dadosEntrevista.cpf} onChange={e => setCpf(e.target.value)} /></td>
                             </tr>
                             <tr>
                                 <td>Proposta</td>

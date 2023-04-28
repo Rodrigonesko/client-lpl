@@ -9,6 +9,7 @@ import PrimeiraFase from "./PrimeiraFase";
 import SegundaFase from "./SegundaFase";
 import AgendaElegibilidade from "./AgendaElegibilidade";
 import BotoesElegibilidade from "./BotoesElegibilidade";
+import MotivoCancelamento from "./MotivoCancelamento";
 
 const AnaliseElegibilidadeDetalhes = () => {
 
@@ -96,14 +97,17 @@ const AnaliseElegibilidadeDetalhes = () => {
                             ) : null
                         }
                         {
-
-                            Object.keys(proposta).length !== 0 ? (
+                            Object.keys(proposta).length !== 0 && proposta.fase1 ? (
                                 <BotoesElegibilidade
                                     atualizarDados={buscarDados}
                                     proposta={proposta}
                                 />
                             ) : null
-
+                        }
+                        {
+                            Object.keys(proposta).length !== 0 && proposta.motivoCancelamento ? (
+                                <MotivoCancelamento proposta={proposta}></MotivoCancelamento>
+                            ) : null
                         }
                         <AgendaElegibilidade id={id} agenda={agenda} buscarAgenda={() => buscarAgenda()} />
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import moment from 'moment/moment'
-import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal } from '@mui/material'
+import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal, FormControl, Select, MenuItem, InputLabel } from '@mui/material'
 import RelatorioPadraoTele from '../../../../components/RelatorioPadraoTele/RelatorioPadraoTele'
 
 const style = {
@@ -21,6 +21,8 @@ const Implantacao = () => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
+    const [tiposContrato, setTiposContrato] = useState([])
+    const [tipoContrato, setTipoContrato] = useState('Todos')
 
     const [modalImplantar, setModalImplantar] = useState(false)
     const [proposta, setProposta] = useState('')
@@ -35,6 +37,7 @@ const Implantacao = () => {
             }, {
                 withCredentials: true
             })
+
 
 
             setModalImplantar(false)
@@ -53,8 +56,27 @@ const Implantacao = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
 
-            setPropostas(result.data)
+
+            if (tipoContrato === 'Todos') {
+                setPropostas(result.data)
+            } else {
+
+                const arrAux = result.data.filter(proposta => {
+                    return proposta.tipoContrato === tipoContrato
+                })
+
+                console.log(arrAux.length);
+
+                setPropostas(arrAux)
+
+            }
+
+            const arrAuxTiposContrato = [...new Set(result.data.map(obj => obj.tipoContrato))]
+            setTiposContrato(arrAuxTiposContrato)
+
+
             setLoading(false)
+
 
         } catch (error) {
             console.log(error);
@@ -88,8 +110,37 @@ const Implantacao = () => {
                         <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
                     ) : null
                 }
-                <Box m={2}>
+                <Box m={2} >
                     <Button onClick={relatorio} variant='contained'>Relatório</Button>
+                    <Box m={2} display='flex'>
+                        <FormControl style={{ width: '150px' }} size='small'>
+                            <InputLabel>Contrato</InputLabel>
+                            <Select
+                                label='Contrato'
+                                value={tipoContrato}
+                                onChange={e => {
+                                    setTipoContrato(e.target.value)
+                                }}
+                            >
+                                <MenuItem>
+                                    <em>Contrato</em>
+                                </MenuItem>
+                                <MenuItem value='Todos'>
+                                    Todos
+                                </MenuItem>
+                                {
+                                    tiposContrato.map(contrato => {
+                                        return (
+                                            <MenuItem value={contrato}>
+                                                {contrato}
+                                            </MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <Button style={{ marginLeft: '15px' }} variant='contained' onClick={buscarPropostas}>Filtrar</Button>
+                    </Box>
                 </Box>
 
                 <TableContainer>

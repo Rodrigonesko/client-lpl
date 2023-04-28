@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 const style = {
     position: 'absolute',
@@ -14,11 +15,32 @@ const style = {
     p: 4,
 };
 
-const ModalCancelamento = () => {
+const ModalCancelamento = ({ atualizarDados }) => {
+
+    const { id } = useParams()
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const cancelar = async () => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/cancelar`, {
+                id
+            }, {
+                withCredentials: true
+            })
+
+            if(result.status === 200){
+                atualizarDados()
+                handleClose()
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -30,12 +52,13 @@ const ModalCancelamento = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Text in a modal
+                    <Typography textAlign='center' id="modal-modal-title" variant="h6" component="h2" m={2}>
+                        Deseja cancelar?
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                    </Typography>
+                    <Box m={2} display='flex' justifyContent='space-around'>
+                        <Button variant="contained" color='inherit' onClick={handleClose}>Fechar</Button>
+                        <Button variant="contained" color="error" onClick={cancelar}>Cancelar</Button>
+                    </Box>
                 </Box>
             </Modal>
         </>

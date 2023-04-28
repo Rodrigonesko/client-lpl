@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
@@ -18,6 +18,7 @@ const style = {
 const ModalEnviarUnder = ({ atualizarDados }) => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -36,6 +37,7 @@ const ModalEnviarUnder = ({ atualizarDados }) => {
             })
 
             handleClose()
+            navigate('/elegibilidade/analise')
             atualizarDados()
 
 

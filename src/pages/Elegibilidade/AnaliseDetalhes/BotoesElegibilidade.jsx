@@ -11,7 +11,7 @@ const BotoesElegibilidade = ({ atualizarDados, proposta }) => {
         <>
             <Box component={Paper} elevation={3} p={2} mt={3}>
                 {
-                    proposta.status === 'A iniciar' || proposta.status === 'Em andamento' || proposta.status === 'Devolvida' ? (
+                    proposta.status === 'A iniciar' || proposta.status === 'Em andamento' || proposta.status === 'Devolvida' || proposta.status === 'Fase Cancelamento' ? (
                         <>
                             <ModalEnviarUnder atualizarDados={atualizarDados} />
                             <ModalEnviarCancelamento atualizarDados={atualizarDados} />

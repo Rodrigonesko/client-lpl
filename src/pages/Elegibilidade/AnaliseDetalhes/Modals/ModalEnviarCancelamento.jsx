@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, TextField, Select, FormControl, InputLabel, MenuItem, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const style = {
     position: 'absolute',
@@ -15,9 +15,10 @@ const style = {
     p: 4,
 };
 
-const ModalEnviarCancelamento = () => {
+const ModalEnviarCancelamento = ({atualizarDados}) => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -40,6 +41,9 @@ const ModalEnviarCancelamento = () => {
             }, {
                 withCredentials: true
             })
+
+            navigate('/elegibilidade/analise')
+            handleClose()
 
         } catch (error) {
             console.log(error);

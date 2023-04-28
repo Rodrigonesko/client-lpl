@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, Paper, FormGroup, FormControlLabel, Checkbox, TextField } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const style = {
     position: 'absolute',
@@ -17,9 +17,10 @@ const style = {
     overflow: 'auto'
 };
 
-const ModalDevolucao = ({ proposta }) => {
+const ModalDevolucao = ({ proposta, atualizarDados }) => {
 
     const { id } = useParams()
+    const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -58,6 +59,7 @@ const ModalDevolucao = ({ proposta }) => {
             })
 
             handleClose()
+            navigate('/elegibilidade/analise')
 
         } catch (error) {
             console.log(error);
@@ -66,9 +68,21 @@ const ModalDevolucao = ({ proposta }) => {
 
     return (
         <>
-            <Button color="warning" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>1° Devolucao</Button>
-            <Button color="warning" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>2° Devolucao</Button>
-            <Button color="warning" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>3° Devolucao</Button>
+            {
+                !proposta.status1Analise ? (
+                    <Button color="warning" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>1° Devolucao</Button>
+                ) : null
+            }
+            {
+                !proposta.status2Analise && proposta.status1Analise ? (
+                    <Button color="warning" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>2° Devolucao</Button>
+                ) : null
+            }
+            {
+                proposta.status2Analise ? (
+                    <Button color="warning" variant="contained" onClick={handleOpen} style={{ marginRight: '10px' }}>3° Devolucao</Button>
+                ) : null
+            }
             <Modal
                 open={open}
                 onClose={handleClose}

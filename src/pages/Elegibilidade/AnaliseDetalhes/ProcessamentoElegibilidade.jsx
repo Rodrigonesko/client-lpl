@@ -164,11 +164,15 @@ const ProcessamentoElegibilidade = ({
                             </Select>
                         </FormControl>
                         <FormControlLabel control={<Checkbox defaultChecked={dadosAnalise.planoAmil === 'Sim'} />} label="Plano Amil" labelPlacement="start" />
-                        <Box display='flex' justifyContent='space-between'>
-                            <TextField type='date' focused label='Data inicio' size='small' value={dadosAnalise.dataInicioPlanoAmil} />
-                            <TextField type='date' focused label='Data Fim' size='small' value={dadosAnalise.dataFimPlanoAmil} />
-                            <TextField focused label='Custo' size='small' value={dadosAnalise.custoPlanoAmil} />
-                        </Box>
+                        {
+                            dadosAnalise.planoAmil === 'Sim' ? (
+                                <Box display='flex' justifyContent='space-between'>
+                                    <TextField type='date' focused label='Data inicio' size='small' value={dadosAnalise.dataInicioPlanoAmil} />
+                                    <TextField type='date' focused label='Data Fim' size='small' value={dadosAnalise.dataFimPlanoAmil} />
+                                    <TextField focused label='Custo' size='small' value={dadosAnalise.custoPlanoAmil} />
+                                </Box>
+                            ) : null
+                        }
                     </FormGroup>
                 </Box>
             </Box>
