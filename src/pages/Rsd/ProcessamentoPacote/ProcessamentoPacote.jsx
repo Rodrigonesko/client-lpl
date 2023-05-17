@@ -37,6 +37,7 @@ const ProcessamentoPacote = () => {
     const [naoContato, setNaoContato] = useState(false)
     const [justificativa, setJustificativa] = useState('')
     const [dataSelo, setDataSelo] = useState('')
+    const [prioridadeDossie, setPrioridadeDossie] = useState(false)
 
     /* Status de contato */
 
@@ -274,6 +275,23 @@ const ProcessamentoPacote = () => {
         }
     }
 
+    const prioridadeDossiePacote = async (prioridade) => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/prioridadeDossie`, {
+                pacote: idPacote,
+                prioridade
+            }, {
+                withCredentials: true
+            })
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
 
         const buscarAgenda = async () => {
@@ -425,7 +443,9 @@ const ProcessamentoPacote = () => {
                             )
                         }
 
-                        <input type="checkbox" name="prioridade-dossie" id="prioridade-dossie" />
+                        <input type="checkbox" name="prioridade-dossie" id="prioridade-dossie" onClick={(e) => {
+                            prioridadeDossiePacote(e.target.checked)
+                        }} />
                         <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label>
                     </div>
                     <div className="roteiro-container">
