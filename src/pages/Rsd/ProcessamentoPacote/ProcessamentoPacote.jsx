@@ -37,7 +37,7 @@ const ProcessamentoPacote = () => {
     const [naoContato, setNaoContato] = useState(false)
     const [justificativa, setJustificativa] = useState('')
     const [dataSelo, setDataSelo] = useState('')
-    const [prioridadeDossie, setPrioridadeDossie] = useState(false)
+    const [prioridadePacote, setPrioridadePacote] = useState(false);
 
     /* Status de contato */
 
@@ -325,6 +325,23 @@ const ProcessamentoPacote = () => {
 
                 setPedidos(result.data.pedidos)
 
+                let tamanhoPrioridade = result.data.pedidos.length
+
+                let countTamanhoPrioridade = 0
+
+                result.data.pedidos.forEach(e => {
+                    if (e.prioridadeDossie) {
+                        countTamanhoPrioridade++
+                    }
+                })
+
+                console.log(countTamanhoPrioridade, tamanhoPrioridade);
+
+                if (countTamanhoPrioridade === tamanhoPrioridade) {
+                    console.log('entrou');
+                    setPrioridadePacote(true)
+                }
+
                 let arrAuxProtocolos = result.data.pedidos.filter((item, pos, array) => {
                     return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
                 })
@@ -443,7 +460,8 @@ const ProcessamentoPacote = () => {
                             )
                         }
 
-                        <input type="checkbox" name="prioridade-dossie" id="prioridade-dossie" onClick={(e) => {
+                        <input type="checkbox" name="prioridade-dossie" checked={prioridadePacote} id="prioridade-dossie" onClick={(e) => {
+                            setPrioridadePacote(!prioridadePacote)
                             prioridadeDossiePacote(e.target.checked)
                         }} />
                         <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label>
