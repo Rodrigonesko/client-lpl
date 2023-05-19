@@ -16,7 +16,19 @@ const AnaliseElegibilidadeDetalhes = () => {
     const { id } = useParams()
     const [proposta, setProposta] = useState({})
     const [agenda, setAgenda] = useState([])
+    const [blacklist, setBlacklist] = useState([])
 
+    const buscarBlacklist = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+
+            setBlacklist(result.data)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const buscarDados = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
@@ -42,6 +54,7 @@ const AnaliseElegibilidadeDetalhes = () => {
     useEffect(() => {
         buscarDados()
         buscarAgenda()
+        buscarBlacklist()
     }, [])
 
     return (
@@ -54,7 +67,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                     </Typography>
                     <Box component={Paper} elevation={3} p={2}>
                         <Typography variant="h6" bgcolor='royalblue' p={1} color='white' borderRadius='5px'>
-                            {proposta.proposta} - {proposta.nome}
+                            {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) ? '*Corretor na blacklist*' : null}
                         </Typography>
 
                         {
@@ -64,6 +77,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                                     status1Analise={proposta.status1Analise}
                                     status2Analise={proposta.status2Analise}
                                     status3Analise={proposta.status3Analise}
+                                    corretor={proposta.nomeCorretor}
                                 />
                             ) : null
                         }

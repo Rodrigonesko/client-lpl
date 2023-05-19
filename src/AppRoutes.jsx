@@ -18,6 +18,7 @@ import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegib
 import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
 import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
 import ProducaoElegibilidade from "./pages/Elegibilidade/ProducaoElegibilidade/ProducaoElegibilidade";
+import DevolvidasElegibilidade from "./pages/Elegibilidade/Devolvidas/Devolvidas";
 
 /* RSD */
 
@@ -324,6 +325,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/producao" element={<ProtectedRoute>
                     <ProducaoElegibilidade />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/devolvidas" element={<ProtectedRoute>
+                    <DevolvidasElegibilidade />
                 </ProtectedRoute>} />
 
                 {/* Urgência Emergência*/}

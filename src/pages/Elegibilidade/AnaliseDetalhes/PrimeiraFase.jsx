@@ -56,7 +56,7 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
 
             setOpenSnack(true)
             setLoading(false)
-
+            atualizarDados()
 
         } catch (error) {
             console.log(error);

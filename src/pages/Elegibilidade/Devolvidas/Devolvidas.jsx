@@ -5,7 +5,7 @@ import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
 
-const AnaliseElegibilidade = () => {
+const DevolvidasElegibilidade = () => {
 
     const { name } = useContext(AuthContext)
 
@@ -39,17 +39,22 @@ const AnaliseElegibilidade = () => {
         try {
 
             setLoading(true)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analise/${name}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/devolvidas/${name}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
-            setTotal(result.data.total)
+            setTotal(result.data.propostas.length)
 
-            const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/andamento`, { withCredentials: true })
+            // const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/andamento`, { withCredentials: true })
 
-            setEntidades(buscaEntidade.data.entidades)
+            let arrEnt = result.data.propostas.map(e => {
+                return e.entidade
+            })
+
+            setEntidades(arrEnt)
 
             setLoading(false)
 
+            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -73,7 +78,6 @@ const AnaliseElegibilidade = () => {
 
             let valorAnalista = analista.current.firstChild.textContent
             let valorEntidade = entidade.current.firstChild.textContent
-            let valorStatus = status.current.firstChild.textContent
 
             setPesquisando(true)
 
@@ -85,11 +89,8 @@ const AnaliseElegibilidade = () => {
                 valorEntidade = ''
             }
 
-            if (valorStatus === 'Todos' || valorStatus === '​') {
-                valorStatus = ''
-            }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroAnalise?analista=${valorAnalista}&entidade=${valorEntidade}&status=${valorStatus}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroCancelar?analista=${valorAnalista}&entidade=${valorEntidade}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)
@@ -131,7 +132,7 @@ const AnaliseElegibilidade = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analise/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/devolvidas/proposta/${propostaPesquisada}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.total)
@@ -162,7 +163,7 @@ const AnaliseElegibilidade = () => {
             <Sidebar></Sidebar>
             <Container>
                 <Typography variant="h5" m={2}>
-                    Análise De Propostas
+                    Propostas devolvidas
                 </Typography>
                 {
                     loading ? (
@@ -177,6 +178,7 @@ const AnaliseElegibilidade = () => {
                             }} />
                             <Button type="submit" onClick={filtrarProposta} style={{ marginLeft: '5px' }} variant="contained" disabled={pesquisando}>Pesquisar {pesquisando ? <CircularProgress style={{ width: '20px', height: '20px', marginLeft: '10px' }} /> : null}</Button>
                         </Box >
+
                     </form>
                     <form action="">
                         <Box component={Paper} p={1.5} elevation={3}>
@@ -222,27 +224,6 @@ const AnaliseElegibilidade = () => {
                                             )
                                         })
                                     }
-                                </Select>
-                            </FormControl>
-                            <FormControl size="small" style={{ width: '150px', margin: '0 5px' }}>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                    label='Status'
-                                    ref={status}
-                                    defaultValue=''
-                                >
-                                    <MenuItem>
-                                        <em>Status</em>
-                                    </MenuItem>
-                                    <MenuItem value='Todos'>
-                                        Todos
-                                    </MenuItem>
-                                    <MenuItem value="A iniciar">
-                                        A iniciar
-                                    </MenuItem>
-                                    <MenuItem value="Em andamento">
-                                        Em andamento
-                                    </MenuItem>
                                 </Select>
                             </FormControl>
                             <Button onClick={filtrar} display={pesquisando} variant="contained">Filtrar {pesquisando ? <CircularProgress style={{ width: '20px', height: '20px', marginLeft: '10px' }} /> : null}</Button>
@@ -312,4 +293,4 @@ const AnaliseElegibilidade = () => {
     )
 }
 
-export default AnaliseElegibilidade
+export default DevolvidasElegibilidade

@@ -17,10 +17,23 @@ const CancelarElegibilidade = () => {
     const [propostaPesquisada, setPropostaPesquisada] = useState('')
     const [pesquisando, setPesquisando] = useState(false)
     const [open, setOpen] = useState(false)
+    const [blacklist, setBlacklist] = useState([])
 
     const analista = useRef(null)
     const entidade = useRef(null)
     const status = useRef(null)
+
+    const buscarBlacklist = async () => {
+        try {
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+
+            setBlacklist(result.data)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const buscarPropostas = async () => {
         try {
@@ -142,6 +155,7 @@ const CancelarElegibilidade = () => {
     useEffect(() => {
         buscarAnalistas()
         buscarPropostas()
+        buscarBlacklist()
     }, [name])
 
     return (
@@ -240,7 +254,7 @@ const CancelarElegibilidade = () => {
                                 {
                                     propostas.map(e => {
                                         return (
-                                            <TableRow>
+                                            <TableRow style={{ color: 'white', backgroundColor: blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor) ? 'lightsalmon' : 'white' }}>
                                                 <TableCell>{e.proposta}</TableCell>
                                                 <TableCell>{moment(e.dataImportacao).format('DD/MM/YYYY')}</TableCell>
                                                 <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>

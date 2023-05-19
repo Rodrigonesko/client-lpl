@@ -124,6 +124,7 @@ const Sidebar = () => {
                         <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
                             <MenuItem><Link to='/elegibilidade/analiseDocumentos'>Atribuição analista</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
+                            <MenuItem><Link to='/elegibilidade/devolvidas'>Devolvidas</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/cancelar'>Cancelar</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/todos'>Todos</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/producao'>Produção</Link></MenuItem>
