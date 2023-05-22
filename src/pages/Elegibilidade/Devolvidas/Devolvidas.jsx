@@ -90,7 +90,7 @@ const DevolvidasElegibilidade = () => {
             }
 
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroCancelar?analista=${valorAnalista}&entidade=${valorEntidade}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroDevolvidas?analista=${valorAnalista}&entidade=${valorEntidade}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)
