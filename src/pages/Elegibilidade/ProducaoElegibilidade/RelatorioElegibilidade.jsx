@@ -8,7 +8,7 @@ const RelatorioElegibilidade = () => {
     const [loading, setLoading] = useState()
 
     const relatorio = async () => {
-        try {     
+        try {
             setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show`, {
@@ -30,6 +30,7 @@ const RelatorioElegibilidade = () => {
             xls += "<th>Status 3° Analise</th>"
             xls += "<th>Plano</th>"
             xls += "<th>Segmentação</th>"
+            xls += "<th>Produtor</th>"
             xls += "<th>UF</th>"
             xls += "<th>Administradora</th>"
             xls += "<th>Cód. Corretor</th>"
@@ -60,30 +61,30 @@ const RelatorioElegibilidade = () => {
             xls += "<th>Observação</th>"
             xls += "<th>Tipo de evidência</th>"
             xls += "<th>Situação Especial</th>"
-            xls += "<th>?</th>"
+            xls += "<th></th>"
             xls += "<th>Motivo do Cancelamento</th>"
             xls += "<th>Data Finalizacao</th>"
             xls += "<th>Analista Resp</th>"
-            xls += "<th>Data Finalizacao Pre</th>"
-            xls += "<th>Analista Pre</th>"
+            xls += "</tr>"
 
             result.data.forEach(proposta => {
                 xls += "<tr>"
                 xls += `<td>${proposta.proposta}</td>`
                 xls += `<td>${proposta.dataImportacao}</td>`
                 xls += `<td>${proposta.vigencia}</td>`
-                xls += `<td>${proposta.statusMotor}</td>`
+                xls += proposta.statusMotor ? `<td>${proposta.statusMotor}</td>` : `<td></td>`
                 xls += `<td>${proposta.categoriaCancelamento}</td>`
                 xls += `<td>${proposta.status}</td>`
-                xls += `<td>${proposta.status1Analise}</td>`
-                xls += `<td>${proposta.status2Analise}</td>`
-                xls += `<td>${proposta.status3Analise}</td>`
-                xls += `<td>${proposta.planoAmil}</td>`
+                xls += proposta.status1Analise ? `<td>${proposta.status1Analise}</td>` : `<td></td>`
+                xls += proposta.status2Analise ? `<td>${proposta.status2Analise}</td>` : `<td></td>`
+                xls += proposta.status3Analise ? `<td>${proposta.status3Analise}</td>` : `<td></td>`
+                xls += proposta.planoAmil ? `<td>${proposta.planoAmil}</td>` : `<td></td>`
                 xls += `<td></td>`
+                xls += `<td>${proposta.produtor}</td>`
                 xls += `<td>${proposta.uf}</td>`
                 xls += `<td>${proposta.administradora}</td>`
                 xls += `<td>${proposta.codCorretor}</td>`
-                xls += `<td>${proposta.nomeCorretor}</td>`
+                xls += proposta.nomeCorretor ? `<td>${proposta.nomeCorretor}</td>` : `<td></td>`
                 xls += `<td>${proposta.entidade}</td>`
                 xls += `<td>${proposta.tipoVinculo}</td>`
                 xls += `<td>${proposta.nome}</td>`
@@ -95,26 +96,25 @@ const RelatorioElegibilidade = () => {
                 xls += `<td>${proposta.valorMedico}</td>`
                 xls += `<td>${proposta.valorDental}</td>`
                 xls += `<td>${proposta.valorTotal}</td>`
-                xls += `<td>${proposta.primeiraDevolucao1}</td>`
-                xls += `<td>${proposta.primeiraDevolucao2}</td>`
-                xls += `<td>${proposta.primeiraDevolucao3}</td>`
-                xls += `<td>${proposta.primeiraDevolucao4}</td>`
-                xls += `<td>${proposta.reprotocolo1}</td>`
-                xls += `<td>${proposta.reprotocolo2}</td>`
-                xls += `<td>${proposta.reprotocolo3}</td>`
-                xls += `<td>${proposta.segundoReprotocolo1}</td>`
-                xls += `<td>${proposta.segundoReprotocolo2}</td>`
-                xls += `<td>${proposta.segundoReprotocolo3}</td>`
-                xls += `<td>${proposta.observacoesDevolucao}</td>`
+                xls += proposta.primeiraDevolucao1 ? `<td>${proposta.primeiraDevolucao1}</td>` : `<td></td>`
+                xls += proposta.primeiraDevolucao2 ? `<td>${proposta.primeiraDevolucao2}</td>` : `<td></td>`
+                xls += proposta.primeiraDevolucao3 ? `<td>${proposta.primeiraDevolucao3}</td>` : `<td></td>`
+                xls += proposta.primeiraDevolucao4 ? `<td>${proposta.primeiraDevolucao4}</td>` : `<td></td>`
+                xls += proposta.reprotocolo1 ? `<td>${proposta.reprotocolo1}</td>` : `<td></td>`
+                xls += proposta.reprotocolo2 ? `<td>${proposta.reprotocolo2}</td>` : `<td></td>`
+                xls += proposta.reprotocolo3 ? `<td>${proposta.reprotocolo3}</td>` : `<td></td>`
+                xls += proposta.segundoReprotocolo1 ? `<td>${proposta.segundoReprotocolo1}</td>` : `<td></td>`
+                xls += proposta.segundoReprotocolo2 ? `<td>${proposta.segundoReprotocolo2}</td>` : `<td></td>`
+                xls += proposta.segundoReprotocolo3 ? `<td>${proposta.segundoReprotocolo3}</td>` : `<td></td>`
                 xls += `<td></td>`
-                xls += `<td>${proposta.ligacao}</td>`
-                xls += `<td>${proposta.segundoReprotocolo4}</td>`
-                xls += `<td>${proposta.evidenciaFraude}</td>`
+                xls += proposta.ligacao ? `<td>${proposta.ligacao}</td>` : `<td></td>`
+                xls += proposta.observacoesDevolucao ? `<td>${proposta.observacoesDevolucao}</td>` : `<td></td>`
+                xls += proposta.evidenciaFraude ? `<td>${proposta.evidenciaFraude}</td>` : `<td></td>`
                 xls += `<td></td>`
                 xls += `<td></td>`
-                xls += `<td>${proposta.motivoCancelamento}</td>`
-                xls += `<td>${proposta.dataConclusao}</td>`
-                xls += `<td>${proposta.analista}</td>`
+                xls += proposta.motivoCancelamento ? `<td>${proposta.motivoCancelamento}</td>` : `<td></td>`
+                xls += proposta.dataConclusao ? `<td>${proposta.dataConclusao}</td>` : `<td></td>`
+                xls += proposta.analista ? `<td>${proposta.analista}</td>` : `<td></td>`
                 xls += "</tr>"
             })
 
