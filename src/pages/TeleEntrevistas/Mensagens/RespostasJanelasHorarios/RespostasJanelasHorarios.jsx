@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Box, Modal, FormControl, InputLabel, Select, MenuItem, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button } from "@mui/material";
+import { Box, Modal, FormControl, InputLabel, Select, MenuItem, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Button, Checkbox, LinearProgress, TextField, Alert } from "@mui/material";
 import Axios from 'axios'
 import { getCookie } from "react-use-cookie";
 
@@ -21,6 +21,7 @@ const RespostasJanelasHorarios = () => {
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
     const [modal, setModal] = useState(false)
+    const [modalReenviar, setModalReenviar] = useState(false)
     const [proposta, setProposta] = useState('')
     const [nome, setNome] = useState('')
     const [janela, setJanela] = useState('')
@@ -31,6 +32,10 @@ const RespostasJanelasHorarios = () => {
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
     const [dataEntrevista, setDataEntrevista] = useState('')
     const [horarioEntrevista, setHorarioEntrevista] = useState('')
+    const [propostasReenviar, setPropostasReenviar] = useState([])
+    const [dataReenviar, setDataReenviar] = useState('')
+    const [loadingReenviar, setLoadingReenviar] = useState(false)
+    const [terminouDeReenviar, setTerminouDeReenviar] = useState(false)
 
     const ajustarDia = (data) => {
         const arr = data.split('/')
@@ -159,13 +164,41 @@ const RespostasJanelasHorarios = () => {
         }
     }
 
+    const reenviarMensagens = async () => {
+        try {
+
+            console.log(propostasReenviar);
+
+            setLoadingReenviar(true)
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reenviarHorariosDisponiveis`, {
+                whatsapps: propostasReenviar,
+                data: dataReenviar
+            }, {
+                withCredentials: true
+            })
+
+            setTerminouDeReenviar(true)
+
+            setLoadingReenviar(false)
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
 
         const buscarDiasDisponiveis = async () => {
             try {
+
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, { withCredentials: true })
 
                 setDatasEntrevista(result.data)
+
+
             } catch (error) {
                 console.log(error);
             }
@@ -181,24 +214,17 @@ const RespostasJanelasHorarios = () => {
             <Sidebar />
             <Box>
                 <Box m={2}>
-                    <Typography variant="h5">
+                    <Typography variant="h5" m={2}>
                         Janela de Horário: {propostas.length}
+                        <Button variant="contained" size="small" color="info" style={{ marginLeft: '50px' }} onClick={() => {
+                            setModalReenviar(true)
+                        }}>Reenviar</Button>
                     </Typography>
                     {
                         loading ? (
                             <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
                         ) : null
                     }
-                    {/* <Box m={2}>
-                        <FormControl style={{minWidth: '230px'}}>
-                            <InputLabel>Responsavel Conversa</InputLabel>
-                            <Select 
-                                label='Responsavel Conversa'
-                            >
-                                <MenuItem></MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box> */}
                     <Box>
                         <TableContainer>
                             <Table className="table">
@@ -217,13 +243,14 @@ const RespostasJanelasHorarios = () => {
                                         <TableCell></TableCell>
                                         <TableCell></TableCell>
                                         <TableCell></TableCell>
+                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {
                                         propostas.map(e => {
                                             return (
-                                                <TableRow style={{backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
+                                                <TableRow style={{ backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
                                                     <TableCell>{e.proposta}</TableCell>
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.cpfTitular}</TableCell>
@@ -243,6 +270,17 @@ const RespostasJanelasHorarios = () => {
                                                     <TableCell>{e.responsavelConversa}</TableCell>
                                                     <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
+                                                    <TableCell>
+                                                        <Checkbox onChange={element => {
+                                                            if (element.target.checked) {
+                                                                if (e.cpfTitular === e.cpf) {
+                                                                    setPropostasReenviar(prevArray => [...prevArray, e.whatsapp])
+                                                                }
+                                                            } else {
+                                                                setPropostasReenviar(propostasReenviar.filter(whatsapp => whatsapp !== e.whatsapp))
+                                                            }
+                                                        }} />
+                                                    </TableCell>
                                                 </TableRow>
                                             )
                                         })
@@ -330,6 +368,34 @@ const RespostasJanelasHorarios = () => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" onClick={agendar}>Agendar</Button>
+                        </Box>
+                    </Box>
+                </Modal>
+                <Modal
+                    open={modalReenviar}
+                    onClose={() => { setModalReenviar(false) }}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2" m={2}>
+                            Modal reenviar
+                        </Typography>
+                        <Box display='flex'>
+                            <TextField type="date" label='Data' focused size="small" value={dataReenviar} onChange={e => {
+                                setDataReenviar(e.target.value)
+                            }} />
+                            <Button style={{ marginLeft: '20px' }} variant="contained" size="small" onClick={reenviarMensagens}>Reenviar</Button>
+                        </Box>
+                        <Box m={2}>
+                            <LinearProgress value={100} variant={loadingReenviar ? 'indeterminate' : 'determinate'} />
+                        </Box>
+                        <Box>
+                            {
+                                terminouDeReenviar ? (
+                                    <Alert severity="success">Mensagens reenviadas com sucesso!</Alert>
+                                ) : null
+                            }
                         </Box>
                     </Box>
                 </Modal>
