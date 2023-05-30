@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Container, Box, Paper, TextField, Button, Typography, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Snackbar, Alert } from "@mui/material";
+import Axios from 'axios'
+import moment from "moment";
+import RelatorioPropostasManuaisElegibilidade from "./RelatorioPropostasManual";
 
 const PropostasAmil = () => {
 
@@ -13,11 +16,17 @@ const PropostasAmil = () => {
     const [resultado, setResultado] = useState('')
     const [responsavel, setResponsavel] = useState('')
     const [observacoes, setObservacoes] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [propostas, setPropostas] = useState([])
 
+    const [severitySnack, setSeveritySnack] = useState('success')
+    const [msgSnack, setMsgSnack] = useState('')
     const [openSnack, setOpenSnack] = useState(false)
 
     const registrar = async () => {
         try {
+
+            setLoading(true)
 
             const obj = {
                 data,
@@ -28,10 +37,38 @@ const PropostasAmil = () => {
                 meioSolicitacao,
                 resultado,
                 responsavel,
-                observacoes
+                observacoes,
+                status: 'Em andamento'
+            }
+
+            let todosVazios = true;
+
+            for (let prop in obj) {
+                if (obj.hasOwnProperty(prop) && obj[prop] !== '') {
+                    todosVazios = false;
+                    break;
+                }
+            }
+
+            if (todosVazios) {
+                setSeveritySnack('error')
+                setMsgSnack('Campos vazios, por favor preencha-os')
+                setOpenSnack(true)
+                return
             }
 
             console.log(obj);
+
+            await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/registrar/proposta`, {
+                dadosProposta: obj
+            }, {
+                withCredentials: true
+            })
+
+
+            setSeveritySnack('success')
+            setMsgSnack('Proposta adicionada com sucesso!')
+            setOpenSnack(true)
 
             setData('')
             setProposta('')
@@ -43,18 +80,49 @@ const PropostasAmil = () => {
             setResponsavel('')
             setObservacoes('')
 
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            setSeveritySnack('error')
+            setMsgSnack('Algo deu errado')
+            setOpenSnack(true)
+            setLoading(false)
+        }
+    }
+
+    const buscarPropostas = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show/propostaManual/andamento`, {
+                withCredentials: true
+            })
+
+            console.log(result.data);
+
+            setPropostas(result.data)
+
+
         } catch (error) {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+
+        buscarPropostas()
+
+    }, [])
 
     return (
         <>
             <Sidebar />
             <Container>
                 <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => { setOpenSnack(false) }} >
-                    <Alert onClose={() => { setOpenSnack(false) }} severity="success" sx={{ width: '100%' }}>
-                        This is a success message!
+                    <Alert onClose={() => { setOpenSnack(false) }} severity={severitySnack} sx={{ width: '100%' }}>
+                        {msgSnack}
                     </Alert>
                 </Snackbar>
                 <Box component={Paper} elevation={3} p={2}>
@@ -99,7 +167,7 @@ const PropostasAmil = () => {
                     </Box>
                     <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column' mt={2}>
                         <Button variant="contained" style={{ marginBottom: '20px' }} onClick={registrar}>Registrar</Button>
-                        <Button variant="contained" color="info">Report</Button>
+                        <RelatorioPropostasManuaisElegibilidade />
                     </Box>
                 </Box>
                 <TableContainer>
@@ -116,7 +184,21 @@ const PropostasAmil = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-
+                            {
+                                propostas.map(proposta => {
+                                    return (
+                                        <TableRow key={proposta._id}>
+                                            <TableCell>{moment(proposta.data).format('DD/MM/YYYY')}</TableCell>
+                                            <TableCell>{proposta.proposta}</TableCell>
+                                            <TableCell>{proposta.beneficiario}</TableCell>
+                                            <TableCell>{proposta.confirmacao}</TableCell>
+                                            <TableCell>{proposta.responsavel}</TableCell>
+                                            <TableCell><Button variant="contained" color='info' >Info</Button></TableCell>
+                                            <TableCell><Button variant="contained" color='success' >Concluir</Button></TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
                         </TableBody>
                     </Table>
                 </TableContainer>

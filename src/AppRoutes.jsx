@@ -41,6 +41,7 @@ import Agd from "./pages/Rsd/Agd/Agd";
 import FichaBeneficiarioConcluidos from "./pages/Rsd/FichaBeneficiarioConcluidos/FichaBeneficiarioConcluidos";
 import MigracaoRsd from "./pages/Rsd/Migracao/MigracaoRsd";
 import ProducaoDiariaRsd from "./pages/Rsd/ProducaoDiaria/ProducaoDiariaRsd";
+import BaixaAgd from "./pages/Rsd/BaixaAgd/BaixaAgd";
 
 /* -----------------  Tele Entrevistas ----------------- */
 
@@ -303,6 +304,10 @@ const AppRoutes = () => {
                 <Route path="/rsd/producaoDiaria" element={<ProtectedRoute>
                     <ProducaoDiariaRsd />
                 </ProtectedRoute>} />
+                <Route path="/rsd/BaixaAgd" element={<ProtectedRoute>
+                    <BaixaAgd />
+                </ProtectedRoute>} />
+
 
                 {/*Elegibilidade*/}
 
