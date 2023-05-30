@@ -127,6 +127,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/devolvidas'>Devolvidas</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/cancelar'>Cancelar</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/todos'>Todos</Link></MenuItem>
+                            <MenuItem><Link to='/elegibilidade/propostasAmil'>Propostas Amil</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/producao'>Produção</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                         </SubMenu>

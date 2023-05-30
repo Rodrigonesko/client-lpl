@@ -178,6 +178,8 @@ const RespostasJanelasHorarios = () => {
                 withCredentials: true
             })
 
+            buscarPropostas()
+
             setTerminouDeReenviar(true)
 
             setLoadingReenviar(false)
