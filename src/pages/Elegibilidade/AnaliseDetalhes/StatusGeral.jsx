@@ -39,7 +39,7 @@ const StatusGeral = ({ statusProposta, status1Analise, status2Analise, status3An
     return (
         <Box component={Paper} elevation={3} p={2} mt={2}>
             <Typography variant="h6">
-                Status Geral - {corretor}
+                Status Geral
             </Typography>
             <Box mt={2}>
                 <TextField label='Status Proposta' value={statusProposta} focused InputProps={{
@@ -75,7 +75,7 @@ const StatusGeral = ({ statusProposta, status1Analise, status2Analise, status3An
                                 propostas.map(proposta => {
                                     return (
                                         <ListItem key={proposta._id}>
-                                            <ListItemButton component="a" href={`/elegibilidade/analise/detalhes/${proposta._id}`} target="_blank">
+                                            <ListItemButton component="a" href={`/elegibilidade/analise/detalhes/${proposta._id}`} target="_blank" style={{ background: proposta.status === 'Cancelada' ? '#b71c1c' : '', color: proposta.status === 'Cancelada' ? 'white' : '' }}>
                                                 <ListItemText primary={`${proposta.proposta} - ${proposta.status}`} />
                                             </ListItemButton>
                                         </ListItem>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Axios from 'axios'
 import { Button, Box, CircularProgress } from "@mui/material";
-import moment from "moment";
 
 const RelatorioPropostasManuaisElegibilidade = () => {
 

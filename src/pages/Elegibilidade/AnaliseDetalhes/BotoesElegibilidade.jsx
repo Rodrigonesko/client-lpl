@@ -5,6 +5,7 @@ import ModalEnviarUnder from "./Modals/ModalEnviarUnder";
 import ModalDevolucao from "./Modals/ModalDevolucao";
 import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalCancelamento from "./Modals/ModalCancelamento";
+import ModalCancelarCpf from "./Modals/ModalCancelarCpf";
 
 const BotoesElegibilidade = ({ atualizarDados, proposta }) => {
     return (
@@ -21,9 +22,13 @@ const BotoesElegibilidade = ({ atualizarDados, proposta }) => {
                 }
                 {
                     proposta.status === 'Fase Cancelamento' ? (
-                        <ModalCancelamento atualizarDados={atualizarDados} />
+                        <>
+                            <ModalCancelamento atualizarDados={atualizarDados} />
+                            <ModalCancelarCpf atualizarDados={atualizarDados} proposta={proposta} />
+                        </>
                     ) : null
                 }
+
             </Box>
         </>
     )

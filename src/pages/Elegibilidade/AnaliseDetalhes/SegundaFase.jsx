@@ -29,7 +29,7 @@ const SegundaFase = ({ proposta }) => {
                     }}
                     disabled={!proposta.fase1}
                 >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    {!open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
             </Box>
             {

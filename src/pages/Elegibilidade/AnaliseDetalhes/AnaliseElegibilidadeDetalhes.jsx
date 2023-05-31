@@ -7,6 +7,7 @@ import StatusGeral from "./StatusGeral";
 import { Box, Typography, Container, Paper } from "@mui/material";
 import PrimeiraFase from "./PrimeiraFase";
 import SegundaFase from "./SegundaFase";
+import BlacklistDiplomas from "./BlacklistDiplomas";
 import AgendaElegibilidade from "./AgendaElegibilidade";
 import BotoesElegibilidade from "./BotoesElegibilidade";
 import MotivoCancelamento from "./MotivoCancelamento";
@@ -17,6 +18,7 @@ const AnaliseElegibilidadeDetalhes = () => {
     const [proposta, setProposta] = useState({})
     const [agenda, setAgenda] = useState([])
     const [blacklist, setBlacklist] = useState([])
+    const [cpfCancelado, setCpfCancelado] = useState(false)
 
     const buscarBlacklist = async () => {
         try {
@@ -34,7 +36,13 @@ const AnaliseElegibilidadeDetalhes = () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
         const { proposta } = result.data;
         setProposta(proposta);
-        console.log(result);
+
+        const resultConsultaCpf = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/consultaCpf/${proposta.cpfCorretor}`, { withCredentials: true })
+
+        if (resultConsultaCpf.data.msg === 'ok') {
+            setCpfCancelado(true)
+        }
+
     }
 
     const buscarAgenda = async () => {
@@ -67,7 +75,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                     </Typography>
                     <Box component={Paper} elevation={3} p={2}>
                         <Typography variant="h6" bgcolor='royalblue' p={1} color='white' borderRadius='5px'>
-                            {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) ? '*Corretor na blacklist*' : null}
+                            {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) ? '*Corretor na blacklist*' : null} {cpfCancelado ? '- CPF JÁ CANCELADO' : ''}
                         </Typography>
 
                         {
@@ -110,6 +118,13 @@ const AnaliseElegibilidadeDetalhes = () => {
                                 />
                             ) : null
                         }
+
+                        {
+                            Object.keys(proposta).length !== 0 ? (
+                                <BlacklistDiplomas proposta={proposta} />
+                            ) : null
+                        }
+
                         {
                             Object.keys(proposta).length !== 0 && proposta.fase1 ? (
                                 <BotoesElegibilidade
