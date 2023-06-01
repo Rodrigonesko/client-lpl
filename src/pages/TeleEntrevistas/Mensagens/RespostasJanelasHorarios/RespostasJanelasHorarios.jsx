@@ -184,7 +184,14 @@ const RespostasJanelasHorarios = () => {
 
             setLoadingReenviar(false)
 
-            console.log(result);
+            const elements = document.getElementsByClassName('checks-reenviar')
+
+            for (const element of elements) {
+                if (element.checked) {
+                    element.checked = false
+                }
+                console.log(element);
+            }
 
         } catch (error) {
             console.log(error);
@@ -273,7 +280,7 @@ const RespostasJanelasHorarios = () => {
                                                     <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
                                                     <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
                                                     <TableCell>
-                                                        <Checkbox onChange={element => {
+                                                        <Checkbox className="check-reenviar" onChange={element => {
                                                             if (element.target.checked) {
                                                                 if (e.cpfTitular === e.cpf) {
                                                                     setPropostasReenviar(prevArray => [...prevArray, e.whatsapp])

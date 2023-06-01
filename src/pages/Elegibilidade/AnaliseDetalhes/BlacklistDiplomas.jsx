@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Paper, Typography, IconButton, TextField, Button } from '@mui/material'
+import { Box, Paper, Typography, IconButton, TextField, Button, Alert, Snackbar, Autocomplete } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Axios from "axios";
@@ -8,13 +8,15 @@ const BlacklistDiplomas = ({ proposta }) => {
 
     const [open, setOpen] = useState(false)
     const [show, setShow] = useState(true)
+    const [openSnack, setOpenSnack] = useState(false)
 
     const [universidade, setUniversidade] = useState(proposta.universidade)
     const [curso, setCurso] = useState(proposta.curso)
     const [numeroRegistro, setNumeroRegistro] = useState(proposta.numeroRegistro)
     const [diplomas, setDiplomas] = useState([])
 
-
+    const [sugestoesUniversidades, setSugestoesUniversidades] = useState(['teste', 'teste2'])
+    const [sugestoesCursos, setSugestoesCursos] = useState([])
 
     const handleChangeShow = () => {
         setShow(!show)
@@ -33,8 +35,6 @@ const BlacklistDiplomas = ({ proposta }) => {
             withCredentials: true
         })
 
-        console.log(result);
-
         setDiplomas(result.data)
 
     }
@@ -52,14 +52,36 @@ const BlacklistDiplomas = ({ proposta }) => {
             withCredentials: true
         })
 
-        console.log(result);
 
+        setOpenSnack(true)
         buscarDiploma()
+
+    }
+
+    const buscarUniversidades = async () => {
+
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/universidades`, {
+            withCredentials: true
+        })
+
+        setSugestoesUniversidades(result.data)
+
+    }
+
+    const buscarCursos = async () => {
+
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/cursos`, {
+            withCredentials: true
+        })
+
+        setSugestoesCursos(result.data)
 
     }
 
     useEffect(() => {
         buscarDiploma()
+        buscarUniversidades()
+        buscarCursos()
     }, [])
 
     return (
@@ -78,20 +100,44 @@ const BlacklistDiplomas = ({ proposta }) => {
             {
                 show ? (
                     <Box width='50%'>
-                        <TextField label='Universidade' fullWidth size="small" style={{ margin: '10px' }} value={universidade} onChange={e => setUniversidade(e.target.value)} />
-                        <TextField label='Curso' fullWidth size="small" style={{ margin: '10px' }} value={curso} onChange={e => setCurso(e.target.value)} />
+                        <Autocomplete
+                            fullWidth
+                            freeSolo
+                            onChange={(event, element) => {
+                                setUniversidade(element)
+                            }}
+                            value={universidade}
+                            options={sugestoesUniversidades.map((option) => option)}
+                            renderInput={(params) => <TextField {...params} label="Universidade" onChange={e => { setUniversidade(e.target.value) }} />}
+                            size="small"
+                            style={{ margin: '10px' }}
+                        />
+                        <Autocomplete
+                            fullWidth
+                            freeSolo
+                            onChange={(event, element) => {
+                                setCurso(element)
+                            }}
+                            value={curso}
+                            options={sugestoesCursos.map((option) => option)}
+                            renderInput={(params) => <TextField {...params} label="Curso" onChange={e => { setCurso(e.target.value) }} />}
+                            size="small"
+                            style={{ margin: '10px' }}
+                        />
+                        {/* <TextField label='Universidade' fullWidth size="small" style={{ margin: '10px' }} value={universidade} onChange={e => setUniversidade(e.target.value)} />
+                        <TextField label='Curso' fullWidth size="small" style={{ margin: '10px' }} value={curso} onChange={e => setCurso(e.target.value)} /> */}
                         <TextField label='Número de Registro de Diploma' fullWidth size="small" style={{ margin: '10px' }} value={numeroRegistro} onChange={e => setNumeroRegistro(e.target.value)} />
                         <Box>
                             <Button variant='outlined' onClick={salvarDiploma}>Salvar</Button>
                         </Box>
                         <Box>
-                            <ul>
+                            <ul style={{ listStyle: 'none', marginTop: '20px' }}>
                                 {
                                     diplomas.length === 0 ? (
-                                        <li>Diploma válido, ainda não utilizado</li>
+                                        <li><Alert severity="success" >Diploma válido, ainda não utilizado</Alert></li>
                                     ) : diplomas.map(e => {
                                         return (
-                                            <li>Diploma utilizado pela proposta: <a href="#">{e.proposta}</a></li>
+                                            <li><Alert severity="error">Diploma utilizado pela proposta: <a href={`/elegibilidade/analise/detalhes/${e._id}`} target='_blank' >{e.proposta}</a></Alert></li>
                                         )
                                     })
                                 }
@@ -100,6 +146,11 @@ const BlacklistDiplomas = ({ proposta }) => {
                     </Box>
                 ) : null
             }
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Atualizado com sucesso!
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }
