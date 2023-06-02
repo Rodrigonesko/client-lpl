@@ -4,6 +4,7 @@ import Axios from 'axios'
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
+import TextColor from "../../../components/TextColor/TextColor";
 
 const arrStatus = [
     'A iniciar',
@@ -251,13 +252,17 @@ const TodosElegibilidade = () => {
                             <TableBody>
                                 {
                                     propostas.map(e => {
+
+                                        const corretorBlacklist = blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor)
+
                                         return (
-                                            <TableRow style={{ color: 'white', backgroundColor: blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor) ? 'lightsalmon' : 'white' }}>
-                                                <TableCell>{e.proposta}</TableCell>
-                                                <TableCell>{moment(e.dataImportacao).format('DD/MM/YYYY')}</TableCell>
-                                                <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>
-                                                <TableCell>{e.nome}</TableCell>
-                                                <TableCell>{e.entidade}</TableCell>
+
+                                            <TableRow style={{ backgroundColor: blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor) ? '#b71c1c' : 'white' }}>
+                                                <TableCell><TextColor text={e.proposta} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
+                                                <TableCell><TextColor text={moment(e.dataImportacao).format('DD/MM/YYYY')} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
+                                                <TableCell><TextColor text={moment(e.vigencia).format('DD/MM/YYYY')} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
+                                                <TableCell><TextColor text={e.nome} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
+                                                <TableCell><TextColor text={e.entidade} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
                                                 <TableCell>
                                                     <select name="" id="" onChange={item => {
                                                         atribuir(item.target.value, e._id)
@@ -271,7 +276,7 @@ const TodosElegibilidade = () => {
                                                             })
                                                         }
                                                     </select></TableCell>
-                                                <TableCell>{e.status}</TableCell>
+                                                <TableCell><TextColor text={e.status} Primary='White' Secundary='Black' condition={corretorBlacklist} /></TableCell>
                                                 <TableCell><Button href={`/elegibilidade/analise/detalhes/${e._id}`}>Detalhes</Button></TableCell>
                                             </TableRow>
                                         )
