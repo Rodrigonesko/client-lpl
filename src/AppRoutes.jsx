@@ -20,6 +20,7 @@ import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
 import ProducaoElegibilidade from "./pages/Elegibilidade/ProducaoElegibilidade/ProducaoElegibilidade";
 import DevolvidasElegibilidade from "./pages/Elegibilidade/Devolvidas/Devolvidas";
 import PropostasAmil from "./pages/Elegibilidade/PropostasAmil/PropostasAmil";
+import Divergencias from "./pages/Elegibilidade/Divergencias/Divergencias";
 
 /* RSD */
 
@@ -337,6 +338,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/propostasAmil" element={<ProtectedRoute>
                     <PropostasAmil />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/divergencias" element={<ProtectedRoute>
+                    <Divergencias />
                 </ProtectedRoute>} />
 
                 {/* Urgência Emergência*/}

@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Container, Box, Paper, TextField, Button, Typography, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Snackbar, Alert } from "@mui/material";
+import { Container, Box, Paper, TextField, Button, Typography, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Snackbar, Alert, Modal, CircularProgress } from "@mui/material";
 import Axios from 'axios'
 import moment from "moment";
 import RelatorioPropostasManuaisElegibilidade from "./RelatorioPropostasManual";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 
 const PropostasAmil = () => {
 
@@ -22,6 +35,16 @@ const PropostasAmil = () => {
     const [severitySnack, setSeveritySnack] = useState('success')
     const [msgSnack, setMsgSnack] = useState('')
     const [openSnack, setOpenSnack] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
+    const [openModalConcluir, setOpenModalConcluir] = useState(false)
+
+    const [modalMeioSolicitacao, setModalMeioSolicitacao] = useState('')
+    const [modalMeioDeConfirmacao, setModalMeioConfirmacao] = useState('')
+    const [modalResultado, setModalResultado] = useState('')
+    const [modalObservacoes, setModalObservacoes] = useState('')
+    const [modalId, setModalId] = useState('')
+
+    const [total, setTotal] = useState([])
 
     const registrar = async () => {
         try {
@@ -100,10 +123,58 @@ const PropostasAmil = () => {
                 withCredentials: true
             })
 
-            console.log(result.data);
-
             setPropostas(result.data)
 
+            const resultData = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show/propostasManual`, { withCredentials: true })
+
+            setTotal(resultData.data)
+
+            setLoading(false)
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const atualizarObservacoes = async () => {
+        try {
+
+            console.log(modalObservacoes, modalId);
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atualizarObservacoes`, {
+                observacoes: modalObservacoes,
+                id: modalId
+            }, {
+                withCredentials: true
+            })
+
+
+            setOpenSnack(true)
+            setMsgSnack('Observações atualizadas')
+            setOpenModal(false)
+            buscarPropostas()
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const concluir = async () => {
+        try {
+
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/concluirPropostaManual`, {
+                id: modalId
+            }, {
+                withCredentials: true
+            })
+
+            setOpenSnack(true)
+            setMsgSnack('Proposta Concluída com sucesso')
+            buscarPropostas()
+            setOpenModalConcluir(false)
 
         } catch (error) {
             console.log(error);
@@ -120,7 +191,15 @@ const PropostasAmil = () => {
         <>
             <Sidebar />
             <Container>
-                <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => { setOpenSnack(false) }} >
+                {
+                    loading ? (
+                        <CircularProgress className="loading" />
+                    ) : null
+                }
+                <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => {
+                    setOpenSnack(false)
+                    setMsgSnack('')
+                }} >
                     <Alert onClose={() => { setOpenSnack(false) }} severity={severitySnack} sx={{ width: '100%' }}>
                         {msgSnack}
                     </Alert>
@@ -193,8 +272,18 @@ const PropostasAmil = () => {
                                             <TableCell>{proposta.beneficiario}</TableCell>
                                             <TableCell>{proposta.confirmacao}</TableCell>
                                             <TableCell>{proposta.responsavel}</TableCell>
-                                            <TableCell><Button variant="contained" color='info' >Info</Button></TableCell>
-                                            <TableCell><Button variant="contained" color='success' >Concluir</Button></TableCell>
+                                            <TableCell><Button variant="contained" color='info' onClick={() => {
+                                                setOpenModal(true)
+                                                setModalMeioSolicitacao(proposta.meioSolicitacao)
+                                                setModalMeioConfirmacao(proposta.meioConfirmacao)
+                                                setModalResultado(proposta.resultado)
+                                                setModalObservacoes(proposta.observacoes)
+                                                setModalId(proposta._id)
+                                            }} >Info</Button></TableCell>
+                                            <TableCell><Button variant="contained" color='success' onClick={() => {
+                                                setModalId(proposta._id)
+                                                setOpenModalConcluir(true)
+                                            }} >Concluir</Button></TableCell>
                                         </TableRow>
                                     )
                                 })
@@ -202,7 +291,79 @@ const PropostasAmil = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column' mt={3}>
+                    <Box component={Paper} p={2} elevation={3}>
+                        <Typography>
+                            Total de propostas amil: <strong>{total.length}</strong>
+                        </Typography>
+                        <Typography>
+                            Total Concluídos: <strong>{total.length - proposta.length}</strong>
+                        </Typography>
+                        <Typography>
+                            Total em andamento: <strong>{propostas.length}</strong>
+                        </Typography>
+                    </Box>
+
+                </Box>
+
             </Container>
+            <Modal
+                open={openModal}
+                onClose={() => {
+                    setOpenModal(false)
+                    setModalMeioConfirmacao('')
+                    setModalMeioSolicitacao('')
+                    setModalResultado('')
+                    setModalObservacoes('')
+                }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Informações
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
+                        <TextField label='Meio de Solicitação' fullWidth style={{ margin: '10px' }} InputProps={{
+                            readOnly: true,
+                        }} value={modalMeioSolicitacao} />
+                        <TextField label='Meio de Confirmação' fullWidth style={{ margin: '10px' }} InputProps={{
+                            readOnly: true,
+                        }} value={modalMeioDeConfirmacao} />
+                        <TextField label='Resultado' fullWidth style={{ margin: '10px' }} InputProps={{
+                            readOnly: true,
+                        }} value={modalResultado} />
+                        <TextField label='Observações' fullWidth style={{ margin: '10px' }} rows={2} multiline value={modalObservacoes} onChange={e => setModalObservacoes(e.target.value)} />
+                    </Typography>
+                    <Box display='flex' justifyContent='space-around' mt={2}>
+                        <Button color='inherit' variant="contained" onClick={() => {
+                            setOpenModal(false)
+                            setModalMeioConfirmacao('')
+                            setModalMeioSolicitacao('')
+                            setModalResultado('')
+                            setModalObservacoes('')
+                        }}>Fechar</Button>
+                        <Button variant="contained" onClick={atualizarObservacoes} >Salvar</Button>
+                    </Box>
+                </Box>
+            </Modal>
+            <Modal
+                open={openModalConcluir}
+                onClose={() => setOpenModalConcluir(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Concluir
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} display='flex' justifyContent='space-around'>
+                        <Button variant="contained" color='inherit' onClick={() => { setOpenModalConcluir(false) }} >Fechar</Button>
+                        <Button color="success" variant="contained" onClick={concluir} >Concluir</Button>
+                    </Typography>
+                </Box>
+            </Modal>
         </>
     )
 }
