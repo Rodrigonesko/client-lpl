@@ -8,6 +8,7 @@ const Divergencias = () => {
     const [file, setFile] = useState()
     const [status, setStatus] = useState('')
     const [qtd, setQtd] = useState(0)
+    // const [propostas, setPropostas] = useState([])
 
     const send = async e => {
         e.preventDefault()
@@ -25,17 +26,46 @@ const Divergencias = () => {
             console.log(result.data);
 
             setStatus('Concluido')
-            setQtd(result.data.qtd)
+
+            setQtd(result.data.propostas.length)
+            downloadArquivo(result.data.propostas)
 
 
         } catch (error) {
             console.log(error);
             setStatus('Erro')
         }
-
     }
 
+    const downloadArquivo = (propostas) => {
 
+        let xls = '\ufeff'
+        xls += "<table border='1'>"
+        xls += "<thead><tr>"
+        xls += "<th>Base Amil</th>"
+        xls += "<th>Base Lpl</th>"
+        xls += "<th>Houve Divergencia</th>"
+        xls += "<th>Proposta</th>"
+        xls += "</tr>"
+
+        propostas.forEach(item => {
+            xls += `<tr>`
+            xls += `<td>${item.statusAmil}</td>`
+            xls += `<td>${item.statusBanco}</td>`
+            xls += `<td>Houve Divergência</td>`
+            xls += `<td>${item.proposta}</td>`
+            xls += `</tr>`
+        })
+
+        xls += "</tbody></table>"
+
+        let a = document.createElement('a');
+        let data_type = 'data:application/vnd.ms-excel';
+        a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+        a.download = 'relatorio divergencias.xls'
+        a.click()
+
+    }
 
     return (
         <>
@@ -61,7 +91,7 @@ const Divergencias = () => {
                         {
                             status === 'Concluido' ? (
                                 <Alert severity="success">
-                                    Foram inseridas {qtd} propostas novas
+                                    {qtd} divergencias
                                 </Alert>
                             ) : null
                         }
