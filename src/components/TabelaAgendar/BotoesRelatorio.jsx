@@ -250,6 +250,219 @@ const BotoesRelatorios = () => {
         }
     }
 
+    const relatorioReenviar = async () => {
+        try {
+
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/show`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
+
+            const reenviar = result.data.propostas.filter(e => {
+                return e.status !== 'Concluído' && e.status !== 'Cancelado' && e.agendado !== 'agendado' && e.reenviadoVigencia
+            })
+
+            console.log(reenviar);
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<td>ID</td>"
+            xls += "<td>Data Recebimento</td>"
+            xls += "<td>Data Vigência</td>"
+            xls += "<td>Proposta</td>"
+            xls += "<td>Nome</td>"
+            xls += "<td>CPF</td>"
+            xls += "<td>Agendado</td>"
+            xls += "<td>Data Entrevista</td>"
+            xls += "<td>Responsável</td>"
+            xls += "<td>Tipo de Contrato</td>"
+            xls += "<th>1° Contato</th>"
+            xls += "<th>Responsavel 1° Contato</th>"
+            xls += "<th>2° Contato</th>"
+            xls += "<th>Responsavel 2° Contato</th>"
+            xls += "<th>3° Contato</th>"
+            xls += "<th>Responsavel 3° Contato</th>"
+            xls += "<td>"
+            xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+
+            reenviar.forEach(e => {
+                xls += "<tr>"
+                xls += `<td>${e._id}</td>`
+                xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.proposta}</td>`
+                xls += `<td>${e.nome}</td>`
+                xls += `<td>${e.cpf}</td>`
+                xls += `<td>${e.agendado}</td>`
+                xls += `<td>${e.dataEntrevista}</td>`
+                xls += `<td>${e.enfermeiro}</td>`
+                xls += `<td>${e.tipoContrato}</td>`
+                e.contato1 ? (
+                    xls += `<td>${e.contato1}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+                e.responsavelContato1 ? (
+                    xls += `<td>${e.responsavelContato1}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.contato2 ? (
+                    xls += `<td>${e.contato2}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.responsavelContato2 ? (
+                    xls += `<td>${e.responsavelContato2}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.contato3 ? (
+                    xls += `<td>${e.contato3}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.responsavelContato3 ? (
+                    xls += `<td>${e.responsavelContato2}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+                xls += `</tr>`
+            })
+
+            xls += "</tbody></table>"
+
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = 'Relatório Não Realizadas.xls'
+            a.click()
+
+            setLoading(false)
+
+            setLoading(false)
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const relatorioDevolver = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/show`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+            })
+
+            const devolver = result.data.propostas.filter(e => {
+                return e.status !== 'Concluído' && e.status !== 'Cancelado' && e.agendado !== 'agendado' && e.reenviadoVigencia && e.vigencia === moment().format('YYYY-MM-DD')
+            })
+
+            console.log(devolver);
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<td>ID</td>"
+            xls += "<td>Data Recebimento</td>"
+            xls += "<td>Data Vigência</td>"
+            xls += "<td>Proposta</td>"
+            xls += "<td>Nome</td>"
+            xls += "<td>CPF</td>"
+            xls += "<td>Agendado</td>"
+            xls += "<td>Data Entrevista</td>"
+            xls += "<td>Responsável</td>"
+            xls += "<td>Tipo de Contrato</td>"
+            xls += "<th>1° Contato</th>"
+            xls += "<th>Responsavel 1° Contato</th>"
+            xls += "<th>2° Contato</th>"
+            xls += "<th>Responsavel 2° Contato</th>"
+            xls += "<th>3° Contato</th>"
+            xls += "<th>Responsavel 3° Contato</th>"
+            xls += "<td>"
+            xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+
+            devolver.forEach(e => {
+                xls += "<tr>"
+                xls += `<td>${e._id}</td>`
+                xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.proposta}</td>`
+                xls += `<td>${e.nome}</td>`
+                xls += `<td>${e.cpf}</td>`
+                xls += `<td>${e.agendado}</td>`
+                xls += `<td>${e.dataEntrevista}</td>`
+                xls += `<td>${e.enfermeiro}</td>`
+                xls += `<td>${e.tipoContrato}</td>`
+                e.contato1 ? (
+                    xls += `<td>${e.contato1}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+                e.responsavelContato1 ? (
+                    xls += `<td>${e.responsavelContato1}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.contato2 ? (
+                    xls += `<td>${e.contato2}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.responsavelContato2 ? (
+                    xls += `<td>${e.responsavelContato2}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.contato3 ? (
+                    xls += `<td>${e.contato3}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.responsavelContato3 ? (
+                    xls += `<td>${e.responsavelContato2}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+                xls += `</tr>`
+            })
+
+            xls += "</tbody></table>"
+
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = 'Relatório Não Realizadas.xls'
+            a.click()
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+    }
+
     return (
         <Box width='50%' display='flex' justifyContent='space-around' margin='1rem'>
             {
@@ -259,6 +472,8 @@ const BotoesRelatorios = () => {
             }
             <Button variant='contained' onClick={relatorioPropostas}>Relatório Propostas</Button>
             <Button variant='contained' onClick={relatorioNaoRealizadas}>Relatório Não Realizadas</Button>
+            <Button size="small" variant='outlined' onClick={relatorioReenviar} >Reenviar mensagens</Button>
+            <Button size="small" variant='outlined' onClick={relatorioDevolver} >Devolver Amil</Button>
         </Box>
     )
 }

@@ -205,6 +205,7 @@ const CriarPedidoIndividual = () => {
                                     <option value=""></option>
                                     <option value="RSD">RSD</option>
                                     <option value="Quarentena">Quarentena</option>
+                                    <option value="Alta Frequência Consulta">Alta Frequência Consulta</option>
                                 </select>
                             </div>
                         </div>

@@ -29,6 +29,8 @@ const EntrevistasRealizadas = () => {
     const [id, setId] = useState('')
     const [nome, setNome] = useState('')
     const [proposta, setpProposta] = useState('')
+    const [dataInicio, setDataInicio] = useState('')
+    const [dataFim, setDataFim] = useState('')
     // const [pdf, setPdf] = useState(false)
 
     const alterarSexo = async (id, sexo) => {
@@ -88,6 +90,8 @@ const EntrevistasRealizadas = () => {
             setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+
+            //console.log(dataInicio, dataFim);
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -191,7 +195,11 @@ const EntrevistasRealizadas = () => {
                         <Button type='submit' onClick={buscarEntrevistas} size='small' variant='contained'>Buscar</Button>
                         <Button variant='contained' onClick={entrevistasQualidade} color='info' size='small' style={{ marginLeft: '20px' }} >Filtrar entrevistas de qualidade</Button>
                     </Box>
-                    <Button size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
+                    <Box display='flex'>
+                        {/* <TextField type='date' label='Data Inicio' focused size='small' onChange={e => setDataInicio(e.target.value)} />
+                        <TextField type='date' label='Data Fim' focused size='small' onChange={e => setDataFim(e.target.value)} /> */}
+                        <Button style={{ marginLeft: '4px' }} size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
+                    </Box>
                 </Box>
                 <TableContainer className="entrevistas-realizadas">
                     <Table className='table'>

@@ -151,13 +151,9 @@ const Agendar = () => {
                         <Button variant="contained" style={{ marginLeft: '10px' }} onClick={buscarPessoa}>Buscar</Button>
                     </Box>
 
-                    <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas}>
+                    <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas} />
 
-                    </TabelaAgendarTele>
-
-                    <TabelaAgendarRn propostas={rns}>
-
-                    </TabelaAgendarRn>
+                    <TabelaAgendarRn propostas={rns} />
 
                     <div className="horarios-disponiveis-container">
                         <div className="title">
