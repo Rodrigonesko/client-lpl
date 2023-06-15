@@ -40,15 +40,15 @@ const DevolvidasElegibilidade = () => {
         try {
 
             setLoading(true)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/devolvidas/${name}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Devolvida/${name}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)
 
-            // const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/andamento`, { withCredentials: true })
+            const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/Devolvida`, { withCredentials: true })
 
-            let arrEnt = result.data.propostas.map(e => {
-                return e.entidade
+            let arrEnt = buscaEntidade.data.entidades.map(e => {
+                return e
             })
 
             setEntidades(arrEnt)
@@ -91,7 +91,7 @@ const DevolvidasElegibilidade = () => {
             }
 
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroDevolvidas?analista=${valorAnalista}&entidade=${valorEntidade}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&entidade=${valorEntidade}&status=Devolvida&vigencia`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)

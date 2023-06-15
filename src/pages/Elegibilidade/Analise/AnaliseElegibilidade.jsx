@@ -40,7 +40,8 @@ const AnaliseElegibilidade = () => {
         try {
 
             setLoading(true)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analise/${name}`, { withCredentials: true })
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Andamento/${name}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.total)
@@ -90,7 +91,7 @@ const AnaliseElegibilidade = () => {
                 valorStatus = ''
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroAnalise?analista=${valorAnalista}&entidade=${valorEntidade}&status=${valorStatus}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&entidade=${valorEntidade}&status=${valorStatus}&fase=Analise&vigencia`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)
@@ -132,7 +133,7 @@ const AnaliseElegibilidade = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analise/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Andamento/proposta/${propostaPesquisada}`, { withCredentials: true })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.total)

@@ -83,9 +83,7 @@ const TodosElegibilidade = () => {
                 valorStatus = ''
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtroTodas?analista=${valorAnalista}&vigencia=${valorVigencia}&status=${valorStatus}`, { withCredentials: true })
-
-
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&vigencia=${valorVigencia}&status=${valorStatus}`, { withCredentials: true })
 
             setPropostas(result.data)
             setTotal(result.data.length)
