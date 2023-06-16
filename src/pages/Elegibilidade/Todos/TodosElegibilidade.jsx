@@ -119,12 +119,12 @@ const TodosElegibilidade = () => {
 
             setPesquisando(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/todas/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Todas/proposta/${propostaPesquisada}`, { withCredentials: true })
 
             console.log(result);
 
-            setPropostas(result.data)
-            setTotal(result.data.total)
+            setPropostas(result.data.propostas)
+            setTotal(result.data.propostas.length)
             setPesquisando(false)
 
         } catch (error) {
