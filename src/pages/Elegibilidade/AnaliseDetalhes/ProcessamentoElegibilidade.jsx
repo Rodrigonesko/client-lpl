@@ -21,7 +21,8 @@ const ProcessamentoElegibilidade = ({
         planoAmil: proposta.planoAmil,
         dataInicioPlanoAmil: proposta.dataInicioPlanoAmil,
         dataFimPlanoAmil: proposta.dataFimPlanoAmil,
-        custoPlanoAmil: proposta.custoPlanoAmil
+        custoPlanoAmil: proposta.custoPlanoAmil,
+        prcProposta: proposta.prcProposta
     })
 
     const [openSnack, setOpenSnack] = useState(false)
@@ -117,6 +118,7 @@ const ProcessamentoElegibilidade = ({
                             }
                         </Select>
                     </FormControl>
+                    <TextField size='small' style={{ width: '50%', marginTop: '18px' }} label='PRC proposta' value={dadosAnalise.prcProposta} onChange={e => setDadosAnalise({ ...dadosAnalise, prcProposta: e.target.value })} />
                     <FormControlLabel onChange={e => {
                         setDadosAnalise({ ...dadosAnalise, planoAnterior: e.target.checked ? true : false })
                     }} control={<Checkbox defaultChecked={dadosAnalise.planoAnterior} />} label="Plano Anterior?" />
