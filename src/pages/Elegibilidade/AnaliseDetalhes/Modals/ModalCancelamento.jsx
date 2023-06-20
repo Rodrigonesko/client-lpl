@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const style = {
     position: 'absolute',
@@ -22,6 +23,7 @@ const ModalCancelamento = ({ atualizarDados }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const navigate = useNavigate()
 
     const cancelar = async () => {
         try {
@@ -32,9 +34,10 @@ const ModalCancelamento = ({ atualizarDados }) => {
                 withCredentials: true
             })
 
-            if(result.status === 200){
+            if (result.status === 200) {
                 atualizarDados()
                 handleClose()
+                navigate('/elegibilidade/cancelar')
             }
 
         } catch (error) {

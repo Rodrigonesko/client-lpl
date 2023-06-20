@@ -275,11 +275,11 @@ const AnaliseElegibilidade = () => {
                                 {
                                     propostas.map(e => {
 
-                                        const corretorBlacklist = blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor)
+                                        const corretorBlacklist = blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor) && e.nomeCorretor
 
                                         return (
 
-                                            <TableRow style={{ backgroundColor: blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor) ? '#b71c1c' : 'white' }}>
+                                            <TableRow style={{ backgroundColor: blacklist.some(obj => obj.nomeCorretor === e.nomeCorretor) && e.nomeCorretor ? '#b71c1c' : 'white' }}>
                                                 <TableCell><TextColor text={e.proposta} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
                                                 <TableCell><TextColor text={moment(e.dataImportacao).format('DD/MM/YYYY')} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>
                                                 <TableCell><TextColor text={moment(e.vigencia).format('DD/MM/YYYY')} Primary='White' Secundary='' condition={corretorBlacklist} /></TableCell>

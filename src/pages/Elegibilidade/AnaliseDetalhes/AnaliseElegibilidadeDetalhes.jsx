@@ -33,16 +33,36 @@ const AnaliseElegibilidadeDetalhes = () => {
     }
 
     const buscarDados = async () => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
-        const { proposta } = result.data;
-        setProposta(proposta);
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
+            const { proposta } = result.data;
 
-        const resultConsultaCpf = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/consultaCpf/${proposta.cpfCorretor}`, { withCredentials: true })
+            if (proposta.status === 'A iniciar') {
+                await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/alterarStatus`, {
+                    id: proposta._id
+                }, {
+                    withCredentials: true
+                })
 
-        if (resultConsultaCpf.data.msg === 'ok') {
-            setCpfCancelado(true)
+                buscarDados()
+
+            }
+
+            setProposta(proposta);
+
+            let consultaCpf
+
+            if (proposta.cpfCorretor) {
+                consultaCpf = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/consultaCpf/${proposta.cpfCorretor}`, { withCredentials: true })
+
+            }
+
+            if (consultaCpf?.data.msg === 'ok') {
+                setCpfCancelado(true)
+            }
+        } catch (error) {
+            console.log(error);
         }
-
     }
 
     const buscarAgenda = async () => {
@@ -75,7 +95,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                     </Typography>
                     <Box component={Paper} elevation={3} p={2}>
                         <Typography variant="h6" bgcolor='royalblue' p={1} color='white' borderRadius='5px'>
-                            {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) ? '*Corretor na blacklist*' : null} {cpfCancelado ? '- CPF JÁ CANCELADO' : ''}
+                            {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) && proposta.nomeCorretor ? '*Corretor na blacklist*' : null} {cpfCancelado ? '- CPF JÁ CANCELADO' : ''}
                         </Typography>
 
                         {

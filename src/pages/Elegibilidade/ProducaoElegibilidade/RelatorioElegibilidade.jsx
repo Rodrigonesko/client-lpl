@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment";
+import { showPropostas } from "../../../_services/elegibilidade.service";
 
 const RelatorioElegibilidade = () => {
 
@@ -11,10 +11,7 @@ const RelatorioElegibilidade = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show`, {
-                withCredentials: true
-            })
-
+            const result = await showPropostas()
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -67,7 +64,7 @@ const RelatorioElegibilidade = () => {
             xls += "<th>Analista Resp</th>"
             xls += "</tr>"
 
-            result.data.forEach(proposta => {
+            result.forEach(proposta => {
                 xls += "<tr>"
                 xls += `<td>${proposta.proposta}</td>`
                 xls += `<td>${proposta.dataImportacao}</td>`
