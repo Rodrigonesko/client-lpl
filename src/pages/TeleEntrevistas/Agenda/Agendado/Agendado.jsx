@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from "@mui/material";
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 import moment from "moment";
-import { getCookie } from "react-use-cookie";
+import { buscaAnalistasTele } from "../../../../_services/user.service";
+import { getPropostasAgendadas, getRnsAgendadas } from "../../../../_services/teleEntrevista.service";
 
 
 const Agendado = () => {
@@ -17,9 +17,9 @@ const Agendado = () => {
 
     const searchEnfermeiro = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, { withCredentials: true })
+            const result = await buscaAnalistasTele()
 
-            setEnfermeiros(result.data.enfermeiros)
+            setEnfermeiros(result.enfermeiros)
 
         } catch (error) {
             console.log(error);
@@ -31,15 +31,13 @@ const Agendado = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
-            const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
+            const result = await getPropostasAgendadas()
+
+            const resultRn = await getRnsAgendadas()
 
             let arr = []
 
-            for (const item of result.data) {
+            for (const item of result) {
                 arr.push({
                     dataEntrevista: item.dataEntrevista,
                     proposta: item.proposta,
@@ -56,7 +54,7 @@ const Agendado = () => {
                 })
             }
 
-            for (const item of resultRn.data.rns) {
+            for (const item of resultRn.rns) {
                 arr.push({
                     dataEntrevista: item.dataEntrevista,
                     proposta: item.proposta,
@@ -86,15 +84,12 @@ const Agendado = () => {
 
     const filtroEnfermeiro = async enfermeiro => {
         setLoading(true)
-        const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/agendadas`, {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${getCookie('token')}` }
-        })
-        const resultRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/agendadas`, { withCredentials: true })
+        const result = await getPropostasAgendadas()
+        const resultRn = await getRnsAgendadas()
 
         let arr = []
 
-        for (const item of result.data) {
+        for (const item of result) {
             arr.push({
                 dataEntrevista: item.dataEntrevista,
                 proposta: item.proposta,
@@ -111,7 +106,7 @@ const Agendado = () => {
             })
         }
 
-        for (const item of resultRn.data.rns) {
+        for (const item of resultRn.rns) {
             arr.push({
                 dataEntrevista: item.dataEntrevista,
                 proposta: item.proposta,

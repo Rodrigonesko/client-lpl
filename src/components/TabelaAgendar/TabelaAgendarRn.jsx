@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, Typography, Container } from "@mui/material";
 import moment from "moment/moment";
 import Axios from 'axios'
+import { alterarTelefoneRn, cancelarRn, excluirRn } from "../../_services/teleEntrevista.service";
 
 const style = {
     position: 'absolute',
@@ -31,15 +32,11 @@ const TabelaAgendarRn = ({ propostas }) => {
     const excluir = async () => {
         try {
 
-            const result = await Axios.delete(`${process.env.REACT_APP_API_KEY}/rn/delete/${id}`, {
-                withCredentials: true
-            })
+            await excluirRn(id)
 
-            console.log(result);
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
+
 
         } catch (error) {
             console.log(error);
@@ -49,30 +46,20 @@ const TabelaAgendarRn = ({ propostas }) => {
     const alterarTelefone = async (id, telefone) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/alterarTelefone`, {
-                id,
-                telefone
-            }, {
-                withCredentials: true
-            })
+            await alterarTelefoneRn({ id, telefone })
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const cancelarRn = async () => {
+    const cancelarEntrevistaRn = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/cancelar`, {
-                id
-            }, {
-                withCredentials: true
-            })
+            await cancelarRn({ id })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
+
 
         } catch (error) {
             console.log(error);
@@ -147,7 +134,7 @@ const TabelaAgendarRn = ({ propostas }) => {
                             </Typography>
                             <Typography variant="body2" display='flex' justifyContent='space-around' width='100%' margin='1rem'>
                                 <Button variant='contained' onClick={() => { setCancelar(false) }}>Fechar</Button>
-                                <Button color="error" variant='contained' onClick={cancelarRn} >Cancelar</Button>
+                                <Button color="error" variant='contained' onClick={cancelarEntrevistaRn} >Cancelar</Button>
                             </Typography>
                         </Box>
                     </Box>

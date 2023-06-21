@@ -1,0 +1,123 @@
+import { ApiCall } from "./api";
+const URL_API = 'http://localhost:3002'  //process.env.REACT_APP_API_TELE_KEY
+
+
+export const showPropostas = async () => {
+    return await new ApiCall('/show', URL_API).get()
+}
+
+export const uploadPropostas = async (result) => {
+    return await new ApiCall('/upload', URL_API).post(result)
+}
+
+export const mostrarPropostaPorId = async (id) => {
+    return await new ApiCall(`/proposta/${id}`, URL_API).get()
+}
+
+export const adicionaCid = async (cid, descricao) => {
+    return await new ApiCall('/entrevistas/cid/adicionar').post(cid, descricao)
+}
+
+export const getPropostasAgendadas = async () => {
+    return await new ApiCall('/agendadas', URL_API).get()
+}
+
+export const getRnsAgendadas = async () => {
+    return await new ApiCall('/rn/agendadas').get()
+}
+
+export const getProposasNaoAgendadas = async () => {
+    return await new ApiCall('/naoAgendadas', URL_API).get()
+}
+
+export const getRnsNaoAgendadas = async () => {
+    return await new ApiCall('/rn/naoAgendadas').get()
+}
+
+export const getHorariosDisponiveis = async () => {
+    return await new ApiCall('/entrevistas/horarios/disponiveis').get()
+}
+
+export const getDiasDisponiveis = async () => {
+    return await new ApiCall('/entrevistas/diasDisponiveis').get()
+}
+
+export const getHorariosDisponiveisPorDia = async (dia) => {
+    return await new ApiCall(`/entrevistas/horariosDisponiveis/${dia}`).get()
+}
+
+export const getAnalistasDisponiveis = async (dataEntrevista, horario) => {
+    return await new ApiCall(`entrevistas/analistasDisponiveis/${dataEntrevista}/${horario}`).get()
+}
+
+export const agendarEntrevista = async (id, responsavel, data, horario) => {
+    return await new ApiCall('/entrevistas/agendar').put(id, responsavel, data, horario)
+}
+
+export const reagendarEntrevista = async (id) => {
+    return await new ApiCall('/entrevistas/reagendar').put(id)
+}
+
+export const reagendarRn = async (id) => {
+    return await new ApiCall('/rn/reagendar').put(id)
+}
+
+export const alterarTelefoneEntrevista = async (id, telefone) => {
+    return await new ApiCall('/alterarTelefone', URL_API).put(id, telefone)
+}
+
+export const alterarTelefoneRn = async (id, telefone) => {
+    return await new ApiCall('/rn/alterarTelefone').put(id, telefone)
+}
+
+export const alterarSexoEntrevista = async (id, sexo) => {
+    return await new ApiCall('/alterarSexo', URL_API).put(id, sexo)
+}
+
+export const tentativaContatoEntrevista = async (tentativa, id) => {
+    return await new ApiCall('/tentativaContato', URL_API).put(tentativa, id)
+}
+
+export const preencherFormulario = async (respostas,
+    subRespostas,
+    pessoa,
+    simOuNao,
+    cids,
+    divergencia,
+    entrevistaQualidade) => {
+    return await new ApiCall('/entrevistas/formulario').post(respostas,
+        subRespostas,
+        pessoa,
+        simOuNao,
+        cids,
+        divergencia,
+        entrevistaQualidade)
+}
+
+export const getPropostasADevolver = async () => {
+    return await new ApiCall('/devolverPropostas', URL_API).get()
+}
+
+export const gerarHorariosEntrevistas = async (dataGerar) => {
+    return await new ApiCall('/entrevistas/gerarHorarios').post(dataGerar)
+}
+
+export const excluirRn = async (id) => {
+    return await new ApiCall(`/rn/delete/${id}`).delete()
+}
+
+export const cancelarRn = async (id) => {
+    return await new ApiCall('/rn/cancelar').put(id)
+}
+
+export const cancelarEntrevista = async (id, motivoCancelamento) => {
+    return await new ApiCall('/entrevistas/cancelar').put(id, motivoCancelamento)
+}
+
+export const excluirPropostaEntrevista = async (id) => {
+    return await new ApiCall(`/delete/${id}`, URL_API).delete()
+}
+
+export const alterarVigenciaProposta = async (id, vigencia) => {
+    return await new ApiCall('/alterarVigencia', URL_API).put(id, vigencia)
+}

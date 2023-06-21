@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios'
+import { atualizarInformacoesMo, buscarInformacoesMo } from "../../_services/rsd.service";
 
 const InformacoesGerais = ({ mo }) => {
 
@@ -15,25 +15,23 @@ const InformacoesGerais = ({ mo }) => {
 
     const buscarInformacoes = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
+            const result = await buscarInformacoesMo(mo)
 
-            setNome(result.data.pessoa.nome)
-            setCpf(result.data.pessoa.cpf)
-            setDataNascimento(result.data.pessoa.dataNascimento)
-            setEmail(result.data.pessoa.email)
-            setFone1(result.data.pessoa.fone1)
-            setFone2(result.data.pessoa.fone2)
-            setFone3(result.data.pessoa.fone3)
-            setContratoEmpresa(result.data.pessoa.contratoEmpresa)
+            setNome(result.pessoa.nome)
+            setCpf(result.pessoa.cpf)
+            setDataNascimento(result.pessoa.dataNascimento)
+            setEmail(result.pessoa.email)
+            setFone1(result.pessoa.fone1)
+            setFone2(result.pessoa.fone2)
+            setFone3(result.pessoa.fone3)
+            setContratoEmpresa(result.pessoa.contratoEmpresa)
         } catch (error) {
             console.log(error);
         }
     }
 
     const atualizarInformacoes = async () => {
-        console.log(dataNascimento, email, fone1, fone2, fone3, contratoEmpresa, mo);
-
-        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/editar`, {
+        await atualizarInformacoesMo({
             dataNascimento,
             email,
             fone1,
@@ -41,14 +39,9 @@ const InformacoesGerais = ({ mo }) => {
             fone3,
             contratoEmpresa,
             mo
-        }, {
-            withCredentials: true
         })
 
-        if (result.status === 200) {
-            setMsg('Atualizado com sucesso')
-        }
-
+        setMsg('Atualizado com sucesso')
     }
 
     useEffect(() => {

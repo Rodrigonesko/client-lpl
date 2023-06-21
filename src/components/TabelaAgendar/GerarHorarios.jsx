@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Modal, Typography } from "@mui/material";
-import Axios from 'axios'
+import { gerarHorariosEntrevistas } from "../../_services/teleEntrevista.service";
 
 const style = {
     position: 'absolute',
@@ -24,18 +24,19 @@ const GerarHorarios = () => {
     const gerarHorarios = async () => {
         try {
 
-            if(data === ''){
+            if (data === '') {
                 setMsg('Por favor selecione uma data')
                 setModal(true)
                 return
             }
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/gerarHorarios`, { dataGerar: data }, { withCredentials: true })
+            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/gerarHorarios`, { dataGerar: data }, { withCredentials: true })
 
-            if (result.status === 200) {
-                setModal(true)
-                setMsg('Horario gerados com sucesso!')
-            }
+            await gerarHorariosEntrevistas({ dataGerar: data })
+
+            setModal(true)
+            setMsg('Horario gerados com sucesso!')
+
         } catch (error) {
             console.log(error);
             setModal(true)

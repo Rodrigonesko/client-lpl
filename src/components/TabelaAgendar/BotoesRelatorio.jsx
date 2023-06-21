@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
+import { getPropostasADevolver, showPropostas } from "../../_services/teleEntrevista.service";
 
 const BotoesRelatorios = () => {
 
@@ -12,10 +13,7 @@ const BotoesRelatorios = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/show`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
-            })
+            const result = await showPropostas()
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -59,7 +57,7 @@ const BotoesRelatorios = () => {
             xls += "</thead>"
             xls += "<tbody>"
 
-            result.data.propostas.forEach(e => {
+            result.propostas.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
@@ -153,12 +151,9 @@ const BotoesRelatorios = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/show`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
-            })
+            const result = await showPropostas()
 
-            const naoRealizadas = result.data.propostas.filter(e => {
+            const naoRealizadas = result.propostas.filter(e => {
                 return e.status !== 'Concluído' && e.status !== 'Cancelado'
             })
 
@@ -255,10 +250,7 @@ const BotoesRelatorios = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/devolverPropostas`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
-            })
+            const result = await getPropostasADevolver()
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -284,7 +276,7 @@ const BotoesRelatorios = () => {
             xls += "</thead>"
             xls += "<tbody>"
 
-            result.data.forEach(e => {
+            result.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e._id}</td>`
                 xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`

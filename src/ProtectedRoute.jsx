@@ -1,37 +1,35 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
 import AuthContext from "./context/AuthContext";
-import Axios from 'axios'
+import { verificarToken } from "./_services/auth.service";
+import { getInfoUser } from "./_services/user.service";
 
 const ProtectedRoute = ({ children }) => {
 
-    const { authToken, accessLevel, setAccessLevel, name, setName, setLiminares, setLiminaresAj, setEnfermeiro, setElegibilidade} = useContext(AuthContext)
+    const { setAccessLevel, name, setName, setEnfermeiro, setElegibilidade } = useContext(AuthContext)
 
     const navigate = useNavigate()
 
-    const verifyToken = async () =>{
+    const verifyToken = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/verifyToken`, {withCredentials: true})
+            const result = await verificarToken()
 
-            setName(result.data.name)
-            setAccessLevel(result.data.accessLevel)
+            setName(result.name)
+            setAccessLevel(result.accessLevel)
 
-            const modules = await Axios.get(`${process.env.REACT_APP_API_KEY}/infoUser`, {withCredentials: true})
-            setLiminares(modules.data.user.liminares)
-            setLiminaresAj(modules.data.user.liminaresAj)
-            setEnfermeiro(modules.data.user.enfermeiro)
-            setElegibilidade(modules.data.user.elegibilidade)
+            const modules = await getInfoUser()
+            setEnfermeiro(modules.user.enfermeiro)
+            setElegibilidade(modules.user.elegibilidade)
 
         } catch (error) {
+            console.log(error);
             navigate('/login')
         }
-       
+
     }
 
-    useEffect( () => {
-
+    useEffect(() => {
         verifyToken()
- 
     }, [name])
 
 

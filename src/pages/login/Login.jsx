@@ -31,10 +31,15 @@ const Login = () => {
             if (result.status === 200) {
                 const authToken = result.data.token
                 setAuthToken(authToken)
+                const cookie = result.data.token
+                document.cookie = `token=${cookie}`
                 await Axios.post(`${process.env.REACT_APP_API_KEY}/controleAtividade/iniciarPadrao`, {
                     name: result.data.user
                 }, {
-                    withCredentials: true
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `Bearer ${cookie}`
+                    }
                 })
                 navigate('/')
 

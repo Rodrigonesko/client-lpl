@@ -1,11 +1,13 @@
 import axios from "axios";
+import { getCookie } from "react-use-cookie";
 
 export class ApiCall {
 
-    constructor(route, config = undefined, admin = false, apiBaseUrl = process.env.REACT_APP_API_KEY) {
+    constructor(route, apiBaseUrl = process.env.REACT_APP_API_KEY, token = getCookie('token'), config = undefined) {
         this.base = apiBaseUrl;
         this.currentRoute = route;
         this.currentConfig = config;
+        this.token = token
         return this;
     }
 

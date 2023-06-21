@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Modal from 'react-modal'
+import { adicionaCid } from "../../../_services/teleEntrevista.service";
 
 Modal.setAppElement('#root')
 
@@ -25,14 +25,9 @@ const AdicionarCid = () => {
 
             e.preventDefault()
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/cid/adicionar`, {
-                cid,
-                descricao: descricaoCid
-            }, { withCredentials: true })
+            await adicionaCid({ cid, descricao: descricaoCid })
 
-            if (result.status === 200) {
-                openModal()
-            }
+            openModal()
 
         } catch (error) {
             console.log(error);

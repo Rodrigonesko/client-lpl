@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Typography, CircularProgress } from "@mui/material";
 import moment from "moment";
-import Axios from 'axios'
-import { getCookie } from "react-use-cookie";
+import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarTelefoneRn, reagendarEntrevista, reagendarRn, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
 
 const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
@@ -10,17 +9,9 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const tentativaContato = async (tentativa, id) => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/tentativaContato`, {
-                tentativa,
-                id
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            await tentativaContatoEntrevista({ tentativa, id })
 
             atualizarPropostas(analista)
-
-            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -32,22 +23,20 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
             setLoading(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reagendar`, { id }, { withCredentials: true })
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            await reagendarEntrevista({ id })
+
+            atualizarPropostas(analista)
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const reagendarRn = async (id) => {
+    const reagendarEntrevistaRn = async (id) => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/reagendar`, { id }, { withCredentials: true })
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            await reagendarRn({ id })
+
+            window.location.reload()
 
         } catch (error) {
             console.log(error);
@@ -57,24 +46,16 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            await alterarTelefoneEntrevista({ telefone, id })
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const alterarTelefoneRn = async (id, telefone) => {
+    const alterarTelefoneEntrevistaRn = async (id, telefone) => {
         try {
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/alterarTelefone`, {
-                id,
-                telefone
-            }, {
-                withCredentials: true
-            })
+            await alterarTelefoneRn({ id, telefone })
 
         } catch (error) {
             console.log(error);
@@ -83,13 +64,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const alterarSexo = async (id, sexo) => {
         try {
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarSexo`, {
-                id,
-                sexo
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            await alterarSexoEntrevista({ id, sexo })
         } catch (error) {
             console.log(error);
         }
@@ -192,7 +167,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                                             <TableCell>{e.proposta}</TableCell>
                                             <TableCell>
                                                 <TextField style={{ minWidth: '150px' }} size="small" variant='standard' defaultValue={e.telefone} onChange={item => {
-                                                    alterarTelefoneRn(e._id, item.target.value)
+                                                    alterarTelefoneEntrevistaRn(e._id, item.target.value)
                                                 }} />
                                             </TableCell>
                                             <TableCell>{e.nome}</TableCell>
@@ -200,7 +175,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                                             <TableCell></TableCell>
                                             <TableCell>{e.enfermeiro}</TableCell>
                                             <TableCell><Button size="small" variant='contained' href={`/rn/rns/${e._id}`}>Formulario</Button></TableCell>
-                                            <TableCell><Button size="small" color='warning' onClick={() => reagendarRn(e._id)} variant='contained'>Reagendar</Button></TableCell>
+                                            <TableCell><Button size="small" color='warning' onClick={() => reagendarEntrevistaRn(e._id)} variant='contained'>Reagendar</Button></TableCell>
                                         </TableRow>
                                     )
                                 }

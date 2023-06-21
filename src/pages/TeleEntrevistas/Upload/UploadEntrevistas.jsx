@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './UploadEntrevistas.css'
 import * as XLSX from 'xlsx';
-import Axios from 'axios'
 import moment from "moment/moment";
 import { CircularProgress } from "@mui/material";
-import { getCookie } from "react-use-cookie";
+import { uploadPropostas } from "../../../_services/teleEntrevista.service";
 
 const UploadRn = () => {
 
@@ -32,49 +31,41 @@ const UploadRn = () => {
 
             setLoading(true)
 
-            const send = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/upload`, { result }, {
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${getCookie('token')}`
-                }
+            const send = await uploadPropostas({ result })
+
+            setStatus(send.message)
+            console.log(send);
+
+            let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
+
+            result.forEach(e => {
+                let telefone = `(${e.NUM_DDD_CEL}) ${e.NUM_CEL}`
+                let proposta = e.NUM_PROPOSTA
+                let nome = e.NOME_ASSOCIADO
+
+                let data = new Date()
+
+                data = moment(data).format('DD/MM/YYYY')
+
+                let dataArr = data.split('/')
+
+                let mes = dataArr[1]
+                let ano = dataArr[2]
+
+                csv += `${mes}/${ano} - ${proposta} - ${nome}`
+                csv += `;${mes}/${ano} - ${proposta} - ${nome}`
+                csv += `;;;;;;;;;;;;;;;;;;;;;;;;;;`
+                csv += `;* myContacts;`
+                csv += `; ${telefone}`
+                csv += `\n`
+
             })
 
-            if (send.status === 200) {
-                setStatus(send.data.message)
-                console.log(send);
-
-                let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
-
-                result.forEach(e => {
-                    let telefone = `(${e.NUM_DDD_CEL}) ${e.NUM_CEL}`
-                    let proposta = e.NUM_PROPOSTA
-                    let nome = e.NOME_ASSOCIADO
-
-                    let data = new Date()
-
-                    data = moment(data).format('DD/MM/YYYY')
-
-                    let dataArr = data.split('/')
-
-                    let mes = dataArr[1]
-                    let ano = dataArr[2]
-
-                    csv += `${mes}/${ano} - ${proposta} - ${nome}`
-                    csv += `;${mes}/${ano} - ${proposta} - ${nome}`
-                    csv += `;;;;;;;;;;;;;;;;;;;;;;;;;;`
-                    csv += `;* myContacts;`
-                    csv += `; ${telefone}`
-                    csv += `\n`
-
-                })
-
-                var hiddenElement = document.createElement('a');
-                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-                hiddenElement.target = '_blank';
-                hiddenElement.download = 'contatos.csv';
-                hiddenElement.click();
-
-            }
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'contatos.csv';
+            hiddenElement.click();
 
             setLoading(false)
 

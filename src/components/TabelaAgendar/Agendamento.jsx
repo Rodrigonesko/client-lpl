@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import { Box, TextField, Autocomplete, Select, FormControl, MenuItem, InputLabel, Button, CircularProgress } from "@mui/material";
+import { agendarEntrevista, getAnalistasDisponiveis, getHorariosDisponiveisPorDia } from "../../_services/teleEntrevista.service";
 
 const Agendamento = ({ propostas, dias }) => {
 
@@ -21,11 +21,10 @@ const Agendamento = ({ propostas, dias }) => {
 
     const buscarHorarios = async (dia) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${ajustarDia(dia)}`, { withCredentials: true })
 
-            console.log(result);
+            const result = await getHorariosDisponiveisPorDia(ajustarDia(dia))
 
-            setHorariosDisponiveis(result.data)
+            setHorariosDisponiveis(result)
 
         } catch (error) {
             console.log(error);
@@ -35,11 +34,9 @@ const Agendamento = ({ propostas, dias }) => {
     const buscarAnalistasDisponiveis = async (horario) => {
         try {
 
-            console.log(dataEntrevista, horario);
+            const result = await getAnalistasDisponiveis(ajustarDia(dataEntrevista), horario)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/analistasDisponiveis/${ajustarDia(dataEntrevista)}/${horario}`, { withCredentials: true })
-
-            setResponsaveis(result.data)
+            setResponsaveis(result)
 
         } catch (error) {
             console.log(error);
@@ -53,11 +50,9 @@ const Agendamento = ({ propostas, dias }) => {
 
             console.log(idProposta, responsavel, dataEntrevista, horarioEntrevista);
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { id: idProposta, responsavel, data: dataEntrevista, horario: horarioEntrevista }, { withCredentials: true })
+            await agendarEntrevista({ id: idProposta, responsavel, data: dataEntrevista, horario: horarioEntrevista })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
 
         } catch (error) {
             console.log(error);

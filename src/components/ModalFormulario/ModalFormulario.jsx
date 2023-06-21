@@ -4,6 +4,8 @@ import Axios from 'axios'
 import NestedList from '../NestedList/NestedList';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import gerarPdf from '../../pages/TeleEntrevistas/Pdf/Pdf';
+import { preencherFormulario } from '../../_services/teleEntrevista.service';
+import { getDicionario } from '../../_services/dicionario.service';
 
 const style = {
     position: 'absolute',
@@ -33,16 +35,14 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
 
         setPalavrasIncorretas([])
 
-        await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/formulario`, {
-            respostas: respostas,
-            subRespostas: subRespostas,
+        await preencherFormulario({
+            respostas,
+            subRespostas,
             pessoa,
             simOuNao,
             cids,
             divergencia,
             entrevistaQualidade
-        }, {
-            withCredentials: true
         })
 
         gerarPdf(pessoa.proposta, pessoa.nome)
@@ -57,11 +57,9 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
             setProgress(0)
             handleOpen()
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/dicionario`, {
-                withCredentials: true
-            })
+            const result = await getDicionario()
 
-            let dicionario = result.data.map(e => {
+            let dicionario = result.map(e => {
                 return e.palavra
             })
 

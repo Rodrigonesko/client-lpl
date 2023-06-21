@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios'
 import { Typography, TextField, Box, Paper, Button } from "@mui/material";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import TabelaAgendarRn from "../../../../components/TabelaAgendar/TabelaAgendarRn";
@@ -8,9 +7,9 @@ import BotoesRelatorios from "../../../../components/TabelaAgendar/BotoesRelator
 import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
 import { CircularProgress } from "@mui/material";
-import { getCookie } from "react-use-cookie";
 
 import './Agendar.css'
+import { getDiasDisponiveis, getHorariosDisponiveis, getProposasNaoAgendadas, getRnsNaoAgendadas } from "../../../../_services/teleEntrevista.service";
 
 
 const Agendar = () => {
@@ -28,18 +27,12 @@ const Agendar = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoAgendadas`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            const result = await getProposasNaoAgendadas()
+            // const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
 
-            const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
-
-            let arrAux = result.data.propostas.filter(elem => {
+            let arrAux = result.propostas.filter(elem => {
                 return elem.nome.includes(pesquisa) || elem.proposta.includes(pesquisa)
             })
-
-            console.log(arrAux);
 
             setPropostas(arrAux)
 
@@ -56,17 +49,14 @@ const Agendar = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoAgendadas`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            const result = await getProposasNaoAgendadas()
 
-            const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
+            const resultRns = await getRnsNaoAgendadas()
 
             let arrTele = []
             let arrRn = []
 
-            for (const proposta of result.data.propostas) {
+            for (const proposta of result.propostas) {
                 arrTele.push({
                     proposta: proposta.proposta,
                     nome: `${proposta.nome} - TELE`,
@@ -75,7 +65,7 @@ const Agendar = () => {
                 })
             }
 
-            for (const proposta of resultRns.data.result) {
+            for (const proposta of resultRns.result) {
                 arrRn.push({
                     proposta: proposta.proposta,
                     nome: `${proposta.beneficiario} - RN`,
@@ -86,9 +76,9 @@ const Agendar = () => {
 
             const arrTotal = arrTele.concat(arrRn)
 
-            setRns(resultRns.data.result)
+            setRns(resultRns.result)
 
-            setPropostas(result.data.propostas)
+            setPropostas(result.propostas)
 
             setPropostasTotal(arrTotal)
 
@@ -101,9 +91,9 @@ const Agendar = () => {
 
     const buscarHorariosDisp = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horarios/disponiveis`, { withCredentials: true })
+            const result = await getHorariosDisponiveis()
 
-            setHorarios(result.data.obj)
+            setHorarios(result.obj)
 
         } catch (error) {
             console.log(error);
@@ -113,9 +103,9 @@ const Agendar = () => {
     useEffect(() => {
         const buscarDiasDisponiveis = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, { withCredentials: true })
+                const result = await getDiasDisponiveis()
 
-                setDatasEntrevista(result.data)
+                setDatasEntrevista(result)
             } catch (error) {
                 console.log(error);
             }

@@ -9,6 +9,7 @@ import Axios from 'axios'
 import { useTheme } from '@mui/material/styles';
 import config from "../../config/axiosHeader";
 import { getCookie } from "react-use-cookie";
+import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarVigenciaProposta, cancelarEntrevista, excluirPropostaEntrevista, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
 
 const style = {
     position: 'absolute',
@@ -130,13 +131,12 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoadingCancelar(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar, motivoCancelamento: motivoCancelar }, { withCredentials: true })
+            await cancelarEntrevista({ id: idCancelar, motivoCancelamento: motivoCancelar })
 
-            if (result.status === 200) {
-                setLoadingCancelar(false)
-                setModalCancelar(false)
-                atualizarTabela()
-            }
+            setLoadingCancelar(false)
+            setModalCancelar(false)
+            atualizarTabela()
+
 
         } catch (error) {
             console.log(error);
@@ -149,16 +149,12 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoadingCancelar(true)
 
-            const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            await excluirPropostaEntrevista(idExcluir)
 
-            if (result.status === 200) {
-                setLoadingCancelar(false)
-                setModalExcluir(false)
-                atualizarTabela()
-            }
+            setLoadingCancelar(false)
+            setModalExcluir(false)
+            atualizarTabela()
+
 
         } catch (error) {
             console.log(error);
@@ -171,17 +167,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoading(true)
 
-            console.log(config);
+            await alterarVigenciaProposta({ id, vigencia })
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarVigencia`, { id, vigencia }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
-
-            if (result.status === 200) {
-                setOpenSnack(true)
-                setLoading(false)
-            }
+            setOpenSnack(true)
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -192,10 +181,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarTelefone`, { id, telefone }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            await alterarTelefoneEntrevista(id, telefone)
 
         } catch (error) {
             console.log(error);
@@ -207,13 +193,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoading(true)
 
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarSexo`, {
-                id,
-                sexo
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            await alterarSexoEntrevista(id, sexo)
 
             setLoading(false)
         } catch (error) {
@@ -226,20 +206,9 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoading(true)
 
-            console.log(tentativa, id);
-
-            const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/tentativaContato`, {
-                tentativa,
-                id
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
-
-            console.log(result);
+            await tentativaContatoEntrevista(tentativa, id)
 
             atualizarTabela()
-
             setLoading(false)
 
         } catch (error) {
