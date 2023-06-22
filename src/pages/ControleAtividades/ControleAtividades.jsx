@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import { Container, Box, Typography, Button } from '@mui/material'
 import TabelaCelulas from './TabelaCelulas'
-// import GridHorarios from './GridHorarios'
-import Axios from 'axios'
+import { getAtividadesEmAndamento, getAtividadeAtual, getReport } from '../../_services/controleAtividade.service'
 
 const ControleAtividades = () => {
 
@@ -12,12 +11,12 @@ const ControleAtividades = () => {
 
     const fetchAtividadesEmAndamento = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/controleAtividade/andamento`, { withCredentials: true })
+            const result = await getAtividadesEmAndamento()
 
-            const resultAtividadeAtual = await Axios.get(`${process.env.REACT_APP_API_KEY}/controleAtividade/atual`, { withCredentials: true })
+            const resultAtividadeAtual = await getAtividadeAtual()
 
-            setReport(result.data.report)
-            setAtividadeAtual(resultAtividadeAtual.data.atividade)
+            setReport(result.report)
+            setAtividadeAtual(resultAtividadeAtual.atividade)
 
         } catch (error) {
             console.log(error);
@@ -27,9 +26,7 @@ const ControleAtividades = () => {
     const relatorio = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/controleAtividade/report`, {
-                withCredentials: true
-            })
+            const result = await getReport()
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -44,7 +41,7 @@ const ControleAtividades = () => {
             xls += "</thead>"
             xls += "<tbody>"
 
-            result.data.report.forEach(e => {
+            result.report.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e.analista}</td>`
                 xls += `<td>${e.data}</td>`

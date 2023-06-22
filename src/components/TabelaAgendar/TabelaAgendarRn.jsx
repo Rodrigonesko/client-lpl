@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, Typography, Container } from "@mui/material";
 import moment from "moment/moment";
-import Axios from 'axios'
 import { alterarTelefoneRn, cancelarRn, excluirRn } from "../../_services/teleEntrevista.service";
 
 const style = {

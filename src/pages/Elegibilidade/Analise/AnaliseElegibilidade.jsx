@@ -5,6 +5,8 @@ import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
 import TextColor from "../../../components/TextColor/TextColor";
+import { filterElegibilidade, getBlacklist, getEntidades, getPropostas } from "../../../_services/elegibilidade.service";
+import { getAnalistasElegibilidade } from "../../../_services/user.service";
 
 const AnaliseElegibilidade = () => {
 
@@ -27,9 +29,9 @@ const AnaliseElegibilidade = () => {
     const buscarBlacklist = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+            const result = await getBlacklist()
 
-            setBlacklist(result.data)
+            setBlacklist(result)
 
         } catch (error) {
             console.log(error);
@@ -41,15 +43,18 @@ const AnaliseElegibilidade = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Andamento/${name}`, { withCredentials: true })
+            const result = await getPropostas('Andamento', name)
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.total)
+            setPropostas(result.propostas)
+            setTotal(result.total)
 
-            const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/andamento`, { withCredentials: true })
+            console.log(result);
 
-            setEntidades(buscaEntidade.data.entidades)
+            const buscaEntidade = await getEntidades('Andamento')
 
+            console.log(buscaEntidade);
+
+            setEntidades(buscaEntidade.entidades)
             setLoading(false)
 
         } catch (error) {
@@ -59,9 +64,9 @@ const AnaliseElegibilidade = () => {
 
     const buscarAnalistas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
+            const result = await getAnalistasElegibilidade()
 
-            setAnalistas(result.data.analistas)
+            setAnalistas(result.analistas)
 
         } catch (error) {
             console.log(error);
@@ -91,10 +96,10 @@ const AnaliseElegibilidade = () => {
                 valorStatus = ''
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&entidade=${valorEntidade}&status=${valorStatus}&fase=Analise&vigencia`, { withCredentials: true })
+            const result = await filterElegibilidade(valorAnalista, valorEntidade, valorStatus, 'Analise', '')
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
             setPesquisando(false)
 
         } catch (error) {

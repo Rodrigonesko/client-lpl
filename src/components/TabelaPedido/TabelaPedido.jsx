@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Axios from 'axios'
 import './TabelaPedido.css'
 import Modal from 'react-modal'
-import $ from 'jquery'
+import { buscarClinica, devolverPedido, editarPedido, prioridadeDossie, voltarFasePedido } from "../../_services/rsd.service";
 
 Modal.setAppElement('#root')
 
@@ -18,16 +18,10 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
 
             const motivoInativo = document.getElementById('motivo-inativo-pedido').value
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/devolverAmil`, {
-                id: e,
-                motivoInativo
-            }, {
-                withCredentials: true
-            })
+            await devolverPedido({ id: e, motivoInativo })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
+
 
         } catch (error) {
             console.log(error);
@@ -36,15 +30,11 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
 
     const voltarFase = async e => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/voltarFase`, {
-                pedido: e
-            }, {
-                withCredentials: true
-            })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            await voltarFasePedido({ pedido: e })
+
+            window.location.reload()
+
 
         } catch (error) {
             console.log(error);
@@ -54,11 +44,9 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
     const definirPrioridadeDossie = async (pedido, prioridade) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/prioridadeDossie`, {
+            await prioridadeDossie({
                 pedido: pedido,
                 prioridade: prioridade.target.checked
-            }, {
-                withCredentials: true
             })
 
         } catch (error) {
@@ -66,7 +54,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
         }
     }
 
-    const editarPedido = async (id, pedido, cnpj, clinica, nf, valorApresentado, valorReembolsado, element) => {
+    const editarPedidoRsd = async (id, pedido, cnpj, clinica, nf, valorApresentado, valorReembolsado, element) => {
         try {
 
             //console.log(element.target.parentElement.parentElement);
@@ -75,7 +63,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
 
             clinica = tr
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/editar`, {
+            await editarPedido({
                 pedido: id,
                 pedidoEditado: pedido,
                 nf,
@@ -83,29 +71,23 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                 clinica,
                 valorApresentado,
                 valorReembolsado
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                setModalSalvar(true)
-            }
+
+            setModalSalvar(true)
+
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const buscarClinica = async (cnpj, id) => {
+    const buscaClinica = async (cnpj, id) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/clinica/busca`, { cnpj: cnpj }, { withCredentials: true })
+            const result = await buscarClinica({ cnpj })
 
-            console.log(cnpj, id);
-
-            console.log(result);
-
-            document.getElementById(`clinica-${id}`).value = result.data.clinica.descricao
+            document.getElementById(`clinica-${id}`).value = result.clinica.descricao
 
         } catch (error) {
             console.log(error);
@@ -185,7 +167,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                     <td>{Number(e.valorReembolsado).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
                                                     <td><input type="text" name="" id="" className="cnpj-pedido" defaultValue={e.cnpj} onChange={(element) => {
                                                         e.cnpj = element.target.value
-                                                        buscarClinica(element.target.value, e._id)
+                                                        buscaClinica(element.target.value, e._id)
                                                     }} /></td>
                                                     <td><input type="text" name="" id={`clinica-${e._id}`} className="clinica-pedido" defaultValue={e.clinica} onChange={(element) => { e.clinica = element.target.value }} /></td>
                                                     <td><input type="text" name="" id="" className="nf-pedido small-width" defaultValue={e.nf} onChange={(element) => { e.nf = element.target.value }} /></td>
@@ -194,7 +176,7 @@ const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados,
                                                         e.fase !== 'Finalizado' ? (
                                                             <>
                                                                 <td><button className="btn-padrao-verde" onClick={(element) => {
-                                                                    editarPedido(e._id, e.numero, e.cnpj, e.clinica, e.nf, e.valorApresentado, e.valorReembolsado, element)
+                                                                    editarPedidoRsd(e._id, e.numero, e.cnpj, e.clinica, e.nf, e.valorApresentado, e.valorReembolsado, element)
                                                                 }} >Salvar</button></td>
                                                                 <td><button className="botao-padrao-cinza" onClick={() => {
                                                                     setModalInativar(true)

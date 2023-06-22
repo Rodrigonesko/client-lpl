@@ -17,7 +17,9 @@ const ProtectedRoute = ({ children }) => {
             setName(result.name)
             setAccessLevel(result.accessLevel)
 
-            const modules = await getInfoUser()
+            console.log(result);
+
+            const modules = await getInfoUser(result.email)
             setEnfermeiro(modules.user.enfermeiro)
             setElegibilidade(modules.user.elegibilidade)
 

@@ -5,10 +5,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import PropTypes from 'prop-types';
-import Axios from 'axios'
 import { useTheme } from '@mui/material/styles';
-import config from "../../config/axiosHeader";
-import { getCookie } from "react-use-cookie";
 import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarVigenciaProposta, cancelarEntrevista, excluirPropostaEntrevista, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
 
 const style = {

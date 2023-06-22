@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { Button, TextField, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Snackbar, Alert } from "@mui/material";
-import './Create.css'
+import { createUser } from "../../../_services/user.service";
 
 const atividades = [
     'Gerência',
@@ -15,7 +14,6 @@ const atividades = [
     'Callback',
     'Ti/Infra'
 ]
-
 
 const Create = () => {
 
@@ -34,25 +32,19 @@ const Create = () => {
 
     const cadastrar = async e => {
         e.preventDefault()
-
-
-
-
         try {
 
+            await createUser({ email, name, accessLevel: admin, atividade })
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/users`, { email, name, accessLevel: admin, atividade }, { withCredentials: true })
-
-            if (result.status === 201) {
-                setSnack(true)
-            }
+            setSnack(true)
+            setEmail('')
+            setName('')
 
         } catch (error) {
             setMessage(error.response.data.message)
             setError(true)
             console.log(error);
         }
-
     }
 
     return (
@@ -65,10 +57,10 @@ const Create = () => {
                     </Box>
                     <Box>
                         <Box m={2} >
-                            <TextField variant="filled" label="E-mail" type="email" name="email" id="email" onChange={e => setEmail(e.target.value)} />
+                            <TextField variant="filled" label="E-mail" type="email" name="email" id="email" value={email} onChange={e => setEmail(e.target.value)} />
                         </Box>
                         <Box m={2}>
-                            <TextField variant="filled" type="text" label='Nome' name="name" id="name" onChange={e => setName(e.target.value)} />
+                            <TextField variant="filled" type="text" label='Nome' name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
                         </Box>
                         <Box m={2}>
                             <FormControl variant='filled'>
@@ -80,7 +72,6 @@ const Create = () => {
                                     label='Atividade Principal'
                                     defaultValue=''
                                     onChange={e => {
-                                        console.log(e.target.value);
                                         setAtividade(e.target.value)
                                     }}
                                 >

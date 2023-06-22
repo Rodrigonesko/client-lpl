@@ -1,31 +1,19 @@
 import React from 'react'
-import Axios from 'axios'
 import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Button } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { assumirAtividade, encerrarAtividade } from '../../_services/controleAtividade.service';
 
-async function assumirAtividade(atividade) {
-    const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/controleAtividade/assumir`, {
-        atividade
-    }, {
-        withCredentials: true
-    })
+async function handlerAssumirAtividade(atividade) {
+    await assumirAtividade({ atividade })
 
-    if (result.status === 200) {
-        window.location.reload()
-    }
+    window.location.reload()
 }
 
-async function encerrarAtividade() {
-    const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/controleAtividade/encerrar`, {
+async function handlerEncerrarAtividade() {
+    await encerrarAtividade()
 
-    }, {
-        withCredentials: true
-    })
-
-    if (result.status === 200) {
-        window.location.reload()
-    }
+    window.location.reload()
 }
 
 function Row(props) {
@@ -51,14 +39,14 @@ function Row(props) {
                 <TableCell align="right">
                     {
                         atividade === row.celula ? (
-                            <Button variant='contained' color='error' size='small' onClick={() => encerrarAtividade()}>Encerrar Atividade</Button>
+                            <Button variant='contained' color='error' size='small' onClick={() => handlerEncerrarAtividade()}>Encerrar Atividade</Button>
                         ) : (
                             null
                         )
                     }
                     {
                         atividade === 'Nenhuma' ? (
-                            <Button variant='contained' size='small' onClick={() => assumirAtividade(row.celula)}>Assumir Atividade</Button>
+                            <Button variant='contained' size='small' onClick={() => handlerAssumirAtividade(row.celula)}>Assumir Atividade</Button>
                         ) : null
                     }
                 </TableCell>

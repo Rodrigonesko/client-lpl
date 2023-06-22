@@ -65,7 +65,6 @@ export class ApiCall {
     async get() {
         try {
             const data = await this.caller().get(this.currentRoute, this.currentConfig);
-            console.log(data);
             return data.data;
         } catch (err) {
             return err.response?.data;

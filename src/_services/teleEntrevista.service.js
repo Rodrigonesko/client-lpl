@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const URL_API = 'http://localhost:3002'  //process.env.REACT_APP_API_TELE_KEY
+const URL_API = process.env.REACT_APP_API_TELE_KEY //'http://localhost:3002' 
 
 
 export const showPropostas = async () => {

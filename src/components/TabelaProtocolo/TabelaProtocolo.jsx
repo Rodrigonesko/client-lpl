@@ -5,6 +5,7 @@ import TabelaPedido from "../TabelaPedido/TabelaPedido";
 import $ from 'jquery'
 import Axios from 'axios'
 import Modal from 'react-modal'
+import { devolverProtocoloInativo, getPedidosPorPacote } from "../../_services/rsd.service";
 
 Modal.setAppElement('#root')
 
@@ -30,17 +31,13 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
 
             const motivoInativo = document.getElementById('motivo-inativo-protocolo').value
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/devolver`, {
+            await devolverProtocoloInativo({
                 protocolo,
                 pacote,
                 motivoInativo
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
 
         } catch (error) {
             console.log(error);
@@ -51,15 +48,24 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
     useEffect(() => {
         let protocolos = []
 
-        Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${pacote}`, { withCredentials: true }).then(e => {
-            console.log(e.data.pedidos);
-            protocolos = e.data.pedidos
+        // Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${pacote}`, { withCredentials: true }).then(e => {
+        //     console.log(e.data.pedidos);
+        //     protocolos = e.data.pedidos
 
+        //     protocolos = protocolos.filter((item, pos, array) => {
+        //         return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+        //     })
+
+        //     console.log(protocolos);
+
+        //     setProtocolos(protocolos)
+        // })
+
+        getPedidosPorPacote().then(value => {
+            protocolos = value.pedidos
             protocolos = protocolos.filter((item, pos, array) => {
                 return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
             })
-
-            console.log(protocolos);
 
             setProtocolos(protocolos)
         })

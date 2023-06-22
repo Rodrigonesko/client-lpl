@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import { Container, TextField, Typography, Button, Snackbar, Alert, Autocomplete } from '@mui/material'
+import { restaurarSenha } from '../../../_services/user.service'
 
 const ResetPassword = () => {
 
@@ -12,17 +13,9 @@ const ResetPassword = () => {
     const [snackOpen, setSnackOpen] = useState(false)
 
     const resetPassword = async () => {
-        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/resetPassword`, {
-            email
-        }, {
-            withCredentials: true
-        })
+        await restaurarSenha({ email })
 
-        if (result.status === 200) {
-            setSnackOpen(true)
-        }
-
-        console.log(result);
+        setSnackOpen(true)
     }
 
 

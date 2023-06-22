@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from "axios";
 import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
 import { getPropostasADevolver, showPropostas } from "../../_services/teleEntrevista.service";

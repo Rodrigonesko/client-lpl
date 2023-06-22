@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { getInfoEmail, getUsers, liberarModulos } from "../../../_services/user.service";
 
 const LiberacaoModulos = () => {
 
@@ -35,28 +36,28 @@ const LiberacaoModulos = () => {
 
             setBusca(false)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/infoUser/${email}`, { withCredentials: true })
+            const result = await getInfoEmail(email)
 
-            if (result.data.user !== null) {
+            if (result.user !== null) {
 
                 console.log(result);
                 setMsg('')
 
-                setEntrada1(result.data.user.horarioEntrada1)
-                setSaida1(result.data.user.horarioSaida1)
-                setEntrada2(result.data.user.horarioEntrada2)
-                setSaida2(result.data.user.horarioSaida2)
-                setUsuario(result.data.user.name)
-                setAtividadePrincipal(result.data.user.atividadePrincipal)
-                setCoren(result.data.user.coren)
+                setEntrada1(result.user.horarioEntrada1)
+                setSaida1(result.user.horarioSaida1)
+                setEntrada2(result.user.horarioEntrada2)
+                setSaida2(result.user.horarioSaida2)
+                setUsuario(result.user.name)
+                setAtividadePrincipal(result.user.atividadePrincipal)
+                setCoren(result.user.coren)
 
-                if (result.data.user.enfermeiro === null || result.data.user.enfermeiro === 'false') {
+                if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
                 } else {
                     setEnfermeiro(true)
                 }
 
-                if (result.data.user.elegibilidade === null || result.data.user.elegibilidade === 'false') {
+                if (result.user.elegibilidade === null || result.user.elegibilidade === 'false') {
                     setElegibilidade(false)
                 } else {
                     setElegibilidade(true)
@@ -78,11 +79,9 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/users/modules`, { email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren }, { withCredentials: true })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren })
 
-            if (result.status === 200) {
-                setMsg('Modulos atualizados com sucesso!')
-            }
+            setMsg('Modulos atualizados com sucesso!')
 
         } catch (error) {
             console.log(error);
@@ -92,9 +91,9 @@ const LiberacaoModulos = () => {
     useEffect(() => {
         const buscarEmails = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users`, { withCredentials: true })
+                const result = await getUsers()
 
-                setEmails(result.data)
+                setEmails(result)
 
             } catch (error) {
                 console.log(error);
