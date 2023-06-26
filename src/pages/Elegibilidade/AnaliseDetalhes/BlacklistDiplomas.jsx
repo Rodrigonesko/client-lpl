@@ -3,6 +3,7 @@ import { Box, Paper, Typography, IconButton, TextField, Button, Alert, Snackbar,
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Axios from "axios";
+import { buscaDiploma, getCursos, getUniversidade, salvaDiploma } from "../../../_services/elegibilidade.service";
 
 const BlacklistDiplomas = ({ proposta }) => {
 
@@ -24,34 +25,29 @@ const BlacklistDiplomas = ({ proposta }) => {
 
     const buscarDiploma = async () => {
 
-        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/buscarDiploma`, {
+        const result = await buscaDiploma({
             dados: {
                 universidade,
                 curso,
                 numeroRegistro,
                 id: proposta._id
             }
-        }, {
-            withCredentials: true
         })
 
-        setDiplomas(result.data)
+        setDiplomas(result)
 
     }
 
     const salvarDiploma = async () => {
 
-        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/salvarDiploma`, {
+        await salvaDiploma({
             dados: {
                 universidade,
                 curso,
                 numeroRegistro,
                 id: proposta._id
             }
-        }, {
-            withCredentials: true
         })
-
 
         setOpenSnack(true)
         buscarDiploma()
@@ -60,22 +56,18 @@ const BlacklistDiplomas = ({ proposta }) => {
 
     const buscarUniversidades = async () => {
 
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/universidades`, {
-            withCredentials: true
-        })
+        const result = await getUniversidade()
 
-        setSugestoesUniversidades(result.data)
+        console.log(result);
+
+        setSugestoesUniversidades(result)
 
     }
 
     const buscarCursos = async () => {
 
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/cursos`, {
-            withCredentials: true
-        })
-
-        setSugestoesCursos(result.data)
-
+        const result = await getCursos()
+        setSugestoesCursos(result)
     }
 
     useEffect(() => {

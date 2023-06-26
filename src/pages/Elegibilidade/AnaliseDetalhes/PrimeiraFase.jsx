@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Paper, TextField, Typography, IconButton, FormControl, RadioGroup, FormControlLabel, FormLabel, Radio, Button, Modal, CircularProgress, Snackbar, Alert } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Axios from "axios";
+import { salvarDadosFase1 } from "../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -47,13 +47,7 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
         try {
             setLoading(true)
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/fase1`, {
-                dataUpdate,
-                id
-            }, {
-                withCredentials: true
-            })
-
+            await salvarDadosFase1({ dataUpdate, id })
             setOpenSnack(true)
             setLoading(false)
             atualizarDados()
@@ -62,26 +56,23 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
             console.log(error);
             setLoading(false)
         }
-
     }
 
     const concluir = async () => {
         try {
+
             setLoading(true)
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/fase1`, {
+            await salvarDadosFase1({
                 dataUpdate,
                 id,
                 concluir: true
-            }, {
-                withCredentials: true
             })
 
             setOpenSnack(true)
             setLoading(false)
             setModalConcluir(false)
             atualizarDados()
-
 
         } catch (error) {
             console.log(error);

@@ -3,6 +3,7 @@ import Axios from 'axios'
 import { Modal, Button, Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { cancelarProposta } from "../../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -28,17 +29,12 @@ const ModalCancelamento = ({ atualizarDados }) => {
     const cancelar = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/cancelar`, {
-                id
-            }, {
-                withCredentials: true
-            })
+            await cancelarProposta({ id })
 
-            if (result.status === 200) {
-                atualizarDados()
-                handleClose()
-                navigate('/elegibilidade/cancelar')
-            }
+            atualizarDados()
+            handleClose()
+            navigate('/elegibilidade/cancelar')
+
 
         } catch (error) {
             console.log(error);

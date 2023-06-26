@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Paper, TextField, Typography, FormGroup, FormControlLabel, Checkbox, FormControl, FormLabel, RadioGroup, Radio, MenuItem, Select, InputLabel, Button, Alert, Snackbar } from '@mui/material'
-import Axios from 'axios'
+import { getPrcs, salvarDadosFase2 } from '../../../_services/elegibilidade.service'
 
 const ProcessamentoElegibilidade = ({
     proposta
@@ -30,11 +30,9 @@ const ProcessamentoElegibilidade = ({
     const buscaPrcs = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/prc`, {
-                withCredentials: true
-            })
+            const result = await getPrcs()
 
-            setPrcs(result.data.prc)
+            setPrcs(result.prc)
 
         } catch (error) {
             console.log(error);
@@ -44,16 +42,12 @@ const ProcessamentoElegibilidade = ({
     const salvar = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/fase2`, {
+            await salvarDadosFase2({
                 id: proposta._id,
                 dataUpdate: dadosAnalise
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                setOpenSnack(true)
-            }
+            setOpenSnack(true)
 
         } catch (error) {
             console.log(error);

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { useParams } from "react-router-dom";
-import './AnaliseElegibilidadeDetalhes.css'
 import StatusGeral from "./StatusGeral";
 import { Box, Typography, Container, Paper, Alert } from "@mui/material";
 import PrimeiraFase from "./PrimeiraFase";
@@ -11,6 +9,7 @@ import BlacklistDiplomas from "./BlacklistDiplomas";
 import AgendaElegibilidade from "./AgendaElegibilidade";
 import BotoesElegibilidade from "./BotoesElegibilidade";
 import MotivoCancelamento from "./MotivoCancelamento";
+import { alterarStatus, getAgenda, getBlacklist, getConsultaCpf, getInfoProposta, getPlanosBlacklist } from "../../../_services/elegibilidade.service";
 
 const AnaliseElegibilidadeDetalhes = () => {
 
@@ -24,9 +23,11 @@ const AnaliseElegibilidadeDetalhes = () => {
     const buscarBlacklist = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
 
-            setBlacklist(result.data)
+            const result = await getBlacklist()
+
+            setBlacklist(result)
 
         } catch (error) {
             console.log(error);
@@ -35,15 +36,12 @@ const AnaliseElegibilidadeDetalhes = () => {
 
     const buscarDados = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/infoProposta/${id}`, { withCredentials: true })
-            const { proposta } = result.data;
+
+            const { proposta } = await getInfoProposta(id)
 
             if (proposta.status === 'A iniciar') {
-                await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/alterarStatus`, {
-                    id: proposta._id
-                }, {
-                    withCredentials: true
-                })
+
+                await alterarStatus({ id: proposta._id })
 
                 buscarDados()
             }
@@ -53,19 +51,18 @@ const AnaliseElegibilidadeDetalhes = () => {
             let consultaCpf
 
             if (proposta.cpfCorretor) {
-                consultaCpf = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/consultaCpf/${proposta.cpfCorretor}`, { withCredentials: true })
-
+                consultaCpf = await getConsultaCpf(proposta.cpfCorretor)
             }
 
-            if (consultaCpf?.data.msg === 'ok') {
+            if (consultaCpf?.msg === 'ok') {
                 setCpfCancelado(true)
             }
 
-            const resultPlanos = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/planosBlacklist`, {
-                withCredentials: true
-            })
+            const resultPlanos = await getPlanosBlacklist()
 
-            setPlanos(resultPlanos.data)
+            console.log(resultPlanos);
+
+            setPlanos(resultPlanos)
 
         } catch (error) {
             console.log(error);
@@ -75,11 +72,9 @@ const AnaliseElegibilidadeDetalhes = () => {
     const buscarAgenda = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${id}`, {
-                withCredentials: true
-            })
+            const result = await getAgenda(id)
 
-            setAgenda(result.data)
+            setAgenda(result)
 
         } catch (error) {
             console.log(error);

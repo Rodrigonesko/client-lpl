@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, TextField, Select, FormControl, InputLabel, MenuItem, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
+import { enviarFaseCancelamento } from "../../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -15,7 +16,7 @@ const style = {
     p: 4,
 };
 
-const ModalEnviarCancelamento = ({atualizarDados}) => {
+const ModalEnviarCancelamento = ({ atualizarDados }) => {
 
     const { id } = useParams()
     const navigate = useNavigate()
@@ -31,15 +32,11 @@ const ModalEnviarCancelamento = ({atualizarDados}) => {
     const enviarCancelamento = async () => {
         try {
 
-            console.log(motivoCancelamento, categoriaCancelamento, evidencia, id);
-
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/enviarFaseCancelamento`, {
+            await enviarFaseCancelamento({
                 motivoCancelamento,
                 categoriaCancelamento,
                 evidencia,
                 id
-            }, {
-                withCredentials: true
             })
 
             navigate('/elegibilidade/analise')

@@ -5,8 +5,9 @@ import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
 import TextColor from "../../../components/TextColor/TextColor";
-import { filterElegibilidade, getBlacklist, getEntidades, getPropostas } from "../../../_services/elegibilidade.service";
+import { atribuirAnalista, filterElegibilidade, filterPropostasElegibilidade, getBlacklist, getEntidades, getPropostas } from "../../../_services/elegibilidade.service";
 import { getAnalistasElegibilidade } from "../../../_services/user.service";
+import { getCookie } from "react-use-cookie";
 
 const AnaliseElegibilidade = () => {
 
@@ -43,16 +44,21 @@ const AnaliseElegibilidade = () => {
 
             setLoading(true)
 
-            const result = await getPropostas('Andamento', name)
+            const cookie = getCookie('token')
 
-            setPropostas(result.propostas)
-            setTotal(result.total)
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Andamento/${name}`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${cookie}`
+                }
+            })
 
-            console.log(result);
+            setPropostas(result.data.propostas)
+            setTotal(result.data.total)
 
-            const buscaEntidade = await getEntidades('Andamento')
+            // console.log(result);
 
-            console.log(buscaEntidade);
+            const buscaEntidade = await getEntidades('andamento')
 
             setEntidades(buscaEntidade.entidades)
             setLoading(false)
@@ -111,12 +117,7 @@ const AnaliseElegibilidade = () => {
     const atribuir = async (analista, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/analise`, {
-                analista,
-                id
-            }, {
-                withCredentials: true
-            })
+            await atribuirAnalista({ analista, id })
 
             setOpen(true);
 
@@ -138,10 +139,10 @@ const AnaliseElegibilidade = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Andamento/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await filterPropostasElegibilidade('Andamento', propostaPesquisada)
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.total)
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
             setPesquisando(false)
 
         } catch (error) {

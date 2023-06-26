@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { cancelarCpf } from "../../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -25,17 +26,11 @@ const ModalCancelarCpf = ({ atualizarDados, proposta }) => {
     const cancelar = async () => {
         try {
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/cancelarCpf`, {
-                dados: proposta
-            }, {
-                withCredentials: true
-            })
+            await cancelarCpf({ dados: proposta })
 
-            if (result.status === 200) {
-                atualizarDados()
-                handleClose()
-                navigate('/elegibilidade/cancelar')
-            }
+            atualizarDados()
+            handleClose()
+            navigate('/elegibilidade/cancelar')
 
         } catch (error) {
             console.log(error);

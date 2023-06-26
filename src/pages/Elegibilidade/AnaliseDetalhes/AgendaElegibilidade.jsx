@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import moment from "moment/moment";
-import Axios from 'axios'
 import { Box, Paper, Typography, TextField, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Alert, Snackbar, IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { deleteComentario, sendComentario } from "../../../_services/elegibilidade.service";
 
 const AgendaElegibilidade = ({ agenda, id, buscarAgenda }) => {
 
@@ -18,20 +18,11 @@ const AgendaElegibilidade = ({ agenda, id, buscarAgenda }) => {
     const enviarComentario = async () => {
         try {
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/comentario`, {
-                comentario,
-                id
-            }, {
-                withCredentials: true
-            })
+            await sendComentario({ comentario, id })
 
-            if (result.status === 200) {
-                setOpenSnack(true)
-            }
-
+            setOpenSnack(true)
             setComentario('')
             buscarAgenda()
-
 
         } catch (error) {
             console.log(error);
@@ -40,11 +31,8 @@ const AgendaElegibilidade = ({ agenda, id, buscarAgenda }) => {
 
     const excluirComentario = async (id) => {
         try {
-
-            await Axios.delete(`${process.env.REACT_APP_API_KEY}/elegibilidade/agenda/${id}`, { withCredentials: true })
-
+            await deleteComentario(id)
             buscarAgenda()
-
         } catch (error) {
             console.log(error);
         }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import { Modal, Button, Box, Typography, Paper, FormGroup, FormControlLabel, Checkbox, TextField } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
+import { devolverProposta } from "../../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -17,7 +17,7 @@ const style = {
     overflow: 'auto'
 };
 
-const ModalDevolucao = ({ proposta, atualizarDados }) => {
+const ModalDevolucao = ({ proposta }) => {
 
     const { id } = useParams()
     const navigate = useNavigate();
@@ -50,12 +50,10 @@ const ModalDevolucao = ({ proposta, atualizarDados }) => {
     const devolver = async () => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/devolver`, {
+            await devolverProposta({
                 id,
                 motivos,
                 observacoes
-            }, {
-                withCredentials: true
             })
 
             handleClose()

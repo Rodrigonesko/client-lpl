@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Paper, TextField, Button, Typography, Modal, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import Axios from 'axios'
+import { getPropostasCorretor } from "../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -25,11 +25,9 @@ const StatusGeral = ({ statusProposta, status1Analise, status2Analise, status3An
     const buscarPropostas = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/corretor/${corretor}`, {
-                withCredentials: true
-            })
+            const result = await getPropostasCorretor(corretor)
 
-            setPropostas(result.data)
+            setPropostas(result)
 
         } catch (error) {
             console.log(error);

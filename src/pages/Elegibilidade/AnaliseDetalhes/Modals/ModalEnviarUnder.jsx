@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from 'axios'
 import { Modal, Button, Box, Typography, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { enviarUnder } from "../../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -29,11 +30,9 @@ const ModalEnviarUnder = ({ atualizarDados }) => {
     const enviar = async () => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/enviarUnder`, {
+            await enviarUnder({
                 id,
                 erroSistema
-            }, {
-                withCredentials: true
             })
 
             handleClose()
