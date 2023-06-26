@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { Container, Box, Paper, Button, LinearProgress, Typography, TextField, Alert } from "@mui/material";
+import { uploadDivergencia } from "../../../_services/elegibilidade.service";
 
 const Divergencias = () => {
 
@@ -21,14 +21,14 @@ const Divergencias = () => {
 
             setStatus('Enviando')
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/uploadDivergencias`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            const result = await uploadDivergencia(formData)
 
-            console.log(result.data);
+            console.log(result);
 
             setStatus('Concluido')
 
-            setQtd(result.data.propostas.length)
-            downloadArquivo(result.data.propostas)
+            setQtd(result.propostas.length)
+            downloadArquivo(result.propostas)
 
 
         } catch (error) {

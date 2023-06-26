@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container } from "@mui/material";
 import { Alert } from "@mui/material";
+import { atribuirAnalistaPre, getPropostasAnalise } from "../../../_services/elegibilidade.service";
+import { getAnalistasElegibilidade } from "../../../_services/user.service";
 
 const AnaliseDocumentos = () => {
 
@@ -17,11 +18,10 @@ const AnaliseDocumentos = () => {
         try {
 
             setLoading(true)
+            const result = await getPropostasAnalise()
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/analiseDoc`, { withCredentials: true })
-
-            setPropostas(result.data.propostas)
-            setTotal(result.data.total)
+            setPropostas(result.propostas)
+            setTotal(result.total)
 
             setLoading(false)
 
@@ -33,9 +33,11 @@ const AnaliseDocumentos = () => {
 
     const buscarAnalistas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
+            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
 
-            setAnalistas(result.data.analistas)
+            const result = await getAnalistasElegibilidade()
+
+            setAnalistas(result.analistas)
 
         } catch (error) {
             console.log(error);
@@ -49,17 +51,13 @@ const AnaliseDocumentos = () => {
                 return
             }
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/preProcessamento`, {
+            await atribuirAnalistaPre({
                 analista,
                 id
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                setOpen(true);
-                buscarPropostas()
-            }
+            setOpen(true);
+            buscarPropostas()
 
         } catch (error) {
             console.log(error);

@@ -6,6 +6,7 @@ import Axios from 'axios'
 import moment from "moment";
 
 import RelatorioElegibilidade from "./RelatorioElegibilidade";
+import { getProducao, getReport } from "../../../_services/elegibilidade.service";
 
 const ProducaoElegibilidade = () => {
 
@@ -18,12 +19,10 @@ const ProducaoElegibilidade = () => {
     const buscarDados = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/producao/${data}`, {
-                withCredentials: true
-            })
+            const result = await getProducao(data)
 
-            setProducao(result.data.producao)
-            setTotal(result.data.total)
+            setProducao(result.producao)
+            setTotal(result.total)
 
         } catch (error) {
             console.log(error);
@@ -33,11 +32,9 @@ const ProducaoElegibilidade = () => {
     const report = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/report`, {
-                withCredentials: true
-            })
+            const result = await getReport()
 
-            setDadosReport(result.data)
+            setDadosReport(result)
 
         } catch (error) {
             console.log(error);

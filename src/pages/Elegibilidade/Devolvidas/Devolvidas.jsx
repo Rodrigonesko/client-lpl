@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import moment from "moment/moment";
-import Axios from 'axios'
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
 import TextColor from "../../../components/TextColor/TextColor";
+import { atribuirAnalista, filterElegibilidade, filterPropostasElegibilidade, getBlacklist, getEntidades, getPropostas } from "../../../_services/elegibilidade.service";
+import { getAnalistasElegibilidade } from "../../../_services/user.service";
 
 const DevolvidasElegibilidade = () => {
 
@@ -22,14 +23,13 @@ const DevolvidasElegibilidade = () => {
 
     const analista = useRef(null)
     const entidade = useRef(null)
-    const status = useRef(null)
 
     const buscarBlacklist = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+            const result = await getBlacklist()
 
-            setBlacklist(result.data)
+            setBlacklist(result)
 
         } catch (error) {
             console.log(error);
@@ -40,14 +40,17 @@ const DevolvidasElegibilidade = () => {
         try {
 
             setLoading(true)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Devolvida/${name}`, { withCredentials: true })
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            if (name) {
+                const result = await getPropostas('Devolvida', name)
 
-            const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/Devolvida`, { withCredentials: true })
+                setPropostas(result.propostas)
+                setTotal(result.propostas.length)
+            }
 
-            let arrEnt = buscaEntidade.data.entidades.map(e => {
+            const buscaEntidade = await getEntidades('Devolvida')
+
+            let arrEnt = buscaEntidade.entidades.map(e => {
                 return e
             })
 
@@ -55,7 +58,6 @@ const DevolvidasElegibilidade = () => {
 
             setLoading(false)
 
-            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -63,9 +65,10 @@ const DevolvidasElegibilidade = () => {
 
     const buscarAnalistas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
 
-            setAnalistas(result.data.analistas)
+            const result = await getAnalistasElegibilidade()
+
+            setAnalistas(result.analistas)
 
         } catch (error) {
             console.log(error);
@@ -90,11 +93,10 @@ const DevolvidasElegibilidade = () => {
                 valorEntidade = ''
             }
 
+            const result = await filterElegibilidade(valorAnalista, valorEntidade, 'Devolvida', '', '')
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&entidade=${valorEntidade}&status=Devolvida&vigencia`, { withCredentials: true })
-
-            setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
             setPesquisando(false)
 
         } catch (error) {
@@ -106,11 +108,9 @@ const DevolvidasElegibilidade = () => {
     const atribuir = async (analista, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/analise`, {
+            await atribuirAnalista({
                 analista,
                 id
-            }, {
-                withCredentials: true
             })
 
             setOpen(true);
@@ -133,10 +133,10 @@ const DevolvidasElegibilidade = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Devolvida/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await filterPropostasElegibilidade('Devolvida', propostaPesquisada)
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.total)
+            setPropostas(result.propostas)
+            setTotal(result.total)
             setPesquisando(false)
 
         } catch (error) {
@@ -149,7 +149,6 @@ const DevolvidasElegibilidade = () => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
     };
 

@@ -1,4 +1,6 @@
+import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
+const token = getCookie('token')
 
 export const showPropostas = async () => {
     return await new ApiCall('/elegibilidade/show').get()
@@ -8,7 +10,7 @@ export const getBlacklist = async () => {
     return await new ApiCall('/elegibilidade/blacklist').get()
 }
 
-export const getPropostas = async (fase, analista) => {
+export const getPropostas = async (fase, analista = 'sem') => {
     return await new ApiCall(`/elegibilidade/propostas/${fase}/${analista}`).get()
 }
 
@@ -106,4 +108,24 @@ export const enviarFaseCancelamento = async (data) => {
 
 export const enviarUnder = async (data) => {
     return await new ApiCall('/elegibilidade/enviarUnder').put(data)
+}
+
+export const getPropostasAnalise = async () => {
+    return await new ApiCall('/elegibilidade/propostas/analiseDoc').get()
+}
+
+export const atribuirAnalistaPre = async (data) => {
+    return await new ApiCall('/elegibilidade/atribuir/preProcessamento').put(data)
+}
+
+export const uploadDivergencia = async (data) => {
+    return await new ApiCall('/elegibilidade/uploadDivergencias', process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
+}
+
+export const getProducao = async (data) => {
+    return await new ApiCall(`/elegibilidade/producao/${data}`).get()
+}
+
+export const getReport = async () => {
+    return await new ApiCall(`/elegibilidade/report`).get()
 }

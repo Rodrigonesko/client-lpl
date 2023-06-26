@@ -5,6 +5,8 @@ import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
 import TextColor from "../../../components/TextColor/TextColor";
+import { atribuirAnalista, filterElegibilidade, filterPropostasElegibilidade, getBlacklist, getEntidades, getPropostas } from "../../../_services/elegibilidade.service";
+import { getAnalistasElegibilidade } from "../../../_services/user.service";
 
 const CancelarElegibilidade = () => {
 
@@ -22,14 +24,13 @@ const CancelarElegibilidade = () => {
 
     const analista = useRef(null)
     const entidade = useRef(null)
-    const status = useRef(null)
 
     const buscarBlacklist = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+            const result = await getBlacklist()
 
-            setBlacklist(result.data)
+            setBlacklist(result)
 
         } catch (error) {
             console.log(error);
@@ -40,22 +41,23 @@ const CancelarElegibilidade = () => {
         try {
 
             setLoading(true)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Fase Cancelamento/${name}`, { withCredentials: true })
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            if (name) {
+                const result = await getPropostas('Fase Cancelamento', name)
 
-            const buscaEntidade = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/entidades/Fase Cancelamento`, { withCredentials: true })
+                setPropostas(result.propostas)
+                setTotal(result.total)
+            }
 
-            let arrEnt = buscaEntidade.data.entidades.map(e => {
+            const buscaEntidade = await getEntidades('Fase Cancelamento')
+
+            let arrEnt = buscaEntidade.entidades.map(e => {
                 return e
             })
 
             setEntidades(arrEnt)
 
             setLoading(false)
-
-            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -63,9 +65,10 @@ const CancelarElegibilidade = () => {
 
     const buscarAnalistas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
 
-            setAnalistas(result.data.analistas)
+            const result = await getAnalistasElegibilidade()
+
+            setAnalistas(result.analistas)
 
         } catch (error) {
             console.log(error);
@@ -90,10 +93,10 @@ const CancelarElegibilidade = () => {
                 valorEntidade = ''
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&entidade=${valorEntidade}&status=Fase Cancelamento&vigencia`, { withCredentials: true })
+            const result = await filterElegibilidade(valorAnalista, valorEntidade, 'Fase Cancelamento', '', '')
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
             setPesquisando(false)
 
         } catch (error) {
@@ -105,12 +108,7 @@ const CancelarElegibilidade = () => {
     const atribuir = async (analista, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/analise`, {
-                analista,
-                id
-            }, {
-                withCredentials: true
-            })
+            await atribuirAnalista({ analista, id })
 
             setOpen(true);
 
@@ -132,10 +130,10 @@ const CancelarElegibilidade = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Fase Cancelamento/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await filterPropostasElegibilidade('Fase Cancelamento', propostaPesquisada)
 
-            setPropostas(result.data.propostas)
-            setTotal(result.data.total)
+            setPropostas(result.propostas)
+            setTotal(result.total)
             setPesquisando(false)
 
         } catch (error) {
@@ -153,9 +151,9 @@ const CancelarElegibilidade = () => {
     };
 
     useEffect(() => {
-        buscarAnalistas()
         buscarPropostas()
         buscarBlacklist()
+        buscarAnalistas()
     }, [name])
 
     return (
