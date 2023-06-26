@@ -4,7 +4,7 @@ import Axios from 'axios'
 import { useParams } from "react-router-dom";
 import './AnaliseElegibilidadeDetalhes.css'
 import StatusGeral from "./StatusGeral";
-import { Box, Typography, Container, Paper } from "@mui/material";
+import { Box, Typography, Container, Paper, Alert } from "@mui/material";
 import PrimeiraFase from "./PrimeiraFase";
 import SegundaFase from "./SegundaFase";
 import BlacklistDiplomas from "./BlacklistDiplomas";
@@ -19,6 +19,7 @@ const AnaliseElegibilidadeDetalhes = () => {
     const [agenda, setAgenda] = useState([])
     const [blacklist, setBlacklist] = useState([])
     const [cpfCancelado, setCpfCancelado] = useState(false)
+    const [planos, setPlanos] = useState([])
 
     const buscarBlacklist = async () => {
         try {
@@ -45,7 +46,6 @@ const AnaliseElegibilidadeDetalhes = () => {
                 })
 
                 buscarDados()
-
             }
 
             setProposta(proposta);
@@ -60,6 +60,13 @@ const AnaliseElegibilidadeDetalhes = () => {
             if (consultaCpf?.data.msg === 'ok') {
                 setCpfCancelado(true)
             }
+
+            const resultPlanos = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/planosBlacklist`, {
+                withCredentials: true
+            })
+
+            setPlanos(resultPlanos.data)
+
         } catch (error) {
             console.log(error);
         }
@@ -93,6 +100,11 @@ const AnaliseElegibilidadeDetalhes = () => {
                     <Typography variant="h6" m={2}>
                         Responsável: {proposta.analista}
                     </Typography>
+                    {
+                        planos.includes(proposta.plano) ? (
+                            <Alert severity="error">Plano na Blacklist - {proposta.plano}</Alert>
+                        ) : null
+                    }
                     <Box component={Paper} elevation={3} p={2}>
                         <Typography variant="h6" bgcolor='royalblue' p={1} color='white' borderRadius='5px'>
                             {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) && proposta.nomeCorretor ? '*Corretor na blacklist*' : null} {cpfCancelado ? '- CPF JÁ CANCELADO' : ''}
@@ -150,6 +162,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                                 <BotoesElegibilidade
                                     atualizarDados={buscarDados}
                                     proposta={proposta}
+                                    blacklistPlanos={planos}
                                 />
                             ) : null
                         }

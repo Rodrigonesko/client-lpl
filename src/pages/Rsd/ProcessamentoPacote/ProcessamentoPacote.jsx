@@ -662,10 +662,18 @@ const ProcessamentoPacote = () => {
                                                 {
                                                     pedidos.map(e => {
 
+                                                        let checkFormaPagamento = false
+
+                                                        if(e.formaPagamento === 'Fracionamento de Nota Fiscal'){
+                                                            checkFormaPagamento = true
+                                                        }
+
                                                         if (e.fase !== 'Finalizado') {
                                                             return (
                                                                 <>
                                                                     <p>Pedido: <strong>{e.numero}</strong></p>
+
+
                                                                     {
                                                                         formasPagamento.map(formaPagamento => {
 
@@ -683,6 +691,8 @@ const ProcessamentoPacote = () => {
                                                                             )
                                                                         })
                                                                     }
+                                                                    <input type="radio" name={`forma-pagamento-${e._id}`} id={`forma-pagamento-${e.numero}-Fracionamento de Nota Fiscal`} value='Fracionamento de Nota Fiscal' onClick={verificarServico} defaultChecked={checkFormaPagamento} />
+                                                                    <label htmlFor={`forma-pagamento-${e.numero}-Fracionamento de Nota Fiscal`}>Fracionamento de Nota Fiscal</label>
                                                                 </>
                                                             )
                                                         }
@@ -715,8 +725,11 @@ const ProcessamentoPacote = () => {
                                                                                     <label htmlFor={`finalizacao-${e.numero}-${statusFinalizacao.descricao}`}>{statusFinalizacao.descricao}</label>
                                                                                 </>
                                                                             )
+
                                                                         })
                                                                     }
+                                                                    <input type="radio" name={`finalizacao-${e._id}`} id={`finalizacao-${e.numero}-Fracionamento de Nota Fiscal`} value='Fracionamento de Nota Fiscal' onClick={verificarFinalizacao} />
+                                                                    <label htmlFor={`finalizacao-${e.numero}-Fracionamento de Nota Fiscal`}>Fracionamento de Nota Fiscal</label>
                                                                 </>
                                                             )
                                                         }
@@ -838,4 +851,3 @@ const ProcessamentoPacote = () => {
 }
 
 export default ProcessamentoPacote
-

@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, TextField, Paper } from "@mui/material";
 import moment from "moment";
+import 'moment-business-days'
 
 const inputWidth = {
     width: '33%'
@@ -9,6 +10,13 @@ const inputWidth = {
 const DadosElegibilidade = ({
     proposta
 }) => {
+    const isVigenciaProxima = (vigencia) => {
+        const currentDate = moment()
+        const threeBusinessDaysFromNow = currentDate.businessAdd(3);
+
+        return vigencia.isSameOrBefore(threeBusinessDaysFromNow, 'day');
+    }
+
     return (
         <Box component={Paper} p={2} mt={3} elevation={3}>
             <Typography variant="h6">
@@ -19,8 +27,8 @@ const DadosElegibilidade = ({
                     readOnly: true,
                 }} value={proposta.proposta} sx={inputWidth} />
                 <TextField label='Vigência' size='small' InputProps={{
-                    readOnly: true,
-                }} value={moment(proposta.vigencia).format('DD/MM/YYYY')} sx={inputWidth} />
+                    readOnly: true
+                }} error={isVigenciaProxima(moment(proposta.vigencia)) ? true : false} value={moment(proposta.vigencia).format('DD/MM/YYYY')} sx={inputWidth} />
                 <TextField label='Titular' size='small' InputProps={{
                     readOnly: true,
                 }} value={proposta.nome} sx={inputWidth} />

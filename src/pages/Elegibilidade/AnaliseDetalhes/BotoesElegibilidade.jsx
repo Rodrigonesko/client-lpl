@@ -7,7 +7,7 @@ import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalCancelamento from "./Modals/ModalCancelamento";
 import ModalCancelarCpf from "./Modals/ModalCancelarCpf";
 
-const BotoesElegibilidade = ({ atualizarDados, proposta }) => {
+const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
     return (
         <>
             <Box component={Paper} elevation={3} p={2} mt={3}>
@@ -21,7 +21,7 @@ const BotoesElegibilidade = ({ atualizarDados, proposta }) => {
                     ) : null
                 }
                 {
-                    proposta.status === 'Fase Cancelamento' ? (
+                    proposta.status === 'Fase Cancelamento' || blacklistPlanos.includes(proposta.plano) ? (
                         <>
                             <ModalCancelamento atualizarDados={atualizarDados} />
                             <ModalCancelarCpf atualizarDados={atualizarDados} proposta={proposta} />
