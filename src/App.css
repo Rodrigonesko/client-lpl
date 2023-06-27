@@ -171,3 +171,30 @@
 .verificando-frase {
   border-bottom: 4px solid yellow;
 }
+
+.table {
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0px 0px 7px 3px #bdbdbd;
+  border-radius: 12px;
+}
+
+.table thead {
+  color: rgb(109, 109, 109);
+}
+
+.table-header {
+  background-color: lightgray;
+}
+
+.table-header th {
+  padding: 1rem;
+}
+
+.table td {
+  padding: 1rem;
+}
+
+.table tr {
+  border-bottom: 1px solid #bdbdbd;
+}

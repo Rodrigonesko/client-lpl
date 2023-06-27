@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Painel from "../../../components/Painel/Painel";
 import './PainelProcessos.css'
+import { filtroPedidosNaoFinalizados, getPedidosNaoFinalizados } from "../../../_services/rsd.service";
 
 const PainelProcessos = () => {
 
@@ -45,23 +45,21 @@ const PainelProcessos = () => {
 
     const [pesquisa, setPesquisa] = useState('')
 
-
-
-
-
     const pesquisaFiltro = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/filtro/${pesquisa}`, { withCredentials: true })
+            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/filtro/${pesquisa}`, { withCredentials: true })
 
-            setPedidos(result.data.pedidos)
+            const result = await filtroPedidosNaoFinalizados(pesquisa)
+
+            setPedidos(result.pedidos)
 
             setAiniciar([])
             setAgendados([])
             setAguardandoContatos([])
             setAguardandoDocs([])
 
-            result.data.pedidos.forEach(e => {
+            result.pedidos.forEach(e => {
 
                 console.log(e);
 
@@ -89,9 +87,9 @@ const PainelProcessos = () => {
         const buscarPedidos = async () => {
             try {
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/naoFinalizados`, { withCredentials: true })
+                const result = await getPedidosNaoFinalizados()
 
-                setPedidos(result.data.pedidos)
+                setPedidos(result.pedidos)
 
                 setTeste('teste')
 
@@ -100,7 +98,7 @@ const PainelProcessos = () => {
             }
         }
 
-        const setStatusPedido = async () => {
+        const setStatusPedido = () => {
             pedidos.forEach(e => {
 
                 if (e.status === 'A iniciar') {
@@ -154,7 +152,6 @@ const PainelProcessos = () => {
                             setStatusVence4={setStatusVence4Iniciar}
                             title={'A iniciar'}
                             protocolos={aIniciar}
-
                         />
                         <div className="painel">
                             <Painel

@@ -11,6 +11,7 @@ import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
 import { IMaskInput } from "react-imask";
 import $ from 'jquery'
 import Modal from 'react-modal'
+import { assumirPacote, atualizarInformacoesMo, buscarInformacoesMo, criarPacoteRsd, devolverPacote, getPedidosPorMo } from "../../../_services/rsd.service";
 
 Modal.setAppElement('#root')
 
@@ -36,13 +37,9 @@ const FichaBeneficiario = () => {
 
     const [modalInativarPacote, setModalInativarPacote] = useState(false)
     const [inativarPacote, setInativarPacote] = useState('')
-
-
-
     const atualizarInformacoes = async () => {
-        console.log(dataNascimento, email, fone1, fone2, fone3, contratoEmpresa, mo);
 
-        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/editar`, {
+        await atualizarInformacoesMo({
             dataNascimento,
             email,
             fone1,
@@ -51,14 +48,9 @@ const FichaBeneficiario = () => {
             contratoEmpresa,
             mo,
             cpf
-        }, {
-            withCredentials: true
         })
 
-        if (result.status === 200) {
-            setMsg('Atualizado com sucesso')
-        }
-
+        setMsg('Atualizado com sucesso')
     }
 
     const mostrarPedidos = e => {
@@ -101,49 +93,41 @@ const FichaBeneficiario = () => {
                 }
             }
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pacote/criar`, { arrPedidos }, { withCredentials: true })
+            await criarPacoteRsd({ arrPedidos })
 
-            if (result.status === 200) {
-                window.location.reload();
-            }
+            window.location.reload();
+
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const assumirPacote = async e => {
+    const handlerAssumirPacote = async e => {
         try {
 
-            console.log(e.target.value, name);
+            //const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/assumir`, { name: name, pacote: e.target.value }, { withCredentials: true })
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/assumir`, { name: name, pacote: e.target.value }, { withCredentials: true })
+            await assumirPacote({ name: name, pacote: e.target.value })
 
-            if (result.status === 200) {
-                window.location.reload();
-            }
-
+            window.location.reload();
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const devolverPacote = async e => {
+    const handlerDevolverPacote = async e => {
         try {
 
             const motivoInativo = document.getElementById('motivo-inativo-pacote').value
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/devolver`, {
+            await devolverPacote({
                 pacote: e,
                 motivoInativo
-            }, {
-                withCredentials: true,
             })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
 
         } catch (error) {
             console.log(error);
@@ -153,22 +137,22 @@ const FichaBeneficiario = () => {
     useEffect(() => {
 
         const buscarMo = async () => {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
+            const result = await buscarInformacoesMo(mo)
 
-            setNome(result.data.pessoa.nome)
-            setCpf(result.data.pessoa.cpf)
-            setDataNascimento(result.data.pessoa.dataNascimento)
-            setEmail(result.data.pessoa.email)
-            setFone1(result.data.pessoa.fone1)
-            setFone2(result.data.pessoa.fone2)
-            setFone3(result.data.pessoa.fone3)
-            setContratoEmpresa(result.data.pessoa.contratoEmpresa)
+            setNome(result.pessoa.nome)
+            setCpf(result.pessoa.cpf)
+            setDataNascimento(result.pessoa.dataNascimento)
+            setEmail(result.pessoa.email)
+            setFone1(result.pessoa.fone1)
+            setFone2(result.pessoa.fone2)
+            setFone3(result.pessoa.fone3)
+            setContratoEmpresa(result.pessoa.contratoEmpresa)
 
-            const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
+            const resultPedidos = await getPedidosPorMo(mo)
 
-            setPedidos(resultPedidos.data.pedidos)
+            setPedidos(resultPedidos.pedidos)
 
-            let auxProtocolos = resultPedidos.data.pedidos.filter((item, pos, array) => {
+            let auxProtocolos = resultPedidos.pedidos.filter((item, pos, array) => {
                 return item.status === 'A iniciar'
             })
 
@@ -185,10 +169,6 @@ const FichaBeneficiario = () => {
             })
 
             setPacotes(arrAuxPacotes)
-
-            console.log(arrAuxPacotes);
-
-
         }
 
         buscarMo()
@@ -338,7 +318,7 @@ const FichaBeneficiario = () => {
                                                         <td className="data">{moment(e.createdAt).format('DD/MM/YYYY')}</td>
                                                         <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
-                                                        <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
+                                                        <td><button value={e.pacote} onClick={handlerAssumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
                                                         <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link> <button onClick={() => {
                                                             setModalInativarPacote(true)
                                                             setInativarPacote(e.pacote)
@@ -380,7 +360,7 @@ const FichaBeneficiario = () => {
                 </div>
                 <div>
                     <button value={inativarPacote} onClick={e => {
-                        devolverPacote(e.target.value)
+                        handlerDevolverPacote(e.target.value)
                     }} >Inativar</button>
                 </div>
             </Modal>

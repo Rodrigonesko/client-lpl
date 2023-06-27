@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Container, Typography, Box, Paper, TextField, Button, LinearProgress, Alert } from "@mui/material";
 import Axios from 'axios'
+import { baixaAgd } from "../../../_services/rsd.service";
 
 const BaixaAgd = () => {
 
@@ -23,10 +24,7 @@ const BaixaAgd = () => {
             const formData = new FormData()
             formData.append('file', file, file.name)
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/baixaAgd`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
-
-            console.log(result);
-
+            await baixaAgd({ formData })
             setLoading(false)
 
             setSuccess(true)

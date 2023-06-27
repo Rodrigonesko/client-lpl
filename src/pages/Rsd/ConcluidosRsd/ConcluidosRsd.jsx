@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import './ConcluidosRsd.css'
+import { getConcluidoRsd } from "../../../_services/rsd.service";
+import { TextField, Button, Box, Paper, Container, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 
 const ConcluidosRsd = () => {
 
@@ -14,11 +14,10 @@ const ConcluidosRsd = () => {
 
             e.preventDefault()
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/concluidos/${pesquisa}`, { withCredentials: true })
+            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/concluidos/${pesquisa}`, { withCredentials: true })
 
-            console.log(result.data);
-
-            setConcluidos(result.data.pedidos)
+            const result = await getConcluidoRsd(pesquisa)
+            setConcluidos(result.pedidos)
 
         } catch (error) {
             console.log(error);
@@ -28,41 +27,42 @@ const ConcluidosRsd = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-concluidos-rsd-container">
-                <div className="concluidos-rsd-container">
-                    <div className="title">
-                        <h3>Concluídos</h3>
-                    </div>
-                    <form action="" className="pesquisa-concluidos-rsd" onSubmit={pesquisar}>
-                        <input type="text" placeholder="Marca Ótica, Protocolo, Pedido" onChange={e => setPesquisa(e.target.value)} />
-                        <button>Pesquisar</button>
-                    </form>
-                    <div className="">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Marca Ótica</th>
-                                    <th>Nome</th>
-                                    <th>Pedido</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    concluidos.map(e => {
-                                        return (
-                                            <tr key={e._id}>
-                                                <td><Link to={`/rsd/FichaBeneficiarioConcluidos/${e.mo}`}>{e.mo}</Link></td>
-                                                <td>{e.pessoa}</td>
-                                                <td>{e.numero}</td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
+            <Container>
+                <Typography m={2} variant="h6">
+                    Concluídos
+                </Typography>
+                <form action="" onSubmit={pesquisar}>
+                    <Box component={Paper} p={2}>
+                        <TextField size="small" label="Marca Ótica, Protocolo, Pedido" onChange={e => setPesquisa(e.target.value)} />
+                        <Button variant="contained" type="submit" >Pesquisar</Button>
+                    </Box>
+                </form>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Marca Ótica</TableCell>
+                                <TableCell>Nome</TableCell>
+                                <TableCell>Pedido</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                concluidos.map(e => {
+                                    return (
+                                        <TableRow key={e._id}>
+                                            <TableCell><Link to={`/rsd/FichaBeneficiarioConcluidos/${e.mo}`}>{e.mo}</Link></TableCell>
+                                            <TableCell>{e.pessoa}</TableCell>
+                                            <TableCell>{e.numero}</TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+            </Container>
         </>
     )
 }
