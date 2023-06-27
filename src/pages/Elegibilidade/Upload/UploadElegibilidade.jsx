@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { Container, Box, Paper, Button, LinearProgress, Typography, TextField, Alert } from "@mui/material";
+import { uploadPropostas } from "../../../_services/elegibilidade.service";
 
 const UploadElegibilidade = () => {
 
@@ -20,13 +20,12 @@ const UploadElegibilidade = () => {
 
             setStatus('Enviando')
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
-            console.log(result.data);
-
+            const result = await uploadPropostas(formData)
 
             setStatus('Concluido')
-            setQtd(result.data.qtd)
+            setQtd(result.qtd)
 
 
         } catch (error) {

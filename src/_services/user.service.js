@@ -31,3 +31,7 @@ export const restaurarSenha = async (email) => {
 export const getAnalistasElegibilidade = async () => {
     return await new ApiCall('/users/elegibilidade').get()
 }
+
+export const updatePassword = async (data) => {
+    return await new ApiCall('/users/updatePassword').put(data)
+}

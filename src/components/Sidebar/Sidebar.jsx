@@ -45,10 +45,6 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
                                     <MenuItem><Link to='/admin/liberarModulos' >Liberação Módulos</Link></MenuItem>
-                                    <SubMenu title='Gráficos' icon={<BsGraphUp />} >
-                                        <MenuItem><Link to='/admin/graphicos/rn'>Rns</Link></MenuItem>
-                                        <MenuItem><Link to='/admin/graphicos/liminares'>Liminares</Link></MenuItem>
-                                    </SubMenu>
                                 </SubMenu>
                             ) : null
                         }

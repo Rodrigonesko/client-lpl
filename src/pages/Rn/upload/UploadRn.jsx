@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Alert, AlertTitle } from "@mui/material";
 import './UploadRn.css'
 import * as XLSX from 'xlsx';
-import Axios from 'axios'
+import { uploadRn } from "../../../_services/teleEntrevista.service";
 
 
 const UploadRn = () => {
@@ -28,18 +28,15 @@ const UploadRn = () => {
 
             setStatus('Enviando...')
 
-            const send = await Axios.post(`${process.env.REACT_APP_API_KEY}/rn/upload`, { result }, { withCredentials: true })
+            const send = await uploadRn({ result })
 
-            if (send.status === 200) {
-                setStatus(send.data.message)
-                console.log(send);
-            }
+
+            setStatus(send.message)
 
         } catch (error) {
             console.log(error);
             setStatus('Algo deu errado')
         }
-
     }
 
 

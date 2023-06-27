@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import { Button, Box, CircularProgress } from "@mui/material";
+import { getPropostasManuais } from "../../../_services/elegibilidade.service";
 
 const RelatorioPropostasManuaisElegibilidade = () => {
 
@@ -10,9 +10,7 @@ const RelatorioPropostasManuaisElegibilidade = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show/propostasManual`, {
-                withCredentials: true
-            })
+            const result = await getPropostasManuais()
 
 
             let xls = '\ufeff'
@@ -30,7 +28,7 @@ const RelatorioPropostasManuaisElegibilidade = () => {
             xls += "<th>Observações</th>"
             xls += "</tr>"
 
-            result.data.forEach(proposta => {
+            result.forEach(proposta => {
                 xls += "<tr>"
                 xls += `<td>${proposta._id}</td>`
                 xls += `<td>${proposta.data}</td>`

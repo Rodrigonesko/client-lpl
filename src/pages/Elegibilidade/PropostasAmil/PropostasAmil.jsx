@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Container, Box, Paper, TextField, Button, Typography, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Snackbar, Alert, Modal, CircularProgress } from "@mui/material";
-import Axios from 'axios'
 import moment from "moment";
 import RelatorioPropostasManuaisElegibilidade from "./RelatorioPropostasManual";
+import { atualizarObservacoes, concluirPropostaManual, getPropostasManuais, getPropostasManuaisEmAndamento, registrarProposta } from "../../../_services/elegibilidade.service";
 
 const style = {
     position: 'absolute',
@@ -80,13 +80,7 @@ const PropostasAmil = () => {
                 return
             }
 
-            console.log(obj);
-
-            await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/registrar/proposta`, {
-                dadosProposta: obj
-            }, {
-                withCredentials: true
-            })
+            await registrarProposta({ dadosProposta: obj })
 
 
             setSeveritySnack('success')
@@ -119,15 +113,13 @@ const PropostasAmil = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show/propostaManual/andamento`, {
-                withCredentials: true
-            })
+            const result = await getPropostasManuaisEmAndamento()
 
-            setPropostas(result.data)
+            setPropostas(result)
 
-            const resultData = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/show/propostasManual`, { withCredentials: true })
+            const resultData = await getPropostasManuais()
 
-            setTotal(resultData.data)
+            setTotal(resultData)
 
             setLoading(false)
 
@@ -137,25 +129,18 @@ const PropostasAmil = () => {
         }
     }
 
-    const atualizarObservacoes = async () => {
+    const handlerAtualizarObservacoes = async () => {
         try {
 
-            console.log(modalObservacoes, modalId);
-
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atualizarObservacoes`, {
+            await atualizarObservacoes({
                 observacoes: modalObservacoes,
                 id: modalId
-            }, {
-                withCredentials: true
             })
-
 
             setOpenSnack(true)
             setMsgSnack('Observações atualizadas')
             setOpenModal(false)
             buscarPropostas()
-
-            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -165,10 +150,8 @@ const PropostasAmil = () => {
     const concluir = async () => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/concluirPropostaManual`, {
+            await concluirPropostaManual({
                 id: modalId
-            }, {
-                withCredentials: true
             })
 
             setOpenSnack(true)
@@ -344,7 +327,7 @@ const PropostasAmil = () => {
                             setModalResultado('')
                             setModalObservacoes('')
                         }}>Fechar</Button>
-                        <Button variant="contained" onClick={atualizarObservacoes} >Salvar</Button>
+                        <Button variant="contained" onClick={handlerAtualizarObservacoes} >Salvar</Button>
                     </Box>
                 </Box>
             </Modal>

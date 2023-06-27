@@ -6,6 +6,10 @@ export const showPropostas = async () => {
     return await new ApiCall('/elegibilidade/show').get()
 }
 
+export const uploadPropostas = async (data) => {
+    return await new ApiCall('/elegibilidade/upload', process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
+}
+
 export const getBlacklist = async () => {
     return await new ApiCall('/elegibilidade/blacklist').get()
 }
@@ -128,4 +132,24 @@ export const getProducao = async (data) => {
 
 export const getReport = async () => {
     return await new ApiCall(`/elegibilidade/report`).get()
+}
+
+export const registrarProposta = async (data) => {
+    return await new ApiCall('/elegibilidade/regitrar/proposta').post(data)
+}
+
+export const getPropostasManuaisEmAndamento = async () => {
+    return await new ApiCall('/elegibilidade/show/propostaManual/andamento').get()
+}
+
+export const getPropostasManuais = async () => {
+    return await new ApiCall('/elegibilidade/show/propostaManual').get()
+}
+
+export const atualizarObservacoes = async (data) => {
+    return await new ApiCall('/elegibilidade/atualizarObservacoes').put(data)
+}
+
+export const concluirPropostaManual = async (data) => {
+    return await new ApiCall('/elegibilidade/concluirPropostaManual').put(data)
 }

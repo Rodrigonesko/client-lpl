@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import './style.css'
 import SideBar from '../../components/Sidebar/Sidebar'
-import Axios from 'axios'
 import AuthContext from "../../context/AuthContext";
 import { Button, TextField, Box, Snackbar, Alert } from "@mui/material";
+import { getInfoUser, updatePassword } from "../../_services/user.service";
 
 const Home = () => {
 
@@ -14,10 +14,14 @@ const Home = () => {
     const [message, setMessage] = useState('')
     const { name } = useContext(AuthContext)
 
-    const updatePassword = async () => {
+    const handlerUpdatePassword = async () => {
 
         try {
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/users/updatePassword`, { password, confirmPassword }, { withCredentials: true })
+
+            await updatePassword({
+                password,
+                confirmPassword
+            })
 
             window.location.reload()
 
@@ -28,24 +32,22 @@ const Home = () => {
 
     }
 
-    const getInfoUser = async () => {
+    const fetchInfoUser = async () => {
 
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/infoUser`, { withCredentials: true })
+            const result = await getInfoUser()
 
-            if (result.data.user.firstAccess === 'Sim') {
+            if (result.user.firstAccess === 'Sim') {
                 setFirstAccess(true)
-
             }
 
         } catch (error) {
             console.log(error);
         }
-
     }
 
     useEffect(() => {
-        getInfoUser()
+        fetchInfoUser()
     }, [])
 
     return (
@@ -75,7 +77,7 @@ const Home = () => {
 
                                 </div>
                                 <div className="btn-container">
-                                    <Button variant='contained' onClick={updatePassword}>Enviar</Button>
+                                    <Button variant='contained' onClick={handlerUpdatePassword}>Enviar</Button>
                                 </div>
                             </div>
                         )

@@ -3,8 +3,6 @@ import { Route, Routes } from 'react-router-dom'
 import Login from "./pages/login/Login";
 import Home from "./pages/home/home";
 import UploadRn from "./pages/Rn/upload/UploadRn";
-import UploadConfirmadas from "./pages/Rn/UploadConfirmadas/UploadConfirmadas";
-import Rns from "./pages/Rn/Rns/Rns";
 import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
@@ -92,15 +90,8 @@ import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/Urgencia
 
 /* Admin */
 
-import RnGraphs from "./pages/Admin/Graphs/Rn/RnGraphs";
-import LiminaresGraphs from "./pages/Admin/Graphs/Liminares/LiminaresGraphs";
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
-
-/* Provisório */
-
-import ContatosProvisorio from "./pages/Provisorio/ContatosProvisorio";
-import ContatosProvisorios2 from "./pages/Provisorio/ContatosProvisorios2";
 
 /* Controle ativicades  */
 
@@ -123,12 +114,6 @@ const AppRoutes = () => {
                 <Route exact path="/rn/upload" element={<ProtectedRoute>
                     <UploadRn />
                 </ProtectedRoute>} />
-                <Route exact path="/rn/uploadConfirmadas" element={<ProtectedRoute>
-                    <UploadConfirmadas />
-                </ProtectedRoute>} />
-                <Route exact path="/rn/rns" element={<ProtectedRoute>
-                    <Rns />
-                </ProtectedRoute>} />
                 <Route exact path="/rn/todas" element={<ProtectedRoute>
                     <Todas />
                 </ProtectedRoute>} />
@@ -143,12 +128,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/liberarModulos" element={<ProtectedRoute>
                     <LiberacaoModulos />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/graphicos/rn" element={<ProtectedRoute>
-                    <RnGraphs />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/graphicos/liminares" element={<ProtectedRoute>
-                    <LiminaresGraphs />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/resetPassword" element={<ProtectedRoute>
                     <ResetPassword />
@@ -362,15 +341,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/urgenciaEmergencia/producao" element={<ProtectedRoute>
                     <UrgenciaEmergenciaProducao />
-                </ProtectedRoute>} />
-
-                {/* provisorio */}
-
-                <Route path="/provisorio/contatos" element={<ProtectedRoute>
-                    <ContatosProvisorio />
-                </ProtectedRoute>} />
-                <Route path="/provisorio/contatos2" element={<ProtectedRoute>
-                    <ContatosProvisorios2 />
                 </ProtectedRoute>} />
 
                 {/* Controle de Atividades */}

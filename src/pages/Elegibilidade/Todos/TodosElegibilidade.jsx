@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import moment from "moment/moment";
-import Axios from 'axios'
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button, Alert } from "@mui/material";
 import TextColor from "../../../components/TextColor/TextColor";
+import { atribuirAnalista, filterElegibilidade, filterPropostasElegibilidade, getBlacklist } from "../../../_services/elegibilidade.service";
+import { getAnalistasElegibilidade } from "../../../_services/user.service";
 
 const arrStatus = [
     'A iniciar',
@@ -24,7 +25,6 @@ const TodosElegibilidade = () => {
     const [propostas, setPropostas] = useState([])
     const [total, setTotal] = useState(0)
     const [analistas, setAnalistas] = useState([])
-    const [entidades, setEntidades] = useState([])
     const [loading, setLoading] = useState(false)
     const [propostaPesquisada, setPropostaPesquisada] = useState('')
     const [pesquisando, setPesquisando] = useState(false)
@@ -38,9 +38,9 @@ const TodosElegibilidade = () => {
     const buscarBlacklist = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
+            const result = await getBlacklist()
 
-            setBlacklist(result.data)
+            setBlacklist(result)
 
         } catch (error) {
             console.log(error);
@@ -49,9 +49,9 @@ const TodosElegibilidade = () => {
 
     const buscarAnalistas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
+            const result = await getAnalistasElegibilidade()
 
-            setAnalistas(result.data.analistas)
+            setAnalistas(result.analistas)
 
         } catch (error) {
             console.log(error);
@@ -67,8 +67,6 @@ const TodosElegibilidade = () => {
             let valorVigencia = vigencia.current.children[1].firstChild.value
             let valorStatus = status.current.firstChild.textContent
 
-            console.log(valorVigencia);
-
             setPesquisando(true)
 
             if (valorAnalista === 'Todos' || valorAnalista === '​') {
@@ -83,10 +81,10 @@ const TodosElegibilidade = () => {
                 valorStatus = ''
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/proposta/filtro?analista=${valorAnalista}&vigencia=${valorVigencia}&status=${valorStatus}`, { withCredentials: true })
+            const result = await filterElegibilidade(valorAnalista, '', valorStatus, '', valorVigencia)
 
-            setPropostas(result.data)
-            setTotal(result.data.length)
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
             setPesquisando(false)
 
         } catch (error) {
@@ -98,11 +96,9 @@ const TodosElegibilidade = () => {
     const atribuir = async (analista, id) => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/elegibilidade/atribuir/analise`, {
+            await atribuirAnalista({
                 analista,
                 id
-            }, {
-                withCredentials: true
             })
 
             setOpen(true);
@@ -119,12 +115,10 @@ const TodosElegibilidade = () => {
 
             setPesquisando(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Todas/proposta/${propostaPesquisada}`, { withCredentials: true })
+            const result = await filterPropostasElegibilidade('Todas', propostaPesquisada)
 
-            console.log(result);
-
-            setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
             setPesquisando(false)
 
         } catch (error) {

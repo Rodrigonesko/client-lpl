@@ -121,3 +121,35 @@ export const excluirPropostaEntrevista = async (id) => {
 export const alterarVigenciaProposta = async (id, vigencia) => {
     return await new ApiCall('/alterarVigencia', URL_API).put(id, vigencia)
 }
+
+export const rnDuplicada = async (data) => {
+    return await new ApiCall('/rn/duplicada').put(data)
+}
+
+export const updateRn = async (data) => {
+    return await new ApiCall('/rn/rns/update').put(data)
+}
+
+export const concluirRn = async (data) => {
+    return await new ApiCall('/rn/rns/concluir').put(data)
+}
+
+export const tentativaContatoRn = async (data) => {
+    return await new ApiCall('/rn/tentativaContato').put(data)
+}
+
+export const getInfoRn = async (id) => {
+    return await new ApiCall(`/rn/rns/${id}`).get()
+}
+
+export const getPedidoRn = async (proposta) => {
+    return await new ApiCall(`/rn/pedido/${proposta}`).get()
+}
+
+export const getRns = async () => {
+    return await new ApiCall('/rn/rns').get()
+}
+
+export const uploadRn = async (data) => {
+    return await new ApiCall('/rn/upload').post(data)
+}

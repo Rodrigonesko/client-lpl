@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
 import { Link } from 'react-router-dom'
-import { Button } from "@mui/material";
+import { Button, Paper, Box, TextField, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import * as XLSX from "xlsx";
 import moment from "moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Todas.css'
+import { getPedidoRn, getRns } from "../../../_services/teleEntrevista.service";
+
 
 const Todas = () => {
 
     const [rns, setRns] = useState([])
+    const [proposta, setProposta] = useState('')
 
     let rnsForExcel
 
-    const searchProposta = async (proposta) => {
+    const searchProposta = async (e) => {
 
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/pedido/${proposta}`, { withCredentials: true })
+        e.preventDefault()
 
-        setRns(result.data)
+
+        if (proposta.length === 0) {
+            return
+        }
+
+        const result = await getPedidoRn(proposta)
+
+        setRns(result)
 
     }
 
@@ -177,8 +186,8 @@ const Todas = () => {
 
         const searchRn = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns`, { withCredentials: true })
-                setRns(result.data)
+                const result = await getRns()
+                setRns(result)
             } catch (error) {
                 console.log(error);
             }
@@ -199,45 +208,41 @@ const Todas = () => {
                     <div className="title">
                         <h2>Rns</h2>
                     </div>
-                    <div className="filters">
-                        <div className="filter">
-                            <label htmlFor="proposta">Proposta: </label>
-                            <input type="text" id="proposta" name="proposta" placeholder="Proposta" onKeyUp={e => {
-                                let proposta = e.target.value
+                    <form action="">
+                        <Box component={Paper} p={2}>
+                            <TextField size="small" label='Proposta' onChange={e => setProposta(e.target.value)} />
+                            <Button type='submit' onClick={searchProposta} variant='contained' style={{ marginLeft: '5px' }} >Buscar</Button>
+                        </Box>
+                    </form>
 
-                                searchProposta(proposta)
-
-                            }} />
-                        </div>
-                    </div>
-                    <div className="table-container">
-                        <table className="table">
-                            <thead>
-                                <tr className="table-header">
-                                    <th>BENEFICIARIO</th>
-                                    <th>MO</th>
-                                    <th>IDADE</th>
-                                    <th>TELEFONE</th>
-                                    <th>CONFIRMADO?</th>
-                                    <th>DETALHES</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow className="table-header">
+                                    <TableCell>BENEFICIARIO</TableCell>
+                                    <TableCell>MO</TableCell>
+                                    <TableCell>IDADE</TableCell>
+                                    <TableCell>TELEFONE</TableCell>
+                                    <TableCell>CONFIRMADO?</TableCell>
+                                    <TableCell>DETALHES</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {rns.map(e => {
                                     return (
-                                        <tr key={e.proposta}>
-                                            <td>{e.beneficiario}</td>
-                                            <td>{e.mo}</td>
-                                            <td>{e.idade}</td>
-                                            <td>{e.telefones}</td>
-                                            <td>{e.respostaBeneficiario}</td>
-                                            <td><Link to={'../rn/rns/' + e._id} className="link">Detalhes</Link></td>
-                                        </tr>
+                                        <TableRow key={e.proposta}>
+                                            <TableCell>{e.beneficiario}</TableCell>
+                                            <TableCell>{e.mo}</TableCell>
+                                            <TableCell>{e.idade}</TableCell>
+                                            <TableCell>{e.telefones}</TableCell>
+                                            <TableCell>{e.respostaBeneficiario}</TableCell>
+                                            <TableCell><Link to={'../rn/rns/' + e._id} className="link">Detalhes</Link></TableCell>
+                                        </TableRow>
                                     )
                                 })}
-                            </tbody>
-                        </table>
-                    </div>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </div>
             </section>
         </>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import Modal from 'react-modal'
 import './Detalhes.css'
 import { Container, Button, Box, Paper, Alert } from "@mui/material";
 import moment from "moment";
+import { concluirRn, getInfoRn, rnDuplicada, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
 
 
 Modal.setAppElement('#root')
@@ -39,11 +39,7 @@ const Detalhes = () => {
     const duplicada = async () => {
         try {
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/duplicada`, {
-                id
-            }, {
-                withCredentials: true
-            })
+            await rnDuplicada({ id })
 
             search()
 
@@ -57,7 +53,7 @@ const Detalhes = () => {
         console.log(id);
 
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/rns/update`, {
+            await updateRn({
                 id: id,
                 email: email,
                 dataContato1: data1,
@@ -67,13 +63,9 @@ const Detalhes = () => {
                 horarioContato2: horario2,
                 horarioContato3: horario3,
                 observacoes: observacoes
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                setSuccess(true)
-            }
+            setSuccess(true)
 
         } catch (error) {
             console.log(error);
@@ -84,7 +76,7 @@ const Detalhes = () => {
     const concluir = async () => {
 
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/rns/concluir`, {
+            await concluirRn({
                 id: id,
                 email: email,
                 dataContato1: data1,
@@ -94,14 +86,11 @@ const Detalhes = () => {
                 horarioContato2: horario2,
                 horarioContato3: horario3,
                 observacoes: observacoes
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                setConcluido(true)
-                closeModal()
-            }
+            setConcluido(true)
+            closeModal()
+
 
         } catch (error) {
             console.log(error);
@@ -113,17 +102,12 @@ const Detalhes = () => {
     const tentativaContato = async (tentativa) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rn/tentativaContato`, {
+            await tentativaContatoRn({
                 tentativa,
                 id
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                search()
-            }
-
+            search()
         } catch (error) {
             console.log(error);
         }
@@ -131,21 +115,19 @@ const Detalhes = () => {
 
     const search = async () => {
 
-        const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
-        const data = resultado.data
+        const result = await getInfoRn(id)
 
-        setDados(data)
-
+        setDados(result)
         setEmail(dados.email)
-        setData1(data.dataContato1)
-        setData2(data.dataContato2)
-        setData3(data.dataContato3)
-        setHorario1(data.horarioContato1)
-        setHorario2(data.horarioContato2)
-        setHorario3(data.horarioContato3)
-        setObservacoes(data.observacoes)
+        setData1(result.dataContato1)
+        setData2(result.dataContato2)
+        setData3(result.dataContato3)
+        setHorario1(result.horarioContato1)
+        setHorario2(result.horarioContato2)
+        setHorario3(result.horarioContato3)
+        setObservacoes(result.observacoes)
 
-        if (data.status === 'Concluido') {
+        if (result.status === 'Concluido') {
             setConcluido(true)
         }
     }
@@ -153,21 +135,19 @@ const Detalhes = () => {
     useEffect(() => {
         const search = async () => {
 
-            const resultado = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/rns/${id}`, { withCredentials: true })
-            const data = resultado.data
+            const result = await getInfoRn(id)
 
-            setDados(data)
-
+            setDados(result)
             setEmail(dados.email)
-            setData1(data.dataContato1)
-            setData2(data.dataContato2)
-            setData3(data.dataContato3)
-            setHorario1(data.horarioContato1)
-            setHorario2(data.horarioContato2)
-            setHorario3(data.horarioContato3)
-            setObservacoes(data.observacoes)
+            setData1(result.dataContato1)
+            setData2(result.dataContato2)
+            setData3(result.dataContato3)
+            setHorario1(result.horarioContato1)
+            setHorario2(result.horarioContato2)
+            setHorario3(result.horarioContato3)
+            setObservacoes(result.observacoes)
 
-            if (data.status === 'Concluido') {
+            if (result.status === 'Concluido') {
                 setConcluido(true)
             }
         }
@@ -190,13 +170,10 @@ const Detalhes = () => {
                 {
                     concluido && (
                         <Alert severity='success'>
-                            Concluido
+                            Concluido - {dados.responsavel}
                         </Alert>
                     )
-
                 }
-
-
                 <Box component={Paper} elevation={4} p={2}>
 
                     <h3>{dados.pedido}</h3>
