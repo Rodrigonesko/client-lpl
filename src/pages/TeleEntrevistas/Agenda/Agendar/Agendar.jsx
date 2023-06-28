@@ -23,8 +23,11 @@ const Agendar = () => {
 
     const [horarios, setHorarios] = useState({})
 
-    const buscarPessoa = async () => {
+    const buscarPessoa = async (event) => {
         try {
+
+            event.preventDefault()
+
             setLoading(true)
 
             const result = await getProposasNaoAgendadas()
@@ -136,9 +139,12 @@ const Agendar = () => {
 
                     <BotoesRelatorios />
 
+
                     <Box component={Paper} p={2} m={2} width='100%'>
-                        <TextField label='Pessoa ou proposta' size="small" onChange={e => setPesquisa(e.target.value)} />
-                        <Button variant="contained" style={{ marginLeft: '10px' }} onClick={buscarPessoa}>Buscar</Button>
+                        <form action="">
+                            <TextField label='Pessoa ou proposta' size="small" onChange={e => setPesquisa(e.target.value)} />
+                            <Button type="submit" variant="contained" style={{ marginLeft: '10px' }} onClick={buscarPessoa}>Buscar</Button>
+                        </form>
                     </Box>
 
                     <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas} />

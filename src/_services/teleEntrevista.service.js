@@ -153,3 +153,11 @@ export const getRns = async () => {
 export const uploadRn = async (data) => {
     return await new ApiCall('/rn/upload').post(data)
 }
+
+export const alterarWhatsapp = async (data) => {
+    return await new ApiCall('/alterarWhatsapp', URL_API).put(data)
+}
+
+export const mandarParaAtendimentoHumanizado = async (data) => {
+    return await new ApiCall('/mandarAtendimentoHumanizado', URL_API).put(data)
+}

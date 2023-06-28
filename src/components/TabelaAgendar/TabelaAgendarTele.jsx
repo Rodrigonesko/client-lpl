@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton, Snackbar, Alert } from "@mui/material";
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton, Snackbar, Alert, Tooltip } from "@mui/material";
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -7,6 +7,11 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarVigenciaProposta, cancelarEntrevista, excluirPropostaEntrevista, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
+import { FaWpforms, FaTrash, FaWhatsapp } from 'react-icons/fa'
+import { TiCancel } from 'react-icons/ti'
+import { BsFillTelephoneFill } from 'react-icons/bs'
+import ModalChangeWhatsapp from "./modais/ModalChangeWhatsapp";
+import { MdPublishedWithChanges } from 'react-icons/md'
 
 const style = {
     position: 'absolute',
@@ -245,91 +250,105 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                         {(rowsPerPage > 0
                             ? propostas.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : propostas
-                        ).map((row) => (
-                            <TableRow key={row._id}>
-                                <TableCell component="th" scope="row">
-                                    <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
-                                    <Button size="small" color='warning' variant='contained' onClick={
-                                        item => {
-                                            alterarVigencia(item.target.parentElement.firstChild.firstChild.firstChild.value, row._id)
-                                        }
-                                    }>Alterar</Button>
-                                </TableCell>
-                                <TableCell align="left">
-                                    {row.proposta}
-                                </TableCell>
-                                <TableCell align="left">
-                                    {row.nome}
-                                </TableCell>
-                                <TableCell align="left">
-                                    {row.dataNascimento}
-                                </TableCell>
-                                <TableCell>
-                                    <select onChange={item => alterarSexo(row._id, item.target.value)} >
-                                        <option value="M" selected={row.sexo === 'M'}>M</option>
-                                        <option value="F" selected={row.sexo === 'F'} >F</option>
-                                    </select>
-                                </TableCell>
-                                <TableCell>
-                                    <TextField style={{ minWidth: '200px' }} size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
-                                </TableCell>
-                                <TableCell>
-                                    <Button variant="contained" onClick={() => {
-                                        setPropostaCancelar(row.proposta)
-                                        setBeneficiarioCancelar(row.nome)
-                                        setIdCancelar(row._id)
-                                        setModalCancelar(true)
-                                    }} color="error" size="small">
-                                        Cancelar
-                                    </Button>
-                                </TableCell>
-                                <TableCell>
-                                    <Button variant="contained" onClick={() => {
-                                        setPropostaExcluir(row.proposta)
-                                        setBeneficiarioExcluir(row.nome)
-                                        setIdCExcluir(row._id)
-                                        setModalExcluir(true)
-                                    }} color="error" size="small">
-                                        Excluir
-                                    </Button>
-                                </TableCell>
-                                <TableCell>
-                                    <Button variant="contained" href={`/entrevistas/formulario/${row._id}`} >
-                                        Formulario
-                                    </Button>
-                                </TableCell>
-                                <TableCell>
-                                    {
-                                        row.contato1 ? (
-                                            <span>{row.contato1}</span>
-                                        ) : (
-                                            <Button variant='contained' size="small" onClick={() => {
-                                                tentativaContato('tentativa 1', row._id)
-                                            }} style={{ background: 'blue' }}>1° Contato</Button>
-                                        )
-                                    }
+                        ).map((row) => {
 
-                                </TableCell>
-                                <TableCell>
-                                    {
-                                        row.contato2 === undefined && row.contato1 !== undefined ? (
-                                            <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 2', row._id) }} style={{ background: 'blue' }}>2° Contato</Button>
-                                        ) : (
-                                            <span>{row.contato2}</span>
-                                        )
-                                    }
-                                </TableCell>
-                                <TableCell>
-                                    {
-                                        row.contato3 === undefined & row.contato2 !== undefined ? (
-                                            <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 3', row._id) }} style={{ background: 'blue' }}>3° Contato</Button>
-                                        ) : (
-                                            <span>{row.contato3}</span>
-                                        )
-                                    }
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                            const conditionPf = row.tipoContrato.indexOf('PF') !== -1 || row.tipoContrato.indexOf('pf') !== -1
+
+                            return (
+                                <TableRow key={row._id} style={{ background: conditionPf ? '#e6ee9c' : '' }} >
+                                    <TableCell component="th" scope="row">
+                                        <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
+                                        <Tooltip title='Alterar vigência'>
+                                            <Button style={{ marginLeft: '10px' }} color='warning' variant='contained' onClick={
+                                                item => {
+                                                    alterarVigencia(item.target.parentElement.firstChild.firstChild.firstChild.value, row._id)
+                                                }
+                                            }><MdPublishedWithChanges /></Button>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {row.proposta}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {row.nome}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {row.dataNascimento}
+                                    </TableCell>
+                                    <TableCell>
+                                        <select onChange={item => alterarSexo(row._id, item.target.value)} >
+                                            <option value="M" selected={row.sexo === 'M'}>M</option>
+                                            <option value="F" selected={row.sexo === 'F'} >F</option>
+                                        </select>
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField style={{ minWidth: '200px' }} size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
+                                        <ModalChangeWhatsapp whatsapp={row.whatsapp} _id={row._id} />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Tooltip title='Cancelar'>
+                                            <Button variant="contained" onClick={() => {
+                                                setPropostaCancelar(row.proposta)
+                                                setBeneficiarioCancelar(row.nome)
+                                                setIdCancelar(row._id)
+                                                setModalCancelar(true)
+                                            }} color="error">
+                                                <TiCancel />
+                                            </Button>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Tooltip title='Excluir'>
+                                            <Button variant="contained" onClick={() => {
+                                                setPropostaExcluir(row.proposta)
+                                                setBeneficiarioExcluir(row.nome)
+                                                setIdCExcluir(row._id)
+                                                setModalExcluir(true)
+                                            }} color="error">
+                                                <FaTrash />
+                                            </Button>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Tooltip title='Formulario'>
+                                            <Button variant="contained" href={`/entrevistas/formulario/${row._id}`} >
+                                                <FaWpforms />
+                                            </Button>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            row.contato1 ? (
+                                                <span>{row.contato1}</span>
+                                            ) : (
+                                                <Button variant='contained' size="small" onClick={() => {
+                                                    tentativaContato('tentativa 1', row._id)
+                                                }} style={{ background: 'blue' }}>1° <BsFillTelephoneFill /></Button>
+                                            )
+                                        }
+
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            row.contato2 === undefined && row.contato1 !== undefined ? (
+                                                <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 2', row._id) }} style={{ background: 'blue' }}>2° <BsFillTelephoneFill /></Button>
+                                            ) : (
+                                                <span>{row.contato2}</span>
+                                            )
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            row.contato3 === undefined & row.contato2 !== undefined ? (
+                                                <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 3', row._id) }} style={{ background: 'blue' }}>3° <BsFillTelephoneFill /></Button>
+                                            ) : (
+                                                <span>{row.contato3}</span>
+                                            )
+                                        }
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
 
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
@@ -346,6 +365,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                                 count={propostas.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
+                                labelRowsPerPage='Linhas por página'
                                 SelectProps={{
                                     inputProps: {
                                         'aria-label': 'Linhas por página',
@@ -359,7 +379,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                         </TableRow>
                     </TableFooter>
                 </Table>
-            </TableContainer>
+            </TableContainer >
             <Modal
                 open={modalExcluir}
                 onClose={() => setModalExcluir(false)}
