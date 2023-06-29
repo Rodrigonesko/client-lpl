@@ -183,7 +183,9 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            await alterarTelefoneEntrevista(id, telefone)
+            const { result } = await alterarTelefoneEntrevista({ id, telefone })
+
+            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -208,7 +210,8 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
             setLoading(true)
 
-            await tentativaContatoEntrevista(tentativa, id)
+            const teste = await tentativaContatoEntrevista({ tentativa, id })
+            console.log(teste);
 
             atualizarTabela()
             setLoading(false)

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import { Modal, Button, Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";

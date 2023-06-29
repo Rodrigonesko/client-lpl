@@ -61,7 +61,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
         //     setProtocolos(protocolos)
         // })
 
-        getPedidosPorPacote().then(value => {
+        getPedidosPorPacote(pacote).then(value => {
             protocolos = value.pedidos
             protocolos = protocolos.filter((item, pos, array) => {
                 return array.map(x => x.protocolo).indexOf(item.protocolo) === pos

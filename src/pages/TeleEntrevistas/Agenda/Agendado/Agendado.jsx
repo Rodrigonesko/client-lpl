@@ -51,6 +51,7 @@ const Agendado = () => {
                     contato1: item.contato1,
                     contato2: item.contato2,
                     contato3: item.contato3,
+                    whatsapp: item.whatsapp
                 })
             }
 
@@ -103,6 +104,7 @@ const Agendado = () => {
                 contato1: item.contato1,
                 contato2: item.contato2,
                 contato3: item.contato3,
+                whatsapp: item.whatsapp
             })
         }
 

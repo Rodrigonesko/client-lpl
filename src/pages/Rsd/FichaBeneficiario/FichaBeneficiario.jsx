@@ -164,7 +164,7 @@ const FichaBeneficiario = () => {
 
             setProtocolos(arrAuxProtocolos)
 
-            let arrAuxPacotes = resultPedidos.data.pedidos.filter((item, pos, array) => {
+            let arrAuxPacotes = resultPedidos.pedidos.filter((item, pos, array) => {
                 return array.map(x => x.pacote).indexOf(item.pacote) === pos
             })
 

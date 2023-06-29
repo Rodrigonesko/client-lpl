@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Modal from 'react-modal'
 import './Detalhes.css'
-import { Container, Button, Box, Paper, Alert } from "@mui/material";
+import { Container, Button, Box, Paper, Alert, Snackbar } from "@mui/material";
 import moment from "moment";
-import { concluirRn, getInfoRn, rnDuplicada, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
-
-
-Modal.setAppElement('#root')
+import { getInfoRn, rnDuplicada, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
+import ModalCancelarRn from "./modais/ModalCancelarRn";
+import { HiDuplicate } from 'react-icons/hi'
+import { CiFloppyDisk } from 'react-icons/ci'
+import ModalConcluirRn from "./modais/ModalConcluirRn";
 
 const Detalhes = () => {
 
     const { id } = useParams()
 
-    const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [openSnack, setOpenSnack] = useState(false)
 
     const [dados, setDados] = useState({})
     const [email, setEmail] = useState('')
@@ -25,16 +25,9 @@ const Detalhes = () => {
     const [horario2, setHorario2] = useState('')
     const [horario3, setHorario3] = useState('')
     const [observacoes, setObservacoes] = useState('')
-    const [success, setSuccess] = useState(false)
     const [concluido, setConcluido] = useState(false)
 
-    const openModal = () => {
-        setModalIsOpen(true)
-    }
-
-    const closeModal = () => {
-        setModalIsOpen(false)
-    }
+    const [flushHook, setFlushHook] = useState(false)
 
     const duplicada = async () => {
         try {
@@ -65,36 +58,10 @@ const Detalhes = () => {
                 observacoes: observacoes
             })
 
-            setSuccess(true)
+            setOpenSnack(true)
 
         } catch (error) {
             console.log(error);
-        }
-
-    }
-
-    const concluir = async () => {
-
-        try {
-            await concluirRn({
-                id: id,
-                email: email,
-                dataContato1: data1,
-                dataContato2: data2,
-                dataContato3: data3,
-                horarioContato1: horario1,
-                horarioContato2: horario2,
-                horarioContato3: horario3,
-                observacoes: observacoes
-            })
-
-            setConcluido(true)
-            closeModal()
-
-
-        } catch (error) {
-            console.log(error);
-            closeModal()
         }
 
     }
@@ -135,6 +102,8 @@ const Detalhes = () => {
     useEffect(() => {
         const search = async () => {
 
+            setFlushHook(false)
+
             const result = await getInfoRn(id)
 
             setDados(result)
@@ -153,20 +122,12 @@ const Detalhes = () => {
         }
 
         search()
-    }, [dados.email, id])
+    }, [dados.email, id, flushHook])
 
     return (
         <>
             <Sidebar />
             <Container>
-                {
-                    success && (
-                        <div className="success">
-                            Atualizado com sucesso
-                        </div>
-                    )
-
-                }
                 {
                     concluido && (
                         <Alert severity='success'>
@@ -304,31 +265,26 @@ const Detalhes = () => {
                         </div>
                     </div>
                     <div className="buttons">
-                        <Button onClick={update} className="salvar">Salvar</Button>
+                        <Button startIcon={<CiFloppyDisk />} onClick={update} className="salvar">Salvar</Button>
                         {
                             !concluido && (
                                 <>
-                                    <Button onClick={openModal} className="concluir">Concluir</Button>
-                                    <Button color='warning' variant="contained" style={{ marginLeft: '18px' }} onClick={duplicada} >Duplicada</Button>
+                                    <ModalConcluirRn id={id} email={email} observacoes={observacoes} flushHook={setFlushHook} />
+                                    <Button startIcon={<HiDuplicate />} color='warning' variant="contained" style={{ marginLeft: '18px' }} onClick={duplicada} >Duplicada</Button>
+                                    <ModalCancelarRn id={dados._id} proposta={dados.proposta} flushHook={setFlushHook} />
                                 </>
 
                             )
                         }
 
                     </div>
-                    <Modal
-                        isOpen={modalIsOpen}
-                        onRequestClose={closeModal}
-                        contentLabel="Exemplo"
-                        overlayClassName='modal-overlay'
-                        className='modal-content'
-                    >
-                        <h2>Anexou no SisAmil?</h2>
-                        <button onClick={closeModal}>Fechar</button>
-                        <button className="concluir" onClick={concluir} >Concluir</button>
-                    </Modal>
                 </Box>
             </Container>
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert variant="filled" onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Atualizado com sucesso!
+                </Alert>
+            </Snackbar>
         </>
     )
 }

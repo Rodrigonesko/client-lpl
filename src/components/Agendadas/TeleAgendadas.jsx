@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Typography, CircularProgress } from "@mui/material";
 import moment from "moment";
 import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarTelefoneRn, reagendarEntrevista, reagendarRn, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
+import ModalChangeWhatsapp from "../TabelaAgendar/modais/ModalChangeWhatsapp";
 
 const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
@@ -46,7 +47,9 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     const alterarTelefone = async (telefone, id) => {
         try {
 
-            await alterarTelefoneEntrevista({ telefone, id })
+            const result = await alterarTelefoneEntrevista({ telefone, id })
+
+            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -113,6 +116,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                                             <TableCell>{e.proposta}</TableCell>
                                             <TableCell>
                                                 <TextField style={{ minWidth: '150px' }} size="small" variant='standard' defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} />
+                                                <ModalChangeWhatsapp whatsapp={e.whatsapp} _id={e._id} />
                                             </TableCell>
                                             <TableCell>{e.nome}</TableCell>
                                             <TableCell>{e.idade}</TableCell>

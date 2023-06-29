@@ -35,7 +35,7 @@ export const devolverProtocoloInativo = async (protocolo, pacote) => {
 }
 
 export const getPedidosPorPacote = async (pacote) => {
-    return await new ApiCall(`/rsd/pedidos/${pacote}`).get()
+    return await new ApiCall(`/rsd/pedidos/pacote/${pacote}`).get()
 }
 
 export const baixaAgd = async (data) => {

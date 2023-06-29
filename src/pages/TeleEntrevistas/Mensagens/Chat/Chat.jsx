@@ -5,21 +5,60 @@ import Axios from 'axios'
 import { useParams } from 'react-router-dom';
 import { getCookie } from 'react-use-cookie';
 import moment from 'moment';
+import { getHorariosDisponiveis } from '../../../../_services/teleEntrevista.service';
 
 const Chat = () => {
 
     const inputRef = useRef(null)
+    const chatRef = useRef(null)
 
     const { whatsapp } = useParams()
     const [chat, setChat] = useState([])
     const [mensagem, setMensagem] = useState('')
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [dataDiaAnterior, setDataDiaAnterior] = useState('')
+    const [aux, setAux] = useState(false)
 
-    const gerarMensagemNaoAtendido = async () => {
+    const handlerSemContato = async () => {
         try {
-            
-            
+
+            setMensagem('Somos da Amil. Estamos tentando contato conforme agendamento realizado. O(a) Sr(a) pode falar no momento?')
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handlerSemContatoDiaAnterior = async () => {
+        try {
+
+            setLoading(true)
+
+            const { obj } = await getHorariosDisponiveis()
+
+            const dataFormatada = moment(dataDiaAnterior).format('DD/MM/YYYY')
+
+            let msg = `Bom dia!
+Tentamos contato contigo no horário agendado, porém sem sucesso. Sendo assim, teremos que reagendar. Vou te passar os horários disponíveis atualizados.
+Horários disponíveis para o dia ${dataFormatada} -`
+
+            if (obj.hasOwnProperty(dataFormatada)) {
+                obj[dataFormatada].forEach(horario => {
+                    msg += ` ${horario} -`
+                })
+
+            } else {
+
+            }
+
+            msg += ` ⚠️ Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.`
+
+            console.log(msg);
+
+            setMensagem(msg)
+
+            setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -41,6 +80,8 @@ const Chat = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${getCookie('token')}` }
             })
+
+            console.log(result);
 
             if (result.status === 200) {
                 buscarMensagens()
@@ -68,12 +109,14 @@ const Chat = () => {
 
             setChat(result.data)
 
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
-                whatsapp
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
-            })
+            setAux(true)
+
+            // await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
+            //     whatsapp
+            // }, {
+            //     withCredentials: true,
+            //     headers: { Authorization: `Bearer ${getCookie('token')}` }
+            // })
 
         } catch (error) {
             console.log(error);
@@ -83,13 +126,19 @@ const Chat = () => {
 
     useEffect(() => {
         buscarMensagens()
-    }, [whatsapp])
+        const component = chatRef.current;
+        if (component) {
+            component.scrollTop = component.scrollHeight;
+        }
+
+
+    }, [whatsapp, aux])
 
     return (
         <>
             <Sidebar></Sidebar>
             <Container>
-                <Box display='block' style={{ overflowY: 'auto' }} component={Paper} mt={3} bgcolor='lightgray' height='80vh'>
+                <Box display='block' style={{ overflowY: 'auto' }} component={Paper} mt={3} bgcolor='lightgray' height='80vh' ref={chatRef}>
                     {
                         chat.map(e => {
                             return (
@@ -116,13 +165,23 @@ const Chat = () => {
                         <Alert severity='error' >Erro ao enviar mensagem</Alert>
                     ) : null
                 }
-                <Box component={Paper} p={2} width='30%' >
-                    <Typography>
-                        Mensagem não atendido
-                    </Typography>
-                    <Box display='flex'>
-                        <TextField type='date' size='small' style={{ marginRight: '10px' }} />
-                        <Button variant='contained' color='secondary'>Gerar</Button>
+                <Box display='flex'>
+                    <Box component={Paper} p={2} width='30%' >
+                        <Typography>
+                            Mensagem não atenderam dia anterior
+                        </Typography>
+                        <Box display='flex'>
+                            <TextField type='date' size='small' style={{ marginRight: '10px' }} value={dataDiaAnterior} onChange={element => setDataDiaAnterior(element.target.value)} />
+                            <Button variant='contained' color='secondary' onClick={handlerSemContatoDiaAnterior} >Gerar</Button>
+                        </Box>
+                    </Box>
+                    <Box component={Paper} p={2} width='30%'>
+                        <Typography>
+                            Mensagem sem sucesso de contato
+                        </Typography>
+                        <Box>
+                            <Button variant='contained' color='warning' onClick={handlerSemContato} >Gerar</Button>
+                        </Box>
                     </Box>
                 </Box>
             </Container>

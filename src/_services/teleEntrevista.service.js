@@ -62,8 +62,8 @@ export const reagendarRn = async (id) => {
     return await new ApiCall('/rn/reagendar').put(id)
 }
 
-export const alterarTelefoneEntrevista = async (id, telefone) => {
-    return await new ApiCall('/alterarTelefone', URL_API).put(id, telefone)
+export const alterarTelefoneEntrevista = async (data) => {
+    return await new ApiCall('/alterarTelefone', URL_API).put(data)
 }
 
 export const alterarTelefoneRn = async (id, telefone) => {
@@ -74,8 +74,8 @@ export const alterarSexoEntrevista = async (id, sexo) => {
     return await new ApiCall('/alterarSexo', URL_API).put(id, sexo)
 }
 
-export const tentativaContatoEntrevista = async (tentativa, id) => {
-    return await new ApiCall('/tentativaContato', URL_API).put(tentativa, id)
+export const tentativaContatoEntrevista = async (data) => {
+    return await new ApiCall('/tentativaContato', URL_API).put(data)
 }
 
 export const preencherFormulario = async (respostas,
