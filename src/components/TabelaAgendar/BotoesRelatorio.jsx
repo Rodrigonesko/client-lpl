@@ -3,6 +3,34 @@ import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
 import { getPropostasADevolver, showPropostas } from "../../_services/teleEntrevista.service";
 
+
+function calcularDiasUteis(dataInicial, dataFinal) {
+    // Cria cópias das datas para evitar alterações indesejadas
+    const start = new Date(dataInicial);
+    const end = new Date(dataFinal);
+
+    // Verifica se as datas são válidas
+    if (isNaN(start) || isNaN(end)) {
+        return '';
+    }
+
+    let diasUteis = 0;
+
+    // Itera sobre cada dia entre as datas inicial e final
+    while (start <= end) {
+        // Verifica se o dia é sábado (6) ou domingo (0)
+        if (start.getDay() !== 6 && start.getDay() !== 0) {
+            diasUteis++;
+        }
+
+        // Incrementa a data inicial para o próximo dia
+        start.setDate(start.getDate() + 1);
+    }
+
+    return diasUteis;
+}
+
+
 const BotoesRelatorios = () => {
 
     const [loading, setLoading] = useState(false)
@@ -52,11 +80,14 @@ const BotoesRelatorios = () => {
             xls += "<th>Responsavel 2° Contato</th>"
             xls += "<th>3° Contato</th>"
             xls += "<th>Responsavel 3° Contato</th>"
+            xls += "<th>Dias uteis</th>"
+            xls += "<th>Ret</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
 
             result.propostas.forEach(e => {
+
                 xls += "<tr>"
                 xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
@@ -126,6 +157,18 @@ const BotoesRelatorios = () => {
                 ) : (
                     xls += `<td></td>`
                 )
+
+                const diasUteis = calcularDiasUteis(e.dataRecebimento, e.dataConclusao)
+
+                xls += `<td>${diasUteis}</td>`
+
+                e.retrocedido ? (
+                    xls += `<td>${e.retrocedido}</td>`
+
+                ) : (
+                    xls += `<td></td>`
+                )
+
                 xls += `</tr>`
             })
 

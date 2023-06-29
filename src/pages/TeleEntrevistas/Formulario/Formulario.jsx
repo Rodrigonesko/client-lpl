@@ -10,6 +10,7 @@ import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import ModalFormulario from "../../../components/ModalFormulario/ModalFormulario";
+import MarcacaoAutista from "../../../components/MarcacaoAutista/MarcacaoAutista";
 
 import './Formulario.css'
 import { getCookie } from "react-use-cookie";
@@ -321,6 +322,8 @@ const Formulario = () => {
                         </Box>
 
                         <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
+{/* 
+                        <MarcacaoAutista /> */}
 
                     </div>
                     <div className="info-adicional">

@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import { FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp } from "react-icons/fa";
-import { BsGraphUp } from 'react-icons/bs'
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import AuthContext from "../../context/AuthContext";
+import { IconButton } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
 
 const Sidebar = () => {
@@ -137,12 +137,16 @@ const Sidebar = () => {
             {
                 isOpen ? (
                     <div className="div-toggle">
-                        <FaAngleDoubleLeft className="toggle" onClick={toggleMenu} />
+                        <IconButton style={{ zIndex: 99, background: 'gray', color: 'white' }} onClick={toggleMenu} >
+                            <FaAngleDoubleLeft className="toggle" />
+                        </IconButton>
                     </div>
 
                 ) : (
                     <div className="div-toggle">
-                        <FaAngleDoubleRight className="toggle" onClick={toggleMenu} />
+                        <IconButton style={{ zIndex: 99, background: 'gray', color: 'white' }} onClick={toggleMenu} >
+                            <FaAngleDoubleRight className="toggle" />
+                        </IconButton>
                     </div>
                 )
             }
