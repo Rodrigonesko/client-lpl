@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import './CriarPedidoIndividual.css'
+import { Container, Box, Paper, TextField, Typography, Divider, FormControl, InputLabel, Select, MenuItem, Button, Alert, Snackbar } from "@mui/material";
+import { buscarInformacoesMo, criarPedidoIndividual, getOperadoras } from "../../../_services/rsd.service";
 
 const CriarPedidoIndividual = () => {
 
@@ -24,20 +24,30 @@ const CriarPedidoIndividual = () => {
     const [pedido, setPedido] = useState('')
     const [fila, setFila] = useState('')
 
+    const [msg, setMsg] = useState('')
+    const [error, setError] = useState(false)
+    const [open, setOpen] = useState(false)
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
     const buscarMo = async (marcaOtica) => {
         try {
 
             if (marcaOtica) {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${marcaOtica}`, { withCredentials: true })
+                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${marcaOtica}`, { withCredentials: true })
 
-                if (result.data.pessoa) {
-                    setNome(result.data.pessoa.nome)
-                    setDataNascimento(result.data.pessoa.dataNascimento)
-                    setEmail(result.data.pessoa.email)
-                    setFone1(result.data.pessoa.fone1)
-                    setFone2(result.data.pessoa.fone2)
-                    setFone3(result.data.pessoa.fone3)
-                    setCpf(result.data.pessoa.cpf)
+                const result = await buscarInformacoesMo(marcaOtica)
+
+                if (result.pessoa) {
+                    setNome(result.pessoa.nome)
+                    setDataNascimento(result.pessoa.dataNascimento)
+                    setEmail(result.pessoa.email)
+                    setFone1(result.pessoa.fone1)
+                    setFone2(result.pessoa.fone2)
+                    setFone3(result.pessoa.fone3)
+                    setCpf(result.pessoa.cpf)
                 }
             }
 
@@ -48,9 +58,16 @@ const CriarPedidoIndividual = () => {
 
     const criarPedido = async e => {
         try {
-            e.preventDefault()
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pedido/criar/individual`, {
+            if (protocolo.length === 0 || mo.length === 0) {
+
+                setError(true)
+                setMsg('Marca ótica e Protocolo são obrigatórios')
+                setOpen(true)
+                return
+            }
+
+            await criarPedidoIndividual({
                 mo,
                 nome,
                 dataNascimento,
@@ -65,13 +82,16 @@ const CriarPedidoIndividual = () => {
                 dataPagamento,
                 pedido,
                 fila
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
+            setOpen(true)
+            setError(false)
+            setMsg('Protocolo/pedido criado com sucesso!')
+
+            setTimeout(() => {
                 navigate(`/rsd/FichaBeneficiario/${mo}`)
-            }
+                handleClose()
+            }, '1000')
 
         } catch (error) {
             console.log(error);
@@ -81,9 +101,9 @@ const CriarPedidoIndividual = () => {
     const buscarOperadoras = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadoras`, { withCredentials: true })
+            const result = await getOperadoras()
 
-            setOperadorasBeneficiario(result.data.operadoras)
+            setOperadorasBeneficiario(result.operadoras)
 
         } catch (error) {
             console.log(error);
@@ -96,125 +116,89 @@ const CriarPedidoIndividual = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section className="section-criar-pedido-protocolo-container">
-                <div className="criar-pedido-protocolo-container">
-                    <div className="title">
-                        <h3>Novo Protocolo/Pedido</h3>
-                    </div>
-                    <form action="">
-                        <div className="input-marca-otica">
-                            <label htmlFor="mo">Marca Ótica</label>
-                            <input type="text" id="mo" placeholder="Marca Ótica" onChange={e => {
-                                setMo(e.target.value)
-                                buscarMo(e.target.value)
-                            }} />
-                        </div>
-                        <div className="container-dados-beneficiario">
-                            <div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="nome">Nome</label>
-                                    <input type="text" id="nome" placeholder="Nome" defaultValue={nome} onChange={e => {
-                                        setNome(e.target.value)
-                                    }} />
-                                </div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="data-nascimento">Data Nascimento</label>
-                                    <input type="date" id="data-nascimento" placeholder="Data Nascimento" defaultValue={dataNascimento} onChange={e => {
-                                        setDataNascimento(e.target.value)
-                                    }} />
-                                </div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="email">E-mail</label>
-                                    <input type="text" id="email" placeholder="E-mail" defaultValue={email} onChange={e => {
-                                        setEmail(e.target.value)
-                                    }} />
-                                </div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="fone-2">Fone 2</label>
-                                    <input type="text" id="fone-2" placeholder="Fone 2" defaultValue={fone2} onChange={e => {
-                                        setFone2(e.target.value)
-                                    }} />
-                                </div>
-                            </div>
-                            <div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="cpf">CPF</label>
-                                    <input type="text" id="cpf" placeholder="CPF" defaultValue={cpf} onChange={e => {
-                                        setCpf(e.target.value)
-                                    }} />
-                                </div>
-                                <div className="input-box-criar-pedido">
-                                    <select name="operadora-beneficiario" id="operadora-beneficiario" onChange={e => {
+            <Sidebar />
+            <Container style={{ overflow: 'auto', height: '100vh' }} >
+                <Box mt={1} component={Paper} p={2} elevation={3}>
+                    <Typography variant="h6">
+                        Novo Protocolo/Pedido
+                    </Typography>
+                    <Box m={1}>
+                        <TextField helperText='Informe a marca ótica' label='Marca Ótica' value={mo} size="small" onChange={e => {
+                            setMo(e.target.value)
+                            buscarMo(e.target.value)
+                        }} />
+                        <Divider style={{ margin: '10px' }} />
+                    </Box>
+
+                    <Box display='flex' justifyContent='space-between'>
+                        <Box display='flex' flexDirection='column' width='100%' maxWidth='400px' >
+                            <TextField style={{ margin: '10px' }} size="small" label='Nome' value={nome} onChange={e => setNome(e.target.value)} />
+                            <TextField style={{ margin: '10px' }} size="small" focused type='date' label='Data Nascimento' value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} />
+                            <TextField style={{ margin: '10px' }} size="small" label='Email' value={email} onChange={e => setEmail(e.target.value)} />
+                            <TextField style={{ margin: '10px' }} size="small" label='Fone 2' value={fone2} onChange={e => setFone2(e.target.value)} />
+                        </Box>
+                        <Box display='flex' flexDirection='column' width='100%' maxWidth='400px'>
+                            <TextField style={{ margin: '10px' }} size="small" label='CPF' value={cpf} onChange={e => setCpf(e.target.value)} />
+                            <FormControl style={{ margin: '10px' }} size="small" >
+                                <InputLabel>Operadora Beneficiario</InputLabel>
+                                <Select
+                                    label='Operadora Beneficiario'
+                                    value={operadoraBeneficiario}
+                                    onChange={e => {
                                         setOperadoraBeneficiario(e.target.value)
-                                    }} >
-                                        <option value="">Operadora Beneficiário</option>
-                                        {
-                                            operadoresBeneficiario.map(e => {
-                                                return (
-                                                    <option key={e._id} value={e.descricao}>{e.descricao}</option>
-                                                )
-                                            })
-                                        }
-                                    </select>
-                                </div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="fone-1">Fone 1</label>
-                                    <input type="text" id="fone-1" placeholder="Fone 1" defaultValue={fone1} onChange={e => {
-                                        setFone1(e.target.value)
-                                    }} />
-                                </div>
-                                <div className="input-box-criar-pedido">
-                                    <label htmlFor="fone-3">Fone 3</label>
-                                    <input type="text" id="fone-3" placeholder="Fone 3" defaultValue={fone3} onChange={e => {
-                                        setFone3(e.target.value)
-                                    }} />
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="input-box-criar-pedido">
-                                <label htmlFor="protocolo">Número do Protocolo</label>
-                                <input type="text" id="protocolo" placeholder="Número do Protocolo" onChange={e => {
-                                    setProtocolo(e.target.value)
-                                }} />
-                            </div>
-                            <div className="input-box-criar-pedido">
-                                <label htmlFor="data-solicitacao">Data Solicitação</label>
-                                <input type="date" id="data-solicitacao" placeholder="Data Solicitação" onChange={e => {
-                                    setDataSolicitacao(e.target.value)
-                                }} />
-                            </div>
-                            <div className="input-box-criar-pedido">
-                                <label htmlFor="data-pagamento">Data Pagamento</label>
-                                <input type="date" id="data-pagamento" placeholder="Data Pagamento" onChange={e => {
-                                    setDataPagamento(e.target.value)
-                                }} />
-                            </div>
-                            <div className="input-box-criar-pedido">
-                                <label htmlFor="pedido">Número do Pedido</label>
-                                <input type="text" id="pedido" placeholder="Número do Pedido" onChange={e => {
-                                    setPedido(e.target.value)
-                                }} />
-                            </div>
-                            <div className="input-box-criar-pedido">
-                                <label htmlFor="fila">Fila: </label>
-                                <select name="fila" id="fila" style={{width: '300px'}} onChange={(e)=>{
+                                    }}
+                                >
+                                    <MenuItem>
+                                        <em>Operadora Beneficiario</em>
+                                    </MenuItem>
+                                    {
+                                        operadoresBeneficiario.map(e => {
+                                            return (
+                                                <MenuItem key={e._id} value={e.descricao} >{e.descricao}</MenuItem>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
+                            <TextField style={{ margin: '10px' }} size="small" label='Fone 1' value={fone1} onChange={e => setFone1(e.target.value)} />
+                            <TextField style={{ margin: '10px' }} size="small" label='Fone 3' value={fone3} onChange={e => setFone3(e.target.value)} />
+                        </Box>
+                    </Box>
+                    <Divider style={{ margin: '10px' }} />
+                    <Box display='flex' flexDirection='column' width='100%' maxWidth='400px' >
+                        <TextField size="small" label='Protocolo' style={{ margin: '10px' }} value={protocolo} helperText='Número do protocolo' onChange={e => setProtocolo(e.target.value)} />
+                        <TextField size="small" label='Data Solicitação' type="date" focused style={{ margin: '10px' }} value={dataSolicitacao} onChange={e => setDataSolicitacao(e.target.value)} />
+                        <TextField size="small" label='Data Pagamento' type="date" focused style={{ margin: '10px' }} value={dataPagamento} onChange={e => setDataPagamento(e.target.value)} />
+                        <TextField size="small" label='Pedido' style={{ margin: '10px' }} value={pedido} helperText='Número do pedido' onChange={e => setPedido(e.target.value)} />
+
+                        <FormControl size="small" style={{ margin: '10px' }} >
+                            <InputLabel>Fila</InputLabel>
+                            <Select
+                                label='Fila'
+                                value={fila}
+                                onChange={e => {
                                     setFila(e.target.value)
-                                }}>
-                                    <option value=""></option>
-                                    <option value="RSD">RSD</option>
-                                    <option value="Quarentena">Quarentena</option>
-                                    <option value="Alta Frequência Consulta">Alta Frequência Consulta</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <button onClick={criarPedido} className="criar-pedido-botao">Criar</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+                                }}
+                            >
+                                <MenuItem>
+                                    <em>Fila</em>
+                                </MenuItem>
+                                <MenuItem value="RSD">RSD</MenuItem>
+                                <MenuItem value="Quarentena">Quarentena</MenuItem>
+                                <MenuItem value="Alta Frequência Consulta">Alta Frequência Consulta</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box m={1}>
+                        <Button variant="contained" onClick={criarPedido}>Criar</Button>
+                    </Box>
+                </Box>
+                <Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert variant='filled' onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+                        {msg}
+                    </Alert>
+                </Snackbar>
+            </Container>
         </>
     )
 }

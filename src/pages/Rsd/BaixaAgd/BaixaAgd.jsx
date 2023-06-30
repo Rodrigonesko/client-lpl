@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Container, Typography, Box, Paper, TextField, Button, LinearProgress, Alert } from "@mui/material";
-import Axios from 'axios'
 import { baixaAgd } from "../../../_services/rsd.service";
 
 const BaixaAgd = () => {

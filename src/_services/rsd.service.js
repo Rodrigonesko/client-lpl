@@ -34,6 +34,10 @@ export const devolverProtocoloInativo = async (protocolo, pacote) => {
     return await new ApiCall('/rsd/protocolo/devolver').put(protocolo, pacote)
 }
 
+export const criarProtocolo = async (data) => {
+    return await new ApiCall('/rsd/protocolo/criar').post(data)
+}
+
 export const getPedidosPorPacote = async (pacote) => {
     return await new ApiCall(`/rsd/pedidos/pacote/${pacote}`).get()
 }
@@ -68,4 +72,20 @@ export const devolverPacote = async (data) => {
 
 export const getPedidosPorMo = async (mo) => {
     return await new ApiCall(`/rsd/pedidos/mo/${mo}`).get()
+}
+
+export const criarPedido = async (data) => {
+    return await new ApiCall('/rsd/pedido/criar').post(data)
+}
+
+export const getMoPorProtocolo = async (protocolo) => {
+    return await new ApiCall(`/rsd/mo/${protocolo}`).get()
+}
+
+export const criarPedidoIndividual = async (data) => {
+    return await new ApiCall('/rsd/pedido/criar/individual').post(data)
+}
+
+export const getOperadoras = async () => {
+    return await new ApiCall('/rsd/operadoras').get()
 }

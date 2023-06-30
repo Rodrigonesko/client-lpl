@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaAngleDown } from 'react-icons/fa'
-import Axios from "axios";
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './FichaBeneficiario.css'

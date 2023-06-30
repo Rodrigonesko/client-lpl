@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { useParams, useNavigate } from "react-router-dom";
-import './CriarProtocolo.css'
+import { Container, Box, Paper, TextField, Button, Typography, Divider, Select, MenuItem, FormControl, InputLabel, Alert, Snackbar } from "@mui/material";
+import { criarProtocolo, getOperadoras } from "../../../_services/rsd.service";
 
 const CriarProtocolo = () => {
     const { mo } = useParams()
@@ -13,104 +13,111 @@ const CriarProtocolo = () => {
     const [pedido, setPedido] = useState('')
     const [operadora, setOperadora] = useState('')
     const [operadoras, setOperadoras] = useState([])
+    const [open, setOpen] = useState(false)
+    const [msg, setMsg] = useState('')
+    const [error, setError] = useState(false)
 
     const navigate = useNavigate()
 
-    const criarProtocolo = async e => {
-        e.preventDefault()
+    const handleClose = () => {
+        setOpen(false)
+    }
 
-        console.log(protocolo, dataSolicitacao, dataPagamento);
+    const handlerCriarProtocolo = async () => {
 
-        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/protocolo/criar`, {
+        if (protocolo.length === 0) {
+            setOpen(true)
+            setError(true)
+            setMsg('Protocolo é obrigatório')
+            return
+        }
+
+        await criarProtocolo({
             protocolo,
             dataSolicitacao,
             dataPagamento,
             mo,
             pedido,
             operadora
-        }, {
-            withCredentials: true
         })
 
-        if (result.status === 200) {
+        setError(false)
+        setMsg('Protocolo criado com sucesso!')
+        setOpen(true)
+
+        setTimeout(() => {
             navigate(`/rsd/FichaBeneficiario/${mo}`)
-        }
-        console.log(result);
+        }, '1000')
 
     }
 
-    const buscarOperadoras = async e => {
+    const handleBuscarOperadoras = async e => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadoras`, { withCredentials: true })
 
-            setOperadoras(result.data.operadoras)
+            const result = await getOperadoras()
+
+            setOperadoras(result.operadoras)
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        buscarOperadoras()
+        handleBuscarOperadoras()
     }, [])
 
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-criar-protocolo-container">
-                <div className="criar-protocolo-container">
-                    <div className="title">
-                        Novo Protocolo
-                    </div>
-                    <form className="criar-protocolo">
-                        <div className="input-criar-protocolo">
-                            <label htmlFor="protocolo">Protocolo</label>
-                            <input type="text" name="protocolo" id="protocolo" placeholder="Protocolo" onKeyUp={e => setProtocolo(e.target.value)} />
-                        </div>
-                        <div className="input-criar-protocolo">
-                            <label htmlFor="mo">Marca Ótica</label>
-                            <input type="text" name="mo" id="mo" placeholder="Marca Ótica" defaultValue={mo} />
-                        </div>
-                        <div className="input-criar-protocolo">
-                            <label htmlFor="data-solicitacao">Data Solicitação</label>
-                            <input type="date" name="data-solicitacao" id="data-solicitacao" placeholder="Data Solicitação" onChange={e => setDataSolicitacao(e.target.value)} />
-                        </div>
-                        <div className="input-criar-protocolo">
-                            <label htmlFor="data-pagamento">Data Pagamento</label>
-                            <input type="date" name="data-pagamento" id="data-pagamento" placeholder="Data Pagamento" onChange={e => setDataPagamento(e.target.value)} />
-                        </div>
-                        <div className="input-criar-protocolo">
-                            <label htmlFor="operadora">Operadora Beneficiário</label>
-                            <select name="operadora" id="operadora" onChange={e => {
-                                setOperadora(e.target.value)
-                            }} >
-                                <option value="">Operadora Beneficiário</option>
+            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Box component={Paper} p={2} elevation={3} minWidth='600px' >
+                    <Typography variant="h6" m={1}>
+                        Criar Protocolo
+                    </Typography>
+                    <Divider />
+                    <Box display='flex' justifyContent='center' flexDirection='column'  >
+
+                        <TextField size="small" style={{ margin: '10px' }} value={protocolo} helperText='Número do protocolo' onChange={e => setProtocolo(e.target.value)} label='Protocolo' />
+                        <TextField size="small" style={{ margin: '10px' }} focused value={mo} label='Marca Ótica' />
+                        <TextField type="date" focused size="small" style={{ margin: '10px' }} value={dataSolicitacao} onChange={e => setDataSolicitacao(e.target.value)} label='Data solicitação' />
+                        <TextField type="date" focused size="small" style={{ margin: '10px' }} value={dataPagamento} onChange={e => setDataPagamento(e.target.value)} label='Data Pagamento' />
+
+                        <FormControl size="small" style={{ margin: '10px' }}>
+                            <InputLabel>Operadora Beneficiário</InputLabel>
+                            <Select
+                                label='Operadora Beneficiário'
+                                value={operadora}
+                                onChange={e => {
+                                    setOperadora(e.target.value)
+                                }}
+                            >
+                                <MenuItem>
+                                    <em>
+                                        Operadora Beneficiario
+                                    </em>
+                                </MenuItem>
                                 {
                                     operadoras.map(e => {
                                         return (
-                                            <option value={e.descricao}>{e.descricao}</option>
+                                            <MenuItem value={e.descricao}>{e.descricao}</MenuItem>
                                         )
                                     })
                                 }
-                            </select>
-                        </div>
-                        <div className="input-criar-protocolo">
-                            <label htmlFor="pedido">Pedido</label>
-                            <input type="text" name="pedido" id="pedido" placeholder="Numero do Pedido" onChange={e => setPedido(e.target.value)} />
-                        </div>
-                        {/* <div className="input-criar-protocolo">
-                            <label htmlFor="fila">Fila: </label>
-                            <select name="fila" id="fila">
-                                <option value=""></option>
-                                <option value="RSD">RSD</option>
-                                <option value="Quarentena">Quarentena</option>
-                            </select>
-                        </div> */}
-                        <div className="criar-protocolo-btn">
-                            <button onClick={criarProtocolo}>Criar</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+                            </Select>
+                        </FormControl>
+
+                        <TextField size="small" style={{ margin: '10px' }} value={pedido} onChange={e => setPedido(e.target.value)} label='Pedido' helperText='Número do pedido' />
+                        <Box m={1}>
+                            <Button variant="contained" onClick={handlerCriarProtocolo}>Criar</Button>
+                        </Box>
+                    </Box>
+                </Box>
+            </Container>
+            <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
+                <Alert variant="filled" onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
         </>
     )
 }

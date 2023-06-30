@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import './CriarPedido.css'
+import { buscarClinica, criarPedido, getMoPorProtocolo } from "../../../_services/rsd.service";
+import { Container, Box, Paper, TextField, Button, Typography, Divider, Select, MenuItem, FormControl, InputLabel, Alert, Snackbar } from "@mui/material";
+
 
 const CriarPedido = () => {
 
@@ -18,27 +19,33 @@ const CriarPedido = () => {
     const [mo, setMo] = useState('')
     const [fila, setFila] = useState('')
 
-    const buscarClinica = async e => {
+    const [open, setOpen] = useState(false)
+
+    const handleOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handlerBuscarClinica = async (valueCnpj) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/clinica/busca`, { cnpj: cnpj }, { withCredentials: true })
+            const result = await buscarClinica({ cnpj: valueCnpj })
 
-            console.log(result);
-
-            setClinica(result.data.clinica.descricao)
+            setClinica(result.clinica.descricao)
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const criarPedido = async e => {
+    const handlerCriarPedido = async e => {
         try {
             e.preventDefault()
 
-            console.log(pedido, valorApresentado, valorReembolsado, cnpj, clinica, cnpj, mo);
-
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/pedido/criar`, {
+            await criarPedido({
                 pedido,
                 protocolo,
                 valorApresentado,
@@ -48,11 +55,16 @@ const CriarPedido = () => {
                 nf,
                 mo,
                 fila
-            }, { withCredentials: true })
+            })
 
-            if (result.status === 200) {
+            handleOpen()
+
+            setTimeout(() => {
                 navigate(`/rsd/FichaBeneficiario/${mo}`)
-            }
+            }, '1000')
+
+
+       
 
         } catch (error) {
             console.log(error);
@@ -65,10 +77,10 @@ const CriarPedido = () => {
 
         const buscaMo = async () => {
             try {
-                console.log(protocolo);
-                const buscaMo = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/mo/${protocolo}`, { withCredentials: true })
-                console.log(buscaMo);
-                setMo(buscaMo.data.pedido.mo)
+                const result = await getMoPorProtocolo(protocolo)
+
+                setMo(result.pedido.mo)
+
             } catch (error) {
                 console.log(error);
             }
@@ -79,56 +91,56 @@ const CriarPedido = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section className="section-editar-pedido-container">
-                <div className="editar-pedido-container">
-                    <div className="title">
+            <Sidebar />
+            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Box component={Paper} p={2} elevation={3} minWidth='600px' >
+                    <Typography variant="h6" m={1}>
                         Criar pedido
-                    </div>
-                    <form>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="pedido">Número Pedido</label>
-                            <input type="text" id="pedido" placeholder="Pedido" onKeyUp={e => setPedido(e.target.value)} />
-                        </div>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="valor-apresentado">Valor Apresentado</label>
-                            <input type="text" id="valor-apresentado" placeholder="Valor Apresentado" onKeyUp={e => setValorApresentado(e.target.value)} />
-                        </div>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="valor-reembolsado">Valor Reembolsado</label>
-                            <input type="text" id="valor-reembolsado" placeholder="Valor Reembolsado" onKeyUp={e => setValorReembolsado(e.target.value)} />
-                        </div>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="cnpj">CNPJ</label>
-                            <input type="text" id="cnpj" placeholder="CNPJ" defaultValue={cnpj} onKeyUp={e => {
-                                setCnpj(e.target.value)
-                                buscarClinica()
-                            }} />
-                        </div>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="clinica">Clinica</label>
-                            <input type="text" id="clinica" placeholder="Clinica" defaultValue={clinica} onKeyUp={e => setClinica(e.target.value)} />
-                        </div>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="nf">NF</label>
-                            <input type="text" id="nf" placeholder="NF" defaultValue={nf} onKeyUp={e => setNf(e.target.value)} />
-                        </div>
-                        <div className="editar-pedido-input">
-                            <label htmlFor="fila">Fila: </label>
-                            <select name="fila" id="fila" style={{ width: '300px' }} onChange={(e) => {
-                                setFila(e.target.value)
-                            }}>
-                                <option value=""></option>
-                                <option value="RSD">RSD</option>
-                                <option value="Quarentena">Quarentena</option>
-                            </select>
-                        </div>
-                        <div className="editar-pedido-input">
-                            <button onClick={criarPedido} >Criar</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+                    </Typography>
+                    <Divider />
+                    <Box display='flex' justifyContent='center' flexDirection='column'  >
+                        <TextField size="small" style={{ margin: '10px' }} value={pedido} label='Pedido' helperText='Numero do pedido' onChange={e => setPedido(e.target.value)} />
+                        <TextField size="small" style={{ margin: '10px' }} value={valorApresentado} label='Valor apresentado' onChange={e => setValorApresentado(e.target.value)} />
+                        <TextField size="small" style={{ margin: '10px' }} value={valorReembolsado} label='Valor reembolsado' onChange={e => setValorReembolsado(e.target.value)} />
+                        <TextField size="small" style={{ margin: '10px' }} value={cnpj} label='CNPJ' onChange={e => {
+                            setCnpj(e.target.value)
+                            handlerBuscarClinica(e.target.value)
+                        }} />
+                        <TextField size="small" style={{ margin: '10px' }} value={clinica} label='Clinica' onChange={e => setClinica(e.target.value)} />
+                        <TextField size="small" style={{ margin: '10px' }} value={nf} label='NF' onChange={e => setNf(e.target.value)} />
+                        <FormControl style={{ margin: '10px' }} size="small">
+                            <InputLabel>Fila</InputLabel>
+                            <Select
+                                label='Fila'
+                                value={fila}
+                                onChange={(e) => {
+                                    setFila(e.target.value)
+                                    console.log(e.target.value);
+                                }}
+                            >
+                                <MenuItem>
+                                    <em>
+                                        Fila
+                                    </em>
+                                </MenuItem>
+                                <MenuItem value='RSD' >RSD</MenuItem>
+                                <MenuItem value='Quarentena' >Quarentena</MenuItem>
+                                <MenuItem value='Alta Frequência Consulta' >Alta Frequência Consulta</MenuItem>
+
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box m={1}>
+                        <Button variant="contained" onClick={handlerCriarPedido} >Criar</Button>
+                    </Box>
+
+                </Box>
+                <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
+                    <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        Pedido criado com sucesso
+                    </Alert>
+                </Snackbar>
+            </Container>
         </>
     )
 }
