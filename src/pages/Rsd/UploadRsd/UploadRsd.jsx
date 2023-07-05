@@ -3,6 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import Modal from 'react-modal'
 import './UploadRsd.css'
+import { subirPedidos, uploadRsd } from "../../../_services/rsd.service";
 
 Modal.setAppElement('#root')
 
@@ -26,15 +27,13 @@ const UploadRsd = () => {
 
             setStatus('Enviando...')
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
-            console.log(result.data.pedidos);
+            const result = await uploadRsd(formData)
 
-            if (result.status === 200) {
-                setStatus(`Novos pedidos: ${result.data.pedidos.length}`)
-            }
+            setStatus(`Novos pedidos: ${result.pedidos.length}`)
 
-            setPedidos(result.data.pedidos)
+            setPedidos(result.pedidos)
 
         } catch (error) {
             console.log(error);
@@ -45,12 +44,15 @@ const UploadRsd = () => {
 
     const subir = async () => {
         try {
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, { pedidos }, { withCredentials: true })
+            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, { pedidos }, { withCredentials: true })
 
-            if (result.status === 200) {
-                setStatus(`Foram adicionados ${result.data.pedidos.length} pedidos`)
-                setModal(true)
-            }
+            const result = await subirPedidos({
+                pedidos
+            })
+
+            setStatus(`Foram adicionados ${result.pedidos.length} pedidos`)
+            setModal(true)
+
 
         } catch (error) {
             console.log(error);

@@ -6,6 +6,7 @@ import ModalDevolucao from "./Modals/ModalDevolucao";
 import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalCancelamento from "./Modals/ModalCancelamento";
 import ModalCancelarCpf from "./Modals/ModalCancelarCpf";
+import PatologiaElegibilidade from "./Modals/PatologiaElegibilidade";
 
 const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
     return (
@@ -28,7 +29,7 @@ const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
                         </>
                     ) : null
                 }
-
+                <PatologiaElegibilidade />
             </Box>
         </>
     )

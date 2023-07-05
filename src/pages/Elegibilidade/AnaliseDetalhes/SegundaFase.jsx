@@ -5,6 +5,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DadosElegibilidade from "./DadosElegebilidade";
 import ProcessamentoElegibilidade from "./ProcessamentoElegibilidade";
 
+
 const SegundaFase = ({ proposta }) => {
 
     const [open, setOpen] = useState(false)
@@ -40,6 +41,7 @@ const SegundaFase = ({ proposta }) => {
                     </Box>
                 ) : null
             }
+            
         </Box>
     )
 }

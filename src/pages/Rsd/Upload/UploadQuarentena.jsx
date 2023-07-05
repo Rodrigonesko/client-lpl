@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import Modal from 'react-modal'
+import { subirPedidos, uploadAltaFrequencia } from "../../../_services/rsd.service";
 
 Modal.setAppElement('#root')
 
@@ -23,15 +24,15 @@ const UploadQuarentena = () => {
 
             setStatus('Enviando...')
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/uploadQuarentena`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/uploadQuarentena`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
-            console.log(result.data.pedidos);
+            const result = await uploadAltaFrequencia(formData)
 
-            if (result.status === 200) {
-                setStatus(`Novos pedidos: ${result.data.pedidos.length}`)
-            }
+            console.log(result.pedidos);
 
-            setPedidos(result.data.pedidos)
+            setStatus(`Novos pedidos: ${result.pedidos.length}`)
+
+            setPedidos(result.pedidos)
 
         } catch (error) {
             console.log(error);
@@ -42,12 +43,14 @@ const UploadQuarentena = () => {
 
     const subir = async () => {
         try {
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, { pedidos }, { withCredentials: true })
+            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/subir`, { pedidos }, { withCredentials: true })
 
-            if (result.status === 200) {
-                setStatus(`Foram adicionados ${result.data.pedidos.length} pedidos`)
-                setModal(true)
-            }
+            const result = await subirPedidos({
+                pedidos
+            })
+
+            setStatus(`Foram adicionados ${result.pedidos.length} pedidos`)
+            setModal(true)
 
         } catch (error) {
             console.log(error);

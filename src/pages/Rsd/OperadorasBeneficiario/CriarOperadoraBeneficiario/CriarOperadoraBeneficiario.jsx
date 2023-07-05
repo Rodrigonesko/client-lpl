@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
+import { Container, Box, TextField, Button, Paper, Typography, Alert, Snackbar } from "@mui/material";
+import { criarOperadora } from "../../../../_services/rsd.service";
 
 const CriarOperadoraBeneficiario = () => {
 
@@ -9,20 +10,46 @@ const CriarOperadoraBeneficiario = () => {
 
     const [descricao, setDescricao] = useState('')
     const [sla, setSla] = useState('')
+    const [open, setOpen] = useState(false)
+    const [error, setError] = useState(false)
+    const [msg, setMsg] = useState('')
+
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     const cadastrar = async () => {
         try {
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/operadoras/criar`, {
+            if (descricao === '' || sla === '') {
+                setError(true)
+                setMsg('Descrição e Sla obrigatórios')
+                setOpen(true)
+                return
+            }
+
+            // const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/operadoras/criar`, {
+            //     descricao,
+            //     sla
+            // }, {
+            //     withCredentials: true
+            // })
+
+            await criarOperadora({
                 descricao,
                 sla
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
+            setError(false)
+            setMsg('Criado com sucesso')
+            setOpen(true)
+
+            setTimeout(() => {
                 navigate('/rsd/OperadoraBeneficiario')
-            }
+            }, '1000')
+
+            // if (result.status === 200) {
+            // }
         } catch (error) {
             console.log(error);
         }
@@ -31,28 +58,21 @@ const CriarOperadoraBeneficiario = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section>
-                <div>
-                    <div className="title">
-                        <h3>Nova Operadora Beneficiário</h3>
-                    </div>
-                    <div className="input-box">
-                        <label htmlFor="descricao">Descrição</label>
-                        <input type="text" id="descricao" placeholder="Descrição" onChange={e => {
-                            setDescricao(e.target.value)
-                        }} />
-                    </div>
-                    <div className="input-box">
-                        <label htmlFor="sla">SLA</label>
-                        <input type="number" id="sla" placeholder="SLA em dias" onChange={e => {
-                            setSla(e.target.value)
-                        }} />
-                    </div>
-                    <div>
-                        <button onClick={cadastrar} className="cadastrar-operadora">Cadastrar</button>
-                    </div>
-                </div>
-            </section>
+            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                <Box component={Paper} elevation={3} p={2} display='flex' flexDirection='column' >
+                    <Typography variant="h6">
+                        Nova Operadora Beneficiário
+                    </Typography>
+                    <TextField style={{ margin: '10px' }} label="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)} size="small" />
+                    <TextField style={{ margin: '10px' }} label='Sla em dias' value={sla} onChange={e => setSla(e.target.value)} size="small" type="number" />
+                    <Button variant="contained" onClick={cadastrar} className="cadastrar-operadora">Cadastrar</Button>
+                </Box>
+            </Container>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert variant='filled' onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
         </>
     )
 }

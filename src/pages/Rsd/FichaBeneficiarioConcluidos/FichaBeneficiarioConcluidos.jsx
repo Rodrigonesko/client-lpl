@@ -1,54 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaAngleDown } from 'react-icons/fa'
-import Axios from "axios";
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment/moment";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
-import { IMaskInput } from "react-imask";
+import { Container, Box, Typography } from "@mui/material";
+import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
+import { assumirPacote, getPedidosPorMo } from "../../../_services/rsd.service";
 
 const FichaBeneficiarioConcluidos = () => {
 
     const { mo } = useParams()
     const { name } = useContext(AuthContext)
 
-    const [nome, setNome] = useState('')
-    const [cpf, setCpf] = useState('')
-    const [dataNascimento, setDataNascimento] = useState('')
-    const [email, setEmail] = useState('')
-    const [fone1, setFone1] = useState('')
-    const [fone2, setFone2] = useState('')
-    const [fone3, setFone3] = useState('')
-    const [contratoEmpresa, setContratoEmpresa] = useState('')
-    const [msg, setMsg] = useState('')
-
     const [pedidos, setPedidos] = useState([])
     const [pacotes, setPacotes] = useState([])
-
-
-
-    const atualizarInformacoes = async () => {
-        console.log(dataNascimento, email, fone1, fone2, fone3, contratoEmpresa, mo);
-
-        const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/editar`, {
-            dataNascimento,
-            email,
-            fone1,
-            fone2,
-            fone3,
-            contratoEmpresa,
-            mo,
-            cpf
-        }, {
-            withCredentials: true
-        })
-
-        if (result.status === 200) {
-            setMsg('Atualizado com sucesso')
-        }
-
-    }
 
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
@@ -60,16 +27,17 @@ const FichaBeneficiarioConcluidos = () => {
         }
     }
 
-    const assumirPacote = async e => {
+    const handlerAssumirPacote = async e => {
         try {
 
-            console.log(e.target.value, name);
+            //const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/assumir`, { name: name, pacote: e.target.value }, { withCredentials: true })
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/assumir`, { name: name, pacote: e.target.value }, { withCredentials: true })
+            await assumirPacote({
+                name: name,
+                pacote: e.target.value
+            })
 
-            if (result.status === 200) {
-                window.location.reload();
-            }
+            window.location.reload();
 
 
         } catch (error) {
@@ -80,22 +48,14 @@ const FichaBeneficiarioConcluidos = () => {
     useEffect(() => {
 
         const buscarMo = async () => {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${mo}`, { withCredentials: true })
 
-            setNome(result.data.pessoa.nome)
-            setCpf(result.data.pessoa.cpf)
-            setDataNascimento(result.data.pessoa.dataNascimento)
-            setEmail(result.data.pessoa.email)
-            setFone1(result.data.pessoa.fone1)
-            setFone2(result.data.pessoa.fone2)
-            setFone3(result.data.pessoa.fone3)
-            setContratoEmpresa(result.data.pessoa.contratoEmpresa)
+            //const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
 
-            const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
+            const resultPedidos = await getPedidosPorMo(mo)
 
-            setPedidos(resultPedidos.data.pedidos)
+            setPedidos(resultPedidos.pedidos)
 
-            let arrAuxPacotes = resultPedidos.data.pedidos.filter((item, pos, array) => {
+            let arrAuxPacotes = resultPedidos.pedidos.filter((item, pos, array) => {
                 return array.map(x => x.pacote).indexOf(item.pacote) === pos
             })
 
@@ -109,70 +69,18 @@ const FichaBeneficiarioConcluidos = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-cadastro-beneficiario-container">
-                <div className="cadastro-beneficiario-container">
-                    <div className="title">
-                        <h2>CADASTRO BENEFICIÁRIO</h2>
-                    </div>
-                    <div className="titulo-informacoes-gerais">
-                        <span>Informações Gerais</span>
-                    </div>
-                    <div className="informacoes-gerais">
-                        {
-                            msg && (
-                                <div className="success">
-                                    Atualizado com sucesso
-                                </div>
-                            )
-                        }
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Marca Ótica: {mo}</td>
-                                    <td>Nome: {nome}</td>
-                                    <td>CPF: <IMaskInput
-                                        mask="000.000.000-00"
-                                        placeholder="Digite o seu CPF"
-                                        name="cpf" id="cpf"
-                                        defaultValue={cpf}
-                                        onChange={e => setCpf(e.target.value)}
-                                    /></td>
-                                    <td>Data Nascimento: <input type="date" defaultValue={dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
-                                    <td>E-mail: <input type="email" name="email" id="email" defaultValue={email} onChange={e => setEmail(e.target.value)} /></td>
-                                </tr>
-                                <tr>
-                                    <td>Fone 1: <IMaskInput
-                                        mask="(00)00000-0000"
-                                        placeholder="Telefone"
-                                        name="fone1" id="fone1"
-                                        defaultValue={fone1}
-                                        onChange={e => setFone1(e.target.value)}
-                                    /></td>
-                                    <td>Fone 2: <IMaskInput
-                                        mask="(00)00000-0000"
-                                        placeholder="Telefone"
-                                        name="fone2" id="fone2"
-                                        defaultValue={fone1}
-                                        onChange={e => setFone2(e.target.value)}
-                                    /></td>
-                                    <td>Fone 3: <IMaskInput
-                                        mask="(00)00000-0000"
-                                        placeholder="Telefone"
-                                        name="fone3" id="fone3"
-                                        defaultValue={fone3}
-                                        onChange={e => setFone3(e.target.value)}
-                                    /></td>
-                                    <td>Contrato/Empresa <input type="text" defaultValue={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} /></td>
-                                </tr>
-                                <tr>
-                                    <td><button id="atualizar-informacoes-beneficiario" onClick={atualizarInformacoes} >Salvar</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="titulo-informacoes-gerais">
-                        <span>Pacotes Concluidos</span>
-                    </div>
+            <Container>
+                <Box className="cadastro-beneficiario-container">
+                    <Typography variant="h5" m={2}>
+                        Ficha Beneficiário Concluído
+                    </Typography>
+                    <Typography p={1} bgcolor='lightgray' borderRadius='5px' >
+                        Informações Gerais
+                    </Typography>
+                    <InformacoesGerais mo={mo} />
+                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
+                        Pacotes Concluídos
+                    </Typography>
                     <div className="pacotes">
                         <table className="table">
                             <thead className="table-header">
@@ -196,7 +104,7 @@ const FichaBeneficiarioConcluidos = () => {
                                                         <td className="data">{moment(e.createdAt).format('DD/MM/YYYY')}</td>
                                                         <td>{e.statusPacote}</td>
                                                         <td>{e.analista}</td>
-                                                        <td><button value={e.pacote} onClick={assumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
+                                                        <td><button value={e.pacote} onClick={handlerAssumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
                                                         <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
                                                     </tr>
                                                     <tr className="none teste">
@@ -215,8 +123,8 @@ const FichaBeneficiarioConcluidos = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </section>
+                </Box>
+            </Container>
         </>
     )
 }

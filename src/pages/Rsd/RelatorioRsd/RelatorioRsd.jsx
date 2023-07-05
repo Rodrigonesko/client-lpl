@@ -2,35 +2,43 @@ import React, { useState } from "react";
 import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment/moment";
-import './RelatorioRsd.css'
+import { Container, Box, Paper, Divider, Button, TextField, CircularProgress, Typography } from "@mui/material";
+import { getRelatorio, getTodosOsPedidos } from "../../../_services/rsd.service";
 
 const RelatorioRsd = () => {
 
     const [msg, setMsg] = useState('')
     const [aPartir, setAPartir] = useState('')
     const [ate, setAte] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const gerarRelatorio = async () => {
         try {
 
-            setMsg('Buscando Dados...')
+            setLoading(true)
 
             let result
 
             if (aPartir === '' && ate === '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
+                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
+                result = await getTodosOsPedidos()
             }
 
             if (aPartir === '' && ate !== '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, { withCredentials: true })
+                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, { withCredentials: true })
+
+                result = await getRelatorio(moment(new Date()).format('YYYY-MM-DD'), ate)
+
             }
 
             if (aPartir !== '' && ate === '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, { withCredentials: true })
+                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, { withCredentials: true })
+
+                result = await getRelatorio(aPartir, moment(new Date()).format('YYYY-MM-DD'))
             }
 
             if (aPartir !== '' && ate !== '') {
-                result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${ate}`, { withCredentials: true })
+                result = await getRelatorio(aPartir, ate)
             }
 
             let xls = '\ufeff'
@@ -69,7 +77,7 @@ const RelatorioRsd = () => {
 
             setMsg('Gerando Arquivo')
 
-            result.data.pedidos.forEach(e => {
+            result.pedidos.forEach(e => {
 
                 let valorApresentado = e.valorApresentado - 0
 
@@ -132,44 +140,35 @@ const RelatorioRsd = () => {
             a.download = 'relatorio rsd.xls'
             a.click()
 
-            setMsg('Arquivo gerado!')
+            setLoading(false)
 
 
         } catch (error) {
             console.log(error);
             setMsg('Algo deu errado')
+            setLoading(false)
+
         }
     }
 
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-relatorio-rsd">
-                <div className="container-relatorio-rsd">
-                    <div className="title">
-                        <h3>Relatório RSD</h3>
-                    </div>
-                    <div className="datas-relatorio-rsd">
-                        <div>
-                            <label htmlFor="">A partir de: </label>
-                            <input type="date" name="" id="" onChange={e => setAPartir(e.target.value)} />
-                        </div>
-                        <div>
-                            <label htmlFor="">Até: </label>
-                            <input type="date" name="" id="" onChange={e => setAte(e.target.value)} />
-                        </div>
-                    </div>
-                    <div>
-                        <button className="btn-padrao-azul" onClick={gerarRelatorio} >Gerar Relatório</button>
-                    </div>
-                    <div>
-                        {
-                            <span>{msg}</span>
-                        }
-                    </div>
-                </div>
-                {/* <RelatorioQualidadeLigacoes></RelatorioQualidadeLigacoes> */}
-            </section>
+            <Container style={{ display: 'flex', justifyContent: 'center' }}>
+                <Box component={Paper} maxHeight='300px' width='600px' elevation={3} p={2} mt={2}>
+                    <Typography variant="h6" mt={1}>
+                        Relatório RSD
+                    </Typography>
+                    <Divider />
+                    <Box display='flex' flexDirection='column' p={1} m={1} >
+                        <TextField type="date" value={aPartir} onChange={e => setAPartir(e.target.value)} size="small" focused label='A partir de' style={{ maxWidth: '210px', margin: '10px' }} />
+                        <TextField type="date" value={ate} onChange={e => setAte(e.target.value)} size="small" focused label='Até' style={{ maxWidth: '210px', margin: '10px' }} />
+                    </Box>
+                    <Box m={1} p={1}>
+                        <Button disabled={loading} variant='contained' startIcon={loading ? <CircularProgress color='inherit' style={{ width: '20px', height: '20px' }} /> : null} onClick={gerarRelatorio} >Gerar Relatório</Button>
+                    </Box>
+                </Box>
+            </Container>
 
         </>
     )

@@ -127,6 +127,7 @@ const EntrevistasRealizadas = () => {
                 xls += `<td>${e.divergencia ? e.divergencia : ''}</td>`
                 xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.entrevistaQualidade ? 'Sim' : ''}</td>`
+                // xls += `<td>${e.cids}</td>`
                 if (e.cids) {
                     const arrCids = e.cids.split(',')
                     arrCids.forEach(cid => {

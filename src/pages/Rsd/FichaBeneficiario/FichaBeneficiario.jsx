@@ -7,28 +7,18 @@ import './FichaBeneficiario.css'
 import moment from "moment/moment";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
-import { IMaskInput } from "react-imask";
 import $ from 'jquery'
 import Modal from 'react-modal'
-import { assumirPacote, atualizarInformacoesMo, buscarInformacoesMo, criarPacoteRsd, devolverPacote, getPedidosPorMo } from "../../../_services/rsd.service";
+import { assumirPacote, criarPacoteRsd, devolverPacote, getPedidosPorMo } from "../../../_services/rsd.service";
+import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
+import { Container, Box, Typography } from "@mui/material";
 
 Modal.setAppElement('#root')
-
 
 const FichaBeneficiario = () => {
 
     const { mo } = useParams()
     const { name } = useContext(AuthContext)
-
-    const [nome, setNome] = useState('')
-    const [cpf, setCpf] = useState('')
-    const [dataNascimento, setDataNascimento] = useState('')
-    const [email, setEmail] = useState('')
-    const [fone1, setFone1] = useState('')
-    const [fone2, setFone2] = useState('')
-    const [fone3, setFone3] = useState('')
-    const [contratoEmpresa, setContratoEmpresa] = useState('')
-    const [msg, setMsg] = useState('')
 
     const [pedidos, setPedidos] = useState([])
     const [protocolos, setProtocolos] = useState([])
@@ -36,21 +26,7 @@ const FichaBeneficiario = () => {
 
     const [modalInativarPacote, setModalInativarPacote] = useState(false)
     const [inativarPacote, setInativarPacote] = useState('')
-    const atualizarInformacoes = async () => {
 
-        await atualizarInformacoesMo({
-            dataNascimento,
-            email,
-            fone1,
-            fone2,
-            fone3,
-            contratoEmpresa,
-            mo,
-            cpf
-        })
-
-        setMsg('Atualizado com sucesso')
-    }
 
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
@@ -136,16 +112,6 @@ const FichaBeneficiario = () => {
     useEffect(() => {
 
         const buscarMo = async () => {
-            const result = await buscarInformacoesMo(mo)
-
-            setNome(result.pessoa.nome)
-            setCpf(result.pessoa.cpf)
-            setDataNascimento(result.pessoa.dataNascimento)
-            setEmail(result.pessoa.email)
-            setFone1(result.pessoa.fone1)
-            setFone2(result.pessoa.fone2)
-            setFone3(result.pessoa.fone3)
-            setContratoEmpresa(result.pessoa.contratoEmpresa)
 
             const resultPedidos = await getPedidosPorMo(mo)
 
@@ -176,70 +142,18 @@ const FichaBeneficiario = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-cadastro-beneficiario-container">
-                <div className="cadastro-beneficiario-container">
-                    <div className="title">
-                        <h2>CADASTRO BENEFICIÁRIO</h2>
-                    </div>
-                    <div className="titulo-informacoes-gerais">
-                        <span>Informações Gerais</span>
-                    </div>
-                    <div className="informacoes-gerais">
-                        {
-                            msg && (
-                                <div className="success">
-                                    Atualizado com sucesso
-                                </div>
-                            )
-                        }
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Marca Ótica: {mo}</td>
-                                    <td>Nome: {nome}</td>
-                                    <td>CPF: <IMaskInput
-                                        mask="000.000.000-00"
-                                        placeholder="Digite o seu CPF"
-                                        name="cpf" id="cpf"
-                                        defaultValue={cpf}
-                                        onChange={e => setCpf(e.target.value)}
-                                    /></td>
-                                    <td>Data Nascimento: <input type="date" defaultValue={dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
-                                    <td>E-mail: <input type="email" name="email" id="email" defaultValue={email} onChange={e => setEmail(e.target.value)} /></td>
-                                </tr>
-                                <tr>
-                                    <td>Fone 1: <IMaskInput
-                                        mask="(00)00000-0000"
-                                        placeholder="Telefone"
-                                        name="fone1" id="fone1"
-                                        defaultValue={fone1}
-                                        onKeyUp={e => setFone1(e.target.value)}
-                                    /></td>
-                                    <td>Fone 2: <IMaskInput
-                                        mask="(00)00000-0000"
-                                        placeholder="Telefone"
-                                        name="fone2" id="fone2"
-                                        defaultValue={fone2}
-                                        onKeyUp={e => setFone2(e.target.value)}
-                                    /></td>
-                                    <td>Fone 3: <IMaskInput
-                                        mask="(00)00000-0000"
-                                        placeholder="Telefone"
-                                        name="fone3" id="fone3"
-                                        defaultValue={fone3}
-                                        onKeyUp={e => setFone3(e.target.value)}
-                                    /></td>
-                                    <td>Contrato/Empresa <input type="text" defaultValue={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} /></td>
-                                </tr>
-                                <tr>
-                                    <td><button id="atualizar-informacoes-beneficiario" onClick={atualizarInformacoes} >Salvar</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="titulo-pedidos-reembolso">
-                        <span>Pedidos de Reembolso</span>
-                    </div>
+            <Container>
+                <Box className="cadastro-beneficiario-container">
+                    <Typography variant="h5" m={2}>
+                        Ficha Beneficiário
+                    </Typography>
+                    <Typography p={1} bgcolor='lightgray' borderRadius='5px' >
+                        Informações Gerais
+                    </Typography>
+                    <InformacoesGerais mo={mo} />
+                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
+                        Pedidos de Reembolso
+                    </Typography>
                     <div className="pedidos-reembolso">
                         <table className="table">
                             <thead className="table-header">
@@ -338,8 +252,8 @@ const FichaBeneficiario = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </section>
+                </Box>
+            </Container>
             <Modal
                 isOpen={modalInativarPacote}
                 onRequestClose={() => { setModalInativarPacote(false) }}

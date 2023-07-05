@@ -24,12 +24,6 @@ const ModalConcluirRn = (props) => {
         await concluirRn({
             id: props.id,
             email: props.email,
-            dataContato1: props.data1,
-            dataContato2: props.data2,
-            dataContato3: props.data3,
-            horarioContato1: props.horario1,
-            horarioContato2: props.horario2,
-            horarioContato3: props.horario3,
             observacoes: props.observacoes
         })
         handleClose()

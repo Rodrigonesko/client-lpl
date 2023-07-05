@@ -23,7 +23,7 @@ const BaixaAgd = () => {
             const formData = new FormData()
             formData.append('file', file, file.name)
 
-            await baixaAgd({ formData })
+            await baixaAgd( formData )
             setLoading(false)
 
             setSuccess(true)

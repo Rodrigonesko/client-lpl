@@ -7,6 +7,7 @@ import ModalChangeWhatsapp from "../TabelaAgendar/modais/ModalChangeWhatsapp";
 const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const [loading, setLoading] = useState(false)
+    console.log(analista);
 
     const tentativaContato = async (tentativa, id) => {
         try {
@@ -26,7 +27,11 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
             await reagendarEntrevista({ id })
 
+            console.log(analista);
+
             atualizarPropostas(analista)
+
+            setLoading(false)
 
         } catch (error) {
             console.log(error);

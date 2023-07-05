@@ -12,7 +12,7 @@ const Agendado = () => {
 
     const [propostas, setPropostas] = useState([])
     const [enfermeiros, setEnfermeiros] = useState([])
-    const [responsavel, setResponsavel] = useState('todos')
+    const [responsavel, setResponsavel] = useState('Todos')
     const [loading, setLoading] = useState(false)
 
     const searchEnfermeiro = async () => {

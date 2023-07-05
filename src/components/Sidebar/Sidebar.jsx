@@ -107,7 +107,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
                             <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>
                             <MenuItem><Link to='/Rsd/UploadArquivo'>Upload</Link></MenuItem>
-                            <MenuItem><Link to='/Rsd/UploadQuarentena'>Upload Quarentena</Link></MenuItem>
+                            <MenuItem><Link to='/Rsd/UploadQuarentena'>Upload Alta Frequência</Link></MenuItem>
                             <MenuItem><Link to='/rsd/Relatorio'>Relatório</Link></MenuItem>
                             {/* {
                                 accessLevel !== 'false' ? (

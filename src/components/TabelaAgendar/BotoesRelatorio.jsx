@@ -1,35 +1,46 @@
 import React, { useState } from "react";
 import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
+import 'moment-business-days'
 import { getPropostasADevolver, showPropostas } from "../../_services/teleEntrevista.service";
 
+const feriados = [
+    moment('2022-01-01'),
+    moment('2022-04-21'),
+    moment('2022-05-01'),
+    moment('2022-09-07'),
+    moment('2022-10-12'),
+    moment('2022-11-02'),
+    moment('2022-11-15'),
+    moment('2022-12-25'),
+    moment('2023-01-01'),
+    moment('2023-02-20'),
+    moment('2023-02-21'),
+    moment('2023-02-22'),
+    moment('2023-04-07'),
+    moment('2023-04-21'),
+    moment('2023-05-01'),
+    moment('2023-06-08'),
+    moment('2023-09-07'),
+    moment('2023-10-12'),
+    moment('2023-11-02'),
+    moment('2023-11-15'),
+    moment('2023-12-25')
+];
 
-function calcularDiasUteis(dataInicial, dataFinal) {
-    // Cria cópias das datas para evitar alterações indesejadas
-    const start = new Date(dataInicial);
-    const end = new Date(dataFinal);
-
-    // Verifica se as datas são válidas
-    if (isNaN(start) || isNaN(end)) {
-        return '';
-    }
-
+function calcularDiasUteis(dataInicio, dataFim, feriados) {
     let diasUteis = 0;
+    let dataAtual = moment(dataInicio);
 
-    // Itera sobre cada dia entre as datas inicial e final
-    while (start <= end) {
-        // Verifica se o dia é sábado (6) ou domingo (0)
-        if (start.getDay() !== 6 && start.getDay() !== 0) {
+    while (dataAtual.isSameOrBefore(dataFim, 'day')) {
+        if (dataAtual.isBusinessDay() && !feriados.some(feriado => feriado.isSame(dataAtual, 'day'))) {
             diasUteis++;
         }
-
-        // Incrementa a data inicial para o próximo dia
-        start.setDate(start.getDate() + 1);
+        dataAtual.add(1, 'day');
     }
 
-    return diasUteis;
+    return diasUteis - 1;
 }
-
 
 const BotoesRelatorios = () => {
 
@@ -158,7 +169,11 @@ const BotoesRelatorios = () => {
                     xls += `<td></td>`
                 )
 
-                const diasUteis = calcularDiasUteis(e.dataRecebimento, e.dataConclusao)
+                let diasUteis = calcularDiasUteis(moment(e.dataRecebimento), moment(e.dataConclusao), feriados)
+
+                if (!e.dataConclusao) {
+                    diasUteis = ''
+                }
 
                 xls += `<td>${diasUteis}</td>`
 

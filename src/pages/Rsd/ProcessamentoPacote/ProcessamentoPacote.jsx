@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { useParams } from "react-router-dom";
 import { FaAngleDown } from "react-icons/fa";
-import Axios from 'axios'
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
 import Modal from 'react-modal'
 import './ProcessamentoPacote.css'
 import moment from "moment";
+import { anexarGravacao, atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, novoParecerAgenda, voltarFasePacote } from "../../../_services/rsd.service";
 
 Modal.setAppElement('#root')
 
@@ -62,7 +62,7 @@ const ProcessamentoPacote = () => {
     }
 
 
-    const anexarGravacao = async e => {
+    const handlerAnexarGravacao = async e => {
 
         e.preventDefault()
 
@@ -72,12 +72,16 @@ const ProcessamentoPacote = () => {
 
             formData.append('file', gravacao, gravacao.name)
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/gravacao/anexar/${idPacote}`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            // const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/gravacao/anexar/${idPacote}`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
 
-            if (result.status === 200) {
-                salvar()
-                window.location.reload()
-            }
+            await anexarGravacao(
+                formData
+                , idPacote)
+
+            // if (result.status === 200) {
+            salvar()
+            window.location.reload()
+            // }
 
         } catch (error) {
             console.log(error);
@@ -97,9 +101,11 @@ const ProcessamentoPacote = () => {
     }
     const buscarFormasPagamento = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/formasPagamento`, { withCredentials: true })
+            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/formasPagamento`, { withCredentials: true })
 
-            setFormasPagamento(result.data.formasPagamento)
+            const result = await getFormasPagamento()
+
+            setFormasPagamento(result.formasPagamento)
 
         } catch (error) {
             console.log(error);
@@ -108,9 +114,11 @@ const ProcessamentoPacote = () => {
     const buscarStatusFinalizacao = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/statusFinalizacoes`, { withCredentials: true })
+            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/statusFinalizacoes`, { withCredentials: true })
 
-            setStatusFinalizacao(result.data.statusFinalizacoes)
+            const result = await getStatusFinalizacao()
+
+            setStatusFinalizacao(result.statusFinalizacoes)
 
         } catch (error) {
             console.log(error);
@@ -149,11 +157,23 @@ const ProcessamentoPacote = () => {
                 finalizacoes.push([chave, item])
             })
 
-            console.log(motivoContato);
-            console.log(servicos);
-            console.log(finalizacoes);
+            // console.log(motivoContato);
+            // console.log(servicos);
+            // console.log(finalizacoes);
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
+            // await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
+            //     pacote: idPacote,
+            //     sucesso: houveSucesso,
+            //     motivoContato: motivosContato,
+            //     confirmacaoServico: servicos,
+            //     finalizacao: finalizacoes,
+            //     justificativa,
+            //     dataSelo
+            // }, {
+            //     withCredentials: true
+            // })
+
+            await atualizarPedido({
                 pacote: idPacote,
                 sucesso: houveSucesso,
                 motivoContato: motivosContato,
@@ -161,8 +181,6 @@ const ProcessamentoPacote = () => {
                 finalizacao: finalizacoes,
                 justificativa,
                 dataSelo
-            }, {
-                withCredentials: true
             })
 
             window.location.reload()
@@ -205,16 +223,21 @@ const ProcessamentoPacote = () => {
 
             e.preventDefault()
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/agenda/novoParecer`, {
+            // const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/agenda/novoParecer`, {
+            //     pacote: idPacote,
+            //     parecer
+            // }, {
+            //     withCredentials: true
+            // })
+
+            await novoParecerAgenda({
                 pacote: idPacote,
                 parecer
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+
+            window.location.reload()
+
 
         } catch (error) {
             console.log(error);
@@ -223,15 +246,18 @@ const ProcessamentoPacote = () => {
     const voltarFase = async e => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/voltarFase`, {
+            // const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/voltarFase`, {
+            //     pacote: idPacote
+            // }, {
+            //     withCredentials: true
+            // })
+
+            await voltarFasePacote({
                 pacote: idPacote
-            }, {
-                withCredentials: true
             })
 
-            if (result.status === 200) {
-                window.location.reload()
-            }
+            window.location.reload()
+
 
         } catch (error) {
             console.log(error);
@@ -278,14 +304,18 @@ const ProcessamentoPacote = () => {
     const prioridadeDossiePacote = async (prioridade) => {
         try {
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/prioridadeDossie`, {
+            // const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/prioridadeDossie`, {
+            //     pacote: idPacote,
+            //     prioridade
+            // }, {
+            //     withCredentials: true
+            // })
+
+
+            await inserirPrioridadeDossiePacote({
                 pacote: idPacote,
                 prioridade
-            }, {
-                withCredentials: true
             })
-
-            console.log(result);
 
         } catch (error) {
             console.log(error);
@@ -297,9 +327,11 @@ const ProcessamentoPacote = () => {
         const buscarAgenda = async () => {
             try {
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
+                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
 
-                setAgenda(result.data.agenda)
+                const result = await getAgendaRsd(idPacote)
+
+                setAgenda(result.agenda)
 
             } catch (error) {
                 console.log(error);
@@ -309,9 +341,11 @@ const ProcessamentoPacote = () => {
         const buscarArquivos = async e => {
             try {
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
+                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
 
-                setArquivos(result.data.arquivos)
+                const result = await getArquivos(idPacote)
+
+                setArquivos(result.arquivos)
 
             } catch (error) {
                 console.log(error);
@@ -321,15 +355,17 @@ const ProcessamentoPacote = () => {
         const buscarPedidos = async () => {
             try {
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
+                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
 
-                setPedidos(result.data.pedidos)
+                const result = await getPedidosPorPacote(idPacote)
 
-                let tamanhoPrioridade = result.data.pedidos.length
+                setPedidos(result.pedidos)
+
+                let tamanhoPrioridade = result.pedidos.length
 
                 let countTamanhoPrioridade = 0
 
-                result.data.pedidos.forEach(e => {
+                result.pedidos.forEach(e => {
                     if (e.prioridadeDossie) {
                         countTamanhoPrioridade++
                     }
@@ -342,27 +378,27 @@ const ProcessamentoPacote = () => {
                     setPrioridadePacote(true)
                 }
 
-                let arrAuxProtocolos = result.data.pedidos.filter((item, pos, array) => {
+                let arrAuxProtocolos = result.pedidos.filter((item, pos, array) => {
                     return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
                 })
 
                 setProtocolos(arrAuxProtocolos)
 
-                setStatusPacote(result.data.pedidos[0].statusPacote)
+                setStatusPacote(result.pedidos[0].statusPacote)
 
-                if (result.data.pedidos[0].statusPacote === 'Finalizado') {
+                if (result.pedidos[0].statusPacote === 'Finalizado') {
                     setFinalizado(false)
                 }
 
-                if (result.data.pedidos[0].statusPacote === '2° Tentativa') {
+                if (result.pedidos[0].statusPacote === '2° Tentativa') {
                     setNumeroTentativa('2° Tentativa')
                 }
 
-                if (result.data.pedidos[0].statusPacote === '3° Tentativa') {
+                if (result.pedidos[0].statusPacote === '3° Tentativa') {
                     setNumeroTentativa('3° Tentativa')
                 }
 
-                if (result.data.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
+                if (result.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
                     setRetornoContato(true)
                 }
 
@@ -370,17 +406,17 @@ const ProcessamentoPacote = () => {
                     setNaoContato(true)
                     setContatoNaoEntrado(true)
                 }
-                if (result.data.pedidos[0].contato === 'Sim') {
+                if (result.pedidos[0].contato === 'Sim') {
                     setContatoSim(true)
                 }
-                if (result.data.pedidos[0].contato === 'Não') {
+                if (result.pedidos[0].contato === 'Não') {
                     setContatoNao(true)
                 }
                 if (result.data.pedidos[0].contato === 'Necessário Agendar Horario') {
                     setContatoAgendar(true)
                 }
 
-                setJustificativa(result.data.pedidos[0].justificativa)
+                setJustificativa(result.pedidos[0].justificativa)
 
             } catch (error) {
                 console.log(error);
@@ -664,7 +700,7 @@ const ProcessamentoPacote = () => {
 
                                                         let checkFormaPagamento = false
 
-                                                        if(e.formaPagamento === 'Fracionamento de Nota Fiscal'){
+                                                        if (e.formaPagamento === 'Fracionamento de Nota Fiscal') {
                                                             checkFormaPagamento = true
                                                         }
 
@@ -823,7 +859,7 @@ const ProcessamentoPacote = () => {
                             <input type="file" name="gravacao" id="gravacao" onChange={e => setGravacao(e.target.files[0])} />
                         </div>
                         <div className="btns-modal">
-                            <button onClick={anexarGravacao} >Anexar</button>
+                            <button onClick={handlerAnexarGravacao} >Anexar</button>
                             <button onClick={() => {
                                 closeModal()
                             }}>Fechar</button>

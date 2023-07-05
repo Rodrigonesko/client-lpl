@@ -89,3 +89,67 @@ export const criarPedidoIndividual = async (data) => {
 export const getOperadoras = async () => {
     return await new ApiCall('/rsd/operadoras').get()
 }
+
+export const criarOperadora = async (data) => {
+    return await new ApiCall('/rsd/operadoras/criar').post(data)
+}
+
+export const anexarGravacao = async (data, idPacote) => {
+    return await new ApiCall(`/rsd/gravacao/anexar/${idPacote}`, process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
+}
+
+export const getFormasPagamento = async () => {
+    return await new ApiCall('/rsd/formasPagamento').get()
+}
+
+export const getStatusFinalizacao = async () => {
+    return await new ApiCall('/rsd/statusFinalizacoes').get()
+}
+
+export const atualizarPedido = async (data) => {
+    return await new ApiCall('/rsd/pedido/atualizar').put(data)
+}
+
+export const novoParecerAgenda = async (data) => {
+    return await new ApiCall('/rsd/agenda/novoParecer').post(data)
+}
+
+export const voltarFasePacote = async (data) => {
+    return await new ApiCall('/rsd/pacote/voltarFase').put(data)
+}
+
+export const inserirPrioridadeDossiePacote = async (data) => {
+    return await new ApiCall('/rsd/pacote/prioridadeDossie').put(data)
+}
+
+export const getAgendaRsd = async (idPacote) => {
+    return await new ApiCall(`/rsd/agenda/${idPacote}`).get()
+}
+
+export const getArquivos = async (idPacote) => {
+    return await new ApiCall(`/rsd/arquivos/${idPacote}`).get()
+}
+
+export const getProducaoDiaria = async (dia) => {
+    return await new ApiCall(`/rsd/producaoDiaria/${dia}`).get()
+}
+
+export const getTodosOsPedidos = async () => {
+    return await new ApiCall('/rsd/pedidos/todos').get()
+}
+
+export const getRelatorio = async (aPartir, ate) => {
+    return await new ApiCall(`/rsd/relatorio/${aPartir}/${ate}`).get()
+}
+
+export const uploadAltaFrequencia = async (data) => {
+    return await new ApiCall('/rsd/uploadQuarentena', process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
+}
+
+export const uploadRsd = async (data) => {
+    return await new ApiCall('/rsd/upload', process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
+}
+
+export const subirPedidos = async (data) => {
+    return await new ApiCall('/rsd/subir').post(data)
+}

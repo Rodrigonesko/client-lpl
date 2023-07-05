@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Box, Typography, Button, CircularProgress } from '@mui/material';
+import { Modal, Box, Typography, Button, CircularProgress, Alert, Snackbar } from '@mui/material';
 import Axios from 'axios'
 import NestedList from '../NestedList/NestedList';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -24,6 +24,7 @@ const style = {
 const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, divergencia, entrevistaQualidade }) => {
 
     const [open, setOpen] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false)
     const [progress, setProgress] = useState(0)
     const [palavrasIncorretas, setPalavrasIncorretas] = useState([])
     const [enviado, setEnviado] = useState(false)
@@ -52,6 +53,11 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
 
     const corrigirOrtografia = async () => {
         try {
+
+            if (cids.length === 0 && divergencia) {
+                setOpenSnack(true)
+                return
+            }
 
             setPalavrasIncorretas([])
             setProgress(0)
@@ -167,6 +173,11 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
             <Box m={2}>
                 <Button variant="contained" onClick={corrigirOrtografia} >Enviar</Button>
             </Box>
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert variant='filled' onClose={() => setOpenSnack(false)} severity="error" sx={{ width: '100%' }}>
+                    Cid obrigatório caso haja divergência!
+                </Alert>
+            </Snackbar>
             <Modal
                 open={open}
                 onClose={handleClose}

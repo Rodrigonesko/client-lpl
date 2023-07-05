@@ -111,12 +111,12 @@ Horários disponíveis para o dia ${dataFormatada} -`
 
             setAux(true)
 
-            // await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
-            //     whatsapp
-            // }, {
-            //     withCredentials: true,
-            //     headers: { Authorization: `Bearer ${getCookie('token')}` }
-            // })
+            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
+                whatsapp
+            }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${getCookie('token')}` }
+            })
 
         } catch (error) {
             console.log(error);
