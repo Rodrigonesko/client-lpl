@@ -99,7 +99,7 @@ const InformacoesGerais = ({ mo }) => {
                 >
                     {() => <TextField size="small" label='Fone 3' style={{ marginRight: '10px', marginBottom: '5px' }} />}
                 </InputMask>
-                <TextField size="small" label='Contrato/Empresa' style={{ marginRight: '10px', marginBottom: '5px' }} value={contratoEmpresa} />
+                <TextField size="small" label='Contrato/Empresa' style={{ marginRight: '10px', marginBottom: '5px' }} value={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} />
             </Box>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert variant='filled' onClose={handleClose} severity="success" sx={{ width: '100%' }}>

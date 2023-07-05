@@ -12,6 +12,7 @@ import Modal from 'react-modal'
 import { assumirPacote, criarPacoteRsd, devolverPacote, getPedidosPorMo } from "../../../_services/rsd.service";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
 import { Container, Box, Typography } from "@mui/material";
+import PedidosReembolso from "./PedidosReembolso/PedidosReembolso";
 
 Modal.setAppElement('#root')
 
@@ -154,6 +155,8 @@ const FichaBeneficiario = () => {
                     <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
                         Pedidos de Reembolso
                     </Typography>
+                    <PedidosReembolso />
+                    <br /><br />
                     <div className="pedidos-reembolso">
                         <table className="table">
                             <thead className="table-header">
