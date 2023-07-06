@@ -3,6 +3,7 @@ import { Box, Paper, TextField, Typography, IconButton, FormControl, RadioGroup,
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { salvarDadosFase1 } from "../../../_services/elegibilidade.service";
+import ModalSemDocumentos from "./Modals/ModalSemDocumentos";
 
 const style = {
     position: 'absolute',
@@ -149,7 +150,10 @@ const PrimeiraFase = ({ entidade, planoAmil, dataInicio, dataFim, custo, cpfCorr
                             <Button style={{ marginRight: '20px' }} variant="contained" onClick={salvar} disabled={loading}>Salvar {loading ? <CircularProgress style={{ width: '10px', height: '10px', marginLeft: '10px' }} /> : null}</Button>
                             {
                                 !fase1 ? (
-                                    <Button variant="contained" color="success" onClick={() => { setModalConcluir(true) }}>Concluir</Button>
+                                    <>
+                                        <Button style={{ marginRight: '20px' }} variant="contained" color="success" onClick={() => { setModalConcluir(true) }}>Concluir</Button>
+                                        <ModalSemDocumentos />
+                                    </>
                                 ) : null
                             }
                         </Box>

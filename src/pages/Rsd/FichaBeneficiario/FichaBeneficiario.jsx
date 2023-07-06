@@ -122,8 +122,6 @@ const FichaBeneficiario = () => {
                 return item.status === 'A iniciar'
             })
 
-            console.log(auxProtocolos);
-
             let arrAuxProtocolos = auxProtocolos.filter((item, pos, array) => {
                 return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
             })
@@ -155,7 +153,11 @@ const FichaBeneficiario = () => {
                     <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
                         Pedidos de Reembolso
                     </Typography>
-                    <PedidosReembolso />
+                    {
+                        protocolos.length !== 0 ? (
+                            <PedidosReembolso protocolos={protocolos} />
+                        ) : null
+                    }
                     <br /><br />
                     <div className="pedidos-reembolso">
                         <table className="table">

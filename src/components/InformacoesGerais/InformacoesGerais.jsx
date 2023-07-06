@@ -66,10 +66,9 @@ const InformacoesGerais = ({ mo }) => {
         <Box p={2} component={Paper} display='flex' flexDirection='column'>
             <Box display='flex' m={1} flexWrap='wrap'>
                 <TextField size="small" label='Marca Ótica' style={{ marginRight: '10px', marginBottom: '5px' }} value={mo} />
-                <TextField size="small" label='Nome' style={{ marginRight: '10px', marginBottom: '5px' }} value={nome} />
+                <TextField size="small" label='Nome' style={{ marginRight: '10px', marginBottom: '5px', width: '430px' }} value={nome} />
                 <TextField size="small" label='CPF' style={{ marginRight: '10px', marginBottom: '5px' }} value={cpf} onChange={e => setCpf(e.target.value)} />
                 <TextField type="date" size="small" label='Data Nascimento' style={{ marginRight: '10px', marginBottom: '5px', width: '210px' }} focused value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} />
-                <TextField size="small" label='Email' style={{ marginRight: '10px', marginBottom: '5px' }} value={email} onChange={e => setEmail(e.target.value)} />
             </Box>
             <Box display='flex' m={1} flexWrap='wrap'>
                 <InputMask
@@ -100,6 +99,7 @@ const InformacoesGerais = ({ mo }) => {
                     {() => <TextField size="small" label='Fone 3' style={{ marginRight: '10px', marginBottom: '5px' }} />}
                 </InputMask>
                 <TextField size="small" label='Contrato/Empresa' style={{ marginRight: '10px', marginBottom: '5px' }} value={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} />
+                <TextField size="small" label='Email' style={{ marginRight: '10px', marginBottom: '5px' }} value={email} onChange={e => setEmail(e.target.value)} />
             </Box>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert variant='filled' onClose={handleClose} severity="success" sx={{ width: '100%' }}>

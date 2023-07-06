@@ -45,6 +45,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
                                     <MenuItem><Link to='/admin/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
                                 </SubMenu>
                             ) : null
                         }
@@ -119,6 +120,7 @@ const Sidebar = () => {
                         </SubMenu>
                         <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
                             <MenuItem><Link to='/elegibilidade/analiseDocumentos'>Atribuição analista</Link></MenuItem>
+                            <MenuItem><Link to='/elegibilidade/semDocumentos'>Sem Documentos</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/devolvidas'>Devolvidas</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/cancelar'>Cancelar</Link></MenuItem>

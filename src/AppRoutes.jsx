@@ -11,6 +11,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
 import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
+import SemDocumentos from "./pages/Elegibilidade/SemDocumentos/SemDocumentos";
 import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
 import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
 import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
@@ -91,6 +92,7 @@ import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/Urgencia
 
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
+import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
 
 /* Controle ativicades  */
 
@@ -131,7 +133,9 @@ const AppRoutes = () => {
                 <Route exact path="/admin/resetPassword" element={<ProtectedRoute>
                     <ResetPassword />
                 </ProtectedRoute>} />
-
+                <Route exact path="/admin/relatorioProdutividade" element={<ProtectedRoute>
+                    <RelatorioProdutividade />
+                </ProtectedRoute>} />
                 {/* Tele entrevista Routes */}
 
                 <Route exact path="/entrevistas/upload" element={<ProtectedRoute>
@@ -292,6 +296,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analiseDocumentos" element={<ProtectedRoute>
                     <AnaliseDocumentos />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/semDocumentos" element={<ProtectedRoute>
+                    <SemDocumentos />
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analise" element={<ProtectedRoute>
                     <AnaliseElegibilidade />

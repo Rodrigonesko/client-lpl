@@ -153,3 +153,19 @@ export const atualizarObservacoes = async (data) => {
 export const concluirPropostaManual = async (data) => {
     return await new ApiCall('/elegibilidade/concluirPropostaManual').put(data)
 }
+
+export const relatorioProdutividade = async () => {
+    return await new ApiCall('/elegibilidade/relatorioProducao').get()
+}
+
+export const semDocumentos = async (data) => {
+    return await new ApiCall('/elegibilidade/semDocumentos').put(data)
+}
+
+export const getSemDocumentos = async () => {
+    return await new ApiCall('/elegibilidade/semDocumentos').get()
+}
+
+export const doumentoRecebido = async (data) => {
+    return await new ApiCall('/elegibilidade/documentoRecebido').put(data)
+}

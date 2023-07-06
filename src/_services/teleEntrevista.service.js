@@ -161,3 +161,7 @@ export const alterarWhatsapp = async (data) => {
 export const mandarParaAtendimentoHumanizado = async (data) => {
     return await new ApiCall('/mandarAtendimentoHumanizado', URL_API).put(data)
 }
+
+export const relatorioProducaoTele = async () => {
+    return await new ApiCall('/entrevistas/relatorioProducao').get()
+}

@@ -153,3 +153,7 @@ export const uploadRsd = async (data) => {
 export const subirPedidos = async (data) => {
     return await new ApiCall('/rsd/subir').post(data)
 }
+
+export const relatorioProducaoRsd = async () => {
+    return await new ApiCall('/rsd/relatorioProducao').get()
+}
