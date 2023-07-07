@@ -93,6 +93,7 @@ import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/Urgencia
 import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
+import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
 
 /* Controle ativicades  */
 
@@ -135,6 +136,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/relatorioProdutividade" element={<ProtectedRoute>
                     <RelatorioProdutividade />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/controlePoliticas" element={<ProtectedRoute>
+                    <ControlePoliticas />
                 </ProtectedRoute>} />
                 {/* Tele entrevista Routes */}
 

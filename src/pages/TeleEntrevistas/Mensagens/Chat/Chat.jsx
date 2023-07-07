@@ -102,8 +102,11 @@ const Chat = () => {
                             {
                                 chat.map(e => {
                                     return (
-                                        <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' ? 'right' : 'left' }}>
-                                            <Typography style={{ display: 'inline-block', backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' ? '#0066FF' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
+                                        <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' ? 'right' : 'left' }}>
+                                            <Typography color='darkblue' fontSize='14px' >
+                                                {e.de}
+                                            </Typography>
+                                            <Typography style={{ display: 'inline-block', backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' ? '#0066FF' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
                                             <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                         </Box>
                                     )
@@ -130,7 +133,6 @@ const Chat = () => {
                         <MensagemDiaAnterior setLoading={setLoading} setMensagem={setMensagem} />
                         <MensagemSemSucessoContato hookMsg={setMensagem} />
                         <PrimeiroContato hookMsg={setMensagem} />
-
                     </Box>
                 </Box>
 

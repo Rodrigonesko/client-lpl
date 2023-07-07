@@ -153,12 +153,12 @@ const FichaBeneficiario = () => {
                     <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
                         Pedidos de Reembolso
                     </Typography>
-                    {
+                    {/* {
                         protocolos.length !== 0 ? (
-                            <PedidosReembolso protocolos={protocolos} />
+                            <PedidosReembolso protocolos={protocolos} pedidos={pedidos} />
                         ) : null
-                    }
-                    <br /><br />
+                    } */}
+                    {/* <br /><br /> */}
                     <div className="pedidos-reembolso">
                         <table className="table">
                             <thead className="table-header">

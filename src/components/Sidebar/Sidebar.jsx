@@ -46,6 +46,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
                                     <MenuItem><Link to='/admin/liberarModulos' >Liberação Módulos</Link></MenuItem>
                                     <MenuItem><Link to='/admin/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/controlePoliticas'>Controle de Políticas</Link></MenuItem>
                                 </SubMenu>
                             ) : null
                         }
