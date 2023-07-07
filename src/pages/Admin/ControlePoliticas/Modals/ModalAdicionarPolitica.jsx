@@ -1,9 +1,10 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
+import { useState } from "react"
 import { FaPlus } from 'react-icons/fa'
 
 const ModalAdicionarPolitica = () => {
 
-    con
+    const [open ,setOpen] = useState(false)
 
     return (
         <>
