@@ -93,6 +93,7 @@ const BotoesRelatorios = () => {
             xls += "<th>Responsavel 3° Contato</th>"
             xls += "<th>Dias uteis</th>"
             xls += "<th>Ret</th>"
+            xls += "<th>Nome Operadora</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -180,6 +181,12 @@ const BotoesRelatorios = () => {
                 e.retrocedido ? (
                     xls += `<td>${e.retrocedido}</td>`
 
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.nomeOperadora ? (
+                    xls += `<td>${e.nomeOperadora}</td>`
                 ) : (
                     xls += `<td></td>`
                 )

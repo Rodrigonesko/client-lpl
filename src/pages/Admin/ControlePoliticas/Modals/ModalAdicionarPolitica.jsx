@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 
 const ModalAdicionarPolitica = () => {
 
-    const [open ,setOpen] = useState(false)
+    const [open, setOpen] = useState(false)
 
     return (
         <>

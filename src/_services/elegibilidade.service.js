@@ -169,3 +169,11 @@ export const getSemDocumentos = async () => {
 export const doumentoRecebido = async (data) => {
     return await new ApiCall('/elegibilidade/documentoRecebido').put(data)
 }
+
+export const adicionarPlanoBlacklist = async (data) => {
+    return await new ApiCall('/elegibilidade/planosBlacklist').post(data)
+}
+
+export const removerPlanoBlacklist = async (id) => {
+    return await new ApiCall(`/elegibilidade/planosBlacklist/${id}`).delete()
+}

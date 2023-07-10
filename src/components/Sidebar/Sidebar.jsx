@@ -130,6 +130,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/producao'>Produção</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/divergencias'>Divergências</Link></MenuItem>
+                            <MenuItem><Link to='/elegibilidade/planosBlacklist'>Planos Blacklist</Link></MenuItem>
                         </SubMenu>
                         <MenuItem icon={<RiLogoutBoxRLine />}>
                             <a onClick={logout}>Sair</a>

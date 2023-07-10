@@ -20,6 +20,7 @@ import ProducaoElegibilidade from "./pages/Elegibilidade/ProducaoElegibilidade/P
 import DevolvidasElegibilidade from "./pages/Elegibilidade/Devolvidas/Devolvidas";
 import PropostasAmil from "./pages/Elegibilidade/PropostasAmil/PropostasAmil";
 import Divergencias from "./pages/Elegibilidade/Divergencias/Divergencias";
+import PlanosBlacklist from "./pages/Elegibilidade/PlanosBlacklist/PlanosBlacklist";
 
 /* RSD */
 
@@ -86,7 +87,6 @@ import UrgenciaEmergenciaDetalhes from "./pages/UrgenciaEmergencia/UrgenciaEmerg
 import UrgenciaEmergenciaProducao from "./pages/UrgenciaEmergencia/Producao/UrgenciaEmergenciaProducao";
 import UrgenciaEmergenciaTodos from "./pages/UrgenciaEmergencia/Todos/UrgenciaEmergenciaTodos";
 import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/UrgenciaEmergenciaAnexar";
-
 
 /* Admin */
 
@@ -327,6 +327,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/divergencias" element={<ProtectedRoute>
                     <Divergencias />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidade/planosBlacklist" element={<ProtectedRoute>
+                    <PlanosBlacklist />
                 </ProtectedRoute>} />
 
                 {/* Urgência Emergência*/}
