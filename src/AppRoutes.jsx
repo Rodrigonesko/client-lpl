@@ -22,6 +22,13 @@ import PropostasAmil from "./pages/Elegibilidade/PropostasAmil/PropostasAmil";
 import Divergencias from "./pages/Elegibilidade/Divergencias/Divergencias";
 import PlanosBlacklist from "./pages/Elegibilidade/PlanosBlacklist/PlanosBlacklist";
 
+/* ELegibilidade PME */
+
+import UploadElegibilidadePme from "./pages/Elegibilidade/PME/upload/UploadElegibilidadePme";
+import TodosElegibilidadePme from "./pages/Elegibilidade/PME/Todos/TodosElegibilidadePme";
+import DetalhesElegibilidadePme from "./pages/Elegibilidade/PME/Detalhes/DetalhesElegibilidadePme";
+import AndamentoElegibilidadePme from "./pages/Elegibilidade/PME/Andamento/AndamentoElegibilidadePme";
+
 /* RSD */
 
 import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
@@ -330,6 +337,21 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/planosBlacklist" element={<ProtectedRoute>
                     <PlanosBlacklist />
+                </ProtectedRoute>} />
+
+                {/*Elegibilidade PME*/}
+
+                <Route path="/elegibilidadePme/upload" element={<ProtectedRoute>
+                    <UploadElegibilidadePme />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidadePme/todos" element={<ProtectedRoute>
+                    <TodosElegibilidadePme />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidadePme/detalhes/:id" element={<ProtectedRoute>
+                    <DetalhesElegibilidadePme />
+                </ProtectedRoute>} />
+                <Route path="/elegibilidadePme/andamento" element={<ProtectedRoute>
+                    <AndamentoElegibilidadePme />
                 </ProtectedRoute>} />
 
                 {/* Urgência Emergência*/}

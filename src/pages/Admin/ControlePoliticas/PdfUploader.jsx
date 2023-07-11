@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import { FaRegFilePdf } from 'react-icons/fa'
+import { MdOutlineUnarchive } from 'react-icons/md'
 
 const PdfUploader = ({ setFile, file }) => {
 
@@ -37,11 +38,13 @@ const PdfUploader = ({ setFile, file }) => {
             }}
             p={10}
             onClick={handleClick}
+            bgcolor={onDrag ? 'red' : ''}
+            color={onDrag ? 'white' : ''}
         >
             {
                 onDrag ? (
                     <Typography>
-                        Solte o pdf
+                        Solte o pdf <MdOutlineUnarchive />
                     </Typography>
                 ) : null
             }

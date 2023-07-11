@@ -131,6 +131,11 @@ const Sidebar = () => {
                             <MenuItem><Link to='/elegibilidade/upload'>Upload</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/divergencias'>Divergências</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidade/planosBlacklist'>Planos Blacklist</Link></MenuItem>
+                            <SubMenu title='PME'>
+                                <MenuItem><Link to='/elegibilidadePme/andamento'>Em andamento</Link></MenuItem>
+                                <MenuItem><Link to='/elegibilidadePme/todos'>Todos</Link></MenuItem>
+                                <MenuItem><Link to='/elegibilidadePme/upload'>Upload</Link></MenuItem>
+                            </SubMenu>
                         </SubMenu>
                         <MenuItem icon={<RiLogoutBoxRLine />}>
                             <a onClick={logout}>Sair</a>

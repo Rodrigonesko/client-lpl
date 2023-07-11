@@ -23,7 +23,8 @@ const gerarPdf = async (proposta, nome) => {
         { nome: "Eduarda Mayworm", coren: "COREN PR-001.866.786" },
         { nome: "Cristiane Antonioli", coren: "COREN PR-000.356.705" },
         { nome: "Liliane Antunes Laureano", coren: "COREN PR-001.794.387" },
-        { nome: "Michelle Jonsson", coren: "COREN PR-000.552.516" }
+        { nome: "Michelle Jonsson", coren: "COREN PR-000.552.516" },
+        {nome: 'Camila Tomczak', coren: 'COREN PR-001.919.048'}
     ];
 
     console.log(result);
