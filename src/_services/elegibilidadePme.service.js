@@ -37,3 +37,7 @@ export const getAgendaElegibilidadePmePorProposta = async (proposta) => {
 export const adicionaComentarioElegibilidadePme = async (data) => {
     return await new ApiCall('/elegibilidadePme/agenda').post(data)
 }
+
+export const alterarStatusElegibildadePme = async (data) => {
+    return await new ApiCall('/elegibilidadePme/alterarStatus').put(data)
+}

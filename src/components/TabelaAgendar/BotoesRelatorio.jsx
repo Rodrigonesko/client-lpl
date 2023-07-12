@@ -94,6 +94,7 @@ const BotoesRelatorios = () => {
             xls += "<th>Dias uteis</th>"
             xls += "<th>Ret</th>"
             xls += "<th>Nome Operadora</th>"
+            xls += "<th>Filial</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -187,6 +188,12 @@ const BotoesRelatorios = () => {
 
                 e.nomeOperadora ? (
                     xls += `<td>${e.nomeOperadora}</td>`
+                ) : (
+                    xls += `<td></td>`
+                )
+
+                e.filial ? (
+                    xls += `<td>${e.filial}</td>`
                 ) : (
                     xls += `<td></td>`
                 )
