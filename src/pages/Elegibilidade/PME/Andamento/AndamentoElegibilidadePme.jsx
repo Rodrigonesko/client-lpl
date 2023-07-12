@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react"
 import Sidebar from "../../../../components/Sidebar/Sidebar"
-import { Box, Container, Typography, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, FormControl, InputLabel, Select, MenuItem, TextField, Tooltip, Snackbar, Alert } from "@mui/material"
-import { getPropostaElegibilidadePmePorStatusEProposta, getPropostasElegibilidadePmePorStatus, getPropostasElegibilidadePmePorStatusEAnalista } from "../../../../_services/elegibilidadePme.service"
+import { Box, LinearProgress, Container, Typography, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, FormControl, InputLabel, Select, MenuItem, TextField, Tooltip, Snackbar, Alert } from "@mui/material"
+import { atribuirAnalistaPme, getPropostaElegibilidadePmePorStatusEProposta, getPropostasElegibilidadePmePorStatus, getPropostasElegibilidadePmePorStatusEAnalista } from "../../../../_services/elegibilidadePme.service"
 import { getAnalistasElegibilidade } from "../../../../_services/user.service"
 import { BiSearchAlt, BiFilterAlt } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
@@ -12,13 +12,21 @@ import moment from "moment"
 
 const AndamentoElegibilidadePme = () => {
 
+    const { name } = useContext(AuthContext)
+
     const [flushHook, setFlushHook] = useState(false)
     const [propostas, setPropostas] = useState([])
     const [analistas, setAnalistas] = useState([])
     const [proposta, setProposta] = useState('')
     const [analistaFiltrado, setAnalistaFiltrado] = useState('')
-    const { name } = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [msg, setMsg] = useState('')
+    const [error, setError] = useState(false)
+
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     const fetchData = async () => {
         setLoading(true)
@@ -38,6 +46,15 @@ const AndamentoElegibilidadePme = () => {
         const result = await getPropostasElegibilidadePmePorStatusEAnalista('A iniciar', analistaFiltrado)
         setPropostas(result)
         setLoading(false)
+        if (result.length === 0) {
+            setError(true)
+            setMsg(`Nenhuma proposta encontrada`)
+            setOpen(true)
+        } else {
+            setError(false)
+            setMsg(`${result.length} no nome do analista ${analistaFiltrado}`)
+            setOpen(true)
+        }
     }
 
     const handleChangeFiltroAnalista = (e) => {
@@ -47,6 +64,9 @@ const AndamentoElegibilidadePme = () => {
     const handleLimparFiltro = () => {
         setAnalistaFiltrado('')
         setFlushHook(true)
+        setError(false)
+        setMsg('Propostas limpas com sucesso!')
+        setOpen(true)
     }
 
     const handleMinhasPropostas = async () => {
@@ -55,6 +75,16 @@ const AndamentoElegibilidadePme = () => {
         const result = await getPropostasElegibilidadePmePorStatusEAnalista('A iniciar', name)
         setPropostas(result)
         setLoading(false)
+        if (result.length === 0) {
+            setError(true)
+            setMsg(`Nenhuma proposta encontrada`)
+            setOpen(true)
+        } else {
+            setError(false)
+            setMsg(`${result.length} em seu nome`)
+            setOpen(true)
+        }
+
     }
 
     const handleBuscarProposta = async (e) => {
@@ -63,6 +93,30 @@ const AndamentoElegibilidadePme = () => {
         const result = await getPropostaElegibilidadePmePorStatusEProposta('A iniciar', proposta)
         setPropostas(result)
         setLoading(false)
+        if (result.length === 0) {
+            setError(true)
+            setMsg(`Nenhuma proposta encontrada`)
+            setOpen(true)
+        } else {
+            setError(false)
+            setMsg(`Foram encontradas propostas`)
+            setOpen(true)
+        }
+    }
+
+    const handleAtribuirAnalista = async (analista, id, index) => {
+        setError(false)
+
+        const result = await atribuirAnalistaPme({
+            analista,
+            id
+        })
+        const arrAux = [...propostas];
+        arrAux[index].analista = analista
+        setPropostas(arrAux)
+        setMsg('Analista atribuido com sucesso!')
+        setOpen(true)
+
     }
 
     useEffect(() => {
@@ -77,7 +131,7 @@ const AndamentoElegibilidadePme = () => {
             <Box width='100%' height='100vh' overflow='auto'>
                 <Container>
                     <Typography m={2} variant="h6">
-                        Propostas PME em andamento
+                        Propostas PME em andamento - {propostas.length}
                     </Typography>
                     <Divider />
                     <Box p={2} display='flex' justifyContent='space-between'>
@@ -135,10 +189,11 @@ const AndamentoElegibilidadePme = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+
                                 {
-                                    propostas.map(proposta => {
+                                    !loading ? propostas.map((proposta, index) => {
                                         return (
-                                            <TableRow>
+                                            <TableRow key={proposta._id}>
                                                 <TableCell>{proposta.proposta}</TableCell>
                                                 <TableCell>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</TableCell>
                                                 <TableCell>{proposta.motor}</TableCell>
@@ -148,6 +203,9 @@ const AndamentoElegibilidadePme = () => {
                                                         <Select
                                                             label='Analista'
                                                             value={proposta.analista}
+                                                            onChange={(e) => {
+                                                                handleAtribuirAnalista(e.target.value, proposta._id, index)
+                                                            }}
                                                         >
                                                             <MenuItem>
                                                                 <em>Analista</em>
@@ -169,17 +227,24 @@ const AndamentoElegibilidadePme = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     <Tooltip title='Detalhes'>
-                                                        <Button variant="outlined" color="success" ><BsThreeDots /></Button>
+                                                        <Button target='_blank' href={`/elegibilidadePme/detalhes/${proposta._id}`} variant="outlined" color="success" ><BsThreeDots /></Button>
                                                     </Tooltip>
                                                 </TableCell>
                                             </TableRow>
                                         )
-                                    })
+                                    }) : (
+                                        <LinearProgress style={{ width: '100vw' }} />
+                                    )
                                 }
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Container >
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert variant="filled" onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+                        {msg}
+                    </Alert>
+                </Snackbar>
             </Box >
         </>
     )

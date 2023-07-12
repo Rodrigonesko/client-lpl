@@ -23,7 +23,7 @@ export const getPropostaElegibilidadePmePorStatusEProposta = async (status, prop
 }
 
 export const atribuirAnalistaPme = async (data) => {
-    return await new ApiCall(`/elegibilidade/atribuirAnalista`).put(data)
+    return await new ApiCall(`/elegibilidadePme/atribuirAnalista`).put(data)
 }
 
 export const getInfoPropostaElegibilidadePme = async (id) => {
