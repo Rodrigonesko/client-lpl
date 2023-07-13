@@ -69,7 +69,7 @@ const RelatorioElegibilidade = () => {
                 xls += `<td>${proposta.proposta}</td>`
                 xls += `<td>${proposta.dataImportacao}</td>`
                 xls += `<td>${proposta.vigencia}</td>`
-                xls += proposta.statusMotor ? `<td>${proposta.statusMotor}</td>` : `<td></td>`
+                xls += proposta.statusMotor === '#N/D' ? `<td>${proposta.statusMotor}</td>` : `<td></td>`
                 xls += `<td>${proposta.categoriaCancelamento}</td>`
                 xls += `<td>${proposta.status}</td>`
                 xls += proposta.status1Analise ? `<td>${proposta.status1Analise}</td>` : `<td></td>`

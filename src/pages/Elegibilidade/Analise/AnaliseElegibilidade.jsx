@@ -201,6 +201,9 @@ const AnaliseElegibilidade = () => {
                                     <MenuItem value='Todos'>
                                         Todos
                                     </MenuItem>
+                                    <MenuItem value='A definir'>
+                                        A definir
+                                    </MenuItem>
                                     {
                                         analistas.map(analista => {
                                             return (
