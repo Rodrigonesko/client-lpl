@@ -35,3 +35,7 @@ export const getAnalistasElegibilidade = async () => {
 export const updatePassword = async (data) => {
     return await new ApiCall('/users/updatePassword').put(data)
 }
+
+export const lerPolitica = async (data) => {
+    return await new ApiCall('/users/lerPolitica').put(data)
+}

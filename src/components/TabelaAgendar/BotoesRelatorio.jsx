@@ -224,6 +224,8 @@ const BotoesRelatorios = () => {
 
             const result = await showPropostas()
 
+            console.log(result);
+
             const naoRealizadas = result.propostas.filter(e => {
                 return e.status !== 'Concluído' && e.status !== 'Cancelado'
             })

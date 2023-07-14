@@ -5,8 +5,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { getPoliticas } from '../../../_services/politicas.service'
 import { FaRegFilePdf } from 'react-icons/fa'
-import { BsFillPersonXFill } from 'react-icons/bs'
-
+import ModalFaltouAssinar from './Modals/ModalFaltouAssinar'
 const ControlePoliticas = () => {
 
     const [politicas, setPoliticas] = useState([])
@@ -40,7 +39,7 @@ const ControlePoliticas = () => {
                         {
                             politicas.map(politica => {
                                 return (
-                                    <Card sx={{ width: '200px', margin: '10px' }}>
+                                    <Card sx={{ width: '200px', margin: '10px', bgcolor: politica.inativo ? 'lightgray' : '', padding: '5px' }}>
                                         <object data={`${process.env.REACT_APP_API_KEY}/media${politica.arquivo}`} type='application/pdf' height={250} width='100%'>
                                             PDF
                                         </object>
@@ -53,8 +52,8 @@ const ControlePoliticas = () => {
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Button variant='contained' target='_blank' color='error' href={`${process.env.REACT_APP_API_KEY}/media${politica.arquivo}`} >PDF</Button>
-                                            <Button></Button>
+                                            <Button variant='contained' target='_blank' color='error' href={`${process.env.REACT_APP_API_KEY}/media${politica.arquivo}`} ><FaRegFilePdf /></Button>
+                                            <ModalFaltouAssinar id={politica._id} />
                                         </CardActions>
                                     </Card>
                                 )

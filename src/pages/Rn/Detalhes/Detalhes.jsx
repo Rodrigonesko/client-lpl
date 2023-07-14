@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Detalhes.css'
-import { Container, Button, Box, Paper, Alert, Snackbar } from "@mui/material";
+import { Container, Button, Box, Paper, Alert, Snackbar, TextField, Divider, Typography } from "@mui/material";
 import moment from "moment";
 import { getInfoRn, rnDuplicada, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
 import ModalCancelarRn from "./modais/ModalCancelarRn";
@@ -137,86 +137,45 @@ const Detalhes = () => {
                 }
                 <Box component={Paper} elevation={4} p={2}>
 
-                    <h3>{dados.pedido}</h3>
+                    <h3>{dados.pedido} - Data Recebido LPL: {moment(dados.createdAt).format('DD/MM/YYYY')}</h3>
 
-                    <div className="info-proposta">
-                        <div className="info-box">
-                            <label htmlFor="beneficiario">Beneficiario: </label>
-                            <span><strong>{dados.beneficiario}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="mo">MO: </label>
-                            <span><strong>{dados.mo}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="proposta">Proposta: </label>
-                            <span><strong>{dados.proposta}</strong></span>
-                        </div>
-                    </div>
-                    <div className="info-proposta">
-                        <div className="info-box">
-                            <label htmlFor="">Vigencia: </label>
-                            <span><strong>{dados.vigencia}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="">Pedido: </label>
-                            <span><strong>{dados.pedido}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="proposta">Tipo: </label>
-                            <span><strong>{dados.tipo}</strong></span>
-                        </div>
-                    </div>
-                    <div className="info-proposta">
-                        <div className="info-box">
-                            <label htmlFor="">Filal: </label>
-                            <span><strong>{dados.filial}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="">Idade: </label>
-                            <span><strong>{dados.idade}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="proposta">Data Recebimento: </label>
-                            <span><strong>{dados.dataRecebimento}</strong></span>
-                        </div>
-                    </div>
-                    <div className="info-proposta">
-                        <div className="info-box procedimento">
-                            <label htmlFor="">Procedimento:</label>
-                            <span><strong>{dados.procedimento}</strong></span>
-                        </div>
-                    </div>
-                    <div className="info-proposta">
-                        <div className="info-box">
-                            <label htmlFor="">Doença: </label>
-                            <span><strong>{dados.doenca}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="">Cid: </label>
-                            <span><strong>{dados.cid}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="">PRC: </label>
-                            <span><strong>{dados.prc}</strong></span>
-                        </div>
-                    </div>
-                    <div className="info-proposta">
-                        <div className="info-box periodo-doenca">
-                            <label htmlFor="">Período da Doença: </label>
-                            <span ><strong>{dados.periodo}</strong></span>
-                        </div>
-                    </div>
-                    <div className="info-proposta">
-                        <div className="info-box">
-                            <label htmlFor="">Telefones Beneficiário: </label>
-                            <span><strong>{dados.telefones}</strong></span>
-                        </div>
-                        <div className="info-box">
-                            <label htmlFor="email">Email Beneficiário: </label>
-                            <input type="email" id="email" name="email" style={{ width: '60%' }} defaultValue={dados.email} onChange={e => setEmail(e.target.value)} />
-                        </div>
-                    </div>
+                    <Box display='flex' justifyContent='space-between' m={2}>
+                        <TextField label='Beneficiario' size="small" variant='standard' value={dados.beneficiario} inputProps={{ readOnly: true }} sx={{ width: '300px' }} focused />
+                        <TextField label='Marca Ótica' size="small" variant='standard' value={dados.mo} inputProps={{ readOnly: true }} focused />
+                        <TextField label='Proposta' size="small" variant='standard' value={dados.proposta} inputProps={{ readOnly: true }} focused />
+                    </Box>
+                    <Box display='flex' justifyContent='space-between' m={2}>
+                        <TextField label='Vigencia' type="date" focused size="small" variant='standard' value={dados.vigencia} inputProps={{ readOnly: true }} sx={{ width: '300px' }} />
+                        <TextField label='Pedido' size="small" variant='standard' value={dados.pedido} inputProps={{ readOnly: true }} focused />
+                        <TextField label='Tipo' size="small" variant='standard' value={dados.tipo} inputProps={{ readOnly: true }} focused />
+                    </Box>
+                    <Box display='flex' justifyContent='space-between' m={2}>
+                        <TextField label='Filial' size="small" variant='standard' value={dados.filial} inputProps={{ readOnly: true }} sx={{ width: '300px' }} focused />
+                        <TextField label='Idade' size="small" variant='standard' value={dados.idade} inputProps={{ readOnly: true }} focused />
+                        <TextField label='Data Recebimento Pedido' size="small" variant='standard' value={dados.dataRecebimento} inputProps={{ readOnly: true }} focused />
+                    </Box>
+                    <Divider />
+                    <Box m={2} component={Paper} p={1} >
+                        <Typography variant='body2'>
+                            Procedimento: <strong>{dados.procedimento}</strong>
+                        </Typography>
+                    </Box>
+                    <Divider />
+                    <Box display='flex' justifyContent='space-between' m={2}>
+                        <TextField label='Doença' size="small" variant='standard' value={dados.doenca} inputProps={{ readOnly: true }} sx={{ width: '300px' }} focused />
+                        <TextField label='Cid' size="small" variant='standard' value={dados.cid} inputProps={{ readOnly: true }} focused />
+                        <TextField label='PRC' size="small" variant='standard' value={dados.prc} inputProps={{ readOnly: true }} focused />
+                    </Box>
+                    <Box m={2} component={Paper} p={1} >
+                        <Typography variant='body2'>
+                            Período da Doença: <strong>{dados.periodo}</strong>
+                        </Typography>
+                    </Box>
+                    <Box display='flex' justifyContent='space-between' m={2}>
+                        <TextField label='Email' size="small" variant='standard' value={email} onChange={e => setEmail(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label='Telefone' size="small" variant='standard' value={dados.telefones} inputProps={{ readOnly: true }} focused />
+                    </Box>
+
                     <div className="info-proposta">
                         <div className="info-box">
                             <label htmlFor="data-contato-1">1° Contato: </label>

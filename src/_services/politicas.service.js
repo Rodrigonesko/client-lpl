@@ -10,6 +10,10 @@ export const getPoliticas = async () => {
     return await new ApiCall('/politicas').get()
 }
 
-export const downloadPolitica = async (data) => {
-    return await new ApiCall('/politicas/download').post(data)
+export const getPoliticasAtivas = async () => {
+    return await new ApiCall('/politicas/ativos').get()
+}
+
+export const getPoliticaPorId = async (id) => {
+    return await new ApiCall(`/politicas/politica/${id}`).get()
 }

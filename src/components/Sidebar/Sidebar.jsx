@@ -146,7 +146,7 @@ const Sidebar = () => {
             {
                 isOpen ? (
                     <div className="div-toggle">
-                        <IconButton style={{ zIndex: 9999, background: 'gray', color: 'white', position: 'absolute', left: '250px' }} onClick={toggleMenu} >
+                        <IconButton style={{ zIndex: 1100, background: 'gray', color: 'white', position: 'absolute', left: '250px' }} onClick={toggleMenu} >
                             <FaAngleDoubleLeft className="toggle" />
                         </IconButton>
                     </div>

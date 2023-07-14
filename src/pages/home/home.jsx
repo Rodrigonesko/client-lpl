@@ -2,8 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import './style.css'
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
-import { Button, TextField, Box, Snackbar, Alert } from "@mui/material";
+import { Button, TextField, Box, Snackbar, Alert, Container, Typography } from "@mui/material";
 import { getInfoUser, updatePassword } from "../../_services/user.service";
+import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
+import { getPoliticasAtivas } from "../../_services/politicas.service";
 
 const Home = () => {
 
@@ -12,7 +14,11 @@ const Home = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState(false)
     const [message, setMessage] = useState('')
+    const [open, setOpen] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
+    const [idPolitica, setIdPolitica] = useState('')
     const { name } = useContext(AuthContext)
+
 
     const handlerUpdatePassword = async () => {
 
@@ -41,23 +47,42 @@ const Home = () => {
                 setFirstAccess(true)
             }
 
+            const resultPoliticas = await getPoliticasAtivas()
+
+            const politicasLidas = result.user.politicasLidas
+
+            const politicasNaoLidas = []
+
+            for (const item of resultPoliticas) {
+                const find = politicasLidas.some((idPolitica) => item._id === idPolitica)
+                if (!find) {
+                    politicasNaoLidas.push(item)
+                }
+            }
+
+            setIdPolitica(politicasNaoLidas[0])
+
+            if (politicasNaoLidas.length !== 0) {
+                setOpen(true)
+            }
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
+        setFlushHook(false)
         fetchInfoUser()
-    }, [])
+    }, [flushHook])
 
     return (
         <>
             <SideBar />
-            <section className="section">
-                <div className="container">
-                    <div className="title">
-                        <h1>Bem vindo {name}!</h1>
-                    </div>
+            <Container sx={{ textAlign: 'center' }}>
+                <Box>
+                    <Typography variant="h4">
+                        Bem vindo {name}!
+                    </Typography>
                     {
                         firstAccess && (
                             <div className="first-access">
@@ -72,9 +97,6 @@ const Home = () => {
                                     <Box m={2}>
                                         <TextField type="password" name="confirmPassword" id="confirmPassword" label='Confirmar senha' onChange={e => setConfirmPassword(e.target.value)} />
                                     </Box>
-
-
-
                                 </div>
                                 <div className="btn-container">
                                     <Button variant='contained' onClick={handlerUpdatePassword}>Enviar</Button>
@@ -92,8 +114,13 @@ const Home = () => {
                             {message}
                         </Alert>
                     </Snackbar>
-                </div>
-            </section>
+                </Box>
+                {
+                    idPolitica ? (
+                        <ModalAceitarPoliticas setOpen={setOpen} open={open} idPolitica={idPolitica} setFlushHook={setFlushHook} />
+                    ) : null
+                }
+            </Container>
         </>
 
     )

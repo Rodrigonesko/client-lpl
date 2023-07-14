@@ -75,12 +75,17 @@ const ModalAdicionarPolitica = ({ setFlushHook, politicas }) => {
                             PDF
                         </object>}
                     />
-                    <Box mt={2} >
+                    <Box mt={2}>
                         <Autocomplete
                             freeSolo
                             options={politicas}
                             getOptionLabel={(politica) => politica.nome}
-                            renderInput={(params) => <TextField {...params} label='Politica' onChange={e => setPolitica(e.target.value)} value={politica} />}
+                            onChange={e => {
+                                setPolitica(e.target.textContent)
+                            }}
+                            renderInput={(params) => <TextField {...params} label='Politica' onChange={e => {
+                                setPolitica(e.target.value)
+                            }} value={politica} />}
                         />
                     </Box>
                 </DialogContent>
