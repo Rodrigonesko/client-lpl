@@ -17,3 +17,7 @@ export const getPoliticasAtivas = async () => {
 export const getPoliticaPorId = async (id) => {
     return await new ApiCall(`/politicas/politica/${id}`).get()
 }
+
+export const assinarPolitica = async (data) => {
+    return await new ApiCall('/politicas/assinar').put(data)
+}

@@ -95,6 +95,7 @@ const BotoesRelatorios = () => {
             xls += "<th>Ret</th>"
             xls += "<th>Nome Operadora</th>"
             xls += "<th>Filial</th>"
+            xls += "<th>Responsavel</th>"
             xls += "</tr>"
             xls += "</thead>"
             xls += "<tbody>"
@@ -129,74 +130,24 @@ const BotoesRelatorios = () => {
                 xls += `<td>${e.d8?.replaceAll('#', ' ')}</td>`
                 xls += `<td>${e.d9?.replaceAll('#', ' ')}</td>`
                 xls += `<td>${e.status}</td>`
-
-                if (e.dataConclusao) {
-                    xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
-                } else {
-                    xls += `<td></td>`
-                }
+                xls += `<td>${e.dataConclusao ? moment(e.dataConclusao).format('DD/MM/YYYY') : ''}</td>`
                 xls += `<td>${e.tipoContrato}</td>`
-                e.contato1 ? (
-                    xls += `<td>${e.contato1}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
-                e.responsavelContato1 ? (
-                    xls += `<td>${e.responsavelContato1}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
-
-                e.contato2 ? (
-                    xls += `<td>${e.contato2}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
-
-                e.responsavelContato2 ? (
-                    xls += `<td>${e.responsavelContato2}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
-
-                e.contato3 ? (
-                    xls += `<td>${e.contato3}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
-
-                e.responsavelContato3 ? (
-                    xls += `<td>${e.responsavelContato2}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
+                xls += `<td>${e.contato1 || ''}</td>`
+                xls += `<td>${e.responsavelContato1 || ''}</td>`
+                xls += `<td>${e.contato2 || ''}</td>`
+                xls += `<td>${e.responsavelContato2 || ''}</td>`
+                xls += `<td>${e.contato3 || ''}</td>`
+                xls += `<td>${e.responsavelContato3 || ''}</td>`
 
                 let diasUteis = calcularDiasUteis(moment(e.dataRecebimento), moment(e.dataConclusao), feriados)
-
                 if (!e.dataConclusao) {
                     diasUteis = ''
                 }
-
                 xls += `<td>${diasUteis}</td>`
-
-                e.retrocedido ? (
-                    xls += `<td>${e.retrocedido}</td>`
-
-                ) : (
-                    xls += `<td></td>`
-                )
-
-                e.nomeOperadora ? (
-                    xls += `<td>${e.nomeOperadora}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
-
-                e.filial ? (
-                    xls += `<td>${e.filial}</td>`
-                ) : (
-                    xls += `<td></td>`
-                )
+                xls += `<td>${e.retrocedido || ''}</td>`
+                xls += `<td>${e.nomeOperadora || ''}</td>`
+                xls += `<td>${e.filail || ''}</td>`
+                xls += `<td>${e.enfermeiro || ''}</td>`
 
                 xls += `</tr>`
             })

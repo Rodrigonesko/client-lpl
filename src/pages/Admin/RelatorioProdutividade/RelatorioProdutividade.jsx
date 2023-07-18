@@ -91,6 +91,8 @@ const RelatorioProdutividade = () => {
         xls += "<th>Analista</th>"
         xls += "<th>Data</th>"
         xls += "<th>Tele</th>"
+        xls += "<th>Agendadas</th>"
+        xls += "<th>Não Agendadas</th>"
         xls += "<th>1° Tentativa</th>"
         xls += "<th>2° Tentativa</th>"
         xls += "<th>3° Tentativa</th>"
@@ -105,6 +107,8 @@ const RelatorioProdutividade = () => {
             xls += `<td>${item.analista}</td>`
             xls += `<td>${item.data}</td>`
             xls += `<td>${item.tele}</td>`
+            xls += `<td>${item.agendado}</td>`
+            xls += `<td>${item.naoAgendado}</td>`
             xls += `<td>${item.tentativa1}</td>`
             xls += `<td>${item.tentativa2}</td>`
             xls += `<td>${item.tentativa3}</td>`
