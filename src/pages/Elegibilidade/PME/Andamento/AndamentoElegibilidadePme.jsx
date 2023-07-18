@@ -183,6 +183,7 @@ const AndamentoElegibilidadePme = () => {
                                 <TableRow>
                                     <TableCell>Proposta</TableCell>
                                     <TableCell>Data Recebida</TableCell>
+                                    <TableCell>Vidas</TableCell>
                                     <TableCell>Motor</TableCell>
                                     <TableCell>Analista</TableCell>
                                     <TableCell></TableCell>
@@ -196,6 +197,7 @@ const AndamentoElegibilidadePme = () => {
                                             <TableRow key={proposta._id}>
                                                 <TableCell>{proposta.proposta}</TableCell>
                                                 <TableCell>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{proposta.vidas}</TableCell>
                                                 <TableCell>{proposta.motor}</TableCell>
                                                 <TableCell>
                                                     <FormControl size="small" fullWidth>

@@ -1,5 +1,5 @@
-import { forwardRef, useState, useEffect } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Tooltip, Typography } from "@mui/material"
+import { forwardRef, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Tooltip, Typography } from "@mui/material"
 import { BsFillPersonXFill } from 'react-icons/bs'
 import { getUsers } from "../../../../_services/user.service";
 

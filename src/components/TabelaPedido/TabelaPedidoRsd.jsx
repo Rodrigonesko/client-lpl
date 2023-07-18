@@ -1,4 +1,6 @@
-import { TableRow, TableCell, Collapse, Box, Table, TableHead, TableBody, TextField, Button, Checkbox } from "@mui/material"
+import { TableRow, TableCell, Collapse, Box, Table, TableHead, TableBody, Button } from "@mui/material"
+import { buscarClinica, devolverPedido, editarPedido, prioridadeDossie, voltarFasePedido } from "../../_services/rsd.service";
+import RowPedidoRsd from "./RowPedidoRsd";
 
 const TabelaPedidoRsd = (props) => {
 
@@ -30,25 +32,16 @@ const TabelaPedidoRsd = (props) => {
                                     pedidos.map(pedido => {
                                         if (protocolo === pedido.protocolo && pedido.pacote === pacote) {
                                             return (
-                                                <TableRow>
-                                                    <TableCell><TextField value={pedido.numero} inputProps={{
-                                                        style: { fontSize: '14px', padding: '4px', width: '80px' }
-                                                    }} /></TableCell>
-                                                    <TableCell>{pedido.status}</TableCell>
-                                                    <TableCell><TextField size="small" value={pedido.valorApresentado} /></TableCell>
-                                                    <TableCell>{pedido.valorReembolsado}</TableCell>
-                                                    <TableCell><TextField size="small" value={pedido.cnpj} /></TableCell>
-                                                    <TableCell><TextField size="small" value={pedido.clinica} /></TableCell>
-                                                    <TableCell><TextField size="small" value={pedido.nf} /></TableCell>
-                                                    <TableCell><Button color="success" size="small" >Salvar</Button></TableCell>
-                                                    <TableCell><Button color='inherit' size="small" >Inativar</Button></TableCell>
-                                                    <TableCell>{pedido.fila}</TableCell>
-                                                    <TableCell><Checkbox></Checkbox></TableCell>
-                                                </TableRow>
+                                                <RowPedidoRsd pedido={pedido} />
                                             )
                                         }
                                     })
                                 }
+                                <TableRow>
+                                    <TableCell>
+                                        <Button href={`/rsd/CriarPedido/${protocolo}`} target='_blank' variant="contained">Novo Pedido</Button>
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </Box>

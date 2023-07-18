@@ -157,8 +157,8 @@ const FichaBeneficiario = () => {
                         protocolos.length !== 0 ? (
                             <PedidosReembolso protocolos={protocolos} pedidos={pedidos} />
                         ) : null
-                    } */}
-                    {/* <br /><br /> */}
+                    }
+                    <br /><br /> */}
                     <div className="pedidos-reembolso">
                         <table className="table">
                             <thead className="table-header">

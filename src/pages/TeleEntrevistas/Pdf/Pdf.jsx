@@ -84,7 +84,7 @@ const gerarPdf = async (proposta, nome) => {
 
     let divergencias
 
-    if (result.data.result[0].divergencia !== undefined) {
+    if (result.data.result[0].houveDivergencia === 'Sim' ) {
         divergencias = [
             {
                 text: [{ text: 'Identifica divergência? ' }, { text: 'Sim', color: '#0070c0', bold: true, italics: true }], margin: [20, 0, 20, 0]
