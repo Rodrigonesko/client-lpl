@@ -41,3 +41,7 @@ export const adicionaComentarioElegibilidadePme = async (data) => {
 export const alterarStatusElegibildadePme = async (data) => {
     return await new ApiCall('/elegibilidadePme/alterarStatus').put(data)
 }
+
+export const getProducaoDiariaPme = async (data) => {
+    return await new ApiCall(`/elegibilidadePme/producaoDiaria/${data}`).get()
+}

@@ -135,7 +135,7 @@ export const getReport = async () => {
 }
 
 export const registrarProposta = async (data) => {
-    return await new ApiCall('/elegibilidade/regitrar/proposta').post(data)
+    return await new ApiCall('/elegibilidade/registrar/proposta').post(data)
 }
 
 export const getPropostasManuaisEmAndamento = async () => {
@@ -143,7 +143,7 @@ export const getPropostasManuaisEmAndamento = async () => {
 }
 
 export const getPropostasManuais = async () => {
-    return await new ApiCall('/elegibilidade/show/propostaManual').get()
+    return await new ApiCall('/elegibilidade/show/propostasManual').get()
 }
 
 export const atualizarObservacoes = async (data) => {

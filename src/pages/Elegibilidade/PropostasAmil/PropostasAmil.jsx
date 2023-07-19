@@ -281,7 +281,7 @@ const PropostasAmil = () => {
                             Total de propostas amil: <strong>{total.length}</strong>
                         </Typography>
                         <Typography>
-                            Total Concluídos: <strong>{total.length - proposta.length}</strong>
+                            Total Concluídos: <strong>{total.length - propostas.length}</strong>
                         </Typography>
                         <Typography>
                             Total em andamento: <strong>{propostas.length}</strong>

@@ -115,21 +115,88 @@ const EntrevistasRealizadas = () => {
             result.data.entrevistas.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e._id}</td>`
-                xls += `<td>${e.proposta}</td>`
-                xls += `<td>${e.tipoContrato}</td>`
-                xls += `<td>${e.dataEntrevista}</td>`
-                xls += `<td>${e.nome}</td>`
-                xls += `<td>${e.cpf}</td>`
-                xls += `<td>${e.dataNascimento}</td>`
-                xls += `<td>${e.idade}</td>`
-                xls += `<td>${e.responsavel}</td>`
-                xls += `<td>${e.houveDivergencia}</td>`
+                xls += `<td>${e.proposta || ''}</td>`
+                xls += `<td>${e.tipoContrato || ''}</td>`
+                xls += `<td>${e.dataEntrevista || ''}</td>`
+                xls += `<td>${e.nome || ''}</td>`
+                xls += `<td>${e.cpf || ''}</td>`
+                xls += `<td>${e.dataNascimento || ''}</td>`
+                xls += `<td>${e.idade || ''}</td>`
+                xls += `<td>${e.responsavel || ''}</td>`
+                xls += `<td>${e.houveDivergencia || ''}</td>`
                 xls += `<td>${e.divergencia ? e.divergencia : ''}</td>`
                 xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.entrevistaQualidade ? 'Sim' : ''}</td>`
                 // xls += `<td>${e.cids}</td>`
                 if (e.cids) {
-                    const arrCids = e.cids.split(',')
+                    const arrCids = e.codigosCids.split('-')
+                    arrCids.forEach(cid => {
+                        xls += `<td>${cid}</td>`
+                    })
+                } else {
+                    xls += `<td></td>`
+                }
+                xls += `</tr>`
+            })
+
+            xls += "</tbody></table>"
+
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = 'Relatorio Propostas.xls'
+            a.click()
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const gerarRelatorioMensal = async () => {
+        try {
+            setLoading(true)
+
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+
+            //console.log(dataInicio, dataFim);
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Id</th>"
+            xls += "<th>Ano Ref</th>"
+            xls += "<th>Mês Ref</th>"
+            xls += "<th>Data Conclusão</th>"
+            xls += "<th>Porte</th>"
+            xls += "<th>Proposta</th>"
+            xls += "<th>Nome</th>"
+            xls += "<th>Idade</th>"
+            xls += "<th>UF</th>"
+            xls += "<th>Status Final</th>"
+            xls += "<th>Divergência DS</th>"
+            xls += "<th>Observações</th>"
+            xls += "<th>Cids</th>"
+            xls += "</tr></thead><tbody>"
+
+            result.data.entrevistas.forEach(e => {
+                xls += "<tr>"
+                xls += `<td>${e._id}</td>`
+                xls += `<td>${moment(e.dataEntrevista).format('YYYY')}</td>`
+                xls += `<td>${moment(e.dataEntrevista).format('MM')}</td>`
+                xls += `<td>${e.dataEntrevista || ''}</td>`
+                xls += `<td>${e.tipoContrato || ''}</td>`
+                xls += `<td>${e.proposta || ''}</td>`
+                xls += `<td>${e.nome || ''}</td>`
+                xls += `<td>${e.idade || ''}</td>`
+                xls += `<td>${e.filial || ''}</td>`
+                xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
+                xls += `<td>${e.houveDivergencia}</td>`
+                xls += `<td>${e.divergencia || ''}</td>`
+                // xls += `<td>${e.cids}</td>`
+                if (e.cids) {
+                    const arrCids = e.codigosCids.split('-')
                     arrCids.forEach(cid => {
                         xls += `<td>${cid}</td>`
                     })
@@ -199,6 +266,8 @@ const EntrevistasRealizadas = () => {
                     <Box display='flex'>
                         {/* <TextField type='date' label='Data Inicio' focused size='small' onChange={e => setDataInicio(e.target.value)} />
                         <TextField type='date' label='Data Fim' focused size='small' onChange={e => setDataFim(e.target.value)} /> */}
+                        <Button style={{ marginLeft: '4px' }} color='secondary' size='small' variant="contained" onClick={gerarRelatorioMensal}>Relatório Mensal</Button>
+
                         <Button style={{ marginLeft: '4px' }} size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
                     </Box>
                 </Box>

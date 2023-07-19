@@ -1,6 +1,7 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, FormControlLabel, Checkbox, Alert, Snackbar } from "@mui/material"
 import { useState } from "react";
 import { lerPolitica } from "../../_services/user.service";
+import { assinarPolitica } from "../../_services/politicas.service";
 
 const ModalAceitarPoliticas = ({ open, setOpen, idPolitica, setFlushHook }) => {
 
@@ -9,6 +10,7 @@ const ModalAceitarPoliticas = ({ open, setOpen, idPolitica, setFlushHook }) => {
 
     const handleAceitar = async () => {
         await lerPolitica({ id: idPolitica._id })
+        await assinarPolitica({ id: idPolitica._id })
         setOpenSnack(true)
         setFlushHook(true)
         handleClose()

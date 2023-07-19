@@ -102,7 +102,7 @@ const SemDocumentos = () => {
             <Container>
                 <Box display='flex' justifyContent='space-between' >
                     <Typography variant="h6" m={2} >
-                        Propostas sem documento
+                        Propostas sem documento - {propostas.length}
                     </Typography>
                     <Box mt={2}>
                         <Button onClick={handleReport} variant='contained' size="small" >Report</Button>
