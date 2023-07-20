@@ -165,3 +165,7 @@ export const mandarParaAtendimentoHumanizado = async (data) => {
 export const relatorioProducaoTele = async () => {
     return await new ApiCall('/entrevistas/relatorioProducao').get()
 }
+
+export const getRendimentoMensalIndividualTele = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/rendimentoIndividualMensal/${mes}/${analista}`).get()
+}
