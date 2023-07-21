@@ -70,12 +70,12 @@ const RelatorioElegibilidade = () => {
                 xls += `<td>${proposta.dataImportacao}</td>`
                 xls += `<td>${proposta.vigencia}</td>`
                 xls += proposta.statusMotor === '#N/D' ? `<td>${proposta.statusMotor}</td>` : `<td></td>`
-                xls += `<td>${proposta.categoriaCancelamento}</td>`
+                xls += `<td>${proposta.categoriaCancelamento || ''}</td>`
                 xls += `<td>${proposta.status}</td>`
                 xls += proposta.status1Analise ? `<td>${proposta.status1Analise}</td>` : `<td></td>`
                 xls += proposta.status2Analise ? `<td>${proposta.status2Analise}</td>` : `<td></td>`
                 xls += proposta.status3Analise ? `<td>${proposta.status3Analise}</td>` : `<td></td>`
-                xls += proposta.planoAmil ? `<td>${proposta.planoAmil}</td>` : `<td></td>`
+                xls += proposta.plano ? `<td>${proposta.plano}</td>` : `<td></td>`
                 xls += `<td></td>`
                 xls += `<td>${proposta.produtor}</td>`
                 xls += `<td>${proposta.uf}</td>`
@@ -104,7 +104,7 @@ const RelatorioElegibilidade = () => {
                 xls += proposta.segundoReprotocolo2 ? `<td>${proposta.segundoReprotocolo2}</td>` : `<td></td>`
                 xls += proposta.segundoReprotocolo3 ? `<td>${proposta.segundoReprotocolo3}</td>` : `<td></td>`
                 xls += `<td></td>`
-                xls += proposta.ligacao ? `<td>${proposta.ligacao}</td>` : `<td></td>`
+                xls += `<td>${proposta.ligacao ? 'Sim' : ''}</td>`
                 xls += proposta.observacoesDevolucao ? `<td>${proposta.observacoesDevolucao}</td>` : `<td></td>`
                 xls += proposta.evidenciaFraude ? `<td>${proposta.evidenciaFraude}</td>` : `<td></td>`
                 xls += `<td></td>`

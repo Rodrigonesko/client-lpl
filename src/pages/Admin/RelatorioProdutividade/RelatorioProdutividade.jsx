@@ -2,13 +2,13 @@ import { useState } from "react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Container, Box, Typography, Button, Divider, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from "@mui/material"
 import { indigo, deepPurple } from "@mui/material/colors"
-
-import ProducaoIndividualTele from "./Tele/ProducaoIndividualTele/ProducaoIndividualTele"
+import ProducaoIndividual from "./ProducaoIndividual"
+import ProduvidadeElegi from "./Elegi/ProdutividadeElegi"
 import ComparativoTele from "./Tele/ComparativoTele"
+import Chart from "react-google-charts"
 
 const RelatorioProdutividade = () => {
 
-    const [loading, setLoading] = useState(false)
     const [celula, setCelula] = useState('')
     const [component, setComponent] = useState(<></>)
     const [open, setOpen] = useState(false)
@@ -27,32 +27,20 @@ const RelatorioProdutividade = () => {
 
         if (option === 'Individual') {
             setOpenComponent(true)
-            switch (celula) {
-                case 'Tele Entrevista':
-                    console.log('oii');
-                    setComponent('individual-tele')
-                default:
-
-            }
+            setComponent('individual')
         }
 
         if (option === 'Comparativo') {
             setOpenComponent(true)
-
-            switch (celula) {
-                case 'Tele Entrevista':
-                    setComponent('comparativo-tele')
-                default:
-
-            }
+            setComponent('comparativo')
         }
     }
 
     const renderComponent = () => {
         switch (component) {
-            case 'individual-tele':
-                return <ProducaoIndividualTele />
-            case 'comparativo-tele':
+            case 'individual':
+                return <ProducaoIndividual celula={celula} />
+            case 'comparativo':
                 return <ComparativoTele />
             default:
                 return <></>
@@ -75,6 +63,7 @@ const RelatorioProdutividade = () => {
                             label='Selecionar célula'
                             value={celula}
                             onChange={e => {
+                                setOpenComponent(false)
                                 setCelula(e.target.value)
                             }}
                         >
@@ -120,7 +109,9 @@ const RelatorioProdutividade = () => {
                         Selecione uma célula
                     </Alert>
                 </Snackbar>
+                <Chart style={{ display: 'none' }} />
             </Container>
+
         </>
     )
 }

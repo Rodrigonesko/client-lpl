@@ -1,31 +1,21 @@
 import { Box, Paper, Divider, FormControl, InputLabel, Select, MenuItem, TextField, Button, Tooltip, Alert, Snackbar } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BsGraphUp } from 'react-icons/bs'
-import ProducaoTeleIndividualDiaria from "./ProducaoTeleIndividualDiaria"
-import ProducaoTeleIndividualMensal from "./ProducaoTeleIndividualMensal"
-import { getRendimentoMensalIndividualTele } from "../../../../../_services/teleEntrevista.service"
+import ProducaoTeleIndividualMensal from "./Tele/ProducaoTeleIndividualMensal"
+import ProduvidadeElegi from "./Elegi/ProdutividadeElegi"
+import { buscaAnalistasTele, getAnalistasElegibilidade } from "../../../_services/user.service"
 
-const ProducaoIndividualTele = () => {
+
+const ProducaoIndividual = ({ celula }) => {
 
     const [option, setOption] = useState('')
     const [open, setOpen] = useState(false)
     const [date, setDate] = useState('')
     const [month, setMonth] = useState('')
+    const [analistas, setAnalistas] = useState([])
     const [analista, setAnalista] = useState('')
     const [openComponent, setOpenComponent] = useState(false)
-    const [producaoMensal, setProducaoMensal] = useState([])
-    const [totalMensal, setTotalMensal] = useState(0)
-    const [houveDivergenciaMensal, setHouveDivergenciaMensal] = useState(0)
-    const [naoHouveDivergenciaMensal, setNaoHouveDivergenciaMensal] = useState(0)
-    const [agendadoMensal, setAgendadoMensal] = useState(0)
-    const [naoAgendadoMensal, setNaoAgendadoMensal] = useState(0)
-    const [primeiroContatoMensal, setPrimeiroContatoMensal] = useState(0)
-    const [segundoContatoMensal, setSegundoContatoMensal] = useState(0)
-    const [terceiroContatoMensal, setTerceiroContatoMensal] = useState(0)
-    const [producaoMensalRn, setProducaoMensalRn] = useState([])
-    const [totalRnMensal, setMensalRn] = useState(0)
-    const [producaoMensalUe, setProducaoMensalUe] = useState([])
-    const [totalUeMensal, setTotalMensalUe] = useState(0)
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
@@ -48,28 +38,31 @@ const ProducaoIndividualTele = () => {
         }
 
         if (option === 'Por mês') {
-
-            const result = await getRendimentoMensalIndividualTele(month, analista)
-
-            console.log(result);
-
-            setProducaoMensal(result.producaoTele)
-            setTotalMensal(result.total)
-            setHouveDivergenciaMensal(result.houveDivergencia)
-            setNaoHouveDivergenciaMensal(result.naoHouveDivergencia)
-            setAgendadoMensal(result.agendadas)
-            setNaoAgendadoMensal(result.naoAgendadas)
-            setPrimeiroContatoMensal(result.primeiroContato)
-            setSegundoContatoMensal(result.segundoContato)
-            setTerceiroContatoMensal(result.terceiroContato)
-            setProducaoMensalRn(result.producaoRn)
-            setMensalRn(result.totalRn)
-            setProducaoMensalUe(result.producaoUe)
-            setTotalMensalUe(result.totalUe)
+            setFlushHook(true)
             setOpenComponent(true)
-            setProducaoMensalRn()
         }
     }
+
+    const fetchData = async () => {
+        let result = ''
+
+        if (celula === 'Tele Entrevista') {
+            let { enfermeiros } = await buscaAnalistasTele()
+            result = enfermeiros
+        }
+
+        if (celula === 'Elegibilidade') {
+            const { analistas } = await getAnalistasElegibilidade()
+            result = analistas
+        }
+        setAnalistas(result)
+    }
+
+    useEffect(() => {
+
+        fetchData()
+
+    }, [])
 
     return (
         <Box component={Paper} elevation={3} p={1}>
@@ -81,8 +74,6 @@ const ProducaoIndividualTele = () => {
                         value={analista}
                         onChange={(e) => {
                             setOpenComponent(false)
-                            setDate('')
-                            setMonth('')
                             setAnalista(e.target.value)
                         }}
                     >
@@ -91,12 +82,15 @@ const ProducaoIndividualTele = () => {
                                 Analista
                             </em>
                         </MenuItem>
-                        <MenuItem value='Giovana Santana'>
-                            Giovana Santana
-                        </MenuItem>
-                        <MenuItem value='Allana'>
-                            Allana
-                        </MenuItem>
+                        {
+                            analistas.map(analista => {
+                                return (
+                                    <MenuItem value={analista.name}>
+                                        {analista.name}
+                                    </MenuItem>
+                                )
+                            })
+                        }
                     </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: '200px', margin: '10px' }} size="small">
@@ -116,15 +110,15 @@ const ProducaoIndividualTele = () => {
                                 Período
                             </em>
                         </MenuItem>
-                        <MenuItem value='Por dia'>
+                        {/* <MenuItem value='Por dia'>
                             Por dia
-                        </MenuItem>
+                        </MenuItem> */}
                         <MenuItem value='Por mês'>
                             Por mês
                         </MenuItem>
-                        <MenuItem value='Total'>
+                        {/* <MenuItem value='Total'>
                             Total
-                        </MenuItem>
+                        </MenuItem> */}
                     </Select>
                 </FormControl>
                 {
@@ -144,26 +138,19 @@ const ProducaoIndividualTele = () => {
             <Divider />
             <Box>
                 {
-                    openComponent && option === 'Por dia' ? (
-                        <ProducaoTeleIndividualDiaria />
+                    openComponent && option === 'Por mês' && celula === 'Tele Entrevista' ? (
+                        <ProducaoTeleIndividualMensal
+                            analista={analista}
+                            month={month}
+                            hook={flushHook}
+                            flushHook={setFlushHook}
+                        />
                     ) : null
                 }
                 {
-                    openComponent && option === 'Por mês' ? (
-                        <ProducaoTeleIndividualMensal
-                            producaoMensal={producaoMensal}
-                            totalMensal={totalMensal}
-                            houveDivergencia={houveDivergenciaMensal}
-                            naoHouveDivergencia={naoHouveDivergenciaMensal}
-                            agendado={agendadoMensal}
-                            naoAgendado={naoAgendadoMensal}
-                            primeiroContato={primeiroContatoMensal}
-                            segundoContato={segundoContatoMensal}
-                            terceiroContato={terceiroContatoMensal}
-                            producaoRn={producaoMensalRn}
-                            totalRn={totalRnMensal}
-                            producaoUe={producaoMensalUe}
-                            totalUe={totalUeMensal}
+                    openComponent && option === 'Por mês' && celula === 'Elegibilidade' ? (
+                        <ProduvidadeElegi
+
                         />
                     ) : null
                 }
@@ -178,4 +165,4 @@ const ProducaoIndividualTele = () => {
 
 }
 
-export default ProducaoIndividualTele
+export default ProducaoIndividual

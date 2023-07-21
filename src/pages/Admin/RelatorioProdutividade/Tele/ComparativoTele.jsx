@@ -6,7 +6,7 @@ const ComparativoTele = () => {
             Comparativo Tele
 
         </>
-    )
+    ) 
 
 }
 
