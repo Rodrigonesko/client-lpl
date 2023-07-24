@@ -3,7 +3,8 @@ import { useEffect, useState } from "react"
 import { BsGraphUp } from 'react-icons/bs'
 import ProducaoTeleIndividualMensal from "./Tele/ProducaoTeleIndividualMensal"
 import ProduvidadeElegi from "./Elegi/ProdutividadeElegi"
-import { buscaAnalistasTele, getAnalistasElegibilidade } from "../../../_services/user.service"
+import ProdutividadeRsd from "./Rsd/ProdutividadeRsd"
+import { buscaAnalistasTele, getAnalistasElegibilidade, getAnalistasRsd } from "../../../_services/user.service"
 
 
 const ProducaoIndividual = ({ celula }) => {
@@ -44,7 +45,7 @@ const ProducaoIndividual = ({ celula }) => {
     }
 
     const fetchData = async () => {
-        let result = ''
+        let result = []
 
         if (celula === 'Tele Entrevista') {
             let { enfermeiros } = await buscaAnalistasTele()
@@ -55,6 +56,14 @@ const ProducaoIndividual = ({ celula }) => {
             const { analistas } = await getAnalistasElegibilidade()
             result = analistas
         }
+
+        if (celula === 'RSD') {
+            const analistas = await getAnalistasRsd()
+            result = analistas
+        }
+
+        
+
         setAnalistas(result)
     }
 
@@ -150,7 +159,20 @@ const ProducaoIndividual = ({ celula }) => {
                 {
                     openComponent && option === 'Por mês' && celula === 'Elegibilidade' ? (
                         <ProduvidadeElegi
-
+                            analista={analista}
+                            mes={month}
+                            hook={flushHook}
+                            flushHook={setFlushHook}
+                        />
+                    ) : null
+                }
+                {
+                    openComponent && option === 'Por mês' && celula === 'RSD' ? (
+                        <ProdutividadeRsd
+                            analista={analista}
+                            mes={month}
+                            hook={flushHook}
+                            flushHook={setFlushHook}
                         />
                     ) : null
                 }

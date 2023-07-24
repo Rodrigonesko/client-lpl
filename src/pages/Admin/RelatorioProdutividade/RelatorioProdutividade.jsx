@@ -3,7 +3,6 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Container, Box, Typography, Button, Divider, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from "@mui/material"
 import { indigo, deepPurple } from "@mui/material/colors"
 import ProducaoIndividual from "./ProducaoIndividual"
-import ProduvidadeElegi from "./Elegi/ProdutividadeElegi"
 import ComparativoTele from "./Tele/ComparativoTele"
 import Chart from "react-google-charts"
 
@@ -50,7 +49,7 @@ const RelatorioProdutividade = () => {
     return (
         <>
             <Sidebar />
-            <Container>
+            <Container sx={{ height: '100vh', overflow: 'auto' }}>
                 <Typography variant="h6" m={2}>
                     Produtividade por célula
                 </Typography>

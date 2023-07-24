@@ -16,6 +16,10 @@ export const buscaAnalistasTele = async () => {
     return await new ApiCall('/users/enfermeiros').get()
 }
 
+export const getAnalistasRsd = async () => {
+    return await new ApiCall('/users/rsd').get()
+}
+
 export const createUser = async (email, name, accessLevel, atividade) => {
     return await new ApiCall('/users').post(email, name, accessLevel, atividade)
 }

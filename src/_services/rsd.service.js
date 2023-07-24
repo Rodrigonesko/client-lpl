@@ -157,3 +157,7 @@ export const subirPedidos = async (data) => {
 export const relatorioProducaoRsd = async () => {
     return await new ApiCall('/rsd/relatorioProducao').get()
 }
+
+export const getProdutividadeMensalRsd = async (mes, analista) => {
+    return await new ApiCall(`/rsd/producaoMensal/${mes}/${analista}`).get()
+}

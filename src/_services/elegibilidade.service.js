@@ -177,3 +177,7 @@ export const adicionarPlanoBlacklist = async (data) => {
 export const removerPlanoBlacklist = async (id) => {
     return await new ApiCall(`/elegibilidade/planosBlacklist/${id}`).delete()
 }
+
+export const getProducaoMensalElegi = async (mes, analista) => {
+    return await new ApiCall(`/elegibilidade/producaoMensal/${mes}/${analista}`).get()
+}
