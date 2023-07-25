@@ -180,6 +180,9 @@ const TodosElegibilidadePme = () => {
                                     <MenuItem value='Devolvida'>
                                         Devolvida
                                     </MenuItem>
+                                    <MenuItem value='Redistribuído'>
+                                        Redistribuído
+                                    </MenuItem>
                                     <MenuItem value='Concluido'>
                                         Concluido
                                     </MenuItem>

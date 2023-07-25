@@ -6,9 +6,13 @@ import ModalDevolucao from "./Modals/ModalDevolucao";
 import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalCancelamento from "./Modals/ModalCancelamento";
 import ModalCancelarCpf from "./Modals/ModalCancelarCpf";
-import PatologiaElegibilidade from "./Modals/PatologiaElegibilidade";
+import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
+import { useParams } from "react-router-dom";
 
 const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
+
+    const { id } = useParams()
+
     return (
         <>
             <Box component={Paper} elevation={3} p={2} mt={3}>
@@ -29,7 +33,7 @@ const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
                         </>
                     ) : null
                 }
-                <PatologiaElegibilidade />
+                <ModalPatologias celula='Elegibilidade' idCelula={id} />
             </Box>
         </>
     )

@@ -10,7 +10,7 @@ import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import ModalFormulario from "../../../components/ModalFormulario/ModalFormulario";
-import MarcacaoAutista from "../../../components/MarcacaoAutista/MarcacaoAutista";
+import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
 
 import './Formulario.css'
 import { getCookie } from "react-use-cookie";
@@ -322,7 +322,7 @@ const Formulario = () => {
                         </Box>
 
                         <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
-{/* 
+                        {/* 
                         <MarcacaoAutista /> */}
 
                     </div>
@@ -421,7 +421,6 @@ const Formulario = () => {
                         </select>
                     </div>
 
-
                     <div id="divergencia-container" className="none">
                         <div className="perguntas-habitos-container title">
                             <h3>Identificação de divergências</h3>
@@ -469,6 +468,7 @@ const Formulario = () => {
                                 }
                             </div>
                         </div>
+
                     </div>
 
                     <div id="indicador-obesidade">
@@ -476,7 +476,17 @@ const Formulario = () => {
                     </div>
 
                 </div>
-                <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
+
+                <Box display='inline-block'>
+                    <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
+                </Box>
+
+                <ModalPatologias idCelula={id} celula={'Tele Entrevista'} />
+
+
+
+
+
                 <Modal
                     isOpen={modalInfo}
                     onRequestClose={closeModalInfo}

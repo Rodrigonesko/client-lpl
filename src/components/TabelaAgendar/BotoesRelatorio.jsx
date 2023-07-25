@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
 import 'moment-business-days'
-import { getPropostasADevolver, showPropostas } from "../../_services/teleEntrevista.service";
+import { getPropostasADevolver, showPropostas, getPropostasNaoRealizadasTele } from "../../_services/teleEntrevista.service";
 
 const feriados = [
     moment('2022-01-01'),
@@ -173,13 +173,8 @@ const BotoesRelatorios = () => {
 
             setLoading(true)
 
-            const result = await showPropostas()
+            const { propostas } = await getPropostasNaoRealizadasTele()
 
-            console.log(result);
-
-            const naoRealizadas = result.propostas.filter(e => {
-                return e.status !== 'Concluído' && e.status !== 'Cancelado'
-            })
 
             let xls = '\ufeff'
             xls += "<table border='1'>"
@@ -205,7 +200,7 @@ const BotoesRelatorios = () => {
             xls += "</thead>"
             xls += "<tbody>"
 
-            naoRealizadas.forEach(e => {
+            propostas.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e._id}</td>`
                 xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`

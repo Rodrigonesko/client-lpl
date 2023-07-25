@@ -6,6 +6,7 @@ import { getInfoPropostaElegibilidadePme } from "../../../../_services/elegibili
 import InfoElegibilidadePme from "./InfoElegebilidadePme"
 import ModalConcluirElegibilidadePme from "./Modals/ModalConcluirElegibilidadePme"
 import ModalDevolverElegibilidadePme from "./Modals/ModalDevolverElegiblidadePme"
+import ModalRedistribuirElegibilidadePme from "./Modals/ModalRedistribuirElegibilidadePme"
 import AgendaElegibilidadePme from "./AgendaElegibilidadePme"
 
 const DetalhesElegibilidadePme = () => {
@@ -43,6 +44,13 @@ const DetalhesElegibilidadePme = () => {
                         ) : null
                     }
                     {
+                        proposta.status === 'Redistribuído' ? (
+                            <Alert variant="filled" severity="info" >
+                                Proposta redistribuída por {proposta.analista}
+                            </Alert>
+                        ) : null
+                    }
+                    {
                         proposta.status === 'Devolvida' ? (
                             <Alert variant="filled" severity="warning" >
                                 Proposta devolvida por {proposta.analista}
@@ -63,6 +71,7 @@ const DetalhesElegibilidadePme = () => {
                                     <>
                                         <ModalConcluirElegibilidadePme setFlushHook={setFlushHook} />
                                         <ModalDevolverElegibilidadePme setFlushHook={setFlushHook} />
+                                        <ModalRedistribuirElegibilidadePme setFlushHook={setFlushHook} />
                                     </>
                                 ) : null
                             }

@@ -8,6 +8,8 @@ import Modal from 'react-modal'
 import './ProcessamentoPacote.css'
 import moment from "moment";
 import { anexarGravacao, atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, novoParecerAgenda, voltarFasePacote } from "../../../_services/rsd.service";
+import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
+import { Box } from "@mui/material";
 
 Modal.setAppElement('#root')
 
@@ -447,6 +449,9 @@ const ProcessamentoPacote = () => {
                     <div className="title">
                         <h3>Status Pacote: {statusPacote}</h3>
                     </div>
+                    <Box m={1}>
+                        <ModalPatologias idCelula={idPacote} celula={'RSD'} />
+                    </Box>
                     <div className="titulo-informacoes-gerais">
                         <span>Pedidos de Reembolso</span>
                     </div>

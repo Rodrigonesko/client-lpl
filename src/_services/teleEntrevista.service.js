@@ -14,6 +14,10 @@ export const mostrarPropostaPorId = async (id) => {
     return await new ApiCall(`/proposta/${id}`, URL_API).get()
 }
 
+export const getPropostasNaoRealizadasTele = async () => {
+    return await new ApiCall(`/naoRealizadas`, URL_API).get()
+}
+
 export const adicionaCid = async (cid, descricao) => {
     return await new ApiCall('/entrevistas/cid/adicionar').post(cid, descricao)
 }

@@ -9,6 +9,7 @@ const LiberacaoModulos = () => {
     const [email, setEmail] = useState('')
     const [enfermeiro, setEnfermeiro] = useState(false)
     const [elegibilidade, setElegibilidade] = useState(false)
+    const [rsd, setRsd] = useState(false)
     const [busca, setBusca] = useState(false)
     const [msg, setMsg] = useState('')
     const [entrada1, setEntrada1] = useState('')
@@ -50,6 +51,7 @@ const LiberacaoModulos = () => {
                 setUsuario(result.user.name)
                 setAtividadePrincipal(result.user.atividadePrincipal)
                 setCoren(result.user.coren)
+                setRsd(result.user.rsd)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -79,7 +81,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd })
 
             setMsg('Modulos atualizados com sucesso!')
 
@@ -139,7 +141,18 @@ const LiberacaoModulos = () => {
                                 </Typography>
                                 <Box >
                                     <FormControlLabel
-                                        value="start"
+                                        value={rsd}
+                                        control={<Checkbox value={rsd} checked={rsd} />}
+                                        label="RSD"
+                                        labelPlacement="start"
+                                        onChange={() => {
+                                            setRsd(!rsd)
+                                        }}
+                                    />
+                                </Box>
+                                <Box >
+                                    <FormControlLabel
+                                        value={elegibilidade}
                                         control={<Checkbox defaultChecked={elegibilidade} />}
                                         label="Elegiblidade"
                                         labelPlacement="start"
@@ -148,7 +161,7 @@ const LiberacaoModulos = () => {
                                 </Box>
                                 <Box>
                                     <FormControlLabel
-                                        value="start"
+                                        value={enfermeiro}
                                         control={<Checkbox defaultChecked={enfermeiro} />}
                                         label="Tele entrevista"
                                         labelPlacement="start"
