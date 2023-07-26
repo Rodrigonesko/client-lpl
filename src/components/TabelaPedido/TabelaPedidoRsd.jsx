@@ -1,26 +1,27 @@
 import { TableRow, TableCell, Collapse, Box, Table, TableHead, TableBody, Button } from "@mui/material"
-import { buscarClinica, devolverPedido, editarPedido, prioridadeDossie, voltarFasePedido } from "../../_services/rsd.service";
 import RowPedidoRsd from "./RowPedidoRsd";
 
 const TabelaPedidoRsd = (props) => {
 
-    const { open, protocolo, pedidos, pacote } = props
+    const { open, protocolo, pedidos, pacote, flushHook, check, checkPedidos, setCheckPedidos, finalizados } = props
+
+    console.log(open, protocolo, pedidos, pacote, flushHook, check, checkPedidos, setCheckPedidos, finalizados);
 
     return (
-        <TableRow>
+        <TableRow size="small" >
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8} >
                 <Collapse in={open} timeout='auto' unmountOnExit >
                     <Box sx={{ margin: 1 }}>
-                        <Table size="small">
+                        <Table >
                             <TableHead className="table-header">
                                 <TableRow>
-                                    <TableCell>Pedido</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>R$ Apresentado</TableCell>
-                                    <TableCell>R$ Reembolsado</TableCell>
-                                    <TableCell>CNPJ</TableCell>
-                                    <TableCell>Clínica</TableCell>
-                                    <TableCell>NF</TableCell>
+                                    <TableCell align='center'>Pedido</TableCell>
+                                    <TableCell align='center'>Status</TableCell>
+                                    <TableCell align='center'>R$ Apresentado</TableCell>
+                                    <TableCell align='center'>R$ Reembolsado</TableCell>
+                                    <TableCell align='center'>CNPJ</TableCell>
+                                    <TableCell align='center'>Clínica</TableCell>
+                                    <TableCell align='center'>NF</TableCell>
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>
@@ -31,18 +32,36 @@ const TabelaPedidoRsd = (props) => {
                                 {
                                     pedidos.map(pedido => {
                                         if (protocolo === pedido.protocolo && pedido.pacote === pacote) {
-                                            return (
-                                                <RowPedidoRsd pedido={pedido} />
-                                            )
+                                            console.log('aaa');
+                                            if (finalizados && pedido.status === 'Finalizado') {
+                                                return (
+                                                    <RowPedidoRsd
+                                                        flushHook={flushHook}
+                                                        pedido={pedido}
+                                                        check={check}
+                                                        checkPedidos={checkPedidos}
+                                                        setCheckPedidos={setCheckPedidos}
+                                                    />
+                                                )
+                                            }
+                                            if (!finalizados && pedido.status !== 'Finalizado') {
+                                                return (
+                                                    <RowPedidoRsd
+                                                        flushHook={flushHook}
+                                                        pedido={pedido}
+                                                        check={check}
+                                                        checkPedidos={checkPedidos}
+                                                        setCheckPedidos={setCheckPedidos}
+                                                    />
+                                                )
+                                            }
                                         }
                                     })
                                 }
-                                <TableRow>
-                                    <TableCell>
-                                        <Button href={`/rsd/CriarPedido/${protocolo}`} target='_blank' variant="contained">Novo Pedido</Button>
-                                    </TableCell>
-                                </TableRow>
                             </TableBody>
+                            <Box mt={1} ml={1}>
+                                <Button size="small" href={`/rsd/CriarPedido/${protocolo}`} target='_blank' variant="contained">Novo Pedido</Button>
+                            </Box>
                         </Table>
                     </Box>
                 </Collapse>

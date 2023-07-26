@@ -171,7 +171,7 @@ const RespostasJanelasHorarios = () => {
 
             setLoadingReenviar(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reenviarHorariosDisponiveis`, {
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reenviarHorariosDisponiveis`, {
                 whatsapps: propostasReenviar,
                 data: dataReenviar
             }, {

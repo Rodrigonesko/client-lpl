@@ -1,9 +1,11 @@
-import { TableRow, TableCell, TextField, Typography, Button, Checkbox, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
-import { buscarClinica, editarPedido } from "../../_services/rsd.service"
-import { useState } from "react"
+import { TableRow, TableCell, TextField, Typography, Button, Checkbox, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, Select, MenuItem, CircularProgress } from "@mui/material"
+import { buscarClinica, devolverPedido, editarPedido } from "../../_services/rsd.service"
+import { useState, useEffect } from "react"
 
 
-const RowPedidoRsd = ({ pedido }) => {
+const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
+
+
 
     const [numero, setNumero] = useState(pedido.numero)
     const [valorApresentado, setValorApresentado] = useState(pedido.valorApresentado)
@@ -13,6 +15,8 @@ const RowPedidoRsd = ({ pedido }) => {
     const [motivoInativo, setMotivoInativo] = useState('Devolvido')
     const [open, setOpen] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [check, setCheck] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
@@ -59,32 +63,118 @@ const RowPedidoRsd = ({ pedido }) => {
         }
     }
 
+    const handleInativar = async () => {
+
+        setLoading(true)
+
+        await devolverPedido({
+            id: pedido._id,
+            motivoInativo
+        })
+
+        setLoading(false)
+        flushHook(true)
+        handleCloseDialog()
+    }
+
+    const handleAdicionarPedidoPacote = (e) => {
+        if (e.target.checked) {
+            const novoArray = [...checkPedidos]
+            novoArray.push(pedido._id)
+            setCheckPedidos(novoArray)
+
+        } else {
+            const novoArray = checkPedidos.filter(id => {
+                return pedido._id !== id
+            })
+
+            setCheckPedidos(novoArray)
+        }
+    }
+
+    const verifyChecked = () => {
+
+        if (checkPedidos) {
+            if (checkPedidos.some(id => pedido._id === id)) {
+                setCheck(true)
+            } else {
+                setCheck(false)
+            }
+        }
+    }
+
+    useEffect(() => {
+        verifyChecked()
+    }, [JSON.stringify(checkPedidos)])
+
     return (
         <TableRow>
-            <TableCell><TextField onChange={e => setNumero(e.target.value)} value={numero} inputProps={{
-                style: { fontSize: '14px', padding: '4px', width: '80px' }
-            }} /></TableCell>
+            <TableCell>
+                <TextField onChange={e => setNumero(e.target.value)} value={numero} inputProps={{
+                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                }} />
+            </TableCell>
             <TableCell>{pedido.status}</TableCell>
-            <TableCell><TextField size="small" onChange={e => setValorApresentado(e.target.value)} value={valorApresentado} inputProps={{
-                style: { fontSize: '14px', padding: '4px', width: '80px' }
-            }} /></TableCell>
+            <TableCell>
+                <TextField size="small" onChange={e => setValorApresentado(e.target.value)} value={valorApresentado} inputProps={{
+                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                }} />
+            </TableCell>
             <TableCell>{pedido.valorReembolsado}</TableCell>
-            <TableCell><TextField onChange={e => {
-                setCnpj(e.target.value)
-                buscaClinica(e.target.value)
-            }} size="small" value={cnpj} inputProps={{
-                style: { fontSize: '14px', padding: '4px', width: '80px' }
-            }} /></TableCell>
-            <TableCell><TextField onChange={e => setClinica(e.target.value)} size="small" value={clinica} inputProps={{
-                style: { fontSize: '14px', padding: '4px', width: '80px' }
-            }} /></TableCell>
-            <TableCell><TextField onChange={e => setNf(e.target.value)} size="small" value={nf} inputProps={{
-                style: { fontSize: '14px', padding: '4px', width: '80px' }
-            }} /></TableCell>
-            <TableCell><Button color="success" size="small" onClick={handleEditarPedido} >Salvar</Button></TableCell>
-            <TableCell><Button color='inherit' size="small" onClick={handleOpenDialog} >Inativar</Button></TableCell>
+            <TableCell>
+                <TextField onChange={e => {
+                    setCnpj(e.target.value)
+                    buscaClinica(e.target.value)
+                }} size="small" value={cnpj} inputProps={{
+                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                }} />
+            </TableCell>
+            <TableCell>
+                <TextField onChange={e => setClinica(e.target.value)} size="small" value={clinica} inputProps={{
+                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                }} />
+            </TableCell>
+            <TableCell>
+                <TextField onChange={e => setNf(e.target.value)} size="small" value={nf} inputProps={{
+                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                }} />
+            </TableCell>
+            {
+                pedido.fase !== 'Finalizado' ? (
+                    <>
+                        <TableCell>
+                            <Button color="success" size="small" onClick={handleEditarPedido} >Salvar</Button>
+                        </TableCell>
+                        <TableCell>
+                            <Button color='inherit' size="small" onClick={handleOpenDialog} >Inativar</Button>
+                        </TableCell>
+                    </>
+                ) : (
+                    <>
+                        <TableCell>
+                            <Button color='warning' size="small">Voltar Fase</Button>
+                        </TableCell>
+                        <TableCell>
+
+                        </TableCell>
+                    </>
+                )
+            }
+
             <TableCell>{pedido.fila}</TableCell>
-            <TableCell><Checkbox></Checkbox></TableCell>
+            {
+                pedido.statusPacote === 'Não iniciado' ? (
+
+                    <TableCell>
+                        <Checkbox checked={check} onChange={handleAdicionarPedidoPacote} />
+                    </TableCell>
+
+                ) : (
+                    <TableCell>
+                        Prioridade Dossiê
+                    </TableCell>
+                )
+            }
             <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
                 <Alert variant="filled" onClose={handleClose} severity={'success'} sx={{ width: '100%' }}>
                     Pedido editado com sucesso
@@ -130,8 +220,8 @@ const RowPedidoRsd = ({ pedido }) => {
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDialog}>Fechar</Button>
-                    <Button onClick={handleCloseDialog} autoFocus>
+                    <Button onClick={handleCloseDialog} disabled={loading} variant="contained" color="inherit">Fechar</Button>
+                    <Button startIcon={loading ? <CircularProgress size='20px' /> : null} disabled={loading} onClick={handleInativar} variant="contained" >
                         Inativar
                     </Button>
                 </DialogActions>

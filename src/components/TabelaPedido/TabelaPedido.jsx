@@ -6,7 +6,7 @@ import { buscarClinica, devolverPedido, editarPedido, prioridadeDossie, voltarFa
 
 Modal.setAppElement('#root')
 
-const TabelaPedido = ({ pedidos, protocolo, pacote, verificaPacote, finalizados, todos }) => {
+const TabelaPedido = ({ pedidos, protocolo, pacote, finalizados, todos }) => {
 
     const [modalSalvar, setModalSalvar] = useState(false)
     const [modalInativar, setModalInativar] = useState(false)
