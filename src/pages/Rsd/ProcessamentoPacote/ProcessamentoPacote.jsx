@@ -9,7 +9,10 @@ import './ProcessamentoPacote.css'
 import moment from "moment";
 import { anexarGravacao, atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, novoParecerAgenda, voltarFasePacote } from "../../../_services/rsd.service";
 import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
-import { Box } from "@mui/material";
+import { Box, Container, Typography, Button, FormControlLabel, Checkbox } from "@mui/material";
+import TabelaProtocolosProcessamento from "./TabelaProtocolosProcessamento";
+import AgendaProcessamentoRsd from "./AgendaProcessamentoRsd";
+import TabelaArquivosProcessamento from "./TabelaArquivosProcessamento";
 
 Modal.setAppElement('#root')
 
@@ -48,15 +51,13 @@ const ProcessamentoPacote = () => {
     const [contatoAgendar, setContatoAgendar] = useState(false)
     const [contatoNaoEntrado, setContatoNaoEntrado] = useState(false)
 
+    const [flushHook, setFlushHook] = useState(false)
+
     const openModal = () => {
         setModalIsOpen(true)
     }
     const closeModal = () => {
         setModalIsOpen(false)
-    }
-
-    const openModalAgenda = () => {
-        setModalAgenda(true)
     }
 
     const closeModalAgenda = () => {
@@ -158,22 +159,6 @@ const ProcessamentoPacote = () => {
             finalizacao.forEach((item, chave) => {
                 finalizacoes.push([chave, item])
             })
-
-            // console.log(motivoContato);
-            // console.log(servicos);
-            // console.log(finalizacoes);
-
-            // await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pedido/atualizar`, {
-            //     pacote: idPacote,
-            //     sucesso: houveSucesso,
-            //     motivoContato: motivosContato,
-            //     confirmacaoServico: servicos,
-            //     finalizacao: finalizacoes,
-            //     justificativa,
-            //     dataSelo
-            // }, {
-            //     withCredentials: true
-            // })
 
             await atualizarPedido({
                 pacote: idPacote,
@@ -326,6 +311,8 @@ const ProcessamentoPacote = () => {
 
     useEffect(() => {
 
+        setFlushHook(false)
+
         const buscarAgenda = async () => {
             try {
 
@@ -430,31 +417,35 @@ const ProcessamentoPacote = () => {
         buscarFormasPagamento()
         buscarStatusFinalizacao()
         buscarAgenda()
-    }, [idPacote])
+    }, [idPacote, flushHook])
 
     return (
         <>
             <Sidebar />
-            <section className="section-processamento-pacote-container">
-                <div className="processamento-pacote-container">
-                    <div className="title">
+            {/* <section className="section-processamento-pacote-container"> */}
+            <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
+                <Container style={{ maxWidth: '1300px' }}>
+                    <Typography m={1} variant="h6" >
                         Processamento
-                    </div>
-                    <div className="titulo-informacoes-gerais">
-                        <span>Infomações Gerais</span>
-                    </div>
+                    </Typography>
+                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
+                        Infomações Gerais
+                    </Typography>
                     <InformacoesGerais
                         mo={mo}
                     />
-                    <div className="title">
-                        <h3>Status Pacote: {statusPacote}</h3>
-                    </div>
+                    <Typography m={1} variant="h6" >
+                        Status Pacote: {statusPacote}
+                    </Typography>
                     <Box m={1}>
                         <ModalPatologias idCelula={idPacote} celula={'RSD'} />
                     </Box>
-                    <div className="titulo-informacoes-gerais">
-                        <span>Pedidos de Reembolso</span>
-                    </div>
+                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
+                        Pedidos de Reembolso
+                    </Typography>
+                    <TabelaProtocolosProcessamento protocolos={protocolos} pedidos={pedidos} flushHook={setFlushHook} />
+                    {/* <br />
+                    <br />
                     <div className="pedidos-reembolso-container">
                         <table className="table">
                             <thead className="table-header">
@@ -488,30 +479,40 @@ const ProcessamentoPacote = () => {
                                 }
                             </tbody>
                         </table>
-                    </div>
-                    <div className="btns-processamento">
+                    </div> */}
+                    <Box m={2} >
                         {
                             finalizado ? (
-                                <button onClick={() => {
+                                <Button onClick={() => {
                                     mostrarProcessamento()
                                     verificarProcessamento(pedidos)
-                                }} className="iniciar-processamento-btn">Iniciar Processamento</button>
+                                }} variant="contained"  >Iniciar Processamento</Button>
                             ) : (
-                                <button onClick={voltarFase} className="iniciar-processamento-btn">Voltar Fase</button>
+                                <Button onClick={voltarFase}>Voltar Fase</Button>
                             )
                         }
-
-                        <input type="checkbox" name="prioridade-dossie" checked={prioridadePacote} id="prioridade-dossie" onClick={(e) => {
+                        <FormControlLabel
+                            sx={{ margin: '10px' }}
+                            control={<Checkbox checked={prioridadePacote} />}
+                            label='Prioridade Dossie'
+                            id="prioridade-dossie"
+                            name="prioridade-dossie"
+                            onChange={e => {
+                                setPrioridadePacote(!prioridadePacote)
+                                prioridadeDossiePacote(e.target.checked)
+                            }}
+                        />
+                        {/* <input type="checkbox" name="prioridade-dossie" checked={prioridadePacote} id="prioridade-dossie" onClick={(e) => {
                             setPrioridadePacote(!prioridadePacote)
                             prioridadeDossiePacote(e.target.checked)
                         }} />
-                        <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label>
-                    </div>
-                    <div className="roteiro-container">
-                        <div className="roteiro">
-                            <div className="titulo-informacoes-gerais">
-                                <span>Roteiro</span>
-                            </div>
+                        <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label> */}
+                    </Box>
+                    <Box display='flex'>
+                        <div className="roteiro" style={{ maxWidth: '800px' }}>
+                            <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
+                                Roteiro
+                            </Typography>
                             <div className="table-roteiro">
                                 <table className="table tabela-roteiro">
                                     <tbody>
@@ -785,10 +786,15 @@ const ProcessamentoPacote = () => {
                                         </tr>
                                     </tbody>
                                 </table>
+                                <button onClick={salvar} >Salvar</button>
                             </div>
                         </div>
-                        <div className="agenda-processamento">
-                            <div className="titulo-informacoes-gerais">
+                        <Box maxWidth='400px'>
+
+                            <AgendaProcessamentoRsd flushHook={setFlushHook} agenda={agenda} />
+
+
+                            {/* <div className="titulo-informacoes-gerais">
                                 <span>Agenda</span>
                             </div>
                             <div className="table-agenda">
@@ -815,8 +821,11 @@ const ProcessamentoPacote = () => {
                                     </tbody>
                                 </table>
                                 <button onClick={openModalAgenda} >Escrevar na Agenda</button>
-                            </div>
-                            <div className="titulo-informacoes-gerais">
+                            </div> */}
+
+                            <TabelaArquivosProcessamento salvar={salvar} arquivos={arquivos} flushHook={setFlushHook} />
+
+                            {/* <div className="titulo-informacoes-gerais">
                                 <span>Arquivos</span>
                             </div>
                             <div className="tabela-arquivos">
@@ -845,11 +854,10 @@ const ProcessamentoPacote = () => {
                                     </tbody>
                                 </table>
                                 <button onClick={openModal} >Anexar Arquivo</button>
-                                <button onClick={salvar} >Salvar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </div> */}
+                        </Box>
+                    </Box>
+                </Container>
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -886,7 +894,9 @@ const ProcessamentoPacote = () => {
                         <button onClick={enviarComentarioAgenda}>Salvar</button>
                     </form>
                 </Modal>
-            </section>
+            </Box>
+
+            {/* </section> */}
         </>
     )
 }

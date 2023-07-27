@@ -1,11 +1,9 @@
-import { TableRow, TableCell, TextField, Typography, Button, Checkbox, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, Select, MenuItem, CircularProgress } from "@mui/material"
-import { buscarClinica, devolverPedido, editarPedido } from "../../_services/rsd.service"
+import { TableRow, TableCell, TextField, Typography, Button, Checkbox, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, Select, MenuItem, CircularProgress, FormControlLabel, Tooltip } from "@mui/material"
+import { buscarClinica, devolverPedido, editarPedido, prioridadeDossie, voltarFasePedido } from "../../_services/rsd.service"
 import { useState, useEffect } from "react"
-
+import { AiOutlineRollback } from 'react-icons/ai'
 
 const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
-
-
 
     const [numero, setNumero] = useState(pedido.numero)
     const [valorApresentado, setValorApresentado] = useState(pedido.valorApresentado)
@@ -17,6 +15,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const [loading, setLoading] = useState(false)
     const [check, setCheck] = useState(false)
+    const [prioridade, setPrioridade] = useState(pedido.prioridadeDossie)
 
     const handleClose = () => {
         setOpen(false)
@@ -103,6 +102,24 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
         }
     }
 
+    const handlePrioridadeDossie = async () => {
+        setPrioridade(!prioridade)
+        const res = await prioridadeDossie({
+            pedido: numero,
+            prioridade: !prioridade
+        })
+
+        flushHook(true)
+        console.log(res);
+    }
+
+    const handleVoltarFase = async () => {
+        voltarFasePedido({
+            pedido: numero
+        })
+        flushHook(true)
+    }
+
     useEffect(() => {
         verifyChecked()
     }, [JSON.stringify(checkPedidos)])
@@ -152,7 +169,9 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
                 ) : (
                     <>
                         <TableCell>
-                            <Button color='warning' size="small">Voltar Fase</Button>
+                            <Tooltip title='Voltar fase'>
+                                <Button onClick={handleVoltarFase} variant="contained" color='warning'><AiOutlineRollback /></Button>
+                            </Tooltip>
                         </TableCell>
                         <TableCell>
 
@@ -171,7 +190,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
 
                 ) : (
                     <TableCell>
-                        Prioridade Dossiê
+                        <FormControlLabel control={<Checkbox checked={prioridade} />} label='Prioridade Dossiê' onChange={handlePrioridadeDossie} />
                     </TableCell>
                 )
             }

@@ -120,7 +120,7 @@ function Row(props) {
 
 const TabelaProtocoloRsd = (props) => {
 
-    const { open, pacote, pedidos, verificaPacote, finalizados, flushHook } = props
+    const { open, pacote, pedidos, finalizados, flushHook } = props
 
     const [protocolos, setProtocolos] = useState([])
 

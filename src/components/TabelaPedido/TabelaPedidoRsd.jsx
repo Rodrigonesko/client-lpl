@@ -3,10 +3,8 @@ import RowPedidoRsd from "./RowPedidoRsd";
 
 const TabelaPedidoRsd = (props) => {
 
-    const { open, protocolo, pedidos, pacote, flushHook, check, checkPedidos, setCheckPedidos, finalizados } = props
-
-    console.log(open, protocolo, pedidos, pacote, flushHook, check, checkPedidos, setCheckPedidos, finalizados);
-
+    const { open, protocolo, pedidos, pacote, flushHook, check, checkPedidos, setCheckPedidos, finalizados, todos } = props
+    
     return (
         <TableRow size="small" >
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8} >
@@ -32,7 +30,6 @@ const TabelaPedidoRsd = (props) => {
                                 {
                                     pedidos.map(pedido => {
                                         if (protocolo === pedido.protocolo && pedido.pacote === pacote) {
-                                            console.log('aaa');
                                             if (finalizados && pedido.status === 'Finalizado') {
                                                 return (
                                                     <RowPedidoRsd
@@ -45,6 +42,18 @@ const TabelaPedidoRsd = (props) => {
                                                 )
                                             }
                                             if (!finalizados && pedido.status !== 'Finalizado') {
+                                                return (
+                                                    <RowPedidoRsd
+                                                        flushHook={flushHook}
+                                                        pedido={pedido}
+                                                        check={check}
+                                                        checkPedidos={checkPedidos}
+                                                        setCheckPedidos={setCheckPedidos}
+                                                    />
+                                                )
+                                            }
+
+                                            if (todos) {
                                                 return (
                                                     <RowPedidoRsd
                                                         flushHook={flushHook}

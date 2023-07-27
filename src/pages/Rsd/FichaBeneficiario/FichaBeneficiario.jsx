@@ -171,7 +171,7 @@ const FichaBeneficiario = () => {
         <>
             <Sidebar></Sidebar>
             <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
-                <Container >
+                <Container style={{maxWidth: '1300px'}} >
                     <Box className="cadastro-beneficiario-container">
                         <Typography variant="h5" m={2}>
                             Ficha Beneficiário

@@ -60,9 +60,13 @@ const AnaliseElegibilidadeDetalhes = () => {
 
             const resultPlanos = await getPlanosBlacklist()
 
-            console.log(resultPlanos);
+            let arrAuxPlanos = resultPlanos.map(plano => {
+                return plano.plano
+            })
 
-            setPlanos(resultPlanos)
+            console.log(arrAuxPlanos);
+
+            setPlanos(arrAuxPlanos)
 
         } catch (error) {
             console.log(error);
@@ -97,7 +101,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                     </Typography>
                     {
                         planos.includes(proposta.plano) ? (
-                            <Alert severity="error">Plano na Blacklist - {proposta.plano}</Alert>
+                            <Alert variant="filled" severity="error">Plano na Blacklist - {proposta.plano}</Alert>
                         ) : null
                     }
                     <Box component={Paper} elevation={3} p={2}>

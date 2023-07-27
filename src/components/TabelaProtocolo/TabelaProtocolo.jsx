@@ -85,7 +85,7 @@ const TabelaProtocolo = ({ pedidos, pacote, verificaPacote = false, finalizados,
                                                         <td>{e.statusProtocolo}</td>
                                                     </tr>
                                                     <tr className="none">
-                                                        <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} verificaPacote={verificaPacote} finalizados={finalizados} todos={todos} >
+                                                        <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={pacote} finalizados={finalizados} todos={todos} >
 
                                                         </TabelaPedido>
                                                     </tr>
