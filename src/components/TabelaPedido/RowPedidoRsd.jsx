@@ -117,6 +117,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
         voltarFasePedido({
             pedido: numero
         })
+        
         flushHook(true)
     }
 

@@ -12,9 +12,6 @@ function Row(props) {
     const { idPacote } = useParams()
 
     const [open, setOpen] = useState(false)
-
-    console.log(pedidos);
-
     return (
         <>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>

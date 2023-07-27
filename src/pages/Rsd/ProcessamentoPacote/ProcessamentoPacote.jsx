@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { useParams } from "react-router-dom";
-import { FaAngleDown } from "react-icons/fa";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
-import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";
 import Modal from 'react-modal'
 import './ProcessamentoPacote.css'
-import moment from "moment";
-import { anexarGravacao, atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, novoParecerAgenda, voltarFasePacote } from "../../../_services/rsd.service";
+import { atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, voltarFasePacote } from "../../../_services/rsd.service";
 import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
 import { Box, Container, Typography, Button, FormControlLabel, Checkbox } from "@mui/material";
 import TabelaProtocolosProcessamento from "./TabelaProtocolosProcessamento";
 import AgendaProcessamentoRsd from "./AgendaProcessamentoRsd";
 import TabelaArquivosProcessamento from "./TabelaArquivosProcessamento";
+import RoteiroProcessamento from "./RoteiroProcessamento";
 
 Modal.setAppElement('#root')
 
@@ -24,21 +22,17 @@ const ProcessamentoPacote = () => {
 
     const { mo, idPacote } = useParams()
 
-    const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [modalAgenda, setModalAgenda] = useState(false)
     const [pedidos, setPedidos] = useState([])
     const [protocolos, setProtocolos] = useState([])
     const [statusPacote, setStatusPacote] = useState('')
     const [numeroTentativa, setNumeroTentativa] = useState('')
     const [retornoContato, setRetornoContato] = useState(false)
-    const [gravacao, setGravacao] = useState()
     const [arquivos, setArquivos] = useState([])
     const [formasPagamento, setFormasPagamento] = useState([])
     const [statusFinalizacao, setStatusFinalizacao] = useState([])
     const [houveSucesso, setHouveSucesso] = useState('')
     const [agenda, setAgenda] = useState([])
     const [finalizado, setFinalizado] = useState(true)
-    const [parecer, setParecer] = useState('')
     const [naoContato, setNaoContato] = useState(false)
     const [justificativa, setJustificativa] = useState('')
     const [dataSelo, setDataSelo] = useState('')
@@ -53,59 +47,8 @@ const ProcessamentoPacote = () => {
 
     const [flushHook, setFlushHook] = useState(false)
 
-    const openModal = () => {
-        setModalIsOpen(true)
-    }
-    const closeModal = () => {
-        setModalIsOpen(false)
-    }
-
-    const closeModalAgenda = () => {
-        setModalAgenda(false)
-    }
-
-
-    const handlerAnexarGravacao = async e => {
-
-        e.preventDefault()
-
-        try {
-
-            let formData = new FormData()
-
-            formData.append('file', gravacao, gravacao.name)
-
-            // const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/gravacao/anexar/${idPacote}`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
-
-            await anexarGravacao(
-                formData
-                , idPacote)
-
-            // if (result.status === 200) {
-            salvar()
-            window.location.reload()
-            // }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const download = (url, filename) => {
-        fetch(url)
-            .then(response => response.blob())
-            .then(blob => {
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = filename;
-                link.click();
-            })
-            .catch(console.error);
-    }
     const buscarFormasPagamento = async () => {
         try {
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/formasPagamento`, { withCredentials: true })
-
             const result = await getFormasPagamento()
 
             setFormasPagamento(result.formasPagamento)
@@ -117,8 +60,6 @@ const ProcessamentoPacote = () => {
     const buscarStatusFinalizacao = async () => {
         try {
 
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/statusFinalizacoes`, { withCredentials: true })
-
             const result = await getStatusFinalizacao()
 
             setStatusFinalizacao(result.statusFinalizacoes)
@@ -127,15 +68,7 @@ const ProcessamentoPacote = () => {
             console.log(error);
         }
     }
-    const mostrarPedidos = e => {
-        let trPedidos = e.target.parentElement.nextSibling
 
-        if (!trPedidos.classList.contains('data')) {
-            trPedidos.classList.toggle('none')
-        } else {
-            console.log(trPedidos.parentElement.nextSibling.classList.toggle('none'));
-        }
-    }
     const mostrarProcessamento = () => {
 
         document.getElementById('tr-processamento-1').classList.remove('none')
@@ -205,45 +138,14 @@ const ProcessamentoPacote = () => {
 
     }
 
-    const enviarComentarioAgenda = async e => {
+    const voltarFase = async () => {
         try {
-
-            e.preventDefault()
-
-            // const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/agenda/novoParecer`, {
-            //     pacote: idPacote,
-            //     parecer
-            // }, {
-            //     withCredentials: true
-            // })
-
-            await novoParecerAgenda({
-                pacote: idPacote,
-                parecer
-            })
-
-
-            window.location.reload()
-
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    const voltarFase = async e => {
-        try {
-
-            // const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/voltarFase`, {
-            //     pacote: idPacote
-            // }, {
-            //     withCredentials: true
-            // })
 
             await voltarFasePacote({
                 pacote: idPacote
             })
 
-            window.location.reload()
+            setFlushHook(true)
 
 
         } catch (error) {
@@ -290,19 +192,12 @@ const ProcessamentoPacote = () => {
 
     const prioridadeDossiePacote = async (prioridade) => {
         try {
-
-            // const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/rsd/pacote/prioridadeDossie`, {
-            //     pacote: idPacote,
-            //     prioridade
-            // }, {
-            //     withCredentials: true
-            // })
-
-
             await inserirPrioridadeDossiePacote({
                 pacote: idPacote,
                 prioridade
             })
+
+            setFlushHook(true)
 
         } catch (error) {
             console.log(error);
@@ -316,8 +211,6 @@ const ProcessamentoPacote = () => {
         const buscarAgenda = async () => {
             try {
 
-                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/agenda/${idPacote}`, { withCredentials: true })
-
                 const result = await getAgendaRsd(idPacote)
 
                 setAgenda(result.agenda)
@@ -330,8 +223,6 @@ const ProcessamentoPacote = () => {
         const buscarArquivos = async e => {
             try {
 
-                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/arquivos/${idPacote}`, { withCredentials: true })
-
                 const result = await getArquivos(idPacote)
 
                 setArquivos(result.arquivos)
@@ -343,8 +234,6 @@ const ProcessamentoPacote = () => {
 
         const buscarPedidos = async () => {
             try {
-
-                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/pacote/${idPacote}`, { withCredentials: true })
 
                 const result = await getPedidosPorPacote(idPacote)
 
@@ -360,10 +249,7 @@ const ProcessamentoPacote = () => {
                     }
                 })
 
-                console.log(countTamanhoPrioridade, tamanhoPrioridade);
-
                 if (countTamanhoPrioridade === tamanhoPrioridade) {
-                    console.log('entrou');
                     setPrioridadePacote(true)
                 }
 
@@ -422,7 +308,6 @@ const ProcessamentoPacote = () => {
     return (
         <>
             <Sidebar />
-            {/* <section className="section-processamento-pacote-container"> */}
             <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
                 <Container style={{ maxWidth: '1300px' }}>
                     <Typography m={1} variant="h6" >
@@ -444,42 +329,6 @@ const ProcessamentoPacote = () => {
                         Pedidos de Reembolso
                     </Typography>
                     <TabelaProtocolosProcessamento protocolos={protocolos} pedidos={pedidos} flushHook={setFlushHook} />
-                    {/* <br />
-                    <br />
-                    <div className="pedidos-reembolso-container">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Protocolo</th>
-                                    <th>Data Solicitação</th>
-                                    <th>Data Pagamento</th>
-                                    <th>Status</th>
-                                    <th>Data Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    protocolos.map(e => {
-
-                                        return (
-                                            <>
-                                                <tr key={e.protocolo}>
-                                                    <td className="td-protocolo" onClick={mostrarPedidos} > <FaAngleDown /> {e.protocolo}</td>
-                                                    <td className="data">{moment(e.dataSolicitacao).format('DD/MM/YYYY')}</td>
-                                                    <td>{moment(e.dataPagamento).format('DD/MM/YYYY')}</td>
-                                                    <td>{e.statusProtocolo}</td>
-                                                    <td>{moment(e.updatedAt).format('DD/MM/YYYY')}</td>
-                                                </tr>
-                                                <tr className="none" >
-                                                    <TabelaPedido pedidos={pedidos} protocolo={e.protocolo} pacote={idPacote} todos={true} />
-                                                </tr>
-                                            </>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div> */}
                     <Box m={2} >
                         {
                             finalizado ? (
@@ -488,7 +337,7 @@ const ProcessamentoPacote = () => {
                                     verificarProcessamento(pedidos)
                                 }} variant="contained"  >Iniciar Processamento</Button>
                             ) : (
-                                <Button onClick={voltarFase}>Voltar Fase</Button>
+                                <Button variant="contained" size="small" color="warning" onClick={voltarFase}>Voltar Fase</Button>
                             )
                         }
                         <FormControlLabel
@@ -502,17 +351,13 @@ const ProcessamentoPacote = () => {
                                 prioridadeDossiePacote(e.target.checked)
                             }}
                         />
-                        {/* <input type="checkbox" name="prioridade-dossie" checked={prioridadePacote} id="prioridade-dossie" onClick={(e) => {
-                            setPrioridadePacote(!prioridadePacote)
-                            prioridadeDossiePacote(e.target.checked)
-                        }} />
-                        <label htmlFor="prioridade-dossie">Prioridade para Dossie?</label> */}
                     </Box>
                     <Box display='flex'>
                         <div className="roteiro" style={{ maxWidth: '800px' }}>
                             <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
                                 Roteiro
                             </Typography>
+                            <RoteiroProcessamento pedidos={pedidos} />
                             <div className="table-roteiro">
                                 <table className="table tabela-roteiro">
                                     <tbody>
@@ -790,113 +635,12 @@ const ProcessamentoPacote = () => {
                             </div>
                         </div>
                         <Box maxWidth='400px'>
-
                             <AgendaProcessamentoRsd flushHook={setFlushHook} agenda={agenda} />
-
-
-                            {/* <div className="titulo-informacoes-gerais">
-                                <span>Agenda</span>
-                            </div>
-                            <div className="table-agenda">
-                                <table className="table">
-                                    <thead className="table-header">
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Analista</th>
-                                            <th>Parecer</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            agenda.map(e => {
-                                                return (
-                                                    <tr key={e._id}>
-                                                        <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
-                                                        <td>{e.usuario}</td>
-                                                        <td>{e.parecer}</td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
-                                <button onClick={openModalAgenda} >Escrevar na Agenda</button>
-                            </div> */}
-
                             <TabelaArquivosProcessamento salvar={salvar} arquivos={arquivos} flushHook={setFlushHook} />
-
-                            {/* <div className="titulo-informacoes-gerais">
-                                <span>Arquivos</span>
-                            </div>
-                            <div className="tabela-arquivos">
-                                <table className="table">
-                                    <thead className="table-header">
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Data</th>
-                                            <th>Tipo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            arquivos.map(e => {
-                                                return (
-                                                    <tr key={e._id}>
-                                                        <td> <span className="link-arquivo" onClick={() => {
-                                                            download(`${process.env.REACT_APP_API_KEY}/rsd/download/${idPacote}/${e.arquivo}`, e.arquivo)
-                                                        }} >{e.arquivo}</span></td>
-                                                        <td>{moment(e.createdAt).format('DD/MM/YYYY')}</td>
-                                                        <td>{e.tipo}</td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
-                                <button onClick={openModal} >Anexar Arquivo</button>
-                            </div> */}
                         </Box>
                     </Box>
                 </Container>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'>
-                    <div className="title">
-                        <h2>Anexar Gravação</h2>
-                    </div>
-                    <form action="" encType="multipart/form-data" method="post">
-                        <div className="content-modal-gravacao">
-                            <input type="file" name="gravacao" id="gravacao" onChange={e => setGravacao(e.target.files[0])} />
-                        </div>
-                        <div className="btns-modal">
-                            <button onClick={handlerAnexarGravacao} >Anexar</button>
-                            <button onClick={() => {
-                                closeModal()
-                            }}>Fechar</button>
-                        </div>
-                    </form>
-                </Modal>
-                <Modal
-                    isOpen={modalAgenda}
-                    onRequestClose={closeModalAgenda}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'>
-                    <div className="title titulo-modal-agenda">
-                        <h2>Agenda</h2>
-                    </div>
-                    <form action="" encType="multipart/form-data" method="post" className="form-agenda">
-                        <textarea name="comentario" id="comentario" cols="40" rows="6" onChange={e => setParecer(e.target.value)}>
-                        </textarea>
-                        <button onClick={enviarComentarioAgenda}>Salvar</button>
-                    </form>
-                </Modal>
             </Box>
-
-            {/* </section> */}
         </>
     )
 }
