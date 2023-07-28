@@ -1,16 +1,44 @@
 import { TableContainer, Table, TableBody, TableRow, TableCell, Typography, Checkbox, FormControlLabel, Radio, FormControl, RadioGroup, TextField, FormLabel } from "@mui/material"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const RoteiroProcessamento = ({ pedidos }) => {
+const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) => {
 
     console.log(pedidos);
 
     const [contatoChecked, setContatoChecked] = useState(pedidos[0].contato)
     const [justificativa, setJustificativa] = useState(pedidos[0].justificativa)
-
+    const [motivoContato, setMotivoContato] = useState([])
+    const [confirmacaoServico, setConfirmacaoServico] = useState([])
 
     const handleChangeContato = (e) => {
         setContatoChecked(e.target.value)
+    }
+
+    const handleMotivoContato = (id, reconhece) => {
+        if (motivoContato.some(pedido => pedido[0] === id)) {
+            const index = motivoContato.findIndex(pedido => pedido[0] === id)
+            let arrAux = motivoContato
+            arrAux[index] = [id, reconhece]
+            setMotivoContato(arrAux)
+        } else {
+            let arrAux = motivoContato
+            arrAux.push([id, reconhece])
+            setMotivoContato(arrAux)
+        }
+    }
+
+    const handleConfirmacaoServico = (id, servico) => {
+        if (confirmacaoServico.some(pedido => pedido[0] === id)) {
+            const index = confirmacaoServico.findIndex(pedido => pedido[0] === id)
+            let arrAux = confirmacaoServico
+            arrAux[index] = [id, servico]
+            setConfirmacaoServico(arrAux)
+        } else {
+            let arrAux = confirmacaoServico
+            arrAux.push([id, servico])
+            setConfirmacaoServico(arrAux)
+        }
+        console.log(confirmacaoServico);
     }
 
     return (
@@ -78,12 +106,14 @@ const RoteiroProcessamento = ({ pedidos }) => {
                             </Typography>
                             {
                                 pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                    console.log(pedido.reconhece);
                                     return (
                                         <FormControl sx={{ m: 1 }}>
                                             <FormLabel>Pedido {pedido.numero}, NF {pedido.nf}, Clínica: {pedido.clinica}, Valor Apresentado: R$ {pedido.valorApresentado}</FormLabel>
                                             <RadioGroup
                                                 row
-                                                defaultValue='Sim'
+                                                defaultValue={pedido.reconhece && 'Sim'}
+                                                onChange={item => handleMotivoContato(pedido._id, item.target.value)}
                                             >
                                                 <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
                                                 <FormControlLabel value='Não' control={<Radio />} label='Não' />
@@ -108,6 +138,30 @@ const RoteiroProcessamento = ({ pedidos }) => {
                             <Typography>
                                 Questionar como foi realizado e solicitar envio do comprovante/declaração em até 5 dias úteis e deixa-lo ciente que o pedido poderá ser cancelado caso a documentação não seja enviada. Questionar ao beneficiário como ficou acordado o pagamento destes serviços junto a clínica:
                             </Typography>
+                            {
+                                pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                    return (
+                                        <FormControl sx={{ m: 1 }}>
+                                            <FormLabel>Pedido: {pedido.numero}</FormLabel>
+                                            <RadioGroup
+                                                row
+                                                defaultValue={pedido.formaPagamento}
+                                                onChange={item => {
+                                                    handleConfirmacaoServico(pedido._id, item.target.value)
+                                                }}
+                                            >
+                                                {
+                                                    formasPagamento.map(formaPagamento => {
+                                                        return (
+                                                            <FormControlLabel value={formaPagamento.nome} control={<Radio />} label={formaPagamento.nome} />
+                                                        )
+                                                    })
+                                                }
+                                            </RadioGroup>
+                                        </FormControl>
+                                    )
+                                })
+                            }
                         </TableCell>
                         <TableCell>
                             <Checkbox />
@@ -121,6 +175,26 @@ const RoteiroProcessamento = ({ pedidos }) => {
                             <Typography fontWeight='bold'>
                                 FINALIZAÇÃO
                             </Typography>
+                            {
+                                pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                    return (
+                                        <FormControl sx={{ m: 1 }}>
+                                            <FormLabel>Pedido: {pedido.numero}</FormLabel>
+                                            <RadioGroup
+                                                row
+                                            >
+                                                {
+                                                    statusFinalizacao.map(status => {
+                                                        return (
+                                                            <FormControlLabel value={status.descricao} control={<Radio />} label={status.descricao} />
+                                                        )
+                                                    })
+                                                }
+                                            </RadioGroup>
+                                        </FormControl>
+                                    )
+                                })
+                            }
                         </TableCell>
                         <TableCell>
                             <Checkbox>

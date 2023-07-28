@@ -204,100 +204,100 @@ const ProcessamentoPacote = () => {
         }
     }
 
+    const buscarAgenda = async () => {
+        try {
+
+            const result = await getAgendaRsd(idPacote)
+
+            setAgenda(result.agenda)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const buscarArquivos = async e => {
+        try {
+
+            const result = await getArquivos(idPacote)
+
+            setArquivos(result.arquivos)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const buscarPedidos = async () => {
+        try {
+
+            const result = await getPedidosPorPacote(idPacote)
+
+            setPedidos(result.pedidos)
+
+            let tamanhoPrioridade = result.pedidos.length
+
+            let countTamanhoPrioridade = 0
+
+            result.pedidos.forEach(e => {
+                if (e.prioridadeDossie) {
+                    countTamanhoPrioridade++
+                }
+            })
+
+            if (countTamanhoPrioridade === tamanhoPrioridade) {
+                setPrioridadePacote(true)
+            }
+
+            let arrAuxProtocolos = result.pedidos.filter((item, pos, array) => {
+                return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
+            })
+
+            setProtocolos(arrAuxProtocolos)
+
+            setStatusPacote(result.pedidos[0].statusPacote)
+
+            if (result.pedidos[0].statusPacote === 'Finalizado') {
+                setFinalizado(false)
+            }
+
+            if (result.pedidos[0].statusPacote === '2° Tentativa') {
+                setNumeroTentativa('2° Tentativa')
+            }
+
+            if (result.pedidos[0].statusPacote === '3° Tentativa') {
+                setNumeroTentativa('3° Tentativa')
+            }
+
+            if (result.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
+                setRetornoContato(true)
+            }
+
+            if (result.pedidos[0].contato === 'Não foi entrado em contato') {
+                setNaoContato(true)
+                setContatoNaoEntrado(true)
+            }
+            if (result.pedidos[0].contato === 'Sim') {
+                setContatoSim(true)
+            }
+            if (result.pedidos[0].contato === 'Não') {
+                setContatoNao(true)
+            }
+            if (result.pedidos[0].contato === 'Necessário Agendar Horario') {
+                setContatoAgendar(true)
+            }
+
+            setJustificativa(result.pedidos[0].justificativa)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
 
         setFlushHook(false)
-
-        const buscarAgenda = async () => {
-            try {
-
-                const result = await getAgendaRsd(idPacote)
-
-                setAgenda(result.agenda)
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        const buscarArquivos = async e => {
-            try {
-
-                const result = await getArquivos(idPacote)
-
-                setArquivos(result.arquivos)
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        const buscarPedidos = async () => {
-            try {
-
-                const result = await getPedidosPorPacote(idPacote)
-
-                setPedidos(result.pedidos)
-
-                let tamanhoPrioridade = result.pedidos.length
-
-                let countTamanhoPrioridade = 0
-
-                result.pedidos.forEach(e => {
-                    if (e.prioridadeDossie) {
-                        countTamanhoPrioridade++
-                    }
-                })
-
-                if (countTamanhoPrioridade === tamanhoPrioridade) {
-                    setPrioridadePacote(true)
-                }
-
-                let arrAuxProtocolos = result.pedidos.filter((item, pos, array) => {
-                    return array.map(x => x.protocolo).indexOf(item.protocolo) === pos
-                })
-
-                setProtocolos(arrAuxProtocolos)
-
-                setStatusPacote(result.pedidos[0].statusPacote)
-
-                if (result.pedidos[0].statusPacote === 'Finalizado') {
-                    setFinalizado(false)
-                }
-
-                if (result.pedidos[0].statusPacote === '2° Tentativa') {
-                    setNumeroTentativa('2° Tentativa')
-                }
-
-                if (result.pedidos[0].statusPacote === '3° Tentativa') {
-                    setNumeroTentativa('3° Tentativa')
-                }
-
-                if (result.pedidos[0].statusPacote === 'Aguardando Retorno Contato') {
-                    setRetornoContato(true)
-                }
-
-                if (result.pedidos[0].contato === 'Não foi entrado em contato') {
-                    setNaoContato(true)
-                    setContatoNaoEntrado(true)
-                }
-                if (result.pedidos[0].contato === 'Sim') {
-                    setContatoSim(true)
-                }
-                if (result.pedidos[0].contato === 'Não') {
-                    setContatoNao(true)
-                }
-                if (result.pedidos[0].contato === 'Necessário Agendar Horario') {
-                    setContatoAgendar(true)
-                }
-
-                setJustificativa(result.pedidos[0].justificativa)
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
+        
         buscarPedidos()
         buscarArquivos()
         buscarFormasPagamento()
@@ -359,7 +359,11 @@ const ProcessamentoPacote = () => {
                             </Typography>
                             {
                                 pedidos.length !== 0 && (
-                                    <RoteiroProcessamento pedidos={pedidos} />
+                                    <RoteiroProcessamento
+                                        pedidos={pedidos}
+                                        formasPagamento={formasPagamento}
+                                        statusFinalizacao={statusFinalizacao}
+                                    />
                                 )
 
                             }
