@@ -15,7 +15,7 @@ function Row(props) {
         if (e.target.checked) {
             const novoArray = [...checkPedidos]
             const arrIds = pedidos.filter(pedido => {
-                return pedido._id && row.protocolo === pedido.protocolo
+                return pedido._id && row.protocolo === pedido.protocolo && !pedido.pacote
             }).map(pedido => pedido._id)
             novoArray.push(...arrIds)
             setCheckPedidos(novoArray)
@@ -31,7 +31,7 @@ function Row(props) {
     const verifyPedidosChecked = () => {
 
         const array = pedidos.filter(pedido => {
-            return pedido.protocolo === row.protocolo
+            return pedido.protocolo === row.protocolo && !pedido.pacote
         })
 
         let count = 0

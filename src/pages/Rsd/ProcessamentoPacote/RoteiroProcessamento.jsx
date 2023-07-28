@@ -1,8 +1,17 @@
-import { TableContainer, Table, TableBody, TableRow, TableCell, Typography, Checkbox, FormControlLabel, Radio, FormLabel, FormControl, RadioGroup } from "@mui/material"
+import { TableContainer, Table, TableBody, TableRow, TableCell, Typography, Checkbox, FormControlLabel, Radio, FormControl, RadioGroup, TextField, FormLabel } from "@mui/material"
+import { useState } from "react";
 
 const RoteiroProcessamento = ({ pedidos }) => {
 
     console.log(pedidos);
+
+    const [contatoChecked, setContatoChecked] = useState(pedidos[0].contato)
+    const [justificativa, setJustificativa] = useState(pedidos[0].justificativa)
+
+
+    const handleChangeContato = (e) => {
+        setContatoChecked(e.target.value)
+    }
 
     return (
         <TableContainer>
@@ -21,14 +30,20 @@ const RoteiroProcessamento = ({ pedidos }) => {
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
+                                    defaultValue={contatoChecked}
                                 >
-                                    <FormControlLabel value='Sim' control={<Radio checked={pedidos.houveSucesso === 'Sim'} />} label='Sim' />
-                                    <FormControlLabel value='Não' control={<Radio />} label='Não' />
-                                    <FormControlLabel value='Necessário Agendar Horario' control={<Radio />} label='Necessário Agendar Horario' />
-                                    <FormControlLabel value='Sem Retorno de Contato' control={<Radio />} label='Sem Retorno de Contato' />
-                                    <FormControlLabel value='Não foi entrado em contato' control={<Radio />} label='Não foi entrado em contato' />
+                                    <FormControlLabel value='Sim' control={<Radio onClick={handleChangeContato} />} label='Sim' />
+                                    <FormControlLabel value='Não' control={<Radio onClick={handleChangeContato} />} label='Não' />
+                                    <FormControlLabel value='Necessário Agendar Horario' control={<Radio onClick={handleChangeContato} />} label='Necessário Agendar Horario' />
+                                    <FormControlLabel value='Sem Retorno de Contato' control={<Radio onClick={handleChangeContato} />} label='Sem Retorno de Contato' />
+                                    <FormControlLabel value='Não foi entrado em contato' control={<Radio onClick={handleChangeContato} />} label='Não foi entrado em contato' />
                                 </RadioGroup>
                             </FormControl>
+                            {
+                                contatoChecked === 'Não foi entrado em contato' && (
+                                    <TextField label='Justificativa' helperText='Justificativa por não entrar em contato' size="small" variant='standard' value={justificativa} onChange={e => setJustificativa(e.target.value)} />
+                                )
+                            }
                         </TableCell>
                         <TableCell>
                             <Checkbox />
@@ -61,6 +76,22 @@ const RoteiroProcessamento = ({ pedidos }) => {
                             <Typography>
                                 Reembolso referente ao atendimento da clínica TAL, realizado no dia XX, no valor de R$ XX. Confirmar se o beneficiário reconhece esse atendimento e cobrança?
                             </Typography>
+                            {
+                                pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                    return (
+                                        <FormControl sx={{ m: 1 }}>
+                                            <FormLabel>Pedido {pedido.numero}, NF {pedido.nf}, Clínica: {pedido.clinica}, Valor Apresentado: R$ {pedido.valorApresentado}</FormLabel>
+                                            <RadioGroup
+                                                row
+                                                defaultValue='Sim'
+                                            >
+                                                <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
+                                                <FormControlLabel value='Não' control={<Radio />} label='Não' />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    )
+                                })
+                            }
                         </TableCell>
                         <TableCell>
                             <Checkbox />

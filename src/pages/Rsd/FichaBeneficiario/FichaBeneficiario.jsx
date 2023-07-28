@@ -94,7 +94,7 @@ const FichaBeneficiario = () => {
         if (checkPedidos.length === 0) {
             return
         }
-
+        
         await criarPacoteRsd({
             arrPedidos: checkPedidos
         })
@@ -171,7 +171,7 @@ const FichaBeneficiario = () => {
         <>
             <Sidebar></Sidebar>
             <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
-                <Container style={{maxWidth: '1300px'}} >
+                <Container style={{maxWidth: '1400px'}} >
                     <Box className="cadastro-beneficiario-container">
                         <Typography variant="h5" m={2}>
                             Ficha Beneficiário
@@ -183,7 +183,7 @@ const FichaBeneficiario = () => {
                         <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
                             Pedidos de Reembolso
                         </Typography>
-                        {/* {
+                        {
                             protocolos.length !== 0 ? (
                                 <PedidosReembolso
                                     setCheckPedidos={setCheckPedidos}
@@ -197,8 +197,8 @@ const FichaBeneficiario = () => {
                         <Box m={2}>
                             <Button sx={{ mr: '10px', bgcolor: indigo[500], ":hover": { bgcolor: indigo[700] } }} href={`/rsd/CriarProtocolo/${mo}`} variant="contained" size="small" >Novo Protocolo</Button>
                             <Button onClick={handleCriarPacote} sx={{ mr: '10px' }} variant="contained" size="small">Criar Pacote</Button>
-                        </Box> */}
-                        <br /><br />
+                        </Box>
+                        {/* <br /><br />
                         <div className="pedidos-reembolso">
                             <table className="table">
                                 <thead className="table-header">
@@ -248,9 +248,9 @@ const FichaBeneficiario = () => {
                                 <Link className="btn-criar-protocolo" to={`/rsd/CriarProtocolo/${mo}`}>Novo Protocolo</Link>
                                 <button className="btn-criar-pacote" onClick={criarPacote} >Criar Pacote</button>
                             </div>
-                        </div>
+                        </div> */}
 
-                        {/* <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
+                        <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
                             Pacotes
                         </Typography>
 
@@ -266,9 +266,9 @@ const FichaBeneficiario = () => {
                             ) : null
                         }
 
-                        <br />
+                        {/* <br />
                         <br /> */}
-                        <div className="titulo-informacoes-gerais">
+                        {/* <div className="titulo-informacoes-gerais">
                             <span>Pacotes</span>
                         </div>
                         <div className="pacotes">
@@ -317,7 +317,7 @@ const FichaBeneficiario = () => {
                                     }
                                 </tbody>
                             </table>
-                        </div>
+                        </div> */}
                     </Box>
                 </Container>
                 <Modal

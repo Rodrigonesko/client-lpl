@@ -277,7 +277,7 @@ const ProcessamentoPacote = () => {
                     setRetornoContato(true)
                 }
 
-                if (result.data.pedidos[0].contato === 'Não foi entrado em contato') {
+                if (result.pedidos[0].contato === 'Não foi entrado em contato') {
                     setNaoContato(true)
                     setContatoNaoEntrado(true)
                 }
@@ -287,7 +287,7 @@ const ProcessamentoPacote = () => {
                 if (result.pedidos[0].contato === 'Não') {
                     setContatoNao(true)
                 }
-                if (result.data.pedidos[0].contato === 'Necessário Agendar Horario') {
+                if (result.pedidos[0].contato === 'Necessário Agendar Horario') {
                     setContatoAgendar(true)
                 }
 
@@ -357,7 +357,12 @@ const ProcessamentoPacote = () => {
                             <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
                                 Roteiro
                             </Typography>
-                            <RoteiroProcessamento pedidos={pedidos} />
+                            {
+                                pedidos.length !== 0 && (
+                                    <RoteiroProcessamento pedidos={pedidos} />
+                                )
+
+                            }
                             <div className="table-roteiro">
                                 <table className="table tabela-roteiro">
                                     <tbody>
