@@ -9,6 +9,7 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) =
     const [justificativa, setJustificativa] = useState(pedidos[0].justificativa)
     const [motivoContato, setMotivoContato] = useState([])
     const [confirmacaoServico, setConfirmacaoServico] = useState([])
+    const [finalizacoes, setFinalizacoes] = useState([])
 
     const handleChangeContato = (e) => {
         setContatoChecked(e.target.value)
@@ -39,6 +40,19 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) =
             setConfirmacaoServico(arrAux)
         }
         console.log(confirmacaoServico);
+    }
+
+    const handleFinalizacao = (id, finalizacao) => {
+        if (finalizacoes.some(pedido => pedido[0] === id)) {
+            const index = finalizacoes.findIndex(pedido => pedido[0] === id)
+            let arrAux = finalizacoes
+            arrAux[index] = [id, servico]
+            setFinalizacoes(arrAux)
+        } else {
+            let arrAux = finalizacoes
+            arrAux.push([id, servico])
+            setFinalizacoes(arrAux)
+        }
     }
 
     return (
