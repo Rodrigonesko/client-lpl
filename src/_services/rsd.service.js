@@ -161,3 +161,19 @@ export const relatorioProducaoRsd = async () => {
 export const getProdutividadeMensalRsd = async (mes, analista) => {
     return await new ApiCall(`/rsd/producaoMensal/${mes}/${analista}`).get()
 }
+
+export const adicionarFormaPagamento = async (data) => {
+    return await new ApiCall('/rsd/formaPagamento').post(data)
+}
+
+export const deleteFormaPagamento = async (id) => {
+    return await new ApiCall(`/rsd/formaPagamento/${id}`).delete()
+}
+
+export const adicionarFinalizacao = async (data) => {
+    return await new ApiCall('/rsd/finalizacao').post(data)
+}
+
+export const deleteFinalizacao = async (id) => {
+    return await new ApiCall(`/rsd/finalizacao/${id}`).delete()
+}

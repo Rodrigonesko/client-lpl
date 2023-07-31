@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { getOperadoras } from "../../../_services/rsd.service";
 import { Container, Box, Typography, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
@@ -26,14 +25,16 @@ const OperadorasBeneficiario = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
+            <Sidebar />
             <Container>
                 <Box>
                     <Typography variant="h5" mt={2}>
                         Operadoras Beneficiário
                     </Typography>
                     <Box m={2}>
-                        <Button variant="contained" color='inherit' href='/rsd/OperadoraBeneficiario/Criar'>Criar Operadora Beneficiário</Button>
+                        <Button variant="contained" color='inherit' sx={{ mr: '10px' }} href='/rsd/OperadoraBeneficiario/Criar'>Criar Operadora Beneficiário</Button>
+                        <Button variant="contained" color='secondary' sx={{ mr: '10px' }} href='/rsd/formasPagamento'>Formas Pagamento</Button>
+                        <Button variant="contained" color="error" sx={{ mr: '10px' }} href='/rsd/finalizacoes'>Finalizações</Button>
                     </Box>
                     <TableContainer>
                         <Table className="table">

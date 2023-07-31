@@ -46,11 +46,11 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) =
         if (finalizacoes.some(pedido => pedido[0] === id)) {
             const index = finalizacoes.findIndex(pedido => pedido[0] === id)
             let arrAux = finalizacoes
-            arrAux[index] = [id, servico]
+            arrAux[index] = [id, finalizacao]
             setFinalizacoes(arrAux)
         } else {
             let arrAux = finalizacoes
-            arrAux.push([id, servico])
+            arrAux.push([id, finalizacao])
             setFinalizacoes(arrAux)
         }
     }

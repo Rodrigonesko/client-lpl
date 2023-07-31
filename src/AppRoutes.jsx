@@ -46,6 +46,8 @@ import EditarOperadoraBeneficiario from "./pages/Rsd/OperadorasBeneficiario/Edit
 import ConcluidosRsd from "./pages/Rsd/ConcluidosRsd/ConcluidosRsd";
 import RelatorioRsd from "./pages/Rsd/RelatorioRsd/RelatorioRsd";
 import Agd from "./pages/Rsd/Agd/Agd";
+import FormasPagamento from "./pages/Rsd/OperadorasBeneficiario/FormasPagamento/FormasPagamento";
+import Finalizacoes from "./pages/Rsd/OperadorasBeneficiario/Finalizacoes/Finalizacoes";
 import FichaBeneficiarioConcluidos from "./pages/Rsd/FichaBeneficiarioConcluidos/FichaBeneficiarioConcluidos";
 import ProducaoDiariaRsd from "./pages/Rsd/ProducaoDiaria/ProducaoDiariaRsd";
 import BaixaAgd from "./pages/Rsd/BaixaAgd/BaixaAgd";
@@ -297,6 +299,12 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/rsd/BaixaAgd" element={<ProtectedRoute>
                     <BaixaAgd />
+                </ProtectedRoute>} />
+                <Route path="/rsd/formasPagamento" element={<ProtectedRoute>
+                    <FormasPagamento />
+                </ProtectedRoute>} />
+                <Route path="/rsd/finalizacoes" element={<ProtectedRoute>
+                    <Finalizacoes />
                 </ProtectedRoute>} />
 
 
