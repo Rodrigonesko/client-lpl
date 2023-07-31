@@ -1,15 +1,19 @@
-import { TableContainer, Table, TableBody, TableRow, TableCell, Typography, Checkbox, FormControlLabel, Radio, FormControl, RadioGroup, TextField, FormLabel } from "@mui/material"
-import { useState, useEffect } from "react";
+import { TableContainer, Table, TableBody, TableRow, TableCell, Typography, Checkbox, FormControlLabel, Radio, FormControl, RadioGroup, TextField, FormLabel, Button } from "@mui/material"
+import { useState } from "react";
 
-const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) => {
-
-    console.log(pedidos);
+const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, salvar }) => {
 
     const [contatoChecked, setContatoChecked] = useState(pedidos[0].contato)
     const [justificativa, setJustificativa] = useState(pedidos[0].justificativa)
+    const [dataSelo, setDataSelo] = useState('')
     const [motivoContato, setMotivoContato] = useState([])
     const [confirmacaoServico, setConfirmacaoServico] = useState([])
     const [finalizacoes, setFinalizacoes] = useState([])
+
+    const [openSegundaEtapa, setOpenSegundaEtapa] = useState(!pedidos[0].contato ? false : true)
+    const [openTerceiraEtapa, setOpenTerceiraEtapa] = useState(!pedidos[0].dataSelo ? false : true)
+    const [openQuartaEtapa, setOpenQuartaEtapa] = useState(pedidos.some(pedido => pedido.reconhece))
+    const [openQuintaEtapa, setOpenQuintaEtapa] = useState(pedidos.some(pedido => !pedido.formaPagamento ? false : true))
 
     const handleChangeContato = (e) => {
         setContatoChecked(e.target.value)
@@ -43,6 +47,7 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) =
     }
 
     const handleFinalizacao = (id, finalizacao) => {
+        console.log(id, finalizacao);
         if (finalizacoes.some(pedido => pedido[0] === id)) {
             const index = finalizacoes.findIndex(pedido => pedido[0] === id)
             let arrAux = finalizacoes
@@ -88,132 +93,170 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao }) =
                             }
                         </TableCell>
                         <TableCell>
-                            <Checkbox />
+                            <Checkbox checked={openSegundaEtapa} onChange={() => setOpenSegundaEtapa(!openSegundaEtapa)} />
                         </TableCell>
                     </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            2°
-                        </TableCell>
-                        <TableCell>
-                            <Typography fontWeight='bold'>
-                                SELO CONTATO
-                            </Typography>
-                            <Typography>
-                                Informar nome completo do beneficiário no início do contato. Se identifique como funcionário da Operadora Informar que a ligação é gravada e pedir para confirmar algumas informações, como 3 últimos números do CPF, ano de nascimento e idade.
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Checkbox />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            3°
-                        </TableCell>
-                        <TableCell>
-                            <Typography fontWeight='bold'>
-                                MOTIVO CONTATO
-                            </Typography>
-                            <Typography>
-                                Reembolso referente ao atendimento da clínica TAL, realizado no dia XX, no valor de R$ XX. Confirmar se o beneficiário reconhece esse atendimento e cobrança?
-                            </Typography>
-                            {
-                                pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
-                                    console.log(pedido.reconhece);
-                                    return (
-                                        <FormControl sx={{ m: 1 }}>
-                                            <FormLabel>Pedido {pedido.numero}, NF {pedido.nf}, Clínica: {pedido.clinica}, Valor Apresentado: R$ {pedido.valorApresentado}</FormLabel>
-                                            <RadioGroup
-                                                row
-                                                defaultValue={pedido.reconhece && 'Sim'}
-                                                onChange={item => handleMotivoContato(pedido._id, item.target.value)}
-                                            >
-                                                <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
-                                                <FormControlLabel value='Não' control={<Radio />} label='Não' />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    )
-                                })
-                            }
-                        </TableCell>
-                        <TableCell>
-                            <Checkbox />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            4°
-                        </TableCell>
-                        <TableCell>
-                            <Typography fontWeight='bold'>
-                                CONFIRMAÇÃO SERVIÇO
-                            </Typography>
-                            <Typography>
-                                Questionar como foi realizado e solicitar envio do comprovante/declaração em até 5 dias úteis e deixa-lo ciente que o pedido poderá ser cancelado caso a documentação não seja enviada. Questionar ao beneficiário como ficou acordado o pagamento destes serviços junto a clínica:
-                            </Typography>
-                            {
-                                pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
-                                    return (
-                                        <FormControl sx={{ m: 1 }}>
-                                            <FormLabel>Pedido: {pedido.numero}</FormLabel>
-                                            <RadioGroup
-                                                row
-                                                defaultValue={pedido.formaPagamento}
-                                                onChange={item => {
-                                                    handleConfirmacaoServico(pedido._id, item.target.value)
-                                                }}
-                                            >
-                                                {
-                                                    formasPagamento.map(formaPagamento => {
-                                                        return (
-                                                            <FormControlLabel value={formaPagamento.nome} control={<Radio />} label={formaPagamento.nome} />
-                                                        )
-                                                    })
-                                                }
-                                            </RadioGroup>
-                                        </FormControl>
-                                    )
-                                })
-                            }
-                        </TableCell>
-                        <TableCell>
-                            <Checkbox />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            5°
-                        </TableCell>
-                        <TableCell>
-                            <Typography fontWeight='bold'>
-                                FINALIZAÇÃO
-                            </Typography>
-                            {
-                                pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
-                                    return (
-                                        <FormControl sx={{ m: 1 }}>
-                                            <FormLabel>Pedido: {pedido.numero}</FormLabel>
-                                            <RadioGroup
-                                                row
-                                            >
-                                                {
-                                                    statusFinalizacao.map(status => {
-                                                        return (
-                                                            <FormControlLabel value={status.descricao} control={<Radio />} label={status.descricao} />
-                                                        )
-                                                    })
-                                                }
-                                            </RadioGroup>
-                                        </FormControl>
-                                    )
-                                })
-                            }
-                        </TableCell>
-                        <TableCell>
-                            <Checkbox>
+                    {
+                        openSegundaEtapa && (
+                            <TableRow>
+                                <TableCell>
+                                    2°
+                                </TableCell>
+                                <TableCell>
+                                    <Typography fontWeight='bold'>
+                                        SELO CONTATO
+                                    </Typography>
+                                    <Typography>
+                                        Informar nome completo do beneficiário no início do contato. Se identifique como funcionário da Operadora Informar que a ligação é gravada e pedir para confirmar algumas informações, como 3 últimos números do CPF, ano de nascimento e idade.
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Checkbox
+                                        checked={openTerceiraEtapa}
+                                        onChange={() => {
+                                            setDataSelo(new Date())
+                                            setOpenTerceiraEtapa(!openTerceiraEtapa)
+                                        }} />
+                                </TableCell>
+                            </TableRow>
+                        )
+                    }
+                    {
+                        openTerceiraEtapa && (
+                            <TableRow>
+                                <TableCell>
+                                    3°
+                                </TableCell>
+                                <TableCell>
+                                    <Typography fontWeight='bold'>
+                                        MOTIVO CONTATO
+                                    </Typography>
+                                    <Typography>
+                                        Reembolso referente ao atendimento da clínica TAL, realizado no dia XX, no valor de R$ XX. Confirmar se o beneficiário reconhece esse atendimento e cobrança?
+                                    </Typography>
+                                    {
+                                        pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                            return (
+                                                <FormControl sx={{ m: 1 }}>
+                                                    <FormLabel>Pedido {pedido.numero}, NF {pedido.nf}, Clínica: {pedido.clinica}, Valor Apresentado: R$ {pedido.valorApresentado}</FormLabel>
+                                                    <RadioGroup
+                                                        row
+                                                        defaultValue={pedido.reconhece && 'Sim'}
+                                                        onChange={item => handleMotivoContato(pedido._id, item.target.value)}
+                                                    >
+                                                        <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
+                                                        <FormControlLabel value='Não' control={<Radio />} label='Não' />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            )
+                                        })
+                                    }
+                                </TableCell>
+                                <TableCell>
+                                    <Checkbox checked={openQuartaEtapa} onChange={() => setOpenQuartaEtapa(!openQuartaEtapa)} />
+                                </TableCell>
+                            </TableRow>
+                        )
+                    }
+                    {
+                        openQuartaEtapa && (
+                            <TableRow>
+                                <TableCell>
+                                    4°
+                                </TableCell>
+                                <TableCell>
+                                    <Typography fontWeight='bold'>
+                                        CONFIRMAÇÃO SERVIÇO
+                                    </Typography>
+                                    <Typography>
+                                        Questionar como foi realizado e solicitar envio do comprovante/declaração em até 5 dias úteis e deixa-lo ciente que o pedido poderá ser cancelado caso a documentação não seja enviada. Questionar ao beneficiário como ficou acordado o pagamento destes serviços junto a clínica:
+                                    </Typography>
+                                    {
+                                        pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                            return (
+                                                <FormControl sx={{ m: 1 }}>
+                                                    <FormLabel>Pedido: {pedido.numero}</FormLabel>
+                                                    <RadioGroup
+                                                        row
+                                                        defaultValue={pedido.formaPagamento}
+                                                        onChange={item => {
+                                                            handleConfirmacaoServico(pedido._id, item.target.value)
+                                                        }}
+                                                    >
+                                                        {
+                                                            formasPagamento.map(formaPagamento => {
+                                                                return (
+                                                                    <FormControlLabel value={formaPagamento.nome} control={<Radio />} label={formaPagamento.nome} />
+                                                                )
+                                                            })
+                                                        }
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            )
+                                        })
+                                    }
+                                </TableCell>
+                                <TableCell>
+                                    <Checkbox checked={openQuintaEtapa} onChange={() => setOpenQuintaEtapa(!openQuintaEtapa)} />
+                                </TableCell>
+                            </TableRow>
+                        )
+                    }
+                    {
+                        openQuintaEtapa && (
+                            <TableRow>
+                                <TableCell>
+                                    5°
+                                </TableCell>
+                                <TableCell>
+                                    <Typography fontWeight='bold'>
+                                        FINALIZAÇÃO
+                                    </Typography>
+                                    {
+                                        pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
+                                            return (
+                                                <FormControl sx={{ m: 1 }}>
+                                                    <FormLabel>Pedido: {pedido.numero}</FormLabel>
+                                                    <RadioGroup
+                                                        row
+                                                        onChange={(e) => {
+                                                            handleFinalizacao(pedido._id, e.target.value)
+                                                        }}
+                                                    >
+                                                        {
+                                                            statusFinalizacao.map(status => {
+                                                                return (
+                                                                    <FormControlLabel value={status.descricao} control={<Radio />} label={status.descricao} />
+                                                                )
+                                                            })
+                                                        }
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            )
+                                        })
+                                    }
+                                </TableCell>
+                                <TableCell>
+                                    <Checkbox>
 
-                            </Checkbox>
+                                    </Checkbox>
+                                </TableCell>
+                            </TableRow>
+                        )
+                    }
+                    <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell>
+                            <Button variant="contained" onClick={() => {
+                                salvar(
+                                    contatoChecked,
+                                    motivoContato,
+                                    confirmacaoServico,
+                                    finalizacoes,
+                                    justificativa,
+                                    dataSelo
+                                )
+                            }}>Salvar</Button>
                         </TableCell>
                     </TableRow>
                 </TableBody>
