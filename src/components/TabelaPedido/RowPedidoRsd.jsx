@@ -16,6 +16,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
     const [loading, setLoading] = useState(false)
     const [check, setCheck] = useState(false)
     const [prioridade, setPrioridade] = useState(pedido.prioridadeDossie)
+    const [msg, setMsg] = useState('')
 
     const handleClose = () => {
         setOpen(false)
@@ -55,6 +56,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
                 valorApresentado,
             })
 
+            setMsg('Pedido editado com sucesso!')
             setOpen(true)
 
         } catch (error) {
@@ -71,6 +73,8 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
             motivoInativo
         })
 
+        setMsg('Pedido inativado com sucesso!')
+        setOpen(true)
         setLoading(false)
         flushHook(true)
         handleCloseDialog()
@@ -104,20 +108,23 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
 
     const handlePrioridadeDossie = async () => {
         setPrioridade(!prioridade)
-        const res = await prioridadeDossie({
+        await prioridadeDossie({
             pedido: numero,
             prioridade: !prioridade
         })
 
+        setMsg('Prioridade dossiê atribuída com sucesso!')
+        setOpen(true)
         flushHook(true)
-        console.log(res);
     }
 
     const handleVoltarFase = async () => {
         voltarFasePedido({
             pedido: numero
         })
-        
+
+        setMsg('Pedido voltado com sucesso!')
+        setOpen(true)
         flushHook(true)
     }
 
@@ -197,7 +204,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
             }
             <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
                 <Alert variant="filled" onClose={handleClose} severity={'success'} sx={{ width: '100%' }}>
-                    Pedido editado com sucesso
+                    {msg}
                 </Alert>
             </Snackbar>
             <Dialog

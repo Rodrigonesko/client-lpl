@@ -5,7 +5,7 @@ import InformacoesGerais from "../../../components/InformacoesGerais/Informacoes
 import './ProcessamentoPacote.css'
 import { atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, voltarFasePacote } from "../../../_services/rsd.service";
 import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
-import { Box, Container, Typography, Button, FormControlLabel, Checkbox } from "@mui/material";
+import { Box, Container, Typography, Button, FormControlLabel, Checkbox, Alert, Snackbar } from "@mui/material";
 import TabelaProtocolosProcessamento from "./TabelaProtocolosProcessamento";
 import AgendaProcessamentoRsd from "./AgendaProcessamentoRsd";
 import TabelaArquivosProcessamento from "./TabelaArquivosProcessamento";
@@ -23,13 +23,22 @@ const ProcessamentoPacote = () => {
     const [formasPagamento, setFormasPagamento] = useState([])
     const [statusFinalizacao, setStatusFinalizacao] = useState([])
     const [agenda, setAgenda] = useState([])
-    const [finalizado, setFinalizado] = useState(true)
+    const [finalizado, setFinalizado] = useState(false)
     const [prioridadePacote, setPrioridadePacote] = useState(false);
 
     const [flushHook, setFlushHook] = useState(false)
     const [openRoteiro, setOpenRoteiro] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [msg, setMsg] = useState('')
+
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     const handleShowRoteiro = () => {
+        
+        setMsg('Processamento iniciado!')
+        setOpen(true)
         setOpenRoteiro(true)
     }
 
@@ -84,7 +93,10 @@ const ProcessamentoPacote = () => {
                 dataSelo
             })
 
+            setMsg('Pacote salvo com sucesso')
+            setOpen(true)
             setFlushHook(true)
+
 
         } catch (error) {
             console.log(error);
@@ -99,6 +111,9 @@ const ProcessamentoPacote = () => {
                 pacote: idPacote
             })
 
+
+            setMsg('Fase retrocedida!')
+            setOpen(true)
             setFlushHook(true)
 
 
@@ -114,6 +129,8 @@ const ProcessamentoPacote = () => {
                 prioridade
             })
 
+            setMsg('Prioridade atribuída com sucesso!')
+            setOpen(true)
             setFlushHook(true)
 
         } catch (error) {
@@ -173,13 +190,12 @@ const ProcessamentoPacote = () => {
             setProtocolos(arrAuxProtocolos)
 
             setStatusPacote(result.pedidos[0].statusPacote)
-
+            console.log(result.pedidos[0].statusPacote );
             if (result.pedidos[0].statusPacote === 'Finalizado') {
                 console.log('finalizado');
-                setFinalizado(false)
-            } else {
-                console.log('nao finalizado');
                 setFinalizado(true)
+            } else {
+                setFinalizado(false)
             }
 
         } catch (error) {
@@ -221,10 +237,13 @@ const ProcessamentoPacote = () => {
                     <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
                         Pedidos de Reembolso
                     </Typography>
+                    {
+                        
+                    }
                     <TabelaProtocolosProcessamento protocolos={protocolos} pedidos={pedidos} flushHook={setFlushHook} />
                     <Box m={2} >
                         {
-                            finalizado ? (
+                            !finalizado ? (
                                 <Button onClick={handleShowRoteiro} variant="contained"  >Iniciar Processamento</Button>
                             ) : (
                                 <Button variant="contained" size="small" color="warning" onClick={voltarFase}>Voltar Fase</Button>
@@ -265,6 +284,11 @@ const ProcessamentoPacote = () => {
                         </Box>
                     </Box>
                 </Container>
+                <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        {msg}
+                    </Alert>
+                </Snackbar>
             </Box>
         </>
     )

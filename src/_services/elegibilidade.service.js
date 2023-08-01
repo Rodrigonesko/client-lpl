@@ -181,3 +181,7 @@ export const removerPlanoBlacklist = async (id) => {
 export const getProducaoMensalElegi = async (mes, analista) => {
     return await new ApiCall(`/elegibilidade/producaoMensal/${mes}/${analista}`).get()
 }
+
+export const voltarPropostaElegibilidade = async (data) => {
+    return await new ApiCall('/elegibilidade/voltarProposta').put(data)
+}

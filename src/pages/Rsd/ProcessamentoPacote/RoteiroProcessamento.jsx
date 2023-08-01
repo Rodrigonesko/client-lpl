@@ -138,7 +138,7 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, sal
                                         pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
                                             return (
                                                 <FormControl sx={{ m: 1 }}>
-                                                    <FormLabel>Pedido {pedido.numero}, NF {pedido.nf}, Clínica: {pedido.clinica}, Valor Apresentado: R$ {pedido.valorApresentado}</FormLabel>
+                                                    <FormLabel>Pedido <strong>{pedido.numero}</strong> , NF <strong>{pedido.nf}</strong>, Clínica: <strong>{pedido.clinica}</strong>, Valor Apresentado: <strong>R$ {pedido.valorApresentado}</strong> </FormLabel>
                                                     <RadioGroup
                                                         row
                                                         defaultValue={pedido.reconhece && 'Sim'}
@@ -175,7 +175,7 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, sal
                                         pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
                                             return (
                                                 <FormControl sx={{ m: 1 }}>
-                                                    <FormLabel>Pedido: {pedido.numero}</FormLabel>
+                                                    <FormLabel>Pedido: <strong>{pedido.numero}</strong> </FormLabel>
                                                     <RadioGroup
                                                         row
                                                         defaultValue={pedido.formaPagamento}
@@ -216,7 +216,7 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, sal
                                         pedidos.filter(pedido => pedido.fase !== 'Finalizado').map(pedido => {
                                             return (
                                                 <FormControl sx={{ m: 1 }}>
-                                                    <FormLabel>Pedido: {pedido.numero}</FormLabel>
+                                                    <FormLabel>Pedido: <strong>{pedido.numero}</strong></FormLabel>
                                                     <RadioGroup
                                                         row
                                                         onChange={(e) => {

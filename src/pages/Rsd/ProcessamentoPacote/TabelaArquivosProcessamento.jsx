@@ -1,14 +1,15 @@
-import { Box, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material"
+import { Box, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogActions, DialogContent, DialogTitle, Alert, Snackbar } from "@mui/material"
 import moment from "moment"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { anexarGravacao } from "../../../_services/rsd.service"
 
-const TabelaArquivosProcessamento = ({ arquivos, flushHook, salvar }) => {
+const TabelaArquivosProcessamento = ({ arquivos, flushHook }) => {
 
     const { idPacote } = useParams()
 
     const [open, setOpen] = useState(false)
+    const [openSnack, setOpenSnack] = useState(false)
     const [gravacao, setGravacao] = useState()
 
     const handleClose = () => {
@@ -43,8 +44,8 @@ const TabelaArquivosProcessamento = ({ arquivos, flushHook, salvar }) => {
                 idPacote
             )
 
-            salvar()
             flushHook(true)
+            setOpenSnack(true)
             handleClose()
 
         } catch (error) {
@@ -105,6 +106,11 @@ const TabelaArquivosProcessamento = ({ arquivos, flushHook, salvar }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={openSnack} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert variant="filled" onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Arquivo anexado com sucesso!
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

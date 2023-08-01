@@ -7,6 +7,7 @@ import ModalEnviarCancelamento from "./Modals/ModalEnviarCancelamento";
 import ModalCancelamento from "./Modals/ModalCancelamento";
 import ModalCancelarCpf from "./Modals/ModalCancelarCpf";
 import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
+import ModalVoltarProposta from "./Modals/ModalVoltarProposta.jsx";
 import { useParams } from "react-router-dom";
 
 const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
@@ -30,6 +31,13 @@ const BotoesElegibilidade = ({ atualizarDados, proposta, blacklistPlanos }) => {
                         <>
                             <ModalCancelamento atualizarDados={atualizarDados} />
                             <ModalCancelarCpf atualizarDados={atualizarDados} proposta={proposta} />
+                        </>
+                    ) : null
+                }
+                {
+                    proposta.status === 'Cancelada' ? (
+                        <>
+                            <ModalVoltarProposta />
                         </>
                     ) : null
                 }
