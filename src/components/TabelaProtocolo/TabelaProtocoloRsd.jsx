@@ -8,7 +8,7 @@ import TabelaPedidoRsd from "../TabelaPedido/TabelaPedidoRsd";
 
 function Row(props) {
 
-    const { row, pedidos, pacote, flushHook } = props
+    const { row, pedidos, pacote, flushHook, finalizados } = props
 
     const [open, setOpen] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
@@ -161,7 +161,7 @@ const TabelaProtocoloRsd = (props) => {
                                 {
                                     protocolos.map(protocolo => {
                                         return (
-                                            <Row row={protocolo} pedidos={pedidos} pacote={pacote} flushHook={flushHook} />
+                                            <Row finalizados={finalizados} row={protocolo} pedidos={pedidos} pacote={pacote} flushHook={flushHook} />
                                         )
                                     })
                                 }

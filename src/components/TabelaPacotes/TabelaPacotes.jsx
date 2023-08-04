@@ -99,7 +99,7 @@ function Row(props) {
                     </Tooltip>
                 </TableCell>
             </TableRow>
-            <TabelaProtocoloRsd open={open} pacote={row.pacote} pedidos={pedidos} flushHook={flushHook} />
+            <TabelaProtocoloRsd open={open} pacote={row.pacote} pedidos={pedidos} flushHook={flushHook} finalizados={finalizados} />
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -178,11 +178,18 @@ const TabelaPacotes = (props) => {
                 <TableBody>
                     {
                         pacotes.map(pacote => {
-                            if (pacote.statusPacote !== 'Não iniciado' && pacote.statusPacote !== 'Finalizado' && pacote.statusPacote !== 'Cancelado' && pacote.statusPacote !== 'Comprovante Correto') {
+                            if (!finalizados) {
+                                if (pacote.statusPacote !== 'Não iniciado' && pacote.statusPacote !== 'Finalizado' && pacote.statusPacote !== 'Cancelado' && pacote.statusPacote !== 'Comprovante Correto') {
+                                    return (
+                                        <Row row={pacote} pedidos={pedidos} verificaPacote={verificaPacote} finalizados={finalizados} flushHook={flushHook} />
+                                    )
+                                }
+                            } else {
                                 return (
                                     <Row row={pacote} pedidos={pedidos} verificaPacote={verificaPacote} finalizados={finalizados} flushHook={flushHook} />
                                 )
                             }
+
                         })
                     }
                 </TableBody>

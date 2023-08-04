@@ -3,7 +3,8 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Container, Box, Typography, Button, Divider, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from "@mui/material"
 import { indigo, deepPurple } from "@mui/material/colors"
 import ProducaoIndividual from "./ProducaoIndividual"
-import ComparativoTele from "./Tele/ComparativoTele"
+import ProdutividadeGeral from "./ProdutividadeGeral"
+import RelatoriosProdutividade from "./RelatoriosProdutividade"
 import Chart from "react-google-charts"
 
 const RelatorioProdutividade = () => {
@@ -29,9 +30,9 @@ const RelatorioProdutividade = () => {
             setComponent('individual')
         }
 
-        if (option === 'Comparativo') {
+        if (option === 'Geral') {
             setOpenComponent(true)
-            setComponent('comparativo')
+            setComponent('Geral')
         }
     }
 
@@ -39,8 +40,8 @@ const RelatorioProdutividade = () => {
         switch (component) {
             case 'individual':
                 return <ProducaoIndividual celula={celula} />
-            case 'comparativo':
-                return <ComparativoTele />
+            case 'Geral':
+                return <ProdutividadeGeral celula={celula} />
             default:
                 return <></>
         }
@@ -50,6 +51,7 @@ const RelatorioProdutividade = () => {
         <>
             <Sidebar />
             <Container sx={{ height: '100vh', overflow: 'auto' }}>
+                <RelatoriosProdutividade />
                 <Typography variant="h6" m={2}>
                     Produtividade por célula
                 </Typography>
@@ -90,8 +92,8 @@ const RelatorioProdutividade = () => {
                         handleLoadProduction('Individual')
                     }}>Produção individual</Button>
                     <Button sx={{ margin: '10px', bgcolor: deepPurple[500], ":hover": { bgcolor: deepPurple[200] } }} variant="contained" onClick={() => {
-                        handleLoadProduction('Comparativo')
-                    }}>Comparativo</Button>
+                        handleLoadProduction('Geral')
+                    }}>Produção Geral</Button>
                 </Box>
                 <Divider />
                 <Box>

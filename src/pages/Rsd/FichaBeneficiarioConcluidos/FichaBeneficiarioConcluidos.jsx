@@ -8,6 +8,7 @@ import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo
 import { Container, Box, Typography } from "@mui/material";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
 import { assumirPacote, getPedidosPorMo } from "../../../_services/rsd.service";
+import TabelaPacotes from "../../../components/TabelaPacotes/TabelaPacotes";
 
 const FichaBeneficiarioConcluidos = () => {
 
@@ -16,6 +17,7 @@ const FichaBeneficiarioConcluidos = () => {
 
     const [pedidos, setPedidos] = useState([])
     const [pacotes, setPacotes] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
 
     const mostrarPedidos = e => {
         let trPedidos = e.target.parentElement.nextSibling
@@ -47,6 +49,8 @@ const FichaBeneficiarioConcluidos = () => {
 
     useEffect(() => {
 
+        setFlushHook(false)
+
         const buscarMo = async () => {
 
             //const resultPedidos = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/mo/${mo}`, { withCredentials: true })
@@ -64,24 +68,32 @@ const FichaBeneficiarioConcluidos = () => {
         }
 
         buscarMo()
-    }, [mo])
+    }, [mo, flushHook])
 
     return (
         <>
             <Sidebar></Sidebar>
-            <Container>
-                <Box className="cadastro-beneficiario-container">
-                    <Typography variant="h5" m={2}>
-                        Ficha Beneficiário Concluído
-                    </Typography>
-                    <Typography p={1} bgcolor='lightgray' borderRadius='5px' >
-                        Informações Gerais
-                    </Typography>
-                    <InformacoesGerais mo={mo} />
-                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
-                        Pacotes Concluídos
-                    </Typography>
-                    <div className="pacotes">
+            <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
+                <Container style={{ maxWidth: '1400px' }}>
+                    <Box className="cadastro-beneficiario-container">
+                        <Typography variant="h5" m={2}>
+                            Ficha Beneficiário Concluído
+                        </Typography>
+                        <Typography p={1} bgcolor='lightgray' borderRadius='5px' >
+                            Informações Gerais
+                        </Typography>
+                        <InformacoesGerais mo={mo} />
+                        <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
+                            Pacotes Concluídos
+                        </Typography>
+                        <TabelaPacotes
+                            pacotes={pacotes}
+                            pedidos={pedidos}
+                            verificaPacote={true}
+                            finalizados={true}
+                            flushHook={setFlushHook}
+                        />
+                        {/* <div className="pacotes">
                         <table className="table">
                             <thead className="table-header">
                                 <tr>
@@ -126,9 +138,10 @@ const FichaBeneficiarioConcluidos = () => {
                                 }
                             </tbody>
                         </table>
-                    </div>
-                </Box>
-            </Container>
+                    </div> */}
+                    </Box>
+                </Container>
+            </Box>
         </>
     )
 }
