@@ -88,3 +88,7 @@
 .formulario-container .title button {
     padding: 6px;
 }
+
+.none {
+    display: none;
+}

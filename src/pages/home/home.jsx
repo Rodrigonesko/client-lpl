@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import './style.css'
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
 import { Button, TextField, Box, Snackbar, Alert, Container, Typography } from "@mui/material";
