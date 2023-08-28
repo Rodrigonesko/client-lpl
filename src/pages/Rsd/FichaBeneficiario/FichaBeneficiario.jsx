@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { FaAngleDown } from 'react-icons/fa'
 import AuthContext from "../../../context/AuthContext";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import './FichaBeneficiario.css'
+// import './FichaBeneficiario.css'
 import moment from "moment/moment";
 import TabelaProtocolo from "../../../components/TabelaProtocolo/TabelaProtocolo";
 import TabelaPedido from "../../../components/TabelaPedido/TabelaPedido";

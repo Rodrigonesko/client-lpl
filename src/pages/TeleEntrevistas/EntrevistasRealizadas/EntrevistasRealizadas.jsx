@@ -172,6 +172,7 @@ const EntrevistasRealizadas = () => {
             xls += "<th>Porte</th>"
             xls += "<th>Proposta</th>"
             xls += "<th>Nome</th>"
+            xls += "<th>CPF</th>"
             xls += "<th>Idade</th>"
             xls += "<th>UF</th>"
             xls += "<th>Status Final</th>"
@@ -189,6 +190,7 @@ const EntrevistasRealizadas = () => {
                 xls += `<td>${e.tipoContrato || ''}</td>`
                 xls += `<td>${e.proposta || ''}</td>`
                 xls += `<td>${e.nome || ''}</td>`
+                xls += `<td>${e.cpf || ''}</td>`
                 xls += `<td>${e.idade || ''}</td>`
                 xls += `<td>${e.filial || ''}</td>`
                 xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
