@@ -71,8 +71,8 @@ const Todas = () => {
                         '1º CTTO': contato1,
                         '2º CTTO': contato2,
                         '3º CTTO': contato3,
-                        'OBSERVAÇÕES DO CONTATO': e.observacoes
-
+                        'OBSERVAÇÕES DO CONTATO': e.observacoes,
+                        'Analista': e.analistaAmil || ''
                     }
                 )
             })
