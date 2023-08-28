@@ -93,52 +93,6 @@ const FichaBeneficiarioConcluidos = () => {
                             finalizados={true}
                             flushHook={setFlushHook}
                         />
-                        {/* <div className="pacotes">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>ID LPL</th>
-                                    <th>ANS</th>
-                                    <th>Status</th>
-                                    <th>Analista</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    pacotes.map(e => {
-                                        if (e.statusPacote !== 'Não iniciado' && e.status === 'Finalizado') {
-                                            return (
-                                                <>
-                                                    <tr>
-                                                        <td className="td-pacote" onClick={mostrarPedidos} > <FaAngleDown /> {e.pacote}</td>
-                                                        <td className="data">{moment(e.createdAt).format('DD/MM/YYYY')}</td>
-                                                        <td>{e.statusPacote}</td>
-                                                        <td>{e.analista}</td>
-                                                        <td><button value={e.pacote} onClick={handlerAssumirPacote} className='btn-assumir-pacote' >Assumir</button></td>
-                                                        <td><Link to={`/rsd/ProcessamentoPacote/${mo}/${e.pacote}`} className="btn-verificar-processamento">Verificar Processamento</Link></td>
-                                                    </tr>
-                                                    <tr className="none teste">
-                                                        <TabelaProtocolo
-                                                            pedidos={pedidos}
-                                                            pacote={e.pacote}
-                                                            verificaPacote={true}
-                                                            finalizados={true}
-                                                        />
-
-
-                                                    </tr>
-                                                </>
-                                            )
-                                        }
-
-                                        return null
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div> */}
                     </Box>
                 </Container>
             </Box>
