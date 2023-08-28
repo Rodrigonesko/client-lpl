@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container } from "@mui/material";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel, MenuItem, Select, FormControl, TextField, Box, Snackbar, CircularProgress, Typography, Container, Button } from "@mui/material";
 import { Alert } from "@mui/material";
-import { atribuirAnalistaPre, getPropostasAnalise } from "../../../_services/elegibilidade.service";
+import { atribuirAnalistaPre, filterElegibilidade, getEntidades, getPropostasAnalise } from "../../../_services/elegibilidade.service";
 import { getAnalistasElegibilidade } from "../../../_services/user.service";
 
 const AnaliseDocumentos = () => {
@@ -13,6 +13,9 @@ const AnaliseDocumentos = () => {
     const [analistas, setAnalistas] = useState([])
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false)
+    const [entidades, setEntidades] = useState([])
+
+    const [entidade, setEntidade] = useState('')
 
     const buscarPropostas = async () => {
         try {
@@ -22,6 +25,10 @@ const AnaliseDocumentos = () => {
 
             setPropostas(result.propostas)
             setTotal(result.total)
+
+            const buscaEntidade = await getEntidades('Análise de Documentos')
+
+            setEntidades(buscaEntidade.entidades)
 
             setLoading(false)
 
@@ -33,7 +40,6 @@ const AnaliseDocumentos = () => {
 
     const buscarAnalistas = async () => {
         try {
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/elegibilidade`, { withCredentials: true })
 
             const result = await getAnalistasElegibilidade()
 
@@ -72,6 +78,30 @@ const AnaliseDocumentos = () => {
         setOpen(false);
     };
 
+    const filtrarPropostas = async (e) => {
+
+        try {
+
+            setLoading(true)
+
+            e.preventDefault()
+
+            const result = await filterElegibilidade('', entidade, 'Análise de Documentos', '', '')
+
+            console.log(result);
+
+            setPropostas(result.propostas)
+            setTotal(result.propostas.length)
+
+            setLoading(false)
+
+
+        } catch (error) {
+
+        }
+
+    }
+
     useEffect(() => {
         buscarPropostas()
         buscarAnalistas()
@@ -85,14 +115,40 @@ const AnaliseDocumentos = () => {
                 <Typography variant="h5">
                     Atribuição de analistas
                 </Typography>
-
-                <Box m={2} display='flex' alignItems='center'>
-                    <TextField type="text" id="proposta-analise-doc" label="Proposta" variant="standard" size="small" />
-                    <Typography variant="h6" marginLeft={2}>
-                        Total: <strong>{total}</strong>
-                    </Typography>
-                </Box>
-
+                <form action="">
+                    <Box m={2} display='flex' alignItems='center'>
+                        {/* <TextField type="text" id="proposta-analise-doc" label="Proposta" variant="standard" size="small" /> */}
+                        <FormControl sx={{ minWidth: '120px', mr: '10px' }} size="small">
+                            <InputLabel>Entidade</InputLabel>
+                            <Select
+                                label='Entidade'
+                                onChange={e => {
+                                    setEntidade(e.target.value)
+                                }}
+                                value={entidade}
+                            >
+                                <MenuItem>
+                                    <em>
+                                        Entidade
+                                    </em>
+                                </MenuItem>
+                                {
+                                    entidades.map(entidade => {
+                                        return (
+                                            <MenuItem value={entidade}>
+                                                {entidade}
+                                            </MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <Button onClick={filtrarPropostas} variant="contained">Buscar</Button>
+                        <Typography variant="h6" marginLeft={2}>
+                            Total: <strong>{total}</strong>
+                        </Typography>
+                    </Box>
+                </form>
                 {
                     loading ? (
                         <CircularProgress className="loading" />
@@ -108,6 +164,7 @@ const AnaliseDocumentos = () => {
                                     <TableCell style={{ backgroundColor: 'lightgray' }}>Data Importação</TableCell>
                                     <TableCell style={{ backgroundColor: 'lightgray' }}>Início Vigência</TableCell>
                                     <TableCell style={{ backgroundColor: 'lightgray' }}>Nome Titular</TableCell>
+                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Entidade</TableCell>
                                     <TableCell style={{ backgroundColor: 'lightgray' }}>Analista</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -120,6 +177,7 @@ const AnaliseDocumentos = () => {
                                                 <TableCell >{moment(e.dataImportacao).format('DD/MM/YYYY')}</TableCell >
                                                 <TableCell >{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell >
                                                 <TableCell >{e.nome}</TableCell >
+                                                <TableCell>{e.entidade}</TableCell>
                                                 <TableCell >
                                                     <FormControl>
                                                         <InputLabel id="demo-simple-select-label">Analista</InputLabel>

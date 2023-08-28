@@ -21,6 +21,8 @@ const DevolvidasElegibilidade = () => {
     const [open, setOpen] = useState(false)
     const [blacklist, setBlacklist] = useState([])
 
+    const [vigencia, setVigencia] = useState('')
+
     const analista = useRef(null)
     const entidade = useRef(null)
 
@@ -93,7 +95,7 @@ const DevolvidasElegibilidade = () => {
                 valorEntidade = ''
             }
 
-            const result = await filterElegibilidade(valorAnalista, valorEntidade, 'Devolvida', '', '')
+            const result = await filterElegibilidade(valorAnalista, valorEntidade, 'Devolvida', '', vigencia)
 
             setPropostas(result.propostas)
             setTotal(result.propostas.length)
@@ -226,6 +228,9 @@ const DevolvidasElegibilidade = () => {
                                     }
                                 </Select>
                             </FormControl>
+                            <TextField size="small" type="date" sx={{ w: '150px', m: '0 5px' }} label='Vigência' focused value={vigencia} onChange={e => {
+                                setVigencia(e.target.value)
+                            }} />
                             <Button onClick={filtrar} display={pesquisando} variant="contained">Filtrar {pesquisando ? <CircularProgress style={{ width: '20px', height: '20px', marginLeft: '10px' }} /> : null}</Button>
                         </Box>
                     </form>
