@@ -16,9 +16,7 @@ const ModalPatologias = ({ celula, idCelula }) => {
     const [observacoes, setObservacoes] = useState('')
 
     const handleClickOpen = () => {
-
         fetchData()
-
         setOpen(true);
     };
 

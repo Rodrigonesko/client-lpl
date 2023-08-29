@@ -4,7 +4,6 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { buscarClinica, criarPedido, getMoPorProtocolo } from "../../../_services/rsd.service";
 import { Container, Box, Paper, TextField, Button, Typography, Divider, Select, MenuItem, FormControl, InputLabel, Alert, Snackbar } from "@mui/material";
 
-
 const CriarPedido = () => {
 
     const { protocolo } = useParams()
@@ -62,9 +61,6 @@ const CriarPedido = () => {
             setTimeout(() => {
                 navigate(`/rsd/FichaBeneficiario/${mo}`)
             }, '1000')
-
-
-       
 
         } catch (error) {
             console.log(error);
