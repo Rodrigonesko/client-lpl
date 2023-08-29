@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { useParams } from "react-router-dom";
 import InformacoesGerais from "../../../components/InformacoesGerais/InformacoesGerais";
-import './ProcessamentoPacote.css'
 import { atualizarPedido, getAgendaRsd, getArquivos, getFormasPagamento, getPedidosPorPacote, getStatusFinalizacao, inserirPrioridadeDossiePacote, voltarFasePacote } from "../../../_services/rsd.service";
 import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
 import { Box, Container, Typography, Button, FormControlLabel, Checkbox, Alert, Snackbar } from "@mui/material";
@@ -10,7 +9,6 @@ import TabelaProtocolosProcessamento from "./TabelaProtocolosProcessamento";
 import AgendaProcessamentoRsd from "./AgendaProcessamentoRsd";
 import TabelaArquivosProcessamento from "./TabelaArquivosProcessamento";
 import RoteiroProcessamento from "./RoteiroProcessamento";
-
 
 const ProcessamentoPacote = () => {
 
@@ -36,7 +34,7 @@ const ProcessamentoPacote = () => {
     }
 
     const handleShowRoteiro = () => {
-        
+
         setMsg('Processamento iniciado!')
         setOpen(true)
         setOpenRoteiro(true)
@@ -190,7 +188,7 @@ const ProcessamentoPacote = () => {
             setProtocolos(arrAuxProtocolos)
 
             setStatusPacote(result.pedidos[0].statusPacote)
-            console.log(result.pedidos[0].statusPacote );
+            console.log(result.pedidos[0].statusPacote);
             if (result.pedidos[0].statusPacote === 'Finalizado') {
                 console.log('finalizado');
                 setFinalizado(true)
@@ -238,7 +236,7 @@ const ProcessamentoPacote = () => {
                         Pedidos de Reembolso
                     </Typography>
                     {
-                        
+
                     }
                     <TabelaProtocolosProcessamento protocolos={protocolos} pedidos={pedidos} flushHook={setFlushHook} />
                     <Box m={2} >
@@ -262,7 +260,7 @@ const ProcessamentoPacote = () => {
                         />
                     </Box>
                     <Box display='flex'>
-                        <div className="roteiro" style={{ maxWidth: '800px' }}>
+                        <Box sx={{ maxWidth: '800px', width: '70%', marginRight: '30px' }}>
                             <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
                                 Roteiro
                             </Typography>
@@ -277,7 +275,7 @@ const ProcessamentoPacote = () => {
                                 )
 
                             }
-                        </div>
+                        </Box>
                         <Box maxWidth='400px'>
                             <AgendaProcessamentoRsd flushHook={setFlushHook} agenda={agenda} />
                             <TabelaArquivosProcessamento salvar={salvar} arquivos={arquivos} flushHook={setFlushHook} />
