@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 import moment from "moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Todas.css'
-import { getPedidoRn, getRns } from "../../../_services/teleEntrevista.service";
+import { getPedidoRn, getRns, filterRn } from "../../../_services/teleEntrevista.service";
 
 
 const Todas = () => {
@@ -182,18 +182,17 @@ const Todas = () => {
         }
     }
 
-    useEffect(() => {
-
-        const searchRn = async () => {
-            try {
-                const result = await getRns()
-                setRns(result)
-            } catch (error) {
-                console.log(error);
-            }
+    const fetchData = async () => {
+        try {
+            const result = await getRns()
+            setRns(result)
+        } catch (error) {
+            console.log(error);
         }
+    }
 
-        searchRn()
+    useEffect(() => {
+        fetchData()
     }, [])
 
     return (
