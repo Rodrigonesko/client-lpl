@@ -158,6 +158,10 @@ export const uploadRn = async (data) => {
     return await new ApiCall('/rn/upload').post(data)
 }
 
+export const filterRn = async (pesquisa) => {
+    return await new ApiCall(`/rn/filter/${pesquisa}`).get()
+}
+
 export const alterarWhatsapp = async (data) => {
     return await new ApiCall('/alterarWhatsapp', URL_API).put(data)
 }
