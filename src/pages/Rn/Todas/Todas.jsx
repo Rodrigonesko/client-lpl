@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom'
-import { Button, Paper, Box, TextField, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import { Button, Box, TextField, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Alert, Snackbar } from "@mui/material";
 import * as XLSX from "xlsx";
 import moment from "moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Todas.css'
-import { getPedidoRn, getRns, filterRn } from "../../../_services/teleEntrevista.service";
 
+import { filterRn } from "../../../_services/teleEntrevista.service";
+import { Container } from "@mui/material";
 
 const Todas = () => {
 
     const [rns, setRns] = useState([])
-    const [proposta, setProposta] = useState('')
+    const [pesquisa, setPesquisa] = useState('')
+    const [alerta, setAlerta] = useState(false)
 
     let rnsForExcel
 
-    const searchProposta = async (e) => {
+    const handleClose = () => {
+        setAlerta(false)
+    }
+    const handleChange = (elemento) => {
 
-        e.preventDefault()
+        setPesquisa(elemento.target.value)
+    }
+    const handleFilter = async (event) => {
 
+        event.preventDefault()
 
-        if (proposta.length === 0) {
+        if (pesquisa.length <= 2) {
+            setAlerta(true)
             return
         }
 
-        const result = await getPedidoRn(proposta)
-
-        setRns(result)
-
+        const resultado = await filterRn(pesquisa)
+        setRns(resultado)
     }
 
     const transformData = () => {
@@ -182,70 +189,74 @@ const Todas = () => {
         }
     }
 
-    const fetchData = async () => {
-        try {
-            const result = await getRns()
-            setRns(result)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
     return (
         <>
             <Sidebar />
-            <section className="section-rn-container">
+            <Container>
                 <div className="rn-container">
-                    <div className="report">
-                        <Button variant="outlined" onClick={report}>Report</Button>
-                        <Button variant="contained" onClick={reportGerencial} >Report Gerencial</Button>
-                    </div>
+
                     <div className="title">
                         <h2>Rns</h2>
                     </div>
-                    <form action="">
-                        <Box component={Paper} p={2}>
-                            <TextField size="small" label='Proposta' onChange={e => setProposta(e.target.value)} />
-                            <Button type='submit' onClick={searchProposta} variant='contained' style={{ marginLeft: '5px' }} >Buscar</Button>
-                        </Box>
-                    </form>
 
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow className="table-header">
-                                    <TableCell>BENEFICIARIO</TableCell>
-                                    <TableCell>MO</TableCell>
-                                    <TableCell>IDADE</TableCell>
-                                    <TableCell>TELEFONE</TableCell>
-                                    <TableCell>CONFIRMADO?</TableCell>
-                                    <TableCell>DETALHES</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rns.map(e => {
-                                    return (
-                                        <TableRow key={e.proposta}>
-                                            <TableCell>{e.beneficiario}</TableCell>
-                                            <TableCell>{e.mo}</TableCell>
-                                            <TableCell>{e.idade}</TableCell>
-                                            <TableCell>{e.telefones}</TableCell>
-                                            <TableCell>{e.respostaBeneficiario}</TableCell>
-                                            <TableCell><Link to={'../rn/rns/' + e._id} className="link">Detalhes</Link></TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Box
+                        display={"flex"}
+                        paddingTop={"15px"}
+                        paddingBottom={"15px"}
+                    >
+                        <form action="" >
+                            <TextField onChange={handleChange} size='small' label='Nome, MO, Pedido e Proposta' sx={{ marginRight: '10px' }}
+                            />
+                            <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
+                        </form>
+                        <Box position={'absolute'} right='20px'>
+                            <Button variant="outlined" onClick={report} sx={{ marginRight: '10px' }}>Report</Button>
+                            <Button variant="contained" onClick={reportGerencial} >Report Gerencial</Button>
+                        </Box>
+                    </Box>
+                    <Snackbar open={alerta} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert variant="filled" onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+                            Digite no minimo 3 caracteres!
+                        </Alert>
+                    </Snackbar>
+
+                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow className="table-header">
+                                        <TableCell>BENEFICIARIO</TableCell>
+                                        <TableCell>MO</TableCell>
+                                        <TableCell>IDADE</TableCell>
+                                        <TableCell>TELEFONE</TableCell>
+                                        <TableCell>CONFIRMADO?</TableCell>
+                                        <TableCell>DETALHES</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {rns.map(e => {
+                                        console.log();
+                                        return (
+                                            <TableRow key={e.proposta}>
+                                                <TableCell>{e.beneficiario}</TableCell>
+                                                <TableCell>{e.mo}</TableCell>
+                                                <TableCell>{e.idade}</TableCell>
+                                                <TableCell>{e.telefones}</TableCell>
+                                                <TableCell>{e.respostaBeneficiario}</TableCell>
+                                                <TableCell><Link to={'../rn/rns/' + e._id} className="link">Detalhes</Link></TableCell>
+                                            </TableRow>
+                                        )
+                                    })}
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
                 </div>
-            </section>
+            </Container>
         </>
     )
 }
+
 
 export default Todas

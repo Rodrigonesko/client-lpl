@@ -234,7 +234,6 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/chatTwilio/:whatsapp" element={<ProtectedRoute>
                     <ChatTwilio />
                 </ProtectedRoute>} />
-
                 <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>
                     <Pdf2 />
                 </ProtectedRoute>} />
