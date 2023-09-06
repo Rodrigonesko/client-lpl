@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import moment from "moment/moment";
-import { Button, Box, Select, FormControl, InputLabel, MenuItem, CircularProgress, Modal, Typography } from "@mui/material";
+import RelatorioAnexos from "./RelatorioAnexos";
+import { Button, Box, Select, FormControl, InputLabel, MenuItem, CircularProgress, Modal, Typography, TableContainer, TableCell, TableRow, TableHead, TableBody, Table } from "@mui/material";
 
 const style = {
     position: 'absolute',
@@ -15,7 +16,6 @@ const style = {
     borderRadius: '5px',
     p: 4,
 };
-
 
 const Anexos = () => {
 
@@ -118,12 +118,12 @@ const Anexos = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <section className="section-anexos-container">
-                <Box m={2}>
-                    <h3>Anexar SisAmil: {propostas.length}</h3>
-                </Box>
-                <Box>
-                    <FormControl style={{ minWidth: '130px' }}>
+            <Box className="section-anexos-container">
+                <Typography ml={5} mt={2} variant="h5">
+                    Anexar SisAmil: {propostas.length}
+                </Typography>
+                <Box display='flex' justifyContent='space-between' >
+                    <FormControl size="small" sx={{ minWidth: '130px', ml: 5 }}>
                         <InputLabel>Divergência</InputLabel>
                         <Select
                             label='Divergência'
@@ -145,6 +145,7 @@ const Anexos = () => {
                             </MenuItem>
                         </Select>
                     </FormControl>
+                    <RelatorioAnexos />
                 </Box>
                 {
                     loading ? (
@@ -153,52 +154,52 @@ const Anexos = () => {
                     ) : null
                 }
                 <Box m={2}>
-                    <div className="anexos-sisamil">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>Vigência</th>
-                                    <th>Proposta</th>
-                                    <th>Nome</th>
-                                    <th>TipoContrato</th>
-                                    <th>Houve Divergência</th>
-                                    <th>Cids</th>
-                                    <th>Divergência</th>
-                                    <th>Concluir</th>
-                                    <th>Implantação</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <TableContainer>
+                        <Table className="table">
+                            <TableHead className="table-header">
+                                <TableRow>
+                                    <TableCell>Vigência</TableCell>
+                                    <TableCell>Proposta</TableCell>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>TipoContrato</TableCell>
+                                    <TableCell>Houve Divergência</TableCell>
+                                    <TableCell>Cids</TableCell>
+                                    <TableCell>Divergência</TableCell>
+                                    <TableCell>Concluir</TableCell>
+                                    <TableCell>Implantação</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {
                                     propostas.map(e => {
                                         return (
-                                            <tr key={e._id}>
-                                                <td>{moment(e.vigencia).format('DD/MM/YYYY')}</td>
-                                                <td>{e.proposta}</td>
-                                                <td>{e.nome}</td>
-                                                <td>{e.tipoContrato}</td>
-                                                <td>{e.houveDivergencia}</td>
-                                                <td>{e.cids}</td>
-                                                <td>{e.divergencia}</td>
-                                                <td><Button variant='contained' color='success' size='small' onClick={() => {
+                                            <TableRow key={e._id}>
+                                                <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{e.proposta}</TableCell>
+                                                <TableCell>{e.nome}</TableCell>
+                                                <TableCell>{e.tipoContrato}</TableCell>
+                                                <TableCell>{e.houveDivergencia}</TableCell>
+                                                <TableCell>{e.cids}</TableCell>
+                                                <TableCell>{e.divergencia}</TableCell>
+                                                <TableCell><Button variant='contained' color='success' size='small' onClick={() => {
                                                     setModalConcluir(true)
                                                     setProposta(e.proposta)
                                                     setNome(e.nome)
                                                     setId(e._id)
-                                                }} >Concluir</Button></td>
-                                                <td><Button variant='contained' color='warning' size='small' onClick={() => {
+                                                }} >Concluir</Button></TableCell>
+                                                <TableCell><Button variant='contained' color='warning' size='small' onClick={() => {
                                                     setModalImplantar(true)
                                                     setProposta(e.proposta)
                                                     setNome(e.nome)
                                                     setId(e._id)
-                                                }}>Implantação</Button></td>
-                                            </tr>
+                                                }}>Implantação</Button></TableCell>
+                                            </TableRow>
                                         )
                                     })
                                 }
-                            </tbody>
-                        </table>
-                    </div>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </Box>
                 <Modal
                     open={modalConcluir}
@@ -242,7 +243,7 @@ const Anexos = () => {
                         </Box>
                     </Box>
                 </Modal>
-            </section>
+            </Box>
         </>
     )
 }
