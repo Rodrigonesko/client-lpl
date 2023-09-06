@@ -136,7 +136,7 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
         <TableRow>
             <TableCell>
                 <TextField onChange={e => setNumero(e.target.value)} value={numero} inputProps={{
-                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                    style: { fontSize: '14px', padding: '4px', width: '90px' }
                 }} />
             </TableCell>
             <TableCell>{pedido.status}</TableCell>
@@ -151,12 +151,12 @@ const RowPedidoRsd = ({ pedido, flushHook, checkPedidos, setCheckPedidos }) => {
                     setCnpj(e.target.value)
                     buscaClinica(e.target.value)
                 }} size="small" value={cnpj} inputProps={{
-                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                    style: { fontSize: '14px', padding: '4px', width: '120px' }
                 }} />
             </TableCell>
             <TableCell>
-                <TextField onChange={e => setClinica(e.target.value)} size="small" value={clinica} inputProps={{
-                    style: { fontSize: '14px', padding: '4px', width: '80px' }
+                <TextField  onChange={e => setClinica(e.target.value)} size="small" value={clinica} inputProps={{
+                    style: { fontSize: '14px', padding: '4px', width: '200px' }
                 }} />
             </TableCell>
             <TableCell>

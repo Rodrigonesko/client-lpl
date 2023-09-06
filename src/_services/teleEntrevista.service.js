@@ -177,3 +177,7 @@ export const relatorioProducaoTele = async () => {
 export const getRendimentoMensalIndividualTele = async (mes, analista) => {
     return await new ApiCall(`/entrevistas/rendimentoIndividualMensal/${mes}/${analista}`).get()
 }
+
+export const getRelatorioAnexos = async (date) => {
+    return await new ApiCall(`/entrevistas/reportAnexos/${date}`).get()
+}
