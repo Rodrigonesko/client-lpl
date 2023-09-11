@@ -2,12 +2,13 @@ import { Box, Paper, Button, Avatar, Typography, Divider, IconButton, Tooltip } 
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2  
 import { FaInstagram, FaLinkedin } from 'react-icons/fa'
 
-const ProfileHead = () => {
+const ProfileHead = ({ userData }) => {
+
     return (
         <Box component={Paper} p={1} mr='2%' ml='2%' mt='2%' maxHeight='300px' display='flex' justifyContent='space-between' >
             <Box display='flex' alignItems='center'>
                 <Tooltip title='Trocar foto'>
-                    <Button sx={{borderRadius: '50%'}} >
+                    <Button sx={{ borderRadius: '50%' }} >
                         <Avatar
                             sx={{ width: '100px', height: '100px' }}
                         ></Avatar>
@@ -16,14 +17,14 @@ const ProfileHead = () => {
 
                 <Box ml='20px'>
                     <Typography variant="h5">
-                        Rodrigo Onesko Dias
+                        {userData.name}
                     </Typography>
                     <Typography mb={1} variant='body2' color='gray'>
-                        rodrigo_onesko@hotmail.com
+                        {userData.email}
                     </Typography>
                     <Box>
-                        <Button size="small" variant="contained">Produção</Button>
-                        <Button sx={{ ml: '5px' }} size="small" variant="contained" color="inherit">Editar</Button>
+                        <Button size="small" variant="contained" href={`/profile/minhaProducao/${userData.name}`}>Produção</Button>
+                        <Button disabled sx={{ ml: '5px' }} size="small" variant="contained" color="inherit">Editar</Button>
                     </Box>
                 </Box>
             </Box>
@@ -36,18 +37,17 @@ const ProfileHead = () => {
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-                        2 anos
+                        
                     </Typography>
                 </Grid>
                 <Grid xs={5}>
                     <Typography>
                         Data admissão:
                     </Typography>
-
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-                        06/09/2023
+                        
                     </Typography>
                 </Grid>
                 <Grid xs={5}>
@@ -58,7 +58,7 @@ const ProfileHead = () => {
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-                        RSD
+                        {userData.atividadePrincipal}
                     </Typography>
                 </Grid>
                 <Grid xs={1}>

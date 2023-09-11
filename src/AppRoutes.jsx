@@ -10,6 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 /* User */
 
 import Profile from "./pages/User/Perfil/Profile";
+import MyProduction from "./pages/User/Production/MyProduction";
 
 /* Elegibilidade */
 
@@ -140,6 +141,9 @@ const AppRoutes = () => {
 
                 <Route path="/profile" element={<ProtectedRoute>
                     <Profile />
+                </ProtectedRoute>} />
+                <Route path="/profile/minhaProducao/:name" element={<ProtectedRoute>
+                    <MyProduction />
                 </ProtectedRoute>} />
 
 
