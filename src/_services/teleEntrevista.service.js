@@ -158,6 +158,10 @@ export const uploadRn = async (data) => {
     return await new ApiCall('/rn/upload').post(data)
 }
 
+export const filterRn = async (pesquisa) => {
+    return await new ApiCall(`/rn/filter/${pesquisa}`).get()
+}
+
 export const alterarWhatsapp = async (data) => {
     return await new ApiCall('/alterarWhatsapp', URL_API).put(data)
 }
@@ -174,6 +178,6 @@ export const getRendimentoMensalIndividualTele = async (mes, analista) => {
     return await new ApiCall(`/entrevistas/rendimentoIndividualMensal/${mes}/${analista}`).get()
 }
 
-export const filterRn = async (pesquisa) => {
-    return await new ApiCall(`/rn/filter/${pesquisa}`).get()
+export const getRelatorioAnexos = async (date) => {
+    return await new ApiCall(`/entrevistas/reportAnexos/${date}`).get()
 }

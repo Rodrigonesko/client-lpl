@@ -35,7 +35,6 @@ import PainelProcessos from "./pages/Rsd/PainelProcessos/PainelProcessos";
 import UploadRsd from "./pages/Rsd/UploadRsd/UploadRsd";
 import UploadQuarentena from "./pages/Rsd/Upload/UploadQuarentena";
 import FichaBeneficiario from "./pages/Rsd/FichaBeneficiario/FichaBeneficiario";
-import EditarPedido from "./pages/Rsd/EditarPedido/EditarPedido";
 import CriarPedido from "./pages/Rsd/CriarPedido/CriarPedido";
 import CriarProtocolo from "./pages/Rsd/CriarProtocolo/CriarProtocolo";
 import ProcessamentoPacote from "./pages/Rsd/ProcessamentoPacote/ProcessamentoPacote";
@@ -256,9 +255,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/rsd/FichaBeneficiario/:mo" element={<ProtectedRoute>
                     <FichaBeneficiario />
-                </ProtectedRoute>} />
-                <Route path="/rsd/EditarPedido/:pedido" element={<ProtectedRoute>
-                    <EditarPedido />
                 </ProtectedRoute>} />
                 <Route path="/rsd/CriarPedido/:protocolo" element={<ProtectedRoute>
                     <CriarPedido />

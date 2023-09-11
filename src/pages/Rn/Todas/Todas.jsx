@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 import moment from "moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Todas.css'
-import { filterRn } from "../../../_services/teleEntrevista.service";
+import { filterRn, getRns } from "../../../_services/teleEntrevista.service";
 import { Container } from "@mui/material";
 
 const Todas = () => {
@@ -19,10 +19,11 @@ const Todas = () => {
     const handleClose = () => {
         setAlerta(false)
     }
-    const handleChange = (elemento) => {
 
+    const handleChange = (elemento) => {
         setPesquisa(elemento.target.value)
     }
+
     const handleFilter = async (event) => {
 
         event.preventDefault()
@@ -36,10 +37,12 @@ const Todas = () => {
         setRns(resultado)
     }
 
-    const transformData = () => {
+    const transformData = async () => {
         try {
 
-            rnsForExcel = rns.map(e => {
+            const result = await getRns()
+
+            rnsForExcel = result.map(e => {
 
                 let contato1, contato2, contato3
 
@@ -82,6 +85,7 @@ const Todas = () => {
                     }
                 )
             })
+
         } catch (error) {
             console.log(error);
         }
@@ -89,7 +93,7 @@ const Todas = () => {
 
     const report = async () => {
 
-        transformData()
+        await transformData()
 
         try {
             const ws = XLSX.utils.json_to_sheet(rnsForExcel)
@@ -106,8 +110,9 @@ const Todas = () => {
 
     const reportGerencial = async () => {
         try {
-
             let xls = '\ufeff'
+
+            const result = await getRns()
 
             xls += "<table border='1'>"
             xls += "<thead><tr>"
@@ -135,9 +140,10 @@ const Todas = () => {
             xls += "<th>Responsável</th>"
             xls += "<th>Cancelado</th>"
             xls += "<th>Data Inclusão</th>"
+            xls += "<th>Analista Amil</th>"
             xls += "</tr></thead><tbody>"
 
-            rns.forEach(e => {
+            result.forEach(e => {
 
                 xls += "<tr>"
                 if (e.dataConclusao === undefined) {
@@ -145,33 +151,34 @@ const Todas = () => {
                 } else {
                     xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
                 }
-                xls += `<td>${e.beneficiario}</td>`
-                xls += `<td>${e.mo}</td>`
-                xls += `<td>${e.proposta}</td>`
-                xls += `<td>${e.vigencia}</td>`
-                xls += `<td>${e.pedido}</td>`
-                xls += `<td>${e.tipo}</td>`
-                xls += `<td>${e.filial}</td>`
-                xls += `<td>${e.idade}</td>`
-                xls += `<td>${e.dataRecebimento}</td>`
-                xls += `<td>${e.procedimento}</td>`
-                xls += `<td>${e.doenca}</td>`
-                xls += `<td>${e.cid}</td>`
-                xls += `<td>${e.periodo}</td>`
-                xls += `<td>${e.prc}</td>`
-                xls += `<td>${e.telefones}</td>`
-                xls += `<td>${e.email}</td>`
-                xls += `<td>${e.contato1}</td>`
-                xls += `<td>${e.contato2}</td>`
-                xls += `<td>${e.contato3}</td>`
-                xls += `<td>${e.observacoes}</td>`
-                xls += `<td>${e.responsavel}</td>`
+                xls += `<td>${e.beneficiario || ''}</td>`
+                xls += `<td>${e.mo || ''}</td>`
+                xls += `<td>${e.proposta || ''}</td>`
+                xls += `<td>${e.vigencia || ''}</td>`
+                xls += `<td>${e.pedido || ''}</td>`
+                xls += `<td>${e.tipo || ''}</td>`
+                xls += `<td>${e.filial || ''}</td>`
+                xls += `<td>${e.idade || ''}</td>`
+                xls += `<td>${e.dataRecebimento || ''}</td>`
+                xls += `<td>${e.procedimento || ''}</td>`
+                xls += `<td>${e.doenca || ''}</td>`
+                xls += `<td>${e.cid || ''}</td>`
+                xls += `<td>${e.periodo || ''}</td>`
+                xls += `<td>${e.prc || ''}</td>`
+                xls += `<td>${e.telefones || ''}</td>`
+                xls += `<td>${e.email || ''}</td>`
+                xls += `<td>${e.contato1 || ''}</td>`
+                xls += `<td>${e.contato2 || ''}</td>`
+                xls += `<td>${e.contato3 || ''}</td>`
+                xls += `<td>${e.observacoes || ''}</td>`
+                xls += `<td>${e.responsavel || ''}</td>`
                 if (e.cancelado) {
-                    xls += `<td>${e.cancelado}</td>`
+                    xls += `<td>${e.cancelado || ''}</td>`
                 } else {
                     xls += `<td></td>`
                 }
                 xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.analistaAmil || ''}</td>`
                 xls += `</tr>`
             })
 
