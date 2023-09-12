@@ -4,6 +4,7 @@ import Axios from 'axios'
 import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Modal, Typography, Container } from '@mui/material'
 import moment from 'moment'
 import gerarPdf from '../Pdf/Pdf'
+import ModalEntrevistasRealizadas from './ModalEntrevistasRealizadas'
 //import Pdf2 from '../Pdf/Pdf2'
 
 const style = {
@@ -268,7 +269,8 @@ const EntrevistasRealizadas = () => {
                     <Box display='flex'>
                         {/* <TextField type='date' label='Data Inicio' focused size='small' onChange={e => setDataInicio(e.target.value)} />
                         <TextField type='date' label='Data Fim' focused size='small' onChange={e => setDataFim(e.target.value)} /> */}
-                        <Button style={{ marginLeft: '4px' }} color='secondary' size='small' variant="contained" onClick={gerarRelatorioMensal}>Relatório Mensal</Button>
+                        {/* <Button style={{ marginLeft: '4px' }} color='secondary' size='small' variant="contained" onClick={gerarRelatorioMensal}>Relatório Mensal</Button> */}
+                        <ModalEntrevistasRealizadas />
 
                         <Button style={{ marginLeft: '4px' }} size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
                     </Box>
