@@ -7,6 +7,11 @@ import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
+/* Modulo de Ferias*/
+
+import SolicitacaoFerias from "./pages/Ferias/Solicitacao/SolicitacaoFerias";
+import AprovacaoFerias from "./pages/Ferias/Aprovacao/AprovacaoFerias"
+
 /* Elegibilidade */
 
 import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
@@ -115,6 +120,13 @@ const AppRoutes = () => {
         <AuthProvider>
             <Routes>
                 <Route exact path="/login" element={<Login />} />
+                {/*Modulo de Ferias*/}
+                <Route exact path="/solicitacaoFerias" element={<ProtectedRoute>
+                    <SolicitacaoFerias />
+                </ProtectedRoute>} />
+                <Route exact path="/aprovacaoFerias" element={<ProtectedRoute>
+                    <AprovacaoFerias />
+                </ProtectedRoute>} />
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
 
