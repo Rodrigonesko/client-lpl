@@ -4,11 +4,10 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import { getInfoUser } from "../../../_services/user.service";
 import moment from "moment";
-import { getProdutividadeMensalRsd } from "../../../_services/rsd.service";
-import { getProducaoMensalElegi } from "../../../_services/elegibilidade.service";
 import MyProductionTele from "./Celulas/MyProductionTele";
 import MyProductionRsd from "./Celulas/MyProductionRsd";
 import MyProductionElegi from "./Celulas/MyProductionElegi";
+import Chart from "react-google-charts";
 
 const MyProduction = () => {
 
@@ -24,9 +23,9 @@ const MyProduction = () => {
         if (user.atividadePrincipal === 'Tele Entrevista') {
             setProductionComponent(<MyProductionTele />)
         } else if (user.atividadePrincipal === 'RSD') {
-            const result = await getProdutividadeMensalRsd(moment().format('YYYY-MM'), user.name)
+            setProductionComponent(<MyProductionRsd />)
         } else if (user.atividadePrincipal === 'Elegibilidade') {
-            const result = await getProducaoMensalElegi(moment().format('YYYY-MM'), user.name)
+            setProductionComponent(<MyProductionElegi />)
         }
     }
 
@@ -35,18 +34,15 @@ const MyProduction = () => {
     }
 
 
-
     const handleClick = () => {
 
 
-        // Em seguida, realize as verificações condicionais
         let mesAux = mes;
 
         if (mesAux === '') {
             mesAux = moment().format('YYYY-MM');
         }
-
-        // Atualize o estado primeiro
+        
         setProductionComponent(null)
 
         if (celula === 'Tele Entrevista') {
@@ -101,6 +97,7 @@ const MyProduction = () => {
                     productionComponent
                 }
             </Container>
+            <Chart style={{ display: 'none' }} />
         </>
     )
 }
