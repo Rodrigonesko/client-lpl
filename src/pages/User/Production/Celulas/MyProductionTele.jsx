@@ -18,6 +18,7 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
     const [data, setData] = useState({})
     const [somaMelhor, setSomaMelhor] = useState(0)
     const [melhorRendimento, setMelhorRendimento] = useState(false)
+    const [porcentalMelhorDesempenho, setPorcentualMelhorDesempenho] = useState('')
     const [loading, setLoading] = useState(false)
 
     const fetchData = async () => {
@@ -32,7 +33,12 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
 
         if (somaUltimaColuna === 0) {
             setMelhorRendimento(true)
+        } else {
+            const percMelhorDesempenho = 100 - ((result.total / somaUltimaColuna) * 100)
+
+            setPorcentualMelhorDesempenho('-' + percMelhorDesempenho.toFixed(2) + '%')
         }
+
 
         setSomaMelhor(somaUltimaColuna)
         setData(result)
@@ -80,13 +86,11 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                                             {data.total} - Rendimento
                                         </Typography>
                                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            X% Relação a média
                                         </Typography>
                                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            X% Relação ao melhor desempenho
+                                            {porcentalMelhorDesempenho} Relação ao melhor desempenho
                                         </Typography>
                                         <Typography color="text.secondary">
-                                            X% Relação a meta
                                         </Typography>
                                     </CardContent>
                                 </Card>
