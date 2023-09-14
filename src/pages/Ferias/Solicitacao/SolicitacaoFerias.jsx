@@ -1,22 +1,50 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Radio, RadioGroup, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Radio, RadioGroup, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 
 export default function SolicitacaoFerias() {
 
     const [solicitacaoChecked, setSolicitacaoChecked] = useState('30 dias')
     const [open, setOpen] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
+    const [dados, setDados] = useState({
+        tipoSolicitacao: '30 dias',
+        data: '',
+        data2: ''
+    })
     const [openSnack, setOpenSnack] = useState(false)
     const [alerta, setAlerta] = useState(false)
 
     const handleCheckedSolicitacao = (e) => {
-        setSolicitacaoChecked(e.target.value)   
+        setSolicitacaoChecked(e.target.value)
+        const objAux = dados
+        objAux.tipoSolicitacao = e.target.value
+        objAux.data = ''
+        objAux.data2 = ''
+        setDados(objAux)
 
     }
 
     const handleChange = (elemento) => {
         setPesquisa(elemento.target.value)
+        console.log(pesquisa)
+    }
+
+    const handleChangeDados = (elemento) => {
+        const name = elemento.target.name
+
+        console.log(name, elemento.target.value);
+
+        const objAux = dados
+
+        if (name === 'data') {
+            objAux.data = elemento.target.value
+            console.log('entrou');
+        } else {
+            objAux.data2 = elemento.target.value
+        }
+
+        setDados(objAux)
     }
 
     const handleFilter = async (event) => {
@@ -44,14 +72,16 @@ export default function SolicitacaoFerias() {
     const handleCloseInput = () => {
         setAlerta(false)
     }
-    
+
     const handleSave = () => {
-        if (pesquisa.length <= 0) {
+        if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias')) {
             setOpenSnack(true)
             return
         }
-        
+
+        console.log(dados)
     }
+
 
     return (
         <>
@@ -75,16 +105,17 @@ export default function SolicitacaoFerias() {
                                                 <FormControlLabel value="20/10 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="20/10 Dias" />
                                                 <FormControlLabel value="15/15 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="15/15 Dias" />
 
-                                                {solicitacaoChecked === '30 dias' ? (
-                                                    <TextField type='date' onChange={handleChange} focused size='small' label='Qual data deseja iniciar suas Férias?' />
-                                                ) : (
-                                                    <form action="">
-                                                        <TextField type='date' margin='normal' onChange={handleChange} focused size='small' required='required' label='Qual data deseja iniciar suas Férias?' />
-                                                        <br />
-                                                        <TextField type='date' margin='normal' onChange={handleChange} focused size='small' required='required' label='Qual data deseja iniciar suas Férias?' />
-                                                    </form>
-                                                )}
-
+                                                {
+                                                    solicitacaoChecked === '30 dias' ? (
+                                                        <TextField type='date' onChange={handleChangeDados} name="data" focused size='small' label='Qual data deseja iniciar suas Férias?' />
+                                                    ) : (
+                                                        <>
+                                                            <TextField type='date' margin='normal' name="data" onChange={handleChangeDados} focused size='small' label='Qual data deseja iniciar suas 1° Férias?' />
+                                                            <br />
+                                                            <TextField type='date' margin='normal' name="data2" onChange={handleChangeDados} focused size='small' label='Qual data deseja iniciar suas 2° Férias?' />
+                                                        </>
+                                                    )
+                                                }
 
                                             </RadioGroup>
                                         </FormGroup>
