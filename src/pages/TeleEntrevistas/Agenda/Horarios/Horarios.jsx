@@ -147,7 +147,7 @@ const Horarios = () => {
             }, {
                 withCredentials: true
             })
-                       
+
             if (result.status === 200) {
                 openModal()
             }

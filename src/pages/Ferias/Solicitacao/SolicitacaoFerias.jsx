@@ -110,9 +110,9 @@ export default function SolicitacaoFerias() {
                                                         <TextField type='date' onChange={handleChangeDados} name="data" focused size='small' label='Qual data deseja iniciar suas Férias?' />
                                                     ) : (
                                                         <>
-                                                            <TextField type='date' margin='normal' name="data" onChange={handleChangeDados} focused size='small' label='Qual data deseja iniciar suas 1° Férias?' />
+                                                            <TextField type='date' margin='normal' name="data" onChange={handleChangeDados} focused size='small' label={(solicitacaoChecked === '20/10 dias') ? ('Qual data deseja iniciar suas Férias de 20 dias?') : ('Qual data deseja iniciar suas Férias de 15 dias?')} />
                                                             <br />
-                                                            <TextField type='date' margin='normal' name="data2" onChange={handleChangeDados} focused size='small' label='Qual data deseja iniciar suas 2° Férias?' />
+                                                            <TextField type='date' margin='normal' name="data2" onChange={handleChangeDados} focused size='small' label={(solicitacaoChecked === '20/10 dias') ? ('Qual data deseja iniciar suas Férias de 10 dias?') : ('Qual data deseja iniciar suas Férias de 15 dias?')} />
                                                         </>
                                                     )
                                                 }
