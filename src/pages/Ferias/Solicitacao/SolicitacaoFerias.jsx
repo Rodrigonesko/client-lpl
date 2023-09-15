@@ -102,7 +102,7 @@ export default function SolicitacaoFerias() {
                                     <DialogContentText id="alert-dialog-description">
                                         <FormGroup>
                                             <br />
-                                            <TextField type='text' onChange={handleCheckedSolicitacao} name="data" size='small' label='Insira o nome do Colaborador' />
+                                            <TextField type='text' onChange={handleCheckedSolicitacao} name="nomeColaborador" size='small' label='Insira o nome do Colaborador' />
                                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="30 dias" name="radio-buttons-group">
                                                 <FormControlLabel value="30 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="30 Dias" />
                                                 <FormControlLabel value="20/10 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="20/10 Dias" />
