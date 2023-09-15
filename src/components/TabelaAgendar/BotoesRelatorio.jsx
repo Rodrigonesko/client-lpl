@@ -3,6 +3,7 @@ import { Button, Box, CircularProgress } from "@mui/material";
 import moment from "moment/moment";
 import 'moment-business-days'
 import { getPropostasADevolver, showPropostas, getPropostasNaoRealizadasTele } from "../../_services/teleEntrevista.service";
+import ModalRelatorioPropostas from "./modais/ModalRelatorioPropostas";
 
 const feriados = [
     moment('2022-01-01'),
@@ -367,7 +368,7 @@ const BotoesRelatorios = () => {
                     <CircularProgress style={{ position: 'absolute' }} />
                 ) : null
             }
-            <Button variant='contained' onClick={relatorioPropostas}>Relatório Propostas</Button>
+            <ModalRelatorioPropostas />
             <Button variant='contained' onClick={relatorioNaoRealizadas}>Relatório Não Realizadas</Button>
             <Button size="small" variant='outlined' onClick={relatorioDevolver} >Devolver Amil</Button>
         </Box>

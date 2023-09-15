@@ -7,6 +7,12 @@ import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
+
+/* User */
+
+import Profile from "./pages/User/Perfil/Profile";
+import MyProduction from "./pages/User/Production/MyProduction";
+
 /* Modulo de Ferias*/
 
 import SolicitacaoFerias from "./pages/Ferias/Solicitacao/SolicitacaoFerias";
@@ -127,6 +133,7 @@ const AppRoutes = () => {
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
 
+
                 <Route exact path="/" element={<ProtectedRoute>
                     <Home />
                 </ProtectedRoute>} />
@@ -139,6 +146,16 @@ const AppRoutes = () => {
                 <Route path="/rn/rns/:id" element={<ProtectedRoute>
                     <Detalhes />
                 </ProtectedRoute>} />
+
+                {/* User Routes*/}
+
+                <Route path="/profile" element={<ProtectedRoute>
+                    <Profile />
+                </ProtectedRoute>} />
+                <Route path="/profile/minhaProducao/:name" element={<ProtectedRoute>
+                    <MyProduction />
+                </ProtectedRoute>} />
+
 
                 {/* Admin Routes*/}
 

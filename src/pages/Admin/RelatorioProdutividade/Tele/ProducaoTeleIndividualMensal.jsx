@@ -137,7 +137,7 @@ const ProducaoTeleIndividualMensal = ({
                                 width='100%'
                                 height='400px'
                                 options={{
-                                    title: 'Tentaivas de Contato',
+                                    title: 'Tentativas de Contato',
                                     hAxis: { title: 'Contato' },
                                     vAxis: { title: 'Tentativas' },
                                     legend: 'none',
