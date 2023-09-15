@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
-import { Button, Box, TextField, TableContainer, TableBody, TableHead, Table, TableRow, TableCell, Alert, Snackbar } from "@mui/material";
+import { Button, Box, TextField, TableContainer, TableBody, TableHead, Table, TableRow, TableCell, Alert, Snackbar, CircularProgress } from "@mui/material";
 import * as XLSX from "xlsx";
 import moment from "moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -13,6 +13,7 @@ const Todas = () => {
     const [rns, setRns] = useState([])
     const [pesquisa, setPesquisa] = useState('')
     const [alerta, setAlerta] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     let rnsForExcel
 
@@ -35,6 +36,20 @@ const Todas = () => {
 
         const resultado = await filterRn(pesquisa)
         setRns(resultado)
+    }
+
+    const handleLoading = async (event) => {
+
+        event.preventDefault()
+
+        if (pesquisa === 'true') {
+            setLoading(true)
+            return
+        }
+
+        const resultado = await filterRn(pesquisa)
+        setRns(resultado)
+        setLoading(false)
     }
 
     const transformData = async () => {
@@ -239,6 +254,10 @@ const Todas = () => {
                                         <TableCell>DETALHES</TableCell>
                                     </TableRow>
                                 </TableHead>
+                                <Box>
+                                    <CircularProgress position='center' onChange={handleLoading} />
+
+                                </Box>
                                 <TableBody>
                                     {rns.map(e => {
                                         console.log();

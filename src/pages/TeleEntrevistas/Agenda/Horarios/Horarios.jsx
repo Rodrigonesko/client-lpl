@@ -3,7 +3,7 @@ import Axios from 'axios'
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import Modal from 'react-modal'
 import "./Horarios.css"
-import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
+import { Button, Box, InputLabel, MenuItem, FormControl, Select, Container, TextField, Paper, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, Snackbar, Alert } from "@mui/material";
 
 Modal.setAppElement('#root')
 
@@ -24,6 +24,7 @@ const Horarios = () => {
     const [responsavelExcecao, setResponsavelExcecao] = useState('')
     const [diaExcecao, setDiaExcecao] = useState('')
     const [horarioExcecao, setHorarioExcecao] = useState('')
+    const [openSnack, setOpenSnack] = useState(false)
 
     const openModal = () => {
         setModalIsOpen(true)
@@ -134,6 +135,11 @@ const Horarios = () => {
         try {
             console.log(responsavelExcecao, diaExcecao, horarioExcecao);
 
+            if ((responsavelExcecao === '') || (diaExcecao === '') || (horarioExcecao === '')) {
+                setOpenSnack(true)
+                return
+            }
+
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/horario/novo`, {
                 responsavel: responsavelExcecao,
                 dia: diaExcecao,
@@ -149,6 +155,10 @@ const Horarios = () => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const handleCloseSnack = () => {
+        setOpenSnack(false);
     }
 
     useEffect(() => {
@@ -326,6 +336,9 @@ const Horarios = () => {
                                     Responsável
                                 </em>
                             </MenuItem>
+                            <MenuItem value={'Leonardo'}>
+                                Leonardo
+                            </MenuItem>
                             {
                                 responsaveis.map(e => {
                                     return (
@@ -340,6 +353,11 @@ const Horarios = () => {
                     <Button variant="contained" onClick={abrirNovoHorario} >Abrir</Button>
 
                 </Paper>
+                <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
+                    <Alert variant="filled" onClose={handleCloseSnack} severity="warning" sx={{ width: '100%' }}>
+                        Faltam dados, por favor preencha todos os dados!
+                    </Alert>
+                </Snackbar>
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -347,7 +365,7 @@ const Horarios = () => {
                     overlayClassName='modal-overlay'
                     className='modal-content'>
                     <div className="title">
-                        <h2>Horaios Ajustados com sucesso!</h2>
+                        <h2>Horarios Ajustados com sucesso!</h2>
                         <Button variant='contained' onClick={() => {
                             closeModal()
                             window.location.reload()
