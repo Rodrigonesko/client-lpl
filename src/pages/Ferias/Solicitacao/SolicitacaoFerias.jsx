@@ -8,17 +8,20 @@ export default function SolicitacaoFerias() {
     const [open, setOpen] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
     const [dados, setDados] = useState({
+        nomeColaborador: '',
         tipoSolicitacao: '30 dias',
         data: '',
         data2: ''
     })
     const [openSnack, setOpenSnack] = useState(false)
     const [alerta, setAlerta] = useState(false)
+    const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
+    const [severitySnack, setSeveritySnack] = useState('')
+
 
     const handleCheckedSolicitacao = (e) => {
         setSolicitacaoChecked(e.target.value)
         const objAux = dados
-        objAux.nomeColaborador = ''
         objAux.tipoSolicitacao = e.target.value
         objAux.data = ''
         objAux.data2 = ''
@@ -63,6 +66,12 @@ export default function SolicitacaoFerias() {
 
     const handleClose = () => {
         setOpen(false);
+        setSolicitacaoChecked('30 dias')
+        const objAux = dados
+        objAux.tipoSolicitacao = '30 dias'
+        objAux.data = ''
+        objAux.data2 = ''
+        setDados(objAux)
     };
 
     const handleCloseSnack = () => {
@@ -75,14 +84,25 @@ export default function SolicitacaoFerias() {
     }
 
     const handleSave = () => {
-        if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias')) {
+        if (dados.nomeColaborador.length <= 0) {
             setOpenSnack(true)
+            setSeveritySnack('warning')
+            setTextoSnack('Insira o nome do Colaborador!')
             return
         }
 
-        console.log(dados)
+        if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias')) {
+            setOpenSnack(true)
+            setSeveritySnack('warning')
+            setTextoSnack('Insira uma data!')
+            return
+        }
+        setOpenSnack(true)
+        setSeveritySnack('success')
+        setTextoSnack('Dados inserido com sucesso!')
+        return
+        //console.log(dados)
     }
-
 
     return (
         <>
@@ -102,7 +122,11 @@ export default function SolicitacaoFerias() {
                                     <DialogContentText id="alert-dialog-description">
                                         <FormGroup>
                                             <br />
-                                            <TextField type='text' onChange={handleCheckedSolicitacao} name="nomeColaborador" size='small' label='Insira o nome do Colaborador' />
+                                            <TextField type='text' onChange={(e) => {
+                                                const objAux = dados
+                                                objAux.nomeColaborador = e.target.value
+                                                setDados(objAux)
+                                            }} name="nomeColaborador" size='small' label='Insira o nome do Colaborador' />
                                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="30 dias" name="radio-buttons-group">
                                                 <FormControlLabel value="30 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="30 Dias" />
                                                 <FormControlLabel value="20/10 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="20/10 Dias" />
@@ -131,8 +155,8 @@ export default function SolicitacaoFerias() {
                             </Dialog>
                         </Box>
                         <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
-                            <Alert variant="filled" onClose={handleCloseSnack} severity="warning" sx={{ width: '100%' }}>
-                                Insira uma data!
+                            <Alert variant="filled" onClose={handleCloseSnack} severity={severitySnack} sx={{ width: '100%' }}>
+                                {textoSnack}
                             </Alert>
                         </Snackbar>
 
@@ -140,7 +164,7 @@ export default function SolicitacaoFerias() {
                     </Box>
                     <form action="" >
                         <TextField type='text' onChange={handleChange} size='small' label='Colaborador' sx={{ marginRight: '10px', width: '170px' }} />
-                        <TextField type='date' onChange={handleChange} size='small' focused label='Mês' sx={{ marginRight: '10px', width: '170px' }} />
+                        <TextField type='month' onChange={handleChange} size='small' focused label='Mês' sx={{ marginRight: '10px', width: '170px' }} />
                         <TextField type='date' onChange={handleChange} size='small' focused label='Vencimento' sx={{ marginRight: '10px', width: '170px' }} />
                         <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                     </form>
