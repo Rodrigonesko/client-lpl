@@ -10,7 +10,6 @@ import ProtectedRoute from "./ProtectedRoute";
 /* Modulo de Ferias*/
 
 import SolicitacaoFerias from "./pages/Ferias/Solicitacao/SolicitacaoFerias";
-import AprovacaoFerias from "./pages/Ferias/Aprovacao/AprovacaoFerias"
 
 /* Elegibilidade */
 
@@ -124,9 +123,7 @@ const AppRoutes = () => {
                 <Route exact path="/solicitacaoFerias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
                 </ProtectedRoute>} />
-                <Route exact path="/aprovacaoFerias" element={<ProtectedRoute>
-                    <AprovacaoFerias />
-                </ProtectedRoute>} />
+                
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
 

@@ -18,6 +18,7 @@ export default function SolicitacaoFerias() {
     const handleCheckedSolicitacao = (e) => {
         setSolicitacaoChecked(e.target.value)
         const objAux = dados
+        objAux.nomeColaborador = ''
         objAux.tipoSolicitacao = e.target.value
         objAux.data = ''
         objAux.data2 = ''
@@ -100,6 +101,8 @@ export default function SolicitacaoFerias() {
                                 <DialogContent>
                                     <DialogContentText id="alert-dialog-description">
                                         <FormGroup>
+                                            <br />
+                                            <TextField type='text' onChange={handleCheckedSolicitacao} name="data" size='small' label='Insira o nome do Colaborador' />
                                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="30 dias" name="radio-buttons-group">
                                                 <FormControlLabel value="30 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="30 Dias" />
                                                 <FormControlLabel value="20/10 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="20/10 Dias" />
@@ -133,13 +136,15 @@ export default function SolicitacaoFerias() {
                             </Alert>
                         </Snackbar>
 
-                        <form action="" >
-                            <TextField onChange={handleChange} size='small' label='Nome, Gestor, Data e Escala' sx={{ marginRight: '10px' }}
-                            />
-                            <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
-                        </form>
 
                     </Box>
+                    <form action="" >
+                        <TextField type='text' onChange={handleChange} size='small' label='Colaborador' sx={{ marginRight: '10px', width: '170px' }} />
+                        <TextField type='date' onChange={handleChange} size='small' focused label='Mês' sx={{ marginRight: '10px', width: '170px' }} />
+                        <TextField type='date' onChange={handleChange} size='small' focused label='Vencimento' sx={{ marginRight: '10px', width: '170px' }} />
+                        <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
+                    </form>
+                    <br />
                     <Snackbar open={alerta} autoHideDuration={6000} onClose={handleCloseInput}>
                         <Alert variant="filled" onClose={handleCloseInput} severity="warning" sx={{ width: '100%' }}>
                             Digite no minimo 3 caracteres!

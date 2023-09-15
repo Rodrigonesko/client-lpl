@@ -134,7 +134,7 @@ const Horarios = () => {
     const abrirNovoHorario = async () => {
         try {
             console.log(responsavelExcecao, diaExcecao, horarioExcecao);
-            
+
             if ((responsavelExcecao === '') || (diaExcecao === '') || (horarioExcecao === '')) {
                 setOpenSnack(true)
                 return
@@ -152,15 +152,13 @@ const Horarios = () => {
                 openModal()
             }
 
-
         } catch (error) {
             console.log(error);
         }
     }
 
     const handleCloseSnack = () => {
-        setOpenSnack(false);  
-
+        setOpenSnack(false);
     }
 
     useEffect(() => {
@@ -339,7 +337,7 @@ const Horarios = () => {
                                 </em>
                             </MenuItem>
                             <MenuItem value={'Leonardo'}>
-                                    Leonardo
+                                Leonardo
                             </MenuItem>
                             {
                                 responsaveis.map(e => {
