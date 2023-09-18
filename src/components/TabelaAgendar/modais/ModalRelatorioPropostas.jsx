@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogTitle, DialogActions, DialogContent, Paper, Box, TextField, CircularProgress } from "@mui/material"
+import { Button, Dialog, DialogTitle, DialogActions, DialogContent, Paper, Box, TextField, CircularProgress, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
 import { useState } from "react";
 // import RelatorioPorData from "../../RelatorioPorData/RelatorioPorData";
 import { getPropostasEntreDatas } from "../../../_services/teleEntrevista.service";
@@ -37,6 +37,7 @@ const ModalRelatorioPropostas = () => {
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [loading, setLoading] = useState(false)
+    const [tipoRelatorio, setTipoRelatorio] = useState('Data Conclusão')
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -54,7 +55,7 @@ const ModalRelatorioPropostas = () => {
 
         setLoading(true)
 
-        const result = await getPropostasEntreDatas(startDate, endDate)
+        const result = await getPropostasEntreDatas(startDate, endDate, tipoRelatorio)
 
         let xls = '\ufeff'
         xls += "<table border='1'>"
@@ -151,7 +152,7 @@ const ModalRelatorioPropostas = () => {
             xls += `<td>${e.nomeOperadora || ''}</td>`
             xls += `<td>${e.filail || ''}</td>`
             xls += `<td>${e.enfermeiro || ''}</td>`
-            
+
 
             xls += `</tr>`
         })
@@ -181,13 +182,25 @@ const ModalRelatorioPropostas = () => {
                     {"Relatório de Propostas Recebidas"}
                 </DialogTitle>
                 <DialogContent>
-                    {/* <RelatorioPorData
-                        service={getPropostasEntreDatas}
-                    /> */}
                     <Box component={Paper} p={1}>
+                        <FormControl fullWidth size="small" >
+                            <InputLabel id="demo-simple-select-label">Tipo Relatorio</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Tipo Relatorio"
+                                value={tipoRelatorio}
+                                onChange={(e) => {
+                                    setTipoRelatorio(e.target.value)
+                                }}
+                            >
+                                <MenuItem value={'Data Recebido'}>Data Recebido</MenuItem>
+                                <MenuItem value={'Data Conclusão'}>Data Conclusão</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Box display='flex' flexDirection='column'>
                             <TextField onChange={event => setStartDate(event.target.value)} value={startDate} type="date" label='Data Inicio' focused sx={{ mt: 2 }} />
-                            <TextField onChange={event => setEndDate(event.target.value)} value={endDate} type="date" label='Data FIm' focused sx={{ mt: 2 }} />
+                            <TextField onChange={event => setEndDate(event.target.value)} value={endDate} type="date" label='Data Fim' focused sx={{ mt: 2 }} />
                         </Box>
                         <Box mt={2} textAlign='center'>
                             <Button disabled={loading} startIcon={loading && <CircularProgress />} onClick={handleGenerate} variant="contained">Gerar Relatorio</Button>

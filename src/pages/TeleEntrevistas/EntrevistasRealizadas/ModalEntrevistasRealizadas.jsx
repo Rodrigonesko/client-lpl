@@ -49,6 +49,7 @@ const ModalEntrevistasRealizadas = () => {
             xls += "<th>Status Final</th>"
             xls += "<th>Divergência DS</th>"
             xls += "<th>Observações</th>"
+            xls += "<th>TEA</th>"
             xls += "<th>Cids</th>"
             xls += "</tr></thead><tbody>"
 
@@ -70,6 +71,7 @@ const ModalEntrevistasRealizadas = () => {
                 xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
                 xls += `<td>${e.houveDivergencia}</td>`
                 xls += `<td>${e.divergencia || ''}</td>`
+                xls += `<td>${e.tea || ''}</td>`
                 // xls += `<td>${e.cids}</td>`
                 if (e.cids) {
                     const arrCids = e.codigosCids.split('-')
