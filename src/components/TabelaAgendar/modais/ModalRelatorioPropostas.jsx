@@ -151,6 +151,7 @@ const ModalRelatorioPropostas = () => {
             xls += `<td>${e.nomeOperadora || ''}</td>`
             xls += `<td>${e.filail || ''}</td>`
             xls += `<td>${e.enfermeiro || ''}</td>`
+            
 
             xls += `</tr>`
         })

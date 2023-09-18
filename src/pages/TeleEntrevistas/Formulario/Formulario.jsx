@@ -452,7 +452,6 @@ const Formulario = () => {
                                 <div id="cids-selecionados">
 
                                 </div>
-
                             </div>
                             <div className="cids-container">
                                 {
@@ -482,11 +481,6 @@ const Formulario = () => {
                 </Box>
 
                 <ModalPatologias idCelula={id} celula={'Tele Entrevista'} />
-
-
-
-
-
                 <Modal
                     isOpen={modalInfo}
                     onRequestClose={closeModalInfo}

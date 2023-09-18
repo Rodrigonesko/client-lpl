@@ -34,6 +34,9 @@ const ModalEntrevistasRealizadas = () => {
             xls += "<table border='1'>"
             xls += "<thead><tr>"
             xls += "<th>Id</th>"
+            xls += "<th>anexo</th>"
+            xls += "<th>implantado</th>"
+            xls += "<th>implantacao</th>"
             xls += "<th>Ano Ref</th>"
             xls += "<th>Mês Ref</th>"
             xls += "<th>Data Conclusão</th>"
@@ -52,6 +55,9 @@ const ModalEntrevistasRealizadas = () => {
             result.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e._id}</td>`
+                xls += `<td>${e.anexadoSisAmil || ''}</td>`
+                xls += `<td>${e.implantacao || ''}</td>`
+                xls += `<td>${e.implantado || ''}</td>`
                 xls += `<td>${moment(e.dataEntrevista).format('YYYY')}</td>`
                 xls += `<td>${moment(e.dataEntrevista).format('MM')}</td>`
                 xls += `<td>${e.dataEntrevista || ''}</td>`

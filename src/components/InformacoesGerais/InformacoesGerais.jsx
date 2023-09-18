@@ -106,27 +106,6 @@ const InformacoesGerais = ({ mo }) => {
                     Informações atualizadas com sucesso!
                 </Alert>
             </Snackbar>
-            {/* <table>
-                    <tbody>
-                        <tr>
-                            <td>Marca Ótica: {mo}</td>
-                            <td>Nome: {nome}</td>
-                            <td>CPF: {cpf}</td>
-                            <td>Data Nascimento: <input type="date" defaultValue={dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
-                            <td>E-mail: <input type="email" name="email" id="email" defaultValue={email} onChange={e => setEmail(e.target.value)} /></td>
-                        </tr>
-                        <tr>
-                            <td>Fone 1: <input type="text" defaultValue={fone1} onChange={e => setFone1(e.target.value)} /></td>
-                            <td>Fone 2: <input type="text" defaultValue={fone2} onChange={e => setFone2(e.target.value)} /></td>
-                            <td>Fone 3: <input type="text" defaultValue={fone3} onChange={e => setFone3(e.target.value)} /></td>
-                            <td>Contrato/Empresa <input type="text" defaultValue={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} /></td>
-                        </tr>
-                        <tr>
-                            <td><button onClick={atualizarInformacoes} id="atualizar-informacoes-beneficiario" >Salvar</button></td>
-                        </tr>
-                    </tbody>
-                </table> */}
-
             <Box mt={2}>
                 <Button onClick={atualizarInformacoes} startIcon={<ImFloppyDisk />} size="small" variant='contained' >Salvar</Button>
             </Box>

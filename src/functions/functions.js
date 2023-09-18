@@ -39,11 +39,12 @@ export function calcularDiasUteis(dataInicio, dataFim, feriados) {
 }
 
 export function diasUteisNoMes(ano, mes) {
+    const hoje = moment(); // Obtenha a data de hoje
     const primeiroDia = moment([ano, mes - 1, 1]);
     const ultimoDia = primeiroDia.clone().endOf('month');
     let diasUteis = 0;
 
-    for (let dia = primeiroDia; dia.isSameOrBefore(ultimoDia); dia.add(1, 'days')) {
+    for (let dia = primeiroDia; dia.isSameOrBefore(hoje) && dia.isSameOrBefore(ultimoDia); dia.add(1, 'days')) {
         // Verifique se o dia não é sábado (6) ou domingo (0)
         if (dia.day() !== 0 && dia.day() !== 6) {
             // Verifique se o dia não é um feriado
@@ -53,11 +54,8 @@ export function diasUteisNoMes(ano, mes) {
             }
         }
     }
-
     return diasUteis;
 }
-
-
 
 const feriados = [
     moment('2022-01-01'),

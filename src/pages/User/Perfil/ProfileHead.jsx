@@ -24,7 +24,7 @@ const ProfileHead = ({ userData }) => {
                     </Typography>
                     <Box>
                         <Button size="small" variant="contained" href={`/profile/minhaProducao/${userData.name}`}>Produção</Button>
-                        <Button disabled sx={{ ml: '5px' }} size="small" variant="contained" color="inherit">Editar</Button>
+                        <Button sx={{ ml: '5px' }} href="/profile/edit" size="small" variant="contained" color="inherit">Editar</Button>
                     </Box>
                 </Box>
             </Box>
@@ -37,7 +37,7 @@ const ProfileHead = ({ userData }) => {
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-                        
+
                     </Typography>
                 </Grid>
                 <Grid xs={5}>
@@ -47,7 +47,7 @@ const ProfileHead = ({ userData }) => {
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-                        
+
                     </Typography>
                 </Grid>
                 <Grid xs={5}>
@@ -62,21 +62,21 @@ const ProfileHead = ({ userData }) => {
                     </Typography>
                 </Grid>
                 <Grid xs={1}>
-                    <IconButton sx={{
+                    {/* <IconButton sx={{
                         transition: 'color 0.5s', // Ajuste o tempo de transição conforme necessário
                     }} color="secondary">
                         <FaInstagram />
-                    </IconButton>
+                    </IconButton> */}
                 </Grid>
                 <Grid xs={1}>
-                    <IconButton
+                    {/* <IconButton
                         sx={{
                             transition: 'color 0.5s', // Ajuste o tempo de transição conforme necessário
                         }}
                         color="primary"
                     >
                         <FaLinkedin />
-                    </IconButton>
+                    </IconButton> */}
                 </Grid>
             </Grid>
         </Box>

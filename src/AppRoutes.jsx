@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
+import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
 /* Modulo de Ferias*/
 
@@ -129,7 +130,7 @@ const AppRoutes = () => {
                 <Route exact path="/solicitacaoFerias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
                 </ProtectedRoute>} />
-                
+
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
 
@@ -151,6 +152,9 @@ const AppRoutes = () => {
 
                 <Route path="/profile" element={<ProtectedRoute>
                     <Profile />
+                </ProtectedRoute>} />
+                <Route path="/profile/edit" element={<ProtectedRoute>
+                    <EditInfoUser />
                 </ProtectedRoute>} />
                 <Route path="/profile/minhaProducao/:name" element={<ProtectedRoute>
                     <MyProduction />

@@ -28,23 +28,16 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
     const fetchData = async () => {
         setLoading(true)
         const result = await getRendimentoMensalIndividualTele(mes, name)
-        console.log(result);
         const arrProdutividade = result.arrComparativo
         let somaUltimaColuna = 0
         for (let i = 1; i < arrProdutividade.length; i++) {
             const valorUltimaColuna = arrProdutividade[i][arrProdutividade[i].length - 1];
             somaUltimaColuna += valorUltimaColuna;
         }
-
         setMediaDiaTrabalhado(result.total / result.arrPrazo.length);
-
         const diasUteis = diasUteisNoMes(moment(mes).format('YYYY'), moment(mes).format('MM'))
-
         setMediaDiasPorMes(result.total / diasUteis)
-
         setMetaMensal(diasUteis * 22)
-
-
         if (somaUltimaColuna === 0) {
             setMelhorRendimento(true)
         } else {
@@ -52,8 +45,6 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
 
             setPorcentualMelhorDesempenho('-' + percMelhorDesempenho.toFixed(2) + '%')
         }
-
-
         setSomaMelhor(somaUltimaColuna)
         setMediaMelhorMensal(somaUltimaColuna / diasUteis)
         setData(result)
@@ -143,7 +134,6 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                                     height={'380px'}
                                 />
                             </Box>
-
                         </Box>
                         <Box>
                             <Box display='flex' width='100%' flexWrap='wrap' mt={1} justifyContent='space-around'>
