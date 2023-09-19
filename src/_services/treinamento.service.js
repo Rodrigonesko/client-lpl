@@ -15,3 +15,7 @@ export const updateTreinamento = async (data) => {
 export const deleteTreinamento = async (id) => {
     return await new ApiCall(`/treinamento/${id}`).delete()
 }
+
+export const getByIdTreinamentos = async (id) => {
+    return await new ApiCall(`/treinamento/${id}`).get()
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, TextField, Snackbar, Alert } from "@mui/material"
 import { FaPlus } from 'react-icons/fa'
-import { createTreinamento } from "../../../_services/treinamento.service";
+import { createTreinamento } from "../../../../_services/treinamento.service";
 
 const ModalAdicionarTreinamento = ({ setFlushHook }) => {
 
