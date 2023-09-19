@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Radio, RadioGroup, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import axios from "axios";
 
 export default function SolicitacaoFerias() {
 
@@ -17,7 +18,8 @@ export default function SolicitacaoFerias() {
     const [alerta, setAlerta] = useState(false)
     const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
     const [severitySnack, setSeveritySnack] = useState('')
-
+    const [solicitacoes, setSolicitacoes] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleCheckedSolicitacao = (e) => {
         setSolicitacaoChecked(e.target.value)
@@ -83,7 +85,7 @@ export default function SolicitacaoFerias() {
         setAlerta(false)
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (dados.nomeColaborador.length <= 0) {
             setOpenSnack(true)
             setSeveritySnack('warning')
@@ -97,12 +99,32 @@ export default function SolicitacaoFerias() {
             setTextoSnack('Insira uma data!')
             return
         }
+        const resultado = await axios.post('http://localhost:3001/vacation/request', {
+            colaborador: dados.nomeColaborador,
+            dataInicio: dados.data,
+            dataInicio2: dados.data2,
+            totalDias: dados.tipoSolicitacao,
+        })
+        console.log(resultado)
         setOpenSnack(true)
         setSeveritySnack('success')
         setTextoSnack('Dados inserido com sucesso!')
+        console.log(dados)
+        setFlushHook(true)
+        setOpen(false)
         return
-        //console.log(dados)
     }
+
+    const fetchData = async () => {
+        const resultado = await axios.get(`http://localhost:3001/vacation/findAll`, { withCredentials: true })
+        setSolicitacoes(resultado.data.encontrarTodos)
+        console.log(resultado.data.encontrar.setSolicitacoes)
+    }
+
+    useEffect(() => {
+        fetchData()
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <>
@@ -179,16 +201,31 @@ export default function SolicitacaoFerias() {
                             <Table>
                                 <TableHead>
                                     <TableRow className="table-header">
+                                        <TableCell>MÊS</TableCell>
+                                        <TableCell>VENCIMENTO</TableCell>
                                         <TableCell>COLABORADOR</TableCell>
-                                        <TableCell>GESTOR</TableCell>
-                                        <TableCell>DATA DE FÉRIAS</TableCell>
-                                        <TableCell>ESCALA ESCOLHIDA</TableCell>
-                                        <TableCell>RETORNO</TableCell>
+                                        <TableCell>DATA DE INICIO</TableCell>
+                                        <TableCell>DATA DE RETORNO</TableCell>
+                                        <TableCell>TOTAL DIAS</TableCell>
+                                        <TableCell>EXPECTATIVA</TableCell>
+                                        <TableCell>STATUS RH</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-
-
+                                    {solicitacoes.map((item) => {
+                                        console.log(item)
+                                        return (
+                                            <TableRow>
+                                                <TableCell>{item.mês}</TableCell>
+                                                <TableCell>{item.vencimento}</TableCell>
+                                                <TableCell>{item.colaborador}</TableCell>
+                                                <TableCell>{item.dataInicio}</TableCell>
+                                                <TableCell>{item.dataRetorno}</TableCell>
+                                                <TableCell>{item.totalDias}</TableCell>
+                                                <TableCell>{item.expectativa}</TableCell>
+                                                <TableCell>{item.statusRH}</TableCell>
+                                            </TableRow>)
+                                    })}
                                 </TableBody>
                             </Table>
                         </TableContainer>
