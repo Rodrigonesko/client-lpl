@@ -34,6 +34,9 @@ const ModalEntrevistasRealizadas = () => {
             xls += "<table border='1'>"
             xls += "<thead><tr>"
             xls += "<th>Id</th>"
+            xls += "<th>anexo</th>"
+            xls += "<th>implantado</th>"
+            xls += "<th>implantacao</th>"
             xls += "<th>Ano Ref</th>"
             xls += "<th>Mês Ref</th>"
             xls += "<th>Data Conclusão</th>"
@@ -46,12 +49,16 @@ const ModalEntrevistasRealizadas = () => {
             xls += "<th>Status Final</th>"
             xls += "<th>Divergência DS</th>"
             xls += "<th>Observações</th>"
+            xls += "<th>TEA</th>"
             xls += "<th>Cids</th>"
             xls += "</tr></thead><tbody>"
 
             result.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e._id}</td>`
+                xls += `<td>${e.anexadoSisAmil || ''}</td>`
+                xls += `<td>${e.implantacao || ''}</td>`
+                xls += `<td>${e.implantado || ''}</td>`
                 xls += `<td>${moment(e.dataEntrevista).format('YYYY')}</td>`
                 xls += `<td>${moment(e.dataEntrevista).format('MM')}</td>`
                 xls += `<td>${e.dataEntrevista || ''}</td>`
@@ -64,6 +71,7 @@ const ModalEntrevistasRealizadas = () => {
                 xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
                 xls += `<td>${e.houveDivergencia}</td>`
                 xls += `<td>${e.divergencia || ''}</td>`
+                xls += `<td>${e.tea || ''}</td>`
                 // xls += `<td>${e.cids}</td>`
                 if (e.cids) {
                     const arrCids = e.codigosCids.split('-')

@@ -4,13 +4,13 @@ import Chart from "react-google-charts"
 import { getRendimentoMensalIndividualTele } from "../../../../_services/teleEntrevista.service";
 import moment from "moment";
 import { useParams } from "react-router-dom";
+import { diasUteisNoMes } from "../../../../functions/functions";
 
 const options = {
     title: 'Produção',
     vAxis: { title: 'Entrevistas' },
     hAxis: { title: 'Dias' },
 };
-
 
 const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
 
@@ -19,6 +19,10 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
     const [somaMelhor, setSomaMelhor] = useState(0)
     const [melhorRendimento, setMelhorRendimento] = useState(false)
     const [porcentalMelhorDesempenho, setPorcentualMelhorDesempenho] = useState('')
+    const [mediaDiaTrabalhado, setMediaDiaTrabalhado] = useState(0)
+    const [mediaDiasPorMes, setMediaDiasPorMes] = useState(0)
+    const [metaMensal, setMetaMensal] = useState(0)
+    const [mediaMelhorMensal, setMediaMelhorMensal] = useState(0)
     const [loading, setLoading] = useState(false)
 
     const fetchData = async () => {
@@ -30,7 +34,10 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
             const valorUltimaColuna = arrProdutividade[i][arrProdutividade[i].length - 1];
             somaUltimaColuna += valorUltimaColuna;
         }
-
+        setMediaDiaTrabalhado(result.total / result.arrPrazo.length);
+        const diasUteis = diasUteisNoMes(moment(mes).format('YYYY'), moment(mes).format('MM'))
+        setMediaDiasPorMes(result.total / diasUteis)
+        setMetaMensal(diasUteis * 22)
         if (somaUltimaColuna === 0) {
             setMelhorRendimento(true)
         } else {
@@ -38,9 +45,8 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
 
             setPorcentualMelhorDesempenho('-' + percMelhorDesempenho.toFixed(2) + '%')
         }
-
-
         setSomaMelhor(somaUltimaColuna)
+        setMediaMelhorMensal(somaUltimaColuna / diasUteis)
         setData(result)
         setLoading(false)
     }
@@ -61,8 +67,60 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
             {
                 !loading ? (
                     <>
-                        <Box display='flex'>
-                            <Box component={Paper} p={1} width='60%' m={1}>
+                        <Box display='flex' flexWrap='wrap'>
+                            <Box width='100%' m={1} display='flex' flexWrap='wrap' justifyContent='space-around'>
+                                <Card sx={{ bgcolor: 'lightblue' }} width='300px'>
+                                    <CardContent>
+                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                            Meu rendimento
+                                        </Typography>
+                                        <Typography variant="h5" component="div">
+                                            {data.total} - Rendimento
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            {mediaDiasPorMes.toFixed(2)} - Média por dias no mês
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            {mediaDiaTrabalhado.toFixed(2)} - Média por dia trabalhado
+                                        </Typography>
+
+
+                                    </CardContent>
+                                </Card>
+                                <Card sx={{ bgcolor: 'lightcoral' }} width='300px'>
+                                    <CardContent>
+                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                            Melhor rendimento
+                                        </Typography>
+                                        <Typography variant="h5" component="div">
+                                            {somaMelhor} - Melhor rendimento
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            {mediaMelhorMensal.toFixed(2)} Média melhor mensal
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            {porcentalMelhorDesempenho} Relação ao melhor desempenho
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                                <Card sx={{ bgcolor: 'whitesmoke' }} width='300px'>
+                                    <CardContent>
+                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                            Equipe
+                                        </Typography>
+                                        <Typography variant="h5" component="div">
+                                            {metaMensal} Meta mensal
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            🚧👷🏻‍♀️ - Média equipe
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            22 - Meta p/dia
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Box>
+                            <Box component={Paper} p={1} width='100%' m={1}>
                                 <Chart
                                     chartType="ColumnChart"
                                     data={data.arrComparativo}
@@ -75,39 +133,6 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                                     width={'100%'}
                                     height={'380px'}
                                 />
-                            </Box>
-                            <Box width='30%' m={1} height={'400px'} display='flex' flexDirection='column' justifyContent='space-around'>
-                                <Card sx={{ bgcolor: 'lightgreen' }}>
-                                    <CardContent>
-                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                            Meu rendimento
-                                        </Typography>
-                                        <Typography variant="h5" component="div">
-                                            {data.total} - Rendimento
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            {porcentalMelhorDesempenho} Relação ao melhor desempenho
-                                        </Typography>
-                                        <Typography color="text.secondary">
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                                <Card >
-                                    <CardContent>
-                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                            Melhor rendimento
-                                        </Typography>
-                                        <Typography variant="h5" component="div">
-                                            {somaMelhor} - Melhor rendimento
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        </Typography>
-                                        <Typography color="text.secondary">
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
                             </Box>
                         </Box>
                         <Box>
@@ -196,7 +221,6 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                     </>
                 )
             }
-
         </>
     )
 }

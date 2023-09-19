@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
+import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
 /* Modulo de Ferias*/
 
@@ -112,6 +113,7 @@ import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
 import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
+import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
 
 /* Controle ativicades  */
 
@@ -129,7 +131,7 @@ const AppRoutes = () => {
                 <Route exact path="/solicitacaoFerias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
                 </ProtectedRoute>} />
-                
+
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
 
@@ -152,6 +154,9 @@ const AppRoutes = () => {
                 <Route path="/profile" element={<ProtectedRoute>
                     <Profile />
                 </ProtectedRoute>} />
+                <Route path="/profile/edit" element={<ProtectedRoute>
+                    <EditInfoUser />
+                </ProtectedRoute>} />
                 <Route path="/profile/minhaProducao/:name" element={<ProtectedRoute>
                     <MyProduction />
                 </ProtectedRoute>} />
@@ -173,6 +178,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/treinamentos" element={<ProtectedRoute>
+                    <Treinamentos />
                 </ProtectedRoute>} />
                 {/* Tele entrevista Routes */}
 

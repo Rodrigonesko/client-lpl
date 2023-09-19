@@ -46,6 +46,7 @@ const Formulario = () => {
     const [divergencia, setDivergencia] = useState(false)
     const [cids, setCids] = useState([])
     const [habitos, setHabitos] = useState(true)
+    const [autismo, setAutismo] = useState(false)
 
     const [riscoBeneficiaro, setRiscoBeneficiario] = useState('')
     const [riscoImc, setRiscoImc] = useState('')
@@ -156,7 +157,8 @@ const Formulario = () => {
     }
 
     const handleChangeSub = async (item) => {
-        subRespostas[`${item.id}`] = item.value
+        subRespostas[`${item.name}`] = item.value
+        console.log(item, subRespostas);
     }
 
     const handleSimOuNao = (item) => {
@@ -257,9 +259,6 @@ const Formulario = () => {
                 if (result.data.formulario !== 'adulto') {
                     setHabitos(false)
                 }
-
-                console.log(result);
-
                 setRiscoBeneficiario(result.data.riscoBeneficiario)
                 setRiscoImc(result.data.riscoImc)
                 setSinistral(result.data.sinistral)
@@ -288,7 +287,7 @@ const Formulario = () => {
 
         buscarPerguntas()
         buscarInfoPessoa()
-    }, [id])
+    }, [id, pessoa?.grupoCarencia])
 
     return (
         <>
@@ -315,7 +314,7 @@ const Formulario = () => {
                                     <MenuItem value='adulto-f'>Adulto feminino</MenuItem>
                                     <MenuItem value='adulto-m'>Adulto masculino</MenuItem>
                                     <MenuItem value='0-2 anos'>0-2 anos</MenuItem>
-                                    <MenuItem value='2-8 anos'>2-8 ano</MenuItem>
+                                    <MenuItem value='2-8 anos'>2-8 anos</MenuItem>
                                 </Select>
                             </FormControl>
                             <Button style={{ marginLeft: '10px' }} variant="contained" size="small" onClick={alterarFormulario}>Alterar</Button>
@@ -351,21 +350,21 @@ const Formulario = () => {
                                     if (e.sexo !== 'M' && e.sexo !== 'F') {
                                         return (
                                             <>
-                                                <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
+                                                <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} pessoa={pessoa} setAutismo={setAutismo}></Pergunta>
                                             </>
                                         )
                                     }
                                     if (e.sexo === 'M' && sexo === 'M') {
                                         return (
                                             <>
-                                                <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
+                                                <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} pessoa={pessoa} setAutismo={setAutismo}></Pergunta>
                                             </>
                                         )
                                     }
                                     if (e.sexo === 'F' && sexo === 'F') {
                                         return (
                                             <>
-                                                <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
+                                                <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} pessoa={pessoa} setAutismo={setAutismo}></Pergunta>
                                             </>
                                         )
                                     }
@@ -387,7 +386,7 @@ const Formulario = () => {
                                             if (e.formulario === 'adulto' && e.categoria === 'habitos') {
                                                 return (
                                                     <>
-                                                        <Pergunta handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e}></Pergunta>
+                                                        <Pergunta handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} />
                                                     </>
                                                 )
                                             }
@@ -452,7 +451,6 @@ const Formulario = () => {
                                 <div id="cids-selecionados">
 
                                 </div>
-
                             </div>
                             <div className="cids-container">
                                 {
@@ -474,6 +472,13 @@ const Formulario = () => {
                     <div id="indicador-obesidade">
 
                     </div>
+                    {
+                        autismo && (
+                            <Alert severity="error">
+                                Agradecemos pelas informações fornecidas e, apenas para fins de esclarecimento, informamos que o serviço de Acompanhante Terapêutico Escolar não possui cobertura pela Operadora de Saúde, visto o disposto na Lei de nº 14.454/2022 e o parecer da Agência Nacional de Saúde Suplementar 25/2022, que é nosso órgão regulador, que dispõe sobre a não cobertura em razão da falta de eficácia científica e técnica e de recomendação dos órgãos competentes.
+                            </Alert>
+                        )
+                    }
 
                 </div>
 
@@ -482,11 +487,6 @@ const Formulario = () => {
                 </Box>
 
                 <ModalPatologias idCelula={id} celula={'Tele Entrevista'} />
-
-
-
-
-
                 <Modal
                     isOpen={modalInfo}
                     onRequestClose={closeModalInfo}

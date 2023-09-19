@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import Chart from "react-google-charts"
 import { getProdutividadeMensalRsd } from "../../../../_services/rsd.service"
 import { useParams } from "react-router-dom"
+import moment from "moment"
+import { diasUteisNoMes } from "../../../../functions/functions"
 
 const MyProductionRsd = ({ mes }) => {
 
@@ -12,6 +14,10 @@ const MyProductionRsd = ({ mes }) => {
     const [somaMelhor, setSomaMelhor] = useState(0)
     const [melhorRendimento, setMelhorRendimento] = useState(false)
     const [porcentalMelhorDesempenho, setPorcentualMelhorDesempenho] = useState('')
+    const [mediaDiaTrabalhado, setMediaDiaTrabalhado] = useState(0)
+    const [mediaDiasPorMes, setMediaDiasPorMes] = useState(0)
+    const [metaMensal, setMetaMensal] = useState(0)
+    const [mediaMelhorMensal, setMediaMelhorMensal] = useState(0)
     const [loading, setLoading] = useState(false)
 
     const fetchData = async () => {
@@ -27,6 +33,14 @@ const MyProductionRsd = ({ mes }) => {
             somaUltimaColuna += valorUltimaColuna;
         }
 
+        setMediaDiaTrabalhado(result.total / result.arrPrazo.length);
+
+        const diasUteis = diasUteisNoMes(moment(mes).format('YYYY'), moment(mes).format('MM'))
+
+        setMediaDiasPorMes(result.total / diasUteis)
+
+        setMetaMensal(diasUteis * 25)
+
         if (somaUltimaColuna === 0) {
             setMelhorRendimento(true)
         } else {
@@ -35,7 +49,9 @@ const MyProductionRsd = ({ mes }) => {
             setPorcentualMelhorDesempenho('-' + percMelhorDesempenho.toFixed(2) + '%')
         }
 
+
         setSomaMelhor(somaUltimaColuna)
+        setMediaMelhorMensal(somaUltimaColuna / diasUteis)
         setData(result)
 
         setLoading(false)
@@ -58,21 +74,8 @@ const MyProductionRsd = ({ mes }) => {
                 !loading ? (
                     <>
                         <Box display='flex'>
-                            <Box component={Paper} p={1} width='60%' m={1} >
-                                <Chart
-                                    chartType="ColumnChart"
-                                    width="100%"
-                                    height="400px"
-                                    data={data.arrComparativo}
-                                    options={{
-                                        title: 'Produção',
-                                        vAxis: { title: 'Pedidos' },
-                                        hAxis: { title: 'Dias' },
-                                    }}
-                                />
-                            </Box>
-                            <Box width='30%' m={1} height={'400px'} display='flex' flexDirection='column' justifyContent='space-around'>
-                                <Card sx={{ bgcolor: 'lightgreen' }}>
+                            <Box width='100%' m={1} display='flex' flexWrap='wrap' justifyContent='space-around'>
+                                <Card sx={{ bgcolor: 'lightblue' }} width='300px'>
                                     <CardContent>
                                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                             Meu rendimento
@@ -81,15 +84,16 @@ const MyProductionRsd = ({ mes }) => {
                                             {data.total} - Rendimento
                                         </Typography>
                                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            {porcentalMelhorDesempenho} Relação ao melhor desempenho
+                                            {mediaDiasPorMes.toFixed(2)} - Média por dias no mês
                                         </Typography>
                                         <Typography color="text.secondary">
+                                            {mediaDiaTrabalhado.toFixed(2)} - Média por dia trabalhado
                                         </Typography>
+
+
                                     </CardContent>
                                 </Card>
-                                <Card >
+                                <Card sx={{ bgcolor: 'lightcoral' }} width='300px'>
                                     <CardContent>
                                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                             Melhor rendimento
@@ -98,16 +102,45 @@ const MyProductionRsd = ({ mes }) => {
                                             {somaMelhor} - Melhor rendimento
                                         </Typography>
                                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-
+                                            {mediaMelhorMensal.toFixed(2)} Média melhor mensal
                                         </Typography>
                                         <Typography color="text.secondary">
-
+                                            {porcentalMelhorDesempenho} Relação ao melhor desempenho
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                                <Card sx={{ bgcolor: 'whitesmoke' }} width='300px'>
+                                    <CardContent>
+                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                            Equipe
+                                        </Typography>
+                                        <Typography variant="h5" component="div">
+                                            {metaMensal} Meta mensal
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            🚧👷🏻‍♀️ - Média equipe
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            25 - Meta p/dia
                                         </Typography>
                                     </CardContent>
                                 </Card>
                             </Box>
                         </Box>
-
+                        <Box component={Paper} p={1} width='100%' m={1}>
+                            <Chart
+                                chartType="ColumnChart"
+                                data={data.arrComparativo}
+                                options={{
+                                    title: 'Produção',
+                                    vAxis: { title: 'Entrevistas' },
+                                    hAxis: { title: 'Dias' },
+                                }}
+                                graph_id="ColumnChart"
+                                width={'100%'}
+                                height={'380px'}
+                            />
+                        </Box>
                         <Box display='flex' width='100%' flexWrap='wrap' mt={1} justifyContent='space-around'>
                             <Box width='45%' component={Paper} elevation={3} p={1}>
                                 <Chart

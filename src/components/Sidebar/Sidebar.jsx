@@ -48,6 +48,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/admin/liberarModulos' >Liberação Módulos</Link></MenuItem>
                                     <MenuItem><Link to='/admin/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
                                     <MenuItem><Link to='/admin/controlePoliticas'>Controle de Políticas</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/treinamentos'>Treinamentos</Link></MenuItem>
                                 </SubMenu>
                             ) : null
                         }

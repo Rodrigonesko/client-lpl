@@ -182,8 +182,8 @@ export const getRelatorioAnexos = async (date) => {
     return await new ApiCall(`/entrevistas/reportAnexos/${date}`).get()
 }
 
-export const getPropostasEntreDatas = async (startDate, endDate) => {
-    return await new ApiCall(`/dadosEntreDatas?startDate=${startDate}&endDate=${endDate}`, URL_API).get()
+export const getPropostasEntreDatas = async (startDate, endDate, tipoRelatorio) => {
+    return await new ApiCall(`/dadosEntreDatas?startDate=${startDate}&endDate=${endDate}&tipoRelatorio=${tipoRelatorio}`, URL_API).get()
 }
 
 export const getEntrevistasEntreDatas = async (startDate, endDate) => {
