@@ -14,7 +14,6 @@ const ProfileHead = ({ userData }) => {
                         ></Avatar>
                     </Button>
                 </Tooltip>
-
                 <Box ml='20px'>
                     <Typography variant="h5">
                         {userData.name}
@@ -24,7 +23,7 @@ const ProfileHead = ({ userData }) => {
                     </Typography>
                     <Box>
                         <Button size="small" variant="contained" href={`/profile/minhaProducao/${userData.name}`}>Produção</Button>
-                        <Button sx={{ ml: '5px' }} href="/profile/edit" size="small" variant="contained" color="inherit">Editar</Button>
+                        <Button disabled sx={{ ml: '5px' }} href="/profile/edit" size="small" variant="contained" color="inherit">Editar</Button>
                     </Box>
                 </Box>
             </Box>

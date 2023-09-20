@@ -5,6 +5,8 @@ import { Button, TextField, Box, Snackbar, Alert, Container, Typography } from "
 import { getInfoUser, updatePassword } from "../../_services/user.service";
 import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
 import { getPoliticasAtivas } from "../../_services/politicas.service";
+import { getVerificarTreinamento } from "../../_services/treinamento.service";
+import moment from "moment";
 
 const Home = () => {
 
@@ -16,6 +18,7 @@ const Home = () => {
     const [open, setOpen] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
     const [idPolitica, setIdPolitica] = useState('')
+    const [treinamentos, setTreinamentos] = useState([])
     const { name } = useContext(AuthContext)
 
 
@@ -58,6 +61,9 @@ const Home = () => {
                     politicasNaoLidas.push(item)
                 }
             }
+
+            const resultTreinamentos = await getVerificarTreinamento()
+            setTreinamentos(resultTreinamentos);
 
             setIdPolitica(politicasNaoLidas[0])
 
@@ -114,11 +120,44 @@ const Home = () => {
                         </Alert>
                     </Snackbar>
                 </Box>
+                <Box>
+                    {treinamentos.map(treinamento => {
+                        return (
+                            <Alert severity="warning" sx={{width: '100%', textAlign: 'start', m:1}}>
+                                <Typography>
+                                    Treinamento: {treinamento.nome}
+                                </Typography>
+                                <Typography>
+                                    Plataforma: {treinamento.plataforma}
+                                </Typography>
+                                <Typography>
+                                    Link: {treinamento.link}
+                                </Typography>
+                                <Typography>
+                                    Prazo: {moment(treinamento.prazo).format('DD/MM/YYYY')}
+                                </Typography>
+                                <Typography>
+                                    {
+                                        treinamento.observacoes && (
+                                            <>
+
+                                                Observacões: {treinamento.observacoes}
+                                            </>
+                                        )
+                                    }
+                                </Typography>
+                                Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: X
+                            </Alert>
+                        )
+                    })}
+                </Box>
                 {
                     idPolitica ? (
                         <ModalAceitarPoliticas setOpen={setOpen} open={open} idPolitica={idPolitica} setFlushHook={setFlushHook} />
                     ) : null
                 }
+
+
             </Container>
         </>
 

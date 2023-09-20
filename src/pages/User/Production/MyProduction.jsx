@@ -1,22 +1,31 @@
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Container, Box, Paper, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react"
+import { useNavigate, useParams } from "react-router-dom";
 import { getInfoUser } from "../../../_services/user.service";
 import moment from "moment";
 import MyProductionTele from "./Celulas/MyProductionTele";
 import MyProductionRsd from "./Celulas/MyProductionRsd";
 import MyProductionElegi from "./Celulas/MyProductionElegi";
 import Chart from "react-google-charts";
+import AuthContext from "../../../context/AuthContext";
 
 const MyProduction = () => {
 
     const { name } = useParams()
+    const context = useContext(AuthContext)
+    const navigate = useNavigate()
     const [productionComponent, setProductionComponent] = useState(null)
     const [celula, setCelula] = useState('')
     const [mes, setMes] = useState('')
 
     const fetchData = async () => {
+
+        if (context.authToken) {
+            if (context.name !== name && context.accessLevel !== 'true') {
+                navigate('/')
+            }
+        }
 
         const { user } = await getInfoUser()
 
@@ -42,7 +51,7 @@ const MyProduction = () => {
         if (mesAux === '') {
             mesAux = moment().format('YYYY-MM');
         }
-        
+
         setProductionComponent(null)
 
         if (celula === 'Tele Entrevista') {
@@ -60,7 +69,7 @@ const MyProduction = () => {
 
     useEffect(() => {
         fetchData()
-    }, [name])
+    }, [name, context])
 
     return (
         <>

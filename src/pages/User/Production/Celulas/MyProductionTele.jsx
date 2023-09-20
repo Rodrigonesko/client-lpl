@@ -1,7 +1,7 @@
 import { Box, Paper, Card, CardContent, Typography, CircularProgress } from "@mui/material"
 import { useEffect, useState } from "react";
 import Chart from "react-google-charts"
-import { getRendimentoMensalIndividualTele } from "../../../../_services/teleEntrevista.service";
+import { getRendimentoMensalIndividualTele, getProducaoAnexos, getProducaoAgendamento } from "../../../../_services/teleEntrevista.service";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { diasUteisNoMes } from "../../../../functions/functions";
@@ -24,6 +24,10 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
     const [metaMensal, setMetaMensal] = useState(0)
     const [mediaMelhorMensal, setMediaMelhorMensal] = useState(0)
     const [loading, setLoading] = useState(false)
+    const [anexados, setAnexados] = useState([])
+    const [implantados, setImplantados] = useState([])
+    const [mandouImplantacao, setMandouImplantacao] = useState([])
+    const [agendamentos, setAgendamentos] = useState(0)
 
     const fetchData = async () => {
         setLoading(true)
@@ -48,6 +52,17 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
         setSomaMelhor(somaUltimaColuna)
         setMediaMelhorMensal(somaUltimaColuna / diasUteis)
         setData(result)
+
+        const resultAnexos = await getProducaoAnexos(name, mes)
+
+        setAnexados(resultAnexos.anexos)
+        setImplantados(resultAnexos.implantados)
+        setMandouImplantacao(resultAnexos.mandouImplantacao)
+
+        const resultAgendamento = await getProducaoAgendamento(name, mes)
+
+        setAgendamentos(resultAgendamento);
+
         setLoading(false)
     }
 
@@ -67,6 +82,22 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
             {
                 !loading ? (
                     <>
+                        {
+                            agendamentos ? (
+                                <Box>
+                                    <Card sx={{ bgcolor: 'lightblue' }} width='300px'>
+                                        <CardContent>
+                                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                Agendamentos
+                                            </Typography>
+                                            <Typography variant="h5" component="div">
+                                                {agendamentos} - Entrevistas Agendadas por você
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                            ) : null
+                        }
                         <Box display='flex' flexWrap='wrap'>
                             <Box width='100%' m={1} display='flex' flexWrap='wrap' justifyContent='space-around'>
                                 <Card sx={{ bgcolor: 'lightblue' }} width='300px'>
@@ -83,11 +114,9 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                                         <Typography color="text.secondary">
                                             {mediaDiaTrabalhado.toFixed(2)} - Média por dia trabalhado
                                         </Typography>
-
-
                                     </CardContent>
                                 </Card>
-                                <Card sx={{ bgcolor: 'lightcoral' }} width='300px'>
+                                <Card sx={{ bgcolor: melhorRendimento ? 'lightgreen' : 'lightcoral' }} width='300px'>
                                     <CardContent>
                                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                             Melhor rendimento
@@ -208,6 +237,42 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                                     width="100%"
                                     height="400px"
                                     data={data.producaoUe}
+                                    options={options}
+                                />
+                            </Box>
+                            <Box component={Paper} elevation={3} p={1}>
+                                <Typography m={2} fontWeight='bold' fontSize='1 rem'>
+                                    Total Anexos mensal
+                                </Typography>
+                                <Chart
+                                    chartType="ColumnChart"
+                                    width="100%"
+                                    height="400px"
+                                    data={anexados}
+                                    options={options}
+                                />
+                            </Box>
+                            <Box component={Paper} elevation={3} p={1}>
+                                <Typography m={2} fontWeight='bold' fontSize='1 rem'>
+                                    Total Implantados mensal
+                                </Typography>
+                                <Chart
+                                    chartType="ColumnChart"
+                                    width="100%"
+                                    height="400px"
+                                    data={implantados}
+                                    options={options}
+                                />
+                            </Box>
+                            <Box component={Paper} elevation={3} p={1}>
+                                <Typography m={2} fontWeight='bold' fontSize='1 rem'>
+                                    Total Mandado Implantação Mensal
+                                </Typography>
+                                <Chart
+                                    chartType="ColumnChart"
+                                    width="100%"
+                                    height="400px"
+                                    data={mandouImplantacao}
                                     options={options}
                                 />
                             </Box>

@@ -1,41 +1,15 @@
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Box, Typography, Tab, Tabs } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip } from "@mui/material"
 import { useState } from "react"
-import { getByIdTreinamentos } from "../../../../_services/treinamento.service";
-
-function CustomTabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
-
+import { getByIdTreinamentos, treinamentoRealizado } from "../../../../_services/treinamento.service";
+import { AiOutlineCheck } from 'react-icons/ai'
+import { useEffect } from "react";
+import moment from "moment";
 
 const ModalDetalhesTreinamento = ({ nome, id }) => {
 
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState(0);
-    const [realizados, setRealizdos] = useState([])
-    const [naoRealizados, setNaoRealizados] = useState([])
+    const [realizados, setRealizados] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -46,14 +20,23 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
         setOpen(false);
     };
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
     const fetchData = async () => {
         const result = await getByIdTreinamentos(id)
-        console.log(result);
+        setRealizados(result.realizados)
     }
+
+    const handleFinalizarTreinamento = async (nome) => {
+        await treinamentoRealizado({
+            idTreinamento: id,
+            nome
+        })
+        setFlushHook(true)
+    }
+
+    useEffect(() => {
+        setFlushHook(false)
+        fetchData()
+    }, [flushHook])
 
     return (
         <>
@@ -66,35 +49,54 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Treinamento: X"}
+                    {`Treinamento: ${nome}`}
                 </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab sx={{ ":hover": { bgcolor: '#f5f5f5', color: 'black' } }} label="Quem fez" {...a11yProps(0)} />
-                            <Tab sx={{ ":hover": { bgcolor: '#f5f5f5', color: 'black' } }} label="Falta fazer" {...a11yProps(1)} />
-                        </Tabs>
-                    </Box>
-                    <CustomTabPanel value={value} index={0}>
-                        {
-                            realizados.map(item => {
-                                return (
-                                    <>
-                                    </>
-                                )
-                            })
-                        }
-                    </CustomTabPanel>
-                    <CustomTabPanel value={value} index={1}>
-                        {
-                            naoRealizados.map(item => {
-                                return (
-                                    <>
-                                    </>
-                                )
-                            })
-                        }
-                    </CustomTabPanel>
+                <DialogContent sx={{ minWidth: '400px' }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    Colaborador
+                                </TableCell>
+                                <TableCell>
+                                    Status
+                                </TableCell>
+                                <TableCell>
+                                    Data
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                realizados.map(user => {
+                                    return (
+                                        <TableRow key={user.id}>
+                                            <TableCell>
+                                                {user.nome}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip label={user.realizado ? 'Finalizado' : 'A fazer'} color={user.realizado ? 'success' : 'error'} />
+                                            </TableCell>
+                                            <TableCell>
+                                                {user.data ? moment(user.data).format('DD/MM/YYYY') : ''}
+                                            </TableCell>
+                                            {
+                                                !user.realizado && (
+                                                    <TableCell>
+                                                        <IconButton color="success" onClick={() => {
+                                                            handleFinalizarTreinamento(user.nome)
+                                                        }}>
+                                                            <AiOutlineCheck />
+                                                        </IconButton>
+                                                    </TableCell>
+                                                )
+                                            }
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                    </Table>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Ok</Button>

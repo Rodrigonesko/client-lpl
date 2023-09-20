@@ -19,3 +19,11 @@ export const deleteTreinamento = async (id) => {
 export const getByIdTreinamentos = async (id) => {
     return await new ApiCall(`/treinamento/${id}`).get()
 }
+
+export const treinamentoRealizado = async (data) => {
+    return await new ApiCall('/treinamento/treinamentoRealizado').put(data)
+}
+
+export const getVerificarTreinamento = async () => {
+    return await new ApiCall(`/treinamento/verificar/treinamento`).get()
+}

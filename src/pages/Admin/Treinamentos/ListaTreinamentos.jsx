@@ -10,7 +10,6 @@ const ListaTreinamentos = () => {
 
     const [flushHook, setFlushHook] = useState(false)
     const [treinamentos, setTreinamentos] = useState([])
-    const [edit, setEdit] = useState(false)
 
     const fetchData = async () => {
         const result = await getAllTreinamentos()
@@ -34,7 +33,6 @@ const ListaTreinamentos = () => {
                             <TableCell>Plataforma</TableCell>
                             <TableCell>Link</TableCell>
                             <TableCell>Prazo</TableCell>
-                            <TableCell>Editar</TableCell>
                             <TableCell>Excluir</TableCell>
                             <TableCell>Detalhes</TableCell>
                         </TableRow>
@@ -48,7 +46,6 @@ const ListaTreinamentos = () => {
                                         <TableCell>{treinamento.plataforma}</TableCell>
                                         <TableCell>{treinamento.link}</TableCell>
                                         <TableCell>{moment(treinamento.prazo).format('DD/MM/YYYY')}</TableCell>
-                                        <TableCell><Button size="small" variant="contained" >Editar</Button></TableCell>
                                         <TableCell><ModalDeletarTreinamento nome={treinamento.nome} id={treinamento._id} setFlushHook={setFlushHook} /></TableCell>
                                         <TableCell><ModalDetalhesTreinamento nome={treinamento.nome} id={treinamento._id} /></TableCell>
                                     </TableRow>

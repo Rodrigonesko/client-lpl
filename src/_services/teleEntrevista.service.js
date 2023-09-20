@@ -189,3 +189,11 @@ export const getPropostasEntreDatas = async (startDate, endDate, tipoRelatorio) 
 export const getEntrevistasEntreDatas = async (startDate, endDate) => {
     return await new ApiCall(`/entrevistas/entrevistasEntreDatas?startDate=${startDate}&endDate=${endDate}`).get()
 }
+
+export const getProducaoAnexos = async (analista, mes) => {
+    return await new ApiCall(`/entrevistas/producao/anexos/${analista}/${mes}`).get()
+}
+
+export const getProducaoAgendamento = async (analista, mes) => {
+    return await new ApiCall(`/producaoAgendamento/${analista}/${mes}`, URL_API).get()
+}

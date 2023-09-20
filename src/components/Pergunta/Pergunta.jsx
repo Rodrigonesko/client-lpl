@@ -56,9 +56,9 @@ const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao, pessoa,
                             </RadioGroup>
                         </FormControl>
                         {
-                            (prcs.findIndex(prc => prc === pessoa.grupoCarencia) !== 0) && diagnosticoAutismo ? (
+                            (prcs.findIndex(prc => prc === pessoa.grupoCarencia) !== -1) && diagnosticoAutismo ? (
                                 <>
-                                    <Alert severity="error">Informar sobre a carência de 180 dias para Terapias. {`\n`} Material de apoio (não precisa aparecer no questionário em PDF): Carência é o tempo que você terá que esperar para ser atendido pelo plano de saúde em um determinado procedimento. Essa informação esta claramente disposta no seu contrato e segue o disposto na Lei nº 9.656/98,.</Alert>
+                                    <Alert severity="error">Informar sobre a carência de 180 dias para Terapias. {`\n`} <strong>Material de apoio</strong> : Carência é o tempo que você terá que esperar para ser atendido pelo plano de saúde em um determinado procedimento. Essa informação esta claramente disposta no seu contrato e segue o disposto na Lei nº 9.656/98,.</Alert>
                                 </>
                             ) : null
                         }
@@ -79,7 +79,7 @@ const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao, pessoa,
                         </FormControl>
                         {
                             copart === 'Sim' ? (
-                                <Alert severity="error">informar que o produto contratado prevê COPART para realização de Terapias. {'\n'} Material de Apoio (não precisa aparecer no questionário em PDF) COPART: É o plano de saúde em que o beneficiário paga um valor à parte pela realização de um procedimento ou evento, essa informação está claramente disposta no seu contrato e é prevista na Resolução nr 433 da ANS.</Alert>
+                                <Alert severity="error">informar que o produto contratado prevê COPART para realização de Terapias. {'\n'}  <strong>Material de apoio</strong> COPART: É o plano de saúde em que o beneficiário paga um valor à parte pela realização de um procedimento ou evento, essa informação está claramente disposta no seu contrato e é prevista na Resolução nr 433 da ANS.</Alert>
                             ) : null
                         }
                     </Box>
@@ -109,7 +109,6 @@ const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao, pessoa,
                     </>
                 )
             }
-
         </div >
     )
 }

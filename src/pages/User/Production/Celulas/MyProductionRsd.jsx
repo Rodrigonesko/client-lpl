@@ -93,7 +93,7 @@ const MyProductionRsd = ({ mes }) => {
 
                                     </CardContent>
                                 </Card>
-                                <Card sx={{ bgcolor: 'lightcoral' }} width='300px'>
+                                <Card sx={{ bgcolor: melhorRendimento ? 'lightgreen' : 'lightcoral' }} width='300px'>
                                     <CardContent>
                                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                             Melhor rendimento
