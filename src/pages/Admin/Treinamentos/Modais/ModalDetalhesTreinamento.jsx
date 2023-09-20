@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip } from "@mui/material"
 import { useState } from "react"
-import { getByIdTreinamentos, treinamentoRealizado } from "../../../../_services/treinamento.service";
-import { AiOutlineCheck } from 'react-icons/ai'
+import { getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
+import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai'
 import { useEffect } from "react";
 import moment from "moment";
 
@@ -30,6 +30,15 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
             idTreinamento: id,
             nome
         })
+        setFlushHook(true)
+    }
+
+    const handleNaoPrecisaTreinamento = async (nome) => {
+        await naoPrecisaTreinamento({
+            idTreinamento: id,
+            nome
+        })
+
         setFlushHook(true)
     }
 
@@ -82,13 +91,23 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                             </TableCell>
                                             {
                                                 !user.realizado && (
-                                                    <TableCell>
-                                                        <IconButton color="success" onClick={() => {
-                                                            handleFinalizarTreinamento(user.nome)
-                                                        }}>
-                                                            <AiOutlineCheck />
-                                                        </IconButton>
-                                                    </TableCell>
+                                                    <>
+                                                        <TableCell>
+                                                            <IconButton color="success" onClick={() => {
+                                                                handleFinalizarTreinamento(user.nome)
+                                                            }}>
+                                                                <AiOutlineCheck />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="error" onClick={() => {
+                                                                handleNaoPrecisaTreinamento(user.nome)
+                                                            }}>
+                                                                <AiOutlineClose />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                    </>
+
                                                 )
                                             }
                                         </TableRow>

@@ -27,3 +27,7 @@ export const treinamentoRealizado = async (data) => {
 export const getVerificarTreinamento = async () => {
     return await new ApiCall(`/treinamento/verificar/treinamento`).get()
 }
+
+export const naoPrecisaTreinamento = async (data) => {
+    return await new ApiCall(`/treinamento/naoPrecisaTreinamento`).put(data)
+}
