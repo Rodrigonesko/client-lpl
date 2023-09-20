@@ -146,7 +146,7 @@ const Home = () => {
                                         )
                                     }
                                 </Typography>
-                                Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: X
+                                Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br
                             </Alert>
                         )
                     })}
