@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Radio, RadioGroup, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Radio, RadioGroup, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import axios from "axios";
+import moment from "moment";
 
 export default function SolicitacaoFerias() {
 
@@ -12,9 +13,11 @@ export default function SolicitacaoFerias() {
         nomeColaborador: '',
         tipoSolicitacao: '30 dias',
         data: '',
-        data2: ''
+        data2: '',
+        statusRh: ''
     })
     const [openSnack, setOpenSnack] = useState(false)
+    const [snackSelect, setSnackSelect] = useState(false)
     const [alerta, setAlerta] = useState(false)
     const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
     const [severitySnack, setSeveritySnack] = useState('')
@@ -34,6 +37,15 @@ export default function SolicitacaoFerias() {
     const handleChange = (elemento) => {
         setPesquisa(elemento.target.value)
         console.log(pesquisa)
+    }
+
+    const handleChangeSelect = async (id, status) => {
+        const resultado = await axios.put('http://localhost:3001/vacation/status', {
+            statusRh: status, _id: id
+        })
+        setSnackSelect(true)
+        console.log(resultado)
+        console.log(id, status)
     }
 
     const handleChangeDados = (elemento) => {
@@ -85,6 +97,10 @@ export default function SolicitacaoFerias() {
         setAlerta(false)
     }
 
+    const handleCloseSelect = () => {
+        setSnackSelect(false)
+    }
+
     const handleSave = async () => {
         if (dados.nomeColaborador.length <= 0) {
             setOpenSnack(true)
@@ -104,6 +120,7 @@ export default function SolicitacaoFerias() {
             dataInicio: dados.data,
             dataInicio2: dados.data2,
             totalDias: dados.tipoSolicitacao,
+            statusRh: dados.statusRh
         })
         console.log(resultado)
         setOpenSnack(true)
@@ -112,13 +129,20 @@ export default function SolicitacaoFerias() {
         console.log(dados)
         setFlushHook(true)
         setOpen(false)
+        setSolicitacaoChecked('30 dias')
+        setDados({
+            nomeColaborador: '',
+            tipoSolicitacao: '30 dias',
+            data: '',
+            data2: ''
+        })
         return
     }
 
     const fetchData = async () => {
         const resultado = await axios.get(`http://localhost:3001/vacation/findAll`, { withCredentials: true })
         setSolicitacoes(resultado.data.encontrarTodos)
-        console.log(resultado.data.encontrar.setSolicitacoes)
+
     }
 
     useEffect(() => {
@@ -207,7 +231,6 @@ export default function SolicitacaoFerias() {
                                         <TableCell>DATA DE INICIO</TableCell>
                                         <TableCell>DATA DE RETORNO</TableCell>
                                         <TableCell>TOTAL DIAS</TableCell>
-                                        <TableCell>EXPECTATIVA</TableCell>
                                         <TableCell>STATUS RH</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -216,16 +239,29 @@ export default function SolicitacaoFerias() {
                                         console.log(item)
                                         return (
                                             <TableRow>
-                                                <TableCell>{item.mês}</TableCell>
+                                                <TableCell>{moment(item.dataInicio).format('MM/YYYY')}</TableCell>
                                                 <TableCell>{item.vencimento}</TableCell>
                                                 <TableCell>{item.colaborador}</TableCell>
-                                                <TableCell>{item.dataInicio}</TableCell>
+                                                <TableCell>{moment(item.dataInicio).format('DD/MM/YYYY')}</TableCell>
                                                 <TableCell>{item.dataRetorno}</TableCell>
                                                 <TableCell>{item.totalDias}</TableCell>
-                                                <TableCell>{item.expectativa}</TableCell>
-                                                <TableCell>{item.statusRH}</TableCell>
+                                                <TableCell>
+                                                    <FormControl sx={{ minWidth: 135 }}>
+                                                        <InputLabel id='StatusRh'>Status do RH</InputLabel>
+                                                        <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)}>
+                                                            <MenuItem value={'solicitado'}>SOLICITADO</MenuItem>
+                                                            <MenuItem value={'assinado'}>ASSINADO</MenuItem>
+                                                            <MenuItem value={'retirada'}>RETIRADA</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </TableCell>
                                             </TableRow>)
                                     })}
+                                    < Snackbar open={snackSelect} autoHideDuration={6000} onClose={handleCloseSelect} >
+                                        <Alert variant="filled" onClose={handleCloseSelect} severity="success" sx={{ width: '100%' }}>
+                                            Status alterado com sucesso!
+                                        </Alert>
+                                    </Snackbar>
                                 </TableBody>
                             </Table>
                         </TableContainer>
