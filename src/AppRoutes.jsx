@@ -97,7 +97,6 @@ import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
 import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
 
-
 /* Urgencia Emergencia */
 
 import UploadUrgenciaEmergencia from "./pages/UrgenciaEmergencia/Upload/UploadUrgenciaEmergencia";
@@ -114,6 +113,7 @@ import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
 import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
 import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
+import BancoHoras from "./pages/Admin/BancoHoras/BancoHoras";
 
 /* Controle ativicades  */
 
@@ -181,6 +181,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/treinamentos" element={<ProtectedRoute>
                     <Treinamentos />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/bancoHoras" element={<ProtectedRoute>
+                    <BancoHoras />
                 </ProtectedRoute>} />
                 {/* Tele entrevista Routes */}
 

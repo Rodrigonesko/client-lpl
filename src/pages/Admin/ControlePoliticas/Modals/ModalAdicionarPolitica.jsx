@@ -22,8 +22,6 @@ const ModalAdicionarPolitica = ({ setFlushHook, politicas }) => {
     };
 
     const handleUpload = async () => {
-        console.log(file);
-
         const formData = new FormData()
         formData.append('file', file, file.name)
 
@@ -45,9 +43,6 @@ const ModalAdicionarPolitica = ({ setFlushHook, politicas }) => {
             setMsg('Algo deu errado ou ja existe uma politica com esse nome e versão')
             setOpenSnack(true)
         }
-
-        console.log(result);
-
     }
 
     return (
