@@ -10,6 +10,7 @@ const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao, pessoa,
 
     const [radioSimouNao, setRadioSimOuNao] = useState(false)
     const [diagnosticoAutismo, setDiagnosticoAutismo] = useState()
+    const [autismoAdulto, setAutismoAdulto] = useState('Não')
     const [copart, setCopart] = useState(false)
 
     return (
@@ -39,7 +40,26 @@ const Pergunta = ({ item, handleChange, handleChangeSub, handleSimOuNao, pessoa,
                 )
             }
             {
-                radioSimouNao && item.name === 'espectro' && item.formulario !== 'adulto' ? (
+                item.formulario === 'adulto' && item.name === 'espectro' && radioSimouNao ? (
+                    <Box mt={2}>
+                        <FormControl>
+                            <FormLabel id="demo-radio-buttons-group-label">Autismo?</FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name={`${item.name}-Diagnostico:`}
+                                onChange={(e) => {
+                                    setAutismoAdulto(e.target.value)
+                                }}
+                            >
+                                <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
+                                <FormControlLabel value="Não" control={<Radio />} label="Não" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                ) : null
+            }
+            {
+                radioSimouNao && item.name === 'espectro' && (autismoAdulto === 'Sim' || item.formulario !== 'adulto') ? (
                     <Box mt={1} display='flex' flexDirection='column'>
                         <FormControl>
                             <FormLabel id="demo-radio-buttons-group-label">Já tem o diagnóstico?</FormLabel>

@@ -5,7 +5,6 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
 import Pergunta from "../../../components/Pergunta/Pergunta";
-import Modal from 'react-modal'
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
@@ -15,29 +14,17 @@ import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias
 import './Formulario.css'
 import { getCookie } from "react-use-cookie";
 
-Modal.setAppElement('#root')
+let arrCids = []
 
-let arrCids = [
+let respostas = {}
 
-]
+let subRespostas = {}
 
-let respostas = {
-
-}
-
-let subRespostas = {
-
-}
-
-let simOuNao = {
-
-}
+let simOuNao = {}
 
 const Formulario = () => {
 
     const { id } = useParams()
-
-    const [modalInfo, setModalInfo] = useState(false)
 
     const [perguntas, setPerguntas] = useState([])
     const [pessoa, setPessoa] = useState({})
@@ -47,48 +34,17 @@ const Formulario = () => {
     const [cids, setCids] = useState([])
     const [habitos, setHabitos] = useState(true)
     const [autismo, setAutismo] = useState(false)
-
-    const [riscoBeneficiaro, setRiscoBeneficiario] = useState('')
-    const [riscoImc, setRiscoImc] = useState('')
-    const [sinistral, setSinistral] = useState('')
-    const [tipoAssociado, setTipoAssociado] = useState('')
-    const [grupoCarencia, setGrupoCarencia] = useState('')
-    const [ds1, setDs1] = useState('')
-    const [ds2, setDs2] = useState('')
-    const [ds3, setDs3] = useState('')
-    const [ds4, setDs4] = useState('')
-    const [ds5, setDs5] = useState('')
-    const [ds6, setDs6] = useState('')
-    const [ds7, setDs7] = useState('')
-    const [ds8, setDs8] = useState('')
-    const [ds9, setDs9] = useState('')
-    const [peso, setPeso] = useState('')
-    const [altura, setAltura] = useState('')
-    const [imc, setImc] = useState('')
-    const [cidAnterior1, setCidAnterior1] = useState('')
-    const [cidAnterior2, setCidAnterior2] = useState('')
-    const [cidAnterior3, setCidAnterior3] = useState('')
+    const [infoAdicional, setInfoAdicional] = useState({})
     const [entrevistaQualidade, setEntrevistaQualidade] = useState(false)
-
     const [novoFormulario, setNovoFormulario] = useState('')
-
     const [loading, setLoading] = useState(false)
 
     let alturaInput, pesoInput
 
-    const openModalInfo = () => {
-        setModalInfo(true)
-    }
-    const closeModalInfo = () => {
-        setModalInfo(false)
-    }
-
     const buscarPerguntas = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, { withCredentials: true })
-
             setPerguntas(result.data.perguntas)
-
         } catch (error) {
             console.log(error);
         }
@@ -96,15 +52,11 @@ const Formulario = () => {
 
     const handleChange = (item) => {
         respostas[`${item.id}`] = item.value
-
         let imc
-
         if (item.id === 'peso') {
             pesoInput = (item.value)
             imc = pesoInput / (alturaInput * alturaInput)
-
             let indicadorImc
-
             if (imc >= 40) {
                 indicadorImc = 'OBESIDADE III'
             }
@@ -114,15 +66,12 @@ const Formulario = () => {
             if (imc >= 30 && imc <= 34.99) {
                 indicadorImc = 'OBESIDADE I'
             }
-
             document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
-
             if (imc >= 30) {
                 let span = document.createElement('span')
                 span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
                 document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
             }
-
             if (imc < 30) {
                 let divIndicadorObesidade = document.getElementById('indicador-obesidade')
                 divIndicadorObesidade.removeChild(divIndicadorObesidade.firstChild)
@@ -131,9 +80,7 @@ const Formulario = () => {
         if (item.id === 'altura') {
             alturaInput = (item.value)
             imc = pesoInput / (alturaInput * alturaInput)
-
             let indicadorImc
-
             if (imc >= 40) {
                 indicadorImc = 'OBESIDADE III'
             }
@@ -143,17 +90,13 @@ const Formulario = () => {
             if (imc >= 30 && imc <= 34.99) {
                 indicadorImc = 'OBESIDADE I'
             }
-
             document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
-
             if (imc >= 30) {
                 let span = document.createElement('span')
                 span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
                 document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
             }
         }
-
-
     }
 
     const handleChangeSub = async (item) => {
@@ -168,24 +111,19 @@ const Formulario = () => {
 
     const buscarCids = async (cid) => {
         try {
-
             if (cid === '' || cid.length <= 2) {
                 setCids([])
             } else {
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/cids/pesquisa/${cid}`, { withCredentials: true })
                 setCids(result.data.cids)
-
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
     const adicionarCids = (item) => {
-
         let div = document.getElementById('cids-selecionados')
-
         if (item.checked === true) {
             arrCids.push(item.value)
             let div1 = document.createElement('div')
@@ -195,7 +133,6 @@ const Formulario = () => {
             div1.appendChild(span)
             div.appendChild(div1)
         }
-
         if (item.checked === false) {
             let indice = arrCids.indexOf(item.value)
             arrCids.splice(indice, 1)
@@ -203,7 +140,7 @@ const Formulario = () => {
             console.log(divRetirada);
             divRetirada.parentNode.removeChild(divRetirada)
         }
-
+        console.log(arrCids.some((cid => cid !== 'F841 (Autismo atípico)' && cid !== 'F840 (Autismo infantil)')));
     }
 
     const mostraDivergencia = (item) => {
@@ -217,9 +154,7 @@ const Formulario = () => {
 
     const alterarFormulario = async () => {
         try {
-
             setLoading(true)
-
             if (novoFormulario !== '') {
                 const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarFormulario`, {
                     formulario: novoFormulario,
@@ -228,63 +163,35 @@ const Formulario = () => {
                     withCredentials: true,
                     headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
-
                 if (result.status === 200) {
                     window.location.reload()
                 }
-
             } else {
                 return
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
-
-
     useEffect(() => {
-
         const buscarInfoPessoa = async () => {
             try {
                 const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/proposta/${id}`, {
                     withCredentials: true,
                     headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
-
                 setPessoa(result.data)
                 setFormulario(result.data.formulario)
                 setSexo(result.data.sexo)
                 if (result.data.formulario !== 'adulto') {
                     setHabitos(false)
                 }
-                setRiscoBeneficiario(result.data.riscoBeneficiario)
-                setRiscoImc(result.data.riscoImc)
-                setSinistral(result.data.sinistral)
-                setTipoAssociado(result.data.tipoAssociado)
-                setGrupoCarencia(result.data.grupoCarencia)
-                setDs1(result.data.d1)
-                setDs2(result.data.d2)
-                setDs3(result.data.d3)
-                setDs4(result.data.d4)
-                setDs5(result.data.d5)
-                setDs6(result.data.d6)
-                setDs7(result.data.d7)
-                setDs8(result.data.d8)
-                setDs9(result.data.d9)
-                setPeso(result.data.peso)
-                setAltura(result.data.altura)
-                setImc(result.data.imc)
-                setCidAnterior1(result.data.cid1)
-                setCidAnterior2(result.data.cid2)
-                setCidAnterior3(result.data.cid3)
-
+                setInfoAdicional(result.data)
             } catch (error) {
                 console.log(error);
             }
         }
-
         buscarPerguntas()
         buscarInfoPessoa()
     }, [id, pessoa?.grupoCarencia])
@@ -321,19 +228,20 @@ const Formulario = () => {
                         </Box>
 
                         <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
-                        {/* 
-                        <MarcacaoAutista /> */}
-
                     </div>
-                    <div className="info-adicional">
-                        <button onClick={openModalInfo}>Informações Adicionais</button>
-                    </div>
-                    <RoteiroTeleEntrevista></RoteiroTeleEntrevista>
+                    {
+                        infoAdicional !== {} ? (
+                            <Box m={2} textAlign='center'>
+                                <InfoAdicionais data={infoAdicional} />
+                            </Box>
+                        ) : null
+                    }
+                    <RoteiroTeleEntrevista />
                     <div className="info-pessoa-entrevista-container">
                         <div className="title">
                             <h3>Questionário Médico</h3>
                         </div>
-                        <InfoPessoaEntrevista pessoa={pessoa}></InfoPessoaEntrevista>
+                        <InfoPessoaEntrevista pessoa={pessoa} />
                     </div>
                     <div className="observacoes-entrevista">
                         <div className="title">
@@ -403,7 +311,6 @@ const Formulario = () => {
                         <label htmlFor="identifica-divergencia" className="label-pergunta">Identifica Divergência?</label>
                         <select name="identifica-divergencia" id="identifica-divergencia" onChange={e => {
                             mostraDivergencia(e.target.value)
-                            console.log(e.target.value);
                             if (e.target.value === 'true') {
                                 setDivergencia(true)
                                 let divIndicadorObesidade = document.getElementById('indicador-obesidade')
@@ -413,7 +320,6 @@ const Formulario = () => {
                                 let divIndicadorObesidade = document.getElementById('indicador-obesidade')
                                 divIndicadorObesidade.classList.remove('none')
                             }
-
                         }}>
                             <option value={false}>Não</option>
                             <option value={true}>Sim</option>
@@ -466,9 +372,7 @@ const Formulario = () => {
                                 }
                             </div>
                         </div>
-
                     </div>
-
                     <div id="indicador-obesidade">
 
                     </div>
@@ -479,50 +383,11 @@ const Formulario = () => {
                             </Alert>
                         )
                     }
-
                 </div>
-
                 <Box display='inline-block'>
                     <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
                 </Box>
-
                 <ModalPatologias idCelula={id} celula={'Tele Entrevista'} />
-                <Modal
-                    isOpen={modalInfo}
-                    onRequestClose={closeModalInfo}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content modal-info' >
-                    <div className="title">
-                        <h2>Informações do beneficiario!</h2>
-                    </div>
-                    <InfoAdicionais
-                        riscoBeneficiaro={riscoBeneficiaro}
-                        riscoImc={riscoImc}
-                        sinistral={sinistral}
-                        tipoAssociado={tipoAssociado}
-                        grupoCarencia={grupoCarencia}
-                        ds1={ds1}
-                        ds2={ds2}
-                        ds3={ds3}
-                        ds4={ds4}
-                        ds5={ds5}
-                        ds6={ds6}
-                        ds7={ds7}
-                        ds8={ds8}
-                        ds9={ds9}
-                        peso={peso}
-                        altura={altura}
-                        imc={imc}
-                        cidAnterior1={cidAnterior1}
-                        cidAnterior2={cidAnterior2}
-                        cidAnterior3={cidAnterior3}
-                    />
-                    <button onClick={() => {
-                        closeModalInfo()
-                    }}>Ok</button>
-                </Modal>
-
             </section>
         </>
     )
