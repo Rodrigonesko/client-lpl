@@ -1,110 +1,62 @@
-import React from "react";
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
+import React, { useState } from "react";
 
 const InfoAdicionais = ({
-    riscoBeneficiaro,
-    riscoImc,
-    sinistral,
-    tipoAssociado,
-    grupoCarencia,
-    ds1,
-    ds2,
-    ds3,
-    ds4,
-    ds5,
-    ds6,
-    ds7,
-    ds8,
-    ds9,
-    peso,
-    altura,
-    imc,
-    cidAnterior1,
-    cidAnterior2,
-    cidAnterior3
+    data
 }) => {
+
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
-        <div>
-            <div className="div-pergunta">
-                <label htmlFor="">Risco Beneficiário</label>
-                <input type="text" className="input-pergunta" defaultValue={riscoBeneficiaro} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Risco Imc</label>
-                <input type="text" className="input-pergunta" defaultValue={riscoImc} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Sinistral</label>
-                <input type="text" className="input-pergunta" defaultValue={sinistral} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Tipo Associado</label>
-                <input type="text" className="input-pergunta" defaultValue={tipoAssociado} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Grupo Carência</label>
-                <input type="text" className="input-pergunta" defaultValue={grupoCarencia} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 1</label>
-                <input type="text" className="input-pergunta" defaultValue={ds1} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 2</label>
-                <input type="text" className="input-pergunta" defaultValue={ds2} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 3</label>
-                <input type="text" className="input-pergunta" defaultValue={ds3} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 4</label>
-                <input type="text" className="input-pergunta" defaultValue={ds4} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 5</label>
-                <input type="text" className="input-pergunta" defaultValue={ds5} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 6</label>
-                <input type="text" className="input-pergunta" defaultValue={ds6} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 7</label>
-                <input type="text" className="input-pergunta" defaultValue={ds7} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 8</label>
-                <input type="text" className="input-pergunta" defaultValue={ds8} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">DS 9</label>
-                <input type="text" className="input-pergunta" defaultValue={ds9} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Peso</label>
-                <input type="text" className="input-pergunta" defaultValue={peso} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Altura</label>
-                <input type="text" className="input-pergunta" defaultValue={altura} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">IMC</label>
-                <input type="text" className="input-pergunta" defaultValue={imc} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Cid Anterior 1</label>
-                <input type="text" className="input-pergunta" defaultValue={cidAnterior1} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Cid Anterior 2</label>
-                <input type="text" className="input-pergunta" defaultValue={cidAnterior2} disabled />
-            </div>
-            <div className="div-pergunta">
-                <label htmlFor="">Cid Anterior 3</label>
-                <input type="text" className="input-pergunta" defaultValue={cidAnterior3} disabled />
-            </div>
-        </div>
+        <>
+            <Button onClick={handleClickOpen} variant="contained">Info Adicional</Button>
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"informações adicionais"}
+                </DialogTitle>
+                <DialogContent sx={{ width: '400px' }}>
+                    <Box display='flex' flexDirection='column' minHeight='1500px' justifyContent='space-around' >
+                        <TextField label='Risco Beneficiário' value={data.riscoBeneficiario} />
+                        <TextField label='Risco Imc' value={data.riscoImc} />
+                        <TextField label='Sinistral' value={data.sinistral} />
+                        <TextField label='Tipo Associado' value={data.tipoAssociado} />
+                        <TextField label='Grupo Carência' value={data.grupoCarencia} />
+                        <TextField label='DS 1' value={data.d1} />
+                        <TextField label='DS 2' value={data.d2} />
+                        <TextField label='DS 3' value={data.d3} />
+                        <TextField label='DS 4' value={data.d4} />
+                        <TextField label='DS 5' value={data.d5} />
+                        <TextField label='DS 6' value={data.d6} />
+                        <TextField label='DS 7' value={data.d7} />
+                        <TextField label='DS 8' value={data.d8} />
+                        <TextField label='DS 9' value={data.d9} />
+                        <TextField label='Peso' value={data.peso} />
+                        <TextField label='Altura' value={data.altura} />
+                        <TextField label='IMC' value={data.imc} />
+                        <TextField label='Cid Anterior 1' value={data.cidAnterior1} />
+                        <TextField label='Cid Anterior 2' value={data.cidAnterior2} />
+                        <TextField label='Cid Anterior 3' value={data.cidAnterior3} />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Ok</Button>
+                </DialogActions>
+            </Dialog>
+        </>
     )
 }
 

@@ -43,3 +43,7 @@ export const updatePassword = async (data) => {
 export const lerPolitica = async (data) => {
     return await new ApiCall('/users/lerPolitica').put(data)
 }
+
+export const updateBancoHoras = async (data) => {
+    return await new ApiCall('/bancoHoras').patch(data)
+}

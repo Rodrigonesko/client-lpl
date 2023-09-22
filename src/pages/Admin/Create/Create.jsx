@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Button, TextField, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Snackbar, Alert } from "@mui/material";
+import { Button, TextField, Container, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Snackbar, Alert, Typography } from "@mui/material";
 import { createUser } from "../../../_services/user.service";
 
 const atividades = [
@@ -24,7 +24,7 @@ const Create = () => {
     const [name, setName] = useState('')
     const [admin, setAdmin] = useState(false)
     const [atividade, setAtividade] = useState('')
-
+    const [nomeCompleto, setNomeCompleto] = useState('')
 
     const toggleAdmin = () => {
         setAdmin(!admin)
@@ -32,10 +32,9 @@ const Create = () => {
 
     const cadastrar = async e => {
         e.preventDefault()
+
         try {
-
-            await createUser({ email, name, accessLevel: admin, atividade })
-
+            await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto })
             setSnack(true)
             setEmail('')
             setName('')
@@ -50,20 +49,20 @@ const Create = () => {
     return (
         <>
             <Sidebar></Sidebar>
-            <Box display='flex' justifyContent='center' alignItems='center' width='100%'>
-                <Box>
-                    <Box display='flex' justifyContent='center' alignItems='center'>
-                        <h3>Criar usuario</h3>
-                    </Box>
-                    <Box>
-                        <Box m={2} >
-                            <TextField variant="filled" label="E-mail" type="email" name="email" id="email" value={email} onChange={e => setEmail(e.target.value)} />
+            <Container>
+                <Box mt={2} display='flex' justifyContent='center' alignItems='center' width='100%' minWidth='500px' flexDirection='column'>
+                    <Box width='400px'>
+                        <Typography textAlign='center' variant="h5">
+                            Criar usuario
+                        </Typography>
+                        <Box m={2}>
+                            <TextField fullWidth variant="filled" label="E-mail" type="email" name="email" id="email" value={email} onChange={e => setEmail(e.target.value)} />
                         </Box>
                         <Box m={2}>
-                            <TextField variant="filled" type="text" label='Nome' name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
+                            <TextField fullWidth variant="filled" type="text" label='Nome' name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
                         </Box>
                         <Box m={2}>
-                            <FormControl variant='filled'>
+                            <FormControl fullWidth variant='filled'>
                                 <InputLabel id="label-atividade">Atividade Principal</InputLabel>
                                 <Select
                                     labelId="label-atividade"
@@ -85,6 +84,9 @@ const Create = () => {
                                     }
                                 </Select>
                             </FormControl>
+                        </Box>
+                        <Box m={2}>
+                            <TextField fullWidth variant="filled" type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
                         </Box>
                         <Box m={2}>
                             <FormGroup>
@@ -114,7 +116,9 @@ const Create = () => {
                         </Snackbar>
                     </Box>
                 </Box>
-            </Box>
+            </Container>
+
+
         </>
     )
 
