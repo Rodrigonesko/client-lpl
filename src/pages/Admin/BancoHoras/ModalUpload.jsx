@@ -1,12 +1,13 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Snackbar, Alert } from "@mui/material"
 import { useState } from "react"
 import DragAndDrop from "../../../components/DragAndDrop/DragAndDrop"
 import * as XLSX from "xlsx";
 import { updateBancoHoras } from "../../../_services/user.service";
 
-const ModalUploadBancoHoras = () => {
+const ModalUploadBancoHoras = ({ setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
+    const [openSnack, setOpenSnack] = useState(false)
     const [file, setFile] = useState()
     const [dados, setDados] = useState([])
 
@@ -29,15 +30,19 @@ const ModalUploadBancoHoras = () => {
 
     const handleUpload = async () => {
 
-        const result = await updateBancoHoras({dados})
+        const result = await updateBancoHoras({ dados })
 
-        console.log(result);
-
+        if (result) {
+            setOpenSnack(true)
+            setFlushHook(true)
+            setOpen(false)
+            setFile(null)
+        }
     }
 
     return (
         <>
-            <Button variant="outlined" onClick={handleOpen}  >Adicionar</Button>
+            <Button variant="outlined" onClick={handleOpen}>Atualizar</Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -98,6 +103,11 @@ const ModalUploadBancoHoras = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
+                    Banco de Horas Atualziado com sucesso
+                </Alert>
+            </Snackbar>
         </>
     )
 }

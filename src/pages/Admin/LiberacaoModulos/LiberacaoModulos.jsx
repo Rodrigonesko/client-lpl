@@ -20,6 +20,7 @@ const LiberacaoModulos = () => {
     const [usuario, setUsuario] = useState('')
     const [atividadePrincipal, setAtividadePrincipal] = useState('')
     const [coren, setCoren] = useState('')
+    const [nomeCompleto, setNomeCompleto] = useState('')
 
     const atividades = [
         'Gerência',
@@ -52,6 +53,7 @@ const LiberacaoModulos = () => {
                 setAtividadePrincipal(result.user.atividadePrincipal)
                 setCoren(result.user.coren)
                 setRsd(result.user.rsd)
+                setNomeCompleto(result.user.nomeCompleto)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -81,7 +83,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto })
 
             setMsg('Modulos atualizados com sucesso!')
 
@@ -218,6 +220,9 @@ const LiberacaoModulos = () => {
                                             }
                                         </Select>
                                     </FormControl>
+                                </Box>
+                                <Box m={2}>
+                                    <TextField sx={{width: '400px'}} type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
                                 </Box>
 
                                 <Box m={2} className="btn-container">
