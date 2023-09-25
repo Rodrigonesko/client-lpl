@@ -47,3 +47,7 @@ export const lerPolitica = async (data) => {
 export const updateBancoHoras = async (data) => {
     return await new ApiCall('/bancoHoras').patch(data)
 }
+
+export const getFeriasElegiveis = async () => {
+    return await new ApiCall('/feriasElegiveis').get()
+}

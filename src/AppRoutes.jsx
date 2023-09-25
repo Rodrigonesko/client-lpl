@@ -127,14 +127,8 @@ const AppRoutes = () => {
         <AuthProvider>
             <Routes>
                 <Route exact path="/login" element={<Login />} />
-                {/*Modulo de Ferias*/}
-                <Route exact path="/solicitacaoFerias" element={<ProtectedRoute>
-                    <SolicitacaoFerias />
-                </ProtectedRoute>} />
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
-
-
 
                 <Route exact path="/" element={<ProtectedRoute>
                     <Home />
@@ -184,6 +178,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/bancoHoras" element={<ProtectedRoute>
                     <BancoHoras />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/ferias" element={<ProtectedRoute>
+                    <SolicitacaoFerias />
                 </ProtectedRoute>} />
                 {/* Tele entrevista Routes */}
 

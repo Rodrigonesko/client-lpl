@@ -25,6 +25,7 @@ const Create = () => {
     const [admin, setAdmin] = useState(false)
     const [atividade, setAtividade] = useState('')
     const [nomeCompleto, setNomeCompleto] = useState('')
+    const [dataAdmissao, setDataAdmissao] = useState('')
 
     const toggleAdmin = () => {
         setAdmin(!admin)
@@ -34,7 +35,7 @@ const Create = () => {
         e.preventDefault()
 
         try {
-            await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto })
+            await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto, dataAdmissao })
             setSnack(true)
             setEmail('')
             setName('')
@@ -89,6 +90,9 @@ const Create = () => {
                             <TextField fullWidth variant="filled" type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
                         </Box>
                         <Box m={2}>
+                            <TextField fullWidth variant="filled" type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
+                        </Box>
+                        <Box m={2}>
                             <FormGroup>
                                 <FormControlLabel control={<Checkbox />} label='Admin' onClick={toggleAdmin} />
                             </FormGroup>
@@ -117,8 +121,6 @@ const Create = () => {
                     </Box>
                 </Box>
             </Container>
-
-
         </>
     )
 

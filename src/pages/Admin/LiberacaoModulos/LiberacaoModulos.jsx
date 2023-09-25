@@ -21,6 +21,7 @@ const LiberacaoModulos = () => {
     const [atividadePrincipal, setAtividadePrincipal] = useState('')
     const [coren, setCoren] = useState('')
     const [nomeCompleto, setNomeCompleto] = useState('')
+    const [dataAdmissao, setDataAdmissao] = useState('')
 
     const atividades = [
         'Gerência',
@@ -54,6 +55,7 @@ const LiberacaoModulos = () => {
                 setCoren(result.user.coren)
                 setRsd(result.user.rsd)
                 setNomeCompleto(result.user.nomeCompleto)
+                setDataAdmissao(result.user.dataAdmissao)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -83,7 +85,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao })
 
             setMsg('Modulos atualizados com sucesso!')
 
@@ -222,7 +224,10 @@ const LiberacaoModulos = () => {
                                     </FormControl>
                                 </Box>
                                 <Box m={2}>
-                                    <TextField sx={{width: '400px'}} type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
+                                    <TextField sx={{ width: '400px' }} type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
+                                </Box>
+                                <Box m={2}>
+                                    <TextField sx={{ width: '400px' }} type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
                                 </Box>
 
                                 <Box m={2} className="btn-container">

@@ -34,7 +34,7 @@ const Agendar = () => {
             // const resultRns = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/naoAgendadas`, { withCredentials: true })
 
             let arrAux = result.propostas.filter(elem => {
-                return elem.nome.includes(pesquisa) || elem.proposta.includes(pesquisa)
+                return elem.nome?.includes(pesquisa) || elem.proposta?.includes(pesquisa)
             })
 
             setPropostas(arrAux)
