@@ -5,6 +5,7 @@ import { getAllTreinamentos } from "../../../_services/treinamento.service"
 import ModalDetalhesTreinamento from "./Modais/ModalDetalhesTreinamento"
 import ModalDeletarTreinamento from "./Modais/ModalDeletarTreinamento"
 import moment from "moment"
+import ModalEditarTreinamento from "./Modais/ModalEditarTreinamentos"
 
 const ListaTreinamentos = () => {
 
@@ -35,6 +36,7 @@ const ListaTreinamentos = () => {
                             <TableCell>Prazo</TableCell>
                             <TableCell>Excluir</TableCell>
                             <TableCell>Detalhes</TableCell>
+                            <TableCell>Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,6 +50,15 @@ const ListaTreinamentos = () => {
                                         <TableCell>{moment(treinamento.prazo).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell><ModalDeletarTreinamento nome={treinamento.nome} id={treinamento._id} setFlushHook={setFlushHook} /></TableCell>
                                         <TableCell><ModalDetalhesTreinamento nome={treinamento.nome} id={treinamento._id} /></TableCell>
+                                        <TableCell><ModalEditarTreinamento 
+                                        id={treinamento._id} 
+                                        nomeDoCurso={treinamento.nome} 
+                                        nomePlataforma={treinamento.plataforma} 
+                                        nomeLink={treinamento.link} 
+                                        nomePrazo={treinamento.prazo} 
+                                        nomeObservacoes={treinamento.observacoes} 
+                                        setFlushHook={setFlushHook}
+                                        /></TableCell>
                                     </TableRow>
                                 )
                             })
