@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { getInfoEmail, getUsers, liberarModulos } from "../../../_services/user.service";

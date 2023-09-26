@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { getFeriasElegiveis } from "../../../../_services/user.service"
 
 const ModalFeriasElegiveis = () => {
