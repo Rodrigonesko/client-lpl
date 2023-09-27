@@ -73,8 +73,8 @@ TablePaginationActions.propTypes = {
 const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const [loading, setLoading] = useState(false)
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(50);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(50);
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -102,17 +102,11 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const reagendar = async (id) => {
         try {
-
             setLoading(true)
-
             await reagendarEntrevista({ id })
-
             console.log(analista);
-
             atualizarPropostas(analista)
-
             setLoading(false)
-
         } catch (error) {
             console.log(error);
         }
@@ -121,9 +115,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     const reagendarEntrevistaRn = async (id) => {
         try {
             await reagendarRn({ id })
-
             window.location.reload()
-
         } catch (error) {
             console.log(error);
         }
@@ -131,11 +123,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const alterarTelefone = async (telefone, id) => {
         try {
-
-            const result = await alterarTelefoneEntrevista({ telefone, id })
-
-            console.log(result);
-
+            await alterarTelefoneEntrevista({ telefone, id })
         } catch (error) {
             console.log(error);
         }
@@ -144,7 +132,6 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     const alterarTelefoneEntrevistaRn = async (id, telefone) => {
         try {
             await alterarTelefoneRn({ id, telefone })
-
         } catch (error) {
             console.log(error);
         }
