@@ -7,7 +7,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarVigenciaProposta, cancelarEntrevista, excluirPropostaEntrevista, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
-import { FaWpforms, FaTrash, FaWhatsapp } from 'react-icons/fa'
+import { FaWpforms, FaTrash } from 'react-icons/fa'
 import { TiCancel } from 'react-icons/ti'
 import { BsFillTelephoneFill } from 'react-icons/bs'
 import ModalChangeWhatsapp from "./modais/ModalChangeWhatsapp";
