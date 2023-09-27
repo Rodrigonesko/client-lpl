@@ -1,10 +1,12 @@
 import { Alert, Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Radio, RadioGroup, Snackbar, TextField } from "@mui/material"
 import { useState } from "react";
 import axios from "axios";
+import { getUsers } from "../../../../_services/user.service";
 
-const ModalSolicitar = ({ setFlushHook, colaboradores }) => {
+const ModalSolicitar = ({ setFlushHook }) => {
 
     const [solicitacaoChecked, setSolicitacaoChecked] = useState('30 dias')
+    const [colaboradores, setColaboradores] = useState([])
     const [open, setOpen] = useState(false)
     const [dados, setDados] = useState({
         nomeColaborador: '',
@@ -52,7 +54,6 @@ const ModalSolicitar = ({ setFlushHook, colaboradores }) => {
 
         if (name === 'data') {
             objAux.data = elemento.target.value
-            console.log('entrou');
         } else {
             objAux.data2 = elemento.target.value
         }
@@ -107,8 +108,10 @@ const ModalSolicitar = ({ setFlushHook, colaboradores }) => {
 
     }
 
-    const handleClickOpen = () => {
+    const handleClickOpen = async () => {
         setOpen(true);
+        const resultColaboradores = await getUsers()
+        setColaboradores(resultColaboradores)
     };
 
     return (
