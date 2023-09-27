@@ -7,7 +7,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarVigenciaProposta, cancelarEntrevista, excluirPropostaEntrevista, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
-import { FaWpforms, FaTrash, FaWhatsapp } from 'react-icons/fa'
+import { FaWpforms, FaTrash } from 'react-icons/fa'
 import { TiCancel } from 'react-icons/ti'
 import { BsFillTelephoneFill } from 'react-icons/bs'
 import ModalChangeWhatsapp from "./modais/ModalChangeWhatsapp";
@@ -124,22 +124,16 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpenSnack(false);
     };
 
     const cancelar = async () => {
         try {
-
             setLoadingCancelar(true)
-
             await cancelarEntrevista({ id: idCancelar, motivoCancelamento: motivoCancelar })
-
             setLoadingCancelar(false)
             setModalCancelar(false)
             atualizarTabela()
-
-
         } catch (error) {
             console.log(error);
             setLoadingCancelar(false)
@@ -148,16 +142,11 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const excluir = async () => {
         try {
-
             setLoadingCancelar(true)
-
             await excluirPropostaEntrevista(idExcluir)
-
             setLoadingCancelar(false)
             setModalExcluir(false)
             atualizarTabela()
-
-
         } catch (error) {
             console.log(error);
             setLoadingCancelar(false)
@@ -166,11 +155,8 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const alterarVigencia = async (vigencia, id) => {
         try {
-
             setLoading(true)
-
             await alterarVigenciaProposta({ id, vigencia })
-
             setOpenSnack(true)
             setLoading(false)
 
@@ -182,11 +168,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const alterarTelefone = async (telefone, id) => {
         try {
-
-            const { result } = await alterarTelefoneEntrevista({ id, telefone })
-
-            console.log(result);
-
+            await alterarTelefoneEntrevista({ id, telefone })
         } catch (error) {
             console.log(error);
         }
@@ -194,11 +176,8 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const alterarSexo = async (id, sexo) => {
         try {
-
             setLoading(true)
-
             await alterarSexoEntrevista(id, sexo)
-
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -207,15 +186,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
     const tentativaContato = async (tentativa, id) => {
         try {
-
             setLoading(true)
-
-            const teste = await tentativaContatoEntrevista({ tentativa, id })
-            console.log(teste);
-
+            await tentativaContatoEntrevista({ tentativa, id })
             atualizarTabela()
             setLoading(false)
-
         } catch (error) {
             console.log(error);
         }
@@ -359,7 +333,6 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                             </TableRow>
                         )}
                     </TableBody>
-
                     <TableFooter>
                         <TableRow>
                             <TablePagination
@@ -447,7 +420,6 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                 </Alert>
             </Snackbar>
         </>
-
     )
 }
 

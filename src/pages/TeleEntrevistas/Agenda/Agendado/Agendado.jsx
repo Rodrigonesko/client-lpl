@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from "@mui/material";
+import { Button, TextField, Select, FormControl, MenuItem, InputLabel, Box, CircularProgress } from "@mui/material";
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 import moment from "moment";
@@ -14,77 +14,21 @@ const Agendado = () => {
     const [enfermeiros, setEnfermeiros] = useState([])
     const [responsavel, setResponsavel] = useState('Todos')
     const [loading, setLoading] = useState(false)
+    const [pesquisa, setPesquisa] = useState('')
 
     const searchEnfermeiro = async () => {
         try {
             const result = await buscaAnalistasTele()
-
             setEnfermeiros(result.enfermeiros)
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    const searchPropostas = async () => {
-        try {
+    const fetchPropostas = async () => {
 
-            setLoading(true)
-
-            const result = await getPropostasAgendadas()
-
-            const resultRn = await getRnsAgendadas()
-
-            let arr = []
-
-            for (const item of result) {
-                arr.push({
-                    dataEntrevista: item.dataEntrevista,
-                    proposta: item.proposta,
-                    telefone: item.telefone,
-                    nome: item.nome,
-                    idade: item.idade,
-                    sexo: item.sexo,
-                    enfermeiro: item.enfermeiro,
-                    _id: item._id,
-                    tipo: 'Tele',
-                    contato1: item.contato1,
-                    contato2: item.contato2,
-                    contato3: item.contato3,
-                    whatsapp: item.whatsapp
-                })
-            }
-
-            for (const item of resultRn.rns) {
-                arr.push({
-                    dataEntrevista: item.dataEntrevista,
-                    proposta: item.proposta,
-                    telefone: item.telefones,
-                    nome: item.beneficiario,
-                    idade: item.idade,
-                    enfermeiro: item.responsavel,
-                    _id: item._id,
-                    tipo: 'Rn'
-                })
-            }
-
-            arr.sort(function compare(a, b) {
-                if (moment(a.dataEntrevista) < moment(b.dataEntrevista)) return -1;
-                if (moment(a.dataEntrevista) > moment(b.dataEntrevista)) return 1;
-                return 0;
-            })
-
-            setPropostas(arr)
-
-            setLoading(false)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const filtroEnfermeiro = async enfermeiro => {
         setLoading(true)
+
         const result = await getPropostasAgendadas()
         const resultRn = await getRnsAgendadas()
 
@@ -127,20 +71,38 @@ const Agendado = () => {
             return 0;
         })
 
-        setPropostas([])
-
-        if (enfermeiro === 'Todos') {
-            searchPropostas()
-        }
-
-        arr.forEach(e => {
-            if (e.enfermeiro === enfermeiro) {
-                setPropostas(propostas => [...propostas, e])
-            }
-        })
-
         setLoading(false)
 
+        return arr
+    }
+
+    const searchPropostas = async () => {
+        try {
+            const arr = await fetchPropostas()
+            setPropostas(arr)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const filtroEnfermeiro = async enfermeiro => {
+
+        const arr = await fetchPropostas()
+        setPropostas([])
+        if (enfermeiro === 'Todos') {
+            searchPropostas()
+            return
+        }
+        const arrAux = arr.filter(proposta => proposta.enfermeiro === enfermeiro)
+        setPropostas(arrAux)
+        setLoading(false)
+    }
+
+    const handleFilter = async (event) => {
+        event.preventDefault()
+        const arr = await fetchPropostas()
+        const arrAux = arr.filter(proposta => proposta.proposta.includes(pesquisa) || proposta.nome.includes(pesquisa))
+        setPropostas(arrAux)
     }
 
     useEffect(() => {
@@ -183,7 +145,13 @@ const Agendado = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <TeleAgendadas propostas={propostas} atualizarPropostas={filtroEnfermeiro} analista={responsavel} />
+                    <Box display='flex' m={2} justifyContent='end'>
+                        <form action="">
+                            <TextField onChange={e => setPesquisa(e.target.value)} size="small" label='Colaborador ou proposta' />
+                            <Button onClick={handleFilter} type="submit" >Pesquisar</Button>
+                        </form>
+                    </Box>
+                    <TeleAgendadas setPropostas={setPropostas} propostas={propostas} atualizarPropostas={filtroEnfermeiro} analista={responsavel} />
                 </div>
             </section>
         </>
