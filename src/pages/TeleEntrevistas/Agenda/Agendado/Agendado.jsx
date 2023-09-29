@@ -101,6 +101,7 @@ const Agendado = () => {
     const handleFilter = async (event) => {
         event.preventDefault()
         const arr = await fetchPropostas()
+        setPropostas([])
         const arrAux = arr.filter(proposta => proposta.proposta.includes(pesquisa) || proposta.nome.includes(pesquisa))
         setPropostas(arrAux)
     }
