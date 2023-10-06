@@ -14,6 +14,11 @@ import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
 import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
+/* Modulo de Chamados*/
+
+import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
+import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
+
 /* Modulo de Ferias*/
 
 import SolicitacaoFerias from "./pages/Ferias/Solicitacao/SolicitacaoFerias";
@@ -115,7 +120,7 @@ import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas
 import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
 import BancoHoras from "./pages/Admin/BancoHoras/BancoHoras";
 
-/* Controle ativicades  */
+/* Controle atividades  */
 
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
@@ -130,6 +135,12 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                <Route exact path="/atendimentoChamados" element={<ProtectedRoute>
+                    <AtendimentoChamados />
+                </ProtectedRoute>} />
+                <Route exact path="/solicitarChamados" element={<ProtectedRoute>
+                    <SolicitarChamados />
+                </ProtectedRoute>} />
                 <Route exact path="/" element={<ProtectedRoute>
                     <Home />
                 </ProtectedRoute>} />

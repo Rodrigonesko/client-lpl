@@ -1,8 +1,8 @@
 import { Alert, Box, Button, FormControl, InputLabel, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import axios from "axios"
 import moment from "moment"
-import { useState } from "react"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
+import ModalEditarFerias from "../Modais/ModalEditarFerias"
 
 const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
 
@@ -81,6 +81,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                 <TableCell>DATA DE RETORNO</TableCell>
                                 <TableCell>TOTAL DIAS</TableCell>
                                 <TableCell>STATUS RH</TableCell>
+                                <TableCell>EDITAR</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -102,6 +103,9 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                                     <MenuItem value={'retirada'}>RETIRADA</MenuItem>
                                                 </Select>
                                             </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            <ModalEditarFerias trocaData={item.dataInicio} setFlushHook={setFlushHook} id={item._id}/>
                                         </TableCell>
                                     </TableRow>)
                             })}

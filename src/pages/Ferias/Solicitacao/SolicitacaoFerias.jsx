@@ -7,31 +7,7 @@ import TabelaSolicitacao from "./Tabela/TabelaSolicitacao";
 
 const SolicitacaoFerias = () => {
 
-    // const [pesquisa, setPesquisa] = useState('')
-    // const [alerta, setAlerta] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
-
-    // const handleChange = (elemento) => {
-    //     setPesquisa(elemento.target.value)
-    // }
-
-    // const handleFilter = async (event) => {
-    //     event.preventDefault()
-
-    //     if (pesquisa.length <= 2) {
-    //         setAlerta(true)
-    //         return
-    //     }
-
-    //     const result = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/filter?colaborador=rodrigo&mes=2023-09&vencimento=2023`, {
-    //         withCredentials: true
-    //     })
-
-    // }
-
-    // const handleCloseInput = () => {
-    //     setAlerta(false)
-    // }
 
     return (
         <>
