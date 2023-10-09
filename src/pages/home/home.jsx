@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
-import { Button, TextField, Box, Snackbar, Alert, Container, Typography } from "@mui/material";
+import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper } from "@mui/material";
 import { getInfoUser, updatePassword } from "../../_services/user.service";
 import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
 import { getPoliticasAtivas } from "../../_services/politicas.service";
 import { getVerificarTreinamento } from "../../_services/treinamento.service";
 import moment from "moment";
+import CardBancoHoras from "./cards/CardBancoHoras";
+import CardAniversariantes from "./cards/CardAniversariantes";
+import ModalAdicionarMural from "./modais/ModalAdicionarMural";
+import CardMural from "./cards/CardMural";
 
 const Home = () => {
 
@@ -21,18 +25,13 @@ const Home = () => {
     const [treinamentos, setTreinamentos] = useState([])
     const { name } = useContext(AuthContext)
 
-
     const handlerUpdatePassword = async () => {
-
         try {
-
             await updatePassword({
                 password,
                 confirmPassword
             })
-
             window.location.reload()
-
         } catch (error) {
             setMessage(error.response.data.message)
             setError(true)
@@ -44,29 +43,21 @@ const Home = () => {
 
         try {
             const result = await getInfoUser()
-
             if (result.user.firstAccess === 'Sim') {
                 setFirstAccess(true)
             }
-
             const resultPoliticas = await getPoliticasAtivas()
-
             const politicasLidas = result.user.politicasLidas
-
             const politicasNaoLidas = []
-
             for (const item of resultPoliticas) {
                 const find = politicasLidas.some((idPolitica) => item._id === idPolitica)
                 if (!find) {
                     politicasNaoLidas.push(item)
                 }
             }
-
             const resultTreinamentos = await getVerificarTreinamento()
             setTreinamentos(resultTreinamentos);
-
             setIdPolitica(politicasNaoLidas[0])
-
             if (politicasNaoLidas.length !== 0) {
                 setOpen(true)
             }
@@ -83,7 +74,7 @@ const Home = () => {
     return (
         <>
             <SideBar />
-            <Container sx={{ textAlign: 'center' }}>
+            <Container sx={{ textAlign: 'center' }} component={Paper}>
                 <Box>
                     <Typography variant="h4">
                         Bem vindo {name}!
@@ -123,7 +114,7 @@ const Home = () => {
                 <Box>
                     {treinamentos.map(treinamento => {
                         return (
-                            <Alert severity="warning" sx={{width: '100%', textAlign: 'start', m:1}}>
+                            <Alert severity="warning" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
                                 <Typography>
                                     Treinamento: {treinamento.nome}
                                 </Typography>
@@ -151,13 +142,21 @@ const Home = () => {
                         )
                     })}
                 </Box>
+                <Box display={'flex'} mt={2}>
+                    <Box>
+                        <ModalAdicionarMural />
+                        <CardBancoHoras />
+                        <CardAniversariantes />
+                    </Box>
+                    <Box width={'100%'} ml={2}>
+                        <CardMural />
+                    </Box>
+                </Box>
                 {
                     idPolitica ? (
                         <ModalAceitarPoliticas setOpen={setOpen} open={open} idPolitica={idPolitica} setFlushHook={setFlushHook} />
                     ) : null
                 }
-
-
             </Container>
         </>
 
