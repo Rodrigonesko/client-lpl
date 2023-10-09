@@ -20,7 +20,7 @@ const ExpandirHorarios = ({ analistasDisponiveis, dia }) => {
 
             <Collapse in={open} timeout="auto" unmountOnExit>
                 {
-                    analistasDisponiveis[dia].map(item => {
+                    analistasDisponiveis[dia]?.map(item => {
                         return (
                             <Box component={Paper} p={1} mb={1}>
                                 <strong>{item.horario + ': '}</strong>

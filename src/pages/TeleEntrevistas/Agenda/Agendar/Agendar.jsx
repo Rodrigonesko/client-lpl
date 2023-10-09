@@ -124,7 +124,12 @@ const Agendar = () => {
                     </Box>
                     <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas} />
                     <TabelaAgendarRn propostas={rns} />
-                    <HorariosDisponiveis horarios={horarios} analistasDisponiveis={analistasDisponiveis} />
+                    {
+                        (Object.keys(horarios).length !== 0 && Object.keys(analistasDisponiveis) !== 0) && (
+                            <HorariosDisponiveis horarios={horarios} analistasDisponiveis={analistasDisponiveis} />
+
+                        )
+                    }
                     {/* <div className="horarios-disponiveis-container">
                         <div className="title">
                             <h3>Horarios Disponíveis</h3>
