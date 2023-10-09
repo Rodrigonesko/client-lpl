@@ -39,18 +39,13 @@ const RespostasJanelasHorarios = () => {
 
     const ajustarDia = (data) => {
         const arr = data.split('/')
-
         return `${arr[2]}-${arr[1]}-${arr[0]}`
     }
 
     const buscarHorarios = async (dia) => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${ajustarDia(dia)}`, { withCredentials: true })
-
-            console.log(result);
-
             setHorariosDisponiveis(result.data)
-
         } catch (error) {
             console.log(error);
         }
@@ -199,20 +194,14 @@ const RespostasJanelasHorarios = () => {
 
         const buscarDiasDisponiveis = async () => {
             try {
-
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, { withCredentials: true })
-
                 setDatasEntrevista(result.data)
-
-
             } catch (error) {
                 console.log(error);
             }
         }
-
         buscarPropostas()
         buscarDiasDisponiveis()
-
     }, [])
 
     return (
