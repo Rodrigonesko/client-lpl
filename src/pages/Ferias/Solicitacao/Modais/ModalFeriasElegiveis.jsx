@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import { useState } from "react"
 import { getFeriasElegiveis } from "../../../../_services/user.service"
+import moment from "moment"
 
 const ModalFeriasElegiveis = () => {
 
@@ -57,10 +58,10 @@ const ModalFeriasElegiveis = () => {
                                                     {colaborador.nome}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {colaborador.anoFerias}
+                                                    {moment(colaborador.anoFerias).format(`DD/MM/YYYY`)}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {colaborador.vencimento}
+                                                    {moment(colaborador.vencimento).format(`DD/MM/YYYY`)}
                                                 </TableCell>
                                             </TableRow>
                                         )

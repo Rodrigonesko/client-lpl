@@ -123,7 +123,9 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
     const alterarTelefone = async (telefone, id) => {
         try {
-            await alterarTelefoneEntrevista({ telefone, id })
+            console.log(telefone, id);
+            const result = await alterarTelefoneEntrevista({ telefone, id })
+            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -146,7 +148,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     }
 
     return (
-        <Box maxWidth='1300px' component={Paper} p={1} elevation={3}>
+        <Box maxWidth='1500px' component={Paper} p={1} elevation={3}>
             {
                 loading ? (
                     <CircularProgress style={{ position: 'absolute', top: '50%' }} />
@@ -156,10 +158,10 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                 Tele e Rn: {propostas.length}
             </Typography>
             <TableContainer>
-                <Table style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                <Table style={{ display: 'block', overflowX: 'auto' }}>
                     <TableHead className='table-header'>
                         <TableRow>
-                            <TableCell>Tipo</TableCell>
+                            <TableCell >Tipo</TableCell>
                             <TableCell>Data</TableCell>
                             <TableCell>Horário</TableCell>
                             <TableCell>Proposta</TableCell>
@@ -170,9 +172,9 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                             <TableCell>Analista</TableCell>
                             <TableCell>Formulario</TableCell>
                             <TableCell>Reagendar</TableCell>
-                            <TableCell>1° Contato</TableCell>
-                            <TableCell>2° Contato</TableCell>
-                            <TableCell>3° Contato</TableCell>
+                            <TableCell >1° Contato</TableCell>
+                            <TableCell >2° Contato</TableCell>
+                            <TableCell >3° Contato</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -188,7 +190,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                                                 <TableCell>{moment(e.dataEntrevista).format('HH:mm:ss')}</TableCell>
                                                 <TableCell>{e.proposta}</TableCell>
                                                 <TableCell>
-                                                    <TextField style={{ minWidth: '150px' }} size="small" variant='standard' defaultValue={e.telefone} onKeyUp={element => alterarTelefone(element.target.value, e._id)} />
+                                                    <TextField style={{ minWidth: '150px' }} size="small" variant='standard' defaultValue={e.telefone} onChange={element => alterarTelefone(element.target.value, e._id)} />
                                                     <ModalChangeWhatsapp whatsapp={e.whatsapp} _id={e._id} />
                                                 </TableCell>
                                                 <TableCell>{e.nome}</TableCell>
@@ -260,34 +262,30 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                                     return null
                                 })
                         }
-                        {emptyRows > 0 && (
+                        {/* {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
                                 <TableCell colSpan={6} />
                             </TableRow>
-                        )}
+                        )} */}
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                                colSpan={3}
-                                count={propostas.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                labelRowsPerPage='Linhas por página'
-                                SelectProps={{
-                                    inputProps: {
-                                        'aria-label': 'Linhas por página',
-                                    },
-                                    native: true,
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    colSpan={12}
+                    count={propostas.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    labelRowsPerPage='Linhas por página'
+                    SelectProps={{
+                        inputProps: {
+                            'aria-label': 'Linhas por página',
+                        },
+                        native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                />
             </TableContainer>
         </Box>
     )
