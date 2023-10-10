@@ -10,6 +10,7 @@ import { CircularProgress } from "@mui/material";
 
 import './Agendar.css'
 import { getDiasDisponiveis, getHorariosDisponiveis, getProposasNaoAgendadas, getRnsNaoAgendadas } from "../../../../_services/teleEntrevista.service";
+import HorariosDisponiveis from "./HorariosDisponiveis";
 
 
 const Agendar = () => {
@@ -22,6 +23,7 @@ const Agendar = () => {
     const [pesquisa, setPesquisa] = useState('')
 
     const [horarios, setHorarios] = useState({})
+    const [analistasDisponiveis, setAnalistasDisponiveis] = useState({})
 
     const buscarPessoa = async (event) => {
         try {
@@ -77,6 +79,7 @@ const Agendar = () => {
         try {
             const result = await getHorariosDisponiveis()
             setHorarios(result.obj)
+            setAnalistasDisponiveis(result.analistasDisponiveis)
         } catch (error) {
             console.log(error);
         }
@@ -121,7 +124,13 @@ const Agendar = () => {
                     </Box>
                     <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas} />
                     <TabelaAgendarRn propostas={rns} />
-                    <div className="horarios-disponiveis-container">
+                    {
+                        (Object.keys(horarios).length !== 0 && Object.keys(analistasDisponiveis) !== 0) && (
+                            <HorariosDisponiveis horarios={horarios} analistasDisponiveis={analistasDisponiveis} />
+
+                        )
+                    }
+                    {/* <div className="horarios-disponiveis-container">
                         <div className="title">
                             <h3>Horarios Disponíveis</h3>
                         </div>
@@ -142,7 +151,7 @@ const Agendar = () => {
                                 )
                             })
                         }
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </>
