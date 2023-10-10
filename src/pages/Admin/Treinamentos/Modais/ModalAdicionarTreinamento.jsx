@@ -31,7 +31,7 @@ const ModalAdicionarTreinamento = ({ setFlushHook }) => {
 
     const handleSave = async () => {
 
-        if (nome === '' || plataforma === '' || link === '' || prazo === '') {
+        if (nome === '' || plataforma === '' || prazo === '') {
             setOpenSnack(true)
             setColorSnack('warning')
             setMsgSnack('Algum campo está em branco')
@@ -92,4 +92,4 @@ const ModalAdicionarTreinamento = ({ setFlushHook }) => {
     )
 }
 
-export default ModalAdicionarTreinamento
+export default ModalAdicionarTreinamento;
