@@ -23,10 +23,10 @@ const ExpandirHorarios = ({ analistasDisponiveis, dia }) => {
                     analistasDisponiveis[dia]?.map(item => {
                         return (
                             <Box component={Paper} p={1} mb={1}>
-                                <strong>{item.horario + ': '}</strong>
+                                <strong>{item.analista + ': '}</strong>
                                 {
-                                    item.analistas.map(analista => {
-                                        return <span style={{color: 'gray'}}>{analista} - </span>
+                                    item.horarios.map(horario => {
+                                        return <span style={{color: 'gray'}}>{horario} - </span>
                                     })
                                 }
                             </Box>
