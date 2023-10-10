@@ -3,6 +3,7 @@ import axios from "axios"
 import moment from "moment"
 import { useState, useEffect } from "react"
 import ModalEditarFerias from "../Modais/ModalEditarFerias"
+import { red, yellow, green } from '@mui/material/colors';
 
 const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
 
@@ -17,6 +18,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/vacation/status`, {
             statusRh: status, _id: id
         })
+        setFlushHook(true)
         setSnackSelect(true)
         console.log(resultado)
         console.log(id, status)
@@ -59,7 +61,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
             <form action="" >
                 <TextField type='text' onChange={(e) => { setColaborador(e.target.value) }} size='small' label='Colaborador' sx={{ marginRight: '10px', width: '170px' }} />
                 <TextField type='month' onChange={(e) => { setMes(e.target.value) }} size='small' focused label='Mês' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='date' onChange={(e) => { setVencimento(e.target.value) }} size='small' focused label='Vencimento' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='month' onChange={(e) => { setVencimento(e.target.value) }} size='small' focused label='Vencimento' sx={{ marginRight: '10px', width: '170px' }} />
                 <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                 <Button onClick={() => setFlushHook(true)} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
             </form>
@@ -86,8 +88,16 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                         </TableHead>
                         <TableBody>
                             {solicitacoes.map((item) => {
+                                let color
+                                if (item.statusRh === 'solicitado') {
+                                    color = red[300]
+                                } else if (item.statusRh === 'assinado') {
+                                    color = yellow[300]
+                                } else if (item.statusRh === 'retirada') {
+                                    color = green[300]
+                                }
                                 return (
-                                    <TableRow key={item._id}>
+                                    <TableRow key={item._id} style={{ backgroundColor: color }}>
                                         <TableCell>{moment(item.dataInicio).format('MM/YYYY')}</TableCell>
                                         <TableCell>{moment(item.vencimento).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{item.colaborador}</TableCell>
@@ -97,7 +107,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                         <TableCell>
                                             <FormControl sx={{ minWidth: 135 }}>
                                                 <InputLabel id='StatusRh'>Status do RH</InputLabel>
-                                                <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)}>
+                                                <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)} >
                                                     <MenuItem value={'solicitado'}>SOLICITADO</MenuItem>
                                                     <MenuItem value={'assinado'}>ASSINADO</MenuItem>
                                                     <MenuItem value={'retirada'}>RETIRADA</MenuItem>
@@ -105,7 +115,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <ModalEditarFerias trocaData={item.dataInicio} setFlushHook={setFlushHook} id={item._id}/>
+                                            <ModalEditarFerias trocaData={item.dataInicio} setFlushHook={setFlushHook} id={item._id} />
                                         </TableCell>
                                     </TableRow>)
                             })}

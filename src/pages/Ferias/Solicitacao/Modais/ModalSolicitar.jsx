@@ -70,7 +70,7 @@ const ModalSolicitar = ({ setFlushHook }) => {
                 return
             }
 
-            if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias')) {
+            if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias' && solicitacaoChecked !== '20/10 dias vendidos' )) {
                 setOpenSnack(true)
                 setSeveritySnack('warning')
                 setTextoSnack('Insira uma data!')
@@ -141,9 +141,10 @@ const ModalSolicitar = ({ setFlushHook }) => {
                                 <FormControlLabel value="30 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="30 Dias" />
                                 <FormControlLabel value="20/10 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="20/10 Dias" />
                                 <FormControlLabel value="15/15 dias" control={<Radio onClick={handleCheckedSolicitacao} />} label="15/15 Dias" />
+                                <FormControlLabel value="20/10 dias vendidos" control={<Radio onClick={handleCheckedSolicitacao} />} label="20 dias/10 dias vendidos" />
 
                                 {
-                                    solicitacaoChecked === '30 dias' ? (
+                                    solicitacaoChecked === '30 dias' || solicitacaoChecked === '20/10 dias vendidos' ? (
                                         <TextField type='date' onChange={handleChangeDados} name="data" focused size='small' label='Qual data deseja iniciar suas Férias?' />
                                     ) : (
                                         <>
