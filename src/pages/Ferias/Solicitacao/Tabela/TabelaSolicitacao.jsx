@@ -88,7 +88,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                 <TableCell>VENCIMENTO</TableCell>
                                 <TableCell>COLABORADOR</TableCell>
                                 <TableCell>DATA DE INICIO</TableCell>
-                                <TableCell>DATA DE RETORNO</TableCell>
+                                <TableCell>DATA FIM</TableCell>
                                 <TableCell>TOTAL DIAS</TableCell>
                                 <TableCell>STATUS RH</TableCell>
                                 <TableCell>EDITAR</TableCell>

@@ -1,25 +1,19 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Radio, RadioGroup, Snackbar, TextField } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import { useState } from "react";
-import { getUsers } from "../../_services/user.service";
 
 const Inventario = () => {
 
-    const [solicitacaoChecked, setSolicitacaoChecked] = useState('30 dias')
-    const [colaboradores, setColaboradores] = useState([])
     const [open, setOpen] = useState(false)
     const [dados, setDados] = useState({
-        nomeColaborador: '',
-        tipoSolicitacao: '30 dias',
-        data: '',
-        data2: '',
-        statusRh: ''
+        nomeItem: '',
+        nomeQuantidade: ''
     })
 
     const [flushHook, setFlushHook] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
-    const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
+    const [textoSnack, setTextoSnack] = useState('Insira o nome do Item!')
     const [severitySnack, setSeveritySnack] = useState('')
 
     const handleCloseSnack = () => {
@@ -27,63 +21,42 @@ const Inventario = () => {
 
     };
 
-    const handleCheckedSolicitacao = (e) => {
-        setSolicitacaoChecked(e.target.value)
-        const objAux = dados
-        objAux.tipoSolicitacao = e.target.value
-        objAux.data = ''
-        objAux.data2 = ''
-        setDados(objAux)
-
-    }
-
     const handleClose = () => {
         setOpen(false)
-        setSolicitacaoChecked('30 dias')
         const objAux = dados
-        objAux.tipoSolicitacao = '30 dias'
-        objAux.data = ''
-        objAux.data2 = ''
+        objAux.nomeItem = ''
+        objAux.nomeQuantidade = ''
         setDados(objAux)
     }
 
     const handleChangeDados = (elemento) => {
         const name = elemento.target.name
-
         console.log(name, elemento.target.value);
 
         const objAux = dados
-
-        if (name === 'data') {
-            objAux.data = elemento.target.value
-        } else {
-            objAux.data2 = elemento.target.value
-        }
 
         setDados(objAux)
     }
 
     const handleSave = async () => {
         try {
-            if (dados.nomeColaborador.length <= 0) {
+            if (dados.nomeItem.length <= 0) {
                 setOpenSnack(true)
                 setSeveritySnack('warning')
-                setTextoSnack('Insira o nome do Colaborador!')
+                setTextoSnack('Insira o nome do Item!')
                 return
             }
 
-            if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias' && solicitacaoChecked !== '20/10 dias vendidos')) {
+            if (dados.nomeQuantidade.length <= 0) {
                 setOpenSnack(true)
                 setSeveritySnack('warning')
-                setTextoSnack('Insira uma data!')
+                setTextoSnack('Insira a quantidade do Item!')
                 return
             }
+
             const resultado = await axios.post(process.env.REACT_APP_API_KEY + '/vacation/request', {
-                colaborador: dados.nomeColaborador,
-                dataInicio: dados.data,
-                dataInicio2: dados.data2,
-                totalDias: dados.tipoSolicitacao,
-                statusRh: dados.statusRh
+                item: dados.nomeItem,
+                quantidade: dados.nomeQuantidade,
             })
             console.log(resultado)
             setOpenSnack(true)
@@ -92,28 +65,20 @@ const Inventario = () => {
             console.log(dados)
             setFlushHook(true)
             setOpen(false)
-            setSolicitacaoChecked('30 dias')
             setDados({
-                nomeColaborador: '',
-                tipoSolicitacao: '30 dias',
-                data: '',
-                data2: ''
+                nomeItem: '',
             })
             return
         } catch (error) {
             console.log(error.response.data.msg);
-            setTextoSnack('Erro ao solicitar férias.' + error.response.data.msg)
+            setTextoSnack('Erro ao inserir item.' + error.response.data.msg)
             setSeveritySnack('error')
             setOpenSnack(true)
         }
-
-
     }
 
     const handleClickOpen = async () => {
         setOpen(true);
-        const resultColaboradores = await getUsers()
-        setColaboradores(resultColaboradores)
     };
 
     return (
@@ -132,7 +97,9 @@ const Inventario = () => {
                             <DialogContentText id="alert-dialog-description">
                                 <FormGroup>
                                     <br />
-                                    <TextField type='text' onChange={handleChangeDados} name='Nome do Item' size='small' label='Qual o nome do item?' />
+                                    <TextField type='text' onChange={handleChangeDados} name='nomeItem' size='small' label='Qual o nome do item?' />
+                                    <br />
+                                    <TextField type='text' onChange={handleChangeDados} name='nomeQuantidade' size='small' label='Qual a quatidade do item?' />
                                 </FormGroup>
                             </DialogContentText>
                         </DialogContent>
