@@ -229,13 +229,9 @@ const Formulario = () => {
 
                         <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
                     </div>
-                    {
-                        infoAdicional !== {} ? (
-                            <Box m={2} textAlign='center'>
-                                <InfoAdicionais data={infoAdicional} />
-                            </Box>
-                        ) : null
-                    }
+                    <Box m={2} textAlign='center'>
+                        <InfoAdicionais data={infoAdicional} />
+                    </Box>
                     <RoteiroTeleEntrevista />
                     <div className="info-pessoa-entrevista-container">
                         <div className="title">
