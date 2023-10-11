@@ -1,12 +1,12 @@
 import { Card, CardContent, Typography } from "@mui/material"
-import { blue } from '@mui/material/colors'
+import { lightBlue } from '@mui/material/colors'
 
 const CardAniversariantes = () => {
 
-    const color = { backgroundColor: blue[300] }
+    const color = lightBlue[100] 
 
     return (
-        <Card sx={{ minWidth: 275, mb: `20px`, backgroundColor: color, borderRadius: `10px` }}>
+        <Card sx={{ minWidth: 275, mb: `20px`, bgcolor: color, borderRadius: `10px` }}>
             <CardContent>
                 <Typography variant="h5" component="div">
                 Aniversariante do mês!

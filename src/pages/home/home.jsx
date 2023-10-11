@@ -23,6 +23,7 @@ const Home = () => {
     const [flushHook, setFlushHook] = useState(false)
     const [idPolitica, setIdPolitica] = useState('')
     const [treinamentos, setTreinamentos] = useState([])
+    const [dataUser, setDataUser] = useState(null)
     const { name } = useContext(AuthContext)
 
     const handlerUpdatePassword = async () => {
@@ -43,6 +44,7 @@ const Home = () => {
 
         try {
             const result = await getInfoUser()
+            setDataUser(result.user)
             if (result.user.firstAccess === 'Sim') {
                 setFirstAccess(true)
             }
@@ -145,7 +147,11 @@ const Home = () => {
                 <Box display={'flex'} mt={2}>
                     <Box>
                         <ModalAdicionarMural />
-                        <CardBancoHoras />
+                        {
+                            dataUser !== null && (
+                                <CardBancoHoras data={dataUser} />
+                            )
+                        }
                         <CardAniversariantes />
                     </Box>
                     <Box width={'100%'} ml={2}>

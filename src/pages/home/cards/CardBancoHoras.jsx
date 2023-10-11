@@ -1,18 +1,19 @@
 import { Card, CardContent, Typography } from "@mui/material"
-import { blue } from '@mui/material/colors'
+import { grey } from '@mui/material/colors'
+import moment from "moment"
 
-const CardBancoHoras = () => {
+const CardBancoHoras = ({ data }) => {
 
-    const color = { backgroundColor: blue[300] }
+    const color = grey[300]
 
     return (
-        <Card sx={{ minWidth: 275, mb: `20px`, backgroundColor: color, borderRadius: `10px` }}>
+        <Card sx={{ minWidth: 275, mb: `20px`, bgcolor: color, borderRadius: `10px` }}>
             <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Banco de Horas de x dia
+                    Banco de Horas de {moment(data.dataBancoHoras).format(`DD/MM/YYYY`)}
                 </Typography>
                 <Typography variant="h5" component="div">
-                    XX:XX
+                    {data.bancoHoras}
                 </Typography>
             </CardContent>
         </Card>

@@ -1,13 +1,48 @@
 import { Box, Paper } from "@mui/material"
-import { blue } from "@mui/material/colors"
+import Axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const CardMural = () => {
 
-    const color = { backgroundColor: blue[300] }
+    const [recados, setRecados] = useState([])
+
+    const fetchData = async () => {
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
+            withCredentials: true
+        })
+
+        setRecados(result.data)
+
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     return (
-        <Box component={Paper} width={'100%'} sx={{ backgroundColor: color, borderRadius: `10px` }}>
-            Mural...
+        <Box component={Paper} width={'100%'}>
+            {
+                recados.map(recado => {
+                    return (
+                        <Box>
+                            <Box>
+                                Arquivos: 
+                                {
+                                    recado.arquivos.map(arquivo => {
+                                        return (
+                                            <p>
+                                                {arquivo}
+                                            </p>
+                                        )
+                                    })
+                                }
+                            </Box>
+                            <div dangerouslySetInnerHTML={{ __html: recado.texto }}></div>
+                        </Box>
+                    )
+                })
+            }
         </Box>
     )
 }
