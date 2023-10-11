@@ -1,9 +1,9 @@
-import { Box, Paper } from "@mui/material"
+import { Box, Chip, Divider, Link, Paper, Typography } from "@mui/material"
 import Axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 
-const CardMural = () => {
+const CardMural = ({flushHook}) => {
 
     const [recados, setRecados] = useState([])
 
@@ -18,27 +18,34 @@ const CardMural = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [flushHook])
 
     return (
         <Box component={Paper} width={'100%'}>
             {
                 recados.map(recado => {
                     return (
-                        <Box>
+                        <Box textAlign={"start"} p={2} >
+                            <Typography variant="h5">
+                                {recado.titulo}
+                            </Typography>
                             <Box>
-                                Arquivos: 
+                                {'Arquivos: '}
                                 {
                                     recado.arquivos.map(arquivo => {
                                         return (
-                                            <p>
-                                                {arquivo}
-                                            </p>
+                                            <Chip label={<Link target="_blank" href={`${process.env.REACT_APP_API_KEY}/media/mural/${arquivo}`}>{arquivo}</Link>} variant="outlined" />
                                         )
                                     })
                                 }
                             </Box>
                             <div dangerouslySetInnerHTML={{ __html: recado.texto }}></div>
+                            <Box mt={2}>
+                                <Typography fontWeight={'600'} fontStyle={"italic"}>
+                                    Recado feito por: {recado.responsavel}
+                                </Typography>
+                            </Box>
+                            <Divider sx={{m: 1}} />
                         </Box>
                     )
                 })

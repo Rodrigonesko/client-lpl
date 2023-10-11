@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, AppBar, Box, Button, Chip, Dialog, IconButton, Slide, Snackbar, Toolbar, Tooltip, Typography } from "@mui/material"
+import { Alert, AppBar, Box, Button, Chip, Dialog, Divider, IconButton, Slide, Snackbar, TextField, Toolbar, Tooltip, Typography } from "@mui/material"
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
@@ -13,14 +13,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ModalAdicionarMural = () => {
+const ModalAdicionarMural = ({ setFlushHook }) => {
 
     const [open, setOpen] = useState(false);
-
     const [openSnack, setOpenSnack] = useState(false);
     const [textoSnack, setTextoSnack] = useState(false);
     const [severitySnack, setSeveritySnack] = useState(`success`);
     const [textContent, setTextContent] = useState('')
+    const [titulo, setTitulo] = useState('')
     const [files, setFiles] = useState([])
 
     const handleClickOpen = () => {
@@ -32,32 +32,29 @@ const ModalAdicionarMural = () => {
     };
 
     const handleSave = async () => {
-        console.log(textContent);
 
         const formData = new FormData();
+        formData.append('titulo', titulo)
         formData.append('texto', textContent);
 
         for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
         }
 
-        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/mural`, formData, {
+        await Axios.post(`${process.env.REACT_APP_API_KEY}/mural`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
             withCredentials: true
         })
-
-        console.log(result);
         setTextoSnack(`Recado enviado com sucesso!`)
         setSeveritySnack(`success`)
         setOpenSnack(true)
         setOpen(false)
         setTextContent(``)
         setFiles([])
+        setFlushHook(true)
     };
-
-
 
     return (
         <>
@@ -110,13 +107,17 @@ const ModalAdicionarMural = () => {
                         }
                     </Box>
                     <ModalAnexarArquivos setFiles={setFiles} />
+                    <Box mb={2}>
+                        <TextField value={titulo} onChange={e => setTitulo(e.target.value)} fullWidth label='Titulo' size="small" />
+                    </Box>
                     <ReactQuill
                         theme='snow'
                         value={textContent}
                         onChange={setTextContent}
                     />
                 </Box>
-                <div dangerouslySetInnerHTML={{ __html: textContent }}>
+                <Divider sx={{ m: 1 }} />
+                <div style={{ padding: '1rem' }} dangerouslySetInnerHTML={{ __html: textContent }}>
                 </div>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
