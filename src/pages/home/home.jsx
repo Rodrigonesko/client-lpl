@@ -146,7 +146,11 @@ const Home = () => {
                 </Box>
                 <Box display={'flex'} mt={2}>
                     <Box>
-                        <ModalAdicionarMural />
+                        {
+                            dataUser !== null && dataUser.accessLevel !== 'false' && (
+                                <ModalAdicionarMural setFlushHook={setFlushHook} />
+                            )
+                        }
                         {
                             dataUser !== null && (
                                 <CardBancoHoras data={dataUser} />
@@ -155,7 +159,7 @@ const Home = () => {
                         <CardAniversariantes />
                     </Box>
                     <Box width={'100%'} ml={2}>
-                        <CardMural />
+                        <CardMural flushHook={flushHook} />
                     </Box>
                 </Box>
                 {
