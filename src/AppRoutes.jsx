@@ -19,6 +19,10 @@ import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
 import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
 
+/* Modulo de Inventario*/
+
+import Inventario from "./pages/Inventario/Inventario";
+
 /* Modulo de Ferias*/
 
 import SolicitacaoFerias from "./pages/Ferias/Solicitacao/SolicitacaoFerias";
@@ -135,6 +139,9 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                <Route exact path="/inventario" element={<ProtectedRoute>
+                    <Inventario />
+                </ProtectedRoute>} />
                 <Route exact path="/atendimentoChamados" element={<ProtectedRoute>
                     <AtendimentoChamados />
                 </ProtectedRoute>} />

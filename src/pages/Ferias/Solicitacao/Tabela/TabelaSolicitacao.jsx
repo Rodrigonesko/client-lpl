@@ -3,7 +3,7 @@ import axios from "axios"
 import moment from "moment"
 import { useState, useEffect } from "react"
 import ModalEditarFerias from "../Modais/ModalEditarFerias"
-import { red, yellow, green } from '@mui/material/colors';
+import { red, yellow, green, blue } from '@mui/material/colors';
 
 const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
 
@@ -56,6 +56,14 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
     const handleCloseInput = () => {
         setAlerta(false)
     }
+
+    const isTrintaDias = (dataInicio) => {
+        const currentDate = moment()
+        const trintaDias = currentDate.add(30, 'days');
+
+        return dataInicio.isSameOrBefore(trintaDias, 'day');
+    }
+
     return (
         <>
             <form action="" >
@@ -80,7 +88,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                 <TableCell>VENCIMENTO</TableCell>
                                 <TableCell>COLABORADOR</TableCell>
                                 <TableCell>DATA DE INICIO</TableCell>
-                                <TableCell>DATA DE RETORNO</TableCell>
+                                <TableCell>DATA FIM</TableCell>
                                 <TableCell>TOTAL DIAS</TableCell>
                                 <TableCell>STATUS RH</TableCell>
                                 <TableCell>EDITAR</TableCell>
@@ -89,11 +97,14 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                         <TableBody>
                             {solicitacoes.map((item) => {
                                 let color
-                                if (item.statusRh === 'solicitado') {
+                                const verificaData = isTrintaDias(moment(item.dataInicio))
+                                if (verificaData) {
                                     color = red[300]
-                                } else if (item.statusRh === 'assinado') {
+                                } if (item.statusRh === 'solicitado') {
+                                    color = blue[300]
+                                } if (item.statusRh === 'assinado') {
                                     color = yellow[300]
-                                } else if (item.statusRh === 'retirada') {
+                                } if (item.statusRh === 'retirada') {
                                     color = green[300]
                                 }
                                 return (
