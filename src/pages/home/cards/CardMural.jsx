@@ -2,8 +2,9 @@ import { Box, Chip, Divider, Link, Paper, Typography } from "@mui/material"
 import Axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import ModalDeletarRecado from "../modais/ModalDeletarRecado";
 
-const CardMural = ({flushHook}) => {
+const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
 
     const [recados, setRecados] = useState([])
 
@@ -44,8 +45,13 @@ const CardMural = ({flushHook}) => {
                                 <Typography fontWeight={'600'} fontStyle={"italic"}>
                                     Recado feito por: {recado.responsavel}
                                 </Typography>
+                                {
+                                    dataUser.name === recado.responsavel && (
+                                        <ModalDeletarRecado setFlushHook={setFlushHook} id={recado._id} />
+                                    )
+                                }
                             </Box>
-                            <Divider sx={{m: 1}} />
+                            <Divider sx={{ m: 1 }} />
                         </Box>
                     )
                 })

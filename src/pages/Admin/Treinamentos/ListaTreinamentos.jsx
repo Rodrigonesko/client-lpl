@@ -34,10 +34,8 @@ const ListaTreinamentos = () => {
                             <TableCell>Plataforma</TableCell>
                             <TableCell>Link</TableCell>
                             <TableCell>Prazo</TableCell>
-                            <TableCell>Excluir</TableCell>
-                            <TableCell>Detalhes</TableCell>
-                            <TableCell>Editar</TableCell>
-                        </TableRow>
+                            <TableCell></TableCell>
+                       </TableRow>
                     </TableHead>
                     <TableBody>
                         {
@@ -48,17 +46,27 @@ const ListaTreinamentos = () => {
                                         <TableCell>{treinamento.plataforma}</TableCell>
                                         <TableCell>{treinamento.link}</TableCell>
                                         <TableCell>{moment(treinamento.prazo).format('DD/MM/YYYY')}</TableCell>
-                                        <TableCell><ModalDeletarTreinamento nome={treinamento.nome} id={treinamento._id} setFlushHook={setFlushHook} /></TableCell>
-                                        <TableCell><ModalDetalhesTreinamento nome={treinamento.nome} id={treinamento._id} /></TableCell>
-                                        <TableCell><ModalEditarTreinamento 
-                                        id={treinamento._id} 
-                                        nomeDoCurso={treinamento.nome} 
-                                        nomePlataforma={treinamento.plataforma} 
-                                        nomeLink={treinamento.link} 
-                                        nomePrazo={treinamento.prazo} 
-                                        nomeObservacoes={treinamento.observacoes} 
-                                        setFlushHook={setFlushHook}
-                                        /></TableCell>
+                                        <TableCell>
+                                            <ModalDeletarTreinamento
+                                                nome={treinamento.nome}
+                                                id={treinamento._id}
+                                                setFlushHook={setFlushHook}
+                                            />
+                                            <ModalDetalhesTreinamento
+                                                nome={treinamento.nome}
+                                                id={treinamento._id}
+                                            />
+                                            <ModalEditarTreinamento
+                                                id={treinamento._id}
+                                                nomeDoCurso={treinamento.nome}
+                                                nomePlataforma={treinamento.plataforma}
+                                                nomeLink={treinamento.link}
+                                                nomePrazo={treinamento.prazo}
+                                                nomeObservacoes={treinamento.observacoes}
+                                                setFlushHook={setFlushHook}
+                                            />
+                                        </TableCell>
+
                                     </TableRow>
                                 )
                             })

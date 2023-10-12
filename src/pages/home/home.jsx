@@ -159,7 +159,11 @@ const Home = () => {
                         <CardAniversariantes />
                     </Box>
                     <Box width={'100%'} ml={2}>
-                        <CardMural flushHook={flushHook} />
+                        {
+                            dataUser !== null && (
+                                <CardMural dataUser={dataUser} flushHook={flushHook} setFlushHook={setFlushHook} />
+                            )
+                        }
                     </Box>
                 </Box>
                 {
