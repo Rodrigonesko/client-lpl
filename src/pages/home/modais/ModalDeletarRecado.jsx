@@ -1,12 +1,12 @@
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Typography, Snackbar, Alert, Tooltip, IconButton } from "@mui/material"
-import { useState } from "react";
-import { deleteTreinamento } from "../../../../_services/treinamento.service";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar, Tooltip } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from "react";
+import Axios from "axios";
 
-const ModalDeletarTreinamento = ({ id, nome, setFlushHook }) => {
+const ModalDeletarRecado = ({setFlushHook, id}) => {
 
-    const [open, setOpen] = useState(false)
-    const [openSnack, setOpenSnack] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -16,19 +16,21 @@ const ModalDeletarTreinamento = ({ id, nome, setFlushHook }) => {
         setOpen(false);
     };
 
-
     const handleDelete = async () => {
-        await deleteTreinamento(id)
 
-        setFlushHook(true)
+        await Axios.delete(`${process.env.REACT_APP_API_KEY}/mural/${id}`, {
+            withCredentials: true
+        })
+
         setOpenSnack(true)
         handleClose()
+        setFlushHook(true)
     }
 
     return (
         <>
-            <Tooltip title={`Deletar Treinamento`}>
-                <IconButton sx={{m: 1}} variant="contained" color="error" onClick={handleClickOpen}>
+            <Tooltip title={`Deletar recado`}>
+                <IconButton onClick={handleClickOpen} color="error">
                     <DeleteIcon />
                 </IconButton>
             </Tooltip>
@@ -39,25 +41,27 @@ const ModalDeletarTreinamento = ({ id, nome, setFlushHook }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Treinamento: " + nome}
+                    {"Deletar recado?"}
                 </DialogTitle>
                 <DialogContent>
-                    <Typography variant="body2">
-                        Tem certeza que deseja deletar o treinamento {nome}?
-                    </Typography>
+                    <DialogContentText id="alert-dialog-description">
+                        Tem certeza que deseja deletar o recado?
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Fechar</Button>
-                    <Button onClick={handleDelete} color="error" variant="contained">Deletar</Button>
+                    <Button onClick={handleDelete} variant="contained" color="error" >
+                        Deletar
+                    </Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
                 <Alert variant="filled" onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
-                    Treinamento deletado com sucesso!
+                    Recado deletado com sucesso!
                 </Alert>
             </Snackbar>
         </>
     )
 }
 
-export default ModalDeletarTreinamento
+export default ModalDeletarRecado

@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, TextField, Snackbar, Alert } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, TextField, Snackbar, Alert, Tooltip, IconButton } from "@mui/material"
 import { updateTreinamento } from "../../../../_services/treinamento.service";
+import EditIcon from '@mui/icons-material/Edit';
 
 const ModalEditarTreinamento = ({ setFlushHook, id, nomeDoCurso, nomePlataforma, nomeLink, nomePrazo, nomeObservacoes }) => {
-
-console.log(id, nomeDoCurso, nomePlataforma, nomeLink, nomePrazo, nomeObservacoes)
-
     const [open, setOpen] = useState(false);
     const [openSnack, setOpenSnack] = useState(false)
     const [colorSnack, setColorSnack] = useState('success')
@@ -53,8 +51,11 @@ console.log(id, nomeDoCurso, nomePlataforma, nomeLink, nomePrazo, nomeObservacoe
 
     return (
         <>
-            <Button onClick={handleClickOpen} variant='contained' color="success" size="small">Editar</Button>
-
+            <Tooltip title={`Editar Treinamento`}>
+                <IconButton sx={{ m: 1 }} variant="contained" color="success" onClick={handleClickOpen}>
+                    <EditIcon />
+                </IconButton>
+            </Tooltip>
             <Dialog
                 open={open}
                 onClose={handleClose}
