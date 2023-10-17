@@ -35,6 +35,7 @@ const Agendado = () => {
         let arr = []
 
         for (const item of result) {
+            console.log(item.whatsappsAnteriores);
             arr.push({
                 dataEntrevista: item.dataEntrevista,
                 proposta: item.proposta,
@@ -48,7 +49,9 @@ const Agendado = () => {
                 contato1: item.contato1,
                 contato2: item.contato2,
                 contato3: item.contato3,
-                whatsapp: item.whatsapp
+                whatsapp: item.whatsapp,
+                whatsappsAnteriores: item.whatsappsAnteriores,
+                retrocedido: item.retrocedido
             })
         }
 

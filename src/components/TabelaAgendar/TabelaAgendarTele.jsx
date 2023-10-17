@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton, Snackbar, Alert, Tooltip } from "@mui/material";
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton, Snackbar, Alert, Tooltip, Chip } from "@mui/material";
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -231,6 +231,10 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
                             const conditionPf = row.tipoContrato.indexOf('PF') !== -1 || row.tipoContrato.indexOf('pf') !== -1
 
+                            if(row.proposta === '19403306'){
+                                console.log(row);
+                            }
+
                             return (
                                 <TableRow key={row._id} style={{ background: conditionPf ? '#e6ee9c' : '' }} >
                                     <TableCell component="th" scope="row">
@@ -245,6 +249,11 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                                     </TableCell>
                                     <TableCell align="left">
                                         {row.proposta}
+                                        {
+                                            row.retrocedido && (
+                                                <Chip sx={{ml:'2px'}} variant="outlined" label='ret' color="secondary"/>
+                                            )
+                                        }
                                     </TableCell>
                                     <TableCell align="left">
                                         {row.nome}
@@ -260,7 +269,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                                     </TableCell>
                                     <TableCell>
                                         <TextField style={{ minWidth: '200px' }} size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
-                                        <ModalChangeWhatsapp whatsapp={row.whatsapp} _id={row._id} />
+                                        <ModalChangeWhatsapp whatsapp={row.whatsapp} _id={row._id} whatsappsAnteriores={row.whatsappsAnteriores} />
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title='Cancelar'>

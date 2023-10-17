@@ -5,7 +5,7 @@ import { AiOutlineCheck } from 'react-icons/ai'
 import { BiConversation } from 'react-icons/bi'
 import { BsPeople } from 'react-icons/bs'
 import { alterarWhatsapp, mandarParaAtendimentoHumanizado } from "../../../_services/teleEntrevista.service";
-
+import HistoricoWhatsapp from "./HistoricoWhatsapp";
 const iconButtonStyle = {
     marginLeft: '10px',
     transition: 'background-color 0.3s', // Define a transição para a propriedade backgroundColor
@@ -67,6 +67,8 @@ const ModalChangeWhatsapp = (props) => {
         setOpenSnack(true)
     }
 
+    console.log(props.whatsappsAnteriores);
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -98,6 +100,7 @@ const ModalChangeWhatsapp = (props) => {
                     <Tooltip title='Mandar para atendimento humanizado'>
                         <Button color="info" variant="contained" onClick={handleSendHumanized} style={{ marginLeft: '10px' }} ><BsPeople /></Button>
                     </Tooltip>
+                    <HistoricoWhatsapp historico={props.whatsappsAnteriores} />
                 </Box>
             </Popover>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => { setOpenSnack(false) }}>
