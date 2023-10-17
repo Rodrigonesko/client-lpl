@@ -12,7 +12,7 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
     const [open, setOpen] = useState(false)
     const [realizados, setRealizados] = useState([])
     const [flushHook, setFlushHook] = useState(false)
-    const [openSnack, setOpenSnack] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -27,6 +27,11 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
         const result = await getByIdTreinamentos(id)
         setRealizados(result.realizados)
     }
+
+    useEffect(() => {
+        fetchData()
+        setFlushHook(false)
+    }, [flushHook])
 
     const handleFinalizarTreinamento = async (nome) => {
         await treinamentoRealizado({
@@ -58,10 +63,36 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
         setOpenSnack(true)
     }
 
-    useEffect(() => {
-        setFlushHook(false)
-        fetchData()
-    }, [flushHook])
+
+    const handleReport = () => {
+
+        let xls = '\ufeff'
+        xls += "<table border='1'>"
+        xls += "<thead><tr>"
+        xls += "<th>Colaborador</th>"
+        xls += "<th>Status</th>"
+        xls += "<th>Data</th>"
+        xls += "<th>Nome Treinamento</th>"
+        xls += "</tr>"
+
+        for (const user of realizados) {
+            xls += "<tr>"
+            xls += `<td>${user.nome}</td>`
+            xls += `<td>${user.realizado ? 'Finalizado' : 'A fazer'}</td>`
+            xls += `<td>${user.data}</td>`
+            xls += `<td>${nome}</td>`
+            xls += "</tr>"
+        }
+
+        xls += "</tbody></table>"
+
+        var a = document.createElement('a');
+        var data_type = 'data:application/vnd.ms-excel';
+        a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+        a.download = 'relatorio treinamentos.xls'
+        a.click()
+
+    }
 
     return (
         <>
@@ -83,6 +114,7 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                 <DialogContent>
                     <Table>
                         <TableHead>
+                            <Button onClick={handleReport} variant='contained' size="small" >Report</Button>
                             <TableRow>
                                 <TableCell>
                                     Colaborador

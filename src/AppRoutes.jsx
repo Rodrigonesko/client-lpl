@@ -21,7 +21,6 @@ import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
 
 /* Modulo de Inventario*/
 
-import Inventario from "./pages/Inventario/Inventario";
 
 /* Modulo de Ferias*/
 
@@ -123,6 +122,7 @@ import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/Relator
 import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
 import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
 import BancoHoras from "./pages/Admin/BancoHoras/BancoHoras";
+import Inventario from "./pages/Admin/Inventario/Inventario";
 
 /* Controle atividades  */
 
@@ -139,9 +139,6 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/inventario" element={<ProtectedRoute>
-                    <Inventario />
-                </ProtectedRoute>} />
                 <Route exact path="/atendimentoChamados" element={<ProtectedRoute>
                     <AtendimentoChamados />
                 </ProtectedRoute>} />
@@ -200,6 +197,10 @@ const AppRoutes = () => {
                 <Route exact path="/admin/ferias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
                 </ProtectedRoute>} />
+                <Route exact path="/admin/inventario" element={<ProtectedRoute>
+                    <Inventario />
+                </ProtectedRoute>} />
+
                 {/* Tele entrevista Routes */}
 
                 <Route exact path="/entrevistas/upload" element={<ProtectedRoute>

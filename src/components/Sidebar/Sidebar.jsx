@@ -51,6 +51,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/admin/treinamentos'>Treinamentos</Link></MenuItem>
                                     <MenuItem><Link to='/admin/bancoHoras'>Banco De Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/ferias'>Controle Férias</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/inventario'>Inventário</Link></MenuItem>
                                 </SubMenu>
                             ) : null
                         }
