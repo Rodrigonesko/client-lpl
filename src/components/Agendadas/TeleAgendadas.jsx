@@ -191,7 +191,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                                                 <TableCell>{e.proposta}</TableCell>
                                                 <TableCell>
                                                     <TextField style={{ minWidth: '150px' }} size="small" variant='standard' defaultValue={e.telefone} onChange={element => alterarTelefone(element.target.value, e._id)} />
-                                                    <ModalChangeWhatsapp whatsapp={e.whatsapp} _id={e._id} />
+                                                    <ModalChangeWhatsapp whatsapp={e.whatsapp} _id={e._id} whatsappsAnteriores={e.whatsappsAnteriores} />
                                                 </TableCell>
                                                 <TableCell>{e.nome}</TableCell>
                                                 <TableCell>{e.idade}</TableCell>

@@ -130,28 +130,6 @@ const Agendar = () => {
 
                         )
                     }
-                    {/* <div className="horarios-disponiveis-container">
-                        <div className="title">
-                            <h3>Horarios Disponíveis</h3>
-                        </div>
-                        {
-                            Object.keys(horarios).map(data => {
-                                return (
-                                    <div className="horarios-disponiveis-card">
-                                        <span>Horários disponíveis para o dia <strong>{data}</strong></span>
-                                        <br />
-                                        {
-                                            horarios[data].map(horario => {
-                                                return (
-                                                    <span>{horario} - </span>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                )
-                            })
-                        }
-                    </div> */}
                 </div>
             </section>
         </>
