@@ -1,4 +1,4 @@
-import { Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material"
+import { Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material"
 import ModalAdicionarTreinamento from "./Modais/ModalAdicionarTreinamento"
 import { useEffect, useState } from "react"
 import { getAllTreinamentos } from "../../../_services/treinamento.service"
