@@ -5,7 +5,9 @@ import { AiOutlineCheck, AiOutlineClose, AiFillFileExcel } from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
 import { useEffect } from "react";
 import moment from "moment";
-import InsightsIcon from '@mui/icons-material/Insights';
+import InsightsIcon from '@mui/icons-material/InsightsOutlined';
+import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const ModalDetalhesTreinamento = ({ nome, id }) => {
 
@@ -44,12 +46,12 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
 
     }
 
-    const handleNaoPrecisaTreinamento = async (nome) => {
+    const handleNaoPrecisaTreinamento = async (nome, ativo) => {
         await naoPrecisaTreinamento({
             idTreinamento: id,
-            nome
+            nome,
+            ativo
         })
-
         setFlushHook(true)
     }
 
@@ -160,9 +162,9 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                                         </TableCell>
                                                         <TableCell>
                                                             <IconButton color="error" onClick={() => {
-                                                                handleNaoPrecisaTreinamento(user.nome)
+                                                                handleNaoPrecisaTreinamento(user.nome, user.ativo)
                                                             }}>
-                                                                <AiOutlineClose />
+                                                                {user.ativo ? (<PersonOutlineOutlinedIcon color="primary"/>) : (<PersonOffOutlinedIcon color="error"/>)}
                                                             </IconButton>
                                                         </TableCell>
                                                     </>
@@ -179,7 +181,7 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                                             <IconButton color="error" onClick={() => {
                                                                 handleNaoPrecisaTreinamento(user.nome)
                                                             }}>
-                                                                <AiOutlineClose />
+                                                                <PersonOffOutlinedIcon />
                                                             </IconButton>
                                                         </TableCell>
                                                     </>
