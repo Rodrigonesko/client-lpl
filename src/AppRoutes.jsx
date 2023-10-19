@@ -139,7 +139,7 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/atendimentoChamados" element={<ProtectedRoute>
+                <Route exact path="/admin/atendimentoChamados" element={<ProtectedRoute>
                     <AtendimentoChamados />
                 </ProtectedRoute>} />
                 <Route exact path="/solicitarChamados" element={<ProtectedRoute>
