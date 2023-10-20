@@ -60,6 +60,11 @@ const Chat = () => {
     const buscarMensagens = async () => {
 
         try {
+
+            if (whatsapp === 'whatsapp:+55undefinedundefined') {
+                return
+            }
+
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/chat/${whatsapp}`, {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${getCookie('token')}` }
