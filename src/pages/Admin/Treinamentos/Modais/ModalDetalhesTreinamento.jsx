@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip, TextField, Snackbar, Alert, Tooltip } from "@mui/material"
 import { useState } from "react"
 import { getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
-import { AiOutlineCheck, AiOutlineClose, AiFillFileExcel } from 'react-icons/ai'
+import { AiOutlineCheck, AiFillFileExcel } from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
 import { useEffect } from "react";
 import moment from "moment";
