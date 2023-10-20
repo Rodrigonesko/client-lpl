@@ -51,3 +51,7 @@ export const updateBancoHoras = async (data) => {
 export const getFeriasElegiveis = async () => {
     return await new ApiCall('/feriasElegiveis').get()
 }
+
+// export const getAllAniversariantes = async () => {
+//     return await new ApiCall('/aniversariantes').get()
+// }
