@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaUserCircle, FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp } from "react-icons/fa";
+import { FaUserCircle, FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaHandsHelping } from "react-icons/fa";
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link, useNavigate } from 'react-router-dom'
@@ -40,6 +40,7 @@ const Sidebar = () => {
                         <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
                         <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
                         <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
+                        <MenuItem icon={<FaHandsHelping />} ><Link to='/solicitarChamados'>Abrir Chamados</Link></MenuItem>
                         {
                             accessLevel !== 'false' ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >
@@ -52,6 +53,7 @@ const Sidebar = () => {
                                     <MenuItem><Link to='/admin/bancoHoras'>Banco De Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/ferias'>Controle Férias</Link></MenuItem>
                                     <MenuItem><Link to='/admin/inventario'>Inventário</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/atendimentoChamados'>Chamados TI</Link></MenuItem>
                                 </SubMenu>
                             ) : null
                         }

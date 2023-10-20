@@ -1,8 +1,19 @@
-import { Box, Paper, Button, Avatar, Typography, Divider, IconButton, Tooltip } from "@mui/material"
+import { Box, Paper, Button, Avatar, Typography, Divider, Tooltip } from "@mui/material"
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2  
-import { FaInstagram, FaLinkedin } from 'react-icons/fa'
+import moment from "moment";
+// import { FaInstagram, FaLinkedin } from 'react-icons/fa'
 
 const ProfileHead = ({ userData }) => {
+
+    const calcularTempoDeCasa = () => {
+        const dataAdmissao = userData.dataAdmissao;
+        const dataAtual = moment();
+        const anos = dataAtual.diff(dataAdmissao, 'years');
+        const meses = dataAtual.diff(dataAdmissao, 'months') % 12;
+        return `${anos} anos e ${meses} meses`;
+    };
+
+    const tempoDeCasa = calcularTempoDeCasa();
 
     return (
         <Box component={Paper} p={1} mr='2%' ml='2%' mt='2%' maxHeight='300px' display='flex' justifyContent='space-between' >
@@ -36,7 +47,7 @@ const ProfileHead = ({ userData }) => {
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-
+                        {tempoDeCasa}
                     </Typography>
                 </Grid>
                 <Grid xs={5}>
@@ -46,7 +57,7 @@ const ProfileHead = ({ userData }) => {
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
-
+                        {moment(userData.dataAdmissao).format('DD/MM/YYYY')}
                     </Typography>
                 </Grid>
                 <Grid xs={5}>
@@ -64,8 +75,8 @@ const ProfileHead = ({ userData }) => {
                     {/* <IconButton sx={{
                         transition: 'color 0.5s', // Ajuste o tempo de transição conforme necessário
                     }} color="secondary">
-                        <FaInstagram />
-                    </IconButton> */}
+                    <FaInstagram />
+                </IconButton> */}
                 </Grid>
                 <Grid xs={1}>
                     {/* <IconButton
@@ -73,7 +84,7 @@ const ProfileHead = ({ userData }) => {
                             transition: 'color 0.5s', // Ajuste o tempo de transição conforme necessário
                         }}
                         color="primary"
-                    >
+                        >
                         <FaLinkedin />
                     </IconButton> */}
                 </Grid>
