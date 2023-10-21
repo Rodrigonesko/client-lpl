@@ -6,7 +6,7 @@ import { getInfoUser } from "./_services/user.service";
 
 const ProtectedRoute = ({ children }) => {
 
-    const { setAccessLevel, name, setName, setEnfermeiro, setElegibilidade } = useContext(AuthContext)
+    const { setAccessLevel, name, setName, setEnfermeiro, setElegibilidade, setAcessos } = useContext(AuthContext)
 
     const navigate = useNavigate()
 
@@ -19,6 +19,7 @@ const ProtectedRoute = ({ children }) => {
             const modules = await getInfoUser(result.email)
             setEnfermeiro(modules.user.enfermeiro)
             setElegibilidade(modules.user.elegibilidade)
+            setAcessos(modules.user.acessos)
 
         } catch (error) {
             console.log(error);

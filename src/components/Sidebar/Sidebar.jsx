@@ -14,7 +14,7 @@ const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(true)
 
-    const { accessLevel, name } = useContext(AuthContext)
+    const { accessLevel, name, acessos } = useContext(AuthContext)
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -22,6 +22,8 @@ const Sidebar = () => {
         side.classList.toggle('slidein')
         side.classList.toggle('slideout')
     }
+
+    console.log(acessos);
 
     const logout = async () => {
         const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
@@ -41,7 +43,7 @@ const Sidebar = () => {
                         <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
                         <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
                         {
-                            accessLevel !== 'false' ? (
+                            acessos.administrador ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                     <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
@@ -63,7 +65,7 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/implantacao'>Implatação</Link></MenuItem>
                                 {
-                                    accessLevel !== 'false' ? (
+                                    acessos.agendamento || acessos.administrador ? (
                                         <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
                                     ) : null
                                 }
@@ -81,7 +83,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                             <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
                             {
-                                accessLevel !== 'false' ? (<>
+                                acessos.agendamento || acessos.administrador ? (<>
 
                                     <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>
