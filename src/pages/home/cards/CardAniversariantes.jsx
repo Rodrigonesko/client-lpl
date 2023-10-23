@@ -1,48 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography } from "@mui/material";
 import { grey } from '@mui/material/colors';
 import moment from "moment";
 import { getAllAniversariantes } from '../../../_services/user.service';
 
-const CardAniversariantes = ({ data }) => {
+const CardAniversariantes = ({ data, flushHook }) => {
 
-    // const [dataUser, setDataUser] = useState([])
+    // const [aniversarioEmpresa, setAniversarioEmpresa] = useState([])
+    const [aniversario, setAniversario] = useState([])
 
-    // const calcularAniversario = () => {
-    //     setDataUser(getAllAniversariantes())
+    const fetchInfoUser = async () => {
+        try {
+            const aniversarios = await getAllAniversariantes();
 
-    // }
+            // const aniversariantesEmpresaComData = aniversarios.filter(data => data.dataAdmissao);
+            // setAniversarioEmpresa(aniversariantesEmpresaComData)
+            const aniversariantesComData = aniversarios.filter(data => data.dataAniversario);
+            setAniversario(aniversariantesComData);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchInfoUser()
+    }, [flushHook])
 
     const color = grey[300];
-    const mesAtual = moment().month() + 1;
-    const mesAniversario = moment(data.dataAniversario).month() + 1;
 
-    if (mesAniversario === mesAtual) {
-        // const mostrarAniversario = `${data.name} - ${moment(data.dataAniversario).format('DD/MM')}`;
-        return (
-            <Card sx={{ minWidth: 275, mb: `20px`, bgcolor: color, borderRadius: `10px` }}>
-                <CardContent>
-                    <Typography variant="h5" component="div">
-                        Aniversariante do mês!
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        Nomes abaixo
-                        <br />
-                        {/* {mostrarAniversario} */}
-                        {/* {dataUser.map(data => {
-                            return (
-                                <Typography>
-                                    {data.name}
-                                    {data.dataAniversario}
-                                </Typography>
-                            )
-                        })} */}
-                    </Typography>
-                </CardContent>
-            </Card>
-        );
-    }
-    return null;
+    const mesAtual = moment().month() + 1;
+    // const anoAtual = moment().year()
+
+    // const aniversariantesNaEmpresa = aniversarioEmpresa.filter(data => {
+    //     const anoAniversario = moment(data.dataAdmissao).year();
+    //     return anoAniversario === anoAtual;
+    // });
+
+    const aniversariantesNoMesAtual = aniversario.filter(data => {
+        const mesAniversario = moment(data.dataAniversario).month() + 1;
+        return mesAniversario === mesAtual;
+    });
+
+    return (
+        <Card sx={{ minWidth: 275, mb: `20px`, bgcolor: color, borderRadius: `10px` }}>
+            <CardContent>
+                <Typography variant="h5" component="div">
+                    Aniversariante do mês!
+                </Typography>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    {aniversariantesNoMesAtual.map(data => (
+                        <Typography key={data.id}>
+                            {data.nome} - {moment(data.dataAniversario).format("DD/MM")}
+                        </Typography>
+                    ))}
+                </Typography>
+                {/* <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    {aniversariantesNaEmpresa.map(data => (
+                        <Typography key={data.id}>
+                            {data.nome} - {moment(data.dataAdmissao).format("DD/MM/YYYY")}
+                        </Typography>
+                    ))}
+                </Typography> */}
+            </CardContent>
+        </Card>
+    );
 }
 
 export default CardAniversariantes;
