@@ -21,6 +21,7 @@ const LiberacaoModulos = () => {
     const [coren, setCoren] = useState('')
     const [nomeCompleto, setNomeCompleto] = useState('')
     const [dataAdmissao, setDataAdmissao] = useState('')
+    const [dataAniversario, setDataAniversario] = useState('')
 
     const atividades = [
         'Gerência',
@@ -55,6 +56,7 @@ const LiberacaoModulos = () => {
                 setRsd(result.user.rsd)
                 setNomeCompleto(result.user.nomeCompleto)
                 setDataAdmissao(result.user.dataAdmissao)
+                setDataAniversario(result.user.dataAniversario)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -84,7 +86,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario })
 
             setMsg('Modulos atualizados com sucesso!')
 
@@ -227,6 +229,9 @@ const LiberacaoModulos = () => {
                                 </Box>
                                 <Box m={2}>
                                     <TextField sx={{ width: '400px' }} type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
+                                </Box>
+                                <Box m={2}>
+                                    <TextField sx={{ width: '400px' }} type="date" focused label="Data Nascimento" value={dataAniversario} onChange={e => setDataAniversario(e.target.value)} />
                                 </Box>
 
                                 <Box m={2} className="btn-container">
