@@ -75,7 +75,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                             <TableRow className="table-header">
                                 <TableCell>NOME ITEM</TableCell>
                                 <TableCell>ETIQUETA</TableCell>
-                                <TableCell>ONDE ESTÁ</TableCell>
+                                <TableCell>COM QUEM ESTÁ</TableCell>
                                 <TableCell>DESCRIÇÃO</TableCell>
                                 <TableCell>STATUS</TableCell>
                             </TableRow>
