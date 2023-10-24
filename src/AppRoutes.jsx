@@ -139,10 +139,7 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/admin/atendimentoChamados" element={<ProtectedRoute>
-                    <AtendimentoChamados />
-                </ProtectedRoute>} />
-                <Route exact path="/solicitarChamados" element={<ProtectedRoute>
+                <Route exact path="/admin/solicitarChamados" element={<ProtectedRoute>
                     <SolicitarChamados />
                 </ProtectedRoute>} />
                 <Route exact path="/" element={<ProtectedRoute>
@@ -199,6 +196,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/inventario" element={<ProtectedRoute>
                     <Inventario />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/atendimentoChamados" element={<ProtectedRoute>
+                    <AtendimentoChamados />
                 </ProtectedRoute>} />
 
                 {/* Tele entrevista Routes */}
