@@ -25,17 +25,17 @@ const Home = () => {
     const [treinamentos, setTreinamentos] = useState([])
     const [dataUser, setDataUser] = useState(null)
     const { name } = useContext(AuthContext)
-    
+
     const [userData, setUserData] = useState({})
 
-    // const fetchData = async () => {
-    //     const { user } = await getInfoUser()
-    //     setUserData(user)
-    // }
+    const fetchData = async () => {
+        const { user } = await getInfoUser()
+        setUserData(user)
+    }
 
-    // useEffect(() => {
-    //     fetchData()
-    // }, [name])
+    useEffect(() => {
+        fetchData()
+    }, [name])
 
     const handlerUpdatePassword = async () => {
         try {
@@ -169,7 +169,7 @@ const Home = () => {
                         }
                         {
                             dataUser !== null && (
-                                <CardAniversariantes data={userData} />
+                                <CardAniversariantes data={userData} flushHook={flushHook} />
                             )}
                     </Box>
                     <Box width={'100%'} ml={2}>
