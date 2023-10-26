@@ -19,8 +19,9 @@ import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
 import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
 
-/* Modulo de Inventario*/
+/* Modulo de Mensagens*/
 
+import InternMessages from "./pages/Mensagens/InternMessages";
 
 /* Modulo de Ferias*/
 
@@ -139,11 +140,8 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/admin/atendimentoChamados" element={<ProtectedRoute>
-                    <AtendimentoChamados />
-                </ProtectedRoute>} />
-                <Route exact path="/solicitarChamados" element={<ProtectedRoute>
-                    <SolicitarChamados />
+                <Route exact path="/internMessages" element={<ProtectedRoute>
+                    <InternMessages />
                 </ProtectedRoute>} />
                 <Route exact path="/" element={<ProtectedRoute>
                     <Home />
@@ -199,6 +197,12 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/inventario" element={<ProtectedRoute>
                     <Inventario />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/atendimentoChamados" element={<ProtectedRoute>
+                    <AtendimentoChamados />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/solicitarChamados" element={<ProtectedRoute>
+                    <SolicitarChamados />
                 </ProtectedRoute>} />
 
                 {/* Tele entrevista Routes */}
