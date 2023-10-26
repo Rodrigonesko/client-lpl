@@ -36,6 +36,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-use-cookie": "^1.4.0",
+    "socket.io-client": "^4.7.2",
     "text-highlighter": "^1.0.2",
     "web-vitals": "^2.1.4",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.18.11/xlsx-0.18.11.tgz"
