@@ -113,6 +113,9 @@ const Chat = () => {
                                             </Typography>
                                             <Typography style={{ display: 'inline-block', backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' ? '#0066FF' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
                                             <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
+                                            <Typography variant='body2' color='GrayText'>
+                                                {e.status}
+                                            </Typography>
                                         </Box>
                                     )
                                 })

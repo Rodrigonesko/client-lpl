@@ -14,6 +14,7 @@ import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
 import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
+
 /* Modulo de Chamados*/
 
 import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
@@ -98,13 +99,9 @@ import AtendimentoHumanizado from "./pages/TeleEntrevistas/Mensagens/Necessário
 import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/RespostasJanelasHorarios/RespostasJanelasHorarios";
 import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
-import WhatsappTwilio from "./pages/TeleEntrevistas/Mensagens/WhatsappTwilio/WhatsappTwilio";
-import ChatTwilio from "./pages/TeleEntrevistas/Mensagens/Chat/ChatTwilio";
-
 import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
-import Pdf2 from "./pages/TeleEntrevistas/Pdf/Pdf2";
-import MigracaoTele from "./pages/TeleEntrevistas/Migracao/MigracaoTele";
+import ProtChat from "./pages/PrototipoTele/ProtChat/ProtChat";
 
 /* Urgencia Emergencia */
 
@@ -155,6 +152,8 @@ const AppRoutes = () => {
                 <Route path="/rn/rns/:id" element={<ProtectedRoute>
                     <Detalhes />
                 </ProtectedRoute>} />
+
+
 
                 {/* User Routes*/}
 
@@ -285,18 +284,8 @@ const AppRoutes = () => {
                 <Route exact path="/dicionario" element={<ProtectedRoute>
                     <Dicionario />
                 </ProtectedRoute>} />
-                <Route exact path="/entrevistas/whatsappTwilio" element={<ProtectedRoute>
-                    <WhatsappTwilio />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/chatTwilio/:whatsapp" element={<ProtectedRoute>
-                    <ChatTwilio />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/pdf2/:proposta/:nome" element={<ProtectedRoute>
-                    <Pdf2 />
-                </ProtectedRoute>} />
-
-                <Route exact path="/entrevistas/migrarBase" element={<ProtectedRoute>
-                    <MigracaoTele />
+                <Route exact path="/entrevistas/ProtChat" element={<ProtectedRoute>
+                    <ProtChat />
                 </ProtectedRoute>} />
 
                 {/* RSD */}

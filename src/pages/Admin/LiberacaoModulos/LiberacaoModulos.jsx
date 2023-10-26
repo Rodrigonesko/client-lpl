@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup } from "@mui/material";
 import { getInfoEmail, getUsers, liberarModulos } from "../../../_services/user.service";
 
 const LiberacaoModulos = () => {
@@ -21,6 +21,8 @@ const LiberacaoModulos = () => {
     const [coren, setCoren] = useState('')
     const [nomeCompleto, setNomeCompleto] = useState('')
     const [dataAdmissao, setDataAdmissao] = useState('')
+    const [agendamento, setAgendamento] = useState(false)
+    const [administrador, setAdministrador] = useState(false)
     const [dataAniversario, setDataAniversario] = useState('')
 
     const atividades = [
@@ -57,6 +59,8 @@ const LiberacaoModulos = () => {
                 setNomeCompleto(result.user.nomeCompleto)
                 setDataAdmissao(result.user.dataAdmissao)
                 setDataAniversario(result.user.dataAniversario)
+                setAdministrador(result.user?.acessos?.administrador)
+                setAgendamento(result.user?.acessos?.agendamento)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -86,7 +90,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario ,administrador, agendamento })
 
             setMsg('Modulos atualizados com sucesso!')
 
@@ -180,6 +184,25 @@ const LiberacaoModulos = () => {
                                         ) : null
                                     }
                                 </Box>
+                                <FormControl>
+                                    <FormLabel component='legend'>
+                                        Acessos
+                                    </FormLabel>
+                                    <FormGroup>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox checked={administrador} onChange={e => setAdministrador(e.target.checked)} name="Administrador" value={!administrador} />
+                                            }
+                                            label="Administrador"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox checked={agendamento} onChange={e => setAgendamento(e.target.checked)} name="Agendamento" value={!agendamento} />
+                                            }
+                                            label="Agendamento"
+                                        />
+                                    </FormGroup>
+                                </FormControl>
                                 <Box m={2}>
                                     <h4>Definir carga horária</h4>
                                     <Box m={1}>
