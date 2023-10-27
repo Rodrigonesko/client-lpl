@@ -20,7 +20,6 @@ const ListaTreinamentos = () => {
     useEffect(() => {
         setFlushHook(false)
         fetchData()
-
     }, [flushHook])
 
     return (
