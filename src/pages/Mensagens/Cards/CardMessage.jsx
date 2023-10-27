@@ -11,6 +11,7 @@ const CardMessage = ({ chatId, nome }) => {
     const color = grey[300]
     const chatContainerRef = useRef(null);
     const { name } = useContext(AuthContext)
+    const [flushHook, setFlushHook] = useState(false)
     const [chat, setChat] = useState([])
     const [mensagem, setMensagem] = useState('')
     const [loading, setLoading] = useState(false)
@@ -31,11 +32,13 @@ const CardMessage = ({ chatId, nome }) => {
         if(result.mensagens){
             setChat(result.mensagens)
         }
+        setFlushHook(true)
     }
 
     useEffect(() => {
         fetchData()
-    }, [nome])
+        setFlushHook(false)
+    }, [nome, flushHook])
 
     useEffect(() => {
         if (chatContainerRef.current) {

@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Avatar, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from "@mui/material";
+import React, { useContext, useEffect, useState } from 'react';
+import { Avatar, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { grey } from '@mui/material/colors';
 import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
 import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
@@ -7,8 +7,9 @@ import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
 
 
-const CardPessoasGrupos = ({ flushHook, receptor, setReceptor, chats, setChatId }) => {
+const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId }) => {
 
+    const [flushHook, setFlushHook] = useState(false)
     const { name } = useContext(AuthContext)
 
     const color = grey[300];
@@ -23,7 +24,7 @@ const CardPessoasGrupos = ({ flushHook, receptor, setReceptor, chats, setChatId 
     }
 
     const setChat = (chat) => {
-        if (chat.tipo === 'grupo') {
+        if (chat.tipo === 'Grupo') {
             setReceptor(chat.nome)
         } else {
             setReceptor(verificarNome(chat.participantes))
@@ -32,12 +33,16 @@ const CardPessoasGrupos = ({ flushHook, receptor, setReceptor, chats, setChatId 
         setChatId(chat._id)
     }
 
+    useEffect(() => {
+        setFlushHook(false)
+    }, [flushHook])
+
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>
             <CardContent>
                 <Box mb={1} >
                     <ModalIniciarConversa setReceptor={setReceptor} />
-                    <ModalCriarGrupo />
+                    <ModalCriarGrupo setReceptor={setReceptor} flushHook={flushHook} setFlushHook={setFlushHook} />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px' }}>
                     {!!name && chats.map((item) => (
@@ -47,7 +52,7 @@ const CardPessoasGrupos = ({ flushHook, receptor, setReceptor, chats, setChatId 
                                     <Avatar alt="R" />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary={item.tipo === 'grupo' ? item.nome : (verificarNome(item.participantes))}
+                                    primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
                                     secondary={item.ultimaMensagem}
                                 />
                             </ListItem>

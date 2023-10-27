@@ -15,6 +15,7 @@ const InternMessages = () => {
 
     const fetchData = async () => {
         const resut = await getChats()
+        setFlushHook(true)
         setChats(resut)
     }
 
@@ -31,7 +32,7 @@ const InternMessages = () => {
                     Mensagens e Grupos
                 </Typography>
                 <Box display={'flex'} mt={2}>
-                    <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setReceptor={setReceptor} />
+                    <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setFlushHook={setFlushHook} setReceptor={setReceptor} />
                     <Box width={'100%'} ml={2}>
                         {
                             receptor !== '' && (
