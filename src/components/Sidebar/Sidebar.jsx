@@ -43,7 +43,7 @@ const Sidebar = () => {
                         <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
                         <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
                         {
-                            acessos.administrador ? (
+                            acessos?.administrador ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                     <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
@@ -67,7 +67,7 @@ const Sidebar = () => {
                                 <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/implantacao'>Implatação</Link></MenuItem>
                                 {
-                                    acessos.agendamento || acessos.administrador ? (
+                                    acessos?.agendamento || acessos?.administrador ? (
                                         <MenuItem><Link to='/entrevistas/agenda/horarios'>Ajustar Horarios</Link></MenuItem>
                                     ) : null
                                 }
@@ -85,7 +85,7 @@ const Sidebar = () => {
                             <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                             <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
                             {
-                                acessos.agendamento || acessos.administrador ? (<>
+                                acessos?.agendamento || acessos?.administrador ? (<>
 
                                     <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
                                     <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>

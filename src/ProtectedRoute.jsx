@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
             const modules = await getInfoUser(result.email)
             setEnfermeiro(modules.user.enfermeiro)
             setElegibilidade(modules.user.elegibilidade)
-            setAcessos(modules.user.acessos)
+            setAcessos(modules.user?.acessos)
 
         } catch (error) {
             console.log(error);
