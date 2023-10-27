@@ -33,7 +33,11 @@ const InternMessages = () => {
                 <Box display={'flex'} mt={2}>
                     <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setReceptor={setReceptor} />
                     <Box width={'100%'} ml={2}>
-                        <CardMessage nome={receptor} chatId={chatId} />
+                        {
+                            receptor !== '' && (
+                                <CardMessage nome={receptor} chatId={chatId} />
+                            )
+                        }
                     </Box>
                 </Box>
             </Container>

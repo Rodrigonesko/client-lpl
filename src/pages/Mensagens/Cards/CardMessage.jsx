@@ -28,7 +28,9 @@ const CardMessage = ({ chatId, nome }) => {
 
     const fetchData = async () => {
         const result = await getMessages({ chatId, nome })
-        setChat(result.mensagens)
+        if(result.mensagens){
+            setChat(result.mensagens)
+        }
     }
 
     useEffect(() => {
