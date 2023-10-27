@@ -61,10 +61,8 @@ const AnaliseElegibilidadeDetalhes = () => {
             const resultPlanos = await getPlanosBlacklist()
 
             let arrAuxPlanos = resultPlanos.map(plano => {
-                return plano.plano
+                return plano.plano.toUpperCase()
             })
-
-            console.log(arrAuxPlanos);
 
             setPlanos(arrAuxPlanos)
 
@@ -100,7 +98,7 @@ const AnaliseElegibilidadeDetalhes = () => {
                         Responsável: {proposta.analista}
                     </Typography>
                     {
-                        planos.includes(proposta.plano) ? (
+                        planos.includes(proposta.plano?.toUpperCase()) ? (
                             <Alert variant="filled" severity="error">Plano na Blacklist - {proposta.plano}</Alert>
                         ) : null
                     }
