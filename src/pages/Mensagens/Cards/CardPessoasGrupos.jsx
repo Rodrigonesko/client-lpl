@@ -31,7 +31,7 @@ const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId }) => {
         }
 
         setChatId(chat._id)
-    }
+    };
 
     useEffect(() => {
         setFlushHook(false)
@@ -46,7 +46,7 @@ const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId }) => {
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px' }}>
                     {!!name && chats.map((item) => (
-                        <ListItemButton sx={{ p: 0 }} onClick={() => setChat(item)}>
+                        <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
                                     <Avatar alt="R" />

@@ -6,12 +6,11 @@ import SendIcon from '@mui/icons-material/Send';
 import { getMessages, sendMessageInterno } from "../../../_services/chat.service";
 import AuthContext from "../../../context/AuthContext";
 
-const CardMessage = ({ chatId, nome }) => {
+const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
     const color = grey[300]
     const chatContainerRef = useRef(null);
     const { name } = useContext(AuthContext)
-    const [flushHook, setFlushHook] = useState(false)
     const [chat, setChat] = useState([])
     const [mensagem, setMensagem] = useState('')
     const [loading, setLoading] = useState(false)
@@ -24,15 +23,16 @@ const CardMessage = ({ chatId, nome }) => {
             chatId
         })
 
+        setFlushHook(true)
+        setMensagem('')
         console.log(result);
     }
 
     const fetchData = async () => {
         const result = await getMessages({ chatId, nome })
-        if(result.mensagens){
+        if (result.mensagens) {
             setChat(result.mensagens)
         }
-        setFlushHook(true)
     }
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const CardMessage = ({ chatId, nome }) => {
                                 {
                                     chat.map((e) => {
                                         return (
-                                            <Box key={e.id} m={1} style={{ textAlign: e.remetente === name ? 'right' : 'left' }}>
+                                            <Box key={e._id} m={1} style={{ textAlign: e.remetente === name ? 'right' : 'left' }}>
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>

@@ -5,6 +5,9 @@ import { useEffect } from "react"
 import CardMessage from "./Cards/CardMessage"
 import CardPessoasGrupos from "./Cards/CardPessoasGrupos"
 import { getChats } from "../../_services/chat.service"
+import { io } from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_CHAT_SERVICE);
 
 const InternMessages = () => {
 
@@ -15,7 +18,6 @@ const InternMessages = () => {
 
     const fetchData = async () => {
         const resut = await getChats()
-        setFlushHook(true)
         setChats(resut)
     }
 
@@ -23,6 +25,13 @@ const InternMessages = () => {
         setFlushHook(false)
         fetchData()
     }, [flushHook])
+
+    useEffect(() => {
+        socket.on('receivedMessage', (message) => {
+            //console.log('mensagem recebida', message);
+            setFlushHook(true)
+        })
+    }, [])
 
     return (
         <>
@@ -36,7 +45,7 @@ const InternMessages = () => {
                     <Box width={'100%'} ml={2}>
                         {
                             receptor !== '' && (
-                                <CardMessage nome={receptor} chatId={chatId} />
+                                <CardMessage nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
                             )
                         }
                     </Box>
