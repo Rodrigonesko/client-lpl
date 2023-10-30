@@ -7,9 +7,8 @@ import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
 
 
-const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId }) => {
+const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId, setFlushHook }) => {
 
-    const [flushHook, setFlushHook] = useState(false)
     const { name } = useContext(AuthContext)
 
     const color = grey[300];
@@ -33,16 +32,12 @@ const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId }) => {
         setChatId(chat._id)
     };
 
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook])
-
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>
             <CardContent>
                 <Box mb={1} >
-                    <ModalIniciarConversa setReceptor={setReceptor} />
-                    <ModalCriarGrupo setReceptor={setReceptor} flushHook={flushHook} setFlushHook={setFlushHook} />
+                    <ModalIniciarConversa setReceptor={setReceptor} setFlushHook={setFlushHook} setChatId={setChatId} />
+                    <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px' }}>
                     {!!name && chats.map((item) => (
