@@ -26,22 +26,23 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
     const handleSend = async (e) => {
         e.preventDefault()
-        const result = await sendMessageInterno({
+        await sendMessageInterno({
             receptor: nome,
             mensagem,
             chatId
         })
-
-        setLoading(true)
         setFlushHook(true)
         setMensagem('')
-        console.log(result);
     }
 
     const fetchData = async () => {
+        console.log(nome);
         const result = await getMessages({ chatId, nome })
+        console.log(result.participantes);
         if (result.mensagens) {
             setChat(result.mensagens)
+        } else {
+            setChat([])
         }
     }
 
@@ -68,9 +69,9 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                         <CardContent >
                             <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='73vh' ref={chatContainerRef}>
                                 {
-                                    chat.map((e) => {
+                                    chat.map((e, index) => {
                                         return (
-                                            <Box key={e._id} m={1} style={{ textAlign: e.remetente === name ? 'right' : 'left' }}>
+                                            <Box key={index} m={1} style={{ textAlign: e.remetente === name ? 'right' : 'left' }}>
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>

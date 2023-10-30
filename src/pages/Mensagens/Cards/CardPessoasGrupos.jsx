@@ -8,7 +8,9 @@ import AuthContext from '../../../context/AuthContext';
 import { getChats } from '../../../_services/chat.service';
 
 
-const CardPessoasGrupos = ({ setReceptor, setChatId, setFlushHook, flushHook }) => {
+
+const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId, setFlushHook }) => {
+
 
     const { name } = useContext(AuthContext)
     const [chats, setChats] = useState([])
@@ -39,17 +41,12 @@ const CardPessoasGrupos = ({ setReceptor, setChatId, setFlushHook, flushHook }) 
         setChatId(chat._id)
     };
 
-    useEffect(() => {
-        setFlushHook(false)
-        fetchData()
-    }, [flushHook])
-
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>
             <CardContent>
                 <Box mb={1} >
-                    <ModalIniciarConversa setReceptor={setReceptor} />
-                    <ModalCriarGrupo setReceptor={setReceptor} flushHook={flushHook} setFlushHook={setFlushHook} />
+                    <ModalIniciarConversa setReceptor={setReceptor} setFlushHook={setFlushHook} setChatId={setChatId} />
+                    <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px' }}>
                     {!!name && chats.map((item) => (
