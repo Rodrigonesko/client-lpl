@@ -90,7 +90,7 @@ const ModalCriarGrupo = () => {
                 <DialogContent>
                     {users.map(user => {
                         return (
-                            <ListItemButton onClick={() => handleUserSelection(user.name)}>
+                            <ListItemButton key={user._id} onClick={() => handleUserSelection(user.name)}>
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
                                         <Avatar alt="R" />

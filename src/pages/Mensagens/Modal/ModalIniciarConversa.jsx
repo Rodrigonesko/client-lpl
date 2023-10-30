@@ -22,7 +22,6 @@ const ModalIniciarConversa = ({ setReceptor }) => {
     }
 
     const initChat = (nome) => {
-        console.log(nome);
         setReceptor(nome)
         handleClose()
     }
