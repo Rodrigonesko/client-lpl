@@ -5,9 +5,8 @@ import { getUsers } from "../../../_services/user.service";
 import { createGroupChat } from "../../../_services/chat.service";
 import { useEffect } from "react";
 
-const ModalCriarGrupo = () => {
+const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
 
-    const [flushHook, setFlushHook] = useState(false)
     const [open, setOpen] = useState(false);
     const [openNome, setOpenNome] = useState(false);
     const [users, setUsers] = useState([]);
