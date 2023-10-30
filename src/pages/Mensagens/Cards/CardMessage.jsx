@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Container, Paper, TextField, Typography } from "@mui/material"
+import { Box, Button, Card, CardContent, Container, Paper, SpeedDial, SpeedDialIcon, TextField, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors";
 import moment from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -9,6 +9,7 @@ import AuthContext from "../../../context/AuthContext";
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
     const color = grey[300]
+
     const chatContainerRef = useRef(null);
     const { name } = useContext(AuthContext)
     const [chat, setChat] = useState([])
@@ -23,6 +24,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
             chatId
         })
 
+        setLoading(true)
         setFlushHook(true)
         setMensagem('')
         console.log(result);
@@ -36,8 +38,9 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     }
 
     useEffect(() => {
-        fetchData()
         setFlushHook(false)
+        setLoading(false)
+        fetchData()
     }, [nome, flushHook])
 
     useEffect(() => {
@@ -55,7 +58,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                             {nome}
                         </Typography>
                         <CardContent >
-                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='77vh' ref={chatContainerRef}>
+                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='75vh' ref={chatContainerRef}>
                                 {
                                     chat.map((e) => {
                                         return (
@@ -63,6 +66,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>
+                                                <Typography color='GrayText' >{e.remetente}</Typography>
                                                 <Typography style={{ display: 'inline-block', backgroundColor: e.remetente === name ? '#42a5f5' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
                                                 <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                             </Box>
@@ -72,9 +76,8 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                             </Box>
                             <Box p={1}>
                                 <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', justifyContent: 'start' }}>
-                                    <TextField value={mensagem} multiline type='text' size='small' onChange={e => {
+                                    <TextField value={mensagem} type='text' size='small' onChange={e => {
                                         setMensagem(e.target.value)
-
                                     }} placeholder='Mensagem' style={{ width: '88%', marginRight: '3px' }} />
                                     <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
                                 </form>
