@@ -23,7 +23,7 @@ const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
 
     const initChat = (nome) => {
         setReceptor(nome)
-        setChatId(null)
+        setChatId(null) 
         setFlushHook(true)
         handleClose()
     }
