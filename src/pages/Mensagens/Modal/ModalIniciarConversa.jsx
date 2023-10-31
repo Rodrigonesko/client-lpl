@@ -2,7 +2,7 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divi
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import { useState } from "react";
 import { getUsers } from "../../../_services/user.service";
-const ModalIniciarConversa = ({ setReceptor }) => {
+const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
 
     const [open, setOpen] = useState(false);
     const [users, setUsers] = useState([])
@@ -23,6 +23,8 @@ const ModalIniciarConversa = ({ setReceptor }) => {
 
     const initChat = (nome) => {
         setReceptor(nome)
+        setChatId(null) 
+        setFlushHook(true)
         handleClose()
     }
 

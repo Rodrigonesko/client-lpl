@@ -1,8 +1,8 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Snackbar, Alert } from "@mui/material"
 import { useState } from "react"
-import DragAndDrop from "../../../components/DragAndDrop/DragAndDrop"
+import DragAndDrop from "../../../../components/DragAndDrop/DragAndDrop"
 import * as XLSX from "xlsx";
-import { updateBancoHoras } from "../../../_services/user.service";
+import { updateBancoHoras } from "../../../../_services/user.service";
 
 const ModalUploadBancoHoras = ({ setFlushHook }) => {
 

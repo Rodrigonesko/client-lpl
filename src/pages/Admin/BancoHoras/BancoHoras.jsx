@@ -1,9 +1,10 @@
 import { Box, Container, Divider, Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import ModalUploadBancoHoras from "./ModalUpload"
+import ModalUploadBancoHoras from "./Modais/ModalUpload"
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../_services/user.service"
 import moment from "moment"
+import ModalHorarioPonto from "./Modais/ModalHorarioPonto"
 
 const BancoHoras = () => {
 
@@ -37,6 +38,7 @@ const BancoHoras = () => {
                 <Container>
                     <Box m={2}>
                         <ModalUploadBancoHoras setFlushHook={setFlushHook} />
+                        <ModalHorarioPonto setFlushHook={setFlushHook} />
                     </Box>
                     <Divider />
                     <Box>
@@ -56,6 +58,9 @@ const BancoHoras = () => {
                                         <TableCell>
                                             Banco De Horas
                                         </TableCell>
+                                        <TableCell>
+                                            Horario Saida
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -69,6 +74,9 @@ const BancoHoras = () => {
                                                         </TableCell>
                                                         <TableCell>
                                                             {colaborador.bancoHoras}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {colaborador.horarioSaida && moment(colaborador.horarioSaida).format('DD/MM/YYYY HH:mm')}
                                                         </TableCell>
                                                     </TableRow>
                                                 )

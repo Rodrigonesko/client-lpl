@@ -22,9 +22,6 @@ const Sidebar = () => {
         side.classList.toggle('slidein')
         side.classList.toggle('slideout')
     }
-
-    console.log(acessos);
-
     const logout = async () => {
         const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
 
