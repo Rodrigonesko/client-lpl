@@ -7,7 +7,6 @@ import { getMessages, sendMessageInterno } from "../../../_services/chat.service
 import AuthContext from "../../../context/AuthContext";
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import EditIcon from '@mui/icons-material/Edit';
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
