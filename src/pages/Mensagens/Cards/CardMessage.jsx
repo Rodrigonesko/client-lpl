@@ -1,12 +1,11 @@
-import { Box, Button, Card, CardContent, Container, Paper, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField, Typography } from "@mui/material"
+import { Box, Button, Card, CardContent, Container, Paper, SpeedDial, SpeedDialIcon, TextField, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors";
 import moment from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
 import SendIcon from '@mui/icons-material/Send';
 import { getMessages, sendMessageInterno } from "../../../_services/chat.service";
 import AuthContext from "../../../context/AuthContext";
-import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
@@ -18,10 +17,23 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     const [mensagem, setMensagem] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const actions = [
-        { icon: <AddPhotoAlternateOutlinedIcon />, nomeIcon: 'Photo' },
-        { icon: <ArticleOutlinedIcon />, nomeIcon: 'Document' }
-    ];
+    const handlePaste = (e) => {
+        const clipboardData = e.clipboardData
+
+        if (clipboardData && clipboardData.items) {
+            for (let i = 0; i < clipboardData.items.length; i++) {
+                const item = clipboardData.items[i];
+
+                if (item.type.indexOf('image') !== -1) {
+                    const file = item.getAsFile();
+                    const imageUrl = URL.createObjectURL(file);
+
+                    const imgTag = `<img src="${imageUrl}" alt="Imagem" />`;
+                    setMensagem((mensagem) => mensagem + imgTag);
+                }
+            }
+        }
+    }
 
     const handleSend = async (e) => {
         e.preventDefault()
@@ -75,7 +87,11 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                                     {e.de}
                                                 </Typography>
                                                 <Typography color='GrayText' >{e.remetente}</Typography>
-                                                <Typography style={{ display: 'inline-block', backgroundColor: e.remetente === name ? '#42a5f5' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
+                                                {e.mensagem.includes('<img') ? (
+                                                    <div dangerouslySetInnerHTML={{ __html: e.mensagem }} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                                                ) : (
+                                                    <Typography style={{ display: 'inline-block', backgroundColor: e.remetente === name ? '#42a5f5' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
+                                                )}
                                                 <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                             </Box>
                                         )
@@ -86,17 +102,10 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                 <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                                     <SpeedDial ariaLabel="Anexar" icon={<SpeedDialIcon />}
                                         sx={{ marginRight: '3px', display: 'flex', alignItems: 'center' }} >
-                                        {/* {actions.map((action) => (
-                                            <SpeedDialAction
-                                                key={action.nomeIcon}
-                                                icon={action.icon}
-                                                tooltipTitle={action.nomeIcon}
-                                            />
-                                        ))} */}
+
                                     </SpeedDial>
-                                    <TextField value={mensagem} type='text' size='small' onChange={e => {
-                                        setMensagem(e.target.value)
-                                    }} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }}></TextField>
+                                    <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
+                                        onPaste={handlePaste} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }}></TextField>
                                     <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
                                 </form>
                             </Box>
