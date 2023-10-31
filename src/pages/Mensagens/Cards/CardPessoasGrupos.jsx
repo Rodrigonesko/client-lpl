@@ -5,15 +5,11 @@ import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
 import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
-import { getChats } from '../../../_services/chat.service';
 
-
-
-const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId, setFlushHook }) => {
+const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
 
 
     const { name } = useContext(AuthContext)
-    const [chats, setChats] = useState([])
 
     const color = grey[300];
     const color1 = grey[400];
@@ -26,11 +22,6 @@ const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId, setFlushHo
         }
     }
 
-    const fetchData = async () => {
-        const resut = await getChats()
-        setChats(resut)
-    }
-
     const setChat = (chat) => {
         if (chat.tipo === 'Grupo') {
             setReceptor(chat.nome)
@@ -40,6 +31,7 @@ const CardPessoasGrupos = ({ receptor, setReceptor, chats, setChatId, setFlushHo
         setFlushHook(true)
         setChatId(chat._id)
     };
+
 
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>

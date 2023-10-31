@@ -55,3 +55,7 @@ export const getFeriasElegiveis = async () => {
 export const getAllAniversariantes = async () => {
     return await new ApiCall('/aniversariantes').get()
 }
+
+export const updateHorarioPonto = async (data) => {
+    return await new ApiCall('/horarioPonto').patch(data)
+}
