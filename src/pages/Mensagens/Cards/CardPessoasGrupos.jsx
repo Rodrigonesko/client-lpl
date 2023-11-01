@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Avatar, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import React, { useContext } from 'react';
+import { Avatar, Badge, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { grey } from '@mui/material/colors';
 import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
 import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
+// import MailIcon from '@mui/icons-material/Mail';
 
 const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
 
@@ -31,6 +32,16 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
         setFlushHook(true)
         setChatId(chat._id)
     };
+
+    // const badgeMessage = (chat) => {
+    // if (name === chat.ultimasVisualizacoes) {
+
+    // } else {
+    //     <Badge color="secondary" variant="dot">
+    //         <MailIcon />
+    //     </Badge>
+    // }
+    // }
 
 
     return (

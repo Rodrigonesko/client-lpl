@@ -96,7 +96,7 @@ const ModalAdicionarMural = ({ setFlushHook }) => {
                         }
                         {
                             files.length !== 0 && (
-                                <Tooltip title='Limpar arquicos'>
+                                <Tooltip title='Limpar arquivos'>
                                     <Button
                                         onClick={() => setFiles([])}
                                     >
