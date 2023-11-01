@@ -10,10 +10,24 @@ const CardBancoHoras = ({ data }) => {
         <Card sx={{ minWidth: 275, mb: `20px`, bgcolor: color, borderRadius: `10px` }}>
             <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Banco de Horas de {moment(data.dataBancoHoras).format(`DD/MM/YYYY`)}
+                    {
+                        data.horarioSaida && (
+                            <>
+                                Horario de saída para o dia {moment(data.horarioSaida).format(`DD/MM/YYYY`)}
+
+                            </>
+                        )
+                    }
                 </Typography>
                 <Typography variant="h5" component="div">
-                    {data.bancoHoras}
+                    {
+                        data.horarioSaida && (
+                            <>
+                                {moment(data.horarioSaida).format('HH:mm')}
+                            </>
+                        )
+                    }
+
                 </Typography>
             </CardContent>
         </Card>
