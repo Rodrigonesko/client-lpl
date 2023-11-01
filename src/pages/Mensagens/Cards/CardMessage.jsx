@@ -88,7 +88,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                                 </Typography>
                                                 <Typography color='GrayText' >{e.remetente}</Typography>
                                                 {e.mensagem.includes('<img') ? (
-                                                    <div dangerouslySetInnerHTML={{ __html: e.mensagem }} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                                                    <div dangerouslySetInnerHTML={{ __html: e.mensagem }} style={{ maxWidth: '100px', maxHeight: '100px' }} />
                                                 ) : (
                                                     <Typography style={{ display: 'inline-block', backgroundColor: e.remetente === name ? '#42a5f5' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
                                                 )}
