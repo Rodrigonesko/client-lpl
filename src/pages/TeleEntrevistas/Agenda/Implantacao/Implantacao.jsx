@@ -4,6 +4,7 @@ import Axios from 'axios'
 import moment from 'moment/moment'
 import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal, FormControl, Select, MenuItem, InputLabel } from '@mui/material'
 import RelatorioPadraoTele from '../../../../components/RelatorioPadraoTele/RelatorioPadraoTele'
+import ModalUploadImplantacao from './Modais/ModalUploadImplantacao'
 
 const style = {
     position: 'absolute',
@@ -38,8 +39,6 @@ const Implantacao = () => {
                 withCredentials: true
             })
 
-
-
             setModalImplantar(false)
             buscarPropostas()
 
@@ -56,28 +55,18 @@ const Implantacao = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
 
-
             if (tipoContrato === 'Todos') {
                 setPropostas(result.data)
             } else {
-
                 const arrAux = result.data.filter(proposta => {
                     return proposta.tipoContrato === tipoContrato
                 })
-
-                console.log(arrAux.length);
-
                 setPropostas(arrAux)
-
             }
 
             const arrAuxTiposContrato = [...new Set(result.data.map(obj => obj.tipoContrato))]
             setTiposContrato(arrAuxTiposContrato)
-
-
             setLoading(false)
-
-
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -86,9 +75,7 @@ const Implantacao = () => {
 
     const relatorio = () => {
         try {
-
             RelatorioPadraoTele(propostas, 'Relatorio implantacao')
-
         } catch (error) {
             console.log(error);
         }
@@ -111,7 +98,10 @@ const Implantacao = () => {
                     ) : null
                 }
                 <Box m={2} >
-                    <Button onClick={relatorio} variant='contained'>Relatório</Button>
+                    <Box>
+                        <Button onClick={relatorio} variant='contained'>Relatório</Button>
+                        {/* <ModalUploadImplantacao /> */}
+                    </Box>
                     <Box m={2} display='flex'>
                         <FormControl style={{ width: '150px' }} size='small'>
                             <InputLabel>Contrato</InputLabel>
