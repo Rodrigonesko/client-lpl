@@ -44,8 +44,9 @@ const ModalEntrevistasRealizadas = () => {
             xls += "<th>Proposta</th>"
             xls += "<th>Nome</th>"
             xls += "<th>CPF</th>"
-            xls += "<th>Idade</th>"
+            xls += "<th>Data Nascimento</th>"
             xls += "<th>UF</th>"
+            xls += "<th>Administradora</th>"
             xls += "<th>Status Final</th>"
             xls += "<th>Divergência DS</th>"
             xls += "<th>Observações</th>"
@@ -66,8 +67,9 @@ const ModalEntrevistasRealizadas = () => {
                 xls += `<td>${e.proposta || ''}</td>`
                 xls += `<td>${e.nome || ''}</td>`
                 xls += `<td>${e.cpf || ''}</td>`
-                xls += `<td>${e.idade || ''}</td>`
+                xls += `<td>${e.dataNascimento || ''}</td>`
                 xls += `<td>${e.filial || ''}</td>`
+                xls += `<td>${e.administradora || ''}</td>`
                 xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
                 xls += `<td>${e.houveDivergencia}</td>`
                 xls += `<td>${e.divergencia || ''}</td>`
