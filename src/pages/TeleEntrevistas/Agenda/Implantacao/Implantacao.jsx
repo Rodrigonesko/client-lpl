@@ -43,8 +43,12 @@ const Implantacao = () => {
             })
 
             setModalImplantar(false)
-            buscarPropostas()
 
+            if (situacaoAmil !== 'Todos') {
+                filtrarPorSituacao()
+            } else {
+                buscarPropostas()
+            }
 
         } catch (error) {
             console.log(error);
