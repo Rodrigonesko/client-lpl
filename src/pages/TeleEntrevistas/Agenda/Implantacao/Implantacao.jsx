@@ -20,10 +20,13 @@ const style = {
 
 const Implantacao = () => {
 
+    const [flushHook, setFlushHook] = useState(false)
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
     const [tiposContrato, setTiposContrato] = useState([])
     const [tipoContrato, setTipoContrato] = useState('Todos')
+    const [situacoesAmil, setSituacoesAmil] = useState([])
+    const [situacaoAmil, setSituacaoAmil] = useState('Todos')
 
     const [modalImplantar, setModalImplantar] = useState(false)
     const [proposta, setProposta] = useState('')
@@ -65,7 +68,10 @@ const Implantacao = () => {
             }
 
             const arrAuxTiposContrato = [...new Set(result.data.map(obj => obj.tipoContrato))]
+            const arrAuxSituacoesAmil = [...new Set(result.data.map(obj => obj.situacaoAmil))]
+
             setTiposContrato(arrAuxTiposContrato)
+            setSituacoesAmil(arrAuxSituacoesAmil)
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -81,9 +87,28 @@ const Implantacao = () => {
         }
     }
 
+    const filtrarPorSituacao = async () => {
+
+        setLoading(true)
+
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
+
+        if (situacaoAmil === 'Todos') {
+            setPropostas(result.data)
+        } else {
+            const arrAux = result.data.filter(proposta => {
+                return proposta.situacaoAmil === situacaoAmil
+            })
+            setPropostas(arrAux)
+        }
+
+        setLoading(false)
+    }
+
     useEffect(() => {
+        setFlushHook(false)
         buscarPropostas()
-    }, [])
+    }, [flushHook])
 
     return (
         <>
@@ -100,7 +125,7 @@ const Implantacao = () => {
                 <Box m={2} >
                     <Box>
                         <Button onClick={relatorio} variant='contained'>Relatório</Button>
-                        {/* <ModalUploadImplantacao /> */}
+                        <ModalUploadImplantacao setFlushHook={setFlushHook} />
                     </Box>
                     <Box m={2} display='flex'>
                         <FormControl style={{ width: '150px' }} size='small'>
@@ -130,6 +155,33 @@ const Implantacao = () => {
                             </Select>
                         </FormControl>
                         <Button style={{ marginLeft: '15px' }} variant='contained' onClick={buscarPropostas}>Filtrar</Button>
+                        <FormControl style={{ width: '150px', marginLeft: '20px' }} size='small'>
+                            <InputLabel>Situações Amil</InputLabel>
+                            <Select
+                                label='Situações Amil'
+                                value={situacaoAmil}
+                                onChange={e => {
+                                    setSituacaoAmil(e.target.value)
+                                }}
+                            >
+                                <MenuItem>
+                                    <em>Situação Amil</em>
+                                </MenuItem>
+                                <MenuItem value='Todos'>
+                                    Todos
+                                </MenuItem>
+                                {
+                                    situacoesAmil.map(item => {
+                                        return (
+                                            <MenuItem value={item}>
+                                                {item}
+                                            </MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <Button style={{ marginLeft: '15px' }} variant='contained' onClick={filtrarPorSituacao}>Filtrar</Button>
                     </Box>
                 </Box>
 
@@ -140,6 +192,7 @@ const Implantacao = () => {
                                 <TableCell>Vigência</TableCell>
                                 <TableCell>Proposta</TableCell>
                                 <TableCell>Nome</TableCell>
+                                <TableCell>Situação</TableCell>
                                 <TableCell>Tipo Contrato</TableCell>
                                 <TableCell>Houve Divergencia</TableCell>
                                 <TableCell>Cids</TableCell>
@@ -155,6 +208,7 @@ const Implantacao = () => {
                                             <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{e.proposta}</TableCell>
                                             <TableCell>{e.nome}</TableCell>
+                                            <TableCell>{e.situacaoAmil}</TableCell>
                                             <TableCell>{e.tipoContrato}</TableCell>
                                             <TableCell>{e.houveDivergencia}</TableCell>
                                             <TableCell>{e.cids}</TableCell>
