@@ -5,7 +5,7 @@ import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
 import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
-// import MailIcon from '@mui/icons-material/Mail';
+import { seeInternalMessage } from '../../../_services/chat.service';
 
 const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
 
@@ -23,26 +23,16 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
         }
     }
 
-    const setChat = (chat) => {
+    const setChat = async (chat) => {
         if (chat.tipo === 'Grupo') {
             setReceptor(chat.nome)
         } else {
             setReceptor(verificarNome(chat.participantes))
         }
-        setFlushHook(true)
+        await seeInternalMessage({ chatId: chat._id })
         setChatId(chat._id)
+        setFlushHook(true)
     };
-
-    // const badgeMessage = (chat) => {
-    // if (name === chat.ultimasVisualizacoes) {
-
-    // } else {
-    //     <Badge color="secondary" variant="dot">
-    //         <MailIcon />
-    //     </Badge>
-    // }
-    // }
-
 
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>
@@ -52,20 +42,32 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
                     <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px' }}>
-                    {!!name && chats.map((item) => (
-                        <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                    <Avatar alt="R" />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
-                                    secondary={item.ultimaMensagem}
-                                />
-                            </ListItem>
-                            <Divider />
-                        </ListItemButton>
-                    ))}
+                    {!!name && chats.map((item) => {
+                        const index = item.ultimasVisualizacoes.findIndex(e => e.nome === name)
+                        let showBadge = true
+                        if (item.ultimasVisualizacoes[index].quantidade === 0) {
+                            showBadge = false
+                        }
+                        return (
+                            <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
+                                <ListItem alignItems="flex-start">
+                                    <ListItemAvatar>
+                                        <Avatar alt="R" />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
+                                        secondary={item.ultimaMensagem}
+                                    />
+                                </ListItem>
+                                {
+                                    showBadge && (
+                                        <Badge color="info" badgeContent={item.ultimasVisualizacoes[index].quantidade} />
+                                    )
+                                }
+                                <Divider />
+                            </ListItemButton>
+                        )
+                    })}
                 </List>
             </CardContent>
         </Card>
