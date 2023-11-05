@@ -1,10 +1,11 @@
-import { Alert, Box, Button, Card, CardContent, Container, Paper, Slide, SpeedDial, SpeedDialIcon, TextField, Tooltip, Typography } from "@mui/material"
+import { Alert, Box, Button, Card, CardContent, Container, Paper, Slide, TextField, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors";
 import { useContext, useEffect, useRef, useState } from "react";
 import SendIcon from '@mui/icons-material/Send';
 import { getMessages, seeInternalMessage, sendMessageInterno } from "../../../_services/chat.service";
 import AuthContext from "../../../context/AuthContext";
 import IndividualMessage from "./IndividualMessage";
+import ModalUploadArquivos from "../Modal/ModalUploadArquivos";
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
@@ -116,6 +117,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                     {/* <SpeedDial ariaLabel="Anexar" icon={<SpeedDialIcon />}
                                         sx={{ marginRight: '3px', display: 'flex', alignItems: 'center' }} >
                                     </SpeedDial> */}
+                                    <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
                                     <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
                                         onPaste={handlePaste} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }} />
                                     <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
