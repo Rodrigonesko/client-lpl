@@ -93,6 +93,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
                                 )}
                             </Typography>
                         </div>
+
                     </Typography>
                     {showReplyButton && (
                         <Fade in={showReplyButton}>
