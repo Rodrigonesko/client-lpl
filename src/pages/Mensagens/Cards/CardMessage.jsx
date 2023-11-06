@@ -122,7 +122,6 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                     }
                                 </Box>
                                 <Box >
-
                                     {
                                         messageReplayed.mensagem && (
                                             <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
@@ -134,31 +133,31 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                             </Slide>
                                         )
 
-                                    })
-                                }
-                            </Box>
-                            <Box >
-                                {
-                                    messageReplayed.mensagem && (
-                                        <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
-                                            <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
-                                                <Typography >
-                                                    {messageReplayed?.mensagem}
-                                                </Typography>
-                                            </Alert>
-                                        </Slide>
-                                    )
-                                }
-                                <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
-                                        <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
-                                    </div>
-                                    <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
-                                        onPaste={handlePaste} placeholder='Mensagem' style={{ flex: 5, margin: '0 3px', whiteSpace: 'pre-wrap' }} />
-                                    <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
-                                </form>
-                            </Box>
-                        </CardContent>
+                                    }
+                                </Box>
+                                <Box >
+                                    {
+                                        messageReplayed.mensagem && (
+                                            <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
+                                                <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
+                                                    <Typography >
+                                                        {messageReplayed?.mensagem}
+                                                    </Typography>
+                                                </Alert>
+                                            </Slide>
+                                        )
+                                    }
+                                    <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
+                                            <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
+                                        </div>
+                                        <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
+                                            onPaste={handlePaste} placeholder='Mensagem' style={{ flex: 5, margin: '0 3px', whiteSpace: 'pre-wrap' }} />
+                                        <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
+                                    </form>
+                                </Box>
+                            </CardContent>
+                        </Box>
                     </Card>
                 </Box>
             </Container>
