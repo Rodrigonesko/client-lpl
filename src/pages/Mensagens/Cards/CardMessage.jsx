@@ -133,23 +133,32 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                                 </Alert>
                                             </Slide>
                                         )
-                                    }
-                                    <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+
+                                    })
+                                }
+                            </Box>
+                            <Box >
+                                {
+                                    messageReplayed.mensagem && (
+                                        <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
+                                            <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
+                                                <Typography >
+                                                    {messageReplayed?.mensagem}
+                                                </Typography>
+                                            </Alert>
+                                        </Slide>
+                                    )
+                                }
+                                <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
                                         <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
-                                        <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
-                                            onPaste={handlePaste} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }} />
-                                        <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
-                                    </form>
-                                </Box>
-                            </CardContent>
-                        </Box>
-                        {
-                            showOps && data.tipo === 'Grupo' && (
-
-                                <GroupData chatId={chatId} />
-
-                            )
-                        }
+                                    </div>
+                                    <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
+                                        onPaste={handlePaste} placeholder='Mensagem' style={{ flex: 5, margin: '0 3px', whiteSpace: 'pre-wrap' }} />
+                                    <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
+                                </form>
+                            </Box>
+                        </CardContent>
                     </Card>
                 </Box>
             </Container>

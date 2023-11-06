@@ -6,6 +6,7 @@ import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
 import { seeInternalMessage } from '../../../_services/chat.service';
+import ModalEditarNomeGrupo from '../Modal/ModalEditarNomeGrupo';
 
 const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
 
