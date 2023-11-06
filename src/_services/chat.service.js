@@ -35,10 +35,10 @@ export const leaveChat = async ({ chatId }) => {
     return await new ApiCall('/leaveChat', URL_API).patch({ chatId })
 }
 
-export const addPartipant = async ({ chatId, participante }) => {
-    return await new ApiCall('/addParticipant', URL_API).patch({ chatId, participante })
+export const addPartipants = async ({ chatId, participantes }) => {
+    return await new ApiCall('/addParticipant', URL_API).patch({ chatId, participantes })
 }
 
 export const deleteParticipant = async ({ chatId, participante }) => {
-    return await new ApiCall('/leaveChat', URL_API).patch({ chatId, participante })
+    return await new ApiCall('/deleteParticipant', URL_API).patch({ chatId, participante })
 }

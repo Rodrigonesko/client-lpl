@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardContent, Container, Paper, Slide, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Card, CardContent, Container, Grow, Paper, Slide, TextField, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors";
 import { useContext, useEffect, useRef, useState } from "react";
 import SendIcon from '@mui/icons-material/Send';
@@ -6,6 +6,8 @@ import { getMessages, seeInternalMessage, sendMessageInterno } from "../../../_s
 import AuthContext from "../../../context/AuthContext";
 import IndividualMessage from "./IndividualMessage";
 import ModalUploadArquivos from "../Modal/ModalUploadArquivos";
+import ProfileBar from "./ProfileBar";
+import GroupData from "./GroupData";
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
@@ -16,7 +18,9 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     const [chat, setChat] = useState([])
     const [mensagem, setMensagem] = useState('')
     const [loading, setLoading] = useState(false)
+    const [showOps, setShowOps] = useState(false)
     const [messageReplayed, setMessageReplayed] = useState({})
+    const [data, setData] = useState({})
 
     const handlePaste = (e) => {
         const clipboardData = e.clipboardData
@@ -60,10 +64,28 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         await seeMessage()
 
         if (result.mensagens) {
-            setChat(result.mensagens)
+            if (result.participantes.includes(name)) {
+                if (result.mensagens) {
+                    setChat(result.mensagens)
+                } else {
+                    setChat([])
+                }
+            } else {
+                setChat([])
+            }
         } else {
             setChat([])
         }
+
+        console.log(result);
+
+        setData(result)
+
+        // if (result.mensagens) {
+        //     setChat(result.mensagens)
+        // } else {
+        //     setChat([])
+        // }
     }
 
     const seeMessage = async () => {
@@ -86,44 +108,48 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         <>
             <Container maxWidth>
                 <Box>
-                    <Card component={Paper} sx={{ bgcolor: color, borderRadius: `10px`, height: '90vh' }}>
-                        <Typography p={1} variant="h5" component="div" color='white' bgcolor={grey[500]}>
-                            {nome}
-                        </Typography>
-                        <CardContent >
-                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='75vh' ref={chatContainerRef}>
-                                {
-                                    chat.map((e, index) => {
-                                        return (
-                                            <IndividualMessage item={e} index={index} key={index} name={name} setMessageReplayed={setMessageReplayed} />
-                                        )
-                                    })
-                                }
-                            </Box>
-                            <Box >
+                    <Card component={Paper} sx={{ bgcolor: color, borderRadius: `10px`, height: '90vh', display: 'flex' }}>
+                        <Box width={'100%'}>
+                            <ProfileBar nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
+                            <CardContent >
+                                <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='75vh' ref={chatContainerRef}>
+                                    {
+                                        chat.map((e, index) => {
+                                            return (
+                                                <IndividualMessage item={e} index={index} key={index} name={name} setMessageReplayed={setMessageReplayed} />
+                                            )
+                                        })
+                                    }
+                                </Box>
+                                <Box >
 
-                                {
-                                    messageReplayed.mensagem && (
-                                        <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
-                                            <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
-                                                <Typography >
-                                                    {messageReplayed?.mensagem}
-                                                </Typography>
-                                            </Alert>
-                                        </Slide>
-                                    )
-                                }
-                                <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                    {/* <SpeedDial ariaLabel="Anexar" icon={<SpeedDialIcon />}
-                                        sx={{ marginRight: '3px', display: 'flex', alignItems: 'center' }} >
-                                    </SpeedDial> */}
-                                    <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
-                                    <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
-                                        onPaste={handlePaste} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }} />
-                                    <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
-                                </form>
-                            </Box>
-                        </CardContent>
+                                    {
+                                        messageReplayed.mensagem && (
+                                            <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
+                                                <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
+                                                    <Typography >
+                                                        {messageReplayed?.mensagem}
+                                                    </Typography>
+                                                </Alert>
+                                            </Slide>
+                                        )
+                                    }
+                                    <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                        <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
+                                        <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
+                                            onPaste={handlePaste} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }} />
+                                        <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
+                                    </form>
+                                </Box>
+                            </CardContent>
+                        </Box>
+                        {
+                            showOps && (
+
+                                <GroupData chatId={chatId} />
+
+                            )
+                        }
                     </Card>
                 </Box>
             </Container>

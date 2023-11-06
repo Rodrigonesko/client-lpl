@@ -1,6 +1,6 @@
 import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material"
 import moment from "moment"
-import {  useState } from "react";
+import { useState } from "react";
 import ReplyIcon from '@mui/icons-material/Reply';
 
 const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
@@ -63,7 +63,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
                         {
 
                             item.tipo === 'Arquivo' ? (
-                                <a target="_blank" href={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.caminhoArquivo}`}>{ item.mensagem}</a>
+                                <a target="_blank" href={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.caminhoArquivo}`}>{item.mensagem}</a>
                             ) : (
                                 <>{item.mensagem}</>
                             )
