@@ -102,7 +102,10 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-    }, [chat]);
+
+        console.log('ok');
+
+    }, [chat, messageReplayed]);
 
     return (
         <>
@@ -120,33 +123,22 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                             )
                                         })
                                     }
+                                    <Box >
+                                        {
+                                            messageReplayed.mensagem && (
+                                                <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
+                                                    <Alert  severity="info" onClose={() => { setMessageReplayed({}) }}>
+                                                        <Typography >
+                                                            {messageReplayed?.mensagem}
+                                                        </Typography>
+                                                    </Alert>
+                                                </Slide>
+                                            )
+                                        }
+                                    </Box>
                                 </Box>
-                                <Box >
-                                    {
-                                        messageReplayed.mensagem && (
-                                            <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
-                                                <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
-                                                    <Typography >
-                                                        {messageReplayed?.mensagem}
-                                                    </Typography>
-                                                </Alert>
-                                            </Slide>
-                                        )
 
-                                    }
-                                </Box>
                                 <Box >
-                                    {
-                                        messageReplayed.mensagem && (
-                                            <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
-                                                <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
-                                                    <Typography >
-                                                        {messageReplayed?.mensagem}
-                                                    </Typography>
-                                                </Alert>
-                                            </Slide>
-                                        )
-                                    }
                                     <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
                                             <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
