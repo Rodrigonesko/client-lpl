@@ -144,7 +144,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                             </CardContent>
                         </Box>
                         {
-                            showOps && (
+                            showOps && data.tipo === 'Grupo' && (
 
                                 <GroupData chatId={chatId} />
 
