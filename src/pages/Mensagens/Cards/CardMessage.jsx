@@ -113,13 +113,12 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                         </Slide>
                                     )
                                 }
-                                <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                    {/* <SpeedDial ariaLabel="Anexar" icon={<SpeedDialIcon />}
-                                        sx={{ marginRight: '3px', display: 'flex', alignItems: 'center' }} >
-                                    </SpeedDial> */}
-                                    <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
+                                <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
+                                        <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
+                                    </div>
                                     <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
-                                        onPaste={handlePaste} placeholder='Mensagem' style={{ width: '87%', marginRight: '3px' }} />
+                                        onPaste={handlePaste} placeholder='Mensagem' style={{ flex: 5, margin: '0 3px', whiteSpace: 'pre-wrap' }} />
                                     <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
                                 </form>
                             </Box>
