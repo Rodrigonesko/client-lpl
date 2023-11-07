@@ -76,16 +76,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         } else {
             setChat([])
         }
-
-        console.log(result);
-
         setData(result)
-
-        // if (result.mensagens) {
-        //     setChat(result.mensagens)
-        // } else {
-        //     setChat([])
-        // }
     }
 
     const seeMessage = async () => {
@@ -127,7 +118,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                         {
                                             messageReplayed.mensagem && (
                                                 <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
-                                                    <Alert  severity="info" onClose={() => { setMessageReplayed({}) }}>
+                                                    <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
                                                         <Typography >
                                                             {messageReplayed?.mensagem}
                                                         </Typography>
@@ -150,6 +141,13 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                 </Box>
                             </CardContent>
                         </Box>
+                        {
+                            showOps && data.tipo === 'Grupo' && (
+
+                                <GroupData chatId={chatId} />
+
+                            )
+                        }
                     </Card>
                 </Box>
             </Container>
