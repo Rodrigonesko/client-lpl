@@ -106,7 +106,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                         <Box width={'100%'}>
                             <ProfileBar nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
                             <CardContent >
-                                <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='75vh' ref={chatContainerRef}>
+                                <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='74vh' ref={chatContainerRef}>
                                     {
                                         chat.map((e, index) => {
                                             return (

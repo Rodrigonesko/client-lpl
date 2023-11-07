@@ -6,9 +6,9 @@ import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
 import { seeInternalMessage } from '../../../_services/chat.service';
-import ModalEditarNomeGrupo from '../Modal/ModalEditarNomeGrupo';
+import { useEffect } from 'react';
 
-const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
+const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
 
 
     const { name } = useContext(AuthContext)
@@ -34,6 +34,10 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook }) => {
         setChatId(chat._id)
         setFlushHook(true)
     };
+
+    useEffect(() => {
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>

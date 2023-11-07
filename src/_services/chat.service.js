@@ -46,3 +46,7 @@ export const deleteParticipant = async ({ chatId, participante }) => {
 export const addAdmin = async ({ chatId, participante }) => {
     return await new ApiCall('/addAdmin', URL_API).patch({ chatId, participante })
 }
+
+export const updateNameGroup = async ({ chatId, nome }) => {
+    return await new ApiCall('/updateNameGroup', URL_API).put({ chatId, nome })
+}

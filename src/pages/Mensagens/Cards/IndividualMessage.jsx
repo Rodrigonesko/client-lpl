@@ -14,16 +14,6 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
         })
     }
 
-    const formatMessage = (message) => {
-        // Substitua os caracteres de quebra de linha por elementos <br />
-        return message.split('\n').map((line, i) => (
-            <React.Fragment key={i}>
-                {line}
-                <br />
-            </React.Fragment>
-        ));
-    };
-
     const handleScroll = (idMessage) => {
         const responseMessage = document.getElementById(`responseMessage_${idMessage}`);
 
@@ -77,10 +67,9 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
                                     </Typography>
                                 </div>
                             )}
-                            {/* Renderize a mensagem com quebras de linha */}
                             <Typography component="div" style={{ whiteSpace: 'pre-line' }}>
                                 {item.tipo === 'Arquivo' ? (
-                                    <a target="_blank" href={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.caminhoArquivo}`}>
+                                    <a target="_blank" rel="noreferrer" href={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.caminhoArquivo}`}>
                                         {item.mensagem}
                                     </a>
                                 ) : (
