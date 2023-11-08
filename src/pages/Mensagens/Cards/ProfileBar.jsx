@@ -4,9 +4,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { grey } from "@mui/material/colors";
 
 const ProfileBar = ({ nome, showOps, setShowOps, tipo, url }) => {
-
-    console.log(tipo);
-
     return (
         <Box display={'flex'} justifyContent={"space-between"} p={1} component="div" bgcolor={grey[500]}>
             <Box display={'flex'} alignItems={"center"}>

@@ -11,8 +11,12 @@ export const getChats = async () => {
     return await new ApiCall('/getChats', URL_API).get()
 }
 
-export const getMessages = async ({ chatId, nome }) => {
-    return await new ApiCall('/getMessages', URL_API).post({ chatId, nome })
+export const getChatDataByIdOrName = async ({ chatId, nome }) => {
+    return await new ApiCall('/getChaDatatByIdOrName', URL_API).post({ chatId, nome })
+}
+
+export const getMessages = async ({ chatId, nome, skip }) => {
+    return await new ApiCall('/getMessages', URL_API).post({ chatId, nome, skip })
 }
 
 export const createGroupChat = async ({ participantes, nome }) => {

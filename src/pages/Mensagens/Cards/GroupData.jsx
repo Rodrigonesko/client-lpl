@@ -1,7 +1,7 @@
 import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Tooltip, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import { useContext, useEffect, useState } from "react";
-import { getMessages } from "../../../_services/chat.service";
+import { getChatDataByIdOrName } from "../../../_services/chat.service";
 import ModalRemoverPessoaDoGrupo from "../Modal/ModalRemoverPessoaDoGrupo";
 import ModalAdicionarPessoaNoGrupo from "../Modal/ModalAdicionarPessoaNoGrupo";
 import ModalSairDoGrupo from "../Modal/ModalSairDoGrupo";
@@ -17,7 +17,7 @@ const GroupData = ({ chatId }) => {
     const { name } = useContext(AuthContext)
 
     const fetchData = async () => {
-        const result = await getMessages({ chatId, nome: null })
+        const result = await getChatDataByIdOrName({ chatId, nome: null })
         console.log(result);
         setData(result)
     }

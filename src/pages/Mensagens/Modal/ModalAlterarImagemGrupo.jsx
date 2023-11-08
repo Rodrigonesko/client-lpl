@@ -1,9 +1,9 @@
-import { Avatar, Box, Dialog, DialogActions, DialogContent, IconButton, Tooltip } from "@mui/material"
+import { Avatar, Box, Dialog, DialogContent, IconButton, Tooltip } from "@mui/material"
 import { useState } from "react"
 import EditIcon from '@mui/icons-material/Edit';
 import { useRef } from "react";
 import SaveIcon from '@mui/icons-material/Save';
-import { getMessages, updateGroupImage } from "../../../_services/chat.service";
+import { getChatDataByIdOrName, updateGroupImage } from "../../../_services/chat.service";
 
 const ModalAlterarImagemGrupo = ({ chatId, groupImage, setFlushHook }) => {
 
@@ -22,7 +22,7 @@ const ModalAlterarImagemGrupo = ({ chatId, groupImage, setFlushHook }) => {
     }
 
     const fetchData = async () => {
-        const result = await getMessages({ chatId, nome: null })
+        const result = await getChatDataByIdOrName({ chatId, nome: null })
         setData(result)
         setSelectedImage(`${process.env.REACT_APP_CHAT_SERVICE}/media/${result.imageGroup}`)
     }

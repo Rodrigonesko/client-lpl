@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import ReplyIcon from '@mui/icons-material/Reply';
 import ModalExpandirImagem from "../Modal/ModalExpandirImagem";
 
-const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
+const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelectedRespondedMessage }) => {
 
     const [showReplyButton, setShowReplyButton] = useState(false);
 
@@ -16,13 +16,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
     }
 
     const handleScroll = (idMessage) => {
-        const responseMessage = document.getElementById(`responseMessage_${idMessage}`);
-
-        if (responseMessage) {
-            responseMessage.scrollIntoView({
-                behavior: "smooth",
-            });
-        }
+        loadSelectedRespondedMessage(idMessage)
     }
 
     const isImageByExtension = (url) => {
@@ -32,23 +26,6 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
 
         return imageExtensions.includes('.' + fileExtension.toLowerCase());
     }
-
-    // async function verifyImage(url) {
-    //     try {
-    //         const response = await fetch(url);
-    //         console.log(response.headers.get('content-type'));
-    //         if (response.ok) {
-    //             const contentType = response.headers.get('content-type');
-    //             if (contentType && contentType.startsWith('image/')) {
-    //                 return true; // É uma imagem
-    //             }
-    //         }
-    //         return false; // Não é uma imagem
-    //     } catch (error) {
-    //         console.error('Erro ao verificar se é uma imagem:', error);
-    //         return false;
-    //     }
-    // }
 
     return (
         <Box
@@ -100,10 +77,10 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed }) => {
                                 )
                             ) : (
                                 item.mensagem.split('\n').map((line, lineIndex) => (
-                                    <React.Fragment key={lineIndex}>
+                                    <Box sx={{wordWrap: 'break-word'}} key={lineIndex}>
                                         {lineIndex > 0 && <br />}
                                         {line}
-                                    </React.Fragment>
+                                    </Box>
                                 ))
                             )}
                         </Typography>
