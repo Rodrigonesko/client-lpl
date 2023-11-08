@@ -118,17 +118,11 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     }
 
     const loadSelectedRespondedMessage = (idMessage) => {
-
-        console.log(idMessage);
-
         const findIndex = AllMessages.findIndex(message => message._id === idMessage)
         const findIndexRenderizado = chat.findIndex(message => message._id === idMessage)
 
         if (findIndexRenderizado !== -1) {
             const responseMessage = document.getElementById(`responseMessage_${idMessage}`);
-
-            console.log(responseMessage);
-
             if (responseMessage) {
                 responseMessage.scrollIntoView({
                     behavior: "smooth",
@@ -138,11 +132,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         }
         if (findIndex !== -1) {
             loadMoreMessages(idMessage, AllMessages.length - findIndex, true)
-
             const responseMessage = document.getElementById(`responseMessage_${idMessage}`);
-
-            console.log(responseMessage);
-
             if (responseMessage) {
                 responseMessage.scrollIntoView({
                     behavior: "smooth",
@@ -153,7 +143,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
     return (
         <>
-            <Box maxWidth={'1600px'}>
+            <Box maxWidth={'1500px'}>
             <Card component={Paper} sx={{ bgcolor: color, borderRadius: `10px`, height: '90vh', display: 'flex' }}>
                 <Box width={'100%'}>
                     <ProfileBar url={`${process.env.REACT_APP_CHAT_SERVICE}/media/${data.imageGroup}`} nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
