@@ -39,6 +39,15 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
         setFlushHook(false)
     }, [flushHook])
 
+    const MAX_MESSAGE_LENGTH = 15;
+
+    const truncateMessage = (message, maxLength) => {
+        if (message.length > maxLength) {
+            return `${message.substring(0, maxLength)}...`;
+        }
+        return message;
+    };
+
     return (
         <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>
             <CardContent>
@@ -53,6 +62,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                         if (item.ultimasVisualizacoes[index].quantidade === 0) {
                             showBadge = false
                         }
+                        const truncatedMessage = truncateMessage(item.ultimaMensagem, MAX_MESSAGE_LENGTH)
                         return (
                             <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
                                 <ListItem alignItems="flex-start">
@@ -61,7 +71,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                                     </ListItemAvatar>
                                     <ListItemText
                                         primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
-                                        secondary={item.ultimaMensagem}
+                                        secondary={truncatedMessage}
                                     />
                                 </ListItem>
                                 {

@@ -1,11 +1,20 @@
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemText, Tooltip } from "@mui/material"
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextField, Tooltip } from "@mui/material"
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
+import AuthContext from "../../../context/AuthContext";
+
 const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
 
     const [open, setOpen] = useState(false);
     const [users, setUsers] = useState([])
+    const [userAux, setUserAux] = useState([]);
+    const { name } = useContext(AuthContext)
+
+    const handleChange = async (event) => {
+        const arrayAux = users.filter(e => (e?.name.includes(event.target.value)))
+        setUserAux(arrayAux)
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -17,13 +26,15 @@ const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
     };
 
     const fetchData = async () => {
-        const result = await getUsers()
+        let result = await getUsers()
+        result = result.filter(e => (e.name !== name))
         setUsers(result)
+        setUserAux(result)
     }
 
     const initChat = (nome) => {
         setReceptor(nome)
-        setChatId(null) 
+        setChatId(null)
         setFlushHook(true)
         handleClose()
     }
@@ -43,23 +54,26 @@ const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
                 <DialogTitle id="alert-dialog-title">
                     {"iniciar conversa"}
                 </DialogTitle>
+                <Divider sx={{ mt: '10px', mb: '10px' }} />
                 <DialogContent>
-                    {
-                        users.map(user => {
-                            return (
-                                <ListItemButton onClick={() => initChat(user.name)}>
-                                    <ListItem alignItems="flex-start">
-                                        <ListItemAvatar>
-                                            <Avatar alt="R" />
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            secondary={user.name}
-                                        />
-                                    </ListItem>
-                                    <Divider />
-                                </ListItemButton>
-                            )
-                        })
+                    <form action="">
+                        <TextField type='text' onChange={handleChange} label='Buscar Pessoa' size='small' sx={{ paddingRight: '3px', width: '19vw' }} />
+                    </form>
+                    {userAux.map(user => {
+                        return (
+                            <ListItemButton onClick={() => initChat(user.name)}>
+                                <ListItem alignItems="flex-start">
+                                    <ListItemAvatar>
+                                        <Avatar alt="R" />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        secondary={user.name}
+                                    />
+                                </ListItem>
+                                <Divider />
+                            </ListItemButton>
+                        )
+                    })
                     }
                 </DialogContent>
                 <DialogActions>

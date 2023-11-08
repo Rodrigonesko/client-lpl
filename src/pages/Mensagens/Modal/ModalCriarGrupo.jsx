@@ -1,23 +1,22 @@
 import { Alert, Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Snackbar, TextField, Tooltip } from "@mui/material"
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
 import { createGroupChat } from "../../../_services/chat.service";
 import { useEffect } from "react";
-import axios from "axios";
+import AuthContext from "../../../context/AuthContext";
 
 const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
 
     const [open, setOpen] = useState(false);
-    const [nome, setNome] = useState('');
     const [openNome, setOpenNome] = useState(false);
     const [users, setUsers] = useState([]);
+    const { name } = useContext(AuthContext)
+
+    const [userAux, setUserAux] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [groupName, setGroupName] = useState("");
     const [checked, setChecked] = useState([0]);
-
-    const [solicitacoes, setSolicitacoes] = useState([])
-    const [alerta, setAlerta] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -37,8 +36,11 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
     };
 
     const fetchData = async () => {
-        const result = await getUsers();
+        let result = await getUsers();
+        result = result.filter(e => (e.name !== name))
         setUsers(result);
+        setUserAux(result);
+
     }
 
     useEffect(() => {
@@ -75,24 +77,12 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
         setChecked(newChecked);
     }
 
-    const handleFilter = async (event) => {
-        event.preventDefault()
+    const handleChange = async (event) => {
+        const arrayAux = users.filter(e => (e?.name.includes(event.target.value)))
+        setUserAux(arrayAux)
 
-        if (nome.length > 2) {
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/internMessage/filter?nome=${nome}`, {
-                withCredentials: true
-            })
-            console.log(result)
-            setSolicitacoes(result.participantes)
-        } else {
-            setAlerta(true)
-            return
-        }
     }
 
-    const handleCloseInput = () => {
-        setAlerta(false)
-    }
 
     return (
         <>
@@ -111,16 +101,10 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
                 </DialogTitle>
                 <Divider sx={{ mt: '10px', mb: '10px' }} />
                 <DialogContent>
-                    <form action=''>
-                        <TextField type='text' onChange={(e) => { setNome(e.target.value) }} label='Buscar Pessoas' size='small' sx={{ paddingRight: '3px', width: '17vw' }} />
-                        <Button variant='contained' onClick={handleFilter} >Pesquisar</Button>
+                    <form action="">
+                        <TextField type='text' onChange={handleChange} label='Buscar Pessoas' size='small' sx={{ paddingRight: '3px', width: '24vw' }} />
                     </form>
-                    <Snackbar open={alerta} autoHideDuration={6000} onClose={handleCloseInput}>
-                        <Alert variant="filled" onClose={handleCloseInput} severity="warning" sx={{ width: '100%' }}>
-                            Digite no minimo 3 caracteres!
-                        </Alert>
-                    </Snackbar>
-                    {users.map(user => {
+                    {userAux.map(user => {
                         return (
                             <ListItemButton key={user._id} onClick={() => handleUserSelection(user.name)}>
                                 <ListItem alignItems="flex-start">
