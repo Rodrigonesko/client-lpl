@@ -1,6 +1,5 @@
-import { Avatar, Box, Button, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Tooltip, Typography } from "@mui/material"
+import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Tooltip, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors"
-import EditIcon from '@mui/icons-material/Edit';
 import { useContext, useEffect, useState } from "react";
 import { getMessages } from "../../../_services/chat.service";
 import ModalRemoverPessoaDoGrupo from "../Modal/ModalRemoverPessoaDoGrupo";
@@ -8,6 +7,7 @@ import ModalAdicionarPessoaNoGrupo from "../Modal/ModalAdicionarPessoaNoGrupo";
 import ModalSairDoGrupo from "../Modal/ModalSairDoGrupo";
 import ModalAdicionarAdmin from "../Modal/ModalAdicionarAdmin";
 import AuthContext from "../../../context/AuthContext";
+import ModalEditarNomeGrupo from "../Modal/ModalEditarNomeGrupo";
 import ModalAlterarImagemGrupo from "../Modal/ModalAlterarImagemGrupo";
 
 const GroupData = ({ chatId }) => {
@@ -23,8 +23,8 @@ const GroupData = ({ chatId }) => {
     }
 
     useEffect(() => {
-        fetchData()
         setFlushHook(false)
+        fetchData()
     }, [chatId, flushHook])
 
     return (
@@ -40,7 +40,7 @@ const GroupData = ({ chatId }) => {
                     {data.nome}
                     <Tooltip title='Editar'>
                         <IconButton size="small">
-                            <EditIcon />
+                            <ModalEditarNomeGrupo nomeGrupo={data.nome} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
                         </IconButton>
                     </Tooltip>
                 </Typography>

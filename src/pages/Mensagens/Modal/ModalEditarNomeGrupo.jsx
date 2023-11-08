@@ -1,99 +1,83 @@
 import { useState, useEffect } from 'react';
-import { Dialog, Button, DialogTitle, DialogContent, ListItemButton, ListItemAvatar, Avatar, ListItemText, Checkbox, ListItemIcon, Divider, DialogActions, ListItem } from '@mui/material';
-import { getUsers } from '../../../_services/user.service';
+import { Dialog, Button, DialogTitle, DialogContent, DialogActions, IconButton, Tooltip, TextField, Alert, Snackbar } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { updateNameGroup } from '../../../_services/chat.service';
 
-const ModalEditarNomeGrupo = ({ groupId, finishEditName }) => {
+const ModalEditarNomeGrupo = ({ chatId, nomeGrupo, setFlushHook, flushHook }) => {
 
-    const [flushHook, setFlushHook] = useState(false);
-    const [open, setopen] = useState(false);
-    const [checked, setchecked] = useState(false);
-    const [newGroupName, setNewGroupName] = useState('');
-    const [users, setUsers] = useState([]);
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [openSnack, setOpenSnack] = useState(false)
+    const [colorSnack, setColorSnack] = useState('success')
+    const [msgSnack, setMsgSnack] = useState('Treinamento criado com sucesso!')
+    const [open, setOpen] = useState(false);
+
+    const [nome, setNome] = useState(nomeGrupo)
 
     const handleClose = () => {
-        finishEditName();
+        setOpen(false);
+        setNome(nomeGrupo)
     }
 
-    const handleSave = () => {
-
+    const handleOpen = () => {
+        setOpen(true);
+        setNome(nomeGrupo)
     }
 
-    const handleClickOpen = () => {
-        setopen(true);
-        setNewGroupName('')
-        fetchData();
-    }
-
-    const fetchData = async () => {
-        const result = await getUsers();
-        setUsers(result);
+    const handleSave = async () => {
+        if (nome === '') {
+            setOpenSnack(true)
+            setColorSnack('warning')
+            setMsgSnack('Não deixe o nome do grupo em branco, favor preencher!')
+            return
+        }
+        try {
+            await updateNameGroup({
+                chatId,
+                nome
+            })
+            setColorSnack('success')
+            setMsgSnack('Nome alterado com sucesso!')
+            setOpen(false)
+            setOpenSnack(true)
+            setFlushHook(true)
+        } catch (error) {
+            console.error()
+        }
     }
 
     useEffect(() => {
         setFlushHook(false)
-        fetchData()
     }, [flushHook])
 
-    const handleUserSelection = (user) => {
-        const isUserSelected = selectedUsers.includes(user);
-
-        if (isUserSelected) {
-            setSelectedUsers(selectedUsers.filter((u) => u !== user));
-        } else {
-            setSelectedUsers([...selectedUsers, user]);
-        }
-
-        const newChecked = [...checked];
-        if (isUserSelected) {
-            newChecked.splice(newChecked.indexOf(user), 1);
-        } else {
-            newChecked.push(user);
-        }
-        setchecked(newChecked);
-    }
-
     return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle id="alert-dialog-title">
-                {"Qual o Nome Novo do Grupo"}
-            </DialogTitle>
-            <DialogContent>
-                {users.map(user => {
-                    return (
-                        <ListItemButton key={user._id} onClick={() => handleUserSelection(user.name)}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                    <Avatar alt="R" />
-                                </ListItemAvatar>
-                                <ListItemText secondary={user.name} />
-                            </ListItem>
-                            <ListItemButton role={undefined} dense>
-                                <ListItemIcon>
-                                    <Checkbox
-                                        edge="start"
-                                        checked={checked.indexOf(user.name) !== -1}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{ 'aria-labelledby': user.name }}
-                                    />
-                                </ListItemIcon>
-                            </ListItemButton>
-                            <Divider />
-                        </ListItemButton>
-                    );
-                })}
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Fechar</Button>
-                <Button onClick={handleClickOpen}>Adicionar Nome ao Grupo</Button>
-            </DialogActions>
-        </Dialog >
+        <>
+            <Tooltip title='Editar'>
+                <IconButton onClick={handleOpen} color="success">
+                    <EditIcon />
+                </IconButton>
+            </Tooltip>
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Qual o Nome Novo do Grupo"}
+                </DialogTitle>
+                <DialogContent>
+                    <TextField value={nome} type='text' size='small' margin='normal' fullWidth onChange={e => { setNome(e.target.value) }} label='Nome do Grupo' />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Fechar</Button>
+                    <Button onClick={handleSave}>Editar</Button>
+                </DialogActions>
+            </Dialog >
+            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                <Alert variant="filled" onClose={() => setOpenSnack(false)} severity={colorSnack} sx={{ width: '100%' }}>
+                    {msgSnack}
+                </Alert>
+            </Snackbar>
+        </>
     )
 }
 
