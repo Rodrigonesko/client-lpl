@@ -46,3 +46,7 @@ export const deleteParticipant = async ({ chatId, participante }) => {
 export const addAdmin = async ({ chatId, participante }) => {
     return await new ApiCall('/addAdmin', URL_API).patch({ chatId, participante })
 }
+
+export const updateGroupImage = async (data) => {
+    return await new ApiCall('/updateGroupImage', URL_API, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
+}
