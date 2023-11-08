@@ -17,10 +17,12 @@ const InternMessages = () => {
     const [chats, setChats] = useState([])
 
     const fetchData = async () => {
-        const resut = await getChats()
-        setChats(resut)
+        const result = await getChats()
+        console.log(result);
+        setChats(result.chats)
+        document.title = `LPL (${result.naoLidas})`
     }
-
+    
     useEffect(() => {
         setFlushHook(false)
         fetchData()

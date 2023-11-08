@@ -5,16 +5,24 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import AuthContext from "../../context/AuthContext";
-import { IconButton } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
+import { useEffect } from "react";
+import { io } from "socket.io-client";
+import { getChats } from "../../_services/chat.service";
+import ChatIcon from '@mui/icons-material/Chat';
+
+
+const socket = io(process.env.REACT_APP_CHAT_SERVICE);
+
 
 const Sidebar = () => {
 
     const navigate = useNavigate()
 
     const [isOpen, setIsOpen] = useState(true)
-
-    const { accessLevel, name, acessos } = useContext(AuthContext)
+    const [quantidadeMensagens, setQuantidadeMensagens] = useState(0)
+    const { name, acessos } = useContext(AuthContext)
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -30,14 +38,32 @@ const Sidebar = () => {
         }
     }
 
+    const fetchData = async () => {
+        const result = await getChats()
+        console.log(result.naoLidas);
+        setQuantidadeMensagens(result.naoLidas)
+    }
+
+    useEffect(() => {
+        fetchData()
+        socket.on('receivedMessage', async () => {
+            fetchData()
+        })
+        socket.on('seeMessage', async () => {
+            fetchData()
+        })
+    }, [])
+
     return (
         <>
             {
-
                 <ProSidebar className="" id="sidebar">
                     <Menu iconShape="square">
                         <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
                         <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
+                        <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
+                            <ChatIcon />
+                        </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
                         <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
                         {
                             acessos?.administrador ? (

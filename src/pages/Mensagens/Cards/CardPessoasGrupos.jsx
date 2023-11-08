@@ -55,7 +55,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                     <ModalIniciarConversa setReceptor={setReceptor} setFlushHook={setFlushHook} setChatId={setChatId} />
                     <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
-                <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px' }}>
+                <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh' }}>
                     {!!name && chats.map((item) => {
                         const index = item.ultimasVisualizacoes.findIndex(e => e.nome === name)
                         let showBadge = true
@@ -65,7 +65,13 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                         const truncatedMessage = truncateMessage(item.ultimaMensagem, MAX_MESSAGE_LENGTH)
                         return (
                             <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
-                                <ListItem alignItems="flex-start">
+                                <ListItem alignItems="flex-start"
+                                    secondaryAction={
+                                        showBadge && (
+                                            <Badge color="info" badgeContent={item.ultimasVisualizacoes[index].quantidade} />
+                                        )
+                                    }
+                                >
                                     <ListItemAvatar>
                                         <Avatar src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} />
                                     </ListItemAvatar>
@@ -74,11 +80,6 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                                         secondary={truncatedMessage}
                                     />
                                 </ListItem>
-                                {
-                                    showBadge && (
-                                        <Badge color="info" badgeContent={item.ultimasVisualizacoes[index].quantidade} />
-                                    )
-                                }
                                 <Divider />
                             </ListItemButton>
                         )
