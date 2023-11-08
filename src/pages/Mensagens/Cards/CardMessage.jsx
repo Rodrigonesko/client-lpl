@@ -8,6 +8,7 @@ import IndividualMessage from "./IndividualMessage";
 import ModalUploadArquivos from "../Modal/ModalUploadArquivos";
 import ProfileBar from "./ProfileBar";
 import GroupData from "./GroupData";
+import ModalPasteImage from "../Modal/ModalPasteImage";
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
@@ -21,21 +22,17 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     const [showOps, setShowOps] = useState(false)
     const [messageReplayed, setMessageReplayed] = useState({})
     const [data, setData] = useState({})
+    const [showPastedImage, setShowPastedImage] = useState(false)
+    const [pastedImage, setPastedImage] = useState(null)
 
     const handlePaste = (e) => {
-        const clipboardData = e.clipboardData
+        const items = e.clipboardData.items
 
-        if (clipboardData && clipboardData.items) {
-            for (let i = 0; i < clipboardData.items.length; i++) {
-                const item = clipboardData.items[i];
-
-                if (item.type.indexOf('image') !== -1) {
-                    const file = item.getAsFile();
-                    const imageUrl = URL.createObjectURL(file);
-
-                    const imgTag = `<img src="${imageUrl}" alt="Imagem" />`;
-                    setMensagem((mensagem) => mensagem + imgTag);
-                }
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                const blob = items[i].getAsFile();
+                setPastedImage(blob)
+                setShowPastedImage(true)
             }
         }
     }
@@ -93,9 +90,6 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-
-        console.log('ok');
-
     }, [chat, messageReplayed]);
 
     return (
@@ -104,7 +98,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                 <Box>
                     <Card component={Paper} sx={{ bgcolor: color, borderRadius: `10px`, height: '90vh', display: 'flex' }}>
                         <Box width={'100%'}>
-                            <ProfileBar nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
+                            <ProfileBar url={`${process.env.REACT_APP_CHAT_SERVICE}/media/${data.imageGroup}`} nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
                             <CardContent >
                                 <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='74vh' ref={chatContainerRef}>
                                     {
@@ -143,14 +137,13 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                         </Box>
                         {
                             showOps && data.tipo === 'Grupo' && (
-
                                 <GroupData chatId={chatId} />
-
                             )
                         }
                     </Card>
                 </Box>
             </Container>
+            <ModalPasteImage open={showPastedImage} setOpen={setShowPastedImage} image={pastedImage} setImage={setPastedImage} chatId={chatId} receptor={nome} />
         </>
     )
 }

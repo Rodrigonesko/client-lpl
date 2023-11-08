@@ -8,6 +8,7 @@ import ModalSairDoGrupo from "../Modal/ModalSairDoGrupo";
 import ModalAdicionarAdmin from "../Modal/ModalAdicionarAdmin";
 import AuthContext from "../../../context/AuthContext";
 import ModalEditarNomeGrupo from "../Modal/ModalEditarNomeGrupo";
+import ModalAlterarImagemGrupo from "../Modal/ModalAlterarImagemGrupo";
 
 const GroupData = ({ chatId }) => {
 
@@ -27,17 +28,14 @@ const GroupData = ({ chatId }) => {
     }, [chatId, flushHook])
 
     return (
-
-        <Box width={'30%'}>
+        <Box width={'40%'}>
             <Typography p={2} component="div" bgcolor={grey[500]} color='white'>
                 Dados do grupo
             </Typography>
             <Box textAlign={"center"} mt={2}>
-                <Tooltip title='Alterar imagem'>
-                    <IconButton>
-                        <Avatar sx={{ width: '200px', height: '200px' }}></Avatar>
-                    </IconButton>
-                </Tooltip>
+                {
+                    !!data._id && (<ModalAlterarImagemGrupo setFlushHook={setFlushHook} chatId={data._id} groupImage={`${process.env.REACT_APP_CHAT_SERVICE}/media/${data.imageGroup}`} />)
+                }
                 <Typography>
                     {data.nome}
                     <Tooltip title='Editar'>
@@ -49,7 +47,7 @@ const GroupData = ({ chatId }) => {
             </Box>
             <Divider sx={{ mt: '10px', mb: '10px' }} />
             <Box>
-                <List dense sx={{ width: '100%', maxWidth: 360, display: 'block', overflowY: 'auto', maxHeight: '400px' }}>
+                <List dense sx={{ width: '100%', display: 'block', overflowY: 'auto', maxHeight: '400px' }}>
                     {!!data.participantes && data.participantes.map((participante) => {
                         return (
                             <ListItem
@@ -58,8 +56,6 @@ const GroupData = ({ chatId }) => {
                                     <ModalRemoverPessoaDoGrupo setFlushHook={setFlushHook} participante={participante} chatId={chatId} />
                                     <ModalAdicionarAdmin setFlushHook={setFlushHook} participante={participante} chatId={chatId} />
                                 </>)
-
-
                                 }
                                 disablePadding
                             >

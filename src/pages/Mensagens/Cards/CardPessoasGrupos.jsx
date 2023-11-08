@@ -8,8 +8,8 @@ import AuthContext from '../../../context/AuthContext';
 import { seeInternalMessage } from '../../../_services/chat.service';
 import { useEffect } from 'react';
 
-const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
 
+const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
 
     const { name } = useContext(AuthContext)
 
@@ -57,7 +57,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                             <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
-                                        <Avatar alt="R" />
+                                        <Avatar src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} />
                                     </ListItemAvatar>
                                     <ListItemText
                                         primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
