@@ -29,6 +29,8 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     const [AllMessages, setAllMessages] = useState([])
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [loadedMessages, setLoadedMessages] = useState(0)
+    const [currentScrollHeight, setCurrentScrollHeight] = useState(0)
 
     const handlePaste = (e) => {
         const items = e.clipboardData.items
@@ -121,10 +123,17 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
             if (startIndex < 0) {
                 startIndex = 0
             }
+            console.log('antes de somar' + chatContainerRef.current.scrollHeight);
             const messageToRender = AllMessages.slice(startIndex, endIndex).concat(chat)
             setChat(messageToRender)
+            setLoadedMessages(loadedMessages + 1)
+            console.log('Depois de somar' + chatContainerRef.current.scrollHeight);
         }
     }
+
+    useEffect(() => {
+        chatContainerRef.current.scrollTop = 100
+    }, [loadedMessages])
 
     const loadSelectedRespondedMessage = (idMessage) => {
         const findIndex = AllMessages.findIndex(message => message._id === idMessage)
