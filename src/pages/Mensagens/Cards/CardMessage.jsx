@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardContent, Container, Grow, Paper, Slide, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Card, CardContent, CircularProgress, IconButton, Paper, Slide, TextField, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors";
 import { useContext, useEffect, useRef, useState } from "react";
 import SendIcon from '@mui/icons-material/Send';
@@ -9,6 +9,8 @@ import ModalUploadArquivos from "../Modal/ModalUploadArquivos";
 import ProfileBar from "./ProfileBar";
 import GroupData from "./GroupData";
 import ModalPasteImage from "../Modal/ModalPasteImage";
+import EmojiPicker from 'emoji-picker-react';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
@@ -18,7 +20,6 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     const { name } = useContext(AuthContext)
     const [chat, setChat] = useState([])
     const [mensagem, setMensagem] = useState('')
-    const [loading, setLoading] = useState(false)
     const [showOps, setShowOps] = useState(false)
     const [messageReplayed, setMessageReplayed] = useState({})
     const [data, setData] = useState({})
@@ -26,6 +27,8 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     const [pastedImage, setPastedImage] = useState(null)
     const [hookScroll, setHookScroll] = useState(false)
     const [AllMessages, setAllMessages] = useState([])
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const handlePaste = (e) => {
         const items = e.clipboardData.items
@@ -82,6 +85,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
+        setLoading(false)
     }
 
     const seeMessage = async () => {
@@ -90,9 +94,14 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
 
     useEffect(() => {
         setFlushHook(false)
-        setLoading(false)
         fetchData()
     }, [nome, flushHook])
+
+    useEffect(() => {
+        setLoading(true)
+        setChat([])
+        setMensagem('')
+    }, [chatId])
 
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -144,55 +153,72 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
     return (
         <>
             <Box maxWidth={'1500px'}>
-            <Card component={Paper} sx={{ bgcolor: color, borderRadius: `10px`, height: '90vh', display: 'flex' }}>
-                <Box width={'100%'}>
-                    <ProfileBar url={`${process.env.REACT_APP_CHAT_SERVICE}/media/${data.imageGroup}`} nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
-                    <CardContent >
-                        <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='74vh' ref={chatContainerRef} onScroll={loadMoreMessages} >
-                            <Button onClick={loadMoreMessages}>
-                                Load
-                            </Button>
-                            {
-                                chat.map((e, index) => {
-                                    return (
-                                        <IndividualMessage loadSelectedRespondedMessage={loadSelectedRespondedMessage} item={e} index={index} key={index} name={name} setMessageReplayed={setMessageReplayed} />
-                                    )
-                                })
-                            }
-                            <Box >
+                <Card component={Paper} sx={{ bgcolor: color, borderRadius: `10px`, height: '90vh', display: 'flex' }}>
+                    <Box width={'100%'}>
+                        <ProfileBar url={`${process.env.REACT_APP_CHAT_SERVICE}/media/${data.imageGroup}`} nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
+                        <CardContent >
+                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='74vh' ref={chatContainerRef} onScroll={loadMoreMessages} >
+                                <Button onClick={loadMoreMessages}>
+                                    Load
+                                </Button>
                                 {
-                                    messageReplayed.mensagem && (
-                                        <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
-                                            <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
-                                                <Typography >
-                                                    {messageReplayed?.mensagem}
-                                                </Typography>
-                                            </Alert>
-                                        </Slide>
+                                    loading && (
+                                        <Box textAlign={'center'}>
+                                            <CircularProgress />
+                                        </Box>
+
+                                    )
+                                }
+                                {
+                                    chat.map((e, index) => {
+                                        return (
+                                            <IndividualMessage loadSelectedRespondedMessage={loadSelectedRespondedMessage} item={e} index={index} key={index} name={name} setMessageReplayed={setMessageReplayed} />
+                                        )
+                                    })
+                                }
+                                <Box >
+                                    {
+                                        messageReplayed.mensagem && (
+                                            <Slide direction="up" in={!!messageReplayed.mensagem} mountOnEnter unmountOnExit>
+                                                <Alert severity="info" onClose={() => { setMessageReplayed({}) }}>
+                                                    <Typography >
+                                                        {messageReplayed?.mensagem}
+                                                    </Typography>
+                                                </Alert>
+                                            </Slide>
+                                        )
+                                    }
+                                </Box>
+                                {
+                                    showEmojiPicker && (
+                                        <Box position={'fixed'} bottom={'12%'}>
+                                            <EmojiPicker onEmojiClick={(e) => setMensagem((prev) => prev + e.emoji)} />
+                                        </Box>
                                     )
                                 }
                             </Box>
-                        </Box>
-
-                        <Box >
-                            <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
-                                    <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
-                                </div>
-                                <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
-                                    onPaste={handlePaste} placeholder='Mensagem' style={{ flex: 5, margin: '0 3px', whiteSpace: 'pre-wrap' }} />
-                                <Button disabled={loading} size='small' type='submit' variant='contained'><SendIcon /></Button>
-                            </form>
-                        </Box>
-                    </CardContent>
-                </Box>
-                {
-                    showOps && data.tipo === 'Grupo' && (
-                        <GroupData chatId={chatId} />
-                    )
-                }
-            </Card>
-        </Box >
+                            <Box >
+                                <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
+                                        <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
+                                    </div>
+                                    <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+                                        <EmojiEmotionsIcon />
+                                    </IconButton>
+                                    <TextField value={mensagem} type='text' size='small' onChange={e => { setMensagem(e.target.value) }}
+                                        onPaste={handlePaste} placeholder='Mensagem' style={{ flex: 5, margin: '0 3px', whiteSpace: 'pre-wrap' }} />
+                                    <Button size='small' type='submit' variant='contained'><SendIcon /></Button>
+                                </form>
+                            </Box>
+                        </CardContent>
+                    </Box>
+                    {
+                        showOps && data.tipo === 'Grupo' && (
+                            <GroupData chatId={chatId} />
+                        )
+                    }
+                </Card>
+            </Box >
             <ModalPasteImage open={showPastedImage} setOpen={setShowPastedImage} image={pastedImage} setImage={setPastedImage} chatId={chatId} receptor={nome} />
         </>
     )

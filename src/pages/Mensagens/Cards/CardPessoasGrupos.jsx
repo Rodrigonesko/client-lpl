@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Avatar, Badge, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { grey } from '@mui/material/colors';
 import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
 
     const { name } = useContext(AuthContext)
+    const [selectedIndex, setSelectedIndex] = useState(null)
 
     const color = grey[300];
     const color1 = grey[400];
@@ -24,7 +25,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
         }
     }
 
-    const setChat = async (chat) => {
+    const setChat = async (chat, index) => {
         if (chat.tipo === 'Grupo') {
             setReceptor(chat.nome)
         } else {
@@ -33,11 +34,12 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
         await seeInternalMessage({ chatId: chat._id })
         setChatId(chat._id)
         setFlushHook(true)
+        setSelectedIndex(index)
     };
 
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook])
+    // useEffect(() => {
+    //     setFlushHook(false)
+    // }, [flushHook])
 
     const MAX_MESSAGE_LENGTH = 15;
 
@@ -56,19 +58,19 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                     <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh' }}>
-                    {!!name && chats.map((item) => {
-                        const index = item.ultimasVisualizacoes.findIndex(e => e.nome === name)
+                    {!!name && chats.map((item, index) => {
+                        const findindex = item.ultimasVisualizacoes.findIndex(e => e.nome === name)
                         let showBadge = true
-                        if (item.ultimasVisualizacoes[index].quantidade === 0) {
+                        if (item.ultimasVisualizacoes[findindex].quantidade === 0) {
                             showBadge = false
                         }
                         const truncatedMessage = truncateMessage(item.ultimaMensagem, MAX_MESSAGE_LENGTH)
                         return (
-                            <ListItemButton key={item._id} sx={{ p: 0 }} onClick={() => setChat(item)}>
+                            <ListItemButton selected={selectedIndex === index} key={item._id} sx={{ p: 0 }} onClick={() => setChat(item, index)}>
                                 <ListItem alignItems="flex-start"
                                     secondaryAction={
                                         showBadge && (
-                                            <Badge color="info" badgeContent={item.ultimasVisualizacoes[index].quantidade} />
+                                            <Badge color="info" badgeContent={item.ultimasVisualizacoes[findindex].quantidade} />
                                         )
                                     }
                                 >
