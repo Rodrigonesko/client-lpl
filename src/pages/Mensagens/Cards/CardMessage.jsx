@@ -197,7 +197,7 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook }) => {
                                     )
                                 }
                             </Box>
-                            <Box >
+                            <Box>
                                 <form action="" onSubmit={handleSend} method="post" style={{ display: 'flex', alignItems: 'center' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
                                         <ModalUploadArquivos chatId={chatId} receptor={nome} setFlushHook={setFlushHook} />
