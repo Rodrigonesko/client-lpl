@@ -147,6 +147,7 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
                     <TextField
                         type="text"
                         label="Nome do grupo"
+                        margin="normal"
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                     />
