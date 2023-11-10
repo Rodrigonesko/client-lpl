@@ -14,6 +14,9 @@ import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
 import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
+/* Modulo de Admissional e Demissional*/
+
+import AdmissionalDemissional from "./pages/AdmissionalDemissional/AdmissonalDemissional";
 
 /* Modulo de Chamados*/
 
@@ -137,6 +140,9 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                <Route exact path="/AdmissionalDemissional" element={<ProtectedRoute>
+                    <AdmissionalDemissional />
+                </ProtectedRoute>} />
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
