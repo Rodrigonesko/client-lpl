@@ -7,12 +7,9 @@ import { getChatDataByIdOrName, updateGroupImage } from "../../../_services/chat
 
 const ModalAlterarImagemGrupo = ({ chatId, groupImage, setFlushHook }) => {
 
-    console.log(groupImage);
-
     const [open, setOpen] = useState(false)
     const [selectedImage, setSelectedImage] = useState(null);
     const [image, setImage] = useState(null)
-    const [data, setData] = useState({})
     const fileInputRef = useRef(null);
 
     const handleOpen = () => {
@@ -23,7 +20,6 @@ const ModalAlterarImagemGrupo = ({ chatId, groupImage, setFlushHook }) => {
 
     const fetchData = async () => {
         const result = await getChatDataByIdOrName({ chatId, nome: null })
-        setData(result)
         setSelectedImage(`${process.env.REACT_APP_CHAT_SERVICE}/media/${result.imageGroup}`)
     }
 
@@ -36,7 +32,6 @@ const ModalAlterarImagemGrupo = ({ chatId, groupImage, setFlushHook }) => {
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            // Faça algo com o arquivo, como enviar para o servidor ou exibir na tela
             setSelectedImage(URL.createObjectURL(file));
             setImage(file)
         }
