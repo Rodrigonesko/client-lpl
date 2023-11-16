@@ -173,8 +173,8 @@ const MyProductionTele = ({ mes = moment().format('YYYY-MM') }) => {
                                         height="400px"
                                         data={[
                                             ['Categoria', 'Quantidade'],
-                                            ['Não houve divergencia', data.houveDivergencia],
-                                            ['Houve divergencia', data.naoHouveDivergencia],
+                                            ['Não houve divergencia', data.naoHouveDivergencia],
+                                            ['Houve divergencia', data.houveDivergencia],
                                         ]}
                                         options={{
                                             title: 'Houve divergência'

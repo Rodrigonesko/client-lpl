@@ -28,7 +28,7 @@ const GroupData = ({ chatId }) => {
     }, [chatId, flushHook])
 
     return (
-        <Box width={'40%'}>
+        <Box width={'40%'} >
             <Typography p={2} component="div" bgcolor={grey[500]} color='white'>
                 Dados do grupo
             </Typography>
@@ -47,7 +47,15 @@ const GroupData = ({ chatId }) => {
             </Box>
             <Divider sx={{ mt: '10px', mb: '10px' }} />
             <Box>
-                <List dense sx={{ width: '100%', display: 'block', overflowY: 'auto', maxHeight: '400px' }}>
+                {
+                    !!data.administradores && data.administradores.includes(name) && (
+                        <ModalAdicionarPessoaNoGrupo membros={data.participantes} chatId={chatId} setFlushHook={setFlushHook} />
+                    )
+                }
+                <ModalSairDoGrupo chatId={chatId} setFlushHook={setFlushHook} />
+            </Box>
+            <Box>
+                <List dense sx={{ width: '100%', display: 'block', overflowY: 'auto', maxHeight: '40vh' }}>
                     {!!data.participantes && data.participantes.map((participante) => {
                         return (
                             <ListItem
@@ -73,14 +81,7 @@ const GroupData = ({ chatId }) => {
                     })}
                 </List>
             </Box>
-            <Box>
-                {
-                    !!data.administradores && data.administradores.includes(name) && (
-                        <ModalAdicionarPessoaNoGrupo membros={data.participantes} chatId={chatId} setFlushHook={setFlushHook} />
-                    )
-                }
-                <ModalSairDoGrupo chatId={chatId} setFlushHook={setFlushHook} />
-            </Box>
+
         </Box>
     )
 }

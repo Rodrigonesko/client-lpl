@@ -40,7 +40,6 @@ const Sidebar = () => {
 
     const fetchData = async () => {
         const result = await getChats()
-        console.log(result.naoLidas);
         setQuantidadeMensagens(result.naoLidas)
     }
 

@@ -156,7 +156,7 @@ const FaturamentoEntrevistas = () => {
         reusltRn.data.result.forEach(e => {
             xls += "<tr>"
             xls += `<td>${e._id}</td>`
-            xls += `<td>${e.responsavel}</td>`
+            xls += `<td>${e.retorno === 'Sem sucesso de contato' ? 'Sem Sucesso de Contato!' : e.responsavel}</td>`
             xls += `<td>Rn</td>`
             xls += `<td>${e.proposta}</td>`
             xls += `<td>${e.beneficiario}</td>`

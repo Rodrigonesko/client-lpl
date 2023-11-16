@@ -70,8 +70,8 @@ const ProducaoTeleIndividualMensal = ({
 
     const data = [
         ['Categoria', 'Quantidade'],
-        ['Não houve divergencia', houveDivergencia],
-        ['Houve divergencia', naoHouveDivergencia],
+        ['Não houve divergencia', naoHouveDivergencia],
+        ['Houve divergencia', houveDivergencia],
     ];
 
     const dataAgendados = [

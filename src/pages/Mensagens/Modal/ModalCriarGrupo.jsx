@@ -1,4 +1,4 @@
-import { Alert, Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Snackbar, TextField, Tooltip } from "@mui/material"
+import { Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField, Tooltip } from "@mui/material"
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useContext, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
@@ -49,13 +49,15 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
     }, [flushHook])
 
     const createGroup = async () => {
-        const newGroup = await createGroupChat({
+        await createGroupChat({
             nome: groupName,
             participantes: selectedUsers
         })
 
         setFlushHook(true)
-        console.log("Novo Grupo:", newGroup);
+        setGroupName('')
+        setSelectedUsers([])
+        setChecked([0])
         handleClose();
     }
 

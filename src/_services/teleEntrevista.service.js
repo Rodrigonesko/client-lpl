@@ -1,6 +1,6 @@
 import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const URL_API = process.env.REACT_APP_API_TELE_KEY //'http://localhost:3002' 
+const URL_API = 'http://localhost:3002'  //process.env.REACT_APP_API_TELE_KEY 
 const token = getCookie('token')
 
 
@@ -203,4 +203,8 @@ export const getProducaoAgendamento = async (analista, mes) => {
 export const uploadImplantacao = async (data) => {
     return await new ApiCall('/entrevistas/uploadImplantacao', process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
 
+}
+
+export const getDataByCpfTitular = async (cpfTitular) => {
+    return await new ApiCall(`/cpfTitular/${cpfTitular}`, URL_API).get()
 }

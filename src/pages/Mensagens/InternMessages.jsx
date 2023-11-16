@@ -18,7 +18,6 @@ const InternMessages = () => {
 
     const fetchData = async () => {
         const result = await getChats()
-        console.log(result);
         setChats(result.chats)
         document.title = `LPL (${result.naoLidas})`
     }

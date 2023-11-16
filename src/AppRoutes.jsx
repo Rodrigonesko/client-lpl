@@ -102,6 +102,7 @@ import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
 import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
 import ProtChat from "./pages/PrototipoTele/ProtChat/ProtChat";
+import ProtDetalhesTele from "./pages/PrototipoTele/ProtDetalhesTele/ProtDetalhesTele";
 
 /* Urgencia Emergencia */
 
@@ -284,10 +285,13 @@ const AppRoutes = () => {
                 <Route exact path="/dicionario" element={<ProtectedRoute>
                     <Dicionario />
                 </ProtectedRoute>} />
+
                 <Route exact path="/entrevistas/ProtChat" element={<ProtectedRoute>
                     <ProtChat />
                 </ProtectedRoute>} />
-
+                <Route exact path="/entrevistas/ProtDetalhesTele/:cpfTitular" element={<ProtectedRoute>
+                    <ProtDetalhesTele />
+                </ProtectedRoute>} />
                 {/* RSD */}
 
                 <Route exact path="/rsd/PainelProcesso" element={<ProtectedRoute>

@@ -62,7 +62,7 @@ const ModalAlterarImagemGrupo = ({ chatId, groupImage, setFlushHook }) => {
     return (
         <>
             <IconButton onClick={handleOpen}>
-                <Avatar sx={{ width: '200px', height: '200px' }} src={groupImage} />
+                <Avatar sx={{ width: '150px', height: '150px' }} src={groupImage} />
             </IconButton>
 
             <Dialog
