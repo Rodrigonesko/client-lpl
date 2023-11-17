@@ -1,54 +1,109 @@
-import { Autocomplete, Box, Button, Container, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Autocomplete, Box, Button, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import { getUsers } from "../../_services/user.service"
-import moment from "moment"
-import axios from "axios"
+import { getInfoEmail, getUsers } from "../../_services/user.service"
+import TabelaAdmissional from "./Tabela/TabelaAdmissional"
+import TabelaDemissional from "./Tabela/TabelaDemissional"
 
 const AdmissionalDemissional = () => {
 
+    const acoesAdmissional = [
+        'Agendamento Exame Admissional', 'Planilha Contratação', 'Assinar Documentos', 'Foto 3x4', 'Conta Salario', 'VR', 'VC', 'VT/MetroCard',
+        'Email', 'Assinatura Email', 'Linux', 'Notebook', 'Ramal', 'Portal LPL', 'Ponto', 'Crachá', 'Digital Sala', 'TransUnion', 'SisAmil',
+        'Treinamento Obrigatórios'
+    ]
+
+    const responsavelAdmissao = [
+        'Samantha', 'Samantha', 'Samantha', 'Samantha',
+        'Fabio', 'Fabio', 'Fabio', 'Fabio',
+        'Gerson', 'Gerson', 'Gerson', 'Gerson', 'Gerson',
+        'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha'
+    ]
+
+    const responsavelDemissao = [
+        'Samantha', 'Samantha', 'Samantha',
+        'Fabio', 'Fabio', 'Fabio', 'Fabio',
+        'Gerson', 'Gerson', 'Gerson', 'Gerson',
+        'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha'
+    ]
+
+    const fornecedorAdmissao = [
+        'Clinimerces', 'Eniltec', 'Eniltec', '', 'CEF', 'Site Caixa', 'Site VR', 'URBS', 'Localweb', '', '', '', '', '', 'Voux', 'Perfect Design',
+        'You Do', '', '', 'Clinimerces'
+    ]
+
+    const fornecedorDemissao = [
+        'Clinimerces', 'Eniltec', 'Eniltec', 'CEF', 'Site Caixa', 'Site VR', 'URBS', 'Localweb', '', '', '', '', 'Voux', 'You Do', 'You Do', '', '']
+
+    const acoesDemissional = [
+        'Entrega Carta Pedido de Demissão ou Assinatura de Rescisão do Contrato', 'Agendamento Exame Demissional', 'Envio docs assinados para baixa',
+        'Assinar Documentos/Acerto', 'Conta Salario', 'VR', 'VC', 'VT/MetroCard', 'Cancelar Email', 'Cancelar Linux', 'Notebook', 'Ramal',
+        'Cancelar Portal LPL', 'Fechar e cancelar Ponto', 'Cancelar acesso Crachá', 'Cancelar Digital Sala', 'Cancelar TransUnion',
+        'Cancelar SisAmil'
+    ]
+
     const [flushHook, setFlushHook] = useState(false)
-    const [solicitacoes, setSolicitacoes] = useState([])
     const [email, setEmail] = useState('')
+    const [tipoExame, setTipoExame] = useState('admissional')
+    const [dados, setDados] = useState({
+        nome: '',
+        numero: '',
+        email: '',
+        tipoExame: '',
+        responsavel: '',
+        status: ''
+    })
     const [emails, setEmails] = useState([])
+    const [numero, setNumero] = useState([])
+    const [nomeCompleto, setNomeCompleto] = useState([])
 
-    const handleChangeSelect = async (id, status) => {
-        const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/vacation/status`, {
-            statusRh: status, _id: id
-        })
-        setFlushHook(true)
-        console.log(resultado)
-        console.log(id, status)
-    }
-
-    const fetchData = async () => {
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/findAll`, { withCredentials: true })
-        setSolicitacoes(resultado.data.encontrarTodos)
-    }
-
-    useEffect(() => {
-        fetchData()
-        setFlushHook(false)
-    }, [flushHook, setFlushHook])
+    const [busca, setBusca] = useState(false)
 
     useEffect(() => {
         const buscarEmails = async () => {
             try {
                 const result = await getUsers()
-
                 setEmails(result)
-
             } catch (error) {
                 console.log(error);
             }
         }
-
         buscarEmails()
     }, [])
 
-    const handleFilter = async () => {
-        console.log('Funcionou')
+    const buscarEmail = async (e) => {
+        try {
+
+            setBusca(false)
+
+            const result = await getInfoEmail(email)
+
+            if (result.user !== null) {
+
+                console.log(result);
+
+                setNomeCompleto(result.user.name)
+                
+
+            } else {
+                setBusca(false)
+
+            }
+
+        } catch (error) {
+            console.log(error);
+            setBusca(false)
+        }
     }
+
+    const handleChange = (e) => {
+        setTipoExame(e.target.value)
+        setDados(prevState => ({ ...prevState, tipoExame: e.target.value }));
+    }
+
+    useEffect(() => {
+        setFlushHook(false)
+    }, [flushHook, setFlushHook])
 
     return (
         <>
@@ -58,7 +113,13 @@ const AdmissionalDemissional = () => {
                     <h2>Admissional / Demissional</h2>
                 </div>
                 <br />
-                <Box display='flex' m={2}>
+                <Box m={2} >
+                    <TextField type='text' name='nome' size='small' label='Nome' value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} sx={{ width: '400px' }} />
+                </Box>
+                <Box m={2} >
+                    <TextField type='text' name='numero' size='small' label='Número' value={numero} onChange={e => setNumero(e.target.value)} sx={{ marginLeft: '3px', width: '400px' }} />
+                </Box>
+                <Box display='flex' m={2} >
                     <Autocomplete
                         size="small"
                         disablePortal
@@ -67,54 +128,32 @@ const AdmissionalDemissional = () => {
                         onChange={(event, item) => {
                             setEmail(item.email);
                         }}
+
                         getOptionLabel={emails => emails.email}
-                        sx={{ width: 350 }}
+                        sx={{ width: 400, marginLeft: '3px' }}
                         renderInput={(params) => <TextField {...params} label='Email' />}
                     />
-                    <Button type='submit' onClick={handleFilter} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
-                </Box>
-                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow className="table-header">
-                                    <TableCell>RESPONSAVEL</TableCell>
-                                    <TableCell>AÇÃO</TableCell>
-                                    <TableCell>FORNECEDOR</TableCell>
-                                    <TableCell>OBSERVAÇÃO</TableCell>
-                                    <TableCell>STATUS</TableCell>
-                                    <TableCell>REALIZADO</TableCell>
-                                    <TableCell>DATA</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {solicitacoes.map((item) => {
-                                    return (
-                                        <TableRow key={item._id}>
-                                            <TableCell>{moment(item.dataInicio).format('MM/YYYY')}</TableCell>
-                                            <TableCell>{moment(item.vencimento).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{item.colaborador}</TableCell>
-                                            <TableCell>{moment(item.dataInicio).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{item.dataRetorno}</TableCell>
-                                            <TableCell>{item.totalDias}</TableCell>
-                                            <TableCell>
-                                                <FormControl sx={{ minWidth: 135 }}>
-                                                    <InputLabel id='StatusRh'>Status do RH</InputLabel>
-                                                    <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)} >
-                                                        <MenuItem value={'solicitado'}>SOLICITADO</MenuItem>
-                                                        <MenuItem value={'assinado'}>ASSINADO</MenuItem>
-                                                        <MenuItem value={'retirada'}>RETIRADA</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </TableCell>
-                                        </TableRow>)
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Button type='submit' onClick={buscarEmail} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
                 </Box>
 
-            </Container>
+                <FormControl>
+                    <FormLabel>Qual o tipo de exame:</FormLabel>
+                    <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="admissional" name="radio-buttons-group">
+                        <FormControlLabel value="admissional" control={<Radio onClick={handleChange} />} label="Admissional" />
+                        <FormControlLabel value="demissional" control={<Radio onClick={handleChange} />} label="Demissional" />
+                        <Divider />
+                        <br />
+                        {
+                            tipoExame === 'admissional' ? (
+                                <TabelaAdmissional acoesAdmissional={acoesAdmissional} responsavel={responsavelAdmissao} fornecedor={fornecedorAdmissao} />
+                            ) : (
+                                <TabelaDemissional acoesDemissional={acoesDemissional} responsavel={responsavelDemissao} fornecedor={fornecedorDemissao} />
+                            )
+                        }
+                    </RadioGroup>
+                </FormControl>
+
+            </Container >
         </>
     )
 }
