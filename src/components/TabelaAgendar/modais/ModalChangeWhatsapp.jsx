@@ -67,7 +67,6 @@ const ModalChangeWhatsapp = (props) => {
         setOpenSnack(true)
     }
 
-    console.log(props.whatsappsAnteriores);
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;

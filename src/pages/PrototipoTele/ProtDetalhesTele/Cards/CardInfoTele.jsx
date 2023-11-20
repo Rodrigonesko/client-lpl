@@ -4,8 +4,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import EditIcon from '@mui/icons-material/Edit';
 import { useState } from "react";
+import PopoverAlterarTelefone from "../Components/PopoverAlterarTelefone";
 
 const EnhancedTableHead = () => {
     return (
@@ -61,7 +61,7 @@ const EnhancedTableHead = () => {
     )
 }
 
-const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected }) => {
+const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects }) => {
 
     const [openRow, setOpenRow] = useState(false)
 
@@ -69,6 +69,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
         setNomeWhatsapp(item.nome)
         setResponsavelAtendimentoWhatsapp(item.responsavelConversa)
         setWhatsappSelected(item.whatsapp)
+        setConversaSelecionada(item)
         setShowConversas(true)
     }
 
@@ -76,7 +77,18 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
         <>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell align="center" padding={'none'}>
-                    <Checkbox></Checkbox>
+                    <Checkbox
+
+                        checked={selectedObjects.some(obj => obj._id === item._id)}
+                        onChange={(e) => {
+                            if (e.target.checked) {
+                                setSelectedObjects(prev => [...prev, item])
+                            } else {
+                                setSelectedObjects(prev => prev.filter(obj => item._id !== obj._id))
+                            }
+                            console.log(selectedObjects);
+                        }}
+                    />
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     Status
@@ -106,11 +118,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {item.telefone}
-                    <Tooltip title='Editar Telefone'>
-                        <IconButton sx={{ ml: '10px' }}>
-                            <EditIcon />
-                        </IconButton>
-                    </Tooltip>
+                    <PopoverAlterarTelefone _id={item._id} telefone={item.telefone} />
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {item.enfermeiro}
@@ -119,10 +127,10 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                     {item.janelaHorario}
                 </TableCell>
                 <TableCell align="center" padding="none">
-                    {moment(item.dataEntrevista).format('DD/MM/YYYY')}
+                    {item.dataEntrevista && moment(item.dataEntrevista).format('DD/MM/YYYY')}
                 </TableCell>
                 <TableCell align="center" padding="none">
-                    {moment(item.dataEntrevista).format('HH:mm:ss')}
+                    {item.dataEntrevista && moment(item.dataEntrevista).format('HH:mm:ss')}
                 </TableCell>
                 <TableCell align="center" padding="none">
                     0800
@@ -229,26 +237,29 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
     )
 }
 
-const CardInfoTele = ({ data, setShowConversas, showConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected }) => {
+const CardInfoTele = ({ data, setShowConversas, showConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects }) => {
 
     return (
         <Box component={Paper} p={1} m={2} sx={{ overflow: 'hidden' }}>
             <TableContainer sx={{ marginBottom: '20px' }}>
                 <Table
                     size={'small'}
-
                 >
                     <EnhancedTableHead />
                     <TableBody>
                         {data.map(item => {
                             return (
                                 <Row
+                                    key={item._id}
                                     item={item}
                                     setShowConversas={setShowConversas}
                                     showConversas={showConversas}
                                     setNomeWhatsapp={setNomeWhatsapp}
                                     setResponsavelAtendimentoWhatsapp={setResponsavelAtendimentoWhatsapp}
                                     setWhatsappSelected={setWhatsappSelected}
+                                    setConversaSelecionada={setConversaSelecionada}
+                                    selectedObjects={selectedObjects}
+                                    setSelectedObjects={setSelectedObjects}
                                 />
                             )
                         })}

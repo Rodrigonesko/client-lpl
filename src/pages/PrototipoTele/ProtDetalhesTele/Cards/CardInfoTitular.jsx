@@ -1,9 +1,9 @@
-import { Box, Button, Paper, Tooltip, Typography } from "@mui/material"
-import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import { Box, Paper, Typography } from "@mui/material"
 import { deepPurple } from "@mui/material/colors";
 import moment from "moment";
+import ModalAlterarVigencia from "../Modais/ModalAlterarVigencia";
 
-const CardInfoTitular = ({ data }) => {
+const CardInfoTitular = ({ data, setFlushHook }) => {
     return (
         <Box borderRadius={'10px'} color={'white'} bgcolor={deepPurple[500]} maxWidth={'50%'} width={'50%'} m={2} p={2} component={Paper}>
             <Typography variant="h5" fontWeight={'bold'}>
@@ -16,9 +16,7 @@ const CardInfoTitular = ({ data }) => {
             </Typography>
             <Typography mt={1} variant="body2">
                 Recebimento: {moment(data.dataRecebimento).format('DD/MM/YYYY')} | Vigência: {moment(data.vigencia).format('DD/MM/YYYY')}
-                <Tooltip title='ALterar Vigência'>
-                    <Button variant="contained" size="small" color="secondary" sx={{ ml: '20px' }}><ManageHistoryIcon /></Button>
-                </Tooltip>
+                <ModalAlterarVigencia data={data} setFlushHook={setFlushHook} />
             </Typography>
         </Box>
     )

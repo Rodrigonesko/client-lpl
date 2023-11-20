@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, LinearProgress } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { grey } from "@mui/material/colors"
 import CardInfoTitular from "./Cards/CardInfoTitular";
@@ -19,12 +19,17 @@ const ProtDetalhesTele = () => {
     const [titular, setTitular] = useState({})
     const [horarios, setHorarios] = useState({})
     const [analistasDisponiveis, setAnalistasDisponiveis] = useState({})
+    const [conversaSelecionada, setConversaSelecionada] = useState({})
     const [showConversas, setShowConversas] = useState(false)
     const [nomeWhatsapp, setNomeWhatsapp] = useState('')
     const [responsavelWhatsapp, setResponsavelWhatsapp] = useState('')
     const [whatsappSelected, setWhatsappSelected] = useState('')
+    const [selectedObjects, setSelectedObjects] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
 
     const fetchData = async () => {
+        setLoading(true)
         const result = await getDataByCpfTitular(cpfTitular)
         result.forEach(item => {
             if (item.cpf === item.cpfTitular) {
@@ -32,6 +37,7 @@ const ProtDetalhesTele = () => {
             }
         })
         setData(result)
+        setLoading(false)
     }
 
     const buscarHorariosDisp = async () => {
@@ -45,21 +51,27 @@ const ProtDetalhesTele = () => {
     }
 
     useEffect(() => {
+        setFlushHook(false)
         fetchData()
         buscarHorariosDisp()
-    }, [cpfTitular])
+    }, [cpfTitular, conversaSelecionada, flushHook])
 
     return (
         <>
             <Sidebar />
             <Box height={'100%'} width={'100%'} bgcolor={grey[200]} borderRadius={'5px'} mt={1} mr={1} display={'flex'}>
                 <Box width={showConversas ? '60%' : '100%'}>
+                    {
+                        loading && (
+                            <LinearProgress sx={{ width: '100%' }} />
+                        )
+                    }
                     <Box display={'flex'} width={'100%'}>
                         {
                             data.length !== 0 && (
                                 <>
-                                    <CardInfoTitular data={titular} />
-                                    <CardComentariosTele />
+                                    <CardInfoTitular data={titular} setFlushHook={setFlushHook} />
+                                    <CardComentariosTele cpf={cpfTitular} />
                                 </>
 
                             )
@@ -73,8 +85,12 @@ const ProtDetalhesTele = () => {
                                     setNomeWhatsapp={setNomeWhatsapp}
                                     setResponsavelAtendimentoWhatsapp={setResponsavelWhatsapp}
                                     setWhatsappSelected={setWhatsappSelected}
-                                    data={data} />
-                                <CardAcoesTele />
+                                    setConversaSelecionada={setConversaSelecionada}
+                                    data={data}
+                                    selectedObjects={selectedObjects}
+                                    setSelectedObjects={setSelectedObjects}
+                                />
+                                <CardAcoesTele objects={selectedObjects} />
                             </>
                         )
                     }
@@ -87,16 +103,23 @@ const ProtDetalhesTele = () => {
                         )
                     }
                 </Box>
-                <CardConversaTele
-                    open={showConversas}
-                    setOpen={setShowConversas}
-                    nome={nomeWhatsapp}
-                    setNome={setNomeWhatsapp}
-                    responsavelAtendimento={responsavelWhatsapp}
-                    setResponsavelAtendimento={setResponsavelWhatsapp}
-                    selectedWhatsapp={whatsappSelected}
-                    setSelectedWhatsapp={setWhatsappSelected}
-                />
+                {
+                    showConversas && (
+                        <CardConversaTele
+                            open={showConversas}
+                            setOpen={setShowConversas}
+                            nome={nomeWhatsapp}
+                            setNome={setNomeWhatsapp}
+                            responsavelAtendimento={responsavelWhatsapp}
+                            setResponsavelAtendimento={setResponsavelWhatsapp}
+                            selectedWhatsapp={whatsappSelected}
+                            setSelectedWhatsapp={setWhatsappSelected}
+                            data={conversaSelecionada}
+                            setData={setConversaSelecionada}
+                        />
+                    )
+                }
+
             </Box>
         </>
     )

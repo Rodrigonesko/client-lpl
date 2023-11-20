@@ -59,9 +59,6 @@ Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário
         if (modelo === 'Modelo 2') {
             msg = modelo2()
         }
-
-        console.log(msg);
-
         hookMsg(msg)
 
     }

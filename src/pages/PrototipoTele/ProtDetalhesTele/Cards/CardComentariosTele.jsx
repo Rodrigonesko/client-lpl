@@ -1,11 +1,16 @@
 import { useState } from "react";
 import AddCommentIcon from '@mui/icons-material/AddComment';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Button, Divider, IconButton, Paper, Popover, TextField, Tooltip, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
+import { useEffect } from "react";
+import { createComentario, deleteComentario, getComentariosByCpf } from "../../../../_services/teleEntrevistaExterna.service";
 
-const CardComentariosTele = () => {
+const CardComentariosTele = ({ cpf }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [comentarios, setComentarios] = useState([])
+    const [comentario, setComentario] = useState('')
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -14,6 +19,40 @@ const CardComentariosTele = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleSendComentario = async (e) => {
+        e.preventDefault()
+
+        if (comentario === '') {
+            return
+        }
+
+        await createComentario({
+            cpfTitular: cpf,
+            text: comentario
+        })
+
+        setComentario('')
+        handleClose()
+        fetchData()
+    }
+
+    const fetchData = async () => {
+        const result = await getComentariosByCpf(cpf)
+
+        setComentarios(result)
+    }
+
+    const handleDeleteComentario = async (id) => {
+        await deleteComentario(id)
+        fetchData()
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -43,34 +82,32 @@ const CardComentariosTele = () => {
                 >
                     <form action="">
                         <Box p={2} display={'flex'} width={'30vw'}>
-                            <TextField size="small" fullWidth />
-                            <Button type="submit">Enviar</Button>
+                            <TextField value={comentario} onChange={e => setComentario(e.target.value)} size="small" fullWidth />
+                            <Button onClick={handleSendComentario} type="submit">Enviar</Button>
                         </Box>
                     </form>
 
                 </Popover>
             </Typography>
-            <Box>
-                <Typography variant="subtitle2">
-                    Usuario Usuario 11/10/2023 13:42
-                </Typography>
-                Proposta com x beneficiarios e nenhum atendeu
-                <Divider />
-            </Box>
-            <Box>
-                <Typography variant="subtitle2">
-                    Usuario Usuario 11/10/2023 13:42
-                </Typography>
-                Proposta com x beneficiarios e nenhum atendeu
-                <Divider />
-            </Box>
-            <Box>
-                <Typography variant="subtitle2">
-                    Usuario Usuario 11/10/2023 13:42
-                </Typography>
-                Proposta com x beneficiarios e nenhum atendeu
-                <Divider />
-            </Box>
+            {
+                comentarios.map(comentario => {
+                    return (
+                        <Box key={comentario._id}>
+                            <Typography variant="subtitle2">
+                                {comentario.user} {comentario.data}
+                            </Typography>
+                            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                <Typography>
+                                    {comentario.text}
+                                </Typography>
+                                <IconButton size="small" onClick={() => handleDeleteComentario(comentario._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Box>
+                        </Box>
+                    )
+                })
+            }
         </Box>
     )
 }
