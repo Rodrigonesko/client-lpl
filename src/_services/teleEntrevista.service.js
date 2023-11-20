@@ -1,6 +1,6 @@
 import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const URL_API = process.env.REACT_APP_API_TELE_KEY 
+const URL_API = process.env.REACT_APP_API_TELE_KEY
 const token = getCookie('token')
 
 

@@ -5,12 +5,15 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import AuthContext from "../../context/AuthContext";
-import { Badge, IconButton } from "@mui/material";
+import { Alert, Badge, IconButton, Snackbar, TextField, Typography } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
 import { useEffect } from "react";
 import { io } from "socket.io-client";
-import { getChats } from "../../_services/chat.service";
+import { getChats, sendMessageInterno } from "../../_services/chat.service";
 import ChatIcon from '@mui/icons-material/Chat';
+import { useLocation } from 'react-router-dom';
+
+const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
 
 const socket = io(process.env.REACT_APP_CHAT_SERVICE);
@@ -19,10 +22,16 @@ const socket = io(process.env.REACT_APP_CHAT_SERVICE);
 const Sidebar = () => {
 
     const navigate = useNavigate()
+    const location = useLocation();
+
 
     const [isOpen, setIsOpen] = useState(true)
     const [quantidadeMensagens, setQuantidadeMensagens] = useState(0)
     const { name, acessos } = useContext(AuthContext)
+    const [openToast, setOpenToast] = useState(false)
+    const [message, setMessage] = useState('')
+    const [newMessage, setNewMessage] = useState('')
+    const [chatId, setChatId] = useState('')
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -39,19 +48,53 @@ const Sidebar = () => {
     }
 
     const fetchData = async () => {
+
         const result = await getChats()
         setQuantidadeMensagens(result.naoLidas)
     }
 
     useEffect(() => {
         fetchData()
-        socket.on('receivedMessage', async () => {
-            fetchData()
+
+        socket.on('receivedMessage', async (data) => {
+            if (location.pathname === '/internMessages') {
+                console.log(location.pathname + ' passou daqui');
+                return
+            }
+            console.log('passou daqui 2');
+            if (data.participantes.includes(name) && data.remetente !== name) {
+                setMessage(`${data.remetente}: ${data.mensagem}`)
+                setChatId(data.chatId)
+                if (location.pathname !== '/internMessages') {
+                    setOpenToast(true);
+
+                    // Adicionando som de notificação
+                    const audio = new Audio(notificationSound);
+                    audio.play();
+                }
+            }
+
         })
         socket.on('seeMessage', async () => {
             fetchData()
         })
     }, [])
+
+    const sendMessage = async (e) => {
+        e.preventDefault()
+
+        if (newMessage === '') {
+            return
+        }
+
+        await sendMessageInterno({
+            mensagem: newMessage,
+            chatId: chatId
+        })
+        fetchData()
+        setNewMessage('')
+        setOpenToast(false)
+    }
 
     return (
         <>
@@ -191,10 +234,25 @@ const Sidebar = () => {
                 )
             }
 
+            <Snackbar anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }} open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
+                <Alert variant="filled" onClose={() => setOpenToast(false)} severity="info" sx={{ width: '100%' }}>
+                    <Typography>
+                        {message}
+                    </Typography>
+                    <form action="" onSubmit={sendMessage} style={{ width: '100%' }} >
+                        <TextField inputProps={{
+                            style: {
+                                color: 'white'
+                            }
+                        }}
+                            fullWidth value={newMessage} onChange={e => setNewMessage(e.target.value)} size="small" />
+                    </form>
+                </Alert>
+            </Snackbar>
         </>
-
-
-
     )
 }
 
