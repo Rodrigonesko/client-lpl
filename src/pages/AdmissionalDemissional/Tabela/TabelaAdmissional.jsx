@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select } from '@mui/material';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
 import { green, red, yellow } from '@mui/material/colors';
 
 
@@ -40,7 +39,7 @@ const TabelaAdmissional = ({ acoesAdmissional, responsavel, fornecedor }) => {
                         let color
                         if (index.status === 'pendente') {
                             color = red[300]
-                        } if (index.status === 'em Andamento') {
+                        } if (index.status === 'emAndamento') {
                             color = yellow[300]
                         } if (index.status === 'concluido') {
                             color = green[300]
@@ -56,7 +55,7 @@ const TabelaAdmissional = ({ acoesAdmissional, responsavel, fornecedor }) => {
                                         <InputLabel id='Status'>Status</InputLabel>
                                         <Select defaultValue={index.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeSelect(index._id, elemento.target.value)} >
                                             <MenuItem value={'pendente'}>PENDENTE</MenuItem>
-                                            <MenuItem value={'em Andamento'}>EM ANDAMENTO</MenuItem>
+                                            <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
                                             <MenuItem value={'concluido'}>CONCLUIDO</MenuItem>
                                         </Select>
                                     </FormControl>

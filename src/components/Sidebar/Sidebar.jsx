@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaUserCircle, FaExchangeAlt, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp } from "react-icons/fa";
+import { FaUserCircle, FaExchangeAlt, FaArchive, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaUserSecret, FaTools } from "react-icons/fa";
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { io } from "socket.io-client";
 import { getChats } from "../../_services/chat.service";
 import ChatIcon from '@mui/icons-material/Chat';
-
 
 const socket = io(process.env.REACT_APP_CHAT_SERVICE);
 
@@ -68,17 +67,24 @@ const Sidebar = () => {
                         {
                             acessos?.administrador ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >
-                                    <MenuItem><Link to='/admin/criar'>Criar Usuário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/resetPassword'>Restaurar Senha</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/liberarModulos' >Liberação Módulos</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/controlePoliticas'>Controle de Políticas</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/treinamentos'>Treinamentos</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/bancoHoras'>Banco De Horas</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/ferias'>Controle Férias</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/inventario'>Inventário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/solicitarChamados'>Abrir Chamados</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/atendimentoChamados'>Chamados TI</Link></MenuItem>
+                                    <SubMenu icon={<FaArchive />} title='RH'>
+                                        <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
+                                    </SubMenu>
+                                    <SubMenu title='Infra' icon={<FaTools />}>
+                                        <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/infra/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
+
+                                    </SubMenu>
+                                    <SubMenu title='Produção' icon={<FaUserSecret />}>
+                                        <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/controlePoliticas'>Controle de Políticas</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
+                                    </SubMenu>
                                 </SubMenu>
                             ) : null
                         }

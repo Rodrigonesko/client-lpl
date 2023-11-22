@@ -1,23 +1,23 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select } from '@mui/material';
-import axios from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { green, red, yellow } from '@mui/material/colors';
+import { updateStatus } from '../../../_services/admissaoDemissao.service';
 
 
 const TabelaDemissional = ({ acoesDemissional, responsavel, fornecedor }) => {
 
     const [flushHook, setFlushHook] = useState(false)
+    const [status, setStatus] = useState('')
 
+    const handleChangeSelect = async () => {
 
-    const handleChangeSelect = async (id, status) => {
-        const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/admissaoDemissao/status`, {
-            status: status, _id: id
-        })
+        const resultado = await updateStatus(status)
+
+        setStatus(resultado)
         setFlushHook(true)
         console.log(resultado)
-        console.log(id, status)
     }
 
     useEffect(() => {
