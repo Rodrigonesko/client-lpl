@@ -91,7 +91,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                     />
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
-                    Status
+                    {item.newStatus}
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {
@@ -133,7 +133,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                     {item.dataEntrevista && moment(item.dataEntrevista).format('HH:mm:ss')}
                 </TableCell>
                 <TableCell align="center" padding="none">
-                    0800
+                    {item.canal}
                 </TableCell>
                 <TableCell align="center" padding="none">
                     <IconButton

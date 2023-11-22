@@ -45,6 +45,7 @@ const ProtDetalhesTele = () => {
             const result = await getHorariosDisponiveis()
             setHorarios(result.obj)
             setAnalistasDisponiveis(result.analistasDisponiveis)
+            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -90,7 +91,11 @@ const ProtDetalhesTele = () => {
                                     selectedObjects={selectedObjects}
                                     setSelectedObjects={setSelectedObjects}
                                 />
-                                <CardAcoesTele objects={selectedObjects} />
+                                <CardAcoesTele
+                                    objects={selectedObjects}
+                                    setFlushHook={setFlushHook}
+
+                                />
                             </>
                         )
                     }

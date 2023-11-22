@@ -208,3 +208,11 @@ export const uploadImplantacao = async (data) => {
 export const getDataByCpfTitular = async (cpfTitular) => {
     return await new ApiCall(`/cpfTitular/${cpfTitular}`, URL_API).get()
 }
+
+export const getDiasDisponiveisAnalista = async (analista) => {
+    return await new ApiCall(`/entrevistas/buscarDiasDisponiveis/${analista}`).get()
+}
+
+export const getHorariosDisponiveisPorDiaEAnalista = async (dia, analista) => {
+    return await new ApiCall(`/entrevistas/buscarHorariosDisponiveis/${analista}/${dia}`).get()
+}
