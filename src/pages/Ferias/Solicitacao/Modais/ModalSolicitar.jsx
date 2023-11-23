@@ -104,8 +104,6 @@ const ModalSolicitar = ({ setFlushHook }) => {
             setSeveritySnack('error')
             setOpenSnack(true)
         }
-
-
     }
 
     const handleClickOpen = async () => {

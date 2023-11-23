@@ -14,6 +14,9 @@ import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
 import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
+/* Modulo de Admissional e Demissional*/
+
+import AdmissionalDemissional from "./pages/AdmissionalDemissional/AdmissonalDemissional";
 
 /* Modulo de Chamados*/
 
@@ -138,6 +141,9 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                <Route exact path="/admissionalDemissional" element={<ProtectedRoute>
+                    <AdmissionalDemissional />
+                </ProtectedRoute>} />
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
@@ -171,37 +177,37 @@ const AppRoutes = () => {
 
                 {/* Admin Routes*/}
 
-                <Route exact path="/admin/criar" element={<ProtectedRoute>
+                <Route exact path="/admin/producao/criar" element={<ProtectedRoute>
                     <Create />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/liberarModulos" element={<ProtectedRoute>
+                <Route exact path="/admin/infra/liberarModulos" element={<ProtectedRoute>
                     <LiberacaoModulos />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/resetPassword" element={<ProtectedRoute>
+                <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
                     <ResetPassword />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/relatorioProdutividade" element={<ProtectedRoute>
+                <Route exact path="/admin/producao/relatorioProdutividade" element={<ProtectedRoute>
                     <RelatorioProdutividade />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/controlePoliticas" element={<ProtectedRoute>
+                <Route exact path="/admin/producao/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/treinamentos" element={<ProtectedRoute>
+                <Route exact path="/admin/rh/treinamentos" element={<ProtectedRoute>
                     <Treinamentos />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/bancoHoras" element={<ProtectedRoute>
+                <Route exact path="/admin/rh/bancoHoras" element={<ProtectedRoute>
                     <BancoHoras />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/ferias" element={<ProtectedRoute>
+                <Route exact path="/admin/rh/ferias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/inventario" element={<ProtectedRoute>
+                <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/atendimentoChamados" element={<ProtectedRoute>
+                <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
                     <AtendimentoChamados />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/solicitarChamados" element={<ProtectedRoute>
+                <Route exact path="/admin/producao/solicitarChamados" element={<ProtectedRoute>
                     <SolicitarChamados />
                 </ProtectedRoute>} />
 
