@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
+import Toast from "../../../../components/Toast/Toast";
+import { mandarParaAtendimentoHumanizado } from "../../../../_services/teleEntrevista.service";
 
-const ModalEnviarHumanizado = ({ objects }) => {
+const ModalEnviarHumanizado = ({ objects, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -12,6 +17,27 @@ const ModalEnviarHumanizado = ({ objects }) => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleEnviarHumanizado = async () => {
+        try {
+
+            for (const item of objects) {
+                await mandarParaAtendimentoHumanizado({ id: item._id })
+            }
+
+            setSeverity('success')
+            setMessage('Enviado com sucesso')
+            setOpenToast(true)
+            handleClose()
+            setFlushHook(true)
+
+        } catch (error) {
+            setSeverity('error')
+            setMessage('Algo deu errado')
+            setOpenToast(true)
+            console.log(error);
+        }
     }
 
     return (
@@ -40,10 +66,15 @@ const ModalEnviarHumanizado = ({ objects }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    <Button color="secondary" onClick={handleClose}>Mandar</Button>
+                    <Button color="secondary" onClick={handleEnviarHumanizado}>Mandar</Button>
                 </DialogActions>
             </Dialog>
-
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
         </>
     )
 }

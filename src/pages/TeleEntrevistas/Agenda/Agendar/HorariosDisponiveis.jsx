@@ -7,7 +7,7 @@ const HorariosDisponiveis = ({ horarios, analistasDisponiveis }) => {
     const somarHorarios = (data) => {
         const arrays = analistasDisponiveis[data];
         if (!arrays) {
-          return 0
+            return 0
         }
         const total = arrays.reduce((acc, array) => acc + array.horarios.length, 0)
         return total
@@ -19,14 +19,14 @@ const HorariosDisponiveis = ({ horarios, analistasDisponiveis }) => {
                 Horarios Disponíveis
             </Typography>
             {
-                Object.keys(horarios).map(data => {
+                Object.keys(horarios).map((data, index) => {
                     return (
-                        <Box component={Paper} p={3} mb={1} elevation={3}>
+                        <Box key={index} component={Paper} p={3} mb={1} elevation={3}>
                             <Typography fontSize={'22px'}><strong>{data}</strong> - {horarios[data].length} horários (total: {somarHorarios(data)})</Typography>
                             {
                                 horarios[data].map(horario => {
                                     return (
-                                        <span>{horario} - </span>
+                                        <span key={horario}>{horario} - </span>
                                     )
                                 })
                             }

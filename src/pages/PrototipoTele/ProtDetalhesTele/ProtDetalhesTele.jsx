@@ -10,6 +10,7 @@ import { getDataByCpfTitular, getHorariosDisponiveis } from "../../../_services/
 import CardAcoesTele from "./Cards/CardAcoesTele";
 import HorariosDisponiveis from "../../TeleEntrevistas/Agenda/Agendar/HorariosDisponiveis";
 import CardConversaTele from "./Cards/CardConversaTele";
+import { f } from "html2pdf.js";
 
 const ProtDetalhesTele = () => {
 
@@ -45,7 +46,6 @@ const ProtDetalhesTele = () => {
             const result = await getHorariosDisponiveis()
             setHorarios(result.obj)
             setAnalistasDisponiveis(result.analistasDisponiveis)
-            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -56,6 +56,12 @@ const ProtDetalhesTele = () => {
         fetchData()
         buscarHorariosDisp()
     }, [cpfTitular, conversaSelecionada, flushHook])
+
+    useEffect(() => {
+        //Quanto o flushHook for chamado ira atualizar os dados dos selectedObjects com o status do newStatus
+        setSelectedObjects([])
+
+    }, [flushHook])
 
     return (
         <>
@@ -90,6 +96,7 @@ const ProtDetalhesTele = () => {
                                     data={data}
                                     selectedObjects={selectedObjects}
                                     setSelectedObjects={setSelectedObjects}
+                                    setFlushHook={setFlushHook}
                                 />
                                 <CardAcoesTele
                                     objects={selectedObjects}
@@ -124,7 +131,6 @@ const ProtDetalhesTele = () => {
                         />
                     )
                 }
-
             </Box>
         </>
     )

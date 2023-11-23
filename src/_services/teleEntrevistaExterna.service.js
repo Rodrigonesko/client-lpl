@@ -30,3 +30,7 @@ export const getComentariosByCpf = async (cpf) => {
 export const deleteComentario = async (id) => {
     return await new ApiCall(`/comentario/${id}`, URL_API).delete()
 }
+
+export const alterarVigenciaPorCpfTitular = async ({ cpfTitular, vigencia }) => {
+    return await new ApiCall('/alterarVigenciaPorCpfTitular', URL_API).put({ cpfTitular, vigencia })
+}

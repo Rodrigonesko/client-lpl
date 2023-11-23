@@ -1,10 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup, Tooltip, Typography } from "@mui/material"
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useState } from "react";
+import Toast from "../../../../components/Toast/Toast";
+import { cancelarEntrevista } from "../../../../_services/teleEntrevista.service";
 
-const ModalCancelar = ({ objects }) => {
+const ModalCancelar = ({ objects, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
+    const [motivo, setMotivo] = useState('Sem Sucesso de Contato!')
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -12,6 +18,25 @@ const ModalCancelar = ({ objects }) => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleCancelar = async () => {
+        try {
+            for (const item of objects) {
+                if(item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
+                await cancelarEntrevista({ id: item._id, motivoCancelamento: motivo })
+            }
+            setSeverity('success')
+            setMessage('Cancelado com sucesso')
+            setOpenToast(true)
+            handleClose()
+            setFlushHook(true)
+        } catch (error) {
+            setSeverity('error')
+            setMessage('Algo deu errado')
+            setOpenToast(true)
+            console.log(error);
+        }
     }
 
     return (
@@ -28,8 +53,8 @@ const ModalCancelar = ({ objects }) => {
                     <DialogContentText>
                         Deseja realmente Cancelar as propostas abaixo?
                     </DialogContentText>
-                    <DialogContentText>
-                        {objects.map((obj, index) => {
+                    <DialogContentText sx={{ m: 1 }}>
+                        {objects.filter(obj => obj.newStatus !== 'Cancelado' && obj.newStatus !== 'Concluído').map((obj, index) => {
                             return (
                                 <DialogContentText key={index}>
                                     {obj.nome}
@@ -37,13 +62,32 @@ const ModalCancelar = ({ objects }) => {
                             )
                         })}
                     </DialogContentText>
+                    <FormControl component="fieldset" >
+                        <Typography variant="body2">Motivo Cancelamento</Typography>
+                        <RadioGroup
+                            aria-label="canal"
+                            defaultValue="Sem Sucesso de Contato!"
+                            name="radio-buttons-group"
+                            row
+                            value={motivo}
+                            onChange={(e) => setMotivo(e.target.value)}
+                        >
+                            <FormControlLabel value="Sem Sucesso de Contato!" control={<Radio />} label="Sem Sucesso de Contato!" />
+                            <FormControlLabel value="Beneficiario Solicitou o Cancelamento" control={<Radio />} label="Beneficiario Solicitou o Cancelamento" />
+                        </RadioGroup>
+                    </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancelar</Button>
-                    <Button color="error" onClick={handleClose}>Excluir</Button>
+                    <Button onClick={handleClose}>Fechar</Button>
+                    <Button color="error" onClick={handleCancelar}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
         </>
     )
 }

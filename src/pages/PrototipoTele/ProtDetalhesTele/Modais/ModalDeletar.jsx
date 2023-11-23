@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material"
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState } from "react";
+import Toast from "../../../../components/Toast/Toast";
 
-const ModalDeletar = ({ objects }) => {
+const ModalDeletar = ({ objects, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -12,6 +17,23 @@ const ModalDeletar = ({ objects }) => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleDeletar = async () => {
+        try {
+
+            setSeverity('success')
+            setMessage('Deletado com sucesso')
+            setOpenToast(true)
+            handleClose()
+            setFlushHook(true)
+
+        } catch (error) {
+            setSeverity('error')
+            setMessage('Algo deu errado')
+            setOpenToast(true)
+            console.log(error);
+        }
     }
 
     return (
@@ -40,9 +62,15 @@ const ModalDeletar = ({ objects }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    <Button color="error" onClick={handleClose}>Excluir</Button>
+                    <Button color="error" onClick={handleDeletar}>Excluir</Button>
                 </DialogActions>
             </Dialog>
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
 
         </>
     )

@@ -2,6 +2,7 @@ import { Box, Button, IconButton, Popover, TextField, Tooltip } from "@mui/mater
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from "react";
 import Toast from "../../../../components/Toast/Toast";
+import { alterarTelefoneEntrevista } from "../../../../_services/teleEntrevista.service";
 
 const PopoverAlterarTelefone = ({ _id, telefone, setFlushHook }) => {
 
@@ -20,10 +21,20 @@ const PopoverAlterarTelefone = ({ _id, telefone, setFlushHook }) => {
     };
 
     const handleChangeNumero = async () => {
-        handleClose()
-        setToastOpen(true)
-        setSeverity('success')
-        setMessage('Telefone alterado com sucesso!')
+        try {
+            await alterarTelefoneEntrevista({ id: _id, telefone: newTelefone })
+            handleClose()
+            setToastOpen(true)
+            setSeverity('success')
+            setMessage('Telefone alterado com sucesso!')
+            setFlushHook(true)
+        } catch (error) {
+            setToastOpen(true)
+            setSeverity('error')
+            setMessage('Algo deu errado')
+            console.log(error);
+        }
+
 
     }
 

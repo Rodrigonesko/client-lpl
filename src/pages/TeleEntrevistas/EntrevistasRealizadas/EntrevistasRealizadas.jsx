@@ -21,8 +21,6 @@ const style = {
 
 const EntrevistasRealizadas = () => {
 
-    //const formRef = useRef(null)
-
     const [entrevistas, setEntrevistas] = useState([])
     const [pesquisa, setPesquisa] = useState('');
     const [loading, setLoading] = useState(false)
@@ -30,9 +28,6 @@ const EntrevistasRealizadas = () => {
     const [id, setId] = useState('')
     const [nome, setNome] = useState('')
     const [proposta, setpProposta] = useState('')
-    const [dataInicio, setDataInicio] = useState('')
-    const [dataFim, setDataFim] = useState('')
-    // const [pdf, setPdf] = useState(false)
 
     const alterarSexo = async (id, sexo) => {
         try {

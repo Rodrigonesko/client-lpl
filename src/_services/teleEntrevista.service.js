@@ -216,3 +216,7 @@ export const getDiasDisponiveisAnalista = async (analista) => {
 export const getHorariosDisponiveisPorDiaEAnalista = async (dia, analista) => {
     return await new ApiCall(`/entrevistas/buscarHorariosDisponiveis/${analista}/${dia}`).get()
 }
+
+export const retrocederEntrevista = async (id) => {
+    return await new ApiCall('/entrevistas/voltar').put(id)
+}

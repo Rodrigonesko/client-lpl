@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material"
 import UndoIcon from '@mui/icons-material/Undo';
 import { useState } from "react";
+import Toast from "../../../../components/Toast/Toast";
+import { retrocederEntrevista } from "../../../../_services/teleEntrevista.service";
 
-const ModalRetroceder = ({ objects }) => {
+const ModalRetroceder = ({ objects, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -12,6 +17,28 @@ const ModalRetroceder = ({ objects }) => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleRetroceder = async () => {
+        try {
+
+            for (const item of objects) {
+                const result = await retrocederEntrevista({ id: item._id })
+                console.log(result);
+            }
+
+            setSeverity('success')
+            setMessage('Retrocedido com sucesso')
+            setOpenToast(true)
+            handleClose()
+            setFlushHook(true)
+
+        } catch (error) {
+            setSeverity('error')
+            setMessage('Algo deu errado')
+            setOpenToast(true)
+            console.log(error);
+        }
     }
 
     return (
@@ -29,7 +56,7 @@ const ModalRetroceder = ({ objects }) => {
                         Deseja realmente retroceder as propostas abaixo?
                     </DialogContentText>
                     <DialogContentText>
-                        {objects.map((obj, index) => {
+                        {objects.filter((obj) => obj.newStatus === 'Cancelado').map((obj, index) => {
                             return (
                                 <DialogContentText key={index}>
                                     {obj.nome}
@@ -40,10 +67,15 @@ const ModalRetroceder = ({ objects }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    <Button color="secondary" onClick={handleClose}>Retroceder</Button>
+                    <Button color="secondary" onClick={handleRetroceder}>Retroceder</Button>
                 </DialogActions>
             </Dialog>
-
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
         </>
     )
 }

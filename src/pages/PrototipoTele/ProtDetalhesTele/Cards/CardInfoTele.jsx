@@ -6,6 +6,11 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { useState } from "react";
 import PopoverAlterarTelefone from "../Components/PopoverAlterarTelefone";
+import { deepPurple } from "@mui/material/colors";
+import SelectAlterarSexo from "../Components/SelectAlterarSexo";
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import gerarPdf from "../../../TeleEntrevistas/Pdf/Pdf";
 
 const EnhancedTableHead = () => {
     return (
@@ -61,7 +66,7 @@ const EnhancedTableHead = () => {
     )
 }
 
-const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects }) => {
+const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects, setFlushHook }) => {
 
     const [openRow, setOpenRow] = useState(false)
 
@@ -77,21 +82,31 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
         <>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell align="center" padding={'none'}>
-                    <Checkbox
+                    {
+                        item.newStatus !== 'Concluído' && (
+                            <Checkbox
+                                checked={selectedObjects.some(obj => obj._id === item._id)}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setSelectedObjects(prev => [...prev, item])
+                                    } else {
+                                        setSelectedObjects(prev => prev.filter(obj => item._id !== obj._id))
+                                    }
+                                    console.log(selectedObjects);
+                                }}
+                            />
+                        )
+                    }
 
-                        checked={selectedObjects.some(obj => obj._id === item._id)}
-                        onChange={(e) => {
-                            if (e.target.checked) {
-                                setSelectedObjects(prev => [...prev, item])
-                            } else {
-                                setSelectedObjects(prev => prev.filter(obj => item._id !== obj._id))
-                            }
-                            console.log(selectedObjects);
-                        }}
-                    />
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
-                    {item.newStatus}
+                    {item.atendimentoHumanizado ? (
+                        <Tooltip title='Em atendimento humanizado'>
+                            <Chip label={item.newStatus} sx={{ bgcolor: deepPurple[100] }} />
+                        </Tooltip>
+                    ) : (
+                        <Chip label={item.newStatus} />
+                    )}
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {
@@ -111,14 +126,15 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                     {item.idade}
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
-                    {item.sexo}
+                    <SelectAlterarSexo setFlushHook={setFlushHook} _id={item._id} sexo={item.sexo} />
+                    {/* {item.sexo} */}
                 </TableCell>
                 <TableCell align="center" padding="none">
                     {item.riscoBeneficiario}
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {item.telefone}
-                    <PopoverAlterarTelefone _id={item._id} telefone={item.telefone} />
+                    <PopoverAlterarTelefone setFlushHook={setFlushHook} _id={item._id} telefone={item.telefone} />
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {item.enfermeiro}
@@ -145,11 +161,34 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                     </IconButton>
                 </TableCell>
                 <TableCell align="center" padding="none">
-                    <Tooltip title='Formulario'>
-                        <IconButton color="primary">
-                            <ListAltIcon />
-                        </IconButton>
-                    </Tooltip>
+                    {
+                        item.newStatus !== 'Cancelado' && (
+                            <Box display={'flex'}>
+                                <Tooltip title={item.newStatus !== 'Concluído' ? 'Formulario' : 'Editar Formulario'}>
+                                    <IconButton href={item.newStatus !== 'Concluído' ? `/entrevistas/formulario/${item._id}` : `/entrevistas/propostas/editar/${item._id}`} target="_blank" color="primary">
+                                        {
+                                            item.newStatus !== 'Concluído' ? (
+                                                <ListAltIcon />
+                                            ) : (
+                                                <AppRegistrationIcon />
+                                            )
+                                        }
+                                    </IconButton>
+                                </Tooltip>
+                                {
+                                    item.newStatus === 'Concluído' && (
+                                        <Tooltip title='PDF'>
+                                            <IconButton onClick={() => { gerarPdf(item.proposta, item.nome) }} color="error">
+                                                <PictureAsPdfIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )
+                                }
+                            </Box>
+
+                        )
+                    }
+
                 </TableCell>
                 <TableCell align="center" padding="none">
                     <Tooltip title='Conversas'>
@@ -237,7 +276,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
     )
 }
 
-const CardInfoTele = ({ data, setShowConversas, showConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects }) => {
+const CardInfoTele = ({ data, setShowConversas, showConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects, setFlushHook }) => {
 
     return (
         <Box component={Paper} p={1} m={2} sx={{ overflow: 'hidden' }}>
@@ -260,6 +299,7 @@ const CardInfoTele = ({ data, setShowConversas, showConversas, setNomeWhatsapp, 
                                     setConversaSelecionada={setConversaSelecionada}
                                     selectedObjects={selectedObjects}
                                     setSelectedObjects={setSelectedObjects}
+                                    setFlushHook={setFlushHook}
                                 />
                             )
                         })}

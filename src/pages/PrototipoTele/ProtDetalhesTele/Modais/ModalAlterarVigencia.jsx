@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Tooltip } from "@mui/material"
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import { useState } from "react";
+import { alterarVigenciaPorCpfTitular } from "../../../../_services/teleEntrevistaExterna.service";
 
 const ModalAlterarVigencia = ({ data, setFlushHook }) => {
 
@@ -15,8 +16,9 @@ const ModalAlterarVigencia = ({ data, setFlushHook }) => {
         setOpen(false);
     }
 
-    const handleAlterarVigencia = () => {
+    const handleAlterarVigencia = async () => {
         console.log(vigencia)
+        const result = await alterarVigenciaPorCpfTitular({ cpfTitular: data.cpf, vigencia: vigencia })
         setFlushHook(true)
         setOpen(false);
     }
