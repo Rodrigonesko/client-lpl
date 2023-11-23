@@ -1,4 +1,4 @@
-import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material"
+import { Avatar, Box, Fade, IconButton, Tooltip, Typography } from "@mui/material"
 import moment from "moment"
 import React, { useState } from "react";
 import ReplyIcon from '@mui/icons-material/Reply';
@@ -34,18 +34,35 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
             style={{ textAlign: item.remetente === name ? 'right' : 'left' }}
             id={`responseMessage_${item._id}`}
         >
+            {
+                item.remetente !== name && (
+                    <Avatar
+                        sx={{
+                            width: '30px',
+                            height: '30px',
+                            float: item.remetente === name ? 'right' : 'left',
+                            margin: '0 10px 0 0',
+                        }}
+                        alt={item.remetente}
+                        src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.fotoPerfil}`}
+                    />
+                )
+            }
+
             <Typography color="GrayText">{item.remetente}</Typography>
+
             <div
                 onMouseEnter={() => setShowReplyButton(true)}
                 onMouseLeave={() => setShowReplyButton(false)}
             >
+
                 <Typography
                     style={{
                         display: 'inline-block',
                         backgroundColor: item.remetente === name ? '#42a5f5' : 'gray',
                         color: 'white',
                         padding: '10px',
-                        borderRadius: '10px',
+                        borderRadius: item.remetente === name ? '10px 0 10px 10px' : '0 10px 10px 10px',
                         maxWidth: '80%',
                     }}
                 >
@@ -66,6 +83,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                                 </Typography>
                             </div>
                         )}
+
                         <Typography component="div" style={{ whiteSpace: 'pre-line' }}>
                             {item.tipo === 'Arquivo' ? (
                                 isImageByExtension(`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.caminhoArquivo}`) ? (
@@ -76,26 +94,18 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                                     </a>
                                 )
                             ) : (
-                                item.mensagem.split('\n').map((line, lineIndex) => (
-                                    <Box sx={{wordWrap: 'break-word'}} key={lineIndex}>
-                                        {lineIndex > 0 && <br />}
-                                        {line}
-                                    </Box>
-                                ))
+                                item.mensagem
                             )}
                         </Typography>
                     </div>
-
                 </Typography>
-                {showReplyButton && (
-                    <Fade in={showReplyButton}>
-                        <Tooltip title="Responder">
-                            <IconButton sx={{ m: 1 }} size="small" onClick={() => handleMessageReplayed(item.mensagem, item._id)}>
-                                <ReplyIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Fade>
-                )}
+                <Fade in={showReplyButton} unmountOnExit mountOnEnter>
+                    <Tooltip title="Responder">
+                        <IconButton sx={{ m: 1 }} size="small" onClick={() => handleMessageReplayed(item.mensagem, item._id)}>
+                            <ReplyIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Fade>
             </div>
             <Typography color="GrayText">{moment(item.horario).format('HH:mm DD/MM/YYYY')}</Typography>
         </Box>
