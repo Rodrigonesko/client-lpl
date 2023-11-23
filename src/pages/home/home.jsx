@@ -86,106 +86,107 @@ const Home = () => {
 
     return (
         <>
-            <SideBar />
-            <Container sx={{ textAlign: 'center' }} component={Paper}>
-                <Box>
-                    <Typography variant="h4">
-                        Bem vindo {name}!
-                    </Typography>
-                    {
-                        firstAccess && (
-                            <div className="first-access">
-                                <div className="title">
-                                    <h2>É sua primeira vez acessando o sistema</h2>
-                                    <h3>Por favor defina uma senha por gentileza</h3>
-                                </div>
-                                <div className="inputs-container">
-                                    <Box m={2}>
-                                        <TextField type="password" name="password" id="password" label='Senha' onChange={e => setPassword(e.target.value)} />
-                                    </Box>
-                                    <Box m={2}>
-                                        <TextField type="password" name="confirmPassword" id="confirmPassword" label='Confirmar senha' onChange={e => setConfirmPassword(e.target.value)} />
-                                    </Box>
-                                </div>
-                                <div className="btn-container">
-                                    <Button variant='contained' onClick={handlerUpdatePassword}>Enviar</Button>
-                                </div>
-                            </div>
-                        )
-                    }
-
-                    <Snackbar
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                        open={error}
-                        onClose={() => setError(false)}
-                    >
-                        <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
-                            {message}
-                        </Alert>
-                    </Snackbar>
-                </Box>
-                <Box>
-                    {treinamentos.map(treinamento => {
-                        return (
-                            <Alert severity="warning" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
-                                <Typography>
-                                    Treinamento: {treinamento.nome}
-                                </Typography>
-                                <Typography>
-                                    Plataforma: {treinamento.plataforma}
-                                </Typography>
-                                <Typography>
-                                    Link: {treinamento.link}
-                                </Typography>
-                                <Typography>
-                                    Prazo: {moment(treinamento.prazo).format('DD/MM/YYYY')}
-                                </Typography>
-                                <Typography>
-                                    {
-                                        treinamento.observacoes && (
-                                            <>
-
-                                                Observacões: {treinamento.observacoes}
-                                            </>
-                                        )
-                                    }
-                                </Typography>
-                                Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br
-                            </Alert>
-                        )
-                    })}
-                </Box>
-                <Box display={'flex'} mt={2}>
+            <SideBar>
+                <Container sx={{ textAlign: 'center' }} component={Paper}>
                     <Box>
+                        <Typography variant="h4">
+                            Bem vindo {name}!
+                        </Typography>
                         {
-                            dataUser !== null && dataUser.accessLevel !== 'false' && (
-                                <ModalAdicionarMural setFlushHook={setFlushHook} />
+                            firstAccess && (
+                                <div className="first-access">
+                                    <div className="title">
+                                        <h2>É sua primeira vez acessando o sistema</h2>
+                                        <h3>Por favor defina uma senha por gentileza</h3>
+                                    </div>
+                                    <div className="inputs-container">
+                                        <Box m={2}>
+                                            <TextField type="password" name="password" id="password" label='Senha' onChange={e => setPassword(e.target.value)} />
+                                        </Box>
+                                        <Box m={2}>
+                                            <TextField type="password" name="confirmPassword" id="confirmPassword" label='Confirmar senha' onChange={e => setConfirmPassword(e.target.value)} />
+                                        </Box>
+                                    </div>
+                                    <div className="btn-container">
+                                        <Button variant='contained' onClick={handlerUpdatePassword}>Enviar</Button>
+                                    </div>
+                                </div>
                             )
                         }
-                        {
-                            dataUser !== null && (
-                                <CardBancoHoras data={dataUser} />
-                            )
-                        }
-                        {
-                            dataUser !== null && (
-                                <CardAniversariantes data={userData} flushHook={flushHook} />
-                            )}
+
+                        <Snackbar
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            open={error}
+                            onClose={() => setError(false)}
+                        >
+                            <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
+                                {message}
+                            </Alert>
+                        </Snackbar>
                     </Box>
-                    <Box width={'100%'} ml={2}>
-                        {
-                            dataUser !== null && (
-                                <CardMural dataUser={dataUser} flushHook={flushHook} setFlushHook={setFlushHook} />
+                    <Box>
+                        {treinamentos.map(treinamento => {
+                            return (
+                                <Alert severity="warning" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
+                                    <Typography>
+                                        Treinamento: {treinamento.nome}
+                                    </Typography>
+                                    <Typography>
+                                        Plataforma: {treinamento.plataforma}
+                                    </Typography>
+                                    <Typography>
+                                        Link: {treinamento.link}
+                                    </Typography>
+                                    <Typography>
+                                        Prazo: {moment(treinamento.prazo).format('DD/MM/YYYY')}
+                                    </Typography>
+                                    <Typography>
+                                        {
+                                            treinamento.observacoes && (
+                                                <>
+
+                                                    Observacões: {treinamento.observacoes}
+                                                </>
+                                            )
+                                        }
+                                    </Typography>
+                                    Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br
+                                </Alert>
                             )
-                        }
+                        })}
                     </Box>
-                </Box>
-                {
-                    idPolitica ? (
-                        <ModalAceitarPoliticas setOpen={setOpen} open={open} idPolitica={idPolitica} setFlushHook={setFlushHook} />
-                    ) : null
-                }
-            </Container>
+                    <Box display={'flex'} mt={2}>
+                        <Box>
+                            {
+                                dataUser !== null && dataUser.accessLevel !== 'false' && (
+                                    <ModalAdicionarMural setFlushHook={setFlushHook} />
+                                )
+                            }
+                            {
+                                dataUser !== null && (
+                                    <CardBancoHoras data={dataUser} />
+                                )
+                            }
+                            {
+                                dataUser !== null && (
+                                    <CardAniversariantes data={userData} flushHook={flushHook} />
+                                )}
+                        </Box>
+                        <Box width={'100%'} ml={2}>
+                            {
+                                dataUser !== null && (
+                                    <CardMural dataUser={dataUser} flushHook={flushHook} setFlushHook={setFlushHook} />
+                                )
+                            }
+                        </Box>
+                    </Box>
+                    {
+                        idPolitica ? (
+                            <ModalAceitarPoliticas setOpen={setOpen} open={open} idPolitica={idPolitica} setFlushHook={setFlushHook} />
+                        ) : null
+                    }
+                </Container>
+            </SideBar>
         </>
 
     )
