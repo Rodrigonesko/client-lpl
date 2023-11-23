@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
-import { FaUserCircle, FaExchangeAlt, FaArchive, FaHome, FaClipboard, FaCalendar, FaAngleDoubleLeft, FaAngleDoubleRight, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaUserSecret, FaTools, FaHamburger } from "react-icons/fa";
+import { FaUserCircle, FaExchangeAlt, FaArchive, FaHome, FaClipboard, FaCalendar, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaUserSecret, FaTools } from "react-icons/fa";
 import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
-import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader } from 'react-pro-sidebar'
+import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import AuthContext from "../../context/AuthContext";
-import { Alert, Badge, Box, Collapse, IconButton, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
+import { Alert, Badge, Box, IconButton, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
 import { useEffect } from "react";
 import { io } from "socket.io-client";
