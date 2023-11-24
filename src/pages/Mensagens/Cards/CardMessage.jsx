@@ -12,6 +12,7 @@ import ModalPasteImage from "../Modal/ModalPasteImage";
 import EmojiPicker from 'emoji-picker-react';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import moment from "moment";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook, chatIdSocket, setChatIdSocket }) => {
 
@@ -207,11 +208,25 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook, chatIdSocket, setC
                     <Box width={'100%'}>
                         <ProfileBar url={`${process.env.REACT_APP_CHAT_SERVICE}/media/${data.imageGroup}`} nome={nome} showOps={showOps} setShowOps={setShowOps} tipo={data.tipo} />
                         <CardContent >
-                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} bgcolor='lightgray' height='74vh' ref={chatContainerRef} onScroll={loadMoreMessages} >
-                                {/* <Button onClick={loadMoreMessages}>
-                                    Load
-                                </Button> */}
-                    
+                            <Box display='block' style={{
+                                overflowY: 'auto',
+                                scrollbarWidth: 'thin', // para Firefox
+                                scrollbarColor: '#888 #444', // para Firefox
+                                '&::-webkit-scrollbar': { // para Chrome, Safari e Edge
+                                    width: '12px',
+                                },
+                                '&::-webkit-scrollbar-track': { // para Chrome, Safari e Edge
+                                    background: '#444',
+                                },
+                                '&::-webkit-scrollbar-thumb': { // para Chrome, Safari e Edge
+                                    backgroundColor: '#888',
+                                    borderRadius: '20px',
+                                },
+                                '&::-webkit-scrollbar-thumb:hover': { // para Chrome, Safari e Edge
+                                    backgroundColor: '#555',
+                                },
+                            }} component={Paper} bgcolor='lightgray' height='74vh' ref={chatContainerRef} onScroll={loadMoreMessages} >
+
                                 {
                                     !loading ? Object.entries(messagesByDate).map(([date, messages], index) => {
                                         return (

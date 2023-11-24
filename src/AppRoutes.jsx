@@ -104,7 +104,7 @@ import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
 import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
-import ProtChat from "./pages/PrototipoTele/ProtChat/ProtChat";
+import ProtFiltros from "./pages/PrototipoTele/ProtFiltros/ProtFiltros";
 import ProtDetalhesTele from "./pages/PrototipoTele/ProtDetalhesTele/ProtDetalhesTele";
 
 /* Urgencia Emergencia */
@@ -292,8 +292,9 @@ const AppRoutes = () => {
                     <Dicionario />
                 </ProtectedRoute>} />
 
-                <Route exact path="/entrevistas/ProtChat" element={<ProtectedRoute>
-                    <ProtChat />
+                {/* Prototipo Tele */}
+                <Route exact path="/prototipoTele/filtros" element={<ProtectedRoute>
+                    <ProtFiltros />
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/ProtDetalhesTele/:cpfTitular" element={<ProtectedRoute>
                     <ProtDetalhesTele />
