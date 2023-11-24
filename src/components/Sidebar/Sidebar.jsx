@@ -117,23 +117,23 @@ const Sidebar = () => {
                         {
                             acessos?.administrador ? (
                                 <SubMenu title="Admin" icon={<FaShieldAlt />} >
+                                    <SubMenu title='Produção' icon={<FaUserSecret />}>
+                                        <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
+                                    </SubMenu>
                                     <SubMenu icon={<FaArchive />} title='RH'>
-                                        <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                         <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                         <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
                                     </SubMenu>
                                     <SubMenu title='Infra' icon={<FaTools />}>
                                         <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
                                         <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
-                                        <MenuItem><Link to='/admin/infra/liberarModulos' >Liberação Módulos</Link></MenuItem>
                                         <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
 
-                                    </SubMenu>
-                                    <SubMenu title='Produção' icon={<FaUserSecret />}>
-                                        <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
-                                        <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
-                                        <MenuItem><Link to='/admin/producao/controlePoliticas'>Controle de Políticas</Link></MenuItem>
-                                        <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
                                     </SubMenu>
                                 </SubMenu>
                             ) : null

@@ -12,7 +12,7 @@ import ModalPasteImage from "../Modal/ModalPasteImage";
 import EmojiPicker from 'emoji-picker-react';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import moment from "moment";
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 const CardMessage = ({ chatId, nome, setFlushHook, flushHook, chatIdSocket, setChatIdSocket }) => {
 

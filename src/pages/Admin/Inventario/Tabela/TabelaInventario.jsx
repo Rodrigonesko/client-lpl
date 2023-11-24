@@ -38,7 +38,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const handleFilter = async (event) => {
         event.preventDefault()
 
-        if (nomeItem.length > 2 || ondeEsta.length > 2) {
+        if ((nomeItem.length > 2) || (ondeEsta.length > 2)) {
             const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}`, {
                 withCredentials: true
             })
@@ -84,9 +84,9 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                             {solicitacoes.map((item) => {
                                 let color
                                 if (item.status === 'emEstoque') {
-                                    color = green[300]
-                                } if (item.status === 'emUso') {
                                     color = yellow[300]
+                                } if (item.status === 'emUso') {
+                                    color = green[300]
                                 } if (item.status === 'descontinuado') {
                                     color = red[300]
                                 }
@@ -98,7 +98,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                         <TableCell>{item.descricao}</TableCell>
                                         <TableCell>
                                             <FormControl sx={{ minWidth: 135 }}>
-                                                <InputLabel id='StatusRh'>Status do RH</InputLabel>
+                                                <InputLabel id='Status'>Status</InputLabel>
                                                 <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)} >
                                                     <MenuItem value={'emEstoque'}>EM ESTOQUE</MenuItem>
                                                     <MenuItem value={'emUso'}>EM USO</MenuItem>
