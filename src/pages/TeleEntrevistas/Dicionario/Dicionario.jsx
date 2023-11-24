@@ -73,8 +73,8 @@ const Dicionario = () => {
     }, [])
 
     return (
-        <>
-            <Sidebar />
+
+        <Sidebar>
             <Container>
                 {
                     loading ? (
@@ -120,7 +120,8 @@ const Dicionario = () => {
                     </Alert>
                 </Snackbar>
             </Container>
-        </>
+        </Sidebar>
+
     )
 }
 

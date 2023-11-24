@@ -125,8 +125,7 @@ const Detalhes = () => {
     }, [dados.email, id, flushHook])
 
     return (
-        <>
-            <Sidebar />
+        <Sidebar>
             <Container>
                 {
                     concluido && (
@@ -244,7 +243,9 @@ const Detalhes = () => {
                     Atualizado com sucesso!
                 </Alert>
             </Snackbar>
-        </>
+        </Sidebar>
+
+
     )
 }
 

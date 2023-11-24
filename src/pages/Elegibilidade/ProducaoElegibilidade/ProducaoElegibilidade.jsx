@@ -61,73 +61,46 @@ const ProducaoElegibilidade = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box display='flex' alignItems='center' justifyContent='space-around' width='100%' flexWrap='wrap'>
-                <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
-                    <ProducaoDiariaMui title='Produção diaria Elegibilidade' producao={producao} total={total} setData={setData} buscarDadosData={buscarDados} />
-                    <Box component={Paper} p={2} mt={3} elevation={3}>
-                        <Typography>
-                            Bom dia
-                        </Typography>
-                        <Typography>
-                            Demanda diária (ELEGIBILIDADE)
-                        </Typography>
-                        <Typography>
-                            Recebidas Hoje: {dadosReport.recebidasHoje} (A iniciar)
-                        </Typography>
-                        <Typography>
-                            Em análise: {dadosReport.emAnalise} (backlog)
-                        </Typography>
-                        <Typography>
-                            Total em análise: {dadosReport.totalEmAnalise}
-                        </Typography>
-                        <Typography>
-                            {
-                                Object.keys(dadosReport).length !== 0 ? dadosReport.vigencias.map(vigencia => {
-                                    return (
-                                        <div key={vigencia.vigencia}>
-                                            vigencia: {moment(vigencia.vigencia).format('DD/MM/YYYY')}: {vigencia.quantidade}
-                                        </div>
-                                    )
-                                }) : null
-                            }
-                        </Typography>
-                    </Box>
+            <Sidebar>
+                <Box display='flex' alignItems='center' justifyContent='space-around' width='100%' flexWrap='wrap'>
+                    <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
+                        <ProducaoDiariaMui title='Produção diaria Elegibilidade' producao={producao} total={total} setData={setData} buscarDadosData={buscarDados} />
+                        <Box component={Paper} p={2} mt={3} elevation={3}>
+                            <Typography>
+                                Bom dia
+                            </Typography>
+                            <Typography>
+                                Demanda diária (ELEGIBILIDADE)
+                            </Typography>
+                            <Typography>
+                                Recebidas Hoje: {dadosReport.recebidasHoje} (A iniciar)
+                            </Typography>
+                            <Typography>
+                                Em análise: {dadosReport.emAnalise} (backlog)
+                            </Typography>
+                            <Typography>
+                                Total em análise: {dadosReport.totalEmAnalise}
+                            </Typography>
+                            <Typography>
+                                {
+                                    Object.keys(dadosReport).length !== 0 ? dadosReport.vigencias.map(vigencia => {
+                                        return (
+                                            <div key={vigencia.vigencia}>
+                                                vigencia: {moment(vigencia.vigencia).format('DD/MM/YYYY')}: {vigencia.quantidade}
+                                            </div>
+                                        )
+                                    }) : null
+                                }
+                            </Typography>
+                        </Box>
 
-                    <RelatorioElegibilidade />
+                        <RelatorioElegibilidade />
+                    </Box>
+                    <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
+                        <ProducaoDiariaMui title='Produção diaria Elegibilidade PME' producao={producaoPme} total={totalPme} setData={setDataPme} buscarDadosData={buscarDadosPme} />
+                    </Box>
                 </Box>
-                <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
-                    <ProducaoDiariaMui title='Produção diaria Elegibilidade PME' producao={producaoPme} total={totalPme} setData={setDataPme} buscarDadosData={buscarDadosPme} />
-                    {/* <Box component={Paper} p={2} mt={3} elevation={3}>
-                        <Typography>
-                            Bom dia
-                        </Typography>
-                        <Typography>
-                            Demanda diária (ELEGIBILIDADE)
-                        </Typography>
-                        <Typography>
-                            Recebidas Hoje: {dadosReport.recebidasHoje} (A iniciar)
-                        </Typography>
-                        <Typography>
-                            Em análise: {dadosReport.emAnalise} (backlog)
-                        </Typography>
-                        <Typography>
-                            Total em análise: {dadosReport.totalEmAnalise}
-                        </Typography>
-                        <Typography>
-                            {
-                                Object.keys(dadosReport).length !== 0 ? dadosReport.vigencias.map(vigencia => {
-                                    return (
-                                        <div>
-                                            vigencia: {moment(vigencia.vigencia).format('DD/MM/YYYY')}: {vigencia.quantidade}
-                                        </div>
-                                    )
-                                }) : null
-                            }
-                        </Typography>
-                    </Box> */}
-                </Box>
-            </Box>
+            </Sidebar>
         </>
     )
 }

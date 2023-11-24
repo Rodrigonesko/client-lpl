@@ -78,8 +78,8 @@ const UploadRn = () => {
     }
 
     return (
-        <>
-            <Sidebar />
+
+        <Sidebar>
             <section className="section-upload-container">
                 {
                     loading ? (
@@ -106,7 +106,8 @@ const UploadRn = () => {
                     </form>
                 </div>
             </section>
-        </>
+        </Sidebar>
+
 
     )
 }

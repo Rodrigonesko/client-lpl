@@ -69,46 +69,45 @@ const Divergencias = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <form action="" method="post">
-                    <Box p={3} display='flex' justifyContent='center' flexDirection='column' alignItems='center' component={Paper} elevation={4}>
+            <Sidebar>
+                <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <form action="" method="post">
+                        <Box p={3} display='flex' justifyContent='center' flexDirection='column' alignItems='center' component={Paper} elevation={4}>
 
-                        <Typography variant="h5">
-                            Upload Divergencias
-                        </Typography>
-                        <Box m={1}>
-                            <TextField type="file" onChange={e => setFile(e.target.files[0])} />
+                            <Typography variant="h5">
+                                Upload Divergencias
+                            </Typography>
+                            <Box m={1}>
+                                <TextField type="file" onChange={e => setFile(e.target.files[0])} />
+                            </Box>
+                            <Box m={2}>
+                                <Button variant='contained' onClick={send} >Enviar</Button>
+                            </Box>
+                            {
+                                status === 'Enviando' ? (
+                                    <LinearProgress style={{ width: '100%' }} />
+                                ) : null
+                            }
+                            {
+                                status === 'Concluido' ? (
+                                    <Alert severity="success">
+                                        {qtd} divergencias
+                                    </Alert>
+                                ) : null
+                            }
+                            {
+                                status === 'Erro' ? (
+                                    <Alert severity="error">
+                                        Algo deu errado
+                                    </Alert>
+                                ) : null
+                            }
+
                         </Box>
-                        <Box m={2}>
-                            <Button variant='contained' onClick={send} >Enviar</Button>
-                        </Box>
-                        {
-                            status === 'Enviando' ? (
-                                <LinearProgress style={{ width: '100%' }} />
-                            ) : null
-                        }
-                        {
-                            status === 'Concluido' ? (
-                                <Alert severity="success">
-                                    {qtd} divergencias
-                                </Alert>
-                            ) : null
-                        }
-                        {
-                            status === 'Erro' ? (
-                                <Alert severity="error">
-                                    Algo deu errado
-                                </Alert>
-                            ) : null
-                        }
-
-                    </Box>
-                </form>
-
-            </Container>
+                    </form>
+                </Container>
+            </Sidebar>
         </>
-
     )
 }
 

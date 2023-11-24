@@ -72,8 +72,8 @@ const MyProduction = () => {
     }, [name, context])
 
     return (
-        <>
-            <Sidebar />
+
+        <Sidebar>
             <Container>
                 <Typography variant="h5" mt={2}>
                     Bem vindo de volta, {name}!
@@ -107,7 +107,8 @@ const MyProduction = () => {
                 }
             </Container>
             <Chart style={{ display: 'none' }} />
-        </>
+        </Sidebar>
+
     )
 }
 

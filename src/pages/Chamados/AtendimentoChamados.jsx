@@ -21,10 +21,12 @@ const AtendimentoChamados = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <TabelaAtendimentoChamados />
-            </Container>
+            <Sidebar>
+                <Container>
+                    <TabelaAtendimentoChamados />
+                </Container>
+            </Sidebar>
+
         </>
 
     )

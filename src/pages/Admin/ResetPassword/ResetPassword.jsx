@@ -30,8 +30,8 @@ const ResetPassword = () => {
     }, [])
 
     return (
-        <>
-            <Sidebar></Sidebar>
+
+        <Sidebar>
             <Container style={{ padding: '1rem' }}>
                 <div style={{ marginBottom: '1rem' }}>
                     <Typography variant="h4" component="h2">
@@ -58,7 +58,8 @@ const ResetPassword = () => {
                     Senha restaurada com sucesso
                 </Alert>
             </Snackbar>
-        </>
+        </Sidebar>
+
     )
 }
 

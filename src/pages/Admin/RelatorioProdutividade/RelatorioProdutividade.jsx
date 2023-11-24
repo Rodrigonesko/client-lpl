@@ -48,8 +48,7 @@ const RelatorioProdutividade = () => {
     }
 
     return (
-        <>
-            <Sidebar />
+        <Sidebar>
             <Container sx={{ height: '100vh', overflow: 'auto' }}>
                 <RelatoriosProdutividade />
                 <Typography variant="h6" m={2}>
@@ -112,8 +111,7 @@ const RelatorioProdutividade = () => {
                 </Snackbar>
                 <Chart style={{ display: 'none' }} />
             </Container>
-
-        </>
+        </Sidebar>
     )
 }
 

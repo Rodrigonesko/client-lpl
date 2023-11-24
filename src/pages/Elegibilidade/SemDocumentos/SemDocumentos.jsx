@@ -98,82 +98,83 @@ const SemDocumentos = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box display='flex' justifyContent='space-between' >
-                    <Typography variant="h6" m={2} >
-                        Propostas sem documento - {propostas.length}
-                    </Typography>
-                    <Box mt={2}>
-                        <Button onClick={handleReport} variant='contained' size="small" >Report</Button>
+            <Sidebar>
+                <Container>
+                    <Box display='flex' justifyContent='space-between' >
+                        <Typography variant="h6" m={2} >
+                            Propostas sem documento - {propostas.length}
+                        </Typography>
+                        <Box mt={2}>
+                            <Button onClick={handleReport} variant='contained' size="small" >Report</Button>
+                        </Box>
                     </Box>
-                </Box>
-                <Divider style={{ marginBottom: '10px', marginTop: '10px' }} />
-                <TableContainer>
-                    <Table className="table">
-                        <TableHead className="table-header">
-                            <TableRow>
-                                <TableCell>Proposta</TableCell>
-                                <TableCell>Data Importação</TableCell>
-                                <TableCell>Inicio Vigência</TableCell>
-                                <TableCell>Nome Titular</TableCell>
-                                <TableCell>Entidade</TableCell>
-                                <TableCell>Analista</TableCell>
-                                <TableCell>Status Proposta</TableCell>
-                                <TableCell>Voltar para analise</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                !loading ? propostas.map(proposta => {
-                                    return (
-                                        <TableRow>
-                                            <TableCell>{proposta.proposta}</TableCell>
-                                            <TableCell>{moment(proposta.dataImportacao).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{moment(proposta.vigencia).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{proposta.nome}</TableCell>
-                                            <TableCell>{proposta.entidade}</TableCell>
-                                            <TableCell>
-                                                <FormControl size="small" style={{ minWidth: '100px' }}>
-                                                    <InputLabel>Analista</InputLabel>
-                                                    <Select
-                                                        label='Analista'
-                                                        value={proposta.analista}
-                                                        onChange={item => {
-                                                            atribuir(item.target.value, proposta._id)
-                                                        }}
-                                                    >
-                                                        <MenuItem>
-                                                            <em>Analista</em>
-                                                        </MenuItem>
-                                                        <MenuItem value='A definir'>A definir</MenuItem>
-                                                        {
-                                                            analistas.map(analista => {
-                                                                return (
-                                                                    <MenuItem value={analista.name}>{analista.name}</MenuItem>
-                                                                )
-                                                            })
-                                                        }
-                                                    </Select>
-                                                </FormControl>
-                                            </TableCell>
-                                            <TableCell>{proposta.status}</TableCell>
-                                            <TableCell><Button onClick={() => handleDocumentoRecebido(proposta._id)} color='primary' variant='outlined'>Recebido</Button></TableCell>
-                                        </TableRow>
+                    <Divider style={{ marginBottom: '10px', marginTop: '10px' }} />
+                    <TableContainer>
+                        <Table className="table">
+                            <TableHead className="table-header">
+                                <TableRow>
+                                    <TableCell>Proposta</TableCell>
+                                    <TableCell>Data Importação</TableCell>
+                                    <TableCell>Inicio Vigência</TableCell>
+                                    <TableCell>Nome Titular</TableCell>
+                                    <TableCell>Entidade</TableCell>
+                                    <TableCell>Analista</TableCell>
+                                    <TableCell>Status Proposta</TableCell>
+                                    <TableCell>Voltar para analise</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    !loading ? propostas.map(proposta => {
+                                        return (
+                                            <TableRow>
+                                                <TableCell>{proposta.proposta}</TableCell>
+                                                <TableCell>{moment(proposta.dataImportacao).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{moment(proposta.vigencia).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{proposta.nome}</TableCell>
+                                                <TableCell>{proposta.entidade}</TableCell>
+                                                <TableCell>
+                                                    <FormControl size="small" style={{ minWidth: '100px' }}>
+                                                        <InputLabel>Analista</InputLabel>
+                                                        <Select
+                                                            label='Analista'
+                                                            value={proposta.analista}
+                                                            onChange={item => {
+                                                                atribuir(item.target.value, proposta._id)
+                                                            }}
+                                                        >
+                                                            <MenuItem>
+                                                                <em>Analista</em>
+                                                            </MenuItem>
+                                                            <MenuItem value='A definir'>A definir</MenuItem>
+                                                            {
+                                                                analistas.map(analista => {
+                                                                    return (
+                                                                        <MenuItem value={analista.name}>{analista.name}</MenuItem>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Select>
+                                                    </FormControl>
+                                                </TableCell>
+                                                <TableCell>{proposta.status}</TableCell>
+                                                <TableCell><Button onClick={() => handleDocumentoRecebido(proposta._id)} color='primary' variant='outlined'>Recebido</Button></TableCell>
+                                            </TableRow>
+                                        )
+                                    }) : (
+                                        <CircularProgress style={{ position: 'absolute', right: '50%' }} />
                                     )
-                                }) : (
-                                    <CircularProgress style={{ position: 'absolute', right: '50%' }} />
-                                )
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert variant='filled' onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        {msg}
-                    </Alert>
-                </Snackbar>
-            </Container>
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert variant='filled' onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                            {msg}
+                        </Alert>
+                    </Snackbar>
+                </Container>
+            </Sidebar>
         </>
     )
 }

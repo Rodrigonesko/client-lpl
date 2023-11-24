@@ -28,21 +28,17 @@ const Horarios = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-
-                <Typography variant="h5" m={1}>
-                    Ajustar Horários
-                </Typography>
-
-                <FecharDia responsaveis={responsaveis} />
-
-                <FecharHorarios responsaveis={responsaveis} />
-
-                <ReabrirHorarios responsaveis={responsaveis} />
-
-                <AbrirNovoHorario responsaveis={responsaveis} />
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Typography variant="h5" m={1}>
+                        Ajustar Horários
+                    </Typography>
+                    <FecharDia responsaveis={responsaveis} />
+                    <FecharHorarios responsaveis={responsaveis} />
+                    <ReabrirHorarios responsaveis={responsaveis} />
+                    <AbrirNovoHorario responsaveis={responsaveis} />
+                </Container>
+            </Sidebar>
         </>
     )
 }

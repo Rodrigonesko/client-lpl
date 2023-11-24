@@ -47,31 +47,32 @@ const ProtFiltros = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab sx={{
-                            ":hover": {
-                                bgcolor: 'lightgray',
-                                color: 'black'
-                            },
-                        }} label="Item One" {...a11yProps(0)} />
-                        <Tab sx={{
-                            ":hover": {
-                                bgcolor: 'lightgray',
-                                color: 'black'
-                            },
-                        }} label="Item Two" {...a11yProps(1)} />
-                    </Tabs>
+            <Sidebar>
+                <Box sx={{ width: '100%' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                            <Tab sx={{
+                                ":hover": {
+                                    bgcolor: 'lightgray',
+                                    color: 'black'
+                                },
+                            }} label="Item One" {...a11yProps(0)} />
+                            <Tab sx={{
+                                ":hover": {
+                                    bgcolor: 'lightgray',
+                                    color: 'black'
+                                },
+                            }} label="Item Two" {...a11yProps(1)} />
+                        </Tabs>
+                    </Box>
+                    <CustomTabPanel value={value} index={0}>
+                        <FiltroEmAnalise />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={1}>
+                        Item Two
+                    </CustomTabPanel>
                 </Box>
-                <CustomTabPanel value={value} index={0}>
-                    <FiltroEmAnalise />
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
-                    Item Two
-                </CustomTabPanel>
-            </Box>
+            </Sidebar>
         </>
     )
 }

@@ -46,22 +46,24 @@ const InternMessages = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container maxWidth>
-                <Typography variant="h5" mt={1}>
-                    Mensagens e Grupos
-                </Typography>
-                <Box display={'flex'} mt={2}>
-                    <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setFlushHook={setFlushHook} setReceptor={setReceptor} />
-                    <Box width={'100%'} ml={2}>
-                        {
-                            receptor !== '' && (
-                                <CardMessage setChatIdSocket={setChatIdSocket} chatIdSocket={chatIdSocket} nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
-                            )
-                        }
+            <Sidebar>
+                <Container maxWidth>
+                    <Typography variant="h5" mt={1}>
+                        Mensagens e Grupos
+                    </Typography>
+                    <Box display={'flex'} mt={2}>
+                        <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setFlushHook={setFlushHook} setReceptor={setReceptor} />
+                        <Box width={'100%'} ml={2}>
+                            {
+                                receptor !== '' && (
+                                    <CardMessage setChatIdSocket={setChatIdSocket} chatIdSocket={chatIdSocket} nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
+                                )
+                            }
+                        </Box>
                     </Box>
-                </Box>
-            </Container>
+                </Container>
+            </Sidebar>
+
         </>
     )
 }

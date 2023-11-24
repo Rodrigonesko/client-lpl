@@ -68,56 +68,57 @@ const CriarProtocolo = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Box component={Paper} p={2} elevation={3} minWidth='600px' >
-                    <Typography variant="h6" m={1}>
-                        Criar Protocolo
-                    </Typography>
-                    <Divider />
-                    <Box display='flex' justifyContent='center' flexDirection='column'  >
+            <Sidebar>
+                <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Box component={Paper} p={2} elevation={3} minWidth='600px' >
+                        <Typography variant="h6" m={1}>
+                            Criar Protocolo
+                        </Typography>
+                        <Divider />
+                        <Box display='flex' justifyContent='center' flexDirection='column'  >
 
-                        <TextField size="small" style={{ margin: '10px' }} value={protocolo} helperText='Número do protocolo' onChange={e => setProtocolo(e.target.value)} label='Protocolo' />
-                        <TextField size="small" style={{ margin: '10px' }} focused value={mo} label='Marca Ótica' />
-                        <TextField type="date" focused size="small" style={{ margin: '10px' }} value={dataSolicitacao} onChange={e => setDataSolicitacao(e.target.value)} label='Data solicitação' />
-                        <TextField type="date" focused size="small" style={{ margin: '10px' }} value={dataPagamento} onChange={e => setDataPagamento(e.target.value)} label='Data Pagamento' />
+                            <TextField size="small" style={{ margin: '10px' }} value={protocolo} helperText='Número do protocolo' onChange={e => setProtocolo(e.target.value)} label='Protocolo' />
+                            <TextField size="small" style={{ margin: '10px' }} focused value={mo} label='Marca Ótica' />
+                            <TextField type="date" focused size="small" style={{ margin: '10px' }} value={dataSolicitacao} onChange={e => setDataSolicitacao(e.target.value)} label='Data solicitação' />
+                            <TextField type="date" focused size="small" style={{ margin: '10px' }} value={dataPagamento} onChange={e => setDataPagamento(e.target.value)} label='Data Pagamento' />
 
-                        <FormControl size="small" style={{ margin: '10px' }}>
-                            <InputLabel>Operadora Beneficiário</InputLabel>
-                            <Select
-                                label='Operadora Beneficiário'
-                                value={operadora}
-                                onChange={e => {
-                                    setOperadora(e.target.value)
-                                }}
-                            >
-                                <MenuItem>
-                                    <em>
-                                        Operadora Beneficiario
-                                    </em>
-                                </MenuItem>
-                                {
-                                    operadoras.map(e => {
-                                        return (
-                                            <MenuItem value={e.descricao}>{e.descricao}</MenuItem>
-                                        )
-                                    })
-                                }
-                            </Select>
-                        </FormControl>
+                            <FormControl size="small" style={{ margin: '10px' }}>
+                                <InputLabel>Operadora Beneficiário</InputLabel>
+                                <Select
+                                    label='Operadora Beneficiário'
+                                    value={operadora}
+                                    onChange={e => {
+                                        setOperadora(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem>
+                                        <em>
+                                            Operadora Beneficiario
+                                        </em>
+                                    </MenuItem>
+                                    {
+                                        operadoras.map(e => {
+                                            return (
+                                                <MenuItem value={e.descricao}>{e.descricao}</MenuItem>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
 
-                        <TextField size="small" style={{ margin: '10px' }} value={pedido} onChange={e => setPedido(e.target.value)} label='Pedido' helperText='Número do pedido' />
-                        <Box m={1}>
-                            <Button variant="contained" onClick={handlerCriarProtocolo}>Criar</Button>
+                            <TextField size="small" style={{ margin: '10px' }} value={pedido} onChange={e => setPedido(e.target.value)} label='Pedido' helperText='Número do pedido' />
+                            <Box m={1}>
+                                <Button variant="contained" onClick={handlerCriarProtocolo}>Criar</Button>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
-            </Container>
-            <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
-                <Alert variant="filled" onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
-                    {msg}
-                </Alert>
-            </Snackbar>
+                </Container>
+                <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
+                    <Alert variant="filled" onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+                        {msg}
+                    </Alert>
+                </Snackbar>
+            </Sidebar>
         </>
     )
 }

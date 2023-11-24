@@ -54,29 +54,30 @@ const EditarOperadoraBeneficiario = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section>
-                <div>
-                    <div className="title">
-                        <h3>Editar Operadora Beneficiário</h3>
-                    </div>
-                    <div className="input-box">
-                        <label htmlFor="descricao">Descrição</label>
-                        <input type="text" id="descricao" placeholder="Descrição" defaultValue={descricao} onChange={e => {
-                            setDescricao(e.target.value)
-                        }} />
-                    </div>
-                    <div className="input-box">
-                        <label htmlFor="sla">SLA</label>
-                        <input type="number" id="sla" placeholder="SLA em dias" defaultValue={sla} onChange={e => {
-                            setSla(e.target.value)
-                        }} />
-                    </div>
+            <Sidebar>
+                <section>
                     <div>
-                        <button onClick={editar} className="cadastrar-operadora">Editar</button>
+                        <div className="title">
+                            <h3>Editar Operadora Beneficiário</h3>
+                        </div>
+                        <div className="input-box">
+                            <label htmlFor="descricao">Descrição</label>
+                            <input type="text" id="descricao" placeholder="Descrição" defaultValue={descricao} onChange={e => {
+                                setDescricao(e.target.value)
+                            }} />
+                        </div>
+                        <div className="input-box">
+                            <label htmlFor="sla">SLA</label>
+                            <input type="number" id="sla" placeholder="SLA em dias" defaultValue={sla} onChange={e => {
+                                setSla(e.target.value)
+                            }} />
+                        </div>
+                        <div>
+                            <button onClick={editar} className="cadastrar-operadora">Editar</button>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </Sidebar>
         </>
     )
 }

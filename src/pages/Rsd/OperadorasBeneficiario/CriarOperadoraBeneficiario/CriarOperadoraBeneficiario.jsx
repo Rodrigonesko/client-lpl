@@ -57,22 +57,24 @@ const CriarOperadoraBeneficiario = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-                <Box component={Paper} elevation={3} p={2} display='flex' flexDirection='column' >
-                    <Typography variant="h6">
-                        Nova Operadora Beneficiário
-                    </Typography>
-                    <TextField style={{ margin: '10px' }} label="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)} size="small" />
-                    <TextField style={{ margin: '10px' }} label='Sla em dias' value={sla} onChange={e => setSla(e.target.value)} size="small" type="number" />
-                    <Button variant="contained" onClick={cadastrar} className="cadastrar-operadora">Cadastrar</Button>
-                </Box>
-            </Container>
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert variant='filled' onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
-                    {msg}
-                </Alert>
-            </Snackbar>
+            <Sidebar>
+                <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                    <Box component={Paper} elevation={3} p={2} display='flex' flexDirection='column' >
+                        <Typography variant="h6">
+                            Nova Operadora Beneficiário
+                        </Typography>
+                        <TextField style={{ margin: '10px' }} label="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)} size="small" />
+                        <TextField style={{ margin: '10px' }} label='Sla em dias' value={sla} onChange={e => setSla(e.target.value)} size="small" type="number" />
+                        <Button variant="contained" onClick={cadastrar} className="cadastrar-operadora">Cadastrar</Button>
+                    </Box>
+                </Container>
+                <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert variant='filled' onClose={handleClose} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+                        {msg}
+                    </Alert>
+                </Snackbar>
+            </Sidebar>
+
         </>
     )
 }

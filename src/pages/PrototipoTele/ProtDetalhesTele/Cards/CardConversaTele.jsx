@@ -56,7 +56,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
 
     return (
         <Slide direction="left" in={open} unmountOnExit>
-            <Box display={!open && 'none'} component={Paper} p={1} m={2} width={'50%'} height={'90%'} >
+            <Box display={!open && 'none'} component={Paper} p={1} m={2} width={'35%'} height={'100%'} >
                 <Box display={'flex'} justifyContent={'space-between'}>
                     <Typography variant="h6" m={1}>
                         {nome}

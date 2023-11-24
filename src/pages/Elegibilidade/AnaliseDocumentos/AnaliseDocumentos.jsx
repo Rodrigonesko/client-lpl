@@ -109,108 +109,109 @@ const AnaliseDocumentos = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container>
+            <Sidebar>
+                <Container>
 
-                <Typography variant="h5">
-                    Atribuição de analistas
-                </Typography>
-                <form action="">
-                    <Box m={2} display='flex' alignItems='center'>
-                        {/* <TextField type="text" id="proposta-analise-doc" label="Proposta" variant="standard" size="small" /> */}
-                        <FormControl sx={{ minWidth: '120px', mr: '10px' }} size="small">
-                            <InputLabel>Entidade</InputLabel>
-                            <Select
-                                label='Entidade'
-                                onChange={e => {
-                                    setEntidade(e.target.value)
-                                }}
-                                value={entidade}
-                            >
-                                <MenuItem>
-                                    <em>
-                                        Entidade
-                                    </em>
-                                </MenuItem>
-                                {
-                                    entidades.map(entidade => {
-                                        return (
-                                            <MenuItem value={entidade}>
-                                                {entidade}
-                                            </MenuItem>
-                                        )
-                                    })
-                                }
-                            </Select>
-                        </FormControl>
-                        <Button onClick={filtrarPropostas} variant="contained">Buscar</Button>
-                        <Typography variant="h6" marginLeft={2}>
-                            Total: <strong>{total}</strong>
-                        </Typography>
-                    </Box>
-                </form>
-                {
-                    loading ? (
-                        <CircularProgress className="loading" />
-                    ) : null
-                }
+                    <Typography variant="h5">
+                        Atribuição de analistas
+                    </Typography>
+                    <form action="">
+                        <Box m={2} display='flex' alignItems='center'>
+                            {/* <TextField type="text" id="proposta-analise-doc" label="Proposta" variant="standard" size="small" /> */}
+                            <FormControl sx={{ minWidth: '120px', mr: '10px' }} size="small">
+                                <InputLabel>Entidade</InputLabel>
+                                <Select
+                                    label='Entidade'
+                                    onChange={e => {
+                                        setEntidade(e.target.value)
+                                    }}
+                                    value={entidade}
+                                >
+                                    <MenuItem>
+                                        <em>
+                                            Entidade
+                                        </em>
+                                    </MenuItem>
+                                    {
+                                        entidades.map(entidade => {
+                                            return (
+                                                <MenuItem value={entidade}>
+                                                    {entidade}
+                                                </MenuItem>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
+                            <Button onClick={filtrarPropostas} variant="contained">Buscar</Button>
+                            <Typography variant="h6" marginLeft={2}>
+                                Total: <strong>{total}</strong>
+                            </Typography>
+                        </Box>
+                    </form>
+                    {
+                        loading ? (
+                            <CircularProgress className="loading" />
+                        ) : null
+                    }
 
-                <Paper>
-                    <TableContainer style={{ borderRadius: '6px' }}>
-                        <Table stickyHeader aria-label="sticky table" >
-                            <TableHead>
-                                <TableRow >
-                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Proposta</TableCell>
-                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Data Importação</TableCell>
-                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Início Vigência</TableCell>
-                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Nome Titular</TableCell>
-                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Entidade</TableCell>
-                                    <TableCell style={{ backgroundColor: 'lightgray' }}>Analista</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    propostas.map(e => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={e._id}>
-                                                <TableCell >{e.proposta}</TableCell >
-                                                <TableCell >{moment(e.dataImportacao).format('DD/MM/YYYY')}</TableCell >
-                                                <TableCell >{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell >
-                                                <TableCell >{e.nome}</TableCell >
-                                                <TableCell>{e.entidade}</TableCell>
-                                                <TableCell >
-                                                    <FormControl>
-                                                        <InputLabel id="demo-simple-select-label">Analista</InputLabel>
-                                                        <Select style={{ minWidth: '100px' }} variant="standard" labelId="demo-simple-select-label" name="analistas" id="analistas" onChange={(item) => {
-                                                            atribuirAnalista(item.target.value, e._id)
-                                                        }}>
-                                                            <MenuItem value="">
-                                                                <em>Analista</em>
-                                                            </MenuItem>
-                                                            {
-                                                                analistas.map(analista => {
-                                                                    return (
-                                                                        <MenuItem value={analista.name}>{analista.name}</MenuItem>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </FormControl>
-                                                </TableCell >
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Paper>
-                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} variant="filled" severity="success">
-                        Analista atribuido com sucesso!
-                    </Alert>
-                </Snackbar>
-            </Container>
+                    <Paper>
+                        <TableContainer style={{ borderRadius: '6px' }}>
+                            <Table stickyHeader aria-label="sticky table" >
+                                <TableHead>
+                                    <TableRow >
+                                        <TableCell style={{ backgroundColor: 'lightgray' }}>Proposta</TableCell>
+                                        <TableCell style={{ backgroundColor: 'lightgray' }}>Data Importação</TableCell>
+                                        <TableCell style={{ backgroundColor: 'lightgray' }}>Início Vigência</TableCell>
+                                        <TableCell style={{ backgroundColor: 'lightgray' }}>Nome Titular</TableCell>
+                                        <TableCell style={{ backgroundColor: 'lightgray' }}>Entidade</TableCell>
+                                        <TableCell style={{ backgroundColor: 'lightgray' }}>Analista</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        propostas.map(e => {
+                                            return (
+                                                <TableRow hover role="checkbox" tabIndex={-1} key={e._id}>
+                                                    <TableCell >{e.proposta}</TableCell >
+                                                    <TableCell >{moment(e.dataImportacao).format('DD/MM/YYYY')}</TableCell >
+                                                    <TableCell >{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell >
+                                                    <TableCell >{e.nome}</TableCell >
+                                                    <TableCell>{e.entidade}</TableCell>
+                                                    <TableCell >
+                                                        <FormControl>
+                                                            <InputLabel id="demo-simple-select-label">Analista</InputLabel>
+                                                            <Select style={{ minWidth: '100px' }} variant="standard" labelId="demo-simple-select-label" name="analistas" id="analistas" onChange={(item) => {
+                                                                atribuirAnalista(item.target.value, e._id)
+                                                            }}>
+                                                                <MenuItem value="">
+                                                                    <em>Analista</em>
+                                                                </MenuItem>
+                                                                {
+                                                                    analistas.map(analista => {
+                                                                        return (
+                                                                            <MenuItem value={analista.name}>{analista.name}</MenuItem>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </Select>
+                                                        </FormControl>
+                                                    </TableCell >
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} variant="filled" severity="success">
+                            Analista atribuido com sucesso!
+                        </Alert>
+                    </Snackbar>
+                </Container>
+            </Sidebar>
         </>
     )
 }

@@ -33,64 +33,65 @@ const BancoHoras = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%' height='100vh' overflow='auto' >
-                <Container>
-                    <Box m={2}>
-                        <ModalUploadBancoHoras setFlushHook={setFlushHook} />
-                        <ModalHorarioPonto setFlushHook={setFlushHook} />
-                    </Box>
-                    <Divider />
-                    <Box>
-                        <Typography variant='h5' m={2}>
-                            Banco de Horas
-                        </Typography>
-                        <Typography variant="body2" color='gray' m={2} >
-                            Atualizado dia - {moment(dataBancoHoras).format('DD/MM/YYYY')}
-                        </Typography>
-                        <TableContainer>
-                            <Table className="name">
-                                <TableHead className="table-header">
-                                    <TableRow>
-                                        <TableCell>
-                                            Colaborador
-                                        </TableCell>
-                                        <TableCell>
-                                            Banco De Horas
-                                        </TableCell>
-                                        <TableCell>
-                                            Horario Saida
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        colaboradores.map(colaborador => {
-                                            if (colaborador.nomeCompleto) {
-                                                return (
-                                                    <TableRow key={colaborador.nomeCompleto}>
-                                                        <TableCell>
-                                                            {colaborador.nomeCompleto}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {colaborador.bancoHoras}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {colaborador.horarioSaida && moment(colaborador.horarioSaida).format('DD/MM/YYYY HH:mm')}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            } else {
-                                                return null
-                                            }
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
-                </Container>
-            </Box>
+            <Sidebar>
+                <Box width='100%' height='100vh' overflow='auto' >
+                    <Container>
+                        <Box m={2}>
+                            <ModalUploadBancoHoras setFlushHook={setFlushHook} />
+                            <ModalHorarioPonto setFlushHook={setFlushHook} />
+                        </Box>
+                        <Divider />
+                        <Box>
+                            <Typography variant='h5' m={2}>
+                                Banco de Horas
+                            </Typography>
+                            <Typography variant="body2" color='gray' m={2} >
+                                Atualizado dia - {moment(dataBancoHoras).format('DD/MM/YYYY')}
+                            </Typography>
+                            <TableContainer>
+                                <Table className="name">
+                                    <TableHead className="table-header">
+                                        <TableRow>
+                                            <TableCell>
+                                                Colaborador
+                                            </TableCell>
+                                            <TableCell>
+                                                Banco De Horas
+                                            </TableCell>
+                                            <TableCell>
+                                                Horario Saida
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            colaboradores.map(colaborador => {
+                                                if (colaborador.nomeCompleto) {
+                                                    return (
+                                                        <TableRow key={colaborador.nomeCompleto}>
+                                                            <TableCell>
+                                                                {colaborador.nomeCompleto}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {colaborador.bancoHoras}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {colaborador.horarioSaida && moment(colaborador.horarioSaida).format('DD/MM/YYYY HH:mm')}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                } else {
+                                                    return null
+                                                }
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Box>
+                    </Container>
+                </Box>
+            </Sidebar>
         </>
     )
 }

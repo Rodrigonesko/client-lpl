@@ -43,12 +43,13 @@ const ProducaoDiariaTele = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container>
-                <Box m={3} display='flex' justifyContent='center' alignItems='center'>
-                    <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData}></ProducaoDiariaMui>
-                </Box>
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Box m={3} display='flex' justifyContent='center' alignItems='center'>
+                        <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData}></ProducaoDiariaMui>
+                    </Box>
+                </Container>
+            </Sidebar>
         </>
     )
 }

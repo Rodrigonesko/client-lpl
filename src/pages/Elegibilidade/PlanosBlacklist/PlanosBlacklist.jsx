@@ -35,8 +35,7 @@ const PlanosBlacklist = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100vw' >
+            <Sidebar>
                 <Container>
                     <Typography m={2} variant="h6">
                         Planos
@@ -73,7 +72,8 @@ const PlanosBlacklist = () => {
                         Plano removido com sucesso!
                     </Alert>
                 </Snackbar>
-            </Box>
+
+            </Sidebar>
         </>
     )
 }

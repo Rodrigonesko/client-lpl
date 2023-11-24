@@ -72,59 +72,60 @@ const FichaBeneficiario = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
-                <Container style={{ maxWidth: '1400px' }} >
-                    <Box className="cadastro-beneficiario-container">
-                        <Typography variant="h5" m={2}>
-                            Ficha Beneficiário
-                        </Typography>
-                        <Typography p={1} bgcolor='lightgray' borderRadius='5px' >
-                            Informações Gerais
-                        </Typography>
-                        <InformacoesGerais mo={mo} />
-                        <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
-                            Pedidos de Reembolso
-                        </Typography>
-                        {
-                            protocolos.length !== 0 ? (
-                                <PedidosReembolso
-                                    setCheckPedidos={setCheckPedidos}
-                                    checkPedidos={checkPedidos}
-                                    flushHook={setFlushHook}
-                                    protocolos={protocolos}
-                                    pedidos={pedidos}
-                                />
-                            ) : null
-                        }
-                        <Box m={2}>
-                            <Button sx={{ mr: '10px', bgcolor: indigo[500], ":hover": { bgcolor: indigo[700] } }} href={`/rsd/CriarProtocolo/${mo}`} variant="contained" size="small" >Novo Protocolo</Button>
-                            <Button onClick={handleCriarPacote} sx={{ mr: '10px' }} variant="contained" size="small">Criar Pacote</Button>
+            <Sidebar>
+                <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
+                    <Container style={{ maxWidth: '1400px' }} >
+                        <Box className="cadastro-beneficiario-container">
+                            <Typography variant="h5" m={2}>
+                                Ficha Beneficiário
+                            </Typography>
+                            <Typography p={1} bgcolor='lightgray' borderRadius='5px' >
+                                Informações Gerais
+                            </Typography>
+                            <InformacoesGerais mo={mo} />
+                            <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
+                                Pedidos de Reembolso
+                            </Typography>
+                            {
+                                protocolos.length !== 0 ? (
+                                    <PedidosReembolso
+                                        setCheckPedidos={setCheckPedidos}
+                                        checkPedidos={checkPedidos}
+                                        flushHook={setFlushHook}
+                                        protocolos={protocolos}
+                                        pedidos={pedidos}
+                                    />
+                                ) : null
+                            }
+                            <Box m={2}>
+                                <Button sx={{ mr: '10px', bgcolor: indigo[500], ":hover": { bgcolor: indigo[700] } }} href={`/rsd/CriarProtocolo/${mo}`} variant="contained" size="small" >Novo Protocolo</Button>
+                                <Button onClick={handleCriarPacote} sx={{ mr: '10px' }} variant="contained" size="small">Criar Pacote</Button>
+                            </Box>
+                            <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
+                                Pacotes
+                            </Typography>
+
+                            {
+                                pacotes.length !== 0 ? (
+                                    <TabelaPacotes
+                                        pacotes={pacotes}
+                                        pedidos={pedidos}
+                                        verificaPacote={true}
+                                        finalizados={false}
+                                        flushHook={setFlushHook}
+                                    />
+                                ) : null
+                            }
                         </Box>
-                        <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px' >
-                            Pacotes
-                        </Typography>
+                    </Container>
 
-                        {
-                            pacotes.length !== 0 ? (
-                                <TabelaPacotes
-                                    pacotes={pacotes}
-                                    pedidos={pedidos}
-                                    verificaPacote={true}
-                                    finalizados={false}
-                                    flushHook={setFlushHook}
-                                />
-                            ) : null
-                        }
-                    </Box>
-                </Container>
-
-                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Pacote criado com sucesso!
-                    </Alert>
-                </Snackbar>
-            </Box>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                            Pacote criado com sucesso!
+                        </Alert>
+                    </Snackbar>
+                </Box>
+            </Sidebar>
         </>
     )
 }

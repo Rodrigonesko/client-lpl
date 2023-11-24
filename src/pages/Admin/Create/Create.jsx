@@ -49,78 +49,79 @@ const Create = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container>
-                <Box mt={2} display='flex' justifyContent='center' alignItems='center' width='100%' minWidth='500px' flexDirection='column'>
-                    <Box width='400px'>
-                        <Typography textAlign='center' variant="h5">
-                            Criar usuario
-                        </Typography>
-                        <Box m={2}>
-                            <TextField fullWidth variant="filled" label="E-mail" type="email" name="email" id="email" value={email} onChange={e => setEmail(e.target.value)} />
+            <Sidebar>
+                <Container>
+                    <Box mt={2} display='flex' justifyContent='center' alignItems='center' width='100%' minWidth='500px' flexDirection='column'>
+                        <Box width='400px'>
+                            <Typography textAlign='center' variant="h5">
+                                Criar usuario
+                            </Typography>
+                            <Box m={2}>
+                                <TextField fullWidth variant="filled" label="E-mail" type="email" name="email" id="email" value={email} onChange={e => setEmail(e.target.value)} />
+                            </Box>
+                            <Box m={2}>
+                                <TextField fullWidth variant="filled" type="text" label='Nome' name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
+                            </Box>
+                            <Box m={2}>
+                                <FormControl fullWidth variant='filled'>
+                                    <InputLabel id="label-atividade">Atividade Principal</InputLabel>
+                                    <Select
+                                        labelId="label-atividade"
+                                        id='select-atividade'
+                                        style={{ minWidth: '200px' }}
+                                        label='Atividade Principal'
+                                        defaultValue=''
+                                        onChange={e => {
+                                            setAtividade(e.target.value)
+                                        }}
+                                    >
+                                        <MenuItem>
+                                            <em>
+                                                Atividade Principal
+                                            </em>
+                                        </MenuItem>
+                                        {
+                                            atividades.map(atividade => (<MenuItem key={atividade} value={atividade}>{atividade}</MenuItem>))
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                            <Box m={2}>
+                                <TextField fullWidth variant="filled" type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
+                            </Box>
+                            <Box m={2}>
+                                <TextField fullWidth variant="filled" type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
+                            </Box>
+                            <Box m={2}>
+                                <FormGroup>
+                                    <FormControlLabel control={<Checkbox />} label='Admin' onClick={toggleAdmin} />
+                                </FormGroup>
+                            </Box>
+                            <Box display='flex' justifyContent='center' alignItems='center'>
+                                <Button variant='contained' onClick={cadastrar}>Cadastrar</Button>
+                            </Box>
+                            <Snackbar
+                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                open={snack}
+                                onClose={() => setSnack(false)}
+                            >
+                                <Alert onClose={() => setSnack(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                    Usuário criado com sucesso!
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar
+                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                open={error}
+                                onClose={() => setError(false)}
+                            >
+                                <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
+                                    {message}
+                                </Alert>
+                            </Snackbar>
                         </Box>
-                        <Box m={2}>
-                            <TextField fullWidth variant="filled" type="text" label='Nome' name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
-                        </Box>
-                        <Box m={2}>
-                            <FormControl fullWidth variant='filled'>
-                                <InputLabel id="label-atividade">Atividade Principal</InputLabel>
-                                <Select
-                                    labelId="label-atividade"
-                                    id='select-atividade'
-                                    style={{ minWidth: '200px' }}
-                                    label='Atividade Principal'
-                                    defaultValue=''
-                                    onChange={e => {
-                                        setAtividade(e.target.value)
-                                    }}
-                                >
-                                    <MenuItem>
-                                        <em>
-                                            Atividade Principal
-                                        </em>
-                                    </MenuItem>
-                                    {
-                                        atividades.map(atividade => (<MenuItem key={atividade} value={atividade}>{atividade}</MenuItem>))
-                                    }
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        <Box m={2}>
-                            <TextField fullWidth variant="filled" type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
-                        </Box>
-                        <Box m={2}>
-                            <TextField fullWidth variant="filled" type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
-                        </Box>
-                        <Box m={2}>
-                            <FormGroup>
-                                <FormControlLabel control={<Checkbox />} label='Admin' onClick={toggleAdmin} />
-                            </FormGroup>
-                        </Box>
-                        <Box display='flex' justifyContent='center' alignItems='center'>
-                            <Button variant='contained' onClick={cadastrar}>Cadastrar</Button>
-                        </Box>
-                        <Snackbar
-                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={snack}
-                            onClose={() => setSnack(false)}
-                        >
-                            <Alert onClose={() => setSnack(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                Usuário criado com sucesso!
-                            </Alert>
-                        </Snackbar>
-                        <Snackbar
-                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={error}
-                            onClose={() => setError(false)}
-                        >
-                            <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
-                                {message}
-                            </Alert>
-                        </Snackbar>
                     </Box>
-                </Box>
-            </Container>
+                </Container>
+            </Sidebar>
         </>
     )
 

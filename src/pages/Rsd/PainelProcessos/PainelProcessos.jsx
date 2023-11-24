@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Painel from "../../../components/Painel/Painel";
 import './PainelProcessos.css'
 import { filtroPedidosNaoFinalizados, getPedidosNaoFinalizados } from "../../../_services/rsd.service";
-import { Container, Box, Typography, Paper, TextField, Button, CircularProgress, Skeleton } from "@mui/material";
+import { Container, Box, Typography, Paper, TextField, Button, Skeleton } from "@mui/material";
 
 const PainelProcessos = () => {
 
@@ -48,24 +48,15 @@ const PainelProcessos = () => {
 
     const pesquisaFiltro = async (e) => {
         try {
-
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/naoFinalizados/filtro/${pesquisa}`, { withCredentials: true })
-
             e.preventDefault()
-
             const result = await filtroPedidosNaoFinalizados(pesquisa)
-
             setPedidos(result.pedidos)
-
             setAiniciar([])
             setAgendados([])
             setAguardandoContatos([])
             setAguardandoDocs([])
 
             result.pedidos.forEach(e => {
-
-                console.log(e);
-
                 if (e.status === 'A iniciar') {
                     setAiniciar(aIniciar => [...aIniciar, e])
                 }
@@ -126,133 +117,133 @@ const PainelProcessos = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container style={{ display: 'flex', justifyContent: 'center' }}>
-                <Box>
-                    <Typography mt={2} variant="h6">
-                        Painel de Processos
-                    </Typography>
-                    <form action="">
-                        <Box component={Paper} display='flex' p={2} mb={2} mt={2} >
-                            <TextField size="small" type="text" label="Marca ótica, nome, CPF, Protocolo" onChange={e => setPesquisa(e.target.value)} style={{ marginRight: '10px' }} />
-                            {/* <select name="analista" id="analista">
+            <Sidebar>
+                <Container style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box>
+                        <Typography mt={2} variant="h6">
+                            Painel de Processos
+                        </Typography>
+                        <form action="">
+                            <Box component={Paper} display='flex' p={2} mb={2} mt={2} >
+                                <TextField size="small" type="text" label="Marca ótica, nome, CPF, Protocolo" onChange={e => setPesquisa(e.target.value)} style={{ marginRight: '10px' }} />
+                                {/* <select name="analista" id="analista">
                                 <option value="">Analista</option>
                             </select> */}
-                            <Button type="submit" variant="contained" onClick={pesquisaFiltro} >Pesquisar</Button>
-                        </Box>
-                    </form>
+                                <Button type="submit" variant="contained" onClick={pesquisaFiltro} >Pesquisar</Button>
+                            </Box>
+                        </form>
 
-                    <div className="painel-processos">
+                        <div className="painel-processos">
 
-                        {
-                            pedidos.length === 0 ? (
-                                <Box minWidth='500px' width='100%' display='flex' justifyContent='space-between' >
-                                    <Box width='100px' >
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                    </Box>
-                                    <Box width='100px'>
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                    </Box>
-                                    <Box width='100px' >
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                    </Box>
-                                    <Box width='100px' >
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                    </Box>
+                            {
+                                pedidos.length === 0 ? (
+                                    <Box minWidth='500px' width='100%' display='flex' justifyContent='space-between' >
+                                        <Box width='100px' >
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                        </Box>
+                                        <Box width='100px'>
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                        </Box>
+                                        <Box width='100px' >
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                        </Box>
+                                        <Box width='100px' >
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                            <Skeleton animation="wave" />
+                                        </Box>
 
-                                </Box>
-                            ) : (
-                                <>
-                                    <Painel
-                                        statusVencido={statusVencidoIniciar}
-                                        statusVenceHoje={statusVenceHojeIniciar}
-                                        statusVenceAmanha={statusVenceAmanhaIniciar}
-                                        statusVence2={statusVence2Iniciar}
-                                        statusVence3={statusVence3Iniciar}
-                                        statusVence4={statusVence4Iniciar}
-                                        setStatusVencido={setStatusVencidoInciar}
-                                        setStatusVenceHoje={setStatusVenceHojeInciar}
-                                        setStatusVenceAmanha={setStatusVenceAmanhaInciar}
-                                        setStatusVence2={setStatusVence2Inciar}
-                                        setStatusVence3={setStatusVence3Inciar}
-                                        setStatusVence4={setStatusVence4Iniciar}
-                                        title={'A iniciar'}
-                                        protocolos={aIniciar}
-                                    />
-                                    <div className="painel">
+                                    </Box>
+                                ) : (
+                                    <>
                                         <Painel
-                                            statusVencido={statusVencidoAgendado}
-                                            statusVenceHoje={statusVenceHojeAgendado}
-                                            statusVenceAmanha={statusVenceAmanhaAgendado}
-                                            statusVence2={statusVence2Agendado}
-                                            statusVence3={statusVence3Agendado}
-                                            statusVence4={statusVence4Agendado}
-                                            setStatusVencido={setStatusVencidoAgendado}
-                                            setStatusVenceHoje={setStatusVenceHojeAgendado}
-                                            setStatusVenceAmanha={setStatusVenceAmanhaAgendado}
-                                            setStatusVence2={setStatusVence2Agendado}
-                                            setStatusVence3={setStatusVence3Agendado}
-                                            setStatusVence4={setStatusVence4Agendado}
-                                            title={'Agendado'}
-                                            protocolos={agendados}
+                                            statusVencido={statusVencidoIniciar}
+                                            statusVenceHoje={statusVenceHojeIniciar}
+                                            statusVenceAmanha={statusVenceAmanhaIniciar}
+                                            statusVence2={statusVence2Iniciar}
+                                            statusVence3={statusVence3Iniciar}
+                                            statusVence4={statusVence4Iniciar}
+                                            setStatusVencido={setStatusVencidoInciar}
+                                            setStatusVenceHoje={setStatusVenceHojeInciar}
+                                            setStatusVenceAmanha={setStatusVenceAmanhaInciar}
+                                            setStatusVence2={setStatusVence2Inciar}
+                                            setStatusVence3={setStatusVence3Inciar}
+                                            setStatusVence4={setStatusVence4Iniciar}
+                                            title={'A iniciar'}
+                                            protocolos={aIniciar}
                                         />
-                                    </div>
-                                    <div className="painel">
-                                        <Painel
-                                            statusVencido={statusVencidoAgc}
-                                            statusVenceHoje={statusVenceHojeAgc}
-                                            statusVenceAmanha={statusVenceAmanhaAgc}
-                                            statusVence2={statusVence2Agc}
-                                            statusVence3={statusVence3Agc}
-                                            statusVence4={statusVence4Agc}
-                                            setStatusVencido={setStatusVencidoAgc}
-                                            setStatusVenceHoje={setStatusVenceHojeAgc}
-                                            setStatusVenceAmanha={setStatusVenceAmanhaAgc}
-                                            setStatusVence2={setStatusVence2Agc}
-                                            setStatusVence3={setStatusVence3Agc}
-                                            setStatusVence4={setStatusVence4Agc}
-                                            title={'Aguardando Contato'}
-                                            protocolos={aguardandoContatos}
-                                        />
-                                    </div>
-                                    <div className="painel">
-                                        <Painel
-                                            statusVencido={statusVencidoAgd}
-                                            statusVenceHoje={statusVenceHojeAgd}
-                                            statusVenceAmanha={statusVenceAmanhaAgd}
-                                            statusVence2={statusVence2Agd}
-                                            statusVence3={statusVence3Agd}
-                                            statusVence4={statusVence4Agd}
-                                            setStatusVencido={setStatusVencidoAgd}
-                                            setStatusVenceHoje={setStatusVenceHojeAgd}
-                                            setStatusVenceAmanha={setStatusVenceAmanhaAgd}
-                                            setStatusVence2={setStatusVence2Agd}
-                                            setStatusVence3={setStatusVence3Agd}
-                                            setStatusVence4={setStatusVence4Agd}
-                                            title={'Aguardando Doc'}
-                                            protocolos={aguardandoDocs}
-                                        />
-                                    </div>
-                                </>
-                            )
-                        }
+                                        <div className="painel">
+                                            <Painel
+                                                statusVencido={statusVencidoAgendado}
+                                                statusVenceHoje={statusVenceHojeAgendado}
+                                                statusVenceAmanha={statusVenceAmanhaAgendado}
+                                                statusVence2={statusVence2Agendado}
+                                                statusVence3={statusVence3Agendado}
+                                                statusVence4={statusVence4Agendado}
+                                                setStatusVencido={setStatusVencidoAgendado}
+                                                setStatusVenceHoje={setStatusVenceHojeAgendado}
+                                                setStatusVenceAmanha={setStatusVenceAmanhaAgendado}
+                                                setStatusVence2={setStatusVence2Agendado}
+                                                setStatusVence3={setStatusVence3Agendado}
+                                                setStatusVence4={setStatusVence4Agendado}
+                                                title={'Agendado'}
+                                                protocolos={agendados}
+                                            />
+                                        </div>
+                                        <div className="painel">
+                                            <Painel
+                                                statusVencido={statusVencidoAgc}
+                                                statusVenceHoje={statusVenceHojeAgc}
+                                                statusVenceAmanha={statusVenceAmanhaAgc}
+                                                statusVence2={statusVence2Agc}
+                                                statusVence3={statusVence3Agc}
+                                                statusVence4={statusVence4Agc}
+                                                setStatusVencido={setStatusVencidoAgc}
+                                                setStatusVenceHoje={setStatusVenceHojeAgc}
+                                                setStatusVenceAmanha={setStatusVenceAmanhaAgc}
+                                                setStatusVence2={setStatusVence2Agc}
+                                                setStatusVence3={setStatusVence3Agc}
+                                                setStatusVence4={setStatusVence4Agc}
+                                                title={'Aguardando Contato'}
+                                                protocolos={aguardandoContatos}
+                                            />
+                                        </div>
+                                        <div className="painel">
+                                            <Painel
+                                                statusVencido={statusVencidoAgd}
+                                                statusVenceHoje={statusVenceHojeAgd}
+                                                statusVenceAmanha={statusVenceAmanhaAgd}
+                                                statusVence2={statusVence2Agd}
+                                                statusVence3={statusVence3Agd}
+                                                statusVence4={statusVence4Agd}
+                                                setStatusVencido={setStatusVencidoAgd}
+                                                setStatusVenceHoje={setStatusVenceHojeAgd}
+                                                setStatusVenceAmanha={setStatusVenceAmanhaAgd}
+                                                setStatusVence2={setStatusVence2Agd}
+                                                setStatusVence3={setStatusVence3Agd}
+                                                setStatusVence4={setStatusVence4Agd}
+                                                title={'Aguardando Doc'}
+                                                protocolos={aguardandoDocs}
+                                            />
+                                        </div>
+                                    </>
+                                )
+                            }
+                        </div>
+                    </Box>
+                </Container >
+            </Sidebar>
 
-
-                    </div>
-                </Box>
-            </Container >
         </>
     )
 }

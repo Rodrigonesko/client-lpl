@@ -91,88 +91,89 @@ const AnaliseElegibilidadeDetalhes = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%' height='100vh' overflow='auto'>
-                <Container>
-                    <Typography variant="h6" m={2}>
-                        Responsável: {proposta.analista}
-                    </Typography>
-                    {
-                        planos.includes(proposta.plano?.toUpperCase()) ? (
-                            <Alert variant="filled" severity="error">Plano na Blacklist - {proposta.plano}</Alert>
-                        ) : null
-                    }
-                    <Box component={Paper} elevation={3} p={2}>
-                        <Typography variant="h6" bgcolor='royalblue' p={1} color='white' borderRadius='5px'>
-                            {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) && proposta.nomeCorretor ? '*Corretor na blacklist*' : null} {cpfCancelado ? '- CPF JÁ CANCELADO' : ''}
+            <Sidebar>
+                <Box width='100%' height='100vh' overflow='auto'>
+                    <Container>
+                        <Typography variant="h6" m={2}>
+                            Responsável: {proposta.analista}
                         </Typography>
-
                         {
-                            Object.keys(proposta).length !== 0 ? (
-                                <StatusGeral
-                                    statusProposta={proposta.status}
-                                    status1Analise={proposta.status1Analise}
-                                    status2Analise={proposta.status2Analise}
-                                    status3Analise={proposta.status3Analise}
-                                    corretor={proposta.nomeCorretor}
-                                />
+                            planos.includes(proposta.plano?.toUpperCase()) ? (
+                                <Alert variant="filled" severity="error">Plano na Blacklist - {proposta.plano}</Alert>
                             ) : null
                         }
+                        <Box component={Paper} elevation={3} p={2}>
+                            <Typography variant="h6" bgcolor='royalblue' p={1} color='white' borderRadius='5px'>
+                                {proposta.proposta} - {proposta.nome} - {blacklist.some(obj => obj.nomeCorretor === proposta.nomeCorretor) && proposta.nomeCorretor ? '*Corretor na blacklist*' : null} {cpfCancelado ? '- CPF JÁ CANCELADO' : ''}
+                            </Typography>
 
-                        {
-                            Object.keys(proposta).length !== 0 ? (
-                                <PrimeiraFase
-                                    entidade={proposta.entidade}
-                                    planoAmil={proposta.planoAmil}
-                                    dataInicio={proposta.dataInicioPlanoAmil}
-                                    dataFim={proposta.dataFimPlanoAmil}
-                                    custo={proposta.custoPlanoAmil}
-                                    cpfCorretor={proposta.cpfCorretor}
-                                    nomeCorretor={proposta.nomeCorretor}
-                                    telefoneCorretor={proposta.telefoneCorretor}
-                                    cpfSupervisor={proposta.cpfCorretor}
-                                    nomeSupervisor={proposta.nomeSupervisor}
-                                    telefoneSupervisor={proposta.telefoneSupervisor}
-                                    fase1={proposta.fase1}
-                                    id={id}
-                                    atualizarDados={buscarDados}
-                                />
-                            ) : null
-                        }
+                            {
+                                Object.keys(proposta).length !== 0 ? (
+                                    <StatusGeral
+                                        statusProposta={proposta.status}
+                                        status1Analise={proposta.status1Analise}
+                                        status2Analise={proposta.status2Analise}
+                                        status3Analise={proposta.status3Analise}
+                                        corretor={proposta.nomeCorretor}
+                                    />
+                                ) : null
+                            }
 
-                        {
-                            Object.keys(proposta).length !== 0 ? (
-                                <SegundaFase
-                                    proposta={proposta}
-                                />
-                            ) : null
-                        }
+                            {
+                                Object.keys(proposta).length !== 0 ? (
+                                    <PrimeiraFase
+                                        entidade={proposta.entidade}
+                                        planoAmil={proposta.planoAmil}
+                                        dataInicio={proposta.dataInicioPlanoAmil}
+                                        dataFim={proposta.dataFimPlanoAmil}
+                                        custo={proposta.custoPlanoAmil}
+                                        cpfCorretor={proposta.cpfCorretor}
+                                        nomeCorretor={proposta.nomeCorretor}
+                                        telefoneCorretor={proposta.telefoneCorretor}
+                                        cpfSupervisor={proposta.cpfCorretor}
+                                        nomeSupervisor={proposta.nomeSupervisor}
+                                        telefoneSupervisor={proposta.telefoneSupervisor}
+                                        fase1={proposta.fase1}
+                                        id={id}
+                                        atualizarDados={buscarDados}
+                                    />
+                                ) : null
+                            }
 
-                        {
-                            Object.keys(proposta).length !== 0 ? (
-                                <BlacklistDiplomas proposta={proposta} />
-                            ) : null
-                        }
+                            {
+                                Object.keys(proposta).length !== 0 ? (
+                                    <SegundaFase
+                                        proposta={proposta}
+                                    />
+                                ) : null
+                            }
 
-                        {
-                            Object.keys(proposta).length !== 0 && proposta.fase1 ? (
-                                <BotoesElegibilidade
-                                    atualizarDados={buscarDados}
-                                    proposta={proposta}
-                                    blacklistPlanos={planos}
-                                />
-                            ) : null
-                        }
-                        {
-                            Object.keys(proposta).length !== 0 && proposta.motivoCancelamento ? (
-                                <MotivoCancelamento proposta={proposta}></MotivoCancelamento>
-                            ) : null
-                        }
-                        <AgendaElegibilidade id={id} agenda={agenda} buscarAgenda={() => buscarAgenda()} />
+                            {
+                                Object.keys(proposta).length !== 0 ? (
+                                    <BlacklistDiplomas proposta={proposta} />
+                                ) : null
+                            }
 
-                    </Box>
-                </Container>
-            </Box>
+                            {
+                                Object.keys(proposta).length !== 0 && proposta.fase1 ? (
+                                    <BotoesElegibilidade
+                                        atualizarDados={buscarDados}
+                                        proposta={proposta}
+                                        blacklistPlanos={planos}
+                                    />
+                                ) : null
+                            }
+                            {
+                                Object.keys(proposta).length !== 0 && proposta.motivoCancelamento ? (
+                                    <MotivoCancelamento proposta={proposta}></MotivoCancelamento>
+                                ) : null
+                            }
+                            <AgendaElegibilidade id={id} agenda={agenda} buscarAgenda={() => buscarAgenda()} />
+
+                        </Box>
+                    </Container>
+                </Box>
+            </Sidebar>
         </>
     )
 }

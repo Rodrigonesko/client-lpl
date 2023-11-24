@@ -214,104 +214,105 @@ const FaturamentoEntrevistas = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section className="section-faturamento-entrevistas-container">
-                <div className="faturamento-entrevistas-container">
-                    <div className="title">
-                        <h3>Faturamento</h3>
-                    </div>
-                    <div className="filtros-faturamento-entrevistas">
-                        <FormControl variant='standard'>
-                            <InputLabel id='status'>Status</InputLabel>
-                            <Select
-                                labelId="status"
-                                id='select-status'
-                                label='Status'
-                                style={{ minWidth: '100px' }}
-                                onChange={e => {
-                                    setStatus(e.target.value)
-                                }}
-                            >
-                                <MenuItem value='todos'>
-                                    <em>
+            <Sidebar>
+                <section className="section-faturamento-entrevistas-container">
+                    <div className="faturamento-entrevistas-container">
+                        <div className="title">
+                            <h3>Faturamento</h3>
+                        </div>
+                        <div className="filtros-faturamento-entrevistas">
+                            <FormControl variant='standard'>
+                                <InputLabel id='status'>Status</InputLabel>
+                                <Select
+                                    labelId="status"
+                                    id='select-status'
+                                    label='Status'
+                                    style={{ minWidth: '100px' }}
+                                    onChange={e => {
+                                        setStatus(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='todos'>
+                                        <em>
 
-                                    </em>
-                                </MenuItem>
-                                <MenuItem value='Faturado'>Faturado</MenuItem>
-                                <MenuItem value='Não faturado'>Não faturado</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <label htmlFor="mes-ano">Mes/Ano</label>
-                        <TextField
-                            variant='standard'
-                            type='month'
-                            name="mes-ano" id="mes-ano"
-                            onChange={e => setData(e.target.value)}
-                        />
-                        <Button variant='contained' onClick={pesquisar}>Filtrar</Button>
-                        <TextField variant='standard' type="text" id="nota-fiscal" onChange={e => setNotaFiscalPreencher(e.target.value)} label='Preencher NF' />
-                        <Button variant='contained' onClick={preencherNotasFiscais}>Preencher</Button>
-                        <Button variant='contained' onClick={marcarTodos}>Marcar Todos</Button>
-                        <Button variant='contained' onClick={gerarRelatorio}>Report</Button>
+                                        </em>
+                                    </MenuItem>
+                                    <MenuItem value='Faturado'>Faturado</MenuItem>
+                                    <MenuItem value='Não faturado'>Não faturado</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <label htmlFor="mes-ano">Mes/Ano</label>
+                            <TextField
+                                variant='standard'
+                                type='month'
+                                name="mes-ano" id="mes-ano"
+                                onChange={e => setData(e.target.value)}
+                            />
+                            <Button variant='contained' onClick={pesquisar}>Filtrar</Button>
+                            <TextField variant='standard' type="text" id="nota-fiscal" onChange={e => setNotaFiscalPreencher(e.target.value)} label='Preencher NF' />
+                            <Button variant='contained' onClick={preencherNotasFiscais}>Preencher</Button>
+                            <Button variant='contained' onClick={marcarTodos}>Marcar Todos</Button>
+                            <Button variant='contained' onClick={gerarRelatorio}>Report</Button>
+                        </div>
+                        <div className="entrevistas-faturamento">
+                            {
+                                loading ? (
+                                    <CircularProgress style={{ position: 'absolute', top: '40%' }} />
+                                ) : null
+                            }
+                            <table className="table">
+                                <thead className="table-header">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Analista</th>
+                                        <th>Tipo</th>
+                                        <th>Proposta</th>
+                                        <th>Nome</th>
+                                        <th>Data Entrevista</th>
+                                        <th>Faturado</th>
+                                        <th>Nota Fiscal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        entrevistas.map(e => {
+                                            return (
+                                                <tr key={e._id}>
+                                                    <td className="id-faturamento">{e._id}</td>
+                                                    <td>{e.analista}</td>
+                                                    <td className="tipo">{e.tipo}</td>
+                                                    <td>{e.proposta}</td>
+                                                    <td>{e.nome}</td>
+                                                    <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
+                                                    <td><input type="checkbox" name="" id="" className="check-faturado" defaultChecked={e.faturado === 'Faturado'} /></td>
+                                                    <td><input type="text" name="" id="" className="td-nf" defaultValue={e.nf} /></td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <button onClick={realizarFaturamento}>Faturar</button>
+                        </div>
                     </div>
-                    <div className="entrevistas-faturamento">
-                        {
-                            loading ? (
-                                <CircularProgress style={{ position: 'absolute', top: '40%' }} />
-                            ) : null
-                        }
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Analista</th>
-                                    <th>Tipo</th>
-                                    <th>Proposta</th>
-                                    <th>Nome</th>
-                                    <th>Data Entrevista</th>
-                                    <th>Faturado</th>
-                                    <th>Nota Fiscal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    entrevistas.map(e => {
-                                        return (
-                                            <tr key={e._id}>
-                                                <td className="id-faturamento">{e._id}</td>
-                                                <td>{e.analista}</td>
-                                                <td className="tipo">{e.tipo}</td>
-                                                <td>{e.proposta}</td>
-                                                <td>{e.nome}</td>
-                                                <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
-                                                <td><input type="checkbox" name="" id="" className="check-faturado" defaultChecked={e.faturado === 'Faturado'} /></td>
-                                                <td><input type="text" name="" id="" className="td-nf" defaultValue={e.nf} /></td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                        <button onClick={realizarFaturamento}>Faturar</button>
-                    </div>
-                </div>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'>
-                    <div className="title">
-                        <h2>Faturamento feito com sucesso!</h2>
-                    </div>
-                    <button onClick={() => {
-                        closeModal()
-                        window.location.reload()
-                    }}>Fechar</button>
-                </Modal>
-            </section>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        contentLabel="Exemplo"
+                        overlayClassName='modal-overlay'
+                        className='modal-content'>
+                        <div className="title">
+                            <h2>Faturamento feito com sucesso!</h2>
+                        </div>
+                        <button onClick={() => {
+                            closeModal()
+                            window.location.reload()
+                        }}>Fechar</button>
+                    </Modal>
+                </section>
+            </Sidebar>
         </>
     )
 }

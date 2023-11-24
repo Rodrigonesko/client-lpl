@@ -7,12 +7,6 @@
     padding: 6px;
 }
 
-.section-agendamento-container {
-    width: 100%;
-    overflow: auto;
-    height: 100vh;
-}
-
 .agendamento-container {
     display: flex;
     justify-content: center;

@@ -117,133 +117,135 @@ const Anexos = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Box className="section-anexos-container">
-                <Typography ml={5} mt={2} variant="h5">
-                    Anexar SisAmil: {propostas.length}
-                </Typography>
-                <Box display='flex' justifyContent='space-between' >
-                    <FormControl size="small" sx={{ minWidth: '130px', ml: 5 }}>
-                        <InputLabel>Divergência</InputLabel>
-                        <Select
-                            label='Divergência'
-                            value={divergencia}
-                            onChange={
-                                (e) => {
-                                    handleChange(e.target.value)
+            <Sidebar>
+                <Box className="section-anexos-container">
+                    <Typography ml={5} mt={2} variant="h5">
+                        Anexar SisAmil: {propostas.length}
+                    </Typography>
+                    <Box display='flex' justifyContent='space-between' >
+                        <FormControl size="small" sx={{ minWidth: '130px', ml: 5 }}>
+                            <InputLabel>Divergência</InputLabel>
+                            <Select
+                                label='Divergência'
+                                value={divergencia}
+                                onChange={
+                                    (e) => {
+                                        handleChange(e.target.value)
+                                    }
                                 }
-                            }
-                        >
-                            <MenuItem value='Todos'>
-                                Todos
-                            </MenuItem>
-                            <MenuItem value='Sim'>
-                                Sim
-                            </MenuItem>
-                            <MenuItem value='Não'>
-                                Não
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                    <RelatorioAnexos />
-                </Box>
-                {
-                    loading ? (
-                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
+                            >
+                                <MenuItem value='Todos'>
+                                    Todos
+                                </MenuItem>
+                                <MenuItem value='Sim'>
+                                    Sim
+                                </MenuItem>
+                                <MenuItem value='Não'>
+                                    Não
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+                        <RelatorioAnexos />
+                    </Box>
+                    {
+                        loading ? (
+                            <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
 
-                    ) : null
-                }
-                <Box m={2}>
-                    <TableContainer>
-                        <Table className="table">
-                            <TableHead className="table-header">
-                                <TableRow>
-                                    <TableCell>Vigência</TableCell>
-                                    <TableCell>Proposta</TableCell>
-                                    <TableCell>Nome</TableCell>
-                                    <TableCell>TipoContrato</TableCell>
-                                    <TableCell>Houve Divergência</TableCell>
-                                    <TableCell>Cids</TableCell>
-                                    <TableCell>Divergência</TableCell>
-                                    <TableCell>Concluir</TableCell>
-                                    <TableCell>Implantação</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    propostas.map(e => {
-                                        return (
-                                            <TableRow key={e._id}>
-                                                <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>
-                                                <TableCell>{e.proposta}</TableCell>
-                                                <TableCell>{e.nome}</TableCell>
-                                                <TableCell>{e.tipoContrato}</TableCell>
-                                                <TableCell>{e.houveDivergencia}</TableCell>
-                                                <TableCell>{e.cids}</TableCell>
-                                                <TableCell>{e.divergencia}</TableCell>
-                                                <TableCell><Button variant='contained' color='success' size='small' onClick={() => {
-                                                    setModalConcluir(true)
-                                                    setProposta(e.proposta)
-                                                    setNome(e.nome)
-                                                    setId(e._id)
-                                                }} >Concluir</Button></TableCell>
-                                                <TableCell><Button variant='contained' color='warning' size='small' onClick={() => {
-                                                    setModalImplantar(true)
-                                                    setProposta(e.proposta)
-                                                    setNome(e.nome)
-                                                    setId(e._id)
-                                                }}>Implantação</Button></TableCell>
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                        ) : null
+                    }
+                    <Box m={2}>
+                        <TableContainer>
+                            <Table className="table">
+                                <TableHead className="table-header">
+                                    <TableRow>
+                                        <TableCell>Vigência</TableCell>
+                                        <TableCell>Proposta</TableCell>
+                                        <TableCell>Nome</TableCell>
+                                        <TableCell>TipoContrato</TableCell>
+                                        <TableCell>Houve Divergência</TableCell>
+                                        <TableCell>Cids</TableCell>
+                                        <TableCell>Divergência</TableCell>
+                                        <TableCell>Concluir</TableCell>
+                                        <TableCell>Implantação</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        propostas.map(e => {
+                                            return (
+                                                <TableRow key={e._id}>
+                                                    <TableCell>{moment(e.vigencia).format('DD/MM/YYYY')}</TableCell>
+                                                    <TableCell>{e.proposta}</TableCell>
+                                                    <TableCell>{e.nome}</TableCell>
+                                                    <TableCell>{e.tipoContrato}</TableCell>
+                                                    <TableCell>{e.houveDivergencia}</TableCell>
+                                                    <TableCell>{e.cids}</TableCell>
+                                                    <TableCell>{e.divergencia}</TableCell>
+                                                    <TableCell><Button variant='contained' color='success' size='small' onClick={() => {
+                                                        setModalConcluir(true)
+                                                        setProposta(e.proposta)
+                                                        setNome(e.nome)
+                                                        setId(e._id)
+                                                    }} >Concluir</Button></TableCell>
+                                                    <TableCell><Button variant='contained' color='warning' size='small' onClick={() => {
+                                                        setModalImplantar(true)
+                                                        setProposta(e.proposta)
+                                                        setNome(e.nome)
+                                                        setId(e._id)
+                                                    }}>Implantação</Button></TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+                    <Modal
+                        open={modalConcluir}
+                        onClose={() => { setModalConcluir(false) }}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Deseja concluir a proposta?
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Proposta: {proposta} - Nome: {nome}
+                            </Typography>
+                            <Box mt={2} display='flex' justifyContent='space-around'>
+                                <Button variant="contained" color='inherit' onClick={() => { setModalConcluir(false) }}>Fechar</Button>
+                                <Button variant="contained" color="success" onClick={() => {
+                                    anexar(id)
+                                }}>Concluir</Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={modalImplantar}
+                        onClose={() => { setModalImplantar(false) }}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Deseja mandar para implantação?
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Proposta: {proposta} - Nome: {nome}
+                            </Typography>
+                            <Box mt={2} display='flex' justifyContent='space-around'>
+                                <Button variant="contained" color='inherit' onClick={() => { setModalImplantar(false) }}>Fechar</Button>
+                                <Button variant="contained" color="warning" onClick={() => {
+                                    mandarImplatacao(id)
+                                }}>Implantação</Button>
+                            </Box>
+                        </Box>
+                    </Modal>
                 </Box>
-                <Modal
-                    open={modalConcluir}
-                    onClose={() => { setModalConcluir(false) }}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Deseja concluir a proposta?
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Proposta: {proposta} - Nome: {nome}
-                        </Typography>
-                        <Box mt={2} display='flex' justifyContent='space-around'>
-                            <Button variant="contained" color='inherit' onClick={() => { setModalConcluir(false) }}>Fechar</Button>
-                            <Button variant="contained" color="success" onClick={() => {
-                                anexar(id)
-                            }}>Concluir</Button>
-                        </Box>
-                    </Box>
-                </Modal>
-                <Modal
-                    open={modalImplantar}
-                    onClose={() => { setModalImplantar(false) }}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Deseja mandar para implantação?
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Proposta: {proposta} - Nome: {nome}
-                        </Typography>
-                        <Box mt={2} display='flex' justifyContent='space-around'>
-                            <Button variant="contained" color='inherit' onClick={() => { setModalImplantar(false) }}>Fechar</Button>
-                            <Button variant="contained" color="warning" onClick={() => {
-                                mandarImplatacao(id)
-                            }}>Implantação</Button>
-                        </Box>
-                    </Box>
-                </Modal>
-            </Box>
+            </Sidebar>
+
         </>
     )
 }

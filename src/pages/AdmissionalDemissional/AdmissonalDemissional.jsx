@@ -14,7 +14,7 @@ const AdmissionalDemissional = () => {
         'Email', 'Assinatura Email', 'Linux', 'Notebook', 'Ramal', 'Portal LPL', 'Ponto', 'Crachá', 'Digital Sala', 'TransUnion', 'SisAmil',
         'Treinamento Obrigatórios'
     ]
-    
+
     const acoesDemissional = [
         'Entrega Carta Pedido de Demissão ou Assinatura de Rescisão do Contrato', 'Agendamento Exame Demissional', 'Envio docs assinados para baixa',
         'Assinar Documentos/Acerto', 'Conta Salario', 'VR', 'VC', 'VT/MetroCard', 'Cancelar Email', 'Cancelar Linux', 'Notebook', 'Ramal',
@@ -75,9 +75,9 @@ const AdmissionalDemissional = () => {
         try {
             setBusca(true);
             const result = await getInfoEmail(email);
-    
+
             // Adicione o tratamento do resultado, se necessário
-    
+
         } catch (error) {
             console.log(error);
         } finally {
@@ -122,74 +122,75 @@ const AdmissionalDemissional = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <div className="title">
-                    <h2>Admissional / Demissional</h2>
-                </div>
-                <br />
-                <ModalGerar setFlushHook={setFlushHook} flushHook={flushHook} setNomeCompleto={setNomeCompleto} setNumero={setNumero} />
-                <br />
-                <br />
-                <Box display='flex'>
-                    <Autocomplete
-                        size="small"
-                        disablePortal
-                        id="nome-auto-complete"
-                        options={nomes}
-                        onChange={(event, item) => {
-                            setNome(item.nome);
-                        }}
-                        getOptionLabel={(nomes) => nomes.nome}
-                        sx={{ width: 400 }}
-                        renderInput={(params) => <TextField {...params} label='Nome' />}
-                    />
-                    <Button type='button' onClick={buscarNome} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
-                </Box>
-                <br />
-                <Box display='flex'>
-                    <Autocomplete
-                        size="small"
-                        disablePortal
-                        id="email-auto-complete"
-                        options={emails}
-                        onChange={(event, item) => {
-                            setEmail(item.email);
-                        }}
-
-                        getOptionLabel={emails => emails.email}
-                        sx={{ width: 400 }}
-                        renderInput={(params) => <TextField {...params} label='Email' />}
-                    />
-                    <Button type='submit' onClick={buscarEmail} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
-                </Box>
-                <Box>
+            <Sidebar>
+                <Container>
+                    <div className="title">
+                        <h2>Admissional / Demissional</h2>
+                    </div>
                     <br />
-                    <Typography>Nome do colaborador: {nomeCompleto}</Typography>
-                    <Typography>Número do colaborador: {numero}</Typography>
-                </Box>
-                <br />
-                <FormControl>
-                    <FormLabel>Qual o tipo de exame:</FormLabel>
-                    <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
-                        <FormControlLabel value="admissional" control={<Radio onClick={handleChange} />} label="Admissional" />
-                        <FormControlLabel value="demissional" control={<Radio onClick={handleChange} />} label="Demissional" />
-                        <Divider />
-                        <br />
-                        {
-                            tipoExame === 'admissional' ? (
-                                <TabelaAdmissional acoesAdmissional={acoesAdmissional} responsavel={responsavelAdmissao} fornecedor={fornecedorAdmissao} />
-                            ) : tipoExame === 'demissional' ? (
-                                <TabelaDemissional acoesDemissional={acoesDemissional} responsavel={responsavelDemissao} fornecedor={fornecedorDemissao} />
-                            ) : (
-                                <>
-                                </>
-                            )
-                        }
-                    </RadioGroup>
-                </FormControl>
+                    <ModalGerar setFlushHook={setFlushHook} flushHook={flushHook} setNomeCompleto={setNomeCompleto} setNumero={setNumero} />
+                    <br />
+                    <br />
+                    <Box display='flex'>
+                        <Autocomplete
+                            size="small"
+                            disablePortal
+                            id="nome-auto-complete"
+                            options={nomes}
+                            onChange={(event, item) => {
+                                setNome(item.nome);
+                            }}
+                            getOptionLabel={(nomes) => nomes.nome}
+                            sx={{ width: 400 }}
+                            renderInput={(params) => <TextField {...params} label='Nome' />}
+                        />
+                        <Button type='button' onClick={buscarNome} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
+                    </Box>
+                    <br />
+                    <Box display='flex'>
+                        <Autocomplete
+                            size="small"
+                            disablePortal
+                            id="email-auto-complete"
+                            options={emails}
+                            onChange={(event, item) => {
+                                setEmail(item.email);
+                            }}
 
-            </Container >
+                            getOptionLabel={emails => emails.email}
+                            sx={{ width: 400 }}
+                            renderInput={(params) => <TextField {...params} label='Email' />}
+                        />
+                        <Button type='submit' onClick={buscarEmail} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
+                    </Box>
+                    <Box>
+                        <br />
+                        <Typography>Nome do colaborador: {nomeCompleto}</Typography>
+                        <Typography>Número do colaborador: {numero}</Typography>
+                    </Box>
+                    <br />
+                    <FormControl>
+                        <FormLabel>Qual o tipo de exame:</FormLabel>
+                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
+                            <FormControlLabel value="admissional" control={<Radio onClick={handleChange} />} label="Admissional" />
+                            <FormControlLabel value="demissional" control={<Radio onClick={handleChange} />} label="Demissional" />
+                            <Divider />
+                            <br />
+                            {
+                                tipoExame === 'admissional' ? (
+                                    <TabelaAdmissional acoesAdmissional={acoesAdmissional} responsavel={responsavelAdmissao} fornecedor={fornecedorAdmissao} />
+                                ) : tipoExame === 'demissional' ? (
+                                    <TabelaDemissional acoesDemissional={acoesDemissional} responsavel={responsavelDemissao} fornecedor={fornecedorDemissao} />
+                                ) : (
+                                    <>
+                                    </>
+                                )
+                            }
+                        </RadioGroup>
+                    </FormControl>
+
+                </Container >
+            </Sidebar>
         </>
     )
 }

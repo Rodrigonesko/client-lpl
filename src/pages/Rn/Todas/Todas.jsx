@@ -14,7 +14,7 @@ const Todas = () => {
     const [rns, setRns] = useState([])
     const [pesquisa, setPesquisa] = useState('')
     const [alerta, setAlerta] = useState(false)
- //   const [loading, setLoading] = useState(false)
+    //   const [loading, setLoading] = useState(false)
 
     let rnsForExcel
 
@@ -39,20 +39,20 @@ const Todas = () => {
         setRns(resultado)
     }
 
-/*    const handleLoading = async (event) => {
-
-        event.preventDefault()
-
-        if (pesquisa === 'true') {
-            setLoading(true)
-            return
+    /*    const handleLoading = async (event) => {
+    
+            event.preventDefault()
+    
+            if (pesquisa === 'true') {
+                setLoading(true)
+                return
+            }
+    
+            const resultado = await filterRn(pesquisa)
+            setRns(resultado)
+            setLoading(false)
         }
-
-        const resultado = await filterRn(pesquisa)
-        setRns(resultado)
-        setLoading(false)
-    }
-*/
+    */
     const transformData = async () => {
         try {
 
@@ -213,9 +213,8 @@ const Todas = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <div className="rn-container">
+            <Sidebar>
+                <Container>
 
                     <div className="title">
                         <h2>Rns</h2>
@@ -255,7 +254,7 @@ const Todas = () => {
                                         <TableCell>DETALHES</TableCell>
                                     </TableRow>
                                 </TableHead>
-                               <TableBody>
+                                <TableBody>
                                     {rns.map(e => {
                                         console.log();
                                         return (
@@ -274,8 +273,8 @@ const Todas = () => {
                             </Table>
                         </TableContainer>
                     </Box>
-                </div>
-            </Container>
+                </Container>
+            </Sidebar>
         </>
     )
 }

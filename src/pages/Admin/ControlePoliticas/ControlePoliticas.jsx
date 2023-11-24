@@ -23,8 +23,8 @@ const ControlePoliticas = () => {
     }, [flushHook])
 
     return (
-        <>
-            <Sidebar />
+
+        <Sidebar>
             <Box width='100%' height='100vh' overflow='auto'>
                 <Container>
                     <Typography m={2} variant='h6'>
@@ -62,7 +62,8 @@ const ControlePoliticas = () => {
                     </Box>
                 </Container>
             </Box>
-        </>
+        </Sidebar>
+
     )
 }
 

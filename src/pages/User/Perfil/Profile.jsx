@@ -21,10 +21,12 @@ const Profile = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%'>
-                <ProfileHead userData={userData} />
-            </Box>
+            <Sidebar>
+                <Box width='100%'>
+                    <ProfileHead userData={userData} />
+                </Box>
+            </Sidebar>
+
         </>
     )
 }

@@ -43,31 +43,33 @@ const UploadRn = () => {
 
     return (
         <>
-            <Sidebar />
-            <section className="section-upload-container">
-                {status !== '' ? (
-                    <div className="result">
-                        <Alert severity="success" variant="filled">
-                            <AlertTitle>Sucesso</AlertTitle>
-                            {status}
-                        </Alert>
+            <Sidebar>
+                <section className="section-upload-container">
+                    {status !== '' ? (
+                        <div className="result">
+                            <Alert severity="success" variant="filled">
+                                <AlertTitle>Sucesso</AlertTitle>
+                                {status}
+                            </Alert>
+                        </div>
+                    ) : null}
+                    <div className="upload-container">
+                        <form action="" method="post">
+                            <div className="title">
+                                <h2>Upload de Rn</h2>
+                            </div>
+                            <div>
+                                <label htmlFor="file-rn">Arquivo: </label>
+                                <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
+                            </div>
+                            <div className="container-btns">
+                                <button className="btn" onClick={send} >Enviar</button>
+                            </div>
+                        </form>
                     </div>
-                ) : null}
-                <div className="upload-container">
-                    <form action="" method="post">
-                        <div className="title">
-                            <h2>Upload de Rn</h2>
-                        </div>
-                        <div>
-                            <label htmlFor="file-rn">Arquivo: </label>
-                            <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
-                        </div>
-                        <div className="container-btns">
-                            <button className="btn" onClick={send} >Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+                </section>
+            </Sidebar>
+
         </>
 
     )

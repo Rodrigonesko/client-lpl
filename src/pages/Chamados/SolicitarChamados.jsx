@@ -23,11 +23,13 @@ const SolicitarChamados = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <ModalSolicitarChamados />
-                <TabelaSolicitarChamados />
-            </Container >
+            <Sidebar>
+                <Container>
+                    <ModalSolicitarChamados />
+                    <TabelaSolicitarChamados />
+                </Container >
+            </Sidebar>
+
         </>
     )
 }

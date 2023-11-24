@@ -5,13 +5,14 @@ import ListaTreinamentos from './ListaTreinamentos';
 const Treinamentos = () => {
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Typography mt={2} variant='h5' mb={2}>
-                    Controle de Treinamentos
-                </Typography>
-                <ListaTreinamentos />
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Typography mt={2} variant='h5' mb={2}>
+                        Controle de Treinamentos
+                    </Typography>
+                    <ListaTreinamentos />
+                </Container>
+            </Sidebar>
         </>
     )
 }

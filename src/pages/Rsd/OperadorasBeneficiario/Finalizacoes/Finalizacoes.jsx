@@ -26,41 +26,42 @@ const Finalizacoes = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box>
-                    <Typography variant='h5' mt={2}>
-                        Confirmação de Serviço
-                    </Typography>
-                </Box>
-                <Box m={2}>
-                    <ModalAdicionarFinalizacao flushHook={setFlushHook} />
-                </Box>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Serviço</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                finalizacoes.map(finalizacao => {
-                                    return (
-                                        <TableRow key={finalizacao._id}>
-                                            <TableCell>{finalizacao.descricao}</TableCell>
-                                            <TableCell>
-                                                <ModalDeleteFinalizacao id={finalizacao._id} flushHook={setFlushHook} />
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Box>
+                        <Typography variant='h5' mt={2}>
+                            Confirmação de Serviço
+                        </Typography>
+                    </Box>
+                    <Box m={2}>
+                        <ModalAdicionarFinalizacao flushHook={setFlushHook} />
+                    </Box>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Serviço</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    finalizacoes.map(finalizacao => {
+                                        return (
+                                            <TableRow key={finalizacao._id}>
+                                                <TableCell>{finalizacao.descricao}</TableCell>
+                                                <TableCell>
+                                                    <ModalDeleteFinalizacao id={finalizacao._id} flushHook={setFlushHook} />
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
+            </Sidebar>
         </>
     )
 }

@@ -93,24 +93,25 @@ const UrgenciaEmergenciaProducao = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container>
-                {
-                    loading ? (
-                        <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} />
-                    ) : null
-                }
+            <Sidebar>
+                <Container>
+                    {
+                        loading ? (
+                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} />
+                        ) : null
+                    }
 
-                <Button onClick={relatorio} variant='contained' style={{ position: 'absolute', top: '20px', right: '30px' }} >Relatório</Button>
-                <Box display='flex' m={2} justifyContent='space-around' alignItems='center'>
-                    <Box width='50%'>
-                        <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData} ></ProducaoDiariaMui>
+                    <Button onClick={relatorio} variant='contained' style={{ position: 'absolute', top: '20px', right: '30px' }} >Relatório</Button>
+                    <Box display='flex' m={2} justifyContent='space-around' alignItems='center'>
+                        <Box width='50%'>
+                            <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData} ></ProducaoDiariaMui>
+                        </Box>
+                        <Box>
+                            <TabelaProducaoMui producao={producaoTotal}></TabelaProducaoMui>
+                        </Box>
                     </Box>
-                    <Box>
-                        <TabelaProducaoMui producao={producaoTotal}></TabelaProducaoMui>
-                    </Box>
-                </Box>
-            </Container>
+                </Container>
+            </Sidebar>
         </>
     )
 }
