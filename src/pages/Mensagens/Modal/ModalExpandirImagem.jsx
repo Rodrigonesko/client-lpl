@@ -15,12 +15,13 @@ const ModalExpandirImagem = ({ url }) => {
 
     return (
         <Box sx={{":hover": {cursor: 'pointer'}}}>
-            <img style={{borderRadius: '5px'}} height={'400px'} width={'400px'} onClick={handleOpen} src={url} alt="Imagem" />
+            <img style={{borderRadius: '5px', maxHeight: '400px', maxWidth: '400px'}} onClick={handleOpen} src={url} alt="Imagem" />
             <Dialog
                 open={open}
                 onClose={handleClose}
+                maxWidth={'lg'}
             >
-                <img src={url} width={'100%'}></img>
+                <img src={url} width={'100%'} height={'100%'}></img>
             </Dialog>
 
         </Box>

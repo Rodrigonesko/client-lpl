@@ -140,3 +140,13 @@
 .table tr {
   border-bottom: 1px solid #bdbdbd;
 }
+
+@keyframes blink {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.blink {
+  animation: blink 1s linear infinite;
+}

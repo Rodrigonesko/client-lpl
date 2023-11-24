@@ -6,33 +6,43 @@ import CardMessage from "./Cards/CardMessage"
 import CardPessoasGrupos from "./Cards/CardPessoasGrupos"
 import { getChats } from "../../_services/chat.service"
 import { io } from "socket.io-client";
+import { useContext } from "react"
+import AuthContext from "../../context/AuthContext"
 
-const socket = io(process.env.REACT_APP_CHAT_SERVICE);
+let socket
 
 const InternMessages = () => {
 
+    const { name, } = useContext(AuthContext)
     const [flushHook, setFlushHook] = useState(false)
     const [receptor, setReceptor] = useState('')
     const [chatId, setChatId] = useState(null)
     const [chats, setChats] = useState([])
+    const [chatIdSocket, setChatIdSocket] = useState(null)
 
     const fetchData = async () => {
         const result = await getChats()
         setChats(result.chats)
         document.title = `LPL (${result.naoLidas})`
     }
-    
+
     useEffect(() => {
         setFlushHook(false)
         fetchData()
     }, [flushHook])
 
     useEffect(() => {
-        socket.on('receivedMessage', (message) => {
-            //console.log('mensagem recebida', message);
-            setFlushHook(true)
+
+        socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
+            query: `name=${name}`
         })
-    }, [])
+
+        socket.on('receivedMessage', (message) => {
+            setChatIdSocket(message.chatId)
+            setFlushHook(true)
+            console.log('oi');
+        })
+    }, [name])
 
     return (
         <>
@@ -46,7 +56,7 @@ const InternMessages = () => {
                     <Box width={'100%'} ml={2}>
                         {
                             receptor !== '' && (
-                                <CardMessage nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
+                                <CardMessage setChatIdSocket={setChatIdSocket} chatIdSocket={chatIdSocket} nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
                             )
                         }
                     </Box>

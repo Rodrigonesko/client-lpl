@@ -12,7 +12,8 @@ const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
     const { name } = useContext(AuthContext)
 
     const handleChange = async (event) => {
-        const arrayAux = users.filter(e => (e?.name.includes(event.target.value)))
+        //Preciso pesquisar no users independente de maiusculo ou minusculo
+        let arrayAux = users.filter(e => (e.name.toLowerCase().includes(event.target.value.toLowerCase())))
         setUserAux(arrayAux)
     }
 
@@ -34,7 +35,7 @@ const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
 
     const initChat = (nome) => {
         setReceptor(nome)
-        setChatId(null)
+        setChatId('')
         setFlushHook(true)
         handleClose()
     }

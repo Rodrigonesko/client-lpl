@@ -17,8 +17,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
-const socket = io(process.env.REACT_APP_CHAT_SERVICE);
-
+let socket
 
 const Sidebar = ({ children }) => {
 
@@ -33,12 +32,17 @@ const Sidebar = ({ children }) => {
     const [message, setMessage] = useState('')
     const [newMessage, setNewMessage] = useState('')
     const [chatId, setChatId] = useState('')
+    const [remetente, setRemetente] = useState('')
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
     }
     const logout = async () => {
         const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
+
+        if (socket) {
+            socket.disconnect()
+        }
 
         if (result.status === 200) {
             navigate('/login')
@@ -54,14 +58,17 @@ const Sidebar = ({ children }) => {
     useEffect(() => {
         fetchData()
 
+        socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
+            query: `name=${name}`
+        })
+
         socket.on('receivedMessage', async (data) => {
             if (location.pathname === '/internMessages') {
-                console.log(location.pathname + ' passou daqui');
                 return
             }
-            console.log('passou daqui 2');
             if (data.participantes.includes(name) && data.remetente !== name) {
                 setMessage(`${data.remetente}: ${data.mensagem}`)
+                setRemetente(data.remetente)
                 setChatId(data.chatId)
                 if (location.pathname !== '/internMessages') {
                     setOpenToast(true);
@@ -76,7 +83,7 @@ const Sidebar = ({ children }) => {
         socket.on('seeMessage', async () => {
             fetchData()
         })
-    }, [])
+    }, [name])
 
     const sendMessage = async (e) => {
         e.preventDefault()
@@ -87,7 +94,8 @@ const Sidebar = ({ children }) => {
 
         await sendMessageInterno({
             mensagem: newMessage,
-            chatId: chatId
+            chatId: chatId,
+            receptor: remetente
         })
         fetchData()
         setNewMessage('')

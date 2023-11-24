@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField, Tooltip } from "@mui/material"
+import { Avatar, Box, Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Divider, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField, Tooltip } from "@mui/material"
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useContext, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
@@ -80,7 +80,7 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
     }
 
     const handleChange = async (event) => {
-        const arrayAux = users.filter(e => (e?.name.includes(event.target.value)))
+        let arrayAux = users.filter(e => (e.name.toLowerCase().includes(event.target.value.toLowerCase())))
         setUserAux(arrayAux)
 
     }
@@ -106,6 +106,16 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
                     <form action="">
                         <TextField type='text' onChange={handleChange} label='Buscar Pessoas' size='small' sx={{ paddingRight: '3px', width: '24vw' }} />
                     </form>
+                    <Box>
+                        {selectedUsers.map((user) => (
+                            <Chip
+                                key={user}
+                                label={user}
+                                onDelete={() => handleUserSelection(user)}
+                                sx={{ m: 0.5 }}
+                            />
+                        ))}
+                    </Box>
                     {userAux.map(user => {
                         return (
                             <ListItemButton key={user._id} onClick={() => handleUserSelection(user.name)}>
