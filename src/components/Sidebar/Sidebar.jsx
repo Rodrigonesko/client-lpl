@@ -30,6 +30,7 @@ const Sidebar = () => {
     const [message, setMessage] = useState('')
     const [newMessage, setNewMessage] = useState('')
     const [chatId, setChatId] = useState('')
+    const [remetente, setRemetente] = useState('')
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -68,6 +69,7 @@ const Sidebar = () => {
             }
             if (data.participantes.includes(name) && data.remetente !== name) {
                 setMessage(`${data.remetente}: ${data.mensagem}`)
+                setRemetente(data.remetente)
                 setChatId(data.chatId)
                 if (location.pathname !== '/internMessages') {
                     setOpenToast(true);
@@ -93,7 +95,8 @@ const Sidebar = () => {
 
         await sendMessageInterno({
             mensagem: newMessage,
-            chatId: chatId
+            chatId: chatId,
+            receptor: remetente
         })
         fetchData()
         setNewMessage('')
