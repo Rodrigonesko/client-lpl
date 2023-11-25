@@ -103,34 +103,42 @@ const Sidebar = ({ children }) => {
     }
 
     return (
-        <Box display={'flex'} width={'100%'}>
-            <ProSidebar collapsed={isOpen}>
-                <Box display={'flex'} justifyContent={isOpen ? 'center' : 'end'} alignItems={'center'} height={'50px'} bgcolor={'#1D1D1D'}>
-                    <IconButton color="inherit" onClick={toggleMenu}>
-                        {isOpen ? <MenuIcon /> : <KeyboardArrowLeftIcon />}
-                    </IconButton>
-                </Box>
-                <Menu iconShape="round">
-                    <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
-                    <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
-                    <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
-                        <ChatIcon />
-                    </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
-                    <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
-                    {
-                        acessos?.administrador ? (
-                            <SubMenu title="Admin" icon={<FaShieldAlt />} >
-                                <SubMenu icon={<FaArchive />} title='RH'>
-                                    <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
-                                </SubMenu>
-                                <SubMenu title='Infra' icon={<FaTools />}>
-                                    <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/infra/liberarModulos' >Liberação Módulos</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
 
+        <Box display={'flex'} width={'100%'}>
+                <ProSidebar collapsed={isOpen}>
+                    <Box display={'flex'} justifyContent={isOpen ? 'center' : 'end'} alignItems={'center'} height={'50px'} bgcolor={'#1D1D1D'}>
+                      <IconButton color="inherit" onClick={toggleMenu}>
+                          {isOpen ? <MenuIcon /> : <KeyboardArrowLeftIcon />}
+                      </IconButton>
+                    </Box>
+                    <Menu iconShape="round">
+                        <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
+                        <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
+                        <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
+                            <ChatIcon />
+                        </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
+                        <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
+                        {
+                            acessos?.administrador ? (
+                                <SubMenu title="Admin" icon={<FaShieldAlt />} >
+                                    <SubMenu title='Produção' icon={<FaUserSecret />}>
+                                        <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
+                                    </SubMenu>
+                                    <SubMenu icon={<FaArchive />} title='RH'>
+                                        <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
+                                    </SubMenu>
+                                    <SubMenu title='Infra' icon={<FaTools />}>
+                                        <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
+                                        <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
+
+                                    </SubMenu>
                                 </SubMenu>
                                 <SubMenu title='Produção' icon={<FaUserSecret />}>
                                     <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>

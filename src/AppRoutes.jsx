@@ -180,7 +180,7 @@ const AppRoutes = () => {
                 <Route exact path="/admin/producao/criar" element={<ProtectedRoute>
                     <Create />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/infra/liberarModulos" element={<ProtectedRoute>
+                <Route exact path="/admin/producao/liberarModulos" element={<ProtectedRoute>
                     <LiberacaoModulos />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
@@ -189,7 +189,7 @@ const AppRoutes = () => {
                 <Route exact path="/admin/producao/relatorioProdutividade" element={<ProtectedRoute>
                     <RelatorioProdutividade />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/producao/controlePoliticas" element={<ProtectedRoute>
+                <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/treinamentos" element={<ProtectedRoute>

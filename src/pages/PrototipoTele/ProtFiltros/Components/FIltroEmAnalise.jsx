@@ -1,6 +1,149 @@
-import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Table, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { filterPropostas } from "../../../../_services/teleEntrevistaExterna.service";
+import Filtros from "./Filtros";
 
 const FiltroEmAnalise = () => {
+
+    const [status, setStatus] = useState({
+        agendar: true,
+        humanizado: true,
+        janelas: true,
+        ajustar: true,
+        semWhats: true,
+        agendado: true,
+    });
+
+    const [tipoContrato, setTipoContrato] = useState({
+        pme: true,
+        pf: true,
+        adesao: true,
+    });
+
+    const [vigencia, setVigencia] = useState({
+        noPrazo: true,
+        foraDoPrazo: true,
+    });
+
+    const [altoRisco, setAltoRisco] = useState({
+        baixo: true,
+        medio: true,
+        alto: true,
+    });
+
+    const [propostas, setPropostas] = useState([]);
+
+    const handleChangeStatus = (event) => {
+        setStatus({ ...status, [event.target.name]: event.target.checked });
+    }
+
+    const handleChangeTipoContrato = (event) => {
+        setTipoContrato({ ...tipoContrato, [event.target.name]: event.target.checked });
+    }
+
+    const handleChangeVigencia = (event) => {
+        setVigencia({ ...vigencia, [event.target.name]: event.target.checked });
+    }
+
+    const handleChangeAltoRisco = (event) => {
+        setAltoRisco({ ...altoRisco, [event.target.name]: event.target.checked });
+    }
+
+    const handleFilter = async () => {
+        try {
+
+            const result = await filterPropostas({
+                status: status,
+                tipoContrato: tipoContrato,
+                vigencia: vigencia,
+                altoRisco: altoRisco,
+            })
+
+            setPropostas(result);
+
+            console.log(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleClear = () => {
+        setStatus({
+            agendar: false,
+            humanizado: false,
+            janelas: false,
+            ajustar: false,
+            semWhats: false,
+            agendado: false,
+        });
+
+        setTipoContrato({
+            pme: false,
+            pf: false,
+            adesao: false,
+        });
+
+        setVigencia({
+            noPrazo: false,
+            foraDoPrazo: false,
+        });
+
+        setAltoRisco({
+            baixo: false,
+            medio: false,
+            alto: false,
+        });
+    }
+
+    const handleAll = () => {
+        setStatus({
+            agendar: true,
+            humanizado: true,
+            janelas: true,
+            ajustar: true,
+            semWhats: true,
+            agendado: true,
+        });
+
+        setTipoContrato({
+            pme: true,
+            pf: true,
+            adesao: true,
+        });
+
+        setVigencia({
+            noPrazo: true,
+            foraDoPrazo: true,
+        });
+
+        setAltoRisco({
+            baixo: true,
+            medio: true,
+            alto: true,
+        });
+    }
+
+    const fetchPropostas = async () => {
+        try {
+            const result = await filterPropostas({
+                status: status,
+                tipoContrato: tipoContrato,
+                vigencia: vigencia,
+                altoRisco: altoRisco,
+            })
+
+            setPropostas(result);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchPropostas();
+    }, []);
+
     return (
         <Box>
             <Typography
@@ -11,133 +154,22 @@ const FiltroEmAnalise = () => {
             </Typography>
             <Divider />
             <Box display={'flex'} m={2}>
-                <Box display={'flex'} flexDirection={'column'}>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                    >
-                        Filtros
-                    </Typography>
-                    <Box>
-                        <Button>
-                            Filtrar
-                        </Button>
-                        <Button>
-                            Limpar
-                        </Button>
-                    </Box>
-                    <FormControl
-                        sx={{ m: 1 }}
-                        component={'fieldset'}
-                        variant="standard"
-                    >
-                        <FormLabel
-                            component={'legend'}
-                        >
-                            Status
-                        </FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Agendar"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Humanizado"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Janelas"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Ajustar"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Sem Whats"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Agendado"
-                            />
-                        </FormGroup>
-                    </FormControl>
-                    <FormControl
-                        sx={{ m: 1 }}
-                        component={'fieldset'}
-                        variant="standard"
-                    >
-                        <FormLabel
-                            component={'legend'}
-                        >
-                            Tipo Contrato
-                        </FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="PME"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="PF"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Adesão"
-                            />
-                        </FormGroup>
-                    </FormControl>
-                    <FormControl
-                        sx={{ m: 1 }}
-                        component={'fieldset'}
-                        variant="standard"
-                    >
-                        <FormLabel
-                            component={'legend'}
-                        >
-                            Vigência
-                        </FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="No prazo"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Fora do Prazo"
-                            />
-                        </FormGroup>
-                    </FormControl>
-                    <FormControl
-                        sx={{ m: 1 }}
-                        component={'fieldset'}
-                        variant="standard"
-                    >
-                        <FormLabel
-                            component={'legend'}
-                        >
-                            Alto Risco
-                        </FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Baixo"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Médio"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Alto"
-                            />
-                        </FormGroup>
-                    </FormControl>
-                </Box>
+                <Filtros
+                    status={status}
+                    tipoContrato={tipoContrato}
+                    vigencia={vigencia}
+                    altoRisco={altoRisco}
+                    handleChangeStatus={handleChangeStatus}
+                    handleChangeTipoContrato={handleChangeTipoContrato}
+                    handleChangeVigencia={handleChangeVigencia}
+                    handleChangeAltoRisco={handleChangeAltoRisco}
+                    handleFilter={handleFilter}
+                    handleClear={handleClear}
+                    handleAll={handleAll}
+                />
                 <Box>
                     <TableContainer>
-                        <Table>
+                        <Table size="small">
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Recebimento</TableCell>
@@ -154,6 +186,35 @@ const FiltroEmAnalise = () => {
                                     <TableCell>Detalhes</TableCell>
                                 </TableRow>
                             </TableHead>
+                            <TableBody>
+                                {propostas.map((proposta) => (
+                                    <TableRow
+                                        key={proposta._id}
+                                    >
+                                        <TableCell>{proposta.dataRecebimento}</TableCell>
+                                        <TableCell>{proposta.vigencia}</TableCell>
+                                        <TableCell>{proposta.proposta}</TableCell>
+                                        <TableCell>{proposta.nome}</TableCell>
+                                        <TableCell>{proposta.tipoAssociado}</TableCell>
+                                        <TableCell>{proposta.idade}</TableCell>
+                                        <TableCell>{proposta.sexo}</TableCell>
+                                        <TableCell>{proposta.tipoContrato}</TableCell>
+                                        <TableCell>{proposta.janelaEscolhida}</TableCell>
+                                        <TableCell>{proposta.newStatus}</TableCell>
+                                        <TableCell>{proposta.risco}</TableCell>
+                                        <TableCell>
+                                            <Button
+                                                variant={'contained'}
+                                                color={'primary'}
+                                            >
+                                                Detalhes
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                                }
+
+                            </TableBody>
                         </Table>
                     </TableContainer>
                 </Box>
