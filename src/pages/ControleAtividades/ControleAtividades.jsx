@@ -71,19 +71,20 @@ const ControleAtividades = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box m={2}>
-                    <Button onClick={relatorio} variant='contained' size='small'>Report</Button>
-                </Box>
-                <Box m={2}>
-                    <Typography variant='h5'>
-                        {/* Atividade Principal: Elegibilidade */}
-                    </Typography>
-                </Box>
-                <br />
-                <TabelaCelulas report={report} atividadeAtual={atividadeAtual} />
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Box m={2}>
+                        <Button onClick={relatorio} variant='contained' size='small'>Report</Button>
+                    </Box>
+                    <Box m={2}>
+                        <Typography variant='h5'>
+                            {/* Atividade Principal: Elegibilidade */}
+                        </Typography>
+                    </Box>
+                    <br />
+                    <TabelaCelulas report={report} atividadeAtual={atividadeAtual} />
+                </Container>
+            </Sidebar>
         </>
     )
 }

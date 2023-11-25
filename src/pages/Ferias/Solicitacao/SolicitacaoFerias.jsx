@@ -10,8 +10,8 @@ const SolicitacaoFerias = () => {
     const [flushHook, setFlushHook] = useState(false)
 
     return (
-        <>
-            <Sidebar />
+
+        <Sidebar>
             <Container>
                 <div className="title">
                     <h2>Solicitação de Férias</h2>
@@ -25,7 +25,8 @@ const SolicitacaoFerias = () => {
 
                 <TabelaSolicitacao flushHook={flushHook} setFlushHook={setFlushHook} />
             </Container >
-        </>
+        </Sidebar>
+
     )
 }
 

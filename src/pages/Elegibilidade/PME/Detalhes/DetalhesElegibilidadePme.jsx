@@ -29,58 +29,59 @@ const DetalhesElegibilidadePme = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%' height='100vh' overflow='auto'>
-                <Container>
-                    <Typography m={2} variant="h6" >
-                        Informações da Proposta
-                    </Typography>
-                    <Divider />
-                    {
-                        proposta.status === 'Concluido' ? (
-                            <Alert variant="filled" severity="success" >
-                                Proposta concluida por {proposta.analista}
-                            </Alert>
-                        ) : null
-                    }
-                    {
-                        proposta.status === 'Redistribuído' ? (
-                            <Alert variant="filled" severity="info" >
-                                Proposta redistribuída por {proposta.analista}
-                            </Alert>
-                        ) : null
-                    }
-                    {
-                        proposta.status === 'Devolvida' ? (
-                            <Alert variant="filled" severity="warning" >
-                                Proposta devolvida por {proposta.analista}
-                                <br />
-                                Motivo: {proposta.motivo}
-                            </Alert>
-                        ) : null
-                    }
-                    <Box mt={2} component={Paper} elevation={3} p={1}>
-                        <Typography>
-                            Proposta - {proposta.proposta} - {proposta.analista}
+            <Sidebar>
+                <Box width='100%' height='100vh' overflow='auto'>
+                    <Container>
+                        <Typography m={2} variant="h6" >
+                            Informações da Proposta
                         </Typography>
                         <Divider />
-                        <InfoElegibilidadePme proposta={proposta} />
-                        <Box m={2}>
-                            {
-                                proposta.status === 'A iniciar' ? (
-                                    <>
-                                        <ModalConcluirElegibilidadePme setFlushHook={setFlushHook} />
-                                        <ModalDevolverElegibilidadePme setFlushHook={setFlushHook} />
-                                        <ModalRedistribuirElegibilidadePme setFlushHook={setFlushHook} />
-                                    </>
-                                ) : null
-                            }
+                        {
+                            proposta.status === 'Concluido' ? (
+                                <Alert variant="filled" severity="success" >
+                                    Proposta concluida por {proposta.analista}
+                                </Alert>
+                            ) : null
+                        }
+                        {
+                            proposta.status === 'Redistribuído' ? (
+                                <Alert variant="filled" severity="info" >
+                                    Proposta redistribuída por {proposta.analista}
+                                </Alert>
+                            ) : null
+                        }
+                        {
+                            proposta.status === 'Devolvida' ? (
+                                <Alert variant="filled" severity="warning" >
+                                    Proposta devolvida por {proposta.analista}
+                                    <br />
+                                    Motivo: {proposta.motivo}
+                                </Alert>
+                            ) : null
+                        }
+                        <Box mt={2} component={Paper} elevation={3} p={1}>
+                            <Typography>
+                                Proposta - {proposta.proposta} - {proposta.analista}
+                            </Typography>
+                            <Divider />
+                            <InfoElegibilidadePme proposta={proposta} />
+                            <Box m={2}>
+                                {
+                                    proposta.status === 'A iniciar' ? (
+                                        <>
+                                            <ModalConcluirElegibilidadePme setFlushHook={setFlushHook} />
+                                            <ModalDevolverElegibilidadePme setFlushHook={setFlushHook} />
+                                            <ModalRedistribuirElegibilidadePme setFlushHook={setFlushHook} />
+                                        </>
+                                    ) : null
+                                }
 
+                            </Box>
                         </Box>
-                    </Box>
-                    <AgendaElegibilidadePme proposta={proposta.proposta} />
-                </Container>
-            </Box>
+                        <AgendaElegibilidadePme proposta={proposta.proposta} />
+                    </Container>
+                </Box>
+            </Sidebar>
         </>
     )
 }

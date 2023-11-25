@@ -23,7 +23,7 @@ const BaixaAgd = () => {
             const formData = new FormData()
             formData.append('file', file, file.name)
 
-            await baixaAgd( formData )
+            await baixaAgd(formData)
             setLoading(false)
 
             setSuccess(true)
@@ -37,36 +37,33 @@ const BaixaAgd = () => {
 
     return (
         <>
-            <Sidebar />
+            <Sidebar>
+                <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                    <Typography variant="h6" m={2}>
+                        Baixa AGD
+                    </Typography>
 
-            <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                <Typography variant="h6" m={2}>
-                    Baixa AGD
+                    {
+                        success ? (
+                            <Alert severity='success'>
+                                Baixas realizadas com sucesso!
+                            </Alert>
+                        ) : null
+                    }
 
-                </Typography>
-
-                {
-                    success ? (
-                        <Alert severity='success'>
-                            Baixas realizadas com sucesso!
-                        </Alert>
-                    ) : null
-                }
-
-                <Box component={Paper} display='flex' p={3} elevation={3}>
-                    <TextField type="file" onChange={handleFileChange} />
-                    <Button variant="contained" onClick={handleFileUpload} disabled={loading}>Enviar</Button>
-                </Box>
-                {
-                    loading ? (
-                        <Typography width='40%'>
-                            <LinearProgress />
-                        </Typography>
-                    ) : null
-                }
-
-
-            </Container>
+                    <Box component={Paper} display='flex' p={3} elevation={3}>
+                        <TextField type="file" onChange={handleFileChange} />
+                        <Button variant="contained" onClick={handleFileUpload} disabled={loading}>Enviar</Button>
+                    </Box>
+                    {
+                        loading ? (
+                            <Typography width='40%'>
+                                <LinearProgress />
+                            </Typography>
+                        ) : null
+                    }
+                </Container>
+            </Sidebar>
         </>
     )
 }

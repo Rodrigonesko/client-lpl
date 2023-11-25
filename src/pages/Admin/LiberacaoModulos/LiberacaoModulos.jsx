@@ -90,7 +90,7 @@ const LiberacaoModulos = () => {
     const liberar = async e => {
         try {
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario ,administrador, agendamento })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario, administrador, agendamento })
 
             setMsg('Modulos atualizados com sucesso!')
 
@@ -115,8 +115,7 @@ const LiberacaoModulos = () => {
     }, [])
 
     return (
-        <>
-            <Sidebar />
+        <Sidebar>
             <Container style={{ width: '100%' }}>
                 <Box m={2} style={{ width: '100%' }}>
                     <Typography variant="h4" component="h2">
@@ -265,7 +264,8 @@ const LiberacaoModulos = () => {
                     }
                 </Box>
             </Container>
-        </>
+        </Sidebar>
+
     )
 }
 

@@ -46,13 +46,14 @@ const ProducaoDiariaRsd = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container>
-                <Box m={3} display='flex' justifyContent='center' alignItems='center' >
+            <Sidebar>
+                <Container>
+                    <Box m={3} display='flex' justifyContent='center' alignItems='center' >
 
-                    <ProducaoDiariaMui producao={producao} total={total} setData={setData} title='RSD' buscarDadosData={buscarDadosData} />
-                </Box>
-            </Container>
+                        <ProducaoDiariaMui producao={producao} total={total} setData={setData} title='RSD' buscarDadosData={buscarDadosData} />
+                    </Box>
+                </Container>
+            </Sidebar>
         </>
     )
 }

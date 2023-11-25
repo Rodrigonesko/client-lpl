@@ -31,61 +31,62 @@ const Conversas = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box m={2}>
-                    <Typography variant="h5">
-                        Conversas
-                    </Typography>
-                    {
-                        loading ? (
-                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
-                        ) : null
-                    }
-                    <Box component={Paper} p={2}>
-                        <form action="" method="post" onSubmit={pesquisar}>
-                            <TextField type='search' style={{ minWidth: '300px' }} label='Proposta, nome ou número' size="small" onChange={e => setPesquisa(e.target.value)} />
-                            <Button type="submit" variant="contained">Pesquisar</Button>
-                        </form>
+            <Sidebar>
+                <Container>
+                    <Box m={2}>
+                        <Typography variant="h5">
+                            Conversas
+                        </Typography>
+                        {
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
+                            ) : null
+                        }
+                        <Box component={Paper} p={2}>
+                            <form action="" method="post" onSubmit={pesquisar}>
+                                <TextField type='search' style={{ minWidth: '300px' }} label='Proposta, nome ou número' size="small" onChange={e => setPesquisa(e.target.value)} />
+                                <Button type="submit" variant="contained">Pesquisar</Button>
+                            </form>
+                        </Box>
+                        <Box>
+                            <TableContainer>
+                                <Table className="table">
+                                    <TableHead className="table-header">
+                                        <TableRow>
+                                            <TableCell>Proposta</TableCell>
+                                            <TableCell>Nome</TableCell>
+                                            <TableCell>Cpf</TableCell>
+                                            <TableCell>Cpf Titular</TableCell>
+                                            <TableCell>Tipo Associado</TableCell>
+                                            <TableCell>DDD</TableCell>
+                                            <TableCell>Celular</TableCell>
+                                            <TableCell>Conversa</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            propostas.map(e => {
+                                                return (
+                                                    <TableRow>
+                                                        <TableCell>{e.proposta}</TableCell>
+                                                        <TableCell>{e.nome}</TableCell>
+                                                        <TableCell>{e.cpf}</TableCell>
+                                                        <TableCell>{e.cpfTitular}</TableCell>
+                                                        <TableCell>{e.tipoAssociado}</TableCell>
+                                                        <TableCell>{e.ddd}</TableCell>
+                                                        <TableCell>{e.celular}</TableCell>
+                                                        <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Box>
                     </Box>
-                    <Box>
-                        <TableContainer>
-                            <Table className="table">
-                                <TableHead className="table-header">
-                                    <TableRow>
-                                        <TableCell>Proposta</TableCell>
-                                        <TableCell>Nome</TableCell>
-                                        <TableCell>Cpf</TableCell>
-                                        <TableCell>Cpf Titular</TableCell>
-                                        <TableCell>Tipo Associado</TableCell>
-                                        <TableCell>DDD</TableCell>
-                                        <TableCell>Celular</TableCell>
-                                        <TableCell>Conversa</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        propostas.map(e => {
-                                            return (
-                                                <TableRow>
-                                                    <TableCell>{e.proposta}</TableCell>
-                                                    <TableCell>{e.nome}</TableCell>
-                                                    <TableCell>{e.cpf}</TableCell>
-                                                    <TableCell>{e.cpfTitular}</TableCell>
-                                                    <TableCell>{e.tipoAssociado}</TableCell>
-                                                    <TableCell>{e.ddd}</TableCell>
-                                                    <TableCell>{e.celular}</TableCell>
-                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
-                                                </TableRow>
-                                            )
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
-                </Box>
-            </Container>
+                </Container>
+            </Sidebar>
         </>
     )
 }

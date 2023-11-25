@@ -87,56 +87,57 @@ const CriarPedido = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Box component={Paper} p={2} elevation={3} minWidth='600px' >
-                    <Typography variant="h6" m={1}>
-                        Criar pedido
-                    </Typography>
-                    <Divider />
-                    <Box display='flex' justifyContent='center' flexDirection='column'  >
-                        <TextField size="small" style={{ margin: '10px' }} value={pedido} label='Pedido' helperText='Numero do pedido' onChange={e => setPedido(e.target.value)} />
-                        <TextField size="small" style={{ margin: '10px' }} value={valorApresentado} label='Valor apresentado' onChange={e => setValorApresentado(e.target.value)} />
-                        <TextField size="small" style={{ margin: '10px' }} value={valorReembolsado} label='Valor reembolsado' onChange={e => setValorReembolsado(e.target.value)} />
-                        <TextField size="small" style={{ margin: '10px' }} value={cnpj} label='CNPJ' onChange={e => {
-                            setCnpj(e.target.value)
-                            handlerBuscarClinica(e.target.value)
-                        }} />
-                        <TextField size="small" style={{ margin: '10px' }} value={clinica} label='Clinica' onChange={e => setClinica(e.target.value)} />
-                        <TextField size="small" style={{ margin: '10px' }} value={nf} label='NF' onChange={e => setNf(e.target.value)} />
-                        <FormControl style={{ margin: '10px' }} size="small">
-                            <InputLabel>Fila</InputLabel>
-                            <Select
-                                label='Fila'
-                                value={fila}
-                                onChange={(e) => {
-                                    setFila(e.target.value)
-                                    console.log(e.target.value);
-                                }}
-                            >
-                                <MenuItem>
-                                    <em>
-                                        Fila
-                                    </em>
-                                </MenuItem>
-                                <MenuItem value='RSD' >RSD</MenuItem>
-                                <MenuItem value='Quarentena' >Quarentena</MenuItem>
-                                <MenuItem value='Alta Frequência Consulta' >Alta Frequência Consulta</MenuItem>
+            <Sidebar>
+                <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Box component={Paper} p={2} elevation={3} minWidth='600px' >
+                        <Typography variant="h6" m={1}>
+                            Criar pedido
+                        </Typography>
+                        <Divider />
+                        <Box display='flex' justifyContent='center' flexDirection='column'  >
+                            <TextField size="small" style={{ margin: '10px' }} value={pedido} label='Pedido' helperText='Numero do pedido' onChange={e => setPedido(e.target.value)} />
+                            <TextField size="small" style={{ margin: '10px' }} value={valorApresentado} label='Valor apresentado' onChange={e => setValorApresentado(e.target.value)} />
+                            <TextField size="small" style={{ margin: '10px' }} value={valorReembolsado} label='Valor reembolsado' onChange={e => setValorReembolsado(e.target.value)} />
+                            <TextField size="small" style={{ margin: '10px' }} value={cnpj} label='CNPJ' onChange={e => {
+                                setCnpj(e.target.value)
+                                handlerBuscarClinica(e.target.value)
+                            }} />
+                            <TextField size="small" style={{ margin: '10px' }} value={clinica} label='Clinica' onChange={e => setClinica(e.target.value)} />
+                            <TextField size="small" style={{ margin: '10px' }} value={nf} label='NF' onChange={e => setNf(e.target.value)} />
+                            <FormControl style={{ margin: '10px' }} size="small">
+                                <InputLabel>Fila</InputLabel>
+                                <Select
+                                    label='Fila'
+                                    value={fila}
+                                    onChange={(e) => {
+                                        setFila(e.target.value)
+                                        console.log(e.target.value);
+                                    }}
+                                >
+                                    <MenuItem>
+                                        <em>
+                                            Fila
+                                        </em>
+                                    </MenuItem>
+                                    <MenuItem value='RSD' >RSD</MenuItem>
+                                    <MenuItem value='Quarentena' >Quarentena</MenuItem>
+                                    <MenuItem value='Alta Frequência Consulta' >Alta Frequência Consulta</MenuItem>
 
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    <Box m={1}>
-                        <Button variant="contained" onClick={handlerCriarPedido} >Criar</Button>
-                    </Box>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box m={1}>
+                            <Button variant="contained" onClick={handlerCriarPedido} >Criar</Button>
+                        </Box>
 
-                </Box>
-                <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
-                    <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Pedido criado com sucesso
-                    </Alert>
-                </Snackbar>
-            </Container>
+                    </Box>
+                    <Snackbar open={open} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} autoHideDuration={6000} onClose={handleClose} >
+                        <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                            Pedido criado com sucesso
+                        </Alert>
+                    </Snackbar>
+                </Container>
+            </Sidebar>
         </>
     )
 }

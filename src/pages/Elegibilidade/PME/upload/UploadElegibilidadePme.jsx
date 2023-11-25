@@ -35,33 +35,34 @@ const UploadElegibilidadePme = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%' height='100vh' overflow='auto' >
-                <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <Box component={Paper} p={2} elevation={4} >
-                        <Typography variant="h6" textAlign='center'>
-                            Upload de Propostas PME
-                        </Typography>
-                        <DragAndDrop file={file} bgColor={green[800]} setFile={setFile} fontColor={green[800]} text={'Arraste e solte o arquivo ou clique aqui'} textOnDrag='Solte o arquivo' textOnDrop={file ? <Typography  >{file.name} <RiFileExcel2Fill /></Typography> : ''} />
-                        <Box m={2} textAlign='center'>
-                            <Button onClick={handleUpload} disabled={loading} variant="contained" >Enviar</Button>
-                        </Box>
-                        {
-                            loading ? (
-                                <LinearProgress />
-                            ) : null
-                        }
-                        {
-                            success ? (
-                                <Alert severity="success" variant="filled">
-                                    {qtd} propostas carregadas com sucesso
-                                </Alert>
-                            ) : null
-                        }
+            <Sidebar>
+                <Box width='100%' height='100vh' overflow='auto' >
+                    <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <Box component={Paper} p={2} elevation={4} >
+                            <Typography variant="h6" textAlign='center'>
+                                Upload de Propostas PME
+                            </Typography>
+                            <DragAndDrop file={file} bgColor={green[800]} setFile={setFile} fontColor={green[800]} text={'Arraste e solte o arquivo ou clique aqui'} textOnDrag='Solte o arquivo' textOnDrop={file ? <Typography  >{file.name} <RiFileExcel2Fill /></Typography> : ''} />
+                            <Box m={2} textAlign='center'>
+                                <Button onClick={handleUpload} disabled={loading} variant="contained" >Enviar</Button>
+                            </Box>
+                            {
+                                loading ? (
+                                    <LinearProgress />
+                                ) : null
+                            }
+                            {
+                                success ? (
+                                    <Alert severity="success" variant="filled">
+                                        {qtd} propostas carregadas com sucesso
+                                    </Alert>
+                                ) : null
+                            }
 
-                    </Box>
-                </Container>
-            </Box>
+                        </Box>
+                    </Container>
+                </Box>
+            </Sidebar>
         </>
     )
 }

@@ -153,23 +153,23 @@ const RelatorioRsd = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container style={{ display: 'flex', justifyContent: 'center' }}>
-                <Box component={Paper} maxHeight='300px' width='600px' elevation={3} p={2} mt={2}>
-                    <Typography variant="h6" mt={1}>
-                        Relatório RSD
-                    </Typography>
-                    <Divider />
-                    <Box display='flex' flexDirection='column' p={1} m={1} >
-                        <TextField type="date" value={aPartir} onChange={e => setAPartir(e.target.value)} size="small" focused label='A partir de' style={{ maxWidth: '210px', margin: '10px' }} />
-                        <TextField type="date" value={ate} onChange={e => setAte(e.target.value)} size="small" focused label='Até' style={{ maxWidth: '210px', margin: '10px' }} />
+            <Sidebar>
+                <Container style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box component={Paper} maxHeight='300px' width='600px' elevation={3} p={2} mt={2}>
+                        <Typography variant="h6" mt={1}>
+                            Relatório RSD
+                        </Typography>
+                        <Divider />
+                        <Box display='flex' flexDirection='column' p={1} m={1} >
+                            <TextField type="date" value={aPartir} onChange={e => setAPartir(e.target.value)} size="small" focused label='A partir de' style={{ maxWidth: '210px', margin: '10px' }} />
+                            <TextField type="date" value={ate} onChange={e => setAte(e.target.value)} size="small" focused label='Até' style={{ maxWidth: '210px', margin: '10px' }} />
+                        </Box>
+                        <Box m={1} p={1}>
+                            <Button disabled={loading} variant='contained' startIcon={loading ? <CircularProgress color='inherit' style={{ width: '20px', height: '20px' }} /> : null} onClick={gerarRelatorio} >Gerar Relatório</Button>
+                        </Box>
                     </Box>
-                    <Box m={1} p={1}>
-                        <Button disabled={loading} variant='contained' startIcon={loading ? <CircularProgress color='inherit' style={{ width: '20px', height: '20px' }} /> : null} onClick={gerarRelatorio} >Gerar Relatório</Button>
-                    </Box>
-                </Box>
-            </Container>
-
+                </Container>
+            </Sidebar>
         </>
     )
 }

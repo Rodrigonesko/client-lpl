@@ -257,67 +257,69 @@ const AtendimentoHumanizado = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box>
-                <Box m={2}>
-                    <Typography variant="h5">
-                        Atendimento Humanizado: {propostas.length}
-                        <Box display='flex' justifyContent='end'>
-                            <Button onClick={reportContatos}>Report Contatos</Button>
-                            <Button variant="contained" onClick={report}>Report</Button>
+            <Sidebar>
+                <Box>
+                    <Box m={2}>
+                        <Typography variant="h5">
+                            Atendimento Humanizado: {propostas.length}
+                            <Box display='flex' justifyContent='end'>
+                                <Button onClick={reportContatos}>Report Contatos</Button>
+                                <Button variant="contained" onClick={report}>Report</Button>
+                            </Box>
+                        </Typography>
+                        {
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
+                            ) : null
+                        }
+                        <Box>
+                            <TableContainer>
+                                <Table className="table">
+                                    <TableHead className="table-header">
+                                        <TableRow>
+                                            <TableCell>Proposta</TableCell>
+                                            <TableCell>Nome</TableCell>
+                                            <TableCell>Cpf</TableCell>
+                                            <TableCell>Cpf Titular</TableCell>
+                                            <TableCell>Tipo Associado</TableCell>
+                                            <TableCell>Data Nascimento</TableCell>
+                                            <TableCell>DDD</TableCell>
+                                            <TableCell>Celular</TableCell>
+                                            <TableCell>Conversa</TableCell>
+                                            <TableCell>Responsavel</TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            propostas.map(e => {
+                                                return (
+                                                    <TableRow style={{ backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
+                                                        <TableCell>{e.proposta}</TableCell>
+                                                        <TableCell>{e.nome}</TableCell>
+                                                        <TableCell>{e.cpf}</TableCell>
+                                                        <TableCell>{e.cpfTitular}</TableCell>
+                                                        <TableCell>{e.tipoAssociado}</TableCell>
+                                                        <TableCell>{e.dataNascimento}</TableCell>
+                                                        <TableCell>{e.ddd}</TableCell>
+                                                        <TableCell>{e.celular}</TableCell>
+                                                        <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                        <TableCell>{e.responsavelConversa}</TableCell>
+                                                        <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
+                                                        <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
-                    </Typography>
-                    {
-                        loading ? (
-                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
-                        ) : null
-                    }
-                    <Box>
-                        <TableContainer>
-                            <Table className="table">
-                                <TableHead className="table-header">
-                                    <TableRow>
-                                        <TableCell>Proposta</TableCell>
-                                        <TableCell>Nome</TableCell>
-                                        <TableCell>Cpf</TableCell>
-                                        <TableCell>Cpf Titular</TableCell>
-                                        <TableCell>Tipo Associado</TableCell>
-                                        <TableCell>Data Nascimento</TableCell>
-                                        <TableCell>DDD</TableCell>
-                                        <TableCell>Celular</TableCell>
-                                        <TableCell>Conversa</TableCell>
-                                        <TableCell>Responsavel</TableCell>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        propostas.map(e => {
-                                            return (
-                                                <TableRow style={{ backgroundColor: e.visualizado ? 'wheat' : 'white' }}>
-                                                    <TableCell>{e.proposta}</TableCell>
-                                                    <TableCell>{e.nome}</TableCell>
-                                                    <TableCell>{e.cpf}</TableCell>
-                                                    <TableCell>{e.cpfTitular}</TableCell>
-                                                    <TableCell>{e.tipoAssociado}</TableCell>
-                                                    <TableCell>{e.dataNascimento}</TableCell>
-                                                    <TableCell>{e.ddd}</TableCell>
-                                                    <TableCell>{e.celular}</TableCell>
-                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
-                                                    <TableCell>{e.responsavelConversa}</TableCell>
-                                                    <TableCell><Button size="small" color='warning' variant='outlined' onClick={() => { assumir(e._id) }}>Assumir</Button></TableCell>
-                                                    <TableCell><Button size="small" variant="contained" onClick={() => { encerrarAtendimento(e._id) }} color="error">Encerrar Atendimento</Button></TableCell>
-                                                </TableRow>
-                                            )
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
                     </Box>
                 </Box>
-            </Box>
+            </Sidebar>
+
         </>
     )
 }

@@ -155,138 +155,139 @@ const NaoEnviados = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box m={2}>
-                    <Typography variant="h5">
-                        Contatos não Enviados: {propostas.length}
-                    </Typography>
-                    <Button variant="contained" style={{ position: 'fixed', right: '150px' }} onClick={() => setStateModal(true)}>Enviar</Button>
-                    {
-                        loading ? (
-                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
-                        ) : null
-                    }
-                </Box>
-                <Box>
-                    <TableContainer>
-                        <Table className="table">
-                            <TableHead className="table-header">
-                                <TableRow>
-                                    <TableCell>Proposta</TableCell>
-                                    <TableCell>Nome</TableCell>
-                                    <TableCell>Cpf</TableCell>
-                                    <TableCell>Cpf Titular</TableCell>
-                                    <TableCell>Tipo Associado</TableCell>
-                                    <TableCell>DDD</TableCell>
-                                    <TableCell>Celular</TableCell>
-                                    <TableCell>Voltar</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    propostas.map(e => {
-                                        return (
-                                            <TableRow key={e._id}>
-                                                <TableCell>{e.proposta}</TableCell>
-                                                <TableCell>{e.nome}</TableCell>
-                                                <TableCell>{e.cpf}</TableCell>
-                                                <TableCell>{e.cpfTitular}</TableCell>
-                                                <TableCell>{e.tipoAssociado}</TableCell>
-                                                <TableCell>{e.ddd}</TableCell>
-                                                <TableCell>{e.celular}</TableCell>
-                                                <TableCell><Button variant="contained" onClick={() => voltarParaAjuste(e._id)}>Ajustar</Button></TableCell>
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Box>
-                <Modal
-                    open={stateModal}
-                    onClose={() => setStateModal(false)}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Box component={Paper} p={3} display='flex'>
-                            <Box mr={4}>
-                                <Box>
-                                    <Typography>
-                                        Escolha um modelo de mensagem
-                                    </Typography>
-                                    <FormControl fullWidth size="small" style={{ marginTop: '10px' }}>
-                                        <InputLabel>Modelo</InputLabel>
-                                        <Select
-                                            label='Modelo'
-                                            onChange={e => {
-                                                setModeloEscolhido(e.target.value)
-                                            }}
-                                            value={modeloEscolhido}
-                                        >
-                                            <MenuItem>
-                                                <em>Modelo</em>
-                                            </MenuItem>
-                                            <MenuItem value='Modelo 1'>
-                                                Modelo 1
-                                            </MenuItem>
-                                            <MenuItem value='Modelo 2'>
-                                                Modelo 2
-                                            </MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                                <Box mt={2}>
-                                    <Typography>
-                                        Dias para mensagem:
-                                    </Typography>
-                                    <TextField label='Data 1' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData1(e.target.value)} />
-                                    <TextField label='Data 2' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData2(e.target.value)} />
-                                </Box>
-                            </Box>
-                            <Box ml={2}>
-                                <Typography>
-                                    {
-                                        modeloEscolhido === 'Modelo 1' ? (<Modelo1 data1={moment(data1).format('DD/MM/YYYY')} data2={moment(data2).format('DD/MM/YYYY')} />) : null
-                                    }
-                                    {
-                                        modeloEscolhido === 'Modelo 2' ? (<Modelo2 data1={moment(data1).format('DD/MM/YYYY')} data2={moment(data2).format('DD/MM/YYYY')} />) : null
-                                    }
-                                </Typography>
-                            </Box>
-                        </Box>
-
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Clique abaixo para enviar as mensagens
+            <Sidebar>
+                <Container>
+                    <Box m={2}>
+                        <Typography variant="h5">
+                            Contatos não Enviados: {propostas.length}
                         </Typography>
-                        <Box m={2}>
-                            <LinearProgress variant="determinate" value={progressValue}></LinearProgress>
-                        </Box>
+                        <Button variant="contained" style={{ position: 'fixed', right: '150px' }} onClick={() => setStateModal(true)}>Enviar</Button>
                         {
-                            progressValue === 100 ? (
-                                <Alert severity="success">
-                                    <AlertTitle>Sucesso!</AlertTitle>
-                                    Todas as mensagens foram enviadas com sucesso!
-                                </Alert>
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
                             ) : null
                         }
-                        {
-                            error ? (
-                                <Alert severity="error">
-                                    <AlertTitle>Erro</AlertTitle>
-                                    Algo deu errado
-                                </Alert>
-                            ) : null
-                        }
-                        <Box m={1} display='flex' justifyContent='space-around'>
-                            <Button variant="contained" color='inherit' onClick={() => setStateModal(false)}>Fechar</Button>
-                            <Button variant="contained" color='success' onClick={enviarMensagens}>Enviar</Button>
-                        </Box>
                     </Box>
-                </Modal>
-            </Container>
+                    <Box>
+                        <TableContainer>
+                            <Table className="table">
+                                <TableHead className="table-header">
+                                    <TableRow>
+                                        <TableCell>Proposta</TableCell>
+                                        <TableCell>Nome</TableCell>
+                                        <TableCell>Cpf</TableCell>
+                                        <TableCell>Cpf Titular</TableCell>
+                                        <TableCell>Tipo Associado</TableCell>
+                                        <TableCell>DDD</TableCell>
+                                        <TableCell>Celular</TableCell>
+                                        <TableCell>Voltar</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        propostas.map(e => {
+                                            return (
+                                                <TableRow key={e._id}>
+                                                    <TableCell>{e.proposta}</TableCell>
+                                                    <TableCell>{e.nome}</TableCell>
+                                                    <TableCell>{e.cpf}</TableCell>
+                                                    <TableCell>{e.cpfTitular}</TableCell>
+                                                    <TableCell>{e.tipoAssociado}</TableCell>
+                                                    <TableCell>{e.ddd}</TableCell>
+                                                    <TableCell>{e.celular}</TableCell>
+                                                    <TableCell><Button variant="contained" onClick={() => voltarParaAjuste(e._id)}>Ajustar</Button></TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+                    <Modal
+                        open={stateModal}
+                        onClose={() => setStateModal(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Box component={Paper} p={3} display='flex'>
+                                <Box mr={4}>
+                                    <Box>
+                                        <Typography>
+                                            Escolha um modelo de mensagem
+                                        </Typography>
+                                        <FormControl fullWidth size="small" style={{ marginTop: '10px' }}>
+                                            <InputLabel>Modelo</InputLabel>
+                                            <Select
+                                                label='Modelo'
+                                                onChange={e => {
+                                                    setModeloEscolhido(e.target.value)
+                                                }}
+                                                value={modeloEscolhido}
+                                            >
+                                                <MenuItem>
+                                                    <em>Modelo</em>
+                                                </MenuItem>
+                                                <MenuItem value='Modelo 1'>
+                                                    Modelo 1
+                                                </MenuItem>
+                                                <MenuItem value='Modelo 2'>
+                                                    Modelo 2
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                    <Box mt={2}>
+                                        <Typography>
+                                            Dias para mensagem:
+                                        </Typography>
+                                        <TextField label='Data 1' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData1(e.target.value)} />
+                                        <TextField label='Data 2' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData2(e.target.value)} />
+                                    </Box>
+                                </Box>
+                                <Box ml={2}>
+                                    <Typography>
+                                        {
+                                            modeloEscolhido === 'Modelo 1' ? (<Modelo1 data1={moment(data1).format('DD/MM/YYYY')} data2={moment(data2).format('DD/MM/YYYY')} />) : null
+                                        }
+                                        {
+                                            modeloEscolhido === 'Modelo 2' ? (<Modelo2 data1={moment(data1).format('DD/MM/YYYY')} data2={moment(data2).format('DD/MM/YYYY')} />) : null
+                                        }
+                                    </Typography>
+                                </Box>
+                            </Box>
+
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Clique abaixo para enviar as mensagens
+                            </Typography>
+                            <Box m={2}>
+                                <LinearProgress variant="determinate" value={progressValue}></LinearProgress>
+                            </Box>
+                            {
+                                progressValue === 100 ? (
+                                    <Alert severity="success">
+                                        <AlertTitle>Sucesso!</AlertTitle>
+                                        Todas as mensagens foram enviadas com sucesso!
+                                    </Alert>
+                                ) : null
+                            }
+                            {
+                                error ? (
+                                    <Alert severity="error">
+                                        <AlertTitle>Erro</AlertTitle>
+                                        Algo deu errado
+                                    </Alert>
+                                ) : null
+                            }
+                            <Box m={1} display='flex' justifyContent='space-around'>
+                                <Button variant="contained" color='inherit' onClick={() => setStateModal(false)}>Fechar</Button>
+                                <Button variant="contained" color='success' onClick={enviarMensagens}>Enviar</Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                </Container>
+            </Sidebar>
         </>
     )
 }

@@ -214,80 +214,81 @@ const ProcessamentoPacote = () => {
 
     return (
         <>
-            <Sidebar />
-            <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
-                <Container style={{ maxWidth: '1300px' }}>
-                    <Typography m={1} variant="h6" >
-                        Processamento
-                    </Typography>
-                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
-                        Infomações Gerais
-                    </Typography>
-                    <InformacoesGerais
-                        mo={mo}
-                    />
-                    <Typography m={1} variant="h6" >
-                        Status Pacote: {statusPacote}
-                    </Typography>
-                    <Box m={1}>
-                        <ModalPatologias idCelula={idPacote} celula={'RSD'} />
-                    </Box>
-                    <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
-                        Pedidos de Reembolso
-                    </Typography>
-                    {
-
-                    }
-                    <TabelaProtocolosProcessamento protocolos={protocolos} pedidos={pedidos} flushHook={setFlushHook} />
-                    <Box m={2} >
-                        {
-                            !finalizado ? (
-                                <Button onClick={handleShowRoteiro} variant="contained"  >Iniciar Processamento</Button>
-                            ) : (
-                                <Button variant="contained" size="small" color="warning" onClick={voltarFase}>Voltar Fase</Button>
-                            )
-                        }
-                        <FormControlLabel
-                            sx={{ margin: '10px' }}
-                            control={<Checkbox checked={prioridadePacote} />}
-                            label='Prioridade Dossie'
-                            id="prioridade-dossie"
-                            name="prioridade-dossie"
-                            onChange={e => {
-                                setPrioridadePacote(!prioridadePacote)
-                                prioridadeDossiePacote(e.target.checked)
-                            }}
+            <Sidebar>
+                <Box width='100%' height='100vh' overflow='auto' display='flex' justifyContent='center'>
+                    <Container style={{ maxWidth: '1300px' }}>
+                        <Typography m={1} variant="h6" >
+                            Processamento
+                        </Typography>
+                        <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
+                            Infomações Gerais
+                        </Typography>
+                        <InformacoesGerais
+                            mo={mo}
                         />
-                    </Box>
-                    <Box display='flex'>
-                        <Box sx={{ maxWidth: '800px', width: '70%', marginRight: '30px' }}>
-                            <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
-                                Roteiro
-                            </Typography>
-                            {
-                                pedidos.length !== 0 && openRoteiro && !finalizado && (
-                                    <RoteiroProcessamento
-                                        pedidos={pedidos}
-                                        formasPagamento={formasPagamento}
-                                        statusFinalizacao={statusFinalizacao}
-                                        salvar={salvar}
-                                    />
-                                )
+                        <Typography m={1} variant="h6" >
+                            Status Pacote: {statusPacote}
+                        </Typography>
+                        <Box m={1}>
+                            <ModalPatologias idCelula={idPacote} celula={'RSD'} />
+                        </Box>
+                        <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
+                            Pedidos de Reembolso
+                        </Typography>
+                        {
 
+                        }
+                        <TabelaProtocolosProcessamento protocolos={protocolos} pedidos={pedidos} flushHook={setFlushHook} />
+                        <Box m={2} >
+                            {
+                                !finalizado ? (
+                                    <Button onClick={handleShowRoteiro} variant="contained"  >Iniciar Processamento</Button>
+                                ) : (
+                                    <Button variant="contained" size="small" color="warning" onClick={voltarFase}>Voltar Fase</Button>
+                                )
                             }
+                            <FormControlLabel
+                                sx={{ margin: '10px' }}
+                                control={<Checkbox checked={prioridadePacote} />}
+                                label='Prioridade Dossie'
+                                id="prioridade-dossie"
+                                name="prioridade-dossie"
+                                onChange={e => {
+                                    setPrioridadePacote(!prioridadePacote)
+                                    prioridadeDossiePacote(e.target.checked)
+                                }}
+                            />
                         </Box>
-                        <Box maxWidth='400px'>
-                            <AgendaProcessamentoRsd flushHook={setFlushHook} agenda={agenda} />
-                            <TabelaArquivosProcessamento salvar={salvar} arquivos={arquivos} flushHook={setFlushHook} />
+                        <Box display='flex'>
+                            <Box sx={{ maxWidth: '800px', width: '70%', marginRight: '30px' }}>
+                                <Typography mt={1} mb={1} p={1} bgcolor='lightgray' borderRadius='5px'>
+                                    Roteiro
+                                </Typography>
+                                {
+                                    pedidos.length !== 0 && openRoteiro && !finalizado && (
+                                        <RoteiroProcessamento
+                                            pedidos={pedidos}
+                                            formasPagamento={formasPagamento}
+                                            statusFinalizacao={statusFinalizacao}
+                                            salvar={salvar}
+                                        />
+                                    )
+
+                                }
+                            </Box>
+                            <Box maxWidth='400px'>
+                                <AgendaProcessamentoRsd flushHook={setFlushHook} agenda={agenda} />
+                                <TabelaArquivosProcessamento salvar={salvar} arquivos={arquivos} flushHook={setFlushHook} />
+                            </Box>
                         </Box>
-                    </Box>
-                </Container>
-                <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        {msg}
-                    </Alert>
-                </Snackbar>
-            </Box>
+                    </Container>
+                    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                            {msg}
+                        </Alert>
+                    </Snackbar>
+                </Box>
+            </Sidebar>
         </>
     )
 }

@@ -167,40 +167,41 @@ const Agd = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                <Box component={Paper} p={3} elevation={3} minWidth='500px'>
-                    <Typography variant="h5">
-                        Upload de arquivo AGD
-                    </Typography>
-                    <Box display='flex' marginTop={3}>
-                        <TextField type='file' onChange={handleFileChange} />
-                        <Button variant="contained" onClick={handleFileUpload} disabled={!loading ? false : true}>Enviar</Button>
-                    </Box>
-                    <Box mt={3}>
-                        <LinearProgress variant="determinate" value={progressValue} />
-                        {
-                            progressValue >= 100 ? (
-                                <Alert>Arquivo enviado com sucesso!</Alert>
-                            ) : null
-                        }
-                    </Box>
-                </Box>
-                <Box component={Paper} p={3} elevation={3} minWidth='500px' mt={2}>
-                    <Typography variant="h5">
-                        Gerar arquivo AGD
-                    </Typography>
-                    <Box mt={3}>
-                        <Box>
-                            <Button onClick={gerarAGD} disabled={!loading ? false : true} variant="contained" color='secondary' >Gerar</Button>
+            <Sidebar>
+                <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                    <Box component={Paper} p={3} elevation={3} minWidth='500px'>
+                        <Typography variant="h5">
+                            Upload de arquivo AGD
+                        </Typography>
+                        <Box display='flex' marginTop={3}>
+                            <TextField type='file' onChange={handleFileChange} />
+                            <Button variant="contained" onClick={handleFileUpload} disabled={!loading ? false : true}>Enviar</Button>
                         </Box>
                         <Box mt={3}>
-                            <LinearProgress variant={!loading ? 'determinate' : 'indeterminate'} color='secondary' value={!loading ? '100' : '0'} />
+                            <LinearProgress variant="determinate" value={progressValue} />
+                            {
+                                progressValue >= 100 ? (
+                                    <Alert>Arquivo enviado com sucesso!</Alert>
+                                ) : null
+                            }
                         </Box>
-
                     </Box>
-                </Box>
-            </Container>
+                    <Box component={Paper} p={3} elevation={3} minWidth='500px' mt={2}>
+                        <Typography variant="h5">
+                            Gerar arquivo AGD
+                        </Typography>
+                        <Box mt={3}>
+                            <Box>
+                                <Button onClick={gerarAGD} disabled={!loading ? false : true} variant="contained" color='secondary' >Gerar</Button>
+                            </Box>
+                            <Box mt={3}>
+                                <LinearProgress variant={!loading ? 'determinate' : 'indeterminate'} color='secondary' value={!loading ? '100' : '0'} />
+                            </Box>
+
+                        </Box>
+                    </Box>
+                </Container>
+            </Sidebar>
         </>
 
     )

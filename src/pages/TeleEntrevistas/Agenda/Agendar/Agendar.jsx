@@ -101,15 +101,15 @@ const Agendar = () => {
     }, [])
 
     return (
-        <>
-            <Sidebar />
-            <section className="section-agendamento-container">
+
+        <Sidebar>
+            <Box width={'100%'}>
                 {
                     loading ? (
                         <CircularProgress style={{ position: 'absolute', right: '50%', top: '50%' }} />
                     ) : null
                 }
-                <div className="agendamento-container">
+                <Box className="agendamento-container">
                     <Typography variant="h5">
                         <h3>Agendamento de Horários</h3>
                     </Typography>
@@ -130,9 +130,12 @@ const Agendar = () => {
 
                         )
                     }
-                </div>
-            </section>
-        </>
+                </Box>
+            </Box>
+
+
+        </Sidebar>
+
     )
 }
 

@@ -206,21 +206,21 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                         <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
                     ) : null
                 }
-                <Table style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
+                <Table size="small" style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
                     <TableHead className="table-header">
                         <TableRow>
-                            <TableCell>Vigência</TableCell>
-                            <TableCell>Proposta</TableCell>
-                            <TableCell>Nome</TableCell>
-                            <TableCell>Data Nascimento</TableCell>
-                            <TableCell>Sexo</TableCell>
-                            <TableCell>Telefone</TableCell>
-                            <TableCell>Cancelar</TableCell>
-                            <TableCell>Excluir</TableCell>
-                            <TableCell>Formulario</TableCell>
-                            <TableCell>Contato 1</TableCell>
-                            <TableCell>Contato 2</TableCell>
-                            <TableCell>Contato 3</TableCell>
+                            <TableCell padding="none">Vigência</TableCell>
+                            <TableCell padding="none">Proposta</TableCell>
+                            <TableCell padding="none">Nome</TableCell>
+                            <TableCell padding="none">Data Nascimento</TableCell>
+                            <TableCell padding="none">Sexo</TableCell>
+                            <TableCell padding="none">Telefone</TableCell>
+                            <TableCell padding="none">Cancelar</TableCell>
+                            <TableCell padding="none">Excluir</TableCell>
+                            <TableCell padding="none">Formulario</TableCell>
+                            <TableCell padding="none">Contato 1</TableCell>
+                            <TableCell padding="none">Contato 2</TableCell>
+                            <TableCell padding="none">Contato 3</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -231,13 +231,13 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
 
                             const conditionPf = row.tipoContrato.indexOf('PF') !== -1 || row.tipoContrato.indexOf('pf') !== -1
 
-                            if(row.proposta === '19403306'){
+                            if (row.proposta === '19403306') {
                                 console.log(row);
                             }
 
                             return (
                                 <TableRow key={row._id} style={{ background: conditionPf ? '#e6ee9c' : '' }} >
-                                    <TableCell component="th" scope="row">
+                                    <TableCell padding="none" scope="row">
                                         <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
                                         <Tooltip title='Alterar vigência'>
                                             <Button style={{ marginLeft: '10px' }} color='warning' variant='contained' onClick={
@@ -251,7 +251,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                                         {row.proposta}
                                         {
                                             row.retrocedido && (
-                                                <Chip sx={{ml:'2px'}} variant="outlined" label='ret' color="secondary"/>
+                                                <Chip sx={{ ml: '2px' }} variant="outlined" label='ret' color="secondary" />
                                             )
                                         }
                                     </TableCell>

@@ -242,106 +242,107 @@ const EntrevistasRealizadas = () => {
     // }
 
     return (<>
-        <Sidebar></Sidebar>
-        <Container className='scrollable'>
-            <Box m={2}>
-                <Typography variant='h6'>
-                    Entrevistas Realizadas
-                </Typography>
-                {
-                    loading ? (
-                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '49%' }} />
-                    ) : null
-                }
-                <Box display='flex' justifyContent='space-between' m={2}>
-                    <Box display='flex'>
-                        <TextField id="proposta" size='small' label="proposta, nome ou cpf" variant="standard" onChange={e => {
-                            setPesquisa(e.target.value)
-                        }} />
-                        <Button type='submit' onClick={buscarEntrevistas} size='small' variant='contained'>Buscar</Button>
-                        <Button variant='contained' onClick={entrevistasQualidade} color='info' size='small' style={{ marginLeft: '20px' }} >Filtrar entrevistas de qualidade</Button>
-                    </Box>
-                    <Box display='flex'>
-                        {/* <TextField type='date' label='Data Inicio' focused size='small' onChange={e => setDataInicio(e.target.value)} />
+        <Sidebar>
+            <Container className='scrollable'>
+                <Box m={2}>
+                    <Typography variant='h6'>
+                        Entrevistas Realizadas
+                    </Typography>
+                    {
+                        loading ? (
+                            <CircularProgress style={{ position: 'absolute', top: '50%', left: '49%' }} />
+                        ) : null
+                    }
+                    <Box display='flex' justifyContent='space-between' m={2}>
+                        <Box display='flex'>
+                            <TextField id="proposta" size='small' label="proposta, nome ou cpf" variant="standard" onChange={e => {
+                                setPesquisa(e.target.value)
+                            }} />
+                            <Button type='submit' onClick={buscarEntrevistas} size='small' variant='contained'>Buscar</Button>
+                            <Button variant='contained' onClick={entrevistasQualidade} color='info' size='small' style={{ marginLeft: '20px' }} >Filtrar entrevistas de qualidade</Button>
+                        </Box>
+                        <Box display='flex'>
+                            {/* <TextField type='date' label='Data Inicio' focused size='small' onChange={e => setDataInicio(e.target.value)} />
                         <TextField type='date' label='Data Fim' focused size='small' onChange={e => setDataFim(e.target.value)} /> */}
-                        {/* <Button style={{ marginLeft: '4px' }} color='secondary' size='small' variant="contained" onClick={gerarRelatorioMensal}>Relatório Mensal</Button> */}
-                        <ModalEntrevistasRealizadas />
+                            {/* <Button style={{ marginLeft: '4px' }} color='secondary' size='small' variant="contained" onClick={gerarRelatorioMensal}>Relatório Mensal</Button> */}
+                            <ModalEntrevistasRealizadas />
 
-                        <Button style={{ marginLeft: '4px' }} size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
-                    </Box>
-                </Box>
-                <TableContainer className="entrevistas-realizadas">
-                    <Table className='table'>
-                        <TableHead className='table-header'>
-                            <TableRow>
-                                <TableCell>Proposta</TableCell>
-                                <TableCell>Data Entrevista</TableCell>
-                                <TableCell>Nome</TableCell>
-                                <TableCell>CPF</TableCell>
-                                <TableCell>Idade</TableCell>
-                                <TableCell>Sexo</TableCell>
-                                <TableCell>Voltar</TableCell>
-                                <TableCell>Editar</TableCell>
-                                <TableCell>PDF</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                entrevistas.map(e => {
-                                    return (
-                                        <TableRow key={e._id} style={{ background: e.entrevistaQualidade ? 'lightgreen' : null }}>
-                                            <TableCell>{e.proposta}</TableCell>
-                                            <TableCell>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{e.nome}</TableCell>
-                                            <TableCell>{e.cpf}</TableCell>
-                                            <TableCell>{e.idade}</TableCell>
-                                            <TableCell>
-                                                <select onChange={item => alterarSexo(e._id, item.target.value)} >
-                                                    <option value="M" selected={e.sexo === 'M'}>M</option>
-                                                    <option value="F" selected={e.sexo === 'F'} >F</option>
-                                                </select>
-                                            </TableCell>
-                                            <TableCell>
-                                                {
-                                                    e.cancelado ? (
-                                                        <Button variant='contained' size='small' onClick={() => {
-                                                            setId(e._id)
-                                                            setNome(e.nome)
-                                                            setpProposta(e.proposta)
-                                                            setModalVoltar(true)
-                                                        }} >Voltar</Button>
-                                                    ) : null
-                                                }
-                                            </TableCell>
-                                            <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
-                                            {/* <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`} target='_blank'>PDF</Button></TableCell> */}
-                                            <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
-                                        </TableRow>
-                                    )
-                                })
-                            }
-                        </TableBody>
-                    </Table>
-
-                </TableContainer>
-                <Modal
-                    open={modalVoltar}
-                    onClose={() => { setModalVoltar(false) }}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Deseja voltar a proposta: {proposta} do beneficiário: {nome}
-                        </Typography>
-                        <Box m={2} display='flex' justifyContent='space-around'>
-                            <Button variant='contained' onClick={voltarEntrevista}>Sim</Button>
-                            <Button variant='contained' color='inherit'>Não</Button>
+                            <Button style={{ marginLeft: '4px' }} size='small' variant="contained" onClick={gerarRelatorio}>Relatório</Button>
                         </Box>
                     </Box>
-                </Modal>
-            </Box>
-        </Container>
+                    <TableContainer className="entrevistas-realizadas">
+                        <Table className='table'>
+                            <TableHead className='table-header'>
+                                <TableRow>
+                                    <TableCell>Proposta</TableCell>
+                                    <TableCell>Data Entrevista</TableCell>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>CPF</TableCell>
+                                    <TableCell>Idade</TableCell>
+                                    <TableCell>Sexo</TableCell>
+                                    <TableCell>Voltar</TableCell>
+                                    <TableCell>Editar</TableCell>
+                                    <TableCell>PDF</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    entrevistas.map(e => {
+                                        return (
+                                            <TableRow key={e._id} style={{ background: e.entrevistaQualidade ? 'lightgreen' : null }}>
+                                                <TableCell>{e.proposta}</TableCell>
+                                                <TableCell>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{e.nome}</TableCell>
+                                                <TableCell>{e.cpf}</TableCell>
+                                                <TableCell>{e.idade}</TableCell>
+                                                <TableCell>
+                                                    <select onChange={item => alterarSexo(e._id, item.target.value)} >
+                                                        <option value="M" selected={e.sexo === 'M'}>M</option>
+                                                        <option value="F" selected={e.sexo === 'F'} >F</option>
+                                                    </select>
+                                                </TableCell>
+                                                <TableCell>
+                                                    {
+                                                        e.cancelado ? (
+                                                            <Button variant='contained' size='small' onClick={() => {
+                                                                setId(e._id)
+                                                                setNome(e.nome)
+                                                                setpProposta(e.proposta)
+                                                                setModalVoltar(true)
+                                                            }} >Voltar</Button>
+                                                        ) : null
+                                                    }
+                                                </TableCell>
+                                                <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
+                                                {/* <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`} target='_blank'>PDF</Button></TableCell> */}
+                                                <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+
+                    </TableContainer>
+                    <Modal
+                        open={modalVoltar}
+                        onClose={() => { setModalVoltar(false) }}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Deseja voltar a proposta: {proposta} do beneficiário: {nome}
+                            </Typography>
+                            <Box m={2} display='flex' justifyContent='space-around'>
+                                <Button variant='contained' onClick={voltarEntrevista}>Sim</Button>
+                                <Button variant='contained' color='inherit'>Não</Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                </Box>
+            </Container>
+        </Sidebar>
     </>)
 }
 

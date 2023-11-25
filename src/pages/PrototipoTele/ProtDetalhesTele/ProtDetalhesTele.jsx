@@ -64,8 +64,8 @@ const ProtDetalhesTele = () => {
     }, [flushHook])
 
     return (
-        <>
-            <Sidebar />
+
+        <Sidebar>
             <Box height={'100%'} width={'100%'} bgcolor={grey[200]} borderRadius={'5px'} mt={1} mr={1} display={'flex'}>
                 <Box width={showConversas ? '60%' : '100%'}>
                     {
@@ -132,7 +132,9 @@ const ProtDetalhesTele = () => {
                     )
                 }
             </Box>
-        </>
+        </Sidebar>
+
+
     )
 }
 

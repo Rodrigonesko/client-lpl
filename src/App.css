@@ -62,65 +62,7 @@
 }
 
 
-.pro-sidebar {
-  height: 100%;
-  position: relative;
-}
 
-.slidein {
-  animation-duration: 0.5s;
-  animation-name: slidein;
-  width: 360px;
-  min-width: 360px;
-}
-
-.slideout {
-  animation-duration: 0.5s;
-  animation-name: slideout;
-  width: 0;
-  min-width: 0;
-}
-
-@keyframes slidein {
-  from {
-    width: 0%;
-  }
-
-  to {
-    width: 360px;
-  }
-}
-
-@keyframes slideout {
-  from {
-    width: 360px;
-  }
-
-  to {
-    width: 0%;
-  }
-}
-
-.div-toggle {
-  width: 20px;
-  padding: 1rem 10px;
-}
-
-.toggle {
-  /* position: relative;
-  top: 15px; */
-  height: 24px;
-  width: 24px;
-  /* 
-  text-align: center;  */
-
-  transition: 200ms;
-}
-
-.toggle:hover {
-  cursor: pointer;
-  opacity: 0.9;
-}
 
 @media (max-width: 767.98px) {}
 

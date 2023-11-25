@@ -22,22 +22,24 @@ const Inventario = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
-                    <Box>
-                        <div className="title">
-                            <h2>Inventário LPL</h2>
-                        </div>
-                        <br />
-                        <ModalCriarInventario setFlushHook={setFlushHook} />
-                        <br />
+            <Sidebar>
+                <Container>
+                    <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
+                        <Box>
+                            <div className="title">
+                                <h2>Inventário LPL</h2>
+                            </div>
+                            <br />
+                            <ModalCriarInventario setFlushHook={setFlushHook} />
+                            <br />
+                        </Box>
                     </Box>
-                </Box>
-                <Box>
-                    <TabelaInventario flushHook={flushHook} setFlushHook={setFlushHook} />
-                </Box>
-            </Container >
+                    <Box>
+                        <TabelaInventario flushHook={flushHook} setFlushHook={setFlushHook} />
+                    </Box>
+                </Container >
+            </Sidebar>
+
         </>
     )
 }

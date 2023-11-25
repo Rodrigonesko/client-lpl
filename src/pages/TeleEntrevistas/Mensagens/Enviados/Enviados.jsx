@@ -273,90 +273,91 @@ const Enviados = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box m={2}>
-                    <Typography variant="h5">
-                        Contatos enviados: {propostas.length}
-                        <Box display='flex' justifyContent='end' m={2}>
-                            <Button variant="contained" onClick={() => setOpenModal(true)} color='secondary' style={{ marginRight: '3px' }}>Reenviar</Button>
-                            <Button onClick={reportContatos} variant='outlined' style={{ marginRight: '3px' }}>Report Contatos</Button>
-                            <Button variant="contained" onClick={report} style={{ marginRight: '3px' }}>Report</Button>
-                        </Box>
+            <Sidebar>
+                <Container>
+                    <Box m={2}>
+                        <Typography variant="h5">
+                            Contatos enviados: {propostas.length}
+                            <Box display='flex' justifyContent='end' m={2}>
+                                <Button variant="contained" onClick={() => setOpenModal(true)} color='secondary' style={{ marginRight: '3px' }}>Reenviar</Button>
+                                <Button onClick={reportContatos} variant='outlined' style={{ marginRight: '3px' }}>Report Contatos</Button>
+                                <Button variant="contained" onClick={report} style={{ marginRight: '3px' }}>Report</Button>
+                            </Box>
 
-                    </Typography>
-                    {
-                        loading ? (
-                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
-                        ) : null
-                    }
-                    <Box>
-                        <TableContainer>
-                            <Table className="table">
-                                <TableHead className="table-header">
-                                    <TableRow>
-                                        <TableCell>Proposta</TableCell>
-                                        <TableCell>Nome</TableCell>
-                                        <TableCell>Cpf</TableCell>
-                                        <TableCell>Cpf Titular</TableCell>
-                                        <TableCell>Tipo Associado</TableCell>
-                                        <TableCell>Horario Enviado</TableCell>
-                                        <TableCell>Conversa</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        propostas.map(e => {
-                                            return (
-                                                <TableRow key={e._id}>
-                                                    <TableCell>{e.proposta}</TableCell>
-                                                    <TableCell>{e.nome}</TableCell>
-                                                    <TableCell>{e.cpf}</TableCell>
-                                                    <TableCell>{e.cpfTitular}</TableCell>
-                                                    <TableCell>{e.tipoAssociado}</TableCell>
-                                                    <TableCell>{moment(e.horarioEnviado).format('DD/MM/YYYY HH:mm')}</TableCell>
-                                                    <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
-                                                </TableRow>
-                                            )
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
-                </Box>
-                <Modal
-                    open={openModal}
-                    onClose={() => setOpenModal(false)}
-                >
-                    <Box sx={style}>
-                        <Box component={Paper} p={2} m={1} elevation={3}>
-                            <Typography m={2}>
-                                Selecione o dia para reenviar as mensagens
-                            </Typography>
-                            <TextField type='date' focused label='Data' size="small" onChange={e => setData(e.target.value)} value={data} />
-                        </Box>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Clique abaixo para reenviar as mensagens
                         </Typography>
-                        <Box m={2}>
-                            <LinearProgress variant="determinate" value={progressValue}></LinearProgress>
-                        </Box>
                         {
-                            progressValue === 100 ? (
-                                <Alert severity="success">
-                                    <AlertTitle>Sucesso!</AlertTitle>
-                                    Todas as mensagens foram enviadas com sucesso!
-                                </Alert>
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
                             ) : null
                         }
-                        <Box m={1} display='flex' justifyContent='space-around'>
-                            <Button variant="contained" color='inherit' onClick={() => setOpenModal(false)}>Fechar</Button>
-                            <Button variant="contained" color='success' onClick={reenviarMensagens}>Enviar</Button>
+                        <Box>
+                            <TableContainer>
+                                <Table className="table">
+                                    <TableHead className="table-header">
+                                        <TableRow>
+                                            <TableCell>Proposta</TableCell>
+                                            <TableCell>Nome</TableCell>
+                                            <TableCell>Cpf</TableCell>
+                                            <TableCell>Cpf Titular</TableCell>
+                                            <TableCell>Tipo Associado</TableCell>
+                                            <TableCell>Horario Enviado</TableCell>
+                                            <TableCell>Conversa</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            propostas.map(e => {
+                                                return (
+                                                    <TableRow key={e._id}>
+                                                        <TableCell>{e.proposta}</TableCell>
+                                                        <TableCell>{e.nome}</TableCell>
+                                                        <TableCell>{e.cpf}</TableCell>
+                                                        <TableCell>{e.cpfTitular}</TableCell>
+                                                        <TableCell>{e.tipoAssociado}</TableCell>
+                                                        <TableCell>{moment(e.horarioEnviado).format('DD/MM/YYYY HH:mm')}</TableCell>
+                                                        <TableCell><Button variant="contained" href={`/entrevistas/chat/${e.whatsapp}`}>Ver Conversa</Button></TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
                     </Box>
-                </Modal>
-            </Container>
+                    <Modal
+                        open={openModal}
+                        onClose={() => setOpenModal(false)}
+                    >
+                        <Box sx={style}>
+                            <Box component={Paper} p={2} m={1} elevation={3}>
+                                <Typography m={2}>
+                                    Selecione o dia para reenviar as mensagens
+                                </Typography>
+                                <TextField type='date' focused label='Data' size="small" onChange={e => setData(e.target.value)} value={data} />
+                            </Box>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Clique abaixo para reenviar as mensagens
+                            </Typography>
+                            <Box m={2}>
+                                <LinearProgress variant="determinate" value={progressValue}></LinearProgress>
+                            </Box>
+                            {
+                                progressValue === 100 ? (
+                                    <Alert severity="success">
+                                        <AlertTitle>Sucesso!</AlertTitle>
+                                        Todas as mensagens foram enviadas com sucesso!
+                                    </Alert>
+                                ) : null
+                            }
+                            <Box m={1} display='flex' justifyContent='space-around'>
+                                <Button variant="contained" color='inherit' onClick={() => setOpenModal(false)}>Fechar</Button>
+                                <Button variant="contained" color='success' onClick={reenviarMensagens}>Enviar</Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                </Container>
+            </Sidebar>
         </>
     )
 }

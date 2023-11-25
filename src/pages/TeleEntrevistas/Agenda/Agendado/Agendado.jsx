@@ -115,8 +115,7 @@ const Agendado = () => {
     }, [])
 
     return (
-        <>
-            <Sidebar></Sidebar>
+        <Sidebar>
             {
                 loading ? (
                     <CircularProgress style={{ position: 'absolute', top: '50%', left: '49%' }} />
@@ -158,7 +157,8 @@ const Agendado = () => {
                     <TeleAgendadas setPropostas={setPropostas} propostas={propostas} atualizarPropostas={filtroEnfermeiro} analista={responsavel} />
                 </div>
             </section>
-        </>
+        </Sidebar>
+
     )
 }
 

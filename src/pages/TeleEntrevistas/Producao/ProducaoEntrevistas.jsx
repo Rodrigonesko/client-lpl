@@ -38,34 +38,35 @@ const ProducaoEntrevistas = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <Container className="scrollable">
-                <Box style={{width: '100%'}}>
-                    <Typography variant="h6">
-                        Produção Entrevistas
-                    </Typography>
-                    {
-                        loading ? (
-                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} />
-                        ) : null
-                    }
-                    {/* <TabelaProducao producao={producao}></TabelaProducao> */}
-                    <Box display='flex' width={'100%'} justifyContent='space-between' alignItems='center'>
-                        <Box width={'100%'}>
-                            <Typography m={2} variant='h6'>
-                                Produção Tele
-                            </Typography>
-                            <TabelaProducaoMui producao={producao}></TabelaProducaoMui>
-                        </Box>
-                        <Box width={'100%'}>
-                            <Typography m={2} variant='h6'>
-                                Produção Rn
-                            </Typography>
-                            <TabelaProducaoMui producao={producaoRns}></TabelaProducaoMui>
+            <Sidebar>
+                <Container className="scrollable">
+                    <Box style={{ width: '100%' }}>
+                        <Typography variant="h6">
+                            Produção Entrevistas
+                        </Typography>
+                        {
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }} />
+                            ) : null
+                        }
+                        {/* <TabelaProducao producao={producao}></TabelaProducao> */}
+                        <Box display='flex' width={'100%'} justifyContent='space-between' alignItems='center'>
+                            <Box width={'100%'}>
+                                <Typography m={2} variant='h6'>
+                                    Produção Tele
+                                </Typography>
+                                <TabelaProducaoMui producao={producao}></TabelaProducaoMui>
+                            </Box>
+                            <Box width={'100%'}>
+                                <Typography m={2} variant='h6'>
+                                    Produção Rn
+                                </Typography>
+                                <TabelaProducaoMui producao={producaoRns}></TabelaProducaoMui>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
-            </Container>
+                </Container>
+            </Sidebar>
         </>
     )
 }

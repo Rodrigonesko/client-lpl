@@ -26,41 +26,42 @@ const FormasPagamento = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box>
-                    <Typography variant='h5' mt={2}>
-                        Confirmação de Serviço
-                    </Typography>
-                </Box>
-                <Box m={2}>
-                    <ModalAdicionarFormaPagamento flushHook={setFlushHook} />
-                </Box>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Serviço</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                formasPagamento.map(servico => {
-                                    return (
-                                        <TableRow key={servico._id}>
-                                            <TableCell>{servico.nome}</TableCell>
-                                            <TableCell>
-                                                <ModalDeleteFormaPagamento id={servico._id} flushHook={setFlushHook} />
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Box>
+                        <Typography variant='h5' mt={2}>
+                            Confirmação de Serviço
+                        </Typography>
+                    </Box>
+                    <Box m={2}>
+                        <ModalAdicionarFormaPagamento flushHook={setFlushHook} />
+                    </Box>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Serviço</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    formasPagamento.map(servico => {
+                                        return (
+                                            <TableRow key={servico._id}>
+                                                <TableCell>{servico.nome}</TableCell>
+                                                <TableCell>
+                                                    <ModalDeleteFormaPagamento id={servico._id} flushHook={setFlushHook} />
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
+            </Sidebar>
         </>
     )
 }

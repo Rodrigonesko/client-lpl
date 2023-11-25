@@ -237,9 +237,6 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/faturamento" element={<ProtectedRoute>
                     <FaturamentoEntrevistas />
                 </ProtectedRoute>} />
-                <Route exact path="/entrevistas/faturamento" element={<ProtectedRoute>
-                    <FaturamentoEntrevistas />
-                </ProtectedRoute>} />
                 <Route exact path="/entrevistas/agenda/horarios" element={<ProtectedRoute>
                     <Horarios />
                 </ProtectedRoute>} />

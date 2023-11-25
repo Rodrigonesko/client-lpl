@@ -124,46 +124,48 @@ const UrgenciaEmergenciaTodos = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section className="section-padrao-tabela">
-                <Container>
-                    <div className="title">
-                        <h3>Urgência & Emergência</h3>
-                    </div>
-                    <div>
-                        <h3>Concluídas: {total}</h3>
-                        <Button variant='contained' style={{ position: 'absolute', top: '20px', right: '50px' }} onClick={reportTodas} >Report Todas</Button>
-                    </div>
-                    <TableContainer>
-                        <Table className="table">
-                            <TableHead className="table-header">
-                                <TableRow>
-                                    <TableCell>Nome Associado</TableCell>
-                                    <TableCell>Mo</TableCell>
-                                    <TableCell>Proposta</TableCell>
-                                    <TableCell>Idade</TableCell>
-                                    <TableCell>Telefone</TableCell>
-                                    <TableCell></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {propostas.map(e => {
-                                    return (
-                                        <TableRow key={e._id}>
-                                            <TableCell>{e.nomeAssociado}</TableCell>
-                                            <TableCell>{e.numAssociado}</TableCell>
-                                            <TableCell>{e.proposta}</TableCell>
-                                            <TableCell>{e.idade}</TableCell>
-                                            <TableCell>{e.telefone}</TableCell>
-                                            <TableCell><Button size="small" variant='contained' href={`/urgenciaEmergencia/detalhes/${e._id}`}>Detalhes</Button></TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Container>
-            </section>
+            <Sidebar>
+                <section className="section-padrao-tabela">
+                    <Container>
+                        <div className="title">
+                            <h3>Urgência & Emergência</h3>
+                        </div>
+                        <div>
+                            <h3>Concluídas: {total}</h3>
+                            <Button variant='contained' style={{ position: 'absolute', top: '20px', right: '50px' }} onClick={reportTodas} >Report Todas</Button>
+                        </div>
+                        <TableContainer>
+                            <Table className="table">
+                                <TableHead className="table-header">
+                                    <TableRow>
+                                        <TableCell>Nome Associado</TableCell>
+                                        <TableCell>Mo</TableCell>
+                                        <TableCell>Proposta</TableCell>
+                                        <TableCell>Idade</TableCell>
+                                        <TableCell>Telefone</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {propostas.map(e => {
+                                        return (
+                                            <TableRow key={e._id}>
+                                                <TableCell>{e.nomeAssociado}</TableCell>
+                                                <TableCell>{e.numAssociado}</TableCell>
+                                                <TableCell>{e.proposta}</TableCell>
+                                                <TableCell>{e.idade}</TableCell>
+                                                <TableCell>{e.telefone}</TableCell>
+                                                <TableCell><Button size="small" variant='contained' href={`/urgenciaEmergencia/detalhes/${e._id}`}>Detalhes</Button></TableCell>
+                                            </TableRow>
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Container>
+                </section>
+            </Sidebar>
+
         </>
     )
 }

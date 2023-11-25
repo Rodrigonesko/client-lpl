@@ -35,8 +35,7 @@ const Mensagens = () => {
     }, [])
 
     return (
-        <>
-            <Sidebar></Sidebar>
+        <Sidebar>
             <Container>
                 {
                     loading ? (
@@ -94,7 +93,8 @@ const Mensagens = () => {
                     </Box>
                 </div>
             </Container>
-        </>
+        </Sidebar>
+
     )
 }
 

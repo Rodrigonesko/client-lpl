@@ -69,78 +69,79 @@ const Ajustar = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container>
-                <Box m={2}>
-                    <Typography variant="h5">
-                        Contatos a serem ajustados: {propostas.length}
-                    </Typography>
-                    {
-                        loading ? (
-                            <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
-                        ) : null
-                    }
-                    {
-                        error ? (
-                            <Alert severity="error">Alguma das propostas está faltando o cpf titular</Alert>
-                        ) : null
-                    }
-                </Box>
-                <Box>
-                    <TableContainer>
-                        <Table className="table">
-                            <TableHead className="table-header">
-                                <TableRow>
-                                    <TableCell>Proposta</TableCell>
-                                    <TableCell>Nome</TableCell>
-                                    <TableCell>Cpf</TableCell>
-                                    <TableCell>Cpf Titular</TableCell>
-                                    <TableCell>Tipo Associado</TableCell>
-                                    <TableCell>DDD</TableCell>
-                                    <TableCell>Celular</TableCell>
-                                    <TableCell></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    propostas.map(e => {
-                                        return (
-                                            <TableRow key={e._id}>
-                                                <TableCell>{e.proposta}</TableCell>
-                                                <TableCell>{e.nome}</TableCell>
-                                                <TableCell>{e.cpf}</TableCell>
-                                                <TableCell><TextField size="small" label='CPF titular' defaultValue={e.cpfTitular} onChange={elem => {
-                                                    e.cpfTitular = elem.target.value
-                                                }} /></TableCell>
-                                                <TableCell>{e.tipoAssociado}</TableCell>
-                                                <TableCell>{e.ddd}</TableCell>
-                                                <TableCell>{e.celular}</TableCell>
-                                                <TableCell><Checkbox className="check" onChange={elem => {
-                                                    if (elem.target.checked) {
-                                                        setAjustados(ajustados.concat({ id: e._id, cpfTitular: e.cpfTitular }))
-                                                    } else {
-                                                        setAjustados(ajustados.filter(item => item.id !== e._id))
-                                                    }
-                                                }} /></TableCell>
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                                <TableRow>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell><Button variant="contained" size="small" onClick={ajustar}>Ajustar</Button></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Box>
-            </Container>
+            <Sidebar>
+                <Container>
+                    <Box m={2}>
+                        <Typography variant="h5">
+                            Contatos a serem ajustados: {propostas.length}
+                        </Typography>
+                        {
+                            loading ? (
+                                <CircularProgress style={{ position: 'absolute', top: '50%', right: '50%' }}></CircularProgress>
+                            ) : null
+                        }
+                        {
+                            error ? (
+                                <Alert severity="error">Alguma das propostas está faltando o cpf titular</Alert>
+                            ) : null
+                        }
+                    </Box>
+                    <Box>
+                        <TableContainer>
+                            <Table className="table">
+                                <TableHead className="table-header">
+                                    <TableRow>
+                                        <TableCell>Proposta</TableCell>
+                                        <TableCell>Nome</TableCell>
+                                        <TableCell>Cpf</TableCell>
+                                        <TableCell>Cpf Titular</TableCell>
+                                        <TableCell>Tipo Associado</TableCell>
+                                        <TableCell>DDD</TableCell>
+                                        <TableCell>Celular</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        propostas.map(e => {
+                                            return (
+                                                <TableRow key={e._id}>
+                                                    <TableCell>{e.proposta}</TableCell>
+                                                    <TableCell>{e.nome}</TableCell>
+                                                    <TableCell>{e.cpf}</TableCell>
+                                                    <TableCell><TextField size="small" label='CPF titular' defaultValue={e.cpfTitular} onChange={elem => {
+                                                        e.cpfTitular = elem.target.value
+                                                    }} /></TableCell>
+                                                    <TableCell>{e.tipoAssociado}</TableCell>
+                                                    <TableCell>{e.ddd}</TableCell>
+                                                    <TableCell>{e.celular}</TableCell>
+                                                    <TableCell><Checkbox className="check" onChange={elem => {
+                                                        if (elem.target.checked) {
+                                                            setAjustados(ajustados.concat({ id: e._id, cpfTitular: e.cpfTitular }))
+                                                        } else {
+                                                            setAjustados(ajustados.filter(item => item.id !== e._id))
+                                                        }
+                                                    }} /></TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell><Button variant="contained" size="small" onClick={ajustar}>Ajustar</Button></TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+                </Container>
+            </Sidebar>
         </>
     )
 }

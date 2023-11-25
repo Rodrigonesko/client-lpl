@@ -43,37 +43,38 @@ const UploadUrgenciaEmergencia = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section className="section-upload-container">
+            <Sidebar>
+                <section className="section-upload-container">
 
-                {
-                    loading ? (
-                        <CircularProgress style={{ position: 'absolute' }} />
-                    ) : null
-                }
-
-                <div className="upload-container">
                     {
-                        status !== '' ? (
-                            <div>
-                                <strong>{status}</strong>
-                            </div>
+                        loading ? (
+                            <CircularProgress style={{ position: 'absolute' }} />
                         ) : null
                     }
-                    <form action="" method="post">
-                        <div className="title">
-                            <h2>Upload Urgencia && Emergencia</h2>
-                        </div>
-                        <div>
-                            <label htmlFor="file-rn">Arquivo: </label>
-                            <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
-                        </div>
-                        <div className="container-btns">
-                            <button className="btn" onClick={send} >Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+
+                    <div className="upload-container">
+                        {
+                            status !== '' ? (
+                                <div>
+                                    <strong>{status}</strong>
+                                </div>
+                            ) : null
+                        }
+                        <form action="" method="post">
+                            <div className="title">
+                                <h2>Upload Urgencia && Emergencia</h2>
+                            </div>
+                            <div>
+                                <label htmlFor="file-rn">Arquivo: </label>
+                                <input type="file" name="file-rn" id="file-rn" onChange={e => setFile(e.target.files[0])} />
+                            </div>
+                            <div className="container-btns">
+                                <button className="btn" onClick={send} >Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </Sidebar>
         </>
     )
 }

@@ -47,21 +47,22 @@ const ReportTeleEntrevistas = () => {
 
     return (
         <>
-            <Sidebar></Sidebar>
-            <section className='section-report-entrevista-container'>
-                <div className='report-entrevista-container'>
-                    <div className='title'>
-                        <h3>Report Tele Entrevistas</h3>
+            <Sidebar>
+                <section className='section-report-entrevista-container'>
+                    <div className='report-entrevista-container'>
+                        <div className='title'>
+                            <h3>Report Tele Entrevistas</h3>
+                        </div>
+                        <div className='report-entrevistas'>
+                            <p>Bom dia!</p>
+                            <p>*Demanda Diária (Tele-entrevista)*</p>
+                            <p>{aAgendar} agendar</p>
+                            <p>{agendadas} agendados</p>
+                            <p>Total: {total}</p>
+                        </div>
                     </div>
-                    <div className='report-entrevistas'>
-                        <p>Bom dia!</p>
-                        <p>*Demanda Diária (Tele-entrevista)*</p>
-                        <p>{aAgendar} agendar</p>
-                        <p>{agendadas} agendados</p>
-                        <p>Total: {total}</p>
-                    </div>
-                </div>
-            </section>
+                </section>
+            </Sidebar>
         </>
     )
 }
