@@ -48,7 +48,7 @@ const ProtFiltros = () => {
     return (
         <>
             <Sidebar>
-                <Box sx={{ width: '100%' }}>
+                <Box sx={{ width: '100%', m: 1 }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                             <Tab sx={{

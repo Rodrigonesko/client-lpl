@@ -99,12 +99,14 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook, chatIdSocket, setC
             setMessagesByDate({})
 
         }
-        setHookScroll(true)
+
         setData(resultData)
+
+        setLoading(false)
+        setHookScroll(true)
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-        setLoading(false)
     }
 
     const seeMessage = async () => {
@@ -112,11 +114,21 @@ const CardMessage = ({ chatId, nome, setFlushHook, flushHook, chatIdSocket, setC
     }
 
     useEffect(() => {
-        if (chatIdSocket === chatId) {
-            setFlushHook(true)
-        }
-        setFlushHook(false)
-        fetchData()
+        const fetchDataAsync = async () => {
+            if (chatIdSocket === chatId) {
+                setFlushHook(true);
+            } else {
+                setFlushHook(false);
+            }
+
+            try {
+                await fetchData();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchDataAsync();
     }, [nome, flushHook])
 
     useEffect(() => {
