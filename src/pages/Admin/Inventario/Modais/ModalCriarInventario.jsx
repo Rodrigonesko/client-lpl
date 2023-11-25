@@ -107,9 +107,9 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                             <br />
                             <TextField type='text' onChange={handleChangeDados} name='nomeItem' size='small' label='Qual o nome do item?' />
                             <br />
-                            <TextField type='text' onChange={handleChangeDados} name='etiqueta' size='small' label='Qual o número serial do item?' />
+                            <TextField type='text' onChange={handleChangeDados} name='etiqueta' size='small' label='Qual a etiqueta do item?' />
                             <br />
-                            <TextField type='text' onChange={handleChangeDados} name='ondeItem' size='small' label='Onde está o item?' />
+                            <TextField type='text' onChange={handleChangeDados} name='ondeItem' size='small' label='Com quem/onde está o item?' />
                             <br />
                             <TextField type='text' onChange={handleChangeDados} name='descricao' placeholder='Placeholder' multiline size='small' label='Descreva o que o item possui?' />
                         </FormGroup>
