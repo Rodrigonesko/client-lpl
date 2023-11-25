@@ -56,7 +56,7 @@ const InternMessages = () => {
                         <Box width={'100%'} ml={2}>
                             {
                                 receptor !== '' && (
-                                    <CardMessage setChatIdSocket={setChatIdSocket} chatIdSocket={chatIdSocket} nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
+                                    <CardMessage key={chatId} setChatIdSocket={setChatIdSocket} chatIdSocket={chatIdSocket} nome={receptor} chatId={chatId} setFlushHook={setFlushHook} flushHook={flushHook} />
                                 )
                             }
                         </Box>
