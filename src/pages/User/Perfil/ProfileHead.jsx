@@ -1,6 +1,7 @@
-import { Box, Paper, Button, Avatar, Typography, Divider, Tooltip } from "@mui/material"
+import { Box, Paper, Button, Avatar, Typography, Divider, Tooltip, Modal } from "@mui/material"
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2  
 import moment from "moment";
+import ModalAlterarFoto from "./Components/ModalAlterarFoto";
 // import { FaInstagram, FaLinkedin } from 'react-icons/fa'
 
 const ProfileHead = ({ userData }) => {
@@ -18,13 +19,7 @@ const ProfileHead = ({ userData }) => {
     return (
         <Box component={Paper} p={1} mr='2%' ml='2%' mt='2%' maxHeight='300px' display='flex' justifyContent='space-between' >
             <Box display='flex' alignItems='center'>
-                <Tooltip title='Trocar foto'>
-                    <Button sx={{ borderRadius: '50%' }} >
-                        <Avatar
-                            sx={{ width: '100px', height: '100px' }}
-                        ></Avatar>
-                    </Button>
-                </Tooltip>
+                <ModalAlterarFoto />
                 <Box ml='20px'>
                     <Typography variant="h5">
                         {userData.name}
