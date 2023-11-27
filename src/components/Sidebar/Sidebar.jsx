@@ -58,9 +58,11 @@ const Sidebar = ({ children }) => {
     useEffect(() => {
         fetchData()
 
-        socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
-            query: `name=${name}`
-        })
+        if (!socket || socket._opts.query !== `name=${name}`) {
+            socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
+                query: `name=${name}`
+            })
+        } 
 
         socket.on('receivedMessage', async (data) => {
             if (location.pathname === '/internMessages') {
