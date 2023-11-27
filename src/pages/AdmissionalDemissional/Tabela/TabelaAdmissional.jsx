@@ -22,7 +22,7 @@ const TabelaAdmissional = ({ acoesAdmissional, responsavel, fornecedor }) => {
     }, [flushHook, setFlushHook])
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} >
             <Table>
                 <TableHead>
                     <TableRow className="table-header">

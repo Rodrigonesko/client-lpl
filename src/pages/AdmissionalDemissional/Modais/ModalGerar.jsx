@@ -58,9 +58,9 @@ const ModalGerar = ({ setFlushHook, flushHook, setNomeCompleto, setNumero }) => 
                 nome: dados.nomeCompleto,
                 numero: dados.numero,
                 email: dados.email,
-                observacao: dados.observacao,
-                status: dados.status,
-                data: dados.data
+                // observacao: dados.observacao,
+                // status: dados.status,
+                // data: dados.data
             })
             console.log(resultado)
             setOpenSnack(true)
@@ -70,7 +70,7 @@ const ModalGerar = ({ setFlushHook, flushHook, setNomeCompleto, setNumero }) => 
             setFlushHook(true)
             setOpen(false)
             setDados({
-                nomeColaborador: '',
+                nomeCompleto: '',
                 numero: ''
             })
             return

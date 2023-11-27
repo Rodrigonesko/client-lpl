@@ -5,7 +5,8 @@ import { getInfoEmail, getUsers } from "../../_services/user.service"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
 import TabelaDemissional from "./Tabela/TabelaDemissional"
 import ModalGerar from "./Modais/ModalGerar"
-import { getInfoName, getName } from "../../_services/admissaoDemissao.service"
+import { getInfoName, getNames } from "../../_services/admissaoDemissao.service"
+import axios from "axios"
 
 const AdmissionalDemissional = () => {
 
@@ -42,7 +43,9 @@ const AdmissionalDemissional = () => {
     ]
 
     const fornecedorDemissao = [
-        'Clinimerces', 'Eniltec', 'Eniltec', 'CEF', 'Site Caixa', 'Site VR', 'URBS', 'Localweb', '', '', '', '', 'Voux', 'You Do', 'You Do', '', '']
+        'Clinimerces', 'Eniltec', 'Eniltec', 'CEF', 'Site Caixa', 'Site VR', 'URBS', 'Localweb', '', '', '', '', 'Voux', 'You Do', 'You Do',
+        '', ''
+    ]
 
 
     const [flushHook, setFlushHook] = useState(false)
@@ -71,13 +74,13 @@ const AdmissionalDemissional = () => {
         buscarEmails()
     }, [])
 
-    const buscarEmail = async () => {
+    const adicionarEmail = async (email, id) => {
         try {
-            setBusca(true);
-            const result = await getInfoEmail(email);
-
-            // Adicione o tratamento do resultado, se necessário
-
+            const resultado = await axios.updateOne(`${process.env.REACT_APP_API_KEY}/admissaoDemissao/email`, {
+                email: email, _id: id
+            })
+            console.log(resultado)
+            return
         } catch (error) {
             console.log(error);
         } finally {
@@ -88,7 +91,7 @@ const AdmissionalDemissional = () => {
     useEffect(() => {
         const buscarNomes = async () => {
             try {
-                const result = await getUsers()
+                const result = await getNames()
                 setNomes(result)
                 console.log(result)
             } catch (error) {
@@ -96,14 +99,18 @@ const AdmissionalDemissional = () => {
             }
         }
         buscarNomes()
-    }, [nome])
+    }, [])
 
     const buscarNome = async () => {
         try {
             setBusca(true);
             const result = await getInfoName(nome);
-            setNomes(result);
-            console.log(result)
+
+            // Adicione o tratamento do resultado, se necessário
+            setNomeCompleto(result.user.nome)
+            setNumero(result.user.numero)
+            setEmail(result.user.email)
+
         } catch (error) {
             console.log(error);
         } finally {
@@ -123,7 +130,7 @@ const AdmissionalDemissional = () => {
     return (
         <>
             <Sidebar>
-                <Container>
+                <Container maxWidth>
                     <div className="title">
                         <h2>Admissional / Demissional</h2>
                     </div>
@@ -140,7 +147,8 @@ const AdmissionalDemissional = () => {
                             onChange={(event, item) => {
                                 setNome(item.nome);
                             }}
-                            getOptionLabel={(nomes) => nomes.nome}
+
+                            getOptionLabel={nomes => nomes.nome}
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Nome' />}
                         />
@@ -161,15 +169,16 @@ const AdmissionalDemissional = () => {
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Email' />}
                         />
-                        <Button type='submit' onClick={buscarEmail} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
+                        <Button type='submit' onClick={adicionarEmail} variant='contained' sx={{ marginLeft: '3px' }}>Atualizar</Button>
                     </Box>
                     <Box>
                         <br />
                         <Typography>Nome do colaborador: {nomeCompleto}</Typography>
                         <Typography>Número do colaborador: {numero}</Typography>
+                        <Typography>E-mail do colaborador: {email}</Typography>
                     </Box>
                     <br />
-                    <FormControl>
+                    <FormControl fullWidth>
                         <FormLabel>Qual o tipo de exame:</FormLabel>
                         <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
                             <FormControlLabel value="admissional" control={<Radio onClick={handleChange} />} label="Admissional" />
@@ -188,7 +197,6 @@ const AdmissionalDemissional = () => {
                             }
                         </RadioGroup>
                     </FormControl>
-
                 </Container >
             </Sidebar>
         </>

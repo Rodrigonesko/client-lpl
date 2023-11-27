@@ -11,3 +11,7 @@ export const getAll = async () => {
 export const getInfoName = async (nome) => {
     return await new ApiCall(`/admissaoDemissao/infoUser/${nome}`).get();
 }
+
+export const getNames = async () => {
+    return await new ApiCall('/admissaoDemissao/users').get()
+}
