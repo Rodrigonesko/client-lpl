@@ -1,12 +1,9 @@
-import { Autocomplete, Box, Button, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, Container, Divider, Tab, Tabs, TextField, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import { getInfoEmail, getUsers } from "../../_services/user.service"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
 import TabelaDemissional from "./Tabela/TabelaDemissional"
-import ModalGerar from "./Modais/ModalGerar"
-import { getInfoName, getNames } from "../../_services/admissaoDemissao.service"
-import axios from "axios"
+import { getUsers } from "../../_services/user.service"
 
 const AdmissionalDemissional = () => {
 
@@ -47,51 +44,22 @@ const AdmissionalDemissional = () => {
         '', ''
     ]
 
+    const [user, setUser] = useState({})
 
     const [flushHook, setFlushHook] = useState(false)
     const [email, setEmail] = useState('')
-    const [emails, setEmails] = useState([])
     const [tipoExame, setTipoExame] = useState('')
-    const [dados, setDados] = useState({
-        tipoExame: ''
-    })
+
     const [nome, setNome] = useState('')
     const [nomes, setNomes] = useState([])
     const [numero, setNumero] = useState('')
-    const [nomeCompleto, setNomeCompleto] = useState([])
 
     const [busca, setBusca] = useState(false)
 
     useEffect(() => {
-        const buscarEmails = async () => {
-            try {
-                const result = await getUsers()
-                setEmails(result)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        buscarEmails()
-    }, [])
-
-    const adicionarEmail = async (email, id) => {
-        try {
-            const resultado = await axios.updateOne(`${process.env.REACT_APP_API_KEY}/admissaoDemissao/email`, {
-                email: email, _id: id
-            })
-            console.log(resultado)
-            return
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setBusca(false);
-        }
-    }
-
-    useEffect(() => {
         const buscarNomes = async () => {
             try {
-                const result = await getNames()
+                const result = await getUsers()
                 setNomes(result)
                 console.log(result)
             } catch (error) {
@@ -104,12 +72,9 @@ const AdmissionalDemissional = () => {
     const buscarNome = async () => {
         try {
             setBusca(true);
-            const result = await getInfoName(nome);
+            const result = await getUsers()
 
-            // Adicione o tratamento do resultado, se necessário
-            setNomeCompleto(result.user.nome)
-            setNumero(result.user.numero)
-            setEmail(result.user.email)
+
 
         } catch (error) {
             console.log(error);
@@ -118,9 +83,9 @@ const AdmissionalDemissional = () => {
         }
     }
 
-    const handleChange = (e) => {
-        setTipoExame(e.target.value)
-        setDados(prevState => ({ ...prevState, tipoExame: e.target.value }));
+    const handleChange = (e, newValue) => {
+        setTipoExame(newValue)
+        console.log(e);
     }
 
     useEffect(() => {
@@ -135,9 +100,6 @@ const AdmissionalDemissional = () => {
                         <h2>Admissional / Demissional</h2>
                     </div>
                     <br />
-                    <ModalGerar setFlushHook={setFlushHook} flushHook={flushHook} setNomeCompleto={setNomeCompleto} setNumero={setNumero} />
-                    <br />
-                    <br />
                     <Box display='flex'>
                         <Autocomplete
                             size="small"
@@ -145,60 +107,40 @@ const AdmissionalDemissional = () => {
                             id="nome-auto-complete"
                             options={nomes}
                             onChange={(event, item) => {
-                                setNome(item.nome);
+                                setUser(item);
                             }}
-
-                            getOptionLabel={nomes => nomes.nome}
+                            getOptionLabel={nomes => nomes.name}
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Nome' />}
                         />
                         <Button type='button' onClick={buscarNome} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
                     </Box>
                     <br />
-                    <Box display='flex'>
-                        <Autocomplete
-                            size="small"
-                            disablePortal
-                            id="email-auto-complete"
-                            options={emails}
-                            onChange={(event, item) => {
-                                setEmail(item.email);
-                            }}
-
-                            getOptionLabel={emails => emails.email}
-                            sx={{ width: 400 }}
-                            renderInput={(params) => <TextField {...params} label='Email' />}
-                        />
-                        <Button type='submit' onClick={adicionarEmail} variant='contained' sx={{ marginLeft: '3px' }}>Atualizar</Button>
-                    </Box>
                     <Box>
                         <br />
-                        <Typography>Nome do colaborador: {nomeCompleto}</Typography>
-                        <Typography>Número do colaborador: {numero}</Typography>
-                        <Typography>E-mail do colaborador: {email}</Typography>
+                        <Typography>Nome do colaborador: {user.name} | Número do colaborador: {user.numero} | E-mail do colaborador: {user.email}</Typography>
                     </Box>
                     <br />
-                    <FormControl fullWidth>
-                        <FormLabel>Qual o tipo de exame:</FormLabel>
-                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group">
-                            <FormControlLabel value="admissional" control={<Radio onClick={handleChange} />} label="Admissional" />
-                            <FormControlLabel value="demissional" control={<Radio onClick={handleChange} />} label="Demissional" />
-                            <Divider />
-                            <br />
-                            {
-                                tipoExame === 'admissional' ? (
-                                    <TabelaAdmissional acoesAdmissional={acoesAdmissional} responsavel={responsavelAdmissao} fornecedor={fornecedorAdmissao} />
-                                ) : tipoExame === 'demissional' ? (
-                                    <TabelaDemissional acoesDemissional={acoesDemissional} responsavel={responsavelDemissao} fornecedor={fornecedorDemissao} />
-                                ) : (
-                                    <>
-                                    </>
-                                )
-                            }
-                        </RadioGroup>
-                    </FormControl>
+                    <Divider />
+                    <br />
+                    <Box sx={{ width: '100%' }}>
+                        <Tabs value={tipoExame} onChange={handleChange} aria-label="wrapped label tabs example" >
+                            <Tab value="admissional" label="Admissional" />
+                            <Tab value="demissional" label="Demissional" />
+                        </Tabs>
+                        {
+                            tipoExame === 'admissional' ? (
+                                <TabelaAdmissional acoesAdmissional={acoesAdmissional} responsavel={responsavelAdmissao} fornecedor={fornecedorAdmissao} user={user} />
+                            ) : tipoExame === 'demissional' ? (
+                                <TabelaDemissional acoesDemissional={acoesDemissional} responsavel={responsavelDemissao} fornecedor={fornecedorDemissao} user={user} />
+                            ) : (
+                                <>
+                                </>
+                            )
+                        }
+                    </Box>
                 </Container >
-            </Sidebar>
+            </Sidebar >
         </>
     )
 }
