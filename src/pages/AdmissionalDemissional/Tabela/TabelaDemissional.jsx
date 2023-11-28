@@ -3,8 +3,6 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { green, red, yellow } from '@mui/material/colors';
-import { updateStatus } from '../../../_services/admissaoDemissao.service';
-
 
 const TabelaDemissional = ({ acoesDemissional, responsavel, fornecedor }) => {
 
@@ -13,9 +11,9 @@ const TabelaDemissional = ({ acoesDemissional, responsavel, fornecedor }) => {
 
     const handleChangeSelect = async () => {
 
-        const resultado = await updateStatus(status)
+        const resultado = await
 
-        setStatus(resultado)
+            setStatus(resultado)
         setFlushHook(true)
         console.log(resultado)
     }
