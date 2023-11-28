@@ -1,4 +1,4 @@
-import { Box, Checkbox, Chip, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Checkbox, Chip, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, Typography } from "@mui/material"
 import moment from "moment";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -11,6 +11,7 @@ import SelectAlterarSexo from "../Components/SelectAlterarSexo";
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import gerarPdf from "../../../TeleEntrevistas/Pdf/Pdf";
+import PopoverTentativaContato from "../Components/PopoverTentativaContato";
 
 const EnhancedTableHead = () => {
     return (
@@ -209,9 +210,9 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                 <Typography variant="h6">
                                     Contatos
                                 </Typography>
-                                <Box display={'flex'}>
+                                <Box display={'flex'} mb={1}>
                                     <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>1° Contato:</span>  {item.contato1}
+                                        <span style={{ fontWeight: 'bold' }}>1° Contato:</span>  {item.contato1 || <PopoverTentativaContato tentativa={'tentativa 1'} _id={item._id} setFlushHook={setFlushHook}>1° Contato</PopoverTentativaContato>}
                                     </Typography>
                                     <Typography mr={2}>
                                         <span style={{ fontWeight: 'bold' }}>Responsavel:</span> {item.responsavelContato1}
@@ -220,9 +221,9 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                         <span style={{ fontWeight: 'bold' }}>Tipo:</span> {item.tipoContato1}
                                     </Typography>
                                 </Box>
-                                <Box display={'flex'}>
+                                <Box display={'flex'} mb={1}>
                                     <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>2° Contato:</span>  {item.contato2}
+                                        <span style={{ fontWeight: 'bold' }}>2° Contato:</span>  {!item.contato2 && !!item.contato1 ? <PopoverTentativaContato tentativa={'tentativa 2'} _id={item._id} setFlushHook={setFlushHook}>2° Contato</PopoverTentativaContato> : item.contato2}
                                     </Typography>
                                     <Typography mr={2}>
                                         <span style={{ fontWeight: 'bold' }}>Responsavel:</span> {item.responsavelContato2}
@@ -231,9 +232,9 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                         <span style={{ fontWeight: 'bold' }}>Tipo:</span> {item.tipoContato2}
                                     </Typography>
                                 </Box>
-                                <Box display={'flex'}>
+                                <Box display={'flex'} mb={1}>
                                     <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>3° Contato:</span>  {item.contato3}
+                                        <span style={{ fontWeight: 'bold' }}>3° Contato:</span>  {!item.contato3 && !!item.contato2 && !!item.contato1 ? <PopoverTentativaContato tentativa={'tentativa 3'} _id={item._id} setFlushHook={setFlushHook}>3° Contato</PopoverTentativaContato> : item.contato3}
                                     </Typography>
                                     <Typography mr={2}>
                                         <span style={{ fontWeight: 'bold' }}>Responsavel:</span> {item.responsavelContato3}
@@ -248,24 +249,28 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                     Informações
                                 </Typography>
                                 <Box display={'flex'}>
-                                    <Typography>
-                                        CPF:
-                                    </Typography>
-                                    <Typography>
-                                        Data Nascimento:
-                                    </Typography>
-                                    <Typography>
-                                        Filial:
-                                    </Typography>
-                                    <Typography>
-                                        Peso:
-                                    </Typography>
-                                    <Typography>
-                                        Altura:
-                                    </Typography>
-                                    <Typography>
-                                        IMC:
-                                    </Typography>
+                                    <Box m={1}>
+                                        <Typography>
+                                            <strong>CPF: </strong> {item.cpf}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>Data Nascimento: </strong> {item.dataNascimento}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>Filial: </strong>  {item.filial}
+                                        </Typography>
+                                    </Box>
+                                    <Box m={1}>
+                                        <Typography>
+                                            <strong>Peso: </strong> {item.peso}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>Altura: </strong>  {item.altura}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>IMC: </strong> {item.imc}
+                                        </Typography>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Box>

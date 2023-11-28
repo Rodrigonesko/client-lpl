@@ -97,7 +97,14 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                                                 <Chip label={'ERRO AO ENVIAR'} color="error" />
                                             ) : (
                                                 <>
-                                                    {message.status}
+                                                    {message.status === 'read' ? (
+                                                        <Tooltip title={'Lida'} arrow>
+                                                            <Chip label={'Lida'} color="success" />
+                                                        </Tooltip>
+                                                    ) : (
+                                                        message.status
+                                                    )
+                                                    }
                                                 </>
                                             )
                                         }
