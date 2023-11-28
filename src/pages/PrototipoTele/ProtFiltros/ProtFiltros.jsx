@@ -56,20 +56,29 @@ const ProtFiltros = () => {
                                     bgcolor: 'lightgray',
                                     color: 'black'
                                 },
-                            }} label="Item One" {...a11yProps(0)} />
+                            }} label="Pendencias" {...a11yProps(0)} />
                             <Tab sx={{
                                 ":hover": {
                                     bgcolor: 'lightgray',
                                     color: 'black'
                                 },
-                            }} label="Item Two" {...a11yProps(1)} />
+                            }} label="Agendadas" {...a11yProps(1)} />
+                            <Tab sx={{
+                                ":hover": {
+                                    bgcolor: 'lightgray',
+                                    color: 'black'
+                                },
+                            }} label="Realizadas" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
                         <FiltroEmAnalise />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={1}>
-                        Item Two
+                        Agendadas
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={0}>
+                        Realizadas
                     </CustomTabPanel>
                 </Box>
             </Sidebar>

@@ -1,41 +1,51 @@
-import { Box, Button, Checkbox, CircularProgress, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { filterPropostas } from "../../../../_services/teleEntrevistaExterna.service";
+import { filterPropostas, filterPropostasNaoRealizadas } from "../../../../_services/teleEntrevistaExterna.service";
 import Filtros from "./Filtros";
 import moment from "moment";
+import { blue } from "@mui/material/colors";
 
 const FiltroEmAnalise = () => {
 
+    const [agendado, setAgendado] = useState(false);
+
     const [status, setStatus] = useState({
-        agendar: true,
-        humanizado: true,
-        janelas: true,
-        ajustar: true,
-        semWhats: true,
-        agendado: true,
+        agendar: false,
+        agendado: false,
+        humanizado: false,
+        janelas: false,
+        ajustar: false,
+        semWhats: false,
     });
 
     const [tipoContrato, setTipoContrato] = useState({
-        pme: true,
-        pf: true,
-        adesao: true,
+        pme: false,
+        pf: false,
+        adesao: false,
     });
 
     const [vigencia, setVigencia] = useState({
-        noPrazo: true,
-        foraDoPrazo: true,
+        noPrazo: false,
+        foraDoPrazo: false,
     });
 
     const [altoRisco, setAltoRisco] = useState({
-        baixo: true,
-        medio: true,
-        alto: true,
+        baixo: false,
+        medio: false,
+        alto: false,
+    });
+
+    const [idade, setIdade] = useState({
+        maior60: false,
+        menor60: false,
     });
 
     const [propostas, setPropostas] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [pesquisa, setPesquisa] = useState('');
 
     const handleChangeStatus = (event) => {
         setStatus({ ...status, [event.target.name]: event.target.checked });
@@ -53,6 +63,10 @@ const FiltroEmAnalise = () => {
         setAltoRisco({ ...altoRisco, [event.target.name]: event.target.checked });
     }
 
+    const handleChangeIdade = (event) => {
+        setIdade({ ...idade, [event.target.name]: event.target.checked });
+    }
+
     const handleFilter = async () => {
         try {
 
@@ -64,6 +78,7 @@ const FiltroEmAnalise = () => {
                 tipoContrato: tipoContrato,
                 vigencia: vigencia,
                 altoRisco: altoRisco,
+                idade: idade,
                 page: 1,
                 limit: 100
             })
@@ -105,6 +120,11 @@ const FiltroEmAnalise = () => {
             medio: false,
             alto: false,
         });
+
+        setIdade({
+            maior60: false,
+            menor60: false,
+        });
     }
 
     const handleAll = () => {
@@ -133,6 +153,11 @@ const FiltroEmAnalise = () => {
             medio: true,
             alto: true,
         });
+
+        setIdade({
+            maior60: true,
+            menor60: true,
+        });
     }
 
     const fetchPropostas = async (page) => {
@@ -146,6 +171,7 @@ const FiltroEmAnalise = () => {
                 vigencia: vigencia,
                 altoRisco: altoRisco,
                 page: page,
+                idade: idade,
                 limit: 100
             })
             setPropostas(result.result);
@@ -162,6 +188,25 @@ const FiltroEmAnalise = () => {
         setPage(value);
         fetchPropostas(value);
     }
+
+    const handlePesquisar = async (e) => {
+        e.preventDefault();
+        if (pesquisa === '') {
+            return;
+        }
+        setLoading(true);
+        setPage(1)
+        const result = await filterPropostasNaoRealizadas({
+            pesquisa: pesquisa,
+            page: 1,
+            limit: 100
+        })
+        setPropostas(result.result);
+        setTotalPages(result.total);
+        setLoading(false)
+    }
+
+
 
     useEffect(() => {
         fetchPropostas(page);
@@ -189,8 +234,16 @@ const FiltroEmAnalise = () => {
                     handleFilter={handleFilter}
                     handleClear={handleClear}
                     handleAll={handleAll}
+                    idade={idade}
+                    handleChangeIdade={handleChangeIdade}
                 />
-                <Box width={'100%'}>
+                <Box p={1} width={'100%'}>
+
+                    <form action="" style={{ display: 'flex', margin: '10px' }} onSubmit={handlePesquisar} >
+                        <TextField label="Pesquisar" variant="outlined" size="small" value={pesquisa} onChange={e => setPesquisa(e.target.value)} />
+                        <Button sx={{ ml: 2 }} variant={'contained'} color={'primary'} size="small" type="submit">Pesquisar</Button>
+                    </form>
+
                     <Typography fontWeight={'bold'}>
                         {totalPages} propostas encontradas
                     </Typography>
@@ -202,19 +255,19 @@ const FiltroEmAnalise = () => {
                             !loading ? (
                                 <Table size="small">
                                     <TableHead>
-                                        <TableRow>
-                                            <TableCell>Recebimento</TableCell>
-                                            <TableCell>Vigência</TableCell>
-                                            <TableCell>Proposta</TableCell>
-                                            <TableCell>Nome</TableCell>
-                                            <TableCell>Associado</TableCell>
-                                            <TableCell>Idade</TableCell>
-                                            <TableCell>Sexo</TableCell>
-                                            <TableCell>Tipo Contrato</TableCell>
-                                            <TableCell>Janela Escolhida</TableCell>
-                                            <TableCell>Status</TableCell>
-                                            <TableCell>Risco</TableCell>
-                                            <TableCell>Detalhes</TableCell>
+                                        <TableRow sx={{ bgcolor: blue[600] }}>
+                                            <TableCell sx={{ color: "white" }}>Recebimento</TableCell>
+                                            <TableCell sx={{ color: "white" }} >Vigência</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Proposta</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Nome</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Associado</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Idade</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Sexo</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Tipo Contrato</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Janela Escolhida</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Status</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Risco</TableCell>
+                                            <TableCell sx={{ color: "white" }}>Detalhes</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>

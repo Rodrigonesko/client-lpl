@@ -1,18 +1,57 @@
-import { Box, Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Typography } from '@mui/material'
+import { Box, Button, Checkbox, CircularProgress, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, IconButton, Radio, RadioGroup, Tooltip, Typography } from '@mui/material'
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { quantidadePropostasNaoRealizadas } from '../../../../_services/teleEntrevistaExterna.service';
+import { Refresh } from '@mui/icons-material';
 
 const Filtros = ({
     status,
     tipoContrato,
     vigencia,
     altoRisco,
+    idade,
     handleChangeStatus,
     handleChangeTipoContrato,
     handleChangeVigencia,
     handleChangeAltoRisco,
+    handleChangeIdade,
     handleFilter,
-    handleClear,
-    handleAll
+    handleClear
 }) => {
+
+    const [totalPropostas, setTotalPropostas] = useState({
+        agendar: 0,
+        humanizado: 0,
+        janelas: 0,
+        ajustar: 0,
+        semWhats: 0,
+        agendado: 0,
+        pme: 0,
+        pf: 0,
+        adesao: 0,
+        noPrazo: 0,
+        foraDoPrazo: 0,
+        baixo: 0,
+        medio: 0,
+        alto: 0,
+    });
+    const [loading, setLoading] = useState(false)
+
+    const fetchTotalPropostas = async () => {
+        try {
+            setLoading(true)
+            const result = await quantidadePropostasNaoRealizadas()
+            setTotalPropostas(result)
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        fetchTotalPropostas()
+    }, [])
+
     return (
         <Box display={'flex'} flexDirection={'column'} width={'300px'}>
             <Typography
@@ -32,13 +71,21 @@ const Filtros = ({
                 >
                     Limpar
                 </Button>
-                <Button
-                    onClick={handleAll}
-                    sx={{ m: 1 }}
-                    variant='contained'
-                >
-                    Todos
-                </Button>
+            </Box>
+            <Box>
+                <Tooltip title='Atualizar quantidade' arrow>
+                    <IconButton
+                        onClick={fetchTotalPropostas}
+                        sx={{ m: 1 }}
+                    >
+                        <Refresh />
+                    </IconButton>
+                </Tooltip>
+                {
+                    loading && (
+                        <CircularProgress />
+                    )
+                }
             </Box>
             <FormControl
                 sx={{ m: 1 }}
@@ -58,40 +105,7 @@ const Filtros = ({
                             onChange={handleChangeStatus}
                             name="agendar"
                         />}
-                        label="Agendar"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox
-                            checked={status.humanizado}
-                            onChange={handleChangeStatus}
-                            name="humanizado"
-                        />}
-                        label="Humanizado"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox
-                            checked={status.janelas}
-                            onChange={handleChangeStatus}
-                            name="janelas"
-
-                        />}
-                        label="Janelas"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox
-                            checked={status.ajustar}
-                            onChange={handleChangeStatus}
-                            name="ajustar"
-                        />}
-                        label="Ajustar"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox
-                            checked={status.semWhats}
-                            onChange={handleChangeStatus}
-                            name="semWhats"
-                        />}
-                        label="Sem Whats"
+                        label={`Agendar (${totalPropostas.agendar})`}
                     />
                     <FormControlLabel
                         control={<Checkbox
@@ -100,8 +114,66 @@ const Filtros = ({
                             name="agendado"
 
                         />}
-                        label="Agendado"
+                        label={`Agendado (${totalPropostas.agendado})`}
                     />
+                    {/* <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        name="radio-buttons-group"
+                    >
+                        <FormControlLabel
+                            value="agendar"
+                            control={<Radio
+
+                                onChange={handleChangeStatus}
+                                name="agendar"
+                            />}
+                            label={`Agendar (${totalPropostas.agendar})`}
+                        />
+                        <FormControlLabel
+                            value="agendado"
+                            control={<Radio
+                                onChange={handleChangeStatus}
+                                name="agendado"
+                            />}
+                            label={`Agendado (${totalPropostas.agendado})`}
+                        />
+                    </RadioGroup> */}
+
+                    <Divider />
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={status.humanizado}
+                            onChange={handleChangeStatus}
+                            name="humanizado"
+                        />}
+                        label={`Humanizado (${totalPropostas.humanizado})`}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={status.janelas}
+                            onChange={handleChangeStatus}
+                            name="janelas"
+
+                        />}
+                        label={`Janelas (${totalPropostas.janelas})`}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={status.ajustar}
+                            onChange={handleChangeStatus}
+                            name="ajustar"
+                        />}
+                        label={`Ajustar (${totalPropostas.ajustar})`}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={status.semWhats}
+                            onChange={handleChangeStatus}
+                            name="semWhats"
+                        />}
+                        label={`Sem Whatsapp (${totalPropostas.semWhats})`}
+                    />
+
                 </FormGroup>
             </FormControl>
             <FormControl
@@ -121,7 +193,7 @@ const Filtros = ({
                             onChange={handleChangeTipoContrato}
                             name="pme"
                         />}
-                        label="PME"
+                        label={`PME (${totalPropostas.pme})`}
                     />
                     <FormControlLabel
                         control={<Checkbox
@@ -130,7 +202,7 @@ const Filtros = ({
                             name="pf"
 
                         />}
-                        label="PF"
+                        label={`PF (${totalPropostas.pf})`}
                     />
                     <FormControlLabel
                         control={<Checkbox
@@ -139,7 +211,7 @@ const Filtros = ({
                             name="adesao"
 
                         />}
-                        label="Adesão"
+                        label={`Adesão (${totalPropostas.adesao})`}
                     />
                 </FormGroup>
             </FormControl>
@@ -161,7 +233,7 @@ const Filtros = ({
                             name="noPrazo"
 
                         />}
-                        label="No prazo"
+                        label={`No Prazo (${totalPropostas.noPrazo})`}
                     />
                     <FormControlLabel
                         control={<Checkbox
@@ -170,7 +242,7 @@ const Filtros = ({
                             name="foraDoPrazo"
 
                         />}
-                        label="Fora do Prazo"
+                        label={`Fora do Prazo (${totalPropostas.foraDoPrazo})`}
                     />
                 </FormGroup>
             </FormControl>
@@ -191,7 +263,7 @@ const Filtros = ({
                             onChange={handleChangeAltoRisco}
                             name="baixo"
                         />}
-                        label="Baixo"
+                        label={`Baixo (${totalPropostas.baixo})`}
                     />
                     <FormControlLabel
                         control={<Checkbox
@@ -199,7 +271,7 @@ const Filtros = ({
                             onChange={handleChangeAltoRisco}
                             name="medio"
                         />}
-                        label="Médio"
+                        label={`Médio (${totalPropostas.medio})`}
                     />
                     <FormControlLabel
                         control={<Checkbox
@@ -207,7 +279,36 @@ const Filtros = ({
                             onChange={handleChangeAltoRisco}
                             name="alto"
                         />}
-                        label="Alto"
+                        label={`Alto (${totalPropostas.alto})`}
+                    />
+                </FormGroup>
+            </FormControl>
+            <FormControl
+                sx={{ m: 1 }}
+                component={'fieldset'}
+                variant="standard"
+            >
+                <FormLabel
+                    component={'legend'}
+                >
+                    Idade
+                </FormLabel>
+                <FormGroup>
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={idade.maior60}
+                            onChange={handleChangeIdade}
+                            name="maior60"
+                        />}
+                        label={`Maior que 60 (${totalPropostas.maior60})`}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={idade.menor60}
+                            onChange={handleChangeIdade}
+                            name="menor60"
+                        />}
+                        label={`Menor que 60 (${totalPropostas.menor60})`}
                     />
                 </FormGroup>
             </FormControl>

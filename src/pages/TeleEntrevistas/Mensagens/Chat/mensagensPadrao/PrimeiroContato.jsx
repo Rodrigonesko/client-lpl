@@ -13,16 +13,16 @@ const PrimeiroContato = ({ hookMsg }) => {
         return `Prezado Sr.(a) (nome pessoa),
 Somos da Área de Implantação da Amil e para concluirmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) precisamos confirmar alguns dados médicos.
 Por gentileza, escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a)
-*${data1}*
-1. Das 13:00 às 15:00
-2. Das 15:00 às 17:00
-3. Das 17:00 às 19:00
-*${data2}*
-4. Das 09:00 às 11:00
-5. Das 11:00 às 13:00
-6. Das 13:00 às 15:00
-7. Das 15:00 às 17:00
-8. Das 17:00 às 19:00
+*${moment(data1).format('DD/MM/YYYY')}*
+1. Das 12:00 às 14:00
+2. Das 14:00 às 16:00
+3. Das 16:00 às 18:00
+*${moment(data2).format('DD/MM/YYYY')}*
+4. Das 08:00 às 10:00
+5. Das 10:00 às 12:00
+6. Das 12:00 às 14:00
+7. Das 14:00 às 16:00
+8. Das 16:00 às 18:00
 Qual o melhor horário?
 Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.
 Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.`
@@ -33,17 +33,17 @@ Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário
 Somos da Área de Implantação da Amil e para concluirmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) precisamos confirmar alguns dados médicos.
 Por gentileza, escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a)
 *${moment(data1).format('DD/MM/YYYY')}*
-1. Das 09:00 às 11:00
-2. Das 11:00 às 13:00
-3. Das 13:00 às 15:00
-4. Das 15:00 às 17:00
-5. Das 17:00 às 19:00
+4. Das 08:00 às 10:00
+5. Das 10:00 às 12:00
+6. Das 12:00 às 14:00
+7. Das 14:00 às 16:00
+8. Das 16:00 às 18:00
 *${moment(data2).format('DD/MM/YYYY')}*
-6. Das 09:00 às 11:00
-7. Das 11:00 às 13:00
-8. Das 13:00 às 15:00
-9. Das 15:00 às 17:00
-10. Das 17:00 às 19:00
+4. Das 08:00 às 10:00
+5. Das 10:00 às 12:00
+6. Das 12:00 às 14:00
+7. Das 14:00 às 16:00
+8. Das 16:00 às 18:00
 Qual o melhor horário?
 Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.
 Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.`

@@ -50,7 +50,6 @@ const Sidebar = ({ children }) => {
     }
 
     const fetchData = async () => {
-
         const result = await getChats()
         setQuantidadeMensagens(result.naoLidas)
     }
@@ -62,7 +61,7 @@ const Sidebar = ({ children }) => {
             socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
                 query: `name=${name}`
             })
-        } 
+        }
 
         socket.on('receivedMessage', async (data) => {
             if (location.pathname === '/internMessages') {
@@ -229,6 +228,9 @@ const Sidebar = ({ children }) => {
                             <MenuItem><Link to='/elegibilidadePme/todos'>Todos</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidadePme/upload'>Upload</Link></MenuItem>
                         </SubMenu>
+                    </SubMenu>
+                    <SubMenu title='Prototipo Tele' icon={<FaClipboard />}>
+                        <MenuItem><Link to='/prototipoTele/filtros'>Pendencias</Link></MenuItem>
                     </SubMenu>
                 </Menu>
             </ProSidebar>
