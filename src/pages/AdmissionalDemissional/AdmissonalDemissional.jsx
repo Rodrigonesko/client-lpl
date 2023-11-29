@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Container, Divider, Tab, Tabs, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Container, Divider, Tab, Tabs, TextField, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
@@ -7,54 +7,11 @@ import { getUsers } from "../../_services/user.service"
 
 const AdmissionalDemissional = () => {
 
-    const acoesAdmissional = [
-        'Agendamento Exame Admissional', 'Planilha Contratação', 'Assinar Documentos', 'Foto 3x4', 'Conta Salario', 'VR', 'VC', 'VT/MetroCard',
-        'Email', 'Assinatura Email', 'Linux', 'Notebook', 'Ramal', 'Portal LPL', 'Ponto', 'Crachá', 'Digital Sala', 'TransUnion', 'SisAmil',
-        'Treinamento Obrigatórios'
-    ]
-
-    const acoesDemissional = [
-        'Entrega Carta Pedido de Demissão ou Assinatura de Rescisão do Contrato', 'Agendamento Exame Demissional', 'Envio docs assinados para baixa',
-        'Assinar Documentos/Acerto', 'Conta Salario', 'VR', 'VC', 'VT/MetroCard', 'Cancelar Email', 'Cancelar Linux', 'Notebook', 'Ramal',
-        'Cancelar Portal LPL', 'Fechar e cancelar Ponto', 'Cancelar acesso Crachá', 'Cancelar Digital Sala', 'Cancelar TransUnion',
-        'Cancelar SisAmil'
-    ]
-
-    const responsavelAdmissao = [
-        'Samantha', 'Samantha', 'Samantha', 'Samantha',
-        'Fabio', 'Fabio', 'Fabio', 'Fabio',
-        'Gerson', 'Gerson', 'Gerson', 'Gerson', 'Gerson',
-        'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha'
-    ]
-
-    const responsavelDemissao = [
-        'Samantha', 'Samantha', 'Samantha',
-        'Fabio', 'Fabio', 'Fabio', 'Fabio',
-        'Gerson', 'Gerson', 'Gerson', 'Gerson',
-        'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha', 'Samantha'
-    ]
-
-    const fornecedorAdmissao = [
-        'Clinimerces', 'Eniltec', 'Eniltec', '', 'CEF', 'Site Caixa', 'Site VR', 'URBS', 'Localweb', '', '', '', '', '', 'Voux', 'Perfect Design',
-        'You Do', '', '', 'Clinimerces'
-    ]
-
-    const fornecedorDemissao = [
-        'Clinimerces', 'Eniltec', 'Eniltec', 'CEF', 'Site Caixa', 'Site VR', 'URBS', 'Localweb', '', '', '', '', 'Voux', 'You Do', 'You Do',
-        '', ''
-    ]
-
     const [user, setUser] = useState({})
-
     const [flushHook, setFlushHook] = useState(false)
-    const [email, setEmail] = useState('')
+    const [loading, setLoading] = useState(false)
     const [tipoExame, setTipoExame] = useState('')
-
-    const [nome, setNome] = useState('')
     const [nomes, setNomes] = useState([])
-    const [numero, setNumero] = useState('')
-
-    const [busca, setBusca] = useState(false)
 
     useEffect(() => {
         const buscarNomes = async () => {
@@ -69,22 +26,9 @@ const AdmissionalDemissional = () => {
         buscarNomes()
     }, [])
 
-    const buscarNome = async () => {
-        try {
-            setBusca(true);
-            const result = await getUsers()
-
-
-
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setBusca(false);
-        }
-    }
-
     const handleChange = (e, newValue) => {
         setTipoExame(newValue)
+
         console.log(e);
     }
 
@@ -113,10 +57,10 @@ const AdmissionalDemissional = () => {
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Nome' />}
                         />
-                        <Button type='button' onClick={buscarNome} variant='contained' sx={{ marginLeft: '3px' }}>Buscar</Button>
                     </Box>
                     <br />
-                    <Box>
+                    <Divider />
+                    <Box >
                         <br />
                         <Typography>Nome do colaborador: {user.name} | Número do colaborador: {user.numero} | E-mail do colaborador: {user.email}</Typography>
                     </Box>
@@ -130,9 +74,9 @@ const AdmissionalDemissional = () => {
                         </Tabs>
                         {
                             tipoExame === 'admissional' ? (
-                                <TabelaAdmissional acoesAdmissional={acoesAdmissional} responsavel={responsavelAdmissao} fornecedor={fornecedorAdmissao} user={user} />
+                                <TabelaAdmissional user={user} />
                             ) : tipoExame === 'demissional' ? (
-                                <TabelaDemissional acoesDemissional={acoesDemissional} responsavel={responsavelDemissao} fornecedor={fornecedorDemissao} user={user} />
+                                <TabelaDemissional user={user} />
                             ) : (
                                 <>
                                 </>

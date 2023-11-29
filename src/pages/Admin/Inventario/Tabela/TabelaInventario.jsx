@@ -11,7 +11,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [snackSelect, setSnackSelect] = useState(false)
     const [alerta, setAlerta] = useState(false)
 
-    const handleChangeSelect = async (id, status) => {
+    const handleChangeStatus = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/inventario/status`, {
             status: status, _id: id
         })
@@ -58,7 +58,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         <>
             <form action="" >
                 <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} size='small' label='Onde está?' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} />
                 <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                 <Button onClick={() => setFlushHook(true)} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
             </form>
@@ -99,7 +99,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                         <TableCell>
                                             <FormControl sx={{ minWidth: 135 }}>
                                                 <InputLabel id='Status'>Status</InputLabel>
-                                                <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)} >
+                                                <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(item._id, elemento.target.value)} >
                                                     <MenuItem value={'emEstoque'}>EM ESTOQUE</MenuItem>
                                                     <MenuItem value={'emUso'}>EM USO</MenuItem>
                                                     <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
