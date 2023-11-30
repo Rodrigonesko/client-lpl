@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from '../../../../components/Sidebar/Sidebar'
-import { useMediaQuery, Container, Box, Paper, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material'
+import { useMediaQuery, Container, Box, Paper, Typography, TextField, Button, Alert, CircularProgress, Chip, Tooltip } from '@mui/material'
 import Axios from 'axios'
 import { useParams } from 'react-router-dom';
 import { getCookie } from 'react-use-cookie';
@@ -8,6 +8,9 @@ import moment from 'moment';
 import PrimeiroContato from './mensagensPadrao/PrimeiroContato';
 import MensagemSemSucessoContato from './mensagensPadrao/MensagemSemSucessoContato';
 import MensagemDiaAnterior from './mensagensPadrao/MensagemDiaAnterior';
+import { io } from "socket.io-client";
+
+const socket = io(`http://18.230.122.26:3001`);
 
 const Chat = () => {
 
@@ -97,6 +100,25 @@ const Chat = () => {
 
     }, [whatsapp, aux])
 
+    useEffect(() => {
+        socket.on('receivedMessage', async (message) => {
+            if (message.whatsapp === whatsapp) {
+                buscarMensagens()
+                const component = chatRef.current;
+                if (component) {
+                    component.scrollTop = component.scrollHeight;
+                }
+            }
+        });
+        socket.on('statusMessage', async () => {
+            buscarMensagens()
+            const component = chatRef.current;
+            if (component) {
+                component.scrollTop = component.scrollHeight;
+            }
+        })
+    }, [])
+
     return (
         <>
             <Sidebar>
@@ -114,7 +136,22 @@ const Chat = () => {
                                                 <Typography style={{ display: 'inline-block', backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' ? '#0066FF' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
                                                 <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                                 <Typography variant='body2' color='GrayText'>
-                                                    {e.status}
+                                                    {
+                                                        e.status === 'failed' || e.status === 'undelivered' ? (
+                                                            <Chip label={'ERRO AO ENVIAR'} color="error" />
+                                                        ) : (
+                                                            <>
+                                                                {e.status === 'read' ? (
+                                                                    <Tooltip title={'Lida'} arrow>
+                                                                        <Chip label={'Lida'} color="success" />
+                                                                    </Tooltip>
+                                                                ) : (
+                                                                    e.status
+                                                                )
+                                                                }
+                                                            </>
+                                                        )
+                                                    }
                                                 </Typography>
                                             </Box>
                                         )

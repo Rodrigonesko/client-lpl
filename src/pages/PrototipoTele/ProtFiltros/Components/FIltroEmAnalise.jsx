@@ -1,16 +1,21 @@
-import { Box, Button, CircularProgress, Divider, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { AppBar, Box, Button, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { filterPropostas, filterPropostasNaoRealizadas } from "../../../../_services/teleEntrevistaExterna.service";
 import Filtros from "./Filtros";
 import moment from "moment";
-import { blue } from "@mui/material/colors";
+import { blue, deepPurple, grey } from "@mui/material/colors";
+import ProtDetalhesTele from "../../ProtDetalhesTele/ProtDetalhesTele";
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const FiltroEmAnalise = () => {
 
-    const [agendado, setAgendado] = useState(false);
-
     const [status, setStatus] = useState({
-        agendar: false,
+        agendar: true,
         agendado: false,
         humanizado: false,
         janelas: false,
@@ -46,25 +51,112 @@ const FiltroEmAnalise = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pesquisa, setPesquisa] = useState('');
+    const [openDialog, setOpenDialog] = useState(false)
+    const [cpfTitular, setCpfTitular] = useState('')
+    const [selected, setSelected] = useState('')
+
+    const handleChangeAgendado = (event) => {
+        if (event.target.name === 'agendado' && status.agendar) {
+            setStatus({ ...status, agendado: true, agendar: false });
+        } else if (event.target.name === 'agendar' && status.agendado) {
+            setStatus({ ...status, agendado: false, agendar: true });
+        } else {
+            setStatus({ ...status, [event.target.name]: event.target.checked });
+        }
+    }
 
     const handleChangeStatus = (event) => {
         setStatus({ ...status, [event.target.name]: event.target.checked });
     }
 
     const handleChangeTipoContrato = (event) => {
-        setTipoContrato({ ...tipoContrato, [event.target.name]: event.target.checked });
+        // Quando um for true, os outros devem ser false
+        if (event.target.name === 'pme' && (tipoContrato.pf || tipoContrato.adesao)) {
+            setTipoContrato({
+                pme: true,
+                pf: false,
+                adesao: false,
+            })
+        }
+        else if (event.target.name === 'pf' && (tipoContrato.pme || tipoContrato.adesao)) {
+            setTipoContrato({
+                pme: false,
+                pf: true,
+                adesao: false,
+            })
+        }
+        else if (event.target.name === 'adesao' && (tipoContrato.pme || tipoContrato.pf)) {
+            setTipoContrato({
+                pme: false,
+                pf: false,
+                adesao: true,
+            })
+        } else {
+            setTipoContrato({ ...tipoContrato, [event.target.name]: event.target.checked });
+        }
     }
 
     const handleChangeVigencia = (event) => {
-        setVigencia({ ...vigencia, [event.target.name]: event.target.checked });
+        // Quando um for true, os outros devem ser false
+        if (event.target.name === 'noPrazo' && vigencia.foraDoPrazo) {
+            setVigencia({
+                noPrazo: true,
+                foraDoPrazo: false,
+            })
+        }
+        else if (event.target.name === 'foraDoPrazo' && vigencia.noPrazo) {
+            setVigencia({
+                noPrazo: false,
+                foraDoPrazo: true,
+            })
+        } else {
+            setVigencia({ ...vigencia, [event.target.name]: event.target.checked });
+        }
     }
 
     const handleChangeAltoRisco = (event) => {
-        setAltoRisco({ ...altoRisco, [event.target.name]: event.target.checked });
+        // Quando um for true, os outros devem ser false
+        if (event.target.name === 'baixo' && (altoRisco.medio || altoRisco.alto)) {
+            setAltoRisco({
+                baixo: true,
+                medio: false,
+                alto: false,
+            })
+        }
+        else if (event.target.name === 'medio' && (altoRisco.baixo || altoRisco.alto)) {
+            setAltoRisco({
+                baixo: false,
+                medio: true,
+                alto: false,
+            })
+        }
+        else if (event.target.name === 'alto' && (altoRisco.baixo || altoRisco.medio)) {
+            setAltoRisco({
+                baixo: false,
+                medio: false,
+                alto: true,
+            })
+        } else {
+            setAltoRisco({ ...altoRisco, [event.target.name]: event.target.checked });
+        }
     }
 
     const handleChangeIdade = (event) => {
-        setIdade({ ...idade, [event.target.name]: event.target.checked });
+        // Quando um for true, os outros devem ser false
+        if (event.target.name === 'maior60' && idade.menor60) {
+            setIdade({
+                maior60: true,
+                menor60: false,
+            })
+        } else if (event.target.name === 'menor60' && idade.maior60) {
+            setIdade({
+                maior60: false,
+                menor60: true,
+            })
+        } else {
+            setIdade({ ...idade, [event.target.name]: event.target.checked });
+        }
+
     }
 
     const handleFilter = async () => {
@@ -86,8 +178,7 @@ const FiltroEmAnalise = () => {
             setPropostas(result.result);
             setTotalPages(result.total);
             setLoading(false)
-
-
+            setPesquisa('')
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -177,6 +268,7 @@ const FiltroEmAnalise = () => {
             setPropostas(result.result);
             setTotalPages(result.total);
             setLoading(false)
+            setPesquisa('')
 
         } catch (error) {
             console.log(error);
@@ -190,7 +282,11 @@ const FiltroEmAnalise = () => {
     }
 
     const handlePesquisar = async (e) => {
-        e.preventDefault();
+
+        if (e) {
+            e.preventDefault()
+        }
+
         if (pesquisa === '') {
             return;
         }
@@ -205,9 +301,6 @@ const FiltroEmAnalise = () => {
         setTotalPages(result.total);
         setLoading(false)
     }
-
-
-
     useEffect(() => {
         fetchPropostas(page);
     }, []);
@@ -228,6 +321,7 @@ const FiltroEmAnalise = () => {
                     vigencia={vigencia}
                     altoRisco={altoRisco}
                     handleChangeStatus={handleChangeStatus}
+                    handleChangeAgendado={handleChangeAgendado}
                     handleChangeTipoContrato={handleChangeTipoContrato}
                     handleChangeVigencia={handleChangeVigencia}
                     handleChangeAltoRisco={handleChangeAltoRisco}
@@ -274,6 +368,7 @@ const FiltroEmAnalise = () => {
                                         {propostas.map((proposta) => (
                                             <TableRow
                                                 key={proposta._id}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 }, bgcolor: selected === proposta.cpfTitular ? deepPurple[100] : 'white' }}
                                             >
                                                 <TableCell>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</TableCell>
                                                 <TableCell>{moment(proposta.vigencia).format('DD/MM/YYYY')}</TableCell>
@@ -291,8 +386,13 @@ const FiltroEmAnalise = () => {
                                                         variant={'contained'}
                                                         color={'primary'}
                                                         size={'small'}
-                                                        href={`/entrevistas/protDetalhesTele/${proposta.cpfTitular}`}
-                                                        target="_blank"
+                                                        onClick={() => {
+                                                            setCpfTitular(proposta.cpfTitular)
+                                                            setOpenDialog(true)
+                                                            setSelected(proposta.cpfTitular)
+                                                        }}
+                                                    // href={`/entrevistas/protDetalhesTele/${proposta.cpfTitular}`}
+                                                    // target="_blank"
                                                     >
                                                         Detalhes
                                                     </Button>
@@ -311,6 +411,29 @@ const FiltroEmAnalise = () => {
                     </TableContainer>
                 </Box>
             </Box>
+            <Dialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                fullScreen
+                TransitionComponent={Transition}
+            >
+                <AppBar sx={{ position: 'relative', bgcolor: grey[500] }}>
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={() => {
+                                setOpenDialog(false)
+                                setCpfTitular('')
+                            }}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <ProtDetalhesTele key={cpfTitular} cpfTitular={cpfTitular} atualizarTabela={() => fetchPropostas(page)} atualizarPesquisa={handlePesquisar} pesquisa={pesquisa} />
+            </Dialog>
         </Box >
     );
 }

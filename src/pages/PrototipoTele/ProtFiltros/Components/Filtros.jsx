@@ -11,6 +11,7 @@ const Filtros = ({
     altoRisco,
     idade,
     handleChangeStatus,
+    handleChangeAgendado,
     handleChangeTipoContrato,
     handleChangeVigencia,
     handleChangeAltoRisco,
@@ -102,7 +103,7 @@ const Filtros = ({
                     <FormControlLabel
                         control={<Checkbox
                             checked={status.agendar}
-                            onChange={handleChangeStatus}
+                            onChange={handleChangeAgendado}
                             name="agendar"
                         />}
                         label={`Agendar (${totalPropostas.agendar})`}
@@ -110,35 +111,12 @@ const Filtros = ({
                     <FormControlLabel
                         control={<Checkbox
                             checked={status.agendado}
-                            onChange={handleChangeStatus}
+                            onChange={handleChangeAgendado}
                             name="agendado"
 
                         />}
                         label={`Agendado (${totalPropostas.agendado})`}
                     />
-                    {/* <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="radio-buttons-group"
-                    >
-                        <FormControlLabel
-                            value="agendar"
-                            control={<Radio
-
-                                onChange={handleChangeStatus}
-                                name="agendar"
-                            />}
-                            label={`Agendar (${totalPropostas.agendar})`}
-                        />
-                        <FormControlLabel
-                            value="agendado"
-                            control={<Radio
-                                onChange={handleChangeStatus}
-                                name="agendado"
-                            />}
-                            label={`Agendado (${totalPropostas.agendado})`}
-                        />
-                    </RadioGroup> */}
-
                     <Divider />
                     <FormControlLabel
                         control={<Checkbox

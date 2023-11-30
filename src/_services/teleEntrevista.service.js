@@ -220,3 +220,7 @@ export const getHorariosDisponiveisPorDiaEAnalista = async (dia, analista) => {
 export const retrocederEntrevista = async (id) => {
     return await new ApiCall('/entrevistas/voltar').put(id)
 }
+
+export const verificarAgendamento = async (data, horario, enfermeiro) => {
+    return await new ApiCall(`/entrevistas/verificarAgendamento/${data}/${horario}/${enfermeiro}`).get()
+}

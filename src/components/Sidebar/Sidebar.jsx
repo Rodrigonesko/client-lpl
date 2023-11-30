@@ -40,10 +40,6 @@ const Sidebar = ({ children }) => {
     const logout = async () => {
         const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
 
-        if (socket) {
-            socket.disconnect()
-        }
-
         if (result.status === 200) {
             navigate('/login')
         }

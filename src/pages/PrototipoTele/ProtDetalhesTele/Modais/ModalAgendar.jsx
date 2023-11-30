@@ -4,7 +4,7 @@ import { useState } from "react";
 import Agendamento from "../Components/Agendamento";
 import { Delete } from "@mui/icons-material";
 import Toast from "../../../../components/Toast/Toast";
-import { agendarEntrevista } from "../../../../_services/teleEntrevista.service";
+import { agendarEntrevista, verificarAgendamento } from "../../../../_services/teleEntrevista.service";
 
 const ModalAgendar = ({ objects, setFlushHook }) => {
 
@@ -67,12 +67,31 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
             return
         }
         try {
+
+            for (const item of agendamentos) {
+
+                const dataAjustada = item.data.split('/').reverse().join('-')
+
+                const result = await verificarAgendamento(
+                    dataAjustada,
+                    item.horario,
+                    item.analista
+                )
+
+                if (result.msg !== 'ok') {
+                    setSeverity('error')
+                    setMessage(result.msg)
+                    setOpenToast(true)
+                    return
+                }
+            }
+
             for (const item of agendamentos) {
                 const result = await agendarEntrevista({
                     id: item._id,
                     responsavel: item.analista,
-                    data: item.data, horario:
-                        item.horario,
+                    data: item.data,
+                    horario: item.horario,
                     canal
                 })
                 console.log(result);
@@ -82,6 +101,7 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
             setOpenToast(true)
             setFlushHook(true)
             handleClose()
+            
         } catch (error) {
             console.log(error);
             setSeverity('error')

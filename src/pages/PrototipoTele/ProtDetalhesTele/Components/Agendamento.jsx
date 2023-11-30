@@ -1,4 +1,4 @@
-import { Box, FormControl, InputLabel, Select, MenuItem, Tooltip, IconButton, Button, Typography, Divider } from "@mui/material"
+import { Box, FormControl, InputLabel, Select, MenuItem, Tooltip, IconButton, Typography, Divider, LinearProgress } from "@mui/material"
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { useState } from "react";
 import { useEffect } from "react";
@@ -14,6 +14,7 @@ const Agendamento = ({ onAgendar, obj }) => {
     const [analista, setAnalista] = useState('')
     const [data, setData] = useState('')
     const [horario, setHorario] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const ajustarDia = (data) => {
         const arr = data.split('/')
@@ -22,6 +23,7 @@ const Agendamento = ({ onAgendar, obj }) => {
     }
 
     const fetchData = async () => {
+        setLoading(true)
         let result = await buscaAnalistasTele()
         result = result?.enfermeiros?.map(analista => {
             return analista.name
@@ -29,6 +31,7 @@ const Agendamento = ({ onAgendar, obj }) => {
         setAnalistas(result)
         const datas = await getDiasDisponiveis()
         setDatas(datas)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -43,23 +46,31 @@ const Agendamento = ({ onAgendar, obj }) => {
     }
 
     const fetchHorarios = async (data) => {
+        setLoading(true)
         const result = await getHorariosDisponiveisPorDia(ajustarDia(data))
         setHorarios(result)
+        setLoading(false)
     }
 
     const fetchDiasPorAnalista = async () => {
+        setLoading(true)
         const result = await getDiasDisponiveisAnalista(analista)
         setDatas(result?.dias)
+        setLoading(false)
     }
 
     const fetchHorariosPorAnalistaEData = async () => {
+        setLoading(true)
         const result = await getHorariosDisponiveisPorDiaEAnalista(ajustarDia(data), analista)
         setHorarios(result.horarios)
+        setLoading(false)
     }
 
     const fetchAnalistaPorDataEHora = async () => {
+        setLoading(true)
         const result = await getAnalistasDisponiveis(ajustarDia(data), horario)
         setAnalistas(result)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -86,6 +97,7 @@ const Agendamento = ({ onAgendar, obj }) => {
 
     return (
         <Box p={1}>
+            <LinearProgress style={{ display: loading ? 'block' : 'none', marginBottom: '4px' }} />
             <Typography variant="body">
                 {obj.nome} - {obj.idade} - {obj.sexo} - {obj.tipoAssociado}
             </Typography>
