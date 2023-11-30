@@ -9,7 +9,7 @@ const AdmissionalDemissional = () => {
 
     const [user, setUser] = useState({})
     const [flushHook, setFlushHook] = useState(false)
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     const [tipoExame, setTipoExame] = useState('')
     const [nomes, setNomes] = useState([])
 
@@ -29,6 +29,7 @@ const AdmissionalDemissional = () => {
     const handleChange = (e, newValue) => {
         setTipoExame(newValue)
 
+        setFlushHook(true)
         console.log(e);
     }
 
@@ -74,9 +75,9 @@ const AdmissionalDemissional = () => {
                         </Tabs>
                         {
                             tipoExame === 'admissional' ? (
-                                <TabelaAdmissional user={user} />
+                                <TabelaAdmissional user={user} key={user._id} setUser={setUser} />
                             ) : tipoExame === 'demissional' ? (
-                                <TabelaDemissional user={user} />
+                                <TabelaDemissional user={user} key={user._id} setUser={setUser} />
                             ) : (
                                 <>
                                 </>

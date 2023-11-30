@@ -1,30 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button } from '@mui/material';
 import { green, red, yellow } from '@mui/material/colors';
 import { createDemissao, setarStatus } from '../../../_services/user.service';
 
-const TabelaDemissional = ({ user }) => {
+const TabelaDemissional = ({ user, setUser }) => {
 
-    const [flushHook, setFlushHook] = useState(false)
-
-    const handleChangeStatus = async (_id, status) => {
+    const handleChangeStatus = async (_id, status, id) => {
         const resultado = await setarStatus({
-            _id: _id, status: status
+            _id: _id, status: status, id: id, tipoExame: 'demissao'
         })
-        setFlushHook(true)
+        setUser(resultado)
         console.log(resultado)
-        console.log(_id, status)
+        console.log(_id, status, id)
     }
 
     const criarDemissional = async (_id) => {
-        const result = await createDemissao({ _id: user._id })
-        console.log(result);
-        setFlushHook(true)
-    }
+        try {
+            const result = await createDemissao({ _id: user._id })
+            console.log(result);
 
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook, setFlushHook])
+            setUser(result)
+        } catch (error) {
+            console.error('Erro ao criar demissional:', error);
+        }
+    }
 
     return (
         <TableContainer component={Paper} >
@@ -56,11 +55,11 @@ const TabelaDemissional = ({ user }) => {
                                         <TableCell>{item.responsavel}</TableCell>
                                         <TableCell>{item.acao}</TableCell>
                                         <TableCell>{item.fornecedor}</TableCell>
-                                        <TableCell>{<TextField type='text' label='Obs' />}</TableCell>
+                                        <TableCell>{<TextField defaultValue={item.obs} type='text' label='Obs' />}</TableCell>
                                         <TableCell>
                                             <FormControl sx={{ minWidth: 150 }}>
                                                 <InputLabel id='Status'>Status</InputLabel>
-                                                <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(item._id, elemento.target.value)} >
+                                                <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)} >
                                                     <MenuItem value={'pendente'}>PENDENTE</MenuItem>
                                                     <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
                                                     <MenuItem value={'concluido'}>CONCLUIDO</MenuItem>

@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button, Box } from '@mui/material';
 import { green, red, yellow } from '@mui/material/colors';
-import { createAdmissao, setarStatus } from '../../../_services/user.service';
+import { createAdmissao, setarStatus, updateObs } from '../../../_services/user.service';
 
-const TabelaAdmissional = ({ user }) => {
-
-    const [flushHook, setFlushHook] = useState(false)
-    // console.log(user);
+const TabelaAdmissional = ({ user, setUser }) => {
 
     const handleChangeStatus = async (_id, status, id) => {
         const resultado = await setarStatus({
             _id: _id, status: status, id: id, tipoExame: 'admissao'
         })
-        setFlushHook(true)
+        setUser(resultado)
         console.log(resultado)
         console.log(_id, status, id)
     }
@@ -20,22 +17,32 @@ const TabelaAdmissional = ({ user }) => {
     const criarAdmissional = async (_id) => {
         try {
             const result = await createAdmissao({ _id: user._id });
-            const updatedUser = { ...user, admissao: result.admissional };
+            console.log(result);
 
-            setFlushHook(true);
+            setUser(result)
         } catch (error) {
             console.error('Erro ao criar admissional:', error);
         }
     }
 
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook, setFlushHook])
+    const ativarObs = async (_id, obs, id) => {
+        try {
+            const result = await updateObs({
+                _id: user._id, obs: obs, id: id, tipoExame: 'admissao'
+            });
+            // console.log(result);
+
+            setUser(result)
+            console.log(_id, obs, id);
+        } catch (error) {
+            console.error('Erro ao criar admissional:', error);
+        }
+    }
 
     return (
         <TableContainer component={Paper} >
             {
-                !!user.admissao & user.demissao.length !== 0 ? (
+                !!user.admissao & user.admissao.length !== 0 ? (
                     <Table>
                         <TableHead>
                             <TableRow className="table-header">
@@ -62,7 +69,7 @@ const TabelaAdmissional = ({ user }) => {
                                         <TableCell>{item.responsavel}</TableCell>
                                         <TableCell>{item.acao}</TableCell>
                                         <TableCell>{item.fornecedor}</TableCell>
-                                        <TableCell>{<TextField type='text' label='Obs' />}</TableCell>
+                                        <TableCell>{<TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />}</TableCell>
                                         <TableCell>
                                             <FormControl sx={{ minWidth: 150 }}>
                                                 <InputLabel id='Status'>Status</InputLabel>

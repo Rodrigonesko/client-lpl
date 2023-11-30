@@ -72,6 +72,9 @@ export const createDemissao = async (_id) => {
 export const setarStatus = async (_id, status, id, tipoExame) => {
     return await new ApiCall('/status').put(_id, status, id, tipoExame)
 }
+export const updateObs = async (_id, obs, id, tipoExame) => {
+    return await new ApiCall('/obs').put(_id, obs, id, tipoExame)
+}
 
 export const updateProfilePic = async (data) => {
     return await new ApiCall('/updateProfilePic', process.env.REREACT_APP_API_KEY, token, 
