@@ -1,4 +1,4 @@
-import { Box, CircularProgress, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 const FiltroEnfermeiros = ({ analistas, responsavel, handleSelectAnalista, loading }) => {
     return (
