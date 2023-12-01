@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Badge, Box, Button, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { filterPropostas, filterPropostasNaoRealizadas } from "../../../../_services/teleEntrevistaExterna.service";
 import Filtros from "./Filtros";
@@ -18,6 +18,7 @@ const FiltroEmAnalise = () => {
         agendar: true,
         agendado: false,
         humanizado: false,
+        naoLidas: false,
         janelas: false,
         ajustar: false,
         semWhats: false,
@@ -383,20 +384,27 @@ const FiltroEmAnalise = () => {
                                                 <TableCell>{proposta.newStatus}</TableCell>
                                                 <TableCell>{proposta.riscoBeneficiario}</TableCell>
                                                 <TableCell>
-                                                    <Button
-                                                        variant={'contained'}
-                                                        color={'primary'}
-                                                        size={'small'}
-                                                        onClick={() => {
-                                                            setCpfTitular(proposta.cpfTitular)
-                                                            setOpenDialog(true)
-                                                            setSelected(proposta.cpfTitular)
-                                                        }}
-                                                    // href={`/entrevistas/protDetalhesTele/${proposta.cpfTitular}`}
-                                                    // target="_blank"
+                                                    <Badge
+                                                        color="success"
+                                                        variant="dot"
+                                                        sx={{ '& > *': { mr: 2 } }}
+                                                        invisible={!proposta.visualizado}
                                                     >
-                                                        Detalhes
-                                                    </Button>
+                                                        <Button
+                                                            variant={'contained'}
+                                                            color={'primary'}
+                                                            size={'small'}
+                                                            onClick={() => {
+                                                                setCpfTitular(proposta.cpfTitular)
+                                                                setOpenDialog(true)
+                                                                setSelected(proposta.cpfTitular)
+                                                            }}
+                                                        // href={`/entrevistas/protDetalhesTele/${proposta.cpfTitular}`}
+                                                        // target="_blank"
+                                                        >
+                                                            Detalhes
+                                                        </Button>
+                                                    </Badge>
                                                 </TableCell>
                                             </TableRow>
                                         ))

@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Chip, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, Typography } from "@mui/material"
+import { Badge, Box, Button, Checkbox, Chip, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, Typography } from "@mui/material"
 import moment from "moment";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -196,19 +196,18 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                     )
                                 }
                             </Box>
-
                         )
                     }
 
                 </TableCell>
                 <TableCell align="center" padding="none">
                     <Tooltip title='Conversas'>
-                        <IconButton color="success" onClick={handleShowConversa}>
+                        <IconButton color={!item.visualizado ? "success" : 'warning'} onClick={handleShowConversa}>
                             <WhatsAppIcon />
                         </IconButton>
                     </Tooltip>
                 </TableCell>
-            </TableRow>
+            </TableRow >
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={15}>
                     <Collapse in={openRow} timeout="auto" unmountOnExit>

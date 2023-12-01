@@ -3,7 +3,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import { getMessagesTele } from "../../../../_services/teleEntrevistaExterna.service";
+import { getMessagesTele, visualizarMensagem } from "../../../../_services/teleEntrevistaExterna.service";
 import moment from "moment";
 import { blue } from "@mui/material/colors";
 import MensagemPadrao from "../Components/MensagemPadrao";
@@ -39,6 +39,9 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         }
         const result = await getMessagesTele(selectedWhatsapp)
         setMessages(result)
+        await visualizarMensagem({
+            whatsapp
+        })
     }
 
     useEffect(() => {
@@ -52,6 +55,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         if (component) {
             component.scrollTop = component.scrollHeight;
         }
+
     }, [messages])
 
     return (

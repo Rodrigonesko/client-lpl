@@ -50,3 +50,7 @@ export const quantidadePropostasNaoRealizadas = async () => {
 export const filterPropostasAgendadas = async ({ responsavel, page, limit }) => {
     return await new ApiCall('/filterPropostasAgendadas', URL_API).post({ responsavel, page, limit })
 }
+
+export const visualizarMensagem = async ({ whatsapp }) => {
+    return await new ApiCall('/visualizarMensagem', URL_API).put({ whatsapp })
+}

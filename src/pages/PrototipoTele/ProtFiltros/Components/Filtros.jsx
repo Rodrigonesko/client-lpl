@@ -26,6 +26,7 @@ const Filtros = ({
         janelas: 0,
         ajustar: 0,
         semWhats: 0,
+        naoLidas: 0,
         erroWhatsapp: 0,
         agendado: 0,
         pme: 0,
@@ -129,6 +130,14 @@ const Filtros = ({
                     />
                     <FormControlLabel
                         control={<Checkbox
+                            checked={status.naoLidas}
+                            onChange={handleChangeStatus}
+                            name="naoLidas"
+                        />}
+                        label={`Não lidas (${totalPropostas.naoLidas})`}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox
                             checked={status.janelas}
                             onChange={handleChangeStatus}
                             name="janelas"
@@ -160,7 +169,6 @@ const Filtros = ({
                         />}
                         label={`Erro Whatsapp (${totalPropostas.erroWhatsapp})`}
                     />
-
                 </FormGroup>
             </FormControl>
             <FormControl
