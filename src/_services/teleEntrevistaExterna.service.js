@@ -54,3 +54,7 @@ export const filterPropostasAgendadas = async ({ responsavel, page, limit }) => 
 export const visualizarMensagem = async ({ whatsapp }) => {
     return await new ApiCall('/visualizarMensagem', URL_API).put({ whatsapp })
 }
+
+export const changeWhatsappSender = async ({ whatsapp, whatsappSender }) => {
+    return await new ApiCall('/changeWhatsappSender', URL_API).put({ whatsapp, whatsappSender })
+}

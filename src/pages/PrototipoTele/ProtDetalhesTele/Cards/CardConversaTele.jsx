@@ -15,6 +15,7 @@ import BotaoMandarHumanizado from "../Components/BotaoMandarHumanizado";
 import BotaoAssumirAtendimento from "../Components/BotaoAssumirAtendimento";
 import { mostrarPropostaPorId } from "../../../../_services/teleEntrevista.service";
 import InputSendMessage from "../Components/InputSendMessage";
+import PopoverAlterarNumeroEnvio from "../Components/PopoverAlterarNumeroEnvio";
 
 const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendimento, setResponsavelAtendimento, selectedWhatsapp, setSelectedWhatsapp, data, setData }) => {
 
@@ -82,6 +83,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                         <BotaoMandarHumanizado _id={data._id} />
                         <BotaoAssumirAtendimento setResponsavelAtendimento={setResponsavelAtendimento} _id={data._id} />
                         <PopoverHistoricoWhatsapp setFlushHook={setFlushHook} data={data} setSelectedWhatsapp={setSelectedWhatsapp} setWhatsapp={setWhatsapp} />
+                        <PopoverAlterarNumeroEnvio proposta={data} setFlushHook={setFlushHook} />
                     </Box>
                 </Box>
                 <Divider />
