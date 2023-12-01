@@ -26,6 +26,7 @@ const Filtros = ({
         janelas: 0,
         ajustar: 0,
         semWhats: 0,
+        erroWhatsapp: 0,
         agendado: 0,
         pme: 0,
         pf: 0,
@@ -150,6 +151,14 @@ const Filtros = ({
                             name="semWhats"
                         />}
                         label={`Sem Whatsapp (${totalPropostas.semWhats})`}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox
+                            checked={status.erroWhatsapp}
+                            onChange={handleChangeStatus}
+                            name="erroWhatsapp"
+                        />}
+                        label={`Erro Whatsapp (${totalPropostas.erroWhatsapp})`}
                     />
 
                 </FormGroup>

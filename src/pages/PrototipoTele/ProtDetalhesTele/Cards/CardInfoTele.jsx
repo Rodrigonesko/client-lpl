@@ -12,6 +12,8 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import gerarPdf from "../../../TeleEntrevistas/Pdf/Pdf";
 import PopoverTentativaContato from "../Components/PopoverTentativaContato";
+import AuthContext from "../../../../context/AuthContext";
+import { useContext } from "react";
 
 const EnhancedTableHead = () => {
     return (
@@ -68,6 +70,8 @@ const EnhancedTableHead = () => {
 }
 
 const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendimentoWhatsapp, setWhatsappSelected, setConversaSelecionada, selectedObjects, setSelectedObjects, setFlushHook }) => {
+
+    const { name } = useContext(AuthContext)
 
     const [openRow, setOpenRow] = useState(false)
 
@@ -138,7 +142,13 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                     <PopoverAlterarTelefone setFlushHook={setFlushHook} _id={item._id} telefone={item.telefone} />
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
-                    {item.enfermeiro}
+                    {
+                        item.enfermeiro === name ? (
+                            <Chip label={item.enfermeiro} color="success" variant="outlined" />
+                        ) : (
+                            item.enfermeiro
+                        )
+                    }
                 </TableCell>
                 <TableCell align="center" padding={'none'}>
                     {item.janelaHorario}

@@ -21,6 +21,7 @@ const FiltroEmAnalise = () => {
         janelas: false,
         ajustar: false,
         semWhats: false,
+        erroWhatsapp: false
     });
 
     const [tipoContrato, setTipoContrato] = useState({

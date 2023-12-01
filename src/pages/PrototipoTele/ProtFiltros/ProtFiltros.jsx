@@ -3,6 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
 import FiltroEmAnalise from "./Components/FiltroEmAnalise";
+import FiltroAgendadas from "./Components/FiltroAgendadas";
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -75,7 +76,7 @@ const ProtFiltros = () => {
                         <FiltroEmAnalise />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={1}>
-                        Agendadas
+                        <FiltroAgendadas />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={0}>
                         Realizadas
