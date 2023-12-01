@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button } from '@mui/material';
 import { green, red, yellow } from '@mui/material/colors';
-import { createDemissao, setarStatus } from '../../../_services/user.service';
+import { createDemissao, setarStatus, updateData, updateObs } from '../../../_services/user.service';
 
 const TabelaDemissional = ({ user, setUser }) => {
 
@@ -14,6 +14,20 @@ const TabelaDemissional = ({ user, setUser }) => {
         console.log(_id, status, id)
     }
 
+    const ativarObs = async (_id, obs, id) => {
+        try {
+            const result = await updateObs({
+                _id: user._id, obs: obs, id: id, tipoExame: 'demissao'
+            });
+            // console.log(result);
+
+            setUser(result)
+            console.log(_id, obs, id);
+        } catch (error) {
+            console.error('Erro no Update das Observações:', error);
+        }
+    }
+
     const criarDemissional = async (_id) => {
         try {
             const result = await createDemissao({ _id: user._id })
@@ -22,6 +36,20 @@ const TabelaDemissional = ({ user, setUser }) => {
             setUser(result)
         } catch (error) {
             console.error('Erro ao criar demissional:', error);
+        }
+    }
+
+    const ativarData = async (_id, data, id) => {
+        try {
+            const result = await updateData({
+                _id: user._id, data: data, id: id, tipoExame: 'demissao'
+            });
+            // console.log(result);
+
+            setUser(result)
+            console.log(_id, data, id);
+        } catch (error) {
+            console.error('Erro no update da Data:', error);
         }
     }
 
@@ -55,7 +83,7 @@ const TabelaDemissional = ({ user, setUser }) => {
                                         <TableCell>{item.responsavel}</TableCell>
                                         <TableCell>{item.acao}</TableCell>
                                         <TableCell>{item.fornecedor}</TableCell>
-                                        <TableCell>{<TextField defaultValue={item.obs} type='text' label='Obs' />}</TableCell>
+                                        <TableCell>{<TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />}</TableCell>
                                         <TableCell>
                                             <FormControl sx={{ minWidth: 150 }}>
                                                 <InputLabel id='Status'>Status</InputLabel>
@@ -66,7 +94,7 @@ const TabelaDemissional = ({ user, setUser }) => {
                                                 </Select>
                                             </FormControl>
                                         </TableCell>
-                                        <TableCell>{<TextField type='date' focused label='Data' />}</TableCell>
+                                        <TableCell>{<TextField defaultValue={item.data} type='date' focused label='Data' onChange={(elemento) => ativarData(user._id, elemento.target.value, item.id)} />}</TableCell>
                                     </TableRow>)
                             })}
                         </TableBody>

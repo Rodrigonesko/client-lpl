@@ -2,6 +2,7 @@ import { Alert, Box, Button, FormControl, InputLabel, MenuItem, Select, Snackbar
 import { red, yellow, green } from '@mui/material/colors';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ModalEditarInventario from "../Modais/ModalEditarInventario";
 
 const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
@@ -10,6 +11,8 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [ondeEsta, setOndeEsta] = useState('')
     const [snackSelect, setSnackSelect] = useState(false)
     const [alerta, setAlerta] = useState(false)
+
+    const [open, setOpen] = useState(false)
 
     const handleChangeStatus = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/inventario/status`, {
@@ -50,6 +53,10 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         }
     }
 
+    const openEditButton = async (id) => {
+        setOpen(true)
+    }
+
     const handleCloseInput = () => {
         setAlerta(false)
     }
@@ -78,6 +85,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                 <TableCell>COM QUEM ESTÁ</TableCell>
                                 <TableCell>DESCRIÇÃO</TableCell>
                                 <TableCell>STATUS</TableCell>
+                                <TableCell>BOTÕES</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -104,7 +112,11 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                                     <MenuItem value={'emUso'}>EM USO</MenuItem>
                                                     <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
                                                 </Select>
-                                            </FormControl></TableCell>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            <ModalEditarInventario id={item._id} setFlushHook={setFlushHook} trocaNome={item.nome} trocaEtiqueta={item.etiqueta} trocaOndeEsta={item.ondeEsta} trocaDescricao={item.descricao} />
+                                        </TableCell>
                                     </TableRow>)
                             })}
                             <Snackbar open={snackSelect} autoHideDuration={6000} onClose={handleCloseSelect} >

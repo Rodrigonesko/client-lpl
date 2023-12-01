@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button, Box } from '@mui/material';
 import { green, red, yellow } from '@mui/material/colors';
-import { createAdmissao, setarStatus, updateObs } from '../../../_services/user.service';
+import { createAdmissao, setarStatus, updateData, updateObs } from '../../../_services/user.service';
 
 const TabelaAdmissional = ({ user, setUser }) => {
 
@@ -35,7 +35,21 @@ const TabelaAdmissional = ({ user, setUser }) => {
             setUser(result)
             console.log(_id, obs, id);
         } catch (error) {
-            console.error('Erro ao criar admissional:', error);
+            console.error('Erro no Update das Observações:', error);
+        }
+    }
+
+    const ativarData = async (_id, data, id) => {
+        try {
+            const result = await updateData({
+                _id: user._id, data: data, id: id, tipoExame: 'admissao'
+            });
+            // console.log(result);
+
+            setUser(result)
+            console.log(_id, data, id);
+        } catch (error) {
+            console.error('Erro no update da Data:', error);
         }
     }
 
@@ -80,7 +94,7 @@ const TabelaAdmissional = ({ user, setUser }) => {
                                                 </Select>
                                             </FormControl>
                                         </TableCell>
-                                        <TableCell>{<TextField type='date' focused label='Data' />}</TableCell>
+                                        <TableCell>{<TextField defaultValue={item.data} type='date' focused label='Data' onChange={(elemento) => ativarData(user._id, elemento.target.value, item.id)} />}</TableCell>
                                     </TableRow>)
                             })}
                         </TableBody>

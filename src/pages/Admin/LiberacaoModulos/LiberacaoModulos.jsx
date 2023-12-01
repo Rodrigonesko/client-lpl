@@ -116,7 +116,7 @@ const LiberacaoModulos = () => {
 
     return (
         <Sidebar>
-            <Container style={{ width: '100%' }}>
+            <Container maxWidth style={{ width: '100%' }}>
                 <Box m={2} style={{ width: '100%' }}>
                     <Typography variant="h4" component="h2">
                         Liberação de Módulos
@@ -147,34 +147,36 @@ const LiberacaoModulos = () => {
                                 <Typography variant="h6">
                                     Módulos a serem liberados para o Usuário: {usuario}
                                 </Typography>
-                                <Box >
-                                    <FormControlLabel
-                                        value={rsd}
-                                        control={<Checkbox value={rsd} checked={rsd} />}
-                                        label="RSD"
-                                        labelPlacement="start"
-                                        onChange={() => {
-                                            setRsd(!rsd)
-                                        }}
-                                    />
-                                </Box>
-                                <Box >
-                                    <FormControlLabel
-                                        value={elegibilidade}
-                                        control={<Checkbox defaultChecked={elegibilidade} />}
-                                        label="Elegiblidade"
-                                        labelPlacement="start"
-                                        onChange={e => setElegibilidade(!elegibilidade)}
-                                    />
-                                </Box>
-                                <Box>
-                                    <FormControlLabel
-                                        value={enfermeiro}
-                                        control={<Checkbox defaultChecked={enfermeiro} />}
-                                        label="Tele entrevista"
-                                        labelPlacement="start"
-                                        onChange={e => setEnfermeiro(!enfermeiro)}
-                                    />
+                                <Box sx={{ display: 'flex' }}>
+                                    <Box >
+                                        <FormControlLabel
+                                            value={rsd}
+                                            control={<Checkbox value={rsd} checked={rsd} />}
+                                            label="RSD"
+                                            labelPlacement="start"
+                                            onChange={() => {
+                                                setRsd(!rsd)
+                                            }}
+                                        />
+                                    </Box>
+                                    <Box >
+                                        <FormControlLabel
+                                            value={elegibilidade}
+                                            control={<Checkbox defaultChecked={elegibilidade} />}
+                                            label="Elegiblidade"
+                                            labelPlacement="start"
+                                            onChange={e => setElegibilidade(!elegibilidade)}
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <FormControlLabel
+                                            value={enfermeiro}
+                                            control={<Checkbox defaultChecked={enfermeiro} />}
+                                            label="Tele entrevista"
+                                            labelPlacement="start"
+                                            onChange={e => setEnfermeiro(!enfermeiro)}
+                                        />
+                                    </Box>
                                     {
                                         enfermeiro ? (
                                             <Box m={2}>
@@ -202,19 +204,21 @@ const LiberacaoModulos = () => {
                                         />
                                     </FormGroup>
                                 </FormControl>
-                                <Box m={2}>
+                                <Box m={2} >
                                     <h4>Definir carga horária</h4>
-                                    <Box m={1}>
-                                        <TextField type="time" id="entrada-1" defaultValue={entrada1} onChange={e => setEntrada1(e.target.value)} label='1° Entrada' />
-                                    </Box>
-                                    <Box m={1}>
-                                        <TextField type="time" id="saida-1" defaultValue={saida1} onChange={e => setSaida1(e.target.value)} label='1° Saída' />
-                                    </Box>
-                                    <Box m={1}>
-                                        <TextField type="time" id="entrada-2" defaultValue={entrada2} onChange={e => setEntrada2(e.target.value)} label='2° Entrada' />
-                                    </Box>
-                                    <Box m={1}>
-                                        <TextField type="time" id="saida-2" defaultValue={saida2} onChange={e => setSaida2(e.target.value)} label='2° Saída' />
+                                    <Box sx={{ display: 'flex' }}>
+                                        <Box m={1}>
+                                            <TextField focused type="time" id="entrada-1" defaultValue={entrada1} onChange={e => setEntrada1(e.target.value)} label='1° Entrada' />
+                                        </Box>
+                                        <Box m={1}>
+                                            <TextField focused type="time" id="saida-1" defaultValue={saida1} onChange={e => setSaida1(e.target.value)} label='1° Saída' />
+                                        </Box>
+                                        <Box m={1}>
+                                            <TextField focused type="time" id="entrada-2" defaultValue={entrada2} onChange={e => setEntrada2(e.target.value)} label='2° Entrada' />
+                                        </Box>
+                                        <Box m={1}>
+                                            <TextField focused type="time" id="saida-2" defaultValue={saida2} onChange={e => setSaida2(e.target.value)} label='2° Saída' />
+                                        </Box>
                                     </Box>
                                 </Box>
                                 <Box m={2}>
