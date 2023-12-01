@@ -141,9 +141,6 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/admissionalDemissional" element={<ProtectedRoute>
-                    <AdmissionalDemissional />
-                </ProtectedRoute>} />
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
@@ -177,17 +174,22 @@ const AppRoutes = () => {
 
                 {/* Admin Routes*/}
 
+                {/*admin producao*/}
+
                 <Route exact path="/admin/producao/criar" element={<ProtectedRoute>
                     <Create />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/producao/liberarModulos" element={<ProtectedRoute>
                     <LiberacaoModulos />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
-                    <ResetPassword />
-                </ProtectedRoute>} />
                 <Route exact path="/admin/producao/relatorioProdutividade" element={<ProtectedRoute>
                     <RelatorioProdutividade />
+                </ProtectedRoute>} />
+
+                {/*admin rh*/}
+
+                <Route exact path="/admin/rh/admissionalDemissional" element={<ProtectedRoute>
+                    <AdmissionalDemissional />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
@@ -200,6 +202,12 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/ferias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
+                </ProtectedRoute>} />
+
+                {/*admin infra*/}
+
+                <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
+                    <ResetPassword />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />

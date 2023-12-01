@@ -23,7 +23,7 @@ const Inventario = () => {
     return (
         <>
             <Sidebar>
-                <Container>
+                <Container maxWidth>
                     <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
                         <Box>
                             <div className="title">

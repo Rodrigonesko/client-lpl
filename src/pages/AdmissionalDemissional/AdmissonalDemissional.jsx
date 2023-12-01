@@ -1,11 +1,15 @@
-import { Autocomplete, Box, Container, Divider, Tab, Tabs, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Container, Divider, Paper, Tab, Tabs, TextField, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
 import TabelaDemissional from "./Tabela/TabelaDemissional"
 import { getUsers } from "../../_services/user.service"
+import { grey } from "@mui/material/colors"
+import moment from "moment"
 
 const AdmissionalDemissional = () => {
+
+    const color = grey[300]
 
     const [user, setUser] = useState({})
     const [flushHook, setFlushHook] = useState(false)
@@ -45,7 +49,7 @@ const AdmissionalDemissional = () => {
                         <h2>Admissional / Demissional</h2>
                     </div>
                     <br />
-                    <Box display='flex'>
+                    <Box display='flex' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
                         <Autocomplete
                             size="small"
                             disablePortal
@@ -58,12 +62,16 @@ const AdmissionalDemissional = () => {
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Nome' />}
                         />
+                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Data de Admissao: {!user.dataAdmissao ? ('') : (moment(user?.dataAdmissao).format('DD/MM/YYYY'))}</Typography>
                     </Box>
+
                     <br />
                     <Divider />
-                    <Box >
-                        <br />
-                        <Typography>Nome do colaborador: {user.name} | Número do colaborador: {user.numero} | E-mail do colaborador: {user.email}</Typography>
+                    <br />
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
+                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Nome do colaborador: {user.name}</Typography>
+                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Matrícula do colaborador: {user.numero}</Typography>
+                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >E-mail do colaborador: {user.email}</Typography>
                     </Box>
                     <br />
                     <Divider />
