@@ -4,7 +4,7 @@ import { RiAlarmWarningLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
-import { Alert, Badge, Box, IconButton, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
+import { Alert, Avatar, Badge, Box, IconButton, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
 import { useEffect } from "react";
 import { io } from "socket.io-client";
@@ -14,6 +14,7 @@ import { useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
+import { blue, deepPurple, grey } from "@mui/material/colors";
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
@@ -235,14 +236,25 @@ const Sidebar = ({ children }) => {
                 vertical: 'bottom',
                 horizontal: 'right',
             }} open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
-                <Alert variant="filled" onClose={() => setOpenToast(false)} severity="info" sx={{ width: '100%' }}>
+                <Alert variant="filled" onClose={() => setOpenToast(false)} severity="info" sx={{ width: '100%', background: deepPurple[500] }}>
+
                     <Typography>
+                        <Avatar
+                            sx={{
+                                backgroundColor: 'info.main',
+                                mr: 2
+                            }}
+                            alt={remetente}
+                            src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${remetente.split(' ').join('%20')}.jpg`}
+                        >
+                        </Avatar>
                         {message}
                     </Typography>
                     <form action="" onSubmit={sendMessage} style={{ width: '100%' }} >
                         <TextField inputProps={{
                             style: {
-                                color: 'white'
+                                color: 'white',
+                                background: deepPurple[300],
                             }
                         }}
                             fullWidth value={newMessage} onChange={e => setNewMessage(e.target.value)} size="small" />
