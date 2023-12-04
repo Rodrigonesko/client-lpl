@@ -65,7 +65,7 @@ const ModalIniciarConversa = ({ setReceptor, setFlushHook, setChatId }) => {
                             <ListItemButton onClick={() => initChat(user.name)}>
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
-                                        <Avatar alt="R" />
+                                        <Avatar alt={user.name} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${user.name.split(' ').join('%20')}.jpg`} />
                                     </ListItemAvatar>
                                     <ListItemText
                                         secondary={user.name}

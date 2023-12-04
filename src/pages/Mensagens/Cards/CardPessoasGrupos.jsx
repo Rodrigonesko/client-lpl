@@ -10,7 +10,7 @@ import { seeInternalMessage } from '../../../_services/chat.service';
 const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
 
     const { name } = useContext(AuthContext)
-    const [selectedIndex, setSelectedIndex] = useState(null)
+    const [selectedId, setSelectedId] = useState('')
 
     const color = grey[300];
     const color1 = grey[400];
@@ -32,7 +32,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
         await seeInternalMessage({ chatId: chat._id })
         setChatId(chat._id)
         setFlushHook(true)
-        setSelectedIndex(index)
+        setSelectedId(chat._id)
     };
 
     const MAX_MESSAGE_LENGTH = 15;
@@ -62,7 +62,7 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                         }
                         const truncatedMessage = truncateMessage(item.ultimaMensagem, MAX_MESSAGE_LENGTH)
                         return (
-                            <ListItemButton selected={selectedIndex === index} key={item._id} sx={{ p: 0 }} onClick={() => setChat(item, index)}>
+                            <ListItemButton selected={selectedId === item._id} key={item._id} sx={{ p: 0 }} onClick={() => setChat(item, index)}>
                                 <ListItem alignItems="flex-start"
                                     secondaryAction={
                                         showBadge && (
@@ -83,10 +83,11 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                                                         vertical: 'bottom',
                                                         horizontal: 'right',
                                                     }}
+                                                    invisible={true}
                                                     variant="dot"
                                                     color={item.online ? 'success' : 'error'}
                                                 >
-                                                    <Avatar alt={(verificarNome(item.participantes))} src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.image}`} />
+                                                    <Avatar alt={(verificarNome(item.participantes))} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${(verificarNome(item.participantes)).split(' ').join('%20')}.jpg`} />
 
                                                 </Badge>
                                             )

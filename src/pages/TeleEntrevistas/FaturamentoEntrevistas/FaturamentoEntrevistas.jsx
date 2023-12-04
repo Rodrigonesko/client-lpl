@@ -27,12 +27,12 @@ const FaturamentoEntrevistas = () => {
     const buscarNaoFaturados = async () => {
         try {
 
-            setLoading(true)
+            // setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoFaturadas`, { withCredentials: true })
+            // const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoFaturadas`, { withCredentials: true })
 
-            setEntrevistas(result.data.entrevistas)
-            setLoading(false)
+            // setEntrevistas(result.data.entrevistas)
+            // setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -252,9 +252,9 @@ const FaturamentoEntrevistas = () => {
                             <TextField variant='standard' type="text" id="nota-fiscal" onChange={e => setNotaFiscalPreencher(e.target.value)} label='Preencher NF' />
                             <Button variant='contained' onClick={preencherNotasFiscais}>Preencher</Button>
                             <Button variant='contained' onClick={marcarTodos}>Marcar Todos</Button>
-                            <Button variant='contained' onClick={gerarRelatorio}>Report</Button>
+                            <Button disabled={loading} endIcon={loading && <CircularProgress size={'20px'} />} variant='contained' onClick={gerarRelatorio}>Report</Button>
                         </div>
-                        <div className="entrevistas-faturamento">
+                        {/* <div className="entrevistas-faturamento">
                             {
                                 loading ? (
                                     <CircularProgress style={{ position: 'absolute', top: '40%' }} />
@@ -292,7 +292,7 @@ const FaturamentoEntrevistas = () => {
                                     }
                                 </tbody>
                             </table>
-                        </div>
+                        </div> */}
                         <div>
                             <button onClick={realizarFaturamento}>Faturar</button>
                         </div>

@@ -71,7 +71,7 @@ const GroupData = ({ chatId }) => {
                                     <ListItemAvatar>
                                         <Avatar
                                             alt={`${participante}`}
-                                            src={`/static/images/avatar/${participante + 1}.jpg`}
+                                            src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${participante.split(' ').join('%20')}.jpg`}
                                         />
                                     </ListItemAvatar>
                                     <ListItemText primary={participante} />

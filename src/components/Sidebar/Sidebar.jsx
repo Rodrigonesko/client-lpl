@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 import { FaUserCircle, FaExchangeAlt, FaArchive, FaHome, FaClipboard, FaCalendar, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaUserSecret, FaTools } from "react-icons/fa";
-import { RiAlarmWarningLine, RiLogoutBoxRLine } from 'react-icons/ri'
+import { RiAlarmWarningLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
-import { Link, useNavigate } from 'react-router-dom'
-import Axios from 'axios'
+import { Link } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
 import { Alert, Badge, Box, IconButton, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
@@ -14,6 +13,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import ProfileMenu from "../ProfileMenu/ProfileMenu";
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
@@ -21,9 +21,7 @@ let socket
 
 const Sidebar = ({ children }) => {
 
-    const navigate = useNavigate()
     const location = useLocation();
-
 
     const [isOpen, setIsOpen] = useState(true)
     const [quantidadeMensagens, setQuantidadeMensagens] = useState(0)
@@ -37,13 +35,7 @@ const Sidebar = ({ children }) => {
     const toggleMenu = () => {
         setIsOpen(!isOpen)
     }
-    const logout = async () => {
-        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
 
-        if (result.status === 200) {
-            navigate('/login')
-        }
-    }
 
     const fetchData = async () => {
         const result = await getChats()
@@ -233,11 +225,7 @@ const Sidebar = ({ children }) => {
             </ProSidebar>
             <Box width={'100%'} >
                 <Box width={'100%'} height={'50px'} bgcolor={'#1D1D1D'} display={'flex'} justifyContent={'flex-end'}>
-                    <Tooltip title='Sair'>
-                        <IconButton sx={{ color: 'lightgray', mr: 2 }} onClick={logout} variant="contained">
-                            <RiLogoutBoxRLine />
-                        </IconButton>
-                    </Tooltip>
+                    <ProfileMenu />
                 </Box>
                 <Box overflow={'auto'} style={{ height: 'calc(100vh - 50px)' }}>
                     {children}

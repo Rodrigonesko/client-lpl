@@ -121,7 +121,7 @@ const ModalCriarGrupo = ({ setFlushHook, flushHook }) => {
                             <ListItemButton key={user._id} onClick={() => handleUserSelection(user.name)}>
                                 <ListItem alignItems="flex-start">
                                     <ListItemAvatar>
-                                        <Avatar alt="R" />
+                                        <Avatar alt={user.name} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${user.name.split(' ').join('%20')}.jpg`} />
                                     </ListItemAvatar>
                                     <ListItemText secondary={user.name} />
                                 </ListItem>

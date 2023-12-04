@@ -3,6 +3,7 @@ import moment from "moment"
 import React, { useState } from "react";
 import ReplyIcon from '@mui/icons-material/Reply';
 import ModalExpandirImagem from "../Modal/ModalExpandirImagem";
+import { grey } from "@mui/material/colors";
 
 const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelectedRespondedMessage }) => {
 
@@ -44,7 +45,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                             margin: '0 10px 0 0',
                         }}
                         alt={item.remetente}
-                        src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.fotoPerfil}`}
+                        src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${item.remetente.split(' ').join('%20')}.jpg`}
                     />
                 )
             }
@@ -97,6 +98,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                                 item.mensagem
                             )}
                         </Typography>
+                        <Typography textAlign={'end'} fontSize='10px' color={grey[100]}>{moment(item.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                     </div>
                 </Typography>
                 <Fade in={showReplyButton} unmountOnExit mountOnEnter>
@@ -107,7 +109,6 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                     </Tooltip>
                 </Fade>
             </div>
-            <Typography color="GrayText">{moment(item.horario).format('HH:mm DD/MM/YYYY')}</Typography>
         </Box>
     )
 }
