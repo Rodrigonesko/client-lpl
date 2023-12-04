@@ -22,7 +22,7 @@ const AtendimentoChamados = () => {
     return (
         <>
             <Sidebar>
-                <Container>
+                <Container maxWidth >
                     <TabelaAtendimentoChamados />
                 </Container>
             </Sidebar>

@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup } from "@mui/material";
 import { getInfoEmail, getUsers, liberarModulos } from "../../../_services/user.service";
+import Toast from "../../../components/Toast/Toast";
 
 const LiberacaoModulos = () => {
 
+    const [open, setOpen] = useState(false)
     const [email, setEmail] = useState('')
     const [enfermeiro, setEnfermeiro] = useState(false)
     const [elegibilidade, setElegibilidade] = useState(false)
     const [rsd, setRsd] = useState(false)
     const [busca, setBusca] = useState(false)
-    const [msg, setMsg] = useState('')
     const [entrada1, setEntrada1] = useState('')
     const [saida1, setSaida1] = useState('')
     const [entrada2, setEntrada2] = useState('')
@@ -24,6 +25,8 @@ const LiberacaoModulos = () => {
     const [agendamento, setAgendamento] = useState(false)
     const [administrador, setAdministrador] = useState(false)
     const [dataAniversario, setDataAniversario] = useState('')
+    const [matricula, setMatricula] = useState('')
+    const [inativarEmail, setInativarEmail] = useState(false)
 
     const atividades = [
         'Gerência',
@@ -44,10 +47,6 @@ const LiberacaoModulos = () => {
             const result = await getInfoEmail(email)
 
             if (result.user !== null) {
-
-                console.log(result);
-                setMsg('')
-
                 setEntrada1(result.user.horarioEntrada1)
                 setSaida1(result.user.horarioSaida1)
                 setEntrada2(result.user.horarioEntrada2)
@@ -59,8 +58,11 @@ const LiberacaoModulos = () => {
                 setNomeCompleto(result.user.nomeCompleto)
                 setDataAdmissao(result.user.dataAdmissao)
                 setDataAniversario(result.user.dataAniversario)
+                setMatricula(result.user.matricula)
+                setEmail(result.user.email)
                 setAdministrador(result.user?.acessos?.administrador)
                 setAgendamento(result.user?.acessos?.agendamento)
+                setInativarEmail(result.user.inativarEmail)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -77,7 +79,6 @@ const LiberacaoModulos = () => {
 
             } else {
                 setBusca(false)
-                setMsg('Não foi encontrado um usuário com este e-mail!')
 
             }
 
@@ -89,11 +90,11 @@ const LiberacaoModulos = () => {
 
     const liberar = async e => {
         try {
+            const contaInativada = inativarEmail;
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario, administrador, agendamento })
+            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario, matricula, administrador, agendamento, contaInativada })
 
-            setMsg('Modulos atualizados com sucesso!')
-
+            setOpen(true)
         } catch (error) {
             console.log(error);
         }
@@ -131,19 +132,14 @@ const LiberacaoModulos = () => {
                                 setEmail(item.email);
                             }}
                             getOptionLabel={emails => emails.email}
-                            sx={{ width: 300 }}
+                            sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Email' />}
                         />
                         <Button style={{ marginLeft: '30px' }} variant='contained' onClick={buscarEmail}>Buscar</Button>
                     </Box>
-                    <div >
-                        {
-                            msg
-                        }
-                    </div>
                     {
                         busca && (
-                            <Paper style={{ padding: '10px' }}>
+                            <Paper elevation={6} style={{ padding: '10px' }}>
                                 <Typography variant="h6">
                                     Módulos a serem liberados para o Usuário: {usuario}
                                 </Typography>
@@ -185,38 +181,40 @@ const LiberacaoModulos = () => {
                                         ) : null
                                     }
                                 </Box>
-                                <FormControl>
-                                    <FormLabel component='legend'>
-                                        Acessos
-                                    </FormLabel>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox checked={administrador} onChange={e => setAdministrador(e.target.checked)} name="Administrador" value={!administrador} />
-                                            }
-                                            label="Administrador"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox checked={agendamento} onChange={e => setAgendamento(e.target.checked)} name="Agendamento" value={!agendamento} />
-                                            }
-                                            label="Agendamento"
-                                        />
-                                    </FormGroup>
-                                </FormControl>
+                                <Box m={2}>
+                                    <FormControl>
+                                        <FormLabel component='legend'>
+                                            Acessos
+                                        </FormLabel>
+                                        <FormGroup>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox checked={administrador} onChange={e => setAdministrador(e.target.checked)} name="Administrador" value={!administrador} />
+                                                }
+                                                label="Administrador"
+                                            />
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox checked={agendamento} onChange={e => setAgendamento(e.target.checked)} name="Agendamento" value={!agendamento} />
+                                                }
+                                                label="Agendamento"
+                                            />
+                                        </FormGroup>
+                                    </FormControl>
+                                </Box>
                                 <Box m={2} >
                                     <h4>Definir carga horária</h4>
                                     <Box sx={{ display: 'flex' }}>
-                                        <Box m={1}>
+                                        <Box m={2}>
                                             <TextField focused type="time" id="entrada-1" defaultValue={entrada1} onChange={e => setEntrada1(e.target.value)} label='1° Entrada' />
                                         </Box>
-                                        <Box m={1}>
+                                        <Box m={2}>
                                             <TextField focused type="time" id="saida-1" defaultValue={saida1} onChange={e => setSaida1(e.target.value)} label='1° Saída' />
                                         </Box>
-                                        <Box m={1}>
+                                        <Box m={2}>
                                             <TextField focused type="time" id="entrada-2" defaultValue={entrada2} onChange={e => setEntrada2(e.target.value)} label='2° Entrada' />
                                         </Box>
-                                        <Box m={1}>
+                                        <Box m={2}>
                                             <TextField focused type="time" id="saida-2" defaultValue={saida2} onChange={e => setSaida2(e.target.value)} label='2° Saída' />
                                         </Box>
                                     </Box>
@@ -250,14 +248,37 @@ const LiberacaoModulos = () => {
                                         </Select>
                                     </FormControl>
                                 </Box>
-                                <Box m={2}>
-                                    <TextField sx={{ width: '400px' }} type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
+                                <Box sx={{ display: 'flex', alignContent: 'space-between' }} >
+                                    <Box m={2}>
+                                        <TextField sx={{ width: '350px' }} type="text" label="E-mail" value={email} onChange={e => setEmail(e.target.value)} />
+                                    </Box>
+                                    <Box m={2}>
+                                        <TextField sx={{ width: '350px' }} type="text" label="Nome Completo (Mesmo nome do Ponto)" value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
+                                    </Box>
+                                    <Box m={2}>
+                                        <TextField sx={{ width: '350px' }} type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
+                                    </Box>
+                                    <Box m={2}>
+                                        <TextField sx={{ width: '350px' }} type="date" focused label="Data Nascimento" value={dataAniversario} onChange={e => setDataAniversario(e.target.value)} />
+                                    </Box>
+                                    <Box m={2}>
+                                        <TextField sx={{ width: '350px' }} type="text" label="Matricula" value={matricula} onChange={e => setMatricula(e.target.value)} />
+                                    </Box>
                                 </Box>
                                 <Box m={2}>
-                                    <TextField sx={{ width: '400px' }} type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
-                                </Box>
-                                <Box m={2}>
-                                    <TextField sx={{ width: '400px' }} type="date" focused label="Data Nascimento" value={dataAniversario} onChange={e => setDataAniversario(e.target.value)} />
+                                    <h4>Inativar conta de e-mail:</h4>
+                                    <Box >
+                                        <FormControlLabel
+                                            value={inativarEmail}
+                                            control={<Checkbox value={inativarEmail} checked={inativarEmail} />}
+                                            label="Inativar conta de E-mail"
+                                            labelPlacement="start"
+                                            onChange={() => {
+                                                setInativarEmail(!inativarEmail)
+                                            }}
+                                        />
+                                    </Box>
+
                                 </Box>
 
                                 <Box m={2} className="btn-container">
@@ -266,9 +287,12 @@ const LiberacaoModulos = () => {
                             </Paper>
                         )
                     }
+                    <Toast
+                        message={'Atualizado com sucesso!'} severity={'success'} open={open} onClose={e => { setOpen(false) }} duration={6000}
+                    />
                 </Box>
             </Container>
-        </Sidebar>
+        </Sidebar >
 
     )
 }
