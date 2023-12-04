@@ -20,12 +20,15 @@ const Create = () => {
     const [snack, setSnack] = useState(false);
     const [error, setError] = useState(false)
     const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
+
+    const [matricula, setMatricula] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
-    const [admin, setAdmin] = useState(false)
     const [atividade, setAtividade] = useState('')
     const [nomeCompleto, setNomeCompleto] = useState('')
     const [dataAdmissao, setDataAdmissao] = useState('')
+    const [admin, setAdmin] = useState(false)
 
     const toggleAdmin = () => {
         setAdmin(!admin)
@@ -35,10 +38,19 @@ const Create = () => {
         e.preventDefault()
 
         try {
-            await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto, dataAdmissao })
-            setSnack(true)
-            setEmail('')
-            setName('')
+            if (name.length < 4 || atividade === '' || nomeCompleto.length < 4) {
+                setSnack(true)
+                setMessage('É necessario que você insira o Nome / Atividade e Nome Completo do Colaborador!')
+                setSeverity('warning')
+            } else {
+                await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto, dataAdmissao, matricula })
+                setSnack(true)
+                setMessage('Usuário criado com sucesso!')
+                setSeverity('success')
+                // setEmail('')
+                // setName('')
+
+            }
 
         } catch (error) {
             setMessage(error.response.data.message)
@@ -93,6 +105,9 @@ const Create = () => {
                                 <TextField fullWidth variant="filled" type="date" focused label="Data Admissão" value={dataAdmissao} onChange={e => setDataAdmissao(e.target.value)} />
                             </Box>
                             <Box m={2}>
+                                <TextField fullWidth variant="filled" type="text" label="Matrícula" value={matricula} onChange={e => setMatricula(e.target.value)} />
+                            </Box>
+                            <Box m={2}>
                                 <FormGroup>
                                     <FormControlLabel control={<Checkbox />} label='Admin' onClick={toggleAdmin} />
                                 </FormGroup>
@@ -105,8 +120,8 @@ const Create = () => {
                                 open={snack}
                                 onClose={() => setSnack(false)}
                             >
-                                <Alert onClose={() => setSnack(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                    Usuário criado com sucesso!
+                                <Alert onClose={() => setSnack(false)} variant='filled' severity={severity} sx={{ width: '100%' }}>
+                                    {message}
                                 </Alert>
                             </Snackbar>
                             <Snackbar

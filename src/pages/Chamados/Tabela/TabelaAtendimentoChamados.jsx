@@ -62,7 +62,7 @@ const TabelaAtendimentoChamados = () => {
 
     return (
         <>
-            <Container>
+            <Container maxWidth>
                 <div className="title">
                     <h2>Atendimento de Chamados</h2>
                 </div>

@@ -70,7 +70,7 @@ const AdmissionalDemissional = () => {
                     <br />
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
                         <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Nome do colaborador: {user.name}</Typography>
-                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Matrícula do colaborador: {user.numero}</Typography>
+                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Matrícula do colaborador: {user.matricula}</Typography>
                         <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >E-mail do colaborador: {user.email}</Typography>
                     </Box>
                     <br />

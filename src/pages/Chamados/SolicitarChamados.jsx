@@ -8,7 +8,6 @@ import ModalSolicitarChamados from "./Modais/ModalSolicitarChamados";
 const SolicitarChamados = () => {
 
     const [chamados, setChamados] = useState([])
-
     const [flushHook, setFlushHook] = useState(false)
 
     const fetchData = async () => {
@@ -24,7 +23,7 @@ const SolicitarChamados = () => {
     return (
         <>
             <Sidebar>
-                <Container>
+                <Container maxWidth >
                     <ModalSolicitarChamados />
                     <TabelaSolicitarChamados />
                 </Container >
