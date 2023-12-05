@@ -26,8 +26,8 @@ export const createUser = async (email, name, accessLevel, atividade) => {
     return await new ApiCall('/users').post(email, name, accessLevel, atividade)
 }
 
-export const liberarModulos = async (email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren) => {
-    return await new ApiCall('/users/modules').put(email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren)
+export const liberarModulos = async (email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada) => {
+    return await new ApiCall('/users/modules').put(email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada)
 }
 
 export const restaurarSenha = async (email) => {
@@ -81,6 +81,6 @@ export const updateData = async (_id, data, id, tipoExame) => {
 }
 
 export const updateProfilePic = async (data) => {
-    return await new ApiCall('/updateProfilePic', process.env.REREACT_APP_API_KEY, token, 
-    { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).patch(data)
+    return await new ApiCall('/updateProfilePic', process.env.REREACT_APP_API_KEY, token,
+        { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).patch(data)
 }

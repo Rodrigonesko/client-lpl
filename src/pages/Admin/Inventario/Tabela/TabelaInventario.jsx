@@ -12,8 +12,6 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [snackSelect, setSnackSelect] = useState(false)
     const [alerta, setAlerta] = useState(false)
 
-    const [open, setOpen] = useState(false)
-
     const handleChangeStatus = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/inventario/status`, {
             status: status, _id: id
@@ -26,7 +24,10 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
     const fetchData = async () => {
         const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/findAll`, { withCredentials: true })
-        setSolicitacoes(resultado.data.encontrarTodos)
+        const solicitacoesData = resultado.data.encontrarTodos;
+
+        const sortedSolicitacoes = solicitacoesData.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta));
+        setSolicitacoes(sortedSolicitacoes)
     }
 
     useEffect(() => {
@@ -46,15 +47,13 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                 withCredentials: true
             })
             console.log(result)
-            setSolicitacoes(result.data)
+
+            const sortedSolicitacoes = result.data.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta))
+            setSolicitacoes(sortedSolicitacoes)
         } else {
             setAlerta(true)
             return
         }
-    }
-
-    const openEditButton = async (id) => {
-        setOpen(true)
     }
 
     const handleCloseInput = () => {
