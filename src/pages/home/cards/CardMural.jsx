@@ -40,7 +40,21 @@ const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
                                     })
                                 }
                             </Box>
-                            <div dangerouslySetInnerHTML={{ __html: recado.texto }}></div>
+                            <Box component={'div'}
+                                sx={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    display: '-webkit-box',
+                                    '-webkit-line-clamp': 3,
+                                    '-webkit-box-orient': 'vertical',
+                                    'img': {
+                                        maxWidth: '800px',
+                                        height: 'auto'
+                                    },
+                                    textAlign: 'center',
+                                    width: '100%'
+                                }}
+                                dangerouslySetInnerHTML={{ __html: recado.texto }}></Box>
                             <Box mt={2}>
                                 <Typography fontWeight={'600'} fontStyle={"italic"}>
                                     Recado feito por: {recado.responsavel}

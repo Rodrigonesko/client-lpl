@@ -142,6 +142,15 @@ const Filtros = ({
                     >
                         <FormLabel
                             component={'legend'}
+                            sx={{
+                                ":hover": {
+                                    zIndex: 99999,
+                                    backgroundColor: 'transparent',
+                                    color: 'black',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                }
+                            }}
                         >
                             Status
                         </FormLabel>
@@ -309,6 +318,15 @@ const Filtros = ({
                     >
                         <FormLabel
                             component={'legend'}
+                            sx={{
+                                ":hover": {
+                                    zIndex: 999999,
+                                    backgroundColor: 'transparent',
+                                    color: 'black',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                }
+                            }}
                         >
                             Tipo Contrato
                         </FormLabel>
@@ -536,7 +554,7 @@ const Filtros = ({
                                             onChange={handleChangeIdade}
                                             name="menor60"
                                         />) : (
-                                        <Tooltip 
+                                        <Tooltip
                                             title='Menor que 60' arrow
                                         >
                                             <Checkbox

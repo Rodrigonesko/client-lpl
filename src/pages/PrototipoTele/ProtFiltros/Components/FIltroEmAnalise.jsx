@@ -382,7 +382,13 @@ const FiltroEmAnalise = () => {
                                                 <TableCell>{proposta.tipoContrato}</TableCell>
                                                 <TableCell>{proposta.janelaHorario}</TableCell>
                                                 <TableCell>{
-                                                    proposta.atendimentoHumanizado ? (
+                                                    proposta.atendimentoHumanizado && proposta.newStatus === 'Janela escolhida' ? (
+                                                        <Tooltip title='Humanizado'>
+                                                            <Chip label={'Agendar'} sx={{
+                                                                backgroundColor: deepPurple[100],
+                                                            }} size="small" />
+                                                        </Tooltip>
+                                                    ) : proposta.atendimentoHumanizado ? (
                                                         <Tooltip title='Humanizado'>
                                                             <Chip label={proposta.newStatus} sx={{
                                                                 backgroundColor: deepPurple[100],
