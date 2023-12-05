@@ -39,6 +39,10 @@ const CardAniversariantes = ({ data, flushHook }) => {
     const aniversariantesNoMesAtual = aniversario.filter(data => {
         const mesAniversario = moment(data.dataAniversario).month() + 1;
         return mesAniversario === mesAtual;
+    }).sort((a, b) => {
+        const dataA = moment(a.dataAniversario).format("MM-DD");
+        const dataB = moment(b.dataAniversario).format("MM-DD");
+        return dataA.localeCompare(dataB);
     });
 
     return (

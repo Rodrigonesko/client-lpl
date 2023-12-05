@@ -26,7 +26,7 @@ const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
             {
                 recados.map(recado => {
                     return (
-                        <Box textAlign={"start"} p={2} >
+                        <Box key={recado._id} textAlign={"start"} p={2} sx={{ maxWidth: '800px' }} >
                             <Typography variant="h5">
                                 {recado.titulo}
                             </Typography>
@@ -35,7 +35,7 @@ const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
                                 {
                                     recado.arquivos.map(arquivo => {
                                         return (
-                                            <Chip label={<Link target="_blank" href={`${process.env.REACT_APP_API_KEY}/media/mural/${arquivo}`}>{arquivo}</Link>} variant="outlined" />
+                                            <Chip key={arquivo} label={<Link target="_blank" href={`${process.env.REACT_APP_API_KEY}/media/mural/${arquivo}`}>{arquivo}</Link>} variant="outlined" />
                                         )
                                     })
                                 }

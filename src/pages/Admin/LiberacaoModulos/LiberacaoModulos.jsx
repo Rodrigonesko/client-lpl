@@ -62,7 +62,7 @@ const LiberacaoModulos = () => {
                 setEmail(result.user.email)
                 setAdministrador(result.user?.acessos?.administrador)
                 setAgendamento(result.user?.acessos?.agendamento)
-                setInativarEmail(result.user.inativarEmail)
+                setInativarEmail(result.user.inativo)
 
                 if (result.user.enfermeiro === null || result.user.enfermeiro === 'false') {
                     setEnfermeiro(false)
@@ -278,9 +278,7 @@ const LiberacaoModulos = () => {
                                             }}
                                         />
                                     </Box>
-
                                 </Box>
-
                                 <Box m={2} className="btn-container">
                                     <Button variant='contained' onClick={liberar}>Liberar</Button>
                                 </Box>

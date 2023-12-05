@@ -12,9 +12,6 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
     const { name } = useContext(AuthContext)
     const [selectedId, setSelectedId] = useState('')
 
-    const color = grey[300];
-    const color1 = grey[400];
-
     const verificarNome = (participantes) => {
         if (participantes[0] === name) {
             return participantes[1]
@@ -45,13 +42,13 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
     };
 
     return (
-        <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, bgcolor: color, borderRadius: `10px`, height: `90vh` }}>
-            <CardContent>
-                <Box mb={1} >
+        <Card sx={{ minWidth: 275, width: '360px', mb: `20px`, borderRadius: `10px`, height: `90vh`, padding: '0' }}>
+            <CardContent sx={{ padding: '0' }} >
+                <Box m={2} >
                     <ModalIniciarConversa setReceptor={setReceptor} setFlushHook={setFlushHook} setChatId={setChatId} />
                     <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
-                <List sx={{ width: '100%', maxWidth: 360, bgcolor: color1, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh' }}>
+                <List sx={{ width: '100%', maxWidth: 360, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh', padding: '0' }}>
                     {!!name && chats.map((item, index) => {
                         const findindex = item.ultimasVisualizacoes.findIndex(e => e.nome === name)
                         let showBadge = true
@@ -62,45 +59,49 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                         }
                         const truncatedMessage = truncateMessage(item.ultimaMensagem, MAX_MESSAGE_LENGTH)
                         return (
-                            <ListItemButton selected={selectedId === item._id} key={item._id} sx={{ p: 0 }} onClick={() => setChat(item, index)}>
-                                <ListItem alignItems="flex-start"
-                                    secondaryAction={
-                                        showBadge && (
-                                            <Badge color="info" badgeContent={
-                                                item.ultimasVisualizacoes[findindex]?.quantidade
-                                            } />
-                                        )
-                                    }
-                                >
-                                    <ListItemAvatar>
-                                        {
-                                            item.tipo === 'Grupo' ? (
-                                                <Avatar alt={item.nome} src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} />
-                                            ) : (
-                                                <Badge
-                                                    overlap="circular"
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    invisible={true}
-                                                    variant="dot"
-                                                    color={item.online ? 'success' : 'error'}
-                                                >
-                                                    <Avatar alt={(verificarNome(item.participantes))} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${(verificarNome(item.participantes)).split(' ').join('%20')}.jpg`} />
-
-                                                </Badge>
+                            <>
+                                <ListItemButton selected={selectedId === item._id} key={item._id} sx={{ p: 0 }} onClick={() => setChat(item, index)}>
+                                    <ListItem alignItems="flex-start"
+                                        secondaryAction={
+                                            showBadge && (
+                                                <Badge color="info" badgeContent={
+                                                    item.ultimasVisualizacoes[findindex]?.quantidade
+                                                } />
                                             )
                                         }
-                                        {/* <Avatar src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} /> */}
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
-                                        secondary={truncatedMessage}
-                                    />
-                                </ListItem>
-                                <Divider />
-                            </ListItemButton>
+                                    >
+                                        <ListItemAvatar>
+                                            {
+                                                item.tipo === 'Grupo' ? (
+                                                    <Avatar alt={item.nome} src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} />
+                                                ) : (
+                                                    <Badge
+                                                        overlap="circular"
+                                                        anchorOrigin={{
+                                                            vertical: 'bottom',
+                                                            horizontal: 'right',
+                                                        }}
+                                                        invisible={true}
+                                                        variant="dot"
+                                                        color={item.online ? 'success' : 'error'}
+                                                    >
+                                                        <Avatar alt={(verificarNome(item.participantes))} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${(verificarNome(item.participantes)).split(' ').join('%20')}.jpg`} />
+
+                                                    </Badge>
+                                                )
+                                            }
+                                            {/* <Avatar src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} /> */}
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
+                                            secondary={truncatedMessage}
+                                        />
+                                    </ListItem>
+                                </ListItemButton>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }} >
+                                    <Divider sx={{ bgcolor: grey[300], width: '90%' }} />
+                                </Box>
+                            </>
                         )
                     })}
                 </List>
