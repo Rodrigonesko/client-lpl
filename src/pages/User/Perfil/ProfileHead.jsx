@@ -1,4 +1,4 @@
-import { Box, Paper, Button, Avatar, Typography, Divider, Tooltip, Modal } from "@mui/material"
+import { Box, Paper, Button, Typography, Divider } from "@mui/material"
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2  
 import moment from "moment";
 import ModalAlterarFoto from "./Components/ModalAlterarFoto";

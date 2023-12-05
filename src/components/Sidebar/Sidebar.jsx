@@ -14,11 +14,12 @@ import { useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
-import { blue, deepPurple, grey } from "@mui/material/colors";
+import { deepPurple, green } from "@mui/material/colors";
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
 let socket
+let socketTele
 
 const Sidebar = ({ children }) => {
 
@@ -32,6 +33,8 @@ const Sidebar = ({ children }) => {
     const [newMessage, setNewMessage] = useState('')
     const [chatId, setChatId] = useState('')
     const [remetente, setRemetente] = useState('')
+    const [openToastTele, setOpenToastTele] = useState(false)
+    const [messageTele, setMessageTele] = useState('')
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -51,6 +54,26 @@ const Sidebar = ({ children }) => {
                 query: `name=${name}`
             })
         }
+
+        if (!socketTele) {
+            socketTele = io(`${process.env.REACT_APP_API_TELE_KEY}`, {
+                query: `name=${name}`
+            })
+        }
+
+
+        socketTele.on('receivedMessage', async (data) => {
+            if (location.pathname === `/entrevistas/chat/${data.whatsapp}`) {
+                return
+            }
+            if (data.responsavel === name || data.enfermeiro === name) {
+                setMessageTele(`${data.proposta} - ${data.nome}: ${data.mensagem}`)
+
+                if (location.pathname !== `/entrevistas/chat/${data.whatsapp}`) {
+                    setOpenToastTele(true);
+                }
+            }
+        })
 
         socket.on('receivedMessage', async (data) => {
             if (location.pathname === '/internMessages') {
@@ -259,6 +282,16 @@ const Sidebar = ({ children }) => {
                         }}
                             fullWidth value={newMessage} onChange={e => setNewMessage(e.target.value)} size="small" />
                     </form>
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }} open={openToastTele} autoHideDuration={6000} onClose={() => setOpenToastTele(false)}>
+                <Alert variant="filled" onClose={() => setOpenToastTele(false)} severity="info" sx={{ width: '100%', background: green[700] }}>
+                    <Typography>
+                        {messageTele}
+                    </Typography>
                 </Alert>
             </Snackbar>
         </Box >
