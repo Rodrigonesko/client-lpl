@@ -1,30 +1,51 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Tooltip, Typography } from "@mui/material"
+import { Alert, Box, Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Tooltip, Typography } from "@mui/material"
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { createPrivateChat, uploadArquivosChat } from "../../../_services/chat.service";
+import { blue } from "@mui/material/colors";
 
 const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
 
     const [open, setOpen] = useState(false);
     const [openSnack, setOpenSnack] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [loading, setLoading] = useState(false)
 
     const onDrop = useCallback((acceptedFiles) => {
-
         console.log(acceptedFiles);
         setUploadedFiles(acceptedFiles);
     }, []);
 
-    const { getRootProps, getInputProps } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: '*',
         multiple: true,
     });
 
+    const activeDropzoneStyles = {
+        border: `2px solid ${blue[200]}`, // Change as needed
+        borderRadius: '4px',
+        padding: '20px',
+        textAlign: 'center',
+        cursor: 'pointer',
+        backgroundColor: blue[50], // Change as needed
+        transition: 'all 0.3s ease-in-out',
+
+    };
+
     const uploadedFileItems = useMemo(() => (
         uploadedFiles.map((file, index) => (
-            <Typography m={1} key={index}>{file.name}</Typography>
+            <Chip
+                m={1}
+                key={index}
+                label={file.name}
+                onDelete={() => {
+                    const newFiles = [...uploadedFiles];
+                    newFiles.splice(index, 1);
+                    setUploadedFiles(newFiles);
+                }}
+            >{file.name}</Chip>
         ))
     ), [uploadedFiles]);
 
@@ -37,6 +58,8 @@ const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
     };
 
     const handleSave = async () => {
+
+        setLoading(true)
 
         let auxChatId = chatId
 
@@ -61,6 +84,7 @@ const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
         setOpenSnack(true)
         setFlushHook(true)
         handleClose()
+        setLoading(false)
     }
 
     return (
@@ -78,7 +102,10 @@ const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
                     {"Anexar arquivos?"}
                 </DialogTitle>
                 <DialogContent>
-                    <Box {...getRootProps()} style={dropzoneStyles}>
+                    <Box
+                        {...getRootProps()}
+                        sx={isDragActive ? activeDropzoneStyles : dropzoneStyles}
+                    >
                         <input {...getInputProps()} />
                         <p>Arraste e solte arquivos aqui ou clique para selecionar.</p>
                     </Box>
@@ -89,7 +116,15 @@ const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="inherit">Fechar</Button>
-                    <Button onClick={handleSave} color="info" autoFocus>
+                    <Button
+                        onClick={handleSave}
+                        color="info"
+                        autoFocus
+                        variant="contained"
+                        disableElevation
+                        endIcon={loading && <CircularProgress color="inherit" size={14} />}
+                        disabled={loading || uploadedFiles.length === 0}
+                    >
                         Enviar
                     </Button>
                 </DialogActions>
@@ -104,11 +139,15 @@ const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
 }
 
 const dropzoneStyles = {
-    border: '2px dashed #cccccc',
+    border: '2px solid #cccccc',
     borderRadius: '4px',
     padding: '20px',
     textAlign: 'center',
     cursor: 'pointer',
+    '&:hover': {
+        backgroundColor: '#eeeeee',
+    },
+    transition: 'all 0.3s ease-in-out',
 };
 
 export default ModalUploadArquivos

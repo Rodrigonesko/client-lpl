@@ -37,7 +37,7 @@ const ProfileMenu = () => {
                 <IconButton
                     onClick={handleClick}
                     size="small"
-                    sx={{ ml: 2 }}
+                    sx={{ mr: 2 }}
                     aria-controls={open ? 'account-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
@@ -72,10 +72,12 @@ const ProfileMenu = () => {
                             right: 14,
                             width: 10,
                             height: 10,
-                            bgcolor: 'background.paper',
+                            bgcolor: '#1D1D1D',
                             transform: 'translateY(-50%) rotate(45deg)',
                             zIndex: 0,
                         },
+                        bgcolor: '#1D1D1D',
+                        color: 'lightgray',
                     },
                 }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -105,9 +107,14 @@ const ProfileMenu = () => {
                 </MenuItem> */}
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
-                        <Logout fontSize="small" />
+                        <Logout
+                            sx={{
+                                transform: 'rotate(180deg)',
+                                color: 'lightgray',
+                            }}
+                            fontSize="small" />
                     </ListItemIcon>
-                    Logout
+                    Sair
                 </MenuItem>
             </Menu>
         </>

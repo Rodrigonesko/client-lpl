@@ -1,13 +1,19 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
 import { createPrivateChat, uploadArquivosChat } from "../../../_services/chat.service"
+import { useState } from "react"
 
 const ModalPasteImage = ({ open, setOpen, image, setImage, chatId, receptor }) => {
+
+    const [loading, setLoading] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
     }
 
     const handleSend = async () => {
+
+        setLoading(true)
+
         let auxChatId = chatId
 
         if (!chatId) {
@@ -25,6 +31,7 @@ const ModalPasteImage = ({ open, setOpen, image, setImage, chatId, receptor }) =
         await uploadArquivosChat(formData)
         setImage(null)
         handleClose()
+        setLoading(false)
     }
 
     return (
@@ -39,11 +46,23 @@ const ModalPasteImage = ({ open, setOpen, image, setImage, chatId, receptor }) =
                     {"Enviar imagem"}
                 </DialogTitle>
                 <DialogContent>
-                    <img src={!!image && URL.createObjectURL(image)} ></img>
+                    <img
+                        alt="Imagem"
+                        style={{ width: '100%', height: 'auto' }}
+                        src={!!image && URL.createObjectURL(image)} ></img>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    <Button onClick={handleSend} autoFocus>
+                    <Button
+                        disabled={loading}
+                        color="primary"
+                        variant="contained"
+                        disableElevation
+                        style={{ marginLeft: 10 }}
+                        endIcon={loading && <CircularProgress color="inherit" size={14} />}
+                        onClick={handleSend}
+                        autoFocus
+                    >
                         Enviar
                     </Button>
                 </DialogActions>
