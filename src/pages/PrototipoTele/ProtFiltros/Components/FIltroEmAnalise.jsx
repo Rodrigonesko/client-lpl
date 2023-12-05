@@ -1,4 +1,4 @@
-import { AppBar, Badge, Box, Button, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Badge, Box, Button, Chip, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { filterPropostas, filterPropostasNaoRealizadas } from "../../../../_services/teleEntrevistaExterna.service";
 import Filtros from "./Filtros";
@@ -381,13 +381,23 @@ const FiltroEmAnalise = () => {
                                                 <TableCell>{proposta.sexo}</TableCell>
                                                 <TableCell>{proposta.tipoContrato}</TableCell>
                                                 <TableCell>{proposta.janelaHorario}</TableCell>
-                                                <TableCell>{proposta.newStatus}</TableCell>
+                                                <TableCell>{
+                                                    proposta.atendimentoHumanizado ? (
+                                                        <Tooltip title='Humanizado'>
+                                                            <Chip label={proposta.newStatus} sx={{
+                                                                backgroundColor: deepPurple[100],
+                                                            }} size="small" />
+                                                        </Tooltip>
+                                                    ) : (
+                                                        proposta.newStatus
+                                                    )
+                                                }</TableCell>
                                                 <TableCell>{proposta.riscoBeneficiario}</TableCell>
                                                 <TableCell>
                                                     <Badge
                                                         color="success"
                                                         variant="dot"
-                                                        sx={{ '& > *': { mr: 2 } }}
+                                                        sx={{ '& > *': { mr: 2, p: '3px' } }}
                                                         invisible={!proposta.visualizado}
                                                     >
                                                         <Button
