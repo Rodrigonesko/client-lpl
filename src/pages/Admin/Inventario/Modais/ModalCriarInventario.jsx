@@ -14,7 +14,7 @@ const ModalCriarInventario = ({ setFlushHook }) => {
         ondeEsta: '',
         descricao: ''
     })
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
 
     const handleCloseSnack = () => {
         setOpenSnack(false);
@@ -63,6 +63,12 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                 setOpenSnack(true)
                 setSeveritySnack('warning')
                 setTextoSnack('Faltam dados! Favor preencher todos os dados!')
+                return
+            }
+            if (dados.etiqueta.length > 5) {
+                setOpenSnack(true)
+                setSeveritySnack('warning')
+                setTextoSnack('Etiqueta incorreta! Sua etiqueta está maior de 5 digitos, favor reescrever para 5 digitos!')
                 return
             }
 
