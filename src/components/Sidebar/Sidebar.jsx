@@ -25,7 +25,7 @@ const Sidebar = ({ children }) => {
 
     const location = useLocation();
 
-    const [isOpen, setIsOpen] = useState(true)
+    const [isOpen, setIsOpen] = useState(localStorage.getItem('isOpen') === 'true')
     const [quantidadeMensagens, setQuantidadeMensagens] = useState(0)
     const { name, acessos } = useContext(AuthContext)
     const [openToast, setOpenToast] = useState(false)
@@ -40,6 +40,10 @@ const Sidebar = ({ children }) => {
     const toggleMenu = () => {
         setIsOpen(!isOpen)
     }
+
+    useEffect(() => {
+        localStorage.setItem('isOpen', isOpen)
+    }, [isOpen])
 
 
     const fetchData = async () => {
