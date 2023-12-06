@@ -3,14 +3,15 @@ import moment from "moment"
 import { useState } from "react"
 
 
-const PrimeiroContato = ({ hookMsg, nome }) => {
+const PrimeiroContato = ({ hookMsg }) => {
 
     const [modelo, setModelo] = useState('')
     const [data1, setData1] = useState('')
     const [data2, setData2] = useState('')
+    const [nome, setNome] = useState('')
 
     const modelo1 = () => {
-        return `Prezado Sr.(a) (nome),
+        return `Prezado Sr.(a) ${nome},
 Somos da Área de Implantação da Amil e para concluirmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) precisamos confirmar alguns dados médicos.
 Por gentileza, escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a)
 *${moment(data1).format('DD/MM/YYYY')}*
@@ -30,7 +31,7 @@ Lembrando que em caso de menor de idade a entrevista será realizada com o respo
     }
 
     const modelo2 = () => {
-        return `Prezado Sr.(a) (nome),
+        return `Prezado Sr.(a) ${nome},
 Somos da Área de Implantação da Amil e para concluirmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) precisamos confirmar alguns dados médicos.
 Por gentileza, escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a)
 *${moment(data1).format('DD/MM/YYYY')}*
@@ -87,6 +88,7 @@ Lembrando que em caso de menor de idade a entrevista será realizada com o respo
                         <MenuItem value='Modelo 2' >Modelo 2</MenuItem>
                     </Select>
                 </FormControl>
+                <TextField style={{ marginTop: '10px' }} label='Nome' onChange={e => setNome(e.target.value)} />
                 <TextField style={{ marginTop: '10px' }} type='date' focused label='Data 1' onChange={e => setData1(e.target.value)} />
                 <TextField style={{ marginTop: '10px' }} type='date' focused label='Data 2' onChange={e => setData2(e.target.value)} />
                 <Button style={{ margin: '10px' }} variant="contained" onClick={gerarMensagem} >Gerar</Button>

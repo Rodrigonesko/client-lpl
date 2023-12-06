@@ -125,7 +125,7 @@ const Chat = () => {
                 <Container>
                     <Box display='flex' flexWrap={isSmallScreen ? 'wrap' : ''}  >
                         <Box>
-                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} mt={3} bgcolor='lightgray' height='80vh' ref={chatRef}>
+                            <Box display='block' style={{ overflowY: 'auto' }} component={Paper} mt={3} bgcolor='lightgray' height='80vh' ref={chatRef} minWidth={'500px'}>
                                 {
                                     chat.map(e => {
                                         return (
@@ -133,7 +133,20 @@ const Chat = () => {
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>
-                                                <Typography style={{ display: 'inline-block', backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' ? '#0066FF' : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{e.mensagem}</Typography>
+                                                <Typography
+                                                    style={{
+                                                        display: 'inline-block',
+                                                        backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' ? '#0066FF' : 'gray',
+                                                        color: 'white',
+                                                        padding: '10px',
+                                                        borderRadius: '10px',
+                                                        maxWidth: '80%',
+                                                        wordWrap: 'break-word',
+                                                    }}>
+                                                    {e.mensagem.split('\n').map((item, key) => {
+                                                        return <span key={key}>{item}<br /></span>
+                                                    })}
+                                                </Typography>
                                                 <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                                 <Typography variant='body2' color='GrayText'>
                                                     {

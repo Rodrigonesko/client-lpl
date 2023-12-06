@@ -56,7 +56,7 @@ Lembrando que em caso de menor de idade a entrevista será realizada com o respo
     }
 
     const modelo2 = () => {
-        return `Prezado Sr.(a) (nome),
+        return `Prezado Sr.(a) ${nome},
 Somos da Área de Implantação da Amil e para concluirmos a contratação do Plano de Saúde do Sr.(a), e dos seus dependentes (caso tenha) precisamos confirmar alguns dados médicos.
 Por gentileza, escolha o *NÚMERO* referente a janela de horários para entrarmos em contato com o Sr.(a)
 *${moment(data1).format('DD/MM/YYYY')}*

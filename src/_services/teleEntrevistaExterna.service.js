@@ -39,8 +39,8 @@ export const filterPropostas = async ({ status, tipoContrato, vigencia, altoRisc
     return await new ApiCall('/filterPropostas', URL_API).post({ status, tipoContrato, vigencia, altoRisco, idade, page, limit })
 }
 
-export const filterPropostasNaoRealizadas = async ({ pesquisa, page, limit }) => {
-    return await new ApiCall('/filterPropostasNaoRealizadas', URL_API).post({ pesquisa, page, limit })
+export const filterPropostasNaoRealizadas = async ({ pesquisa, page, limit, filters }) => {
+    return await new ApiCall('/filterPropostasNaoRealizadas', URL_API).post({ pesquisa, page, limit, filters })
 }
 
 export const quantidadePropostasNaoRealizadas = async () => {

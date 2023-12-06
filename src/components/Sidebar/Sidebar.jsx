@@ -4,7 +4,7 @@ import { RiAlarmWarningLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
-import { Alert, Avatar, Badge, Box, IconButton, Snackbar, TextField, Tooltip, Typography } from "@mui/material";
+import { Alert, Avatar, Badge, Box, IconButton, Snackbar, TextField, Typography } from "@mui/material";
 import 'react-pro-sidebar/dist/css/styles.css'
 import { useEffect } from "react";
 import { io } from "socket.io-client";
@@ -35,6 +35,7 @@ const Sidebar = ({ children }) => {
     const [remetente, setRemetente] = useState('')
     const [openToastTele, setOpenToastTele] = useState(false)
     const [messageTele, setMessageTele] = useState('')
+    const [whatsappTele, setWhatsappTele] = useState('')
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -67,7 +68,10 @@ const Sidebar = ({ children }) => {
                 return
             }
             if (data.responsavel === name || data.enfermeiro === name) {
+                console.log(data.responsavel, data.enfermeiro);
+                console.log(name);
                 setMessageTele(`${data.proposta} - ${data.nome}: ${data.mensagem}`)
+                setWhatsappTele(data.whatsapp)
 
                 if (location.pathname !== `/entrevistas/chat/${data.whatsapp}`) {
                     setOpenToastTele(true);
@@ -150,11 +154,9 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
-
                                 </SubMenu>
                             </SubMenu>
                         ) : null
-
                     }
                     <SubMenu title="Tele Entrevistas" icon={<FaClipboard />}>
                         <SubMenu title='Agenda' icon={<FaCalendar />}>
@@ -291,6 +293,23 @@ const Sidebar = ({ children }) => {
                 <Alert variant="filled" onClose={() => setOpenToastTele(false)} severity="info" sx={{ width: '100%', background: green[700] }}>
                     <Typography>
                         {messageTele}
+                    </Typography>
+                    <Typography
+                        component='a'
+                        href={`/entrevistas/chat/${whatsappTele}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: 'none', color: 'white' }}
+                        sx={{
+                            '&:hover': {
+                                textDecoration: 'underline',
+                                color: 'white'
+                            }
+
+                        }}
+
+                    >
+                        Ver Mensagens
                     </Typography>
                 </Alert>
             </Snackbar>

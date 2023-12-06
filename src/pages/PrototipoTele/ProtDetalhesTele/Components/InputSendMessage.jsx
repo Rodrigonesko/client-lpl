@@ -22,7 +22,12 @@ const InputSendMessage = ({ message, setMessage, whatsapp, setFlushHook }) => {
                 mensagem: message
             })
 
-            console.log(result);
+            if (result.msg !== 'ok') {
+                setToastMessage('Não foi possivel enviar a mensagem')
+                setSeverity('error')
+                setToastOpen(true)
+                return
+            }
 
             setMessage('')
             setFlushHook(true)

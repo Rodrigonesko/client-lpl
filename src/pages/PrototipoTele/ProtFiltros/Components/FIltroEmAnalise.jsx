@@ -297,7 +297,14 @@ const FiltroEmAnalise = () => {
         const result = await filterPropostasNaoRealizadas({
             pesquisa: pesquisa,
             page: 1,
-            limit: 100
+            limit: 100,
+            filters: {
+                status: status,
+                tipoContrato: tipoContrato,
+                vigencia: vigencia,
+                altoRisco: altoRisco,
+                idade: idade,
+            }
         })
         setPropostas(result.result);
         setTotalPages(result.total);
