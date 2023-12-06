@@ -11,6 +11,7 @@ import CardBancoHoras from "./cards/CardBancoHoras";
 import CardAniversariantes from "./cards/CardAniversariantes";
 import ModalAdicionarMural from "./modais/ModalAdicionarMural";
 import CardMural from "./cards/CardMural";
+import CardToDo from "./cards/CardToDo";
 
 const Home = () => {
 
@@ -170,7 +171,13 @@ const Home = () => {
                             {
                                 dataUser !== null && (
                                     <CardAniversariantes data={userData} flushHook={flushHook} />
-                                )}
+                                )
+                            }
+                            {
+                                dataUser !== null && (
+                                    <CardToDo data={userData} flushHook={flushHook} />
+                                )
+                            }
                         </Box>
                         <Box width={'100%'} ml={2}>
                             {
