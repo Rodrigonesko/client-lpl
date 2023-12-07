@@ -65,6 +65,7 @@ export const updateHorarioPonto = async (data) => {
 export const createAdmissao = async (_id) => {
     return await new ApiCall('/createAdmissao').post(_id)
 }
+
 export const createDemissao = async (_id) => {
     return await new ApiCall('/createDemissao').post(_id)
 }
@@ -76,8 +77,17 @@ export const setarStatus = async (_id, status, id, tipoExame) => {
 export const updateObs = async (_id, obs, id, tipoExame) => {
     return await new ApiCall('/obs').put(_id, obs, id, tipoExame)
 }
+
 export const updateData = async (_id, data, id, tipoExame) => {
     return await new ApiCall('/data').put(_id, data, id, tipoExame)
+}
+
+export const getAllItens = async () => {
+    return await new ApiCall('/itens').get()
+}
+
+export const updateProrrogacao = async (name, prorrogacao) => {
+    return await new ApiCall('/prorrogacao').put(name, prorrogacao)
 }
 
 export const updateProfilePic = async (data) => {

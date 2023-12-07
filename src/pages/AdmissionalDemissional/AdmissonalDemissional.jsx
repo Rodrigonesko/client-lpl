@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
 import TabelaDemissional from "./Tabela/TabelaDemissional"
-import { getUsers } from "../../_services/user.service"
+import { getUsers, updateProrrogacao } from "../../_services/user.service"
 import { grey } from "@mui/material/colors"
 import moment from "moment"
 
@@ -27,8 +27,9 @@ const AdmissionalDemissional = () => {
                 console.log(error);
             }
         }
+        setFlushHook(false)
         buscarNomes()
-    }, [])
+    }, [flushHook])
 
     const handleChange = (e, newValue) => {
         setTipoExame(newValue)
@@ -36,10 +37,6 @@ const AdmissionalDemissional = () => {
         setFlushHook(true)
         console.log(e);
     }
-
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook, setFlushHook])
 
     return (
         <>
@@ -57,19 +54,11 @@ const AdmissionalDemissional = () => {
                             options={nomes}
                             onChange={(event, item) => {
                                 setUser(item);
+                                setProrrogacao(item.prorrogacao)
                             }}
                             getOptionLabel={nomes => nomes.name}
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Nome' />}
-                        />
-                        <FormControlLabel
-                            value={prorrogacao}
-                            control={<Checkbox value={prorrogacao} checked={prorrogacao} />}
-                            label="Assinado contrato de prorrogação após 30 dias"
-                            labelPlacement="start"
-                            onChange={() => {
-                                setProrrogacao(!prorrogacao)
-                            }}
                         />
                     </Box>
 
@@ -92,7 +81,20 @@ const AdmissionalDemissional = () => {
                         </Tabs>
                         {
                             tipoExame === 'admissional' ? (
-                                <TabelaAdmissional user={user} key={user._id} setUser={setUser} />
+                                <>
+                                    <FormControlLabel
+                                        value={prorrogacao}
+                                        control={<Checkbox value={prorrogacao} checked={prorrogacao} />}
+                                        label="Assinado contrato de prorrogação após 30 dias"
+                                        labelPlacement="start"
+                                        onChange={async (e) => {
+                                            await updateProrrogacao({name: user.name, prorrogacao: !prorrogacao})
+                                            setProrrogacao(!prorrogacao)
+                                            setFlushHook(true)
+                                        }}
+                                    />
+                                    <TabelaAdmissional user={user} key={user._id} setUser={setUser} />
+                                </>
                             ) : tipoExame === 'demissional' ? (
                                 <TabelaDemissional user={user} key={user._id} setUser={setUser} />
                             ) : (
