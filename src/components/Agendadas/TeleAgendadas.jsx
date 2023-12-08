@@ -158,7 +158,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
                 Tele e Rn: {propostas.length}
             </Typography>
             <TableContainer>
-                <Table style={{ display: 'block', overflowX: 'auto' }}>
+                <Table style={{ display: 'block', overflowX: 'auto' }} size="small">
                     <TableHead className='table-header'>
                         <TableRow>
                             <TableCell >Tipo</TableCell>

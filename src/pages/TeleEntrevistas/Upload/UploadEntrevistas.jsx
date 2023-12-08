@@ -33,8 +33,14 @@ const UploadRn = () => {
 
             const send = await uploadPropostas({ result })
 
-            setStatus(send.message)
+            if (send.error) {
+                setStatus(send.error)
+                setLoading(false)
+                return
+            }
             console.log(send);
+            setStatus(send.message)
+
 
             let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
 

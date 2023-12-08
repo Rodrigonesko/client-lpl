@@ -97,7 +97,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                             ) : (
                                 item.mensagem
                             )}
-                        </Typography>
+                        </Typography> 
                         <Typography textAlign={'end'} fontSize='10px' color={grey[100]}>{moment(item.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                     </div>
                 </Typography>

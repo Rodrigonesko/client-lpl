@@ -37,7 +37,7 @@ const UploadUrgenciaEmergencia = () => {
 
         } catch (error) {
             console.log(error);
-            setStatus('Algo deu errado')
+            setStatus(error.response.data.error)
         }
     }
 

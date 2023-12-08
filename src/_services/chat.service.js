@@ -60,3 +60,6 @@ export const updateGroupImage = async (data) => {
     return await new ApiCall('/updateGroupImage', URL_API, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
 }
 
+export const reagirMensagem = async ({ chatId, mensagemId, reacao }) => {
+    return await new ApiCall('/reagirMensagem', URL_API).post({ chatId, mensagemId, reacao })
+}
