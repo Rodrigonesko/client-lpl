@@ -1,9 +1,10 @@
-import { Alert, Box, Button, FormControl, InputLabel, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Alert, Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import axios from "axios"
 import moment from "moment"
 import { useState, useEffect } from "react"
 import ModalEditarFerias from "../Modais/ModalEditarFerias"
 import { red, yellow, green, blue } from '@mui/material/colors';
+import { updateGestorAceitou } from "../../../../_services/ferias"
 
 const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
 
@@ -91,6 +92,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                 <TableCell>DATA FIM</TableCell>
                                 <TableCell>TOTAL DIAS</TableCell>
                                 <TableCell>STATUS RH</TableCell>
+                                <TableCell>GESTOR APROVOU?</TableCell>
                                 <TableCell>EDITAR</TableCell>
                             </TableRow>
                         </TableHead>
@@ -107,6 +109,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                 } if (item.statusRh === 'retirada') {
                                     color = green[300]
                                 }
+                                let gestorAprovou = item.gestorAprovou
                                 return (
                                     <TableRow key={item._id} style={{ backgroundColor: color }}>
                                         <TableCell>{moment(item.dataInicio).format('MM/YYYY')}</TableCell>
@@ -124,6 +127,19 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                                     <MenuItem value={'retirada'}>RETIRADA</MenuItem>
                                                 </Select>
                                             </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControlLabel
+                                                value={item.gestorAprovou}
+                                                control={<Checkbox value={item.gestorAprovou} checked={item.gestorAprovou} />}
+                                                label="Aprovado"
+                                                labelPlacement="start"
+                                                onChange={async (e) => {
+                                                    await updateGestorAceitou({ _id: item._id, gestorAprovou: !gestorAprovou })
+                                                    gestorAprovou = (!gestorAprovou)
+                                                    setFlushHook(true)
+                                                }}
+                                            />
                                         </TableCell>
                                         <TableCell>
                                             <ModalEditarFerias trocaData={item.dataInicio} setFlushHook={setFlushHook} id={item._id} />

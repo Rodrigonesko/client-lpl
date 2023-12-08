@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { getPoliticas } from '../../../_services/politicas.service'
 import { FaRegFilePdf } from 'react-icons/fa'
 import ModalFaltouAssinar from './Modals/ModalFaltouAssinar'
+
 const ControlePoliticas = () => {
 
     const [politicas, setPoliticas] = useState([])
