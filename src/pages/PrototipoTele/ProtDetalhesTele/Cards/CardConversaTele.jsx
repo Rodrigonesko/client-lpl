@@ -16,6 +16,11 @@ import BotaoAssumirAtendimento from "../Components/BotaoAssumirAtendimento";
 import { mostrarPropostaPorId } from "../../../../_services/teleEntrevista.service";
 import InputSendMessage from "../Components/InputSendMessage";
 import PopoverAlterarNumeroEnvio from "../Components/PopoverAlterarNumeroEnvio";
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import { io } from "socket.io-client";
+
+const socket = io(`http://18.230.122.26:3001`);
 
 const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendimento, setResponsavelAtendimento, selectedWhatsapp, setSelectedWhatsapp, data, setData }) => {
 
@@ -25,6 +30,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
     const [flushHook, setFlushHook] = useState(false)
+    const [fullWidth, setFullWidth] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
@@ -52,6 +58,20 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
     }, [selectedWhatsapp, flushHook])
 
     useEffect(() => {
+        socket.on('receivedMessage', async (message) => {
+            if (message.whatsapp === data.whatsapp) {
+                setFlushHook(true)
+            }
+        });
+        socket.on('statusMessage', async (data) => {
+            const { From, To } = data
+            if (From === data.whatsapp || To === data.whatsapp) {
+                setFlushHook(true)
+            }
+        })
+    }, [])
+
+    useEffect(() => {
         const component = chatRef.current;
         if (component) {
             component.scrollTop = component.scrollHeight;
@@ -60,10 +80,21 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
     }, [messages])
 
     return (
-        <Slide direction="left" in={open} unmountOnExit>
-            <Box display={!open && 'none'} component={Paper} p={1} m={2} width={'35%'} height={'100%'} >
+        <Slide direction="left" in={open} unmountOnExit mountOnEnter>
+            <Box display={!open && 'none'} component={Paper} p={1} m={2} width={fullWidth ? '100%' : '80%'} height={'100%'} position={fullWidth && 'absolute'} >
                 <Box display={'flex'} justifyContent={'space-between'}>
                     <Typography variant="h6" m={1}>
+                        {
+                            fullWidth ? (
+                                <IconButton onClick={() => setFullWidth(!fullWidth)}>
+                                    <CloseFullscreenIcon />
+                                </IconButton>
+                            ) : (
+                                <IconButton onClick={() => setFullWidth(!fullWidth)}>
+                                    <OpenInFullIcon />
+                                </IconButton>
+                            )
+                        }
                         {nome}
                         <Typography variant="body1">
                             {responsavelAtendimento}

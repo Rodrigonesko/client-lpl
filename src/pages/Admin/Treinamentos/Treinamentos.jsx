@@ -6,7 +6,7 @@ const Treinamentos = () => {
     return (
         <>
             <Sidebar>
-                <Container>
+                <Container maxWidth>
                     <Typography mt={2} variant='h5' mb={2}>
                         Controle de Treinamentos
                     </Typography>
