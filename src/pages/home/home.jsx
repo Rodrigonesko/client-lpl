@@ -88,7 +88,7 @@ const Home = () => {
     return (
         <>
             <SideBar>
-                <Container sx={{ textAlign: 'center' }} component={Paper}>
+                <Container maxWidth sx={{ textAlign: 'center' }} component={Paper}>
                     <Box>
                         <Typography variant="h4">
                             Bem vindo {name}!
