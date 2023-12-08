@@ -88,6 +88,7 @@ const TabelaDemissional = ({ user, setUser }) => {
                                             <FormControl sx={{ minWidth: 150 }}>
                                                 <InputLabel id='Status'>Status</InputLabel>
                                                 <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)} >
+                                                    <MenuItem value={'naoSeAplica'}>N/A</MenuItem>
                                                     <MenuItem value={'pendente'}>PENDENTE</MenuItem>
                                                     <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
                                                     <MenuItem value={'concluido'}>CONCLUIDO</MenuItem>

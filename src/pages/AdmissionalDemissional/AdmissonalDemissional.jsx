@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Container, Divider, Paper, Tab, Tabs, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Checkbox, Container, Divider, FormControlLabel, Paper, Tab, Tabs, TextField, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
@@ -13,9 +13,9 @@ const AdmissionalDemissional = () => {
 
     const [user, setUser] = useState({})
     const [flushHook, setFlushHook] = useState(false)
-    // const [loading, setLoading] = useState(false)
     const [tipoExame, setTipoExame] = useState('')
     const [nomes, setNomes] = useState([])
+    const [prorrogacao, setProrrogacao] = useState(false)
 
     useEffect(() => {
         const buscarNomes = async () => {
@@ -62,7 +62,15 @@ const AdmissionalDemissional = () => {
                             sx={{ width: 400 }}
                             renderInput={(params) => <TextField {...params} label='Nome' />}
                         />
-                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Data de Admissao: {!user.dataAdmissao ? ('') : (moment(user?.dataAdmissao).format('DD/MM/YYYY'))}</Typography>
+                        <FormControlLabel
+                            value={prorrogacao}
+                            control={<Checkbox value={prorrogacao} checked={prorrogacao} />}
+                            label="Assinado contrato de prorrogação após 30 dias"
+                            labelPlacement="start"
+                            onChange={() => {
+                                setProrrogacao(!prorrogacao)
+                            }}
+                        />
                     </Box>
 
                     <br />
@@ -71,6 +79,7 @@ const AdmissionalDemissional = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
                         <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Nome do colaborador: {user.name}</Typography>
                         <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Matrícula do colaborador: {user.matricula}</Typography>
+                        <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >Data de Admissao: {!user.dataAdmissao ? ('') : (moment(user?.dataAdmissao).format('DD/MM/YYYY'))}</Typography>
                         <Typography component={Paper} sx={{ bgcolor: color, fontSize: '20px' }} >E-mail do colaborador: {user.email}</Typography>
                     </Box>
                     <br />

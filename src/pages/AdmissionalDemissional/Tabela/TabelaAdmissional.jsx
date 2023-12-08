@@ -1,7 +1,8 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button, Box } from '@mui/material';
-import { green, red, yellow } from '@mui/material/colors';
+import { blue, green, red, yellow } from '@mui/material/colors';
 import { createAdmissao, setarStatus, updateData, updateObs } from '../../../_services/user.service';
+import { createToDo } from '../../../_services/toDo.service';
 
 const TabelaAdmissional = ({ user, setUser }) => {
 
@@ -18,6 +19,9 @@ const TabelaAdmissional = ({ user, setUser }) => {
         try {
             const result = await createAdmissao({ _id: user._id });
             console.log(result);
+
+            const resultadoToDo = await createToDo({ _id: user._id });
+            console.log(resultadoToDo)
 
             setUser(result)
         } catch (error) {
@@ -88,6 +92,7 @@ const TabelaAdmissional = ({ user, setUser }) => {
                                             <FormControl sx={{ minWidth: 150 }}>
                                                 <InputLabel id='Status'>Status</InputLabel>
                                                 <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)} >
+                                                    <MenuItem value={'naoSeAplica'}>N/A</MenuItem>
                                                     <MenuItem value={'pendente'}>PENDENTE</MenuItem>
                                                     <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
                                                     <MenuItem value={'concluido'}>CONCLUIDO</MenuItem>
