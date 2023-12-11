@@ -12,7 +12,7 @@ const SolicitacaoFerias = () => {
     return (
 
         <Sidebar>
-            <Container>
+            <Container maxWidth>
                 <div className="title">
                     <h2>Solicitação de Férias</h2>
                 </div>

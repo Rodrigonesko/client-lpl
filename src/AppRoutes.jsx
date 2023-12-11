@@ -14,6 +14,10 @@ import Profile from "./pages/User/Perfil/Profile";
 import MyProduction from "./pages/User/Production/MyProduction";
 import EditInfoUser from "./pages/User/EditInfo/EditInfoUser";
 
+/* Modulo de Contingencia*/
+
+import ControleContigencias from "./pages/ControleContigencias/ControleContigencias";
+
 /* Modulo de Admissional e Demissional*/
 
 import AdmissionalDemissional from "./pages/AdmissionalDemissional/AdmissonalDemissional";
@@ -193,6 +197,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/rh/contingencias" element={<ProtectedRoute>
+                    <ControleContigencias />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/treinamentos" element={<ProtectedRoute>
                     <Treinamentos />
