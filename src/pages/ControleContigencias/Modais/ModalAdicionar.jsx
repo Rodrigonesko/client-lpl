@@ -2,14 +2,14 @@ import { Button, Box, Dialog, DialogActions, DialogContent, DialogTitle, TextFie
 import { useState } from "react"
 import { FaPlus } from 'react-icons/fa'
 import DragAndDrop from "../../../components/DragAndDrop/DragAndDrop"
-import { uploadPolitica } from "../../../_services/politicas.service"
+import { uploadContingencias } from "../../../_services/contingencias.service"
 
-const ModalAdicionar = ({ setFlushHook, politicas }) => {
+const ModalAdicionar = ({ setFlushHook, contingencias }) => {
 
     const [open, setOpen] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
     const [file, setFile] = useState()
-    const [politica, setPolitica] = useState('')
+    const [contingencia, setContingencia] = useState('')
     const [msg, setMsg] = useState('')
     const [error, setError] = useState('')
 
@@ -25,18 +25,18 @@ const ModalAdicionar = ({ setFlushHook, politicas }) => {
         const formData = new FormData()
         formData.append('file', file, file.name)
 
-        const result = await uploadPolitica(
+        const result = await uploadContingencias(
             formData,
-            politica
+            contingencia
         )
 
         if (result.msg === 'ok') {
             setError(false)
-            setMsg('Politica adicionada com sucesso')
+            setMsg('Contingencia/Incidente adicionado com sucesso')
             setOpenSnack(true)
             handleClose()
             setFile('')
-            setPolitica('')
+            setContingencia('')
             setFlushHook(true)
         } else {
             setError(true)
@@ -73,15 +73,16 @@ const ModalAdicionar = ({ setFlushHook, politicas }) => {
                     <Box mt={2}>
                         <Autocomplete
                             freeSolo
-                            options={politicas}
-                            getOptionLabel={(politica) => politica.nome}
+                            options={contingencias}
+                            getOptionLabel={(contingencia) => contingencia.nome}
                             onChange={e => {
-                                setPolitica(e.target.textContent)
+                                setContingencia(e.target.textContent)
                             }}
-                            renderInput={(params) => <TextField {...params} label='Politica' onChange={e => {
-                                setPolitica(e.target.value)
-                            }} value={politica} />}
+                            renderInput={(params) => <TextField {...params} label='Contingencia/Incidente' onChange={e => {
+                                setContingencia(e.target.value)
+                            }} value={contingencias} />}
                         />
+                        <TextField label='Contingencia/Incidente' value={contingencias} onChange={e => { setContingencia(e.target.textContent) }} />
                     </Box>
                 </DialogContent>
                 <DialogActions>

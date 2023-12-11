@@ -1,17 +1,18 @@
-import { Box, Card, CardContent, Container, Divider, Paper, Typography } from "@mui/material"
+import { Box, Button, Card, CardActions, CardContent, Container, Divider, Paper, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import ModalAdicionar from "./Modais/ModalAdicionar"
-import { getPoliticas } from "../../_services/politicas.service"
+import { getContingencias } from "../../_services/contingencias.service"
+import { FaRegFilePdf } from "react-icons/fa"
 
 const ControleContigencias = () => {
 
-    const [politicas, setPoliticas] = useState([])
+    const [contingencias, setContingencias] = useState([])
     const [flushHook, setFlushHook] = useState(false)
 
     const fetchData = async () => {
-        const result = await getPoliticas()
-        setPoliticas(result)
+        const result = await getContingencias()
+        setContingencias(result)
     }
 
     useEffect(() => {
@@ -26,28 +27,31 @@ const ControleContigencias = () => {
                 <Box>
                     <Container maxWidth >
                         <Typography m={2} variant='h6'>
-                            Controle e Gestão de Contingencias e Incidencias!
+                            Controle e Gestão de Contingências e Incidentes!
                         </Typography>
                         <Box mt={1} mb={1}>
-                            <ModalAdicionar setFlushHook={setFlushHook} politicas={politicas} />
+                            <ModalAdicionar setFlushHook={setFlushHook} contingencias={contingencias} />
                         </Box>
                         <Divider />
                         <Box component={Paper} p={1} mt={1} display='flex' flexWrap='wrap'>
                             {
-                                politicas.map(politica => {
+                                contingencias.map(contingencia => {
                                     return (
-                                        <Card sx={{ width: '200px', margin: '10px', bgcolor: politica.inativo ? 'lightgray' : '', padding: '5px' }}>
-                                            <object data={`${process.env.REACT_APP_API_KEY}/media${politica.arquivo}`} type='application/pdf' height={250} width='100%'>
+                                        <Card sx={{ width: '200px', margin: '10px', bgcolor: contingencia.inativo ? 'lightgray' : '', padding: '5px' }}>
+                                            <object data={`${process.env.REACT_APP_API_KEY}/media${contingencia.arquivo}`} type='application/pdf' height={250} width='100%'>
                                                 PDF
                                             </object>
                                             <CardContent>
                                                 <Typography variant='h6'>
-                                                    {politica.nome}
+                                                    {contingencia.nome}
                                                 </Typography>
                                                 <Typography variant='body2' color='text.secondary'>
-                                                    Versão: {politica.versao}
+                                                    Versão: {contingencia.versao}
                                                 </Typography>
                                             </CardContent>
+                                            <CardActions>
+                                            <Button variant='contained' target='_blank' color='error' href={`${process.env.REACT_APP_API_KEY}/media${contingencia.arquivo}`} ><FaRegFilePdf /></Button>
+                                            </CardActions>
                                         </Card>
                                     )
                                 })
