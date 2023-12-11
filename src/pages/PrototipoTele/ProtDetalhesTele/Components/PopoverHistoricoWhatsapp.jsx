@@ -1,11 +1,8 @@
 import { Box, Button, List, ListItem, ListItemButton, ListItemText, Popover, Tooltip } from "@mui/material"
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { alterarWhatsapp } from "../../../../_services/teleEntrevista.service";
 import Toast from "../../../../components/Toast/Toast";
-import { io } from "socket.io-client";
-
-const socket = io(`http://18.230.122.26:3001`);
 
 const PopoverHistoricoWhatsapp = ({ data, setFlushHook, setWhatsapp, setSelectedWhatsapp }) => {
 
@@ -22,17 +19,6 @@ const PopoverHistoricoWhatsapp = ({ data, setFlushHook, setWhatsapp, setSelected
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    useEffect(() => {
-        socket.on('receivedMessage', async (message) => {
-            if (message.whatsapp === data.whatsapp) {
-                setFlushHook(true)
-            }
-        });
-        socket.on('statusMessage', async () => {
-            setFlushHook(true)
-        })
-    }, [])
 
     const handleChangeNumero = async (numero) => {
 
