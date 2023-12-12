@@ -4,13 +4,14 @@ import { green, red, yellow } from '@mui/material/colors';
 import { createToDo } from '../../../_services/toDo.service';
 import { createAdmissao, setarStatus, updateData, updateObs } from '../../../_services/admissaoDemissao.service';
 
-const TabelaAdmissional = ({ user, setUser }) => {
+const TabelaAdmissional = ({ user, setUser, setFlushHook }) => {
 
     const handleChangeStatus = async (_id, status, id) => {
         const resultado = await setarStatus({
             _id: _id, status: status, id: id, tipoExame: 'admissao'
         })
         setUser(resultado)
+        setFlushHook(true)
         console.log(resultado)
         console.log(_id, status, id)
     }
@@ -27,6 +28,7 @@ const TabelaAdmissional = ({ user, setUser }) => {
         } catch (error) {
             console.error('Erro ao criar admissional:', error);
         }
+        setFlushHook(true)
     }
 
     const ativarObs = async (_id, obs, id) => {
@@ -41,6 +43,7 @@ const TabelaAdmissional = ({ user, setUser }) => {
         } catch (error) {
             console.error('Erro no Update das Observações:', error);
         }
+        setFlushHook(true)
     }
 
     const ativarData = async (_id, data, id) => {
@@ -55,6 +58,7 @@ const TabelaAdmissional = ({ user, setUser }) => {
         } catch (error) {
             console.error('Erro no update da Data:', error);
         }
+        setFlushHook(true)
     }
 
     return (

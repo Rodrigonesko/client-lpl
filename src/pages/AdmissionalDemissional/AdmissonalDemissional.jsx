@@ -89,15 +89,15 @@ const AdmissionalDemissional = () => {
                                         label="Assinado contrato de prorrogação após 30 dias"
                                         labelPlacement="start"
                                         onChange={async (e) => {
-                                            await updateProrrogacao({name: user.name, prorrogacao: !prorrogacao})
+                                            await updateProrrogacao({ name: user.name, prorrogacao: !prorrogacao })
                                             setProrrogacao(!prorrogacao)
                                             setFlushHook(true)
                                         }}
                                     />
-                                    <TabelaAdmissional user={user} key={user._id} setUser={setUser} />
+                                    <TabelaAdmissional user={user} key={user._id} setUser={setUser} setFlushHook={setFlushHook} />
                                 </>
                             ) : tipoExame === 'demissional' ? (
-                                <TabelaDemissional user={user} key={user._id} setUser={setUser} />
+                                <TabelaDemissional user={user} key={user._id} setUser={setUser} setFlushHook={setFlushHook} />
                             ) : (
                                 <>
                                 </>

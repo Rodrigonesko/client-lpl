@@ -3,13 +3,14 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { green, red, yellow } from '@mui/material/colors';
 import { createDemissao, setarStatus, updateData, updateObs } from '../../../_services/admissaoDemissao.service';
 
-const TabelaDemissional = ({ user, setUser }) => {
+const TabelaDemissional = ({ user, setUser, setFlushHook }) => {
 
     const handleChangeStatus = async (_id, status, id) => {
         const resultado = await setarStatus({
             _id: _id, status: status, id: id, tipoExame: 'demissao'
         })
         setUser(resultado)
+        setFlushHook(true)
         console.log(resultado)
         console.log(_id, status, id)
     }
@@ -26,6 +27,7 @@ const TabelaDemissional = ({ user, setUser }) => {
         } catch (error) {
             console.error('Erro no Update das Observações:', error);
         }
+        setFlushHook(true)
     }
 
     const criarDemissional = async (_id) => {
@@ -37,6 +39,7 @@ const TabelaDemissional = ({ user, setUser }) => {
         } catch (error) {
             console.error('Erro ao criar demissional:', error);
         }
+        setFlushHook(true)
     }
 
     const ativarData = async (_id, data, id) => {
@@ -51,6 +54,7 @@ const TabelaDemissional = ({ user, setUser }) => {
         } catch (error) {
             console.error('Erro no update da Data:', error);
         }
+        setFlushHook(true)
     }
 
     return (
