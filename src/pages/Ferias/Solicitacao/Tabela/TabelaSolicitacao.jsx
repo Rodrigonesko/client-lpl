@@ -14,6 +14,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
     const [colaborador, setColaborador] = useState('')
     const [mes, setMes] = useState('')
     const [vencimento, setVencimento] = useState('')
+    const [setor, setSetor] = useState('')
 
     const handleChangeSelect = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/vacation/status`, {
@@ -42,8 +43,8 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
     const handleFilter = async (event) => {
         event.preventDefault()
 
-        if (colaborador.length > 2 || mes.length > 2 || vencimento.length > 2) {
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/filter?colaborador=${colaborador}&mes=${mes}&vencimento=${vencimento}`, {
+        if (colaborador.length > 2 || mes.length > 2 || vencimento.length > 2 || setor.length > 2) {
+            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/filter?colaborador=${colaborador}&mes=${mes}&vencimento=${vencimento}&setor=${setor}`, {
                 withCredentials: true
             })
             console.log(result)
@@ -71,6 +72,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                 <TextField type='text' onChange={(e) => { setColaborador(e.target.value) }} size='small' label='Colaborador' sx={{ marginRight: '10px', width: '170px' }} />
                 <TextField type='month' onChange={(e) => { setMes(e.target.value) }} size='small' focused label='Mês' sx={{ marginRight: '10px', width: '170px' }} />
                 <TextField type='month' onChange={(e) => { setVencimento(e.target.value) }} size='small' focused label='Vencimento' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setSetor(e.target.value) }} size='small' label='Setor' sx={{ marginRight: '10px', width: '170px' }} />
                 <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                 <Button onClick={() => setFlushHook(true)} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
             </form>

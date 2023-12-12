@@ -9,11 +9,3 @@ export const uploadContingencias = async (formData, contingencia, versao) => {
 export const getContingencias = async () => {
     return await new ApiCall('/contingencias').get()
 }
-
-export const getContingenciasAtivas = async () => {
-    return await new ApiCall('/contingencias/ativos').get()
-}
-
-export const getContingenciasPorId = async (id) => {
-    return await new ApiCall(`/contingencias/contingencia/${id}`).get()
-}

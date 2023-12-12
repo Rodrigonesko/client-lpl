@@ -3,9 +3,10 @@ import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
 import TabelaDemissional from "./Tabela/TabelaDemissional"
-import { getUsers, updateProrrogacao } from "../../_services/user.service"
+import { getUsers } from "../../_services/user.service"
 import { grey } from "@mui/material/colors"
 import moment from "moment"
+import { updateProrrogacao } from "../../_services/admissaoDemissao.service"
 
 const AdmissionalDemissional = () => {
 
@@ -88,15 +89,15 @@ const AdmissionalDemissional = () => {
                                         label="Assinado contrato de prorrogação após 30 dias"
                                         labelPlacement="start"
                                         onChange={async (e) => {
-                                            await updateProrrogacao({name: user.name, prorrogacao: !prorrogacao})
+                                            await updateProrrogacao({ name: user.name, prorrogacao: !prorrogacao })
                                             setProrrogacao(!prorrogacao)
                                             setFlushHook(true)
                                         }}
                                     />
-                                    <TabelaAdmissional user={user} key={user._id} setUser={setUser} />
+                                    <TabelaAdmissional user={user} key={user._id} setUser={setUser} setFlushHook={setFlushHook} />
                                 </>
                             ) : tipoExame === 'demissional' ? (
-                                <TabelaDemissional user={user} key={user._id} setUser={setUser} />
+                                <TabelaDemissional user={user} key={user._id} setUser={setUser} setFlushHook={setFlushHook} />
                             ) : (
                                 <>
                                 </>

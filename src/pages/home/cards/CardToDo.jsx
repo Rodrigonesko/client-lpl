@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography } from "@mui/material";
 import { grey } from '@mui/material/colors';
-import { getAllItens } from '../../../_services/user.service';
+import { getAllItens } from '../../../_services/admissaoDemissao.service';
 
 const CardToDo = ({ data, flushHook }) => {
     const [atividadesFazer, setAtividadesFazer] = useState([]);
