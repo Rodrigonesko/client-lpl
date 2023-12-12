@@ -4,7 +4,8 @@ import { BsGraphUp } from 'react-icons/bs'
 import ProducaoTeleIndividualMensal from "./Tele/ProducaoTeleIndividualMensal"
 import ProduvidadeElegi from "./Elegi/ProdutividadeElegi"
 import ProdutividadeRsd from "./Rsd/ProdutividadeRsd"
-import { buscaAnalistasTele, getAnalistasElegibilidade, getAnalistasRsd } from "../../../_services/user.service"
+import { buscaAnalistasTele, getAnalistasAgendamento, getAnalistasElegibilidade, getAnalistasRsd } from "../../../_services/user.service"
+import ProdutividadeAgendamento from "./Agendamento/ProdutividadeAgendamento"
 
 
 const ProducaoIndividual = ({ celula }) => {
@@ -62,7 +63,11 @@ const ProducaoIndividual = ({ celula }) => {
             result = analistas
         }
 
-        
+        if (celula === 'Agendamento') {
+            const analistas = await getAnalistasAgendamento()
+            result = analistas
+        }
+
 
         setAnalistas(result)
     }
@@ -171,6 +176,36 @@ const ProducaoIndividual = ({ celula }) => {
                         <ProdutividadeRsd
                             analista={analista}
                             mes={month}
+                            hook={flushHook}
+                            flushHook={setFlushHook}
+                        />
+                    ) : null
+                }
+                {
+                    openComponent && option === 'Por mês' && celula === 'Agendamento' ? (
+                        <ProdutividadeAgendamento
+                            analista={analista}
+                            month={month}
+                            hook={flushHook}
+                            flushHook={setFlushHook}
+                        />
+                    ) : null
+                }
+                {
+                    openComponent && option === 'Por dia' && celula === 'Elegibilidade' ? (
+                        <ProduvidadeElegi
+                            analista={analista}
+                            date={date}
+                            hook={flushHook}
+                            flushHook={setFlushHook}
+                        />
+                    ) : null
+                }
+                {
+                    openComponent && option === 'Por dia' && celula === 'RSD' ? (
+                        <ProdutividadeRsd
+                            analista={analista}
+                            date={date}
                             hook={flushHook}
                             flushHook={setFlushHook}
                         />

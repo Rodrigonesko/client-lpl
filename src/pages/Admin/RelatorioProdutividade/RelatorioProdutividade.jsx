@@ -82,6 +82,9 @@ const RelatorioProdutividade = () => {
                             <MenuItem value='Tele Entrevista'>
                                 Tele Entrevista
                             </MenuItem>
+                            <MenuItem value='Agendamento'>
+                                Agendamento
+                            </MenuItem>
                         </Select>
                     </FormControl>
                 </Box>

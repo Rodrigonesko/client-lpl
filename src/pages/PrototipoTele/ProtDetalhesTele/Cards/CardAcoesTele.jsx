@@ -6,6 +6,7 @@ import ModalEnviarHumanizado from "../Modais/ModalEnviarHumanizado";
 import ModalRetroceder from "../Modais/ModalRetroceder";
 import ModalReagendar from "../Modais/ModalReagendar";
 import ModalAgendar from "../Modais/ModalAgendar";
+import ModalEncerrarHumanizado from "../Modais/ModalEncerrarHumanizado";
 
 const CardAcoesTele = ({ objects, setFlushHook }) => {
     return (
@@ -19,7 +20,9 @@ const CardAcoesTele = ({ objects, setFlushHook }) => {
             <ModalRetroceder objects={objects} setFlushHook={setFlushHook} />
             <ModalEnviarHumanizado objects={objects} setFlushHook={setFlushHook} />
             <ModalCancelar objects={objects} setFlushHook={setFlushHook} />
-            <ModalDeletar objects={objects} setFlushHook={setFlushHook} />
+            {/* <ModalDeletar objects={objects} setFlushHook={setFlushHook} /> */}
+            <ModalEncerrarHumanizado objects={objects} setFlushHook={setFlushHook} />
+
         </Box>
     )
 }

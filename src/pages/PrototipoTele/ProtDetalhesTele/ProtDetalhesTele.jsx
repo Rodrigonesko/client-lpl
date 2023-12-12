@@ -1,10 +1,10 @@
 import { Box, LinearProgress } from "@mui/material"
-import Sidebar from "../../../components/Sidebar/Sidebar"
+//import Sidebar from "../../../components/Sidebar/Sidebar"
 import { grey } from "@mui/material/colors"
 import CardInfoTitular from "./Cards/CardInfoTitular";
 import CardComentariosTele from "./Cards/CardComentariosTele";
 import CardInfoTele from "./Cards/CardInfoTele";
-import { useParams } from "react-router-dom";
+//import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDataByCpfTitular, getHorariosDisponiveis } from "../../../_services/teleEntrevista.service";
 import CardAcoesTele from "./Cards/CardAcoesTele";

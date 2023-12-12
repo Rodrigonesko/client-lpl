@@ -22,6 +22,10 @@ export const getAnalistasRsd = async () => {
     return await new ApiCall('/users/rsd').get()
 }
 
+export const getAnalistasAgendamento = async () => {
+    return await new ApiCall('/users/agendamento').get()
+}
+
 export const createUser = async (email, name, accessLevel, atividade) => {
     return await new ApiCall('/users').post(email, name, accessLevel, atividade)
 }

@@ -58,3 +58,7 @@ export const visualizarMensagem = async ({ whatsapp }) => {
 export const changeWhatsappSender = async ({ whatsapp, wppSender }) => {
     return await new ApiCall('/changeWhatsappSender', URL_API).put({ whatsapp, wppSender })
 }
+
+export const encerrarAtendimentoHumanizado = async ({ id }) => {
+    return await new ApiCall('/encerrarHumanizado', URL_API).put({ id })
+}

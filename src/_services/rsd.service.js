@@ -177,3 +177,7 @@ export const adicionarFinalizacao = async (data) => {
 export const deleteFinalizacao = async (id) => {
     return await new ApiCall(`/rsd/finalizacao/${id}`).delete()
 }
+
+export const relatorioProducaoMensal = async (mes) => {
+    return await new ApiCall(`/rsd/relatorioProducaoMensal/${mes}`).get()
+}
