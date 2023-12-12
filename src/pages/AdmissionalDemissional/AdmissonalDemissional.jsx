@@ -3,9 +3,10 @@ import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import TabelaAdmissional from "./Tabela/TabelaAdmissional"
 import TabelaDemissional from "./Tabela/TabelaDemissional"
-import { getUsers, updateProrrogacao } from "../../_services/user.service"
+import { getUsers } from "../../_services/user.service"
 import { grey } from "@mui/material/colors"
 import moment from "moment"
+import { updateProrrogacao } from "../../_services/admissaoDemissao.service"
 
 const AdmissionalDemissional = () => {
 

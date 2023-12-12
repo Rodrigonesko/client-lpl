@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button } from '@mui/material';
 import { green, red, yellow } from '@mui/material/colors';
-import { createDemissao, setarStatus, updateData, updateObs } from '../../../_services/user.service';
+import { createDemissao, setarStatus, updateData, updateObs } from '../../../_services/admissaoDemissao.service';
 
 const TabelaDemissional = ({ user, setUser }) => {
 

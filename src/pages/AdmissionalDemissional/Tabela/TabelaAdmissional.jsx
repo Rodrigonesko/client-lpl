@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, InputLabel, FormControl, MenuItem, Select, Button, Box } from '@mui/material';
-import { blue, green, red, yellow } from '@mui/material/colors';
-import { createAdmissao, setarStatus, updateData, updateObs } from '../../../_services/user.service';
+import { green, red, yellow } from '@mui/material/colors';
 import { createToDo } from '../../../_services/toDo.service';
+import { createAdmissao, setarStatus, updateData, updateObs } from '../../../_services/admissaoDemissao.service';
 
 const TabelaAdmissional = ({ user, setUser }) => {
 
