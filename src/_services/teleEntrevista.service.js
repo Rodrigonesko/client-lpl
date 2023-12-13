@@ -224,3 +224,11 @@ export const retrocederEntrevista = async (id) => {
 export const verificarAgendamento = async (data, horario, enfermeiro) => {
     return await new ApiCall(`/entrevistas/verificarAgendamento/${data}/${horario}/${enfermeiro}`).get()
 }
+
+export const getRelatorioPropostasPorMesTeleEntrevista = async (mes) => {
+    return await new ApiCall(`/entrevistas/relatorioPropostasMes/${mes}`).get()
+}
+
+export const getRelatoiroRnUePorMes = async (mes) => {
+    return await new ApiCall(`/entrevistas/relatorioRnUePorMes/${mes}`).get()
+}

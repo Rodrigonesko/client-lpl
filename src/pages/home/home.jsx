@@ -145,8 +145,10 @@ const Home = () => {
                                         {
                                             treinamento.observacoes && (
                                                 <>
-
-                                                    Observacões: {treinamento.observacoes}
+                                                    Observacões:
+                                                    {treinamento.observacoes.split('\n').map((item, key) => {
+                                                        return <span key={key}>{item}<br /></span>
+                                                    })}
                                                 </>
                                             )
                                         }

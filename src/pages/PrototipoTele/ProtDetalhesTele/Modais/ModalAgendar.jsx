@@ -1,10 +1,11 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, IconButton, Radio, RadioGroup, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, IconButton, Radio, RadioGroup, Tooltip, Typography, CircularProgress } from "@mui/material"
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { useState } from "react";
 import Agendamento from "../Components/Agendamento";
 import { Delete } from "@mui/icons-material";
 import Toast from "../../../../components/Toast/Toast";
 import { agendarEntrevista, verificarAgendamento } from "../../../../_services/teleEntrevista.service";
+import { encerrarAtendimentoJanela } from "../../../../_services/teleEntrevistaExterna.service";
 
 const ModalAgendar = ({ objects, setFlushHook }) => {
 
@@ -14,6 +15,7 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
     const [openToast, setOpenToast] = useState(false)
     const [severity, setSeverity] = useState('success')
     const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const handleAgendar = (analista, data, horario, pessoa, _id) => {
         if (analista === '' || data === '' || horario === '' || pessoa === '' || _id === '') {
@@ -68,6 +70,8 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
         }
         try {
 
+            setLoading(true)
+
             for (const item of agendamentos) {
 
                 const dataAjustada = item.data.split('/').reverse().join('-')
@@ -87,26 +91,31 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
             }
 
             for (const item of agendamentos) {
-                const result = await agendarEntrevista({
+                await agendarEntrevista({
                     id: item._id,
                     responsavel: item.analista,
                     data: item.data,
                     horario: item.horario,
                     canal
                 })
-                console.log(result);
+
+                await encerrarAtendimentoJanela({
+                    id: item._id
+                })
             }
+            setLoading(false)
             setSeverity('success')
             setMessage('Agendamento realizado com sucesso')
             setOpenToast(true)
             setFlushHook(true)
             handleClose()
-            
+
         } catch (error) {
             console.log(error);
             setSeverity('error')
             setMessage('Erro ao realizar agendamento')
             setOpenToast(true)
+            setLoading(false)
         }
     }
 
@@ -170,7 +179,13 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    <Button color="success" variant="contained" onClick={handleRealizarAgendamento}>Agendar</Button>
+                    <Button
+                        disabled={loading}
+                        color="success"
+                        variant="contained"
+                        onClick={handleRealizarAgendamento}
+                        startIcon={loading && <CircularProgress size={10} />}
+                    >Agendar</Button>
                 </DialogActions>
             </Dialog>
             <Toast

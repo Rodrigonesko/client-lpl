@@ -49,3 +49,7 @@ export const getProducaoDiariaPme = async (data) => {
 export const getProducaoMensalPme = async (mes, analista) => {
     return await new ApiCall(`/elegibilidadePme/producaoMensal/${mes}/${analista}`).get()
 }
+
+export const getRelatorioProducaoMensalPme = async (mes) => {
+    return await new ApiCall(`/elegibilidadePme/relatorioProducaoMensal/${mes}`).get()
+}

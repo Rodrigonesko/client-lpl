@@ -22,11 +22,11 @@ const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
     }, [flushHook])
 
     return (
-        <Box component={Paper} width={'100%'}>
+        <Box component={Paper} width={'100%'} display={'flex'} flexDirection={'column'} alignItems={'center'}>
             {
                 recados.map(recado => {
                     return (
-                        <Box key={recado._id} textAlign={"start"} p={2} sx={{ maxWidth: '800px' }} >
+                        <Box key={recado._id} textAlign={"start"} p={2}  >
                             <Typography variant="h5">
                                 {recado.titulo}
                             </Typography>

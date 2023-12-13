@@ -1,9 +1,10 @@
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, Paper, TextField } from "@mui/material"
-import { relatorioProdutividade } from "../../../_services/elegibilidade.service"
+import { getRelatorioProducaoMensal, relatorioProdutividade } from "../../../_services/elegibilidade.service"
 import { relatorioProducaoMensal, relatorioProducaoRsd } from "../../../_services/rsd.service"
-import { relatorioProducaoTele } from "../../../_services/teleEntrevista.service"
+import { getRelatoiroRnUePorMes, getRelatorioPropostasPorMesTeleEntrevista, relatorioProducaoTele } from "../../../_services/teleEntrevista.service"
 import { useState } from "react"
 import Toast from "../../../components/Toast/Toast"
+import { getRelatorioProducaoMensalPme } from "../../../_services/elegibilidadePme.service"
 
 const RelatoriosProdutividade = () => {
 
@@ -18,37 +19,107 @@ const RelatoriosProdutividade = () => {
 
         setLoading(true)
 
-        const data = await relatorioProdutividade()
+        try {
+            const data = await getRelatorioProducaoMensal(mes)
 
-        let xls = '\ufeff'
-        xls += "<table border='1'>"
-        xls += "<thead><tr>"
-        xls += "<th>Analista</th>"
-        xls += "<th>Data</th>"
-        xls += "<th>Qtd analise</th>"
-        xls += "<th>Qtd ligações</th>"
-        xls += "</tr>"
-        xls += "</thead>"
-        xls += "<tbody>"
-
-        for (const item of Object.values(data)) {
-            xls += "<tr>"
-            xls += `<td>${item.analista}</td>`
-            xls += `<td>${item.data}</td>`
-            xls += `<td>${item.quantidade}</td>`
-            xls += `<td>${item.ligacao}</td>`
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Analista</th>"
+            xls += "<th>Data</th>"
+            xls += "<th>Quantidade</th>"
+            xls += "<th>Ligadas</th>"
+            xls += "<th>Não Ligadas</th>"
+            xls += "<th>Canceladas</th>"
+            xls += "<th>Não Canceladas</th>"
             xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+
+            for (const item of Object.values(data)) {
+                xls += "<tr>"
+                xls += `<td>${item.analista}</td>`
+                xls += `<td>${item.data}</td>`
+                xls += `<td>${item.quantidade}</td>`
+                xls += `<td>${item.ligadas}</td>`
+                xls += `<td>${item.naoLigadas}</td>`
+                xls += `<td>${item.canceladas}</td>`
+                xls += `<td>${item.naoCanceladas}</td>`
+                xls += "</tr>"
+            }
+
+
+            xls += "</tbody></table>"
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = `relatorio producao elegi ${mes}.xls`
+            a.click()
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setOpenToast(true)
+            setMessage('Erro ao gerar relatório')
+            setSeverity('error')
+            setLoading(false)
+        }
+    }
+
+    const handlerRelatorioElegiPme = async () => {
+
+        if (!mes) {
+            setOpenToast(true)
+            setMessage('Selecione um mês')
+            setSeverity('error')
+            return
         }
 
+        setLoading(true)
 
-        xls += "</tbody></table>"
-        var a = document.createElement('a');
-        var data_type = 'data:application/vnd.ms-excel';
-        a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-        a.download = 'relatorio producao elegi.xls'
-        a.click()
+        try {
 
-        setLoading(false)
+            const data = await getRelatorioProducaoMensalPme(mes)
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Analista</th>"
+            xls += "<th>Data</th>"
+            xls += "<th>Quantidade</th>"
+            xls += "<th>Devolvidas</th>"
+            xls += "<th>Não Devolvidas</th>"
+            xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+
+            for (const item of Object.values(data)) {
+                xls += "<tr>"
+                xls += `<td>${item.analista}</td>`
+                xls += `<td>${item.data}</td>`
+                xls += `<td>${item.quantidade}</td>`
+                xls += `<td>${item.devolvidas}</td>`
+                xls += `<td>${item.naoDevolvidas}</td>`
+                xls += "</tr>"
+            }
+
+            xls += "</tbody></table>"
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = `relatorio producao elegi pme - ${mes}.xls`
+            a.click()
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setOpenToast(true)
+            setMessage('Erro ao gerar relatório')
+            setSeverity('error')
+            setLoading(false)
+        }
+
     }
 
     const handlerRelatorioRsd = async () => {
@@ -108,50 +179,103 @@ const RelatoriosProdutividade = () => {
             return
         }
 
-        setLoading(true)
+        try {
+            setLoading(true)
 
-        const data = await relatorioProducaoTele()
+            const data = await getRelatorioPropostasPorMesTeleEntrevista(mes)
 
-        let xls = '\ufeff'
-        xls += "<table border='1'>"
-        xls += "<thead><tr>"
-        xls += "<th>Analista</th>"
-        xls += "<th>Data</th>"
-        xls += "<th>Tele</th>"
-        xls += "<th>Agendadas</th>"
-        xls += "<th>Não Agendadas</th>"
-        xls += "<th>1° Tentativa</th>"
-        xls += "<th>2° Tentativa</th>"
-        xls += "<th>3° Tentativa</th>"
-        xls += "<th>Rn</th>"
-        xls += "<th>Urgencia Emergencia</th>"
-        xls += "</tr>"
-        xls += "</thead>"
-        xls += "<tbody>"
-
-        for (const item of Object.values(data)) {
-            xls += "<tr>"
-            xls += `<td>${item.analista}</td>`
-            xls += `<td>${item.data}</td>`
-            xls += `<td>${item.tele}</td>`
-            xls += `<td>${item.agendado}</td>`
-            xls += `<td>${item.naoAgendado}</td>`
-            xls += `<td>${item.tentativa1}</td>`
-            xls += `<td>${item.tentativa2}</td>`
-            xls += `<td>${item.tentativa3}</td>`
-            xls += `<td>${item.rn}</td>`
-            xls += `<td>${item.ue}</td>`
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Analista</th>"
+            xls += "<th>Data</th>"
+            xls += "<th>Quantidade</th>"
+            xls += "<th>Houve Divergencia</th>"
+            xls += "<th>Não Houve Divergnecia</th>"
+            xls += "<th>Agendado</th>"
+            xls += "<th>Não Agendado</th>"
+            xls += "<th>1° Tentativa</th>"
+            xls += "<th>2° Tentativa</th>"
+            xls += "<th>3° Tentativa</th>"
             xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+
+            for (const item of Object.values(data)) {
+                xls += "<tr>"
+                xls += `<td>${item.analista}</td>`
+                xls += `<td>${item.data}</td>`
+                xls += `<td>${item.quantidade}</td>`
+                xls += `<td>${item.houveDivergencia}</td>`
+                xls += `<td>${item.naoHouveDivergencia}</td>`
+                xls += `<td>${item.agendado}</td>`
+                xls += `<td>${item.naoAgendado}</td>`
+                xls += `<td>${item.tentativa1}</td>`
+                xls += `<td>${item.tentativa2}</td>`
+                xls += `<td>${item.tentativa3}</td>`
+                xls += "</tr>"
+            }
+
+            xls += "</tbody></table>"
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = `relatorio producao tele - ${mes}.xls`
+            a.click()
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setOpenToast(true)
+            setMessage('Erro ao gerar relatório')
+            setSeverity('error')
+            setLoading(false)
+        }
+    }
+
+    const handlerRelatorioRnUe = async () => {
+
+        try {
+
+            setLoading(true)
+
+            const result = await getRelatoiroRnUePorMes(mes)
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Analista</th>"
+            xls += "<th>Data</th>"
+            xls += "<th>Quantidade Rn</th>"
+            xls += "<th>Quantidade Ue</th>"
+            xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+            for (const item of Object.values(result)) {
+                xls += "<tr>"
+                xls += `<td>${item.analista}</td>`
+                xls += `<td>${item.data}</td>`
+                xls += `<td>${item.quantidadeRn}</td>`
+                xls += `<td>${item.quantidadeUe}</td>`
+                xls += "</tr>"
+            }
+
+            xls += "</tbody></table>"
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = `relatorio producao tele - ${mes}.xls`
+            a.click()
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setOpenToast(true)
+            setMessage('Erro ao gerar relatório')
+            setSeverity('error')
+            setLoading(false)
         }
 
-        xls += "</tbody></table>"
-        var a = document.createElement('a');
-        var data_type = 'data:application/vnd.ms-excel';
-        a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-        a.download = 'relatorio producao tele.xls'
-        a.click()
-
-        setLoading(false)
     }
 
     const [loading, setLoading] = useState(false)
@@ -168,6 +292,16 @@ const RelatoriosProdutividade = () => {
                 setOpen(true)
                 setCelula('Elegibilidade')
             }} >Elegibilidade</Button>
+            <Button
+                variant="contained"
+                style={{ marginRight: '10px' }}
+                onClick={() => {
+                    setOpen(true)
+                    setCelula('ElegibilidadePme')
+                }}
+            >
+                Elegibilidade Pme
+            </Button>
             <Button variant="contained" style={{ marginRight: '10px' }} onClick={() => {
                 setOpen(true)
                 setCelula('RSD')
@@ -176,6 +310,16 @@ const RelatoriosProdutividade = () => {
                 setOpen(true)
                 setCelula('Teles')
             }} >Teles</Button>
+            <Button
+                variant="contained"
+                style={{ marginRight: '10px' }}
+                onClick={() => {
+                    setOpen(true)
+                    setCelula('Rn e UE')
+                }}
+            >
+                Rn e UE
+            </Button>
             <Dialog
                 open={open}
                 onClose={() => setOpen(false)}
@@ -207,6 +351,8 @@ const RelatoriosProdutividade = () => {
                         if (celula === 'Elegibilidade') handlerRelatorioElegi()
                         if (celula === 'RSD') handlerRelatorioRsd()
                         if (celula === 'Teles') handlerRelatorioTele()
+                        if (celula === 'ElegibilidadePme') handlerRelatorioElegiPme()
+                        if (celula === 'Rn e UE') handlerRelatorioRnUe()
                     }}
                         disabled={loading}
                         endIcon={loading && <CircularProgress size={20} />}

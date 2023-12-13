@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, MenuItem, TextField } from "@mui/material";
+import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, MenuItem, TextField, IconButton, Tooltip } from "@mui/material";
 import Axios from 'axios'
 import { getCookie } from "react-use-cookie";
 import moment from "moment";
@@ -78,6 +78,7 @@ const NaoEnviados = () => {
     const [modeloEscolhido, setModeloEscolhido] = useState('')
     const [data1, setData1] = useState('')
     const [data2, setData2] = useState('')
+    const [quantidade, setQuantidade] = useState(0)
 
     const enviarMensagens = async () => {
         try {
@@ -91,6 +92,9 @@ const NaoEnviados = () => {
             let count = 0
 
             for (const item of propostas) {
+                if (quantidade !== 0 && count === quantidade) {
+                    break
+                }
                 count++
                 const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagem`, {
                     proposta: item,
@@ -149,7 +153,6 @@ const NaoEnviados = () => {
     }
 
     useEffect(() => {
-
         buscarPropostas()
     }, [])
 
@@ -244,6 +247,13 @@ const NaoEnviados = () => {
                                         </Typography>
                                         <TextField label='Data 1' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData1(e.target.value)} />
                                         <TextField label='Data 2' size="small" type='date' focused style={{ marginTop: '10px' }} onChange={e => setData2(e.target.value)} />
+                                    </Box>
+                                    <Box mt={2} display={'flex'} flexDirection={'column'}>
+                                        <Typography>
+                                            Quantidade de propostas:
+                                        </Typography>
+                                        <TextField label='Quantidade' size="small" type='number' focused style={{ marginTop: '10px' }} onChange={e => setQuantidade(e.target.value)} value={quantidade} />
+                                        <Button variant="contained" onClick={() => setQuantidade(propostas.length)}>Todas</Button>
                                     </Box>
                                 </Box>
                                 <Box ml={2}>

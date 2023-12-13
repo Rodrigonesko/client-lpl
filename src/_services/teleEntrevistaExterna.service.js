@@ -1,7 +1,7 @@
-import { getCookie } from "react-use-cookie";
+//import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
 const URL_API = process.env.REACT_APP_API_TELE_KEY //'http://localhost:3002'
-const token = getCookie('token')
+//const token = getCookie('token')
 
 export const getMessagesTele = async (whatsapp) => {
     return await new ApiCall(`/chat/${whatsapp}`, URL_API).get()
@@ -61,4 +61,8 @@ export const changeWhatsappSender = async ({ whatsapp, wppSender }) => {
 
 export const encerrarAtendimentoHumanizado = async ({ id }) => {
     return await new ApiCall('/encerrarHumanizado', URL_API).put({ id })
+}
+
+export const encerrarAtendimentoJanela = async ({ id }) => {
+    return await new ApiCall('/encerrarAtendimento', URL_API).put({ id })
 }

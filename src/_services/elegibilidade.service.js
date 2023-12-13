@@ -185,3 +185,7 @@ export const getProducaoMensalElegi = async (mes, analista) => {
 export const voltarPropostaElegibilidade = async (data) => {
     return await new ApiCall('/elegibilidade/voltarProposta').put(data)
 }
+
+export const getRelatorioProducaoMensal = async (mes) => {
+    return await new ApiCall(`/elegibilidade/relatorioProducaoMensal/${mes}`).get()
+}
