@@ -82,7 +82,6 @@ const ModalAdicionar = ({ setFlushHook, contingencias }) => {
                                 setContingencia(e.target.value)
                             }} value={contingencias} />}
                         />
-                        <TextField label='Contingencia/Incidente' value={contingencias} onChange={e => { setContingencia(e.target.textContent) }} />
                     </Box>
                 </DialogContent>
                 <DialogActions>
