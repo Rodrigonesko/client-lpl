@@ -32,7 +32,12 @@ const CardToDo = ({ data, flushHook }) => {
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     {atividadesFazer.map(data => (
                         <Typography key={data.id}>
-                            {data.nome} - {data.acao}
+                            {data.nome} - {
+                                data.negrito ? (
+                                    <strong>{data.acao}</strong>
+                                ) : (
+                                    data.acao
+                                )}
                         </Typography>
                     ))}
                 </Typography>

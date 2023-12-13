@@ -150,15 +150,15 @@ const Sidebar = ({ children }) => {
                                 <SubMenu icon={<FaArchive />} title='RH'>
                                     <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/rh/contingencias'>Controle de Contingências</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/admissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu title='Infra' icon={<FaTools />}>
+                                    <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/infra/contingencias'>Controle de Contingências</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
                                 </SubMenu>
                             </SubMenu>
                         ) : null

@@ -198,9 +198,6 @@ const AppRoutes = () => {
                 <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/rh/contingencias" element={<ProtectedRoute>
-                    <ControleContigencias />
-                </ProtectedRoute>} />
                 <Route exact path="/admin/rh/treinamentos" element={<ProtectedRoute>
                     <Treinamentos />
                 </ProtectedRoute>} />
@@ -213,14 +210,17 @@ const AppRoutes = () => {
 
                 {/*admin infra*/}
 
+                <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
+                    <AtendimentoChamados />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/infra/contingencias" element={<ProtectedRoute>
+                    <ControleContigencias />
+                </ProtectedRoute>} />
                 <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
                     <ResetPassword />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
-                    <AtendimentoChamados />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/producao/solicitarChamados" element={<ProtectedRoute>
                     <SolicitarChamados />

@@ -9,6 +9,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [solicitacoes, setSolicitacoes] = useState([])
     const [nomeItem, setNomeItem] = useState('')
     const [ondeEsta, setOndeEsta] = useState('')
+    const [etiqueta, setEtiqueta] = useState('')
     const [snackSelect, setSnackSelect] = useState(false)
     const [alerta, setAlerta] = useState(false)
 
@@ -42,8 +43,8 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const handleFilter = async (event) => {
         event.preventDefault()
 
-        if ((nomeItem.length > 2) || (ondeEsta.length > 2)) {
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}`, {
+        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2)) {
+            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}`, {
                 withCredentials: true
             })
             console.log(result)
@@ -65,12 +66,13 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
             <form action="" >
                 <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} />
                 <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} />
                 <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                 <Button onClick={() => setFlushHook(true)} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
             </form>
             <Snackbar open={alerta} autoHideDuration={6000} onClose={handleCloseInput}>
                 <Alert variant="filled" onClose={handleCloseInput} severity="warning" sx={{ width: '100%' }}>
-                    Digite no minimo 3 caracteres!
+                    Digite no minimo 2 caracteres!
                 </Alert>
             </Snackbar>
             <br />
