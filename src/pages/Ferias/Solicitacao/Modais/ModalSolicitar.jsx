@@ -2,6 +2,7 @@ import { Alert, Autocomplete, Button, Dialog, DialogActions, DialogContent, Dial
 import { useState } from "react";
 import axios from "axios";
 import { getUsers } from "../../../../_services/user.service";
+import { getFeriasSetor } from "../../../../_services/ferias";
 
 const ModalSolicitar = ({ setFlushHook }) => {
 
@@ -45,7 +46,7 @@ const ModalSolicitar = ({ setFlushHook }) => {
         setDados(objAux)
     }
 
-    const handleChangeDados = (elemento) => {
+    const handleChangeDados = async (elemento) => {
         const name = elemento.target.name
 
         console.log(name, elemento.target.value);
@@ -57,7 +58,13 @@ const ModalSolicitar = ({ setFlushHook }) => {
         } else {
             objAux.data2 = elemento.target.value
         }
+        const temColegas = await getFeriasSetor(dados.nomeColaborador, elemento.target.value);
 
+        if (temColegas.length > 0) {
+            setOpenSnack(true);
+            setSeveritySnack('warning');
+            setTextoSnack(`Atenção: Outros colegas de trabalho do mesmo setor estão de férias no mesmo período. ${temColegas.map(item => item.colaborador)}. `);
+        }
         setDados(objAux)
     }
 
@@ -70,12 +77,13 @@ const ModalSolicitar = ({ setFlushHook }) => {
                 return
             }
 
-            if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias' && solicitacaoChecked !== '20/10 dias vendidos' )) {
+            if ((dados.data.length <= 0) || ((dados.data2.length <= 0) && solicitacaoChecked !== '30 dias' && solicitacaoChecked !== '20/10 dias vendidos')) {
                 setOpenSnack(true)
                 setSeveritySnack('warning')
                 setTextoSnack('Insira uma data!')
                 return
             }
+
             const resultado = await axios.post(process.env.REACT_APP_API_KEY + '/vacation/request', {
                 colaborador: dados.nomeColaborador,
                 dataInicio: dados.data,
@@ -146,7 +154,7 @@ const ModalSolicitar = ({ setFlushHook }) => {
                                         <TextField type='date' onChange={handleChangeDados} name="data" focused size='small' label='Qual data deseja iniciar suas Férias?' />
                                     ) : (
                                         <>
-                                            <TextField type='date' margin='normal' name="data" onChange={handleChangeDados} focused size='small' label={(solicitacaoChecked === '20/10 dias') ? ('Qual data deseja iniciar suas Férias de 20 dias?') : ('Qual data deseja iniciar suas Férias de 15 dias?')} /> 
+                                            <TextField type='date' margin='normal' name="data" onChange={handleChangeDados} focused size='small' label={(solicitacaoChecked === '20/10 dias') ? ('Qual data deseja iniciar suas Férias de 20 dias?') : ('Qual data deseja iniciar suas Férias de 15 dias?')} />
                                             <br />
                                             <TextField type='date' margin='normal' name="data2" onChange={handleChangeDados} focused size='small' label={(solicitacaoChecked === '20/10 dias') ? ('Qual data deseja iniciar suas Férias de 10 dias?') : ('Qual data deseja iniciar suas Férias de 15 dias?')} />
                                         </>
