@@ -232,3 +232,7 @@ export const getRelatorioPropostasPorMesTeleEntrevista = async (mes) => {
 export const getRelatoiroRnUePorMes = async (mes) => {
     return await new ApiCall(`/entrevistas/relatorioRnUePorMes/${mes}`).get()
 }
+
+export const getAgendasFechadas = async () => {
+    return await new ApiCall('/entrevistas/agendasFechadas').get()
+}

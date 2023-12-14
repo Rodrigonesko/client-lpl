@@ -1,7 +1,9 @@
-import { Button, FormControl, InputLabel, Paper, Select, TextField, Typography, MenuItem } from "@mui/material"
+import { Button, FormControl, InputLabel, Paper, Select, TextField, Typography, MenuItem, Alert } from "@mui/material"
 import Axios from "axios"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Toast from "../../../../components/Toast/Toast"
+import { getAgendasFechadas } from "../../../../_services/teleEntrevista.service"
+import moment from "moment"
 
 const FecharDia = ({ responsaveis }) => {
 
@@ -10,6 +12,8 @@ const FecharDia = ({ responsaveis }) => {
     const [toastOpen, setToastOpen] = useState(false);
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
+    const [agendasFechadas, setAgendasFechadas] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleFecharDia = async () => {
         try {
@@ -21,6 +25,7 @@ const FecharDia = ({ responsaveis }) => {
                 setToastOpen(true)
                 setData('')
                 setResponsavel('')
+                setFlushHook(true)
             }
 
         } catch (error) {
@@ -29,6 +34,16 @@ const FecharDia = ({ responsaveis }) => {
             setToastOpen(true)
         }
     }
+
+    const fetchData = async () => {
+        const result = await getAgendasFechadas()
+        setAgendasFechadas(result)
+    }
+
+    useEffect(() => {
+        setFlushHook(false)
+        fetchData()
+    }, [flushHook])
 
     return (
         <Paper elevation={3} style={{ padding: '20px', margin: '10px' }} >
@@ -60,6 +75,15 @@ const FecharDia = ({ responsaveis }) => {
             </FormControl>
             <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => setData(e.target.value)} value={data} label='Dia' focused />
             <Button variant="contained" onClick={handleFecharDia} >Fechar Dia</Button>
+            {
+                agendasFechadas.map(e => {
+                    return (
+                        <Alert severity="info" style={{ margin: '10px' }}>
+                            {e.analista} - {moment(e.data).format('DD/MM/YYYY')} - Fechado por: {e.fechadoPor}
+                        </Alert>
+                    )
+                })
+            }
             <Toast
                 open={toastOpen}
                 message={message}
