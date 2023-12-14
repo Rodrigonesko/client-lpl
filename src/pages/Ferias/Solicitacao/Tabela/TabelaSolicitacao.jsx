@@ -112,9 +112,17 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                     color = green[300]
                                 }
                                 let gestorAprovou = item.gestorAprovou
+                                let teste = solicitacoes.findIndex(solicitacao => (item.setor === solicitacao.setor) && (moment(item.dataInicio).format('YYYY-MM') === moment(solicitacao.dataInicio).format('YYYY-MM') && (solicitacao.colaborador !== item.colaborador)))
+                                let corSetor
+
+                                if (teste !== -1) {
+                                    corSetor = red[900]
+                                }
+                                console.log(teste);
+
                                 return (
                                     <TableRow key={item._id} style={{ backgroundColor: color }}>
-                                        <TableCell>{moment(item.dataInicio).format('MM/YYYY')}</TableCell>
+                                        <TableCell sx={{ color: corSetor }}>{moment(item.dataInicio).format('MM/YYYY')}</TableCell>
                                         <TableCell>{moment(item.vencimento).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{item.colaborador}</TableCell>
                                         <TableCell>{moment(item.dataInicio).format('DD/MM/YYYY')}</TableCell>
