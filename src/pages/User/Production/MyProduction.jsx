@@ -20,13 +20,11 @@ const MyProduction = () => {
     const [mes, setMes] = useState('')
 
     const fetchData = async () => {
-
         if (context.authToken) {
             if (context.name !== name && context.accessLevel !== 'true') {
                 navigate('/')
             }
         }
-
         const { user } = await getInfoUser()
 
         if (user.atividadePrincipal === 'Tele Entrevista') {

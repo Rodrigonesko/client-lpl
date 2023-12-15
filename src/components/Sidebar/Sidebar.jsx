@@ -52,7 +52,7 @@ const Sidebar = ({ children }) => {
     }
 
     useEffect(() => {
-        fetchData()
+
 
         if (!socket || socket._opts.query !== `name=${name}`) {
             socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
@@ -104,6 +104,7 @@ const Sidebar = ({ children }) => {
                     audio.play();
                 }
             }
+            fetchData()
 
         })
         socket.on('seeMessage', async () => {
