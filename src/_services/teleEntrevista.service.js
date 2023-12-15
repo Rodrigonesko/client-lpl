@@ -236,3 +236,7 @@ export const getRelatoiroRnUePorMes = async (mes) => {
 export const getAgendasFechadas = async () => {
     return await new ApiCall('/entrevistas/agendasFechadas').get()
 }
+
+export const getRelatorioProdutividadeAnexosMensal = async (mes) => {
+    return await new ApiCall(`/entrevistas/relatorioProdutividadeAnexosMensal/${mes}`).get()
+}

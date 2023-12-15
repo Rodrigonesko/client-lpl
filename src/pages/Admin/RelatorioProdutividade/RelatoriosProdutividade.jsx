@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, Paper, TextField } from "@mui/material"
 import { getRelatorioProducaoMensal, relatorioProdutividade } from "../../../_services/elegibilidade.service"
 import { relatorioProducaoMensal, relatorioProducaoRsd } from "../../../_services/rsd.service"
-import { getRelatoiroRnUePorMes, getRelatorioPropostasPorMesTeleEntrevista, relatorioProducaoTele } from "../../../_services/teleEntrevista.service"
+import { getRelatoiroRnUePorMes, getRelatorioProdutividadeAnexosMensal, getRelatorioPropostasPorMesTeleEntrevista, relatorioProducaoTele } from "../../../_services/teleEntrevista.service"
 import { useState } from "react"
 import Toast from "../../../components/Toast/Toast"
 import { getRelatorioProducaoMensalPme } from "../../../_services/elegibilidadePme.service"
@@ -275,7 +275,52 @@ const RelatoriosProdutividade = () => {
             setSeverity('error')
             setLoading(false)
         }
+    }
 
+    const handlerAnexos = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await getRelatorioProdutividadeAnexosMensal(mes)
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Analista</th>"
+            xls += "<th>Data</th>"
+            xls += "<th>Quantidade Anexado</th>"
+            xls += "<th>Quantidade Implantado</th>"
+            xls += "<th>Quantidade Mandou para Implantação</th>"
+            xls += "</tr>"
+            xls += "</thead>"
+            xls += "<tbody>"
+            for (const item of Object.values(result)) {
+                xls += "<tr>"
+                xls += `<td>${item.analista}</td>`
+                xls += `<td>${item.data}</td>`
+                xls += `<td>${item.quantidadeAnexado}</td>`
+                xls += `<td>${item.quantidadeImplantado}</td>`
+                xls += `<td>${item.quantidadeMandouImplantacao}</td>`
+                xls += "</tr>"
+            }
+
+            xls += "</tbody></table>"
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = `relatorio producao anexos - ${mes}.xls`
+            a.click()
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setOpenToast(true)
+            setMessage('Erro ao gerar relatório')
+            setSeverity('error')
+            setLoading(false)
+        }
     }
 
     const [loading, setLoading] = useState(false)
@@ -320,6 +365,16 @@ const RelatoriosProdutividade = () => {
             >
                 Rn e UE
             </Button>
+            <Button
+                variant="contained"
+                style={{ marginRight: '10px' }}
+                onClick={() => {
+                    setOpen(true)
+                    setCelula('Anexos')
+                }}
+            >
+                Anexos
+            </Button>
             <Dialog
                 open={open}
                 onClose={() => setOpen(false)}
@@ -353,6 +408,7 @@ const RelatoriosProdutividade = () => {
                         if (celula === 'Teles') handlerRelatorioTele()
                         if (celula === 'ElegibilidadePme') handlerRelatorioElegiPme()
                         if (celula === 'Rn e UE') handlerRelatorioRnUe()
+                        if (celula === 'Anexos') handlerAnexos()
                     }}
                         disabled={loading}
                         endIcon={loading && <CircularProgress size={20} />}

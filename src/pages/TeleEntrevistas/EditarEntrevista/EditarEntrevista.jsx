@@ -3,48 +3,45 @@ import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
-import Modal from 'react-modal'
 import './EditarEntrevista.css'
-
-Modal.setAppElement('#root')
+import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button } from '@mui/material'
+import Toast from '../../../components/Toast/Toast'
 
 const EditarEntrevista = () => {
 
-    let respostas = {
+    // let respostas = {
 
-    }
+    // }
 
     const { id } = useParams()
-
-    const [modalIsOpen, setModalIsOpen] = useState(false)
     const [perguntas, setPerguntas] = useState([])
     const [dadosEntrevista, setDadosEntrevista] = useState({})
     const [houveDivergencia, setHouveDivergencia] = useState('')
     const [dataNascimento, setDataNascimento] = useState('')
     const [nome, setNome] = useState('')
     const [cpf, setCpf] = useState('')
-
-    const openModal = () => {
-        setModalIsOpen(true)
-    }
-    const closeModal = () => {
-        setModalIsOpen(false)
-    }
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
+    const [flushHook, setFlushHook] = useState(false)
+    const [qualDivergencia, setQualDivergencia] = useState('')
+    const [patologias, setPatologias] = useState('')
+    const [cids, setCids] = useState('')
+    const [respostas, setRespostas] = useState({})
 
     const buscarPerguntas = async () => {
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, { withCredentials: true })
-
             setPerguntas(result.data.perguntas)
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    const handleChange = async (item) => {
+    const handleChange = (item) => {
         try {
-            respostas[`${item.id}`] = item.value
+            // respostas[`${item.id}`] = item.value
+            setRespostas({ ...respostas, [item.id]: item.value })
         } catch (error) {
             console.log(error);
         }
@@ -52,141 +49,173 @@ const EditarEntrevista = () => {
 
     const salvar = async () => {
         try {
-
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, { withCredentials: true })
-
             if (result.status === 200) {
-                openModal()
+                setMessage('Entrevista salva com sucesso!')
+                setSeverity("success")
+                setOpenToast(true)
+                setFlushHook(true)
             }
-
         } catch (error) {
             console.log(error);
+            setMessage('Erro ao salvar entrevista!')
+            setSeverity("error")
+            setOpenToast(true)
         }
     }
 
     useEffect(() => {
-
+        setFlushHook(false)
         const buscarDadosEntrevista = async () => {
             try {
-
                 const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, { withCredentials: true })
-
                 setDadosEntrevista(result.data.proposta)
-
                 setHouveDivergencia(result.data.proposta.houveDivergencia)
-
                 setDataNascimento(result.data.proposta.dataNascimento)
-
                 setNome(result.data.proposta.nome)
-
                 setCpf(result.data.proposta.cpf)
+                setQualDivergencia(result.data.proposta.divergencia)
+                setPatologias(result.data.proposta.patologias)
+                setCids(result.data.proposta.cids)
 
             } catch (error) {
                 console.log(error);
             }
         }
-
         buscarPerguntas()
         buscarDadosEntrevista()
-    }, [id])
+    }, [id, flushHook])
 
     return (
         <>
             <Sidebar>
-                <section className='section-editar-proposta-container'>
-                    <div className='editar-proposta-container' id='proposta-container'>
-                        <div className="title">
-                            <h3>Editar Dados Entrevista</h3>
-                        </div>
-                        <div className="dados-entrevista-editar">
-                            <table border='1'>
-                                <tr>
-                                    <td>Data Entrevista</td>
-                                    <td>{moment(dadosEntrevista.createdAt).format('DD/MM/YYYY')}</td>
-                                </tr>
-                                <tr>
-                                    <td>Nome</td>
-                                    <td><input type="text" defaultValue={dadosEntrevista.nome} onChange={e => setNome(e.target.value)} /></td>
-                                </tr>
-                                <tr>
-                                    <td>CPF</td>
-                                    <td><input type="text" defaultValue={dadosEntrevista.cpf} onChange={e => setCpf(e.target.value)} /></td>
-                                </tr>
-                                <tr>
-                                    <td>Proposta</td>
-                                    <td>{dadosEntrevista.proposta}</td>
-                                </tr>
-                                <tr>
-                                    <td>Data Nascimento</td>
-                                    <td><input type="text" name="" id="" defaultValue={dadosEntrevista.dataNascimento} onChange={e => setDataNascimento(e.target.value)} /></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div className="perguntas-container">
+                <Container sx={{ mb: 2 }}>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            marginBottom: '20px'
+                        }}
+                    >
+                        Editar Entrevista
+                    </Typography>
+                    <Grid container spacing={3} component={Paper} m={1} p={1}>
+                        <Grid item xs={12}>
+                            <Typography>Data Entrevista: {moment(dadosEntrevista.createdAt).format('DD/MM/YYYY')}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField variant='standard' size='small' label="Nome" value={nome} onChange={e => setNome(e.target.value)} fullWidth />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField variant='standard' size='small' label="CPF" value={cpf} onChange={e => setCpf(e.target.value)} fullWidth />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography>Proposta: {dadosEntrevista.proposta}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField variant='standard' size='small' label="Data Nascimento" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} fullWidth />
+                        </Grid>
+                    </Grid>
+                    <Box width={'100%'} m={1} p={1}>
+                        <Box width={'100%'}>
                             {
                                 perguntas.map(e => {
                                     if (e.formulario === dadosEntrevista.tipoFormulario) {
                                         return (
-                                            <div className='title'>
-                                                <label htmlFor={e.name}>{e.pergunta}</label>
-                                                <textarea type="text" name="" id={e.name} defaultValue={dadosEntrevista[e.name]} onKeyUp={(e) => { handleChange(e.target) }} className='input-pergunta' />
-                                            </div>
+                                            <Box m={1}>
+                                                <Typography m={1}>{e.pergunta}</Typography>
+                                                <TextField
+                                                    id={e.name}
+                                                    placeholder={e.pergunta}
+                                                    multiline
+                                                    size='small'
+                                                    defaultValue={dadosEntrevista[e.name]}
+                                                    onChange={(e) => { handleChange(e.target) }}
+                                                    fullWidth
+                                                    sx={{ marginBottom: '10px' }}
+                                                />
+                                                <Divider />
+                                            </Box>
+
                                         )
                                     }
 
                                     return null
                                 })
                             }
-                            <div id="divergencia-container">
-
-                                <div className="perguntas-habitos-container title">
-                                    <h3>Identificação de divergências</h3>
-                                </div>
-                                <div className="divergencias-container">
-                                    <div className="div-pergunta">
-                                        <label htmlFor="pergunta-divergencia" className="label-pergunta">Houve Divergência?</label>
-                                        <select name="" id="" onChange={e => {
-                                            setHouveDivergencia(e.target.value)
-                                        }} >
-                                            <option value="Não" selected={dadosEntrevista.houveDivergencia === 'Não'} >Não</option>
-                                            <option value="Sim" selected={dadosEntrevista.houveDivergencia === 'Sim'} >Sim</option>
-                                        </select>
-                                    </div>
-                                    <div className="div-pergunta">
-                                        <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
-                                        <textarea type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} defaultValue={dadosEntrevista.divergencia} />
-                                    </div>
-                                    <div className="div-pergunta">
-                                        <label htmlFor="pergunta-patologias" className="label-pergunta">Por que o beneficiario não informou na ds essas patologias?</label>
-                                        <textarea type="text" name="pergunta-patologias" id="patologias" className="input-pergunta" onKeyUp={e => handleChange(e.target)} defaultValue={dadosEntrevista.patologias} />
-                                    </div>
-                                    <div className="div-pergunta">
-                                        <label htmlFor="cids">CID:</label>
-                                        <textarea type="text" name="cids" id="cids" className="input-pergunta" defaultValue={dadosEntrevista.cids} onChange={e => {
-                                            handleChange(e.target)
-                                        }} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <button onClick={salvar}>Salvar</button>
-                        </div>
-                    </div>
-                    <Modal
-                        isOpen={modalIsOpen}
-                        onRequestClose={closeModal}
-                        contentLabel="Exemplo"
-                        overlayClassName='modal-overlay'
-                        className='modal-content'>
-                        <div className="title">
-                            <h2>Dados atualizados com sucesso!</h2>
-                        </div>
-                        <button onClick={() => {
-                            closeModal()
-                        }}>Ok</button>
-                    </Modal>
-                </section>
+                        </Box>
+                        <Box width={'100%'}>
+                            <Box m={1}>
+                                <Typography variant="h6">Identificação de divergências</Typography>
+                            </Box>
+                            <Box m={1}>
+                                <Typography>Houve Divergência?</Typography>
+                                <Select
+                                    onChange={e => setHouveDivergencia(e.target.value)}
+                                    value={houveDivergencia}
+                                >
+                                    <MenuItem value="Não">Não</MenuItem>
+                                    <MenuItem value="Sim">Sim</MenuItem>
+                                </Select>
+                            </Box>
+                            <Box m={1}>
+                                <Typography>Qual divergência?</Typography>
+                                <TextField
+                                    id="divergencia"
+                                    multiline
+                                    size='small'
+                                    value={qualDivergencia}
+                                    onChange={e => {
+                                        setQualDivergencia(e.target.value)
+                                        handleChange(e.target)
+                                    }}
+                                    fullWidth
+                                    sx={{ marginBottom: '10px' }}
+                                />
+                            </Box>
+                            <Box m={1}>
+                                <Typography>Por que o beneficiario não informou na ds essas patologias?</Typography>
+                                <TextField
+                                    id="patologias"
+                                    multiline
+                                    size='small'
+                                    value={patologias}
+                                    onChange={e => {
+                                        setPatologias(e.target.value)
+                                        handleChange(e.target)
+                                    }}
+                                    fullWidth
+                                    sx={{ marginBottom: '10px' }}
+                                />
+                            </Box>
+                            <Box m={1}>
+                                <Typography>CID:</Typography>
+                                <TextField
+                                    id="cids"
+                                    multiline
+                                    size='small'
+                                    value={cids}
+                                    onChange={e => {
+                                        setCids(e.target.value)
+                                        handleChange(e.target)
+                                    }}
+                                    fullWidth
+                                    sx={{ marginBottom: '10px' }}
+                                />
+                            </Box>
+                        </Box>
+                    </Box>
+                    <Box>
+                        <Button variant='contained' fullWidth onClick={salvar}>Salvar</Button>
+                    </Box>
+                    <Toast
+                        open={openToast}
+                        onClose={() => setOpenToast(false)}
+                        severity={severity}
+                        message={message}
+                    />
+                </Container>
             </Sidebar>
         </>
     )

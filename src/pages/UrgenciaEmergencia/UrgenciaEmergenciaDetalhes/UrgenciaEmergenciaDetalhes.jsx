@@ -4,24 +4,22 @@ import Axios from 'axios'
 import { useParams } from "react-router-dom";
 import moment from "moment/moment";
 import './UrgenciaEmergenciaDetalhes.css'
-import Modal from 'react-modal'
 import { Button, Box, Container, TextField, Paper } from "@mui/material";
-
-
-Modal.setAppElement('#root')
-
+import Toast from "../../../components/Toast/Toast";
 
 const UrgenciaEmergenciaDetalhes = () => {
 
     const { id } = useParams()
-
-    const [modalSalvar, setModalSalvar] = useState(false)
 
     const [proposta, setProposta] = useState({})
     const [telefone, setTelefone] = useState('')
     const [email, setEmail] = useState('')
     const [retorno, setRetorno] = useState('')
     const [observacoes, setObservacoes] = useState('')
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('success')
+    const [flushHook, setFlushHook] = useState(false)
 
     const salvarInfo = async () => {
         try {
@@ -32,8 +30,6 @@ const UrgenciaEmergenciaDetalhes = () => {
                 observacoes
             }
 
-            console.log(obj);
-
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/salvarInfo`, {
                 obj,
                 id
@@ -42,11 +38,17 @@ const UrgenciaEmergenciaDetalhes = () => {
             })
 
             if (result.status === 200) {
-                setModalSalvar(true)
+                setSeverity('success')
+                setMessage('Informações salvas com sucesso!')
+                setOpen(true)
+                setFlushHook(true)
             }
 
         } catch (error) {
             console.log(error);
+            setSeverity('error')
+            setMessage('Erro ao salvar informações!')
+            setOpen(true)
         }
     }
 
@@ -69,7 +71,10 @@ const UrgenciaEmergenciaDetalhes = () => {
             })
 
             if (result.status === 200) {
-                setModalSalvar(true)
+                setSeverity('success')
+                setMessage('Concluído com sucesso!')
+                setOpen(true)
+                setFlushHook(true)
             }
 
         } catch (error) {
@@ -95,7 +100,10 @@ const UrgenciaEmergenciaDetalhes = () => {
             })
 
             if (result.status === 200) {
-                window.location.reload()
+                setSeverity('success')
+                setMessage('Informações salvas com sucesso!')
+                setOpen(true)
+                setFlushHook(true)
             }
 
         } catch (error) {
@@ -122,9 +130,10 @@ const UrgenciaEmergenciaDetalhes = () => {
                 console.log(error);
             }
         }
+        setFlushHook(false)
 
         buscarInfoProposta()
-    }, [id])
+    }, [id, flushHook])
 
     return (
         <>
@@ -261,19 +270,12 @@ const UrgenciaEmergenciaDetalhes = () => {
 
                     </div>
                 </Container>
-                <Modal
-                    isOpen={modalSalvar}
-                    onRequestClose={() => setModalSalvar(false)}
-                    contentLabel="Exemplo"
-                    overlayClassName='modal-overlay'
-                    className='modal-content'
-                >
-                    <h2>Dados Salvos com sucesso!</h2>
-                    <Button variant="contained" size='small' onClick={() => {
-                        setModalSalvar(false)
-                        window.location.reload()
-                    }}>Ok</Button>
-                </Modal>
+                <Toast
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    severity={severity}
+                    message={message}
+                />
             </Sidebar>
         </>
     )
