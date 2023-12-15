@@ -139,7 +139,6 @@ const Sidebar = ({ children }) => {
                 </Box>
                 <Menu iconShape="round">
                     <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
-                    <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
                     <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
                         <ChatIcon />
                     </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
