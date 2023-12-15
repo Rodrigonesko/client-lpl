@@ -3,10 +3,7 @@ import Axios from 'axios'
 import moment from "moment/moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './FaturamentoEntrevistas.css'
-import Modal from 'react-modal'
-import { CircularProgress, Button, TextField, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
-
-Modal.setAppElement('#root')
+import { CircularProgress, Button, TextField, InputLabel, MenuItem, FormControl, Select, Dialog, DialogContent, DialogTitle, DialogActions } from "@mui/material";
 
 const FaturamentoEntrevistas = () => {
 
@@ -297,7 +294,7 @@ const FaturamentoEntrevistas = () => {
                             <button onClick={realizarFaturamento}>Faturar</button>
                         </div>
                     </div>
-                    <Modal
+                    {/* <Modal
                         isOpen={modalIsOpen}
                         onRequestClose={closeModal}
                         contentLabel="Exemplo"
@@ -310,7 +307,28 @@ const FaturamentoEntrevistas = () => {
                             closeModal()
                             window.location.reload()
                         }}>Fechar</button>
-                    </Modal>
+                    </Modal> */}
+                    <Dialog
+                        open={modalIsOpen}
+                        onClose={closeModal}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Faturamento feito com sucesso!"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContent id="alert-dialog-description">
+                                <p>Recarregue a página para atualizar os dados</p>
+                            </DialogContent>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => {
+                                closeModal()
+                                window.location.reload()
+                            }} autoFocus>
+                                Atualizar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </section>
             </Sidebar>
         </>
