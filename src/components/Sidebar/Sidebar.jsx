@@ -71,6 +71,11 @@ const Sidebar = ({ children }) => {
             if (location.pathname === `/entrevistas/chat/${data.whatsapp}`) {
                 return
             }
+
+            if (!data.responsavel || data.enfermeiro === '') {
+                return
+            }
+
             if (data.responsavel === name || data.enfermeiro === name) {
                 console.log(data.responsavel, data.enfermeiro);
                 console.log(name);
