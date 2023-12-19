@@ -59,11 +59,8 @@ const TableEnhanced = () => {
                 </TableHead>
                 <TableBody sx={{ display: 'flex', flexDirection: 'column' }} >
                     {nomes.map((item) => {
-
                         return (
-
                             <TableBodyAdmDem setUser={setUser} user={item} />
-
                         )
                     })}
                 </TableBody>
