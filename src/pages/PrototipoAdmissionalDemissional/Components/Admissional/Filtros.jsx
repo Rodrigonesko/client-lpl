@@ -1,5 +1,6 @@
 import { Box, Button, Checkbox, Divider, FormControlLabel, FormGroup, Typography } from '@mui/material'
 import { useState } from 'react'
+import { filterTable } from '../../../../_services/admissaoDemissao.service'
 
 const Filtros = () => {
 
@@ -33,6 +34,26 @@ const Filtros = () => {
         setStatus({ ...status, [event.target.name]: event.target.checked });
     }
 
+    const handleClickFilter = () => {
+        const filter = filterTable()
+        console.log(filter)
+    }
+
+    const handleClear = () => {
+        setResponsaveis({
+            samanthaMacielGiazzon: false,
+            administrador: false,
+            rodrigoDias: false,
+            gersonDouglas: false,
+        })
+        
+        setStatus({
+            pendente: false,
+            naoSeAplica: false,
+            emAndamento: false,
+            concluido: false,
+        })
+    }
 
     return (
         <>
@@ -40,8 +61,8 @@ const Filtros = () => {
                 <h3>Filtros</h3>
                 <br />
                 <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <Button variant='contained'>Filtrar</Button>
-                    <Button variant='contained'>Limpar</Button>
+                    <Button variant='contained' onClick={handleClickFilter}>Filtrar</Button>
+                    <Button variant='contained' onClick={handleClear}>Limpar</Button>
                 </Box>
                 <br />
                 <Divider />

@@ -59,7 +59,7 @@ const TableEnhanced = () => {
                 <TableBody >
                     {nomes.map((item) => {
                         return (
-                            <TableBodyAdmDem setUser={setUser} user={item} />
+                            <TableBodyAdmDem setUser={setUser} user={item} setFlushHook={setFlushHook} />
                         )
                     })}
                 </TableBody>
@@ -68,14 +68,13 @@ const TableEnhanced = () => {
     )
 }
 
-const TableBodyAdmDem = ({ setUser, user }) => {
+const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
 
-    const [flushHook, setFlushHook] = useState(false)
     const [openRow, setOpenRow] = useState(false)
 
     const handleChangeStatus = async (_id, status, id) => {
         const resultado = await setarStatus({
-            _id: _id, status: status, id: id, tipoExame: 'admissao'
+            _id: _id, status: status, id: id, tipoExame: 'demissao'
         })
         setUser(resultado)
         setFlushHook(true)
@@ -86,7 +85,7 @@ const TableBodyAdmDem = ({ setUser, user }) => {
     const ativarObs = async (_id, obs, id) => {
         try {
             const result = await updateObs({
-                _id: user._id, obs: obs, id: id, tipoExame: 'admissao'
+                _id: user._id, obs: obs, id: id, tipoExame: 'demissao'
             });
             setUser(result)
             console.log(_id, obs, id);
@@ -99,7 +98,7 @@ const TableBodyAdmDem = ({ setUser, user }) => {
     const ativarData = async (_id, data, id) => {
         try {
             const result = await updateData({
-                _id: user._id, data: data, id: id, tipoExame: 'admissao'
+                _id: user._id, data: data, id: id, tipoExame: 'demissao'
             });
             setUser(result)
             console.log(_id, data, id);
@@ -108,11 +107,6 @@ const TableBodyAdmDem = ({ setUser, user }) => {
         }
         setFlushHook(true)
     }
-
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook])
-
 
     return (
         <>

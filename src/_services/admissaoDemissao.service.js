@@ -27,3 +27,7 @@ export const getAllItens = async () => {
 export const updateProrrogacao = async (name, prorrogacao) => {
     return await new ApiCall('/admissaoDemissao/prorrogacao').put(name, prorrogacao)
 }
+
+export const filterTable = async (_id, status, id, tipoExame) => {
+    return await new ApiCall('/admissaoDemissao/status').put(_id, status, id, tipoExame)
+}

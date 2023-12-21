@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../../_services/user.service"
-import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem } from "@mui/material"
+import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox } from "@mui/material"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, red, yellow } from "@mui/material/colors";
-import { setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
+import { setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
 const TableEnhanced = () => {
@@ -57,7 +57,7 @@ const TableEnhanced = () => {
                 <TableBody >
                     {nomes.map((item) => {
                         return (
-                            <TableBodyAdmDem setUser={setUser} user={item} />
+                            <TableBodyAdmDem setUser={setUser} user={item} setFlushHook={setFlushHook} />
                         )
                     })}
                 </TableBody>
@@ -66,10 +66,10 @@ const TableEnhanced = () => {
     )
 }
 
-const TableBodyAdmDem = ({ setUser, user }) => {
+const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
 
-    const [flushHook, setFlushHook] = useState(false)
     const [openRow, setOpenRow] = useState(false)
+    const [prorrogacao, setProrrogacao] = useState(user.prorrogacao)
 
     const handleChangeStatus = async (_id, status, id) => {
         const resultado = await setarStatus({
@@ -107,11 +107,6 @@ const TableBodyAdmDem = ({ setUser, user }) => {
         setFlushHook(true)
     }
 
-    useEffect(() => {
-        setFlushHook(false)
-    }, [flushHook])
-
-
     return (
         <>
             <TableRow key={user._id}>
@@ -134,6 +129,17 @@ const TableBodyAdmDem = ({ setUser, user }) => {
             <TableRow >
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={15}>
                     <Collapse in={openRow} timeout="auto" unmountOnExit>
+                        <FormControlLabel
+                            value={prorrogacao}
+                            control={<Checkbox value={prorrogacao} checked={prorrogacao} />}
+                            label="Assinado contrato de prorrogação após 30 dias"
+                            labelPlacement="start"
+                            onChange={async (e) => {
+                                await updateProrrogacao({ name: user.name, prorrogacao: !prorrogacao })
+                                setProrrogacao(!prorrogacao)
+                                setFlushHook(true)
+                            }}
+                        />
                         <TableContainer>
                             <Table size="small">
                                 <TableHead>

@@ -36,14 +36,14 @@ const ProtAdmissionalDemissional = () => {
                         <Box display={'flex'} mt={2}>
                             <CardFiltrosAdmissional flushHook={flushHook} setFlushHook={setFlushHook} />
                             <Box width={'100%'} ml={2} >
-                                <CardColaboradoresAdmissional flushHook={flushHook} setFlushHook={setFlushHook} />
+                                <CardColaboradoresAdmissional />
                             </Box>
                         </Box>
                     ) : tipoExame === 'demissional' ? (
                         <Box display={'flex'} mt={2}>
                             <CardFiltrosDemissional flushHook={flushHook} setFlushHook={setFlushHook} />
                             <Box width={'100%'} ml={2} >
-                                <CardColaboradoresDemissional flushHook={flushHook} setFlushHook={setFlushHook} />
+                                <CardColaboradoresDemissional />
                             </Box>
                         </Box>
                     ) : (
