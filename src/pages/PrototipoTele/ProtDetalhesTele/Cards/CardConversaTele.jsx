@@ -131,7 +131,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                                     <Typography variant='body2' color='GrayText'>
                                         {
                                             message.status === 'failed' || message.status === 'undelivered' ? (
-                                                <Chip label={'ERRO AO ENVIAR'} color="error" />
+                                                <Chip label={`Erro ao enviar - ${message.errorCode || ''}`} color="error" />
                                             ) : (
                                                 <>
                                                     {message.status === 'read' ? (
