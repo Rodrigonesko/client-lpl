@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Button, TextField, Container, Box, FormGroup, FormControlLabel, Checkbox, Select, FormControl, MenuItem, InputLabel, Snackbar, Alert, Typography } from "@mui/material";
 import { createUser } from "../../../_services/user.service";
+import { createAdmissao } from "../../../_services/admissaoDemissao.service";
 
 const atividades = [
     'Gerência',
@@ -43,7 +44,8 @@ const Create = () => {
                 setMessage('É necessario que você insira o Nome / Atividade e Nome Completo do Colaborador!')
                 setSeverity('warning')
             } else {
-                await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto, dataAdmissao, matricula })
+                const newUser = await createUser({ email, name, accessLevel: admin, atividade, nomeCompleto, dataAdmissao, matricula })
+                await createAdmissao({ _id: newUser._id })
                 setSnack(true)
                 setMessage('Usuário criado com sucesso!')
                 setSeverity('success')
