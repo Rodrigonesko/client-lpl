@@ -21,6 +21,7 @@ import ControleContigencias from "./pages/ControleContigencias/ControleContigenc
 /* Modulo de Admissional e Demissional*/
 
 import AdmissionalDemissional from "./pages/AdmissionalDemissional/AdmissonalDemissional";
+import ProtAdmissionalDemissional from "./pages/PrototipoAdmissionalDemissional/ProtAdmissionalDemissional";
 
 /* Modulo de Chamados*/
 
@@ -146,6 +147,9 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                <Route exact path="/protAdmiDemi" element={<ProtectedRoute>
+                    <ProtAdmissionalDemissional />
+                </ProtectedRoute>} />
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />

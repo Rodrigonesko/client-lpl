@@ -12,37 +12,42 @@ const InputSendMessage = ({ message, setMessage, whatsapp, setFlushHook }) => {
     const [loading, setLoading] = useState(false)
 
     const handleSendMessage = async () => {
-
         setLoading(true)
-
         try {
-
             const result = await sendMessageTele({
                 whatsapp,
                 mensagem: message
             })
-
             if (result.msg !== 'ok') {
+                if(result.msg === 63024){
+                    setToastMessage('Esse número não tem whatsapp')
+                    setSeverity('error')
+                    setToastOpen(true)
+                    setLoading(false)
+                    return
+                }
+                if(result.msg === 63016){
+                    setToastMessage('Não foi possível enviar a mensagem pois, está fora da janela de 24 horas, por favor utilize um template pronto.')
+                    setSeverity('error')
+                    setToastOpen(true)
+                    setLoading(false)
+                    return
+                }
                 setToastMessage('Não foi possivel enviar a mensagem')
                 setSeverity('error')
+                setLoading(false)
                 setToastOpen(true)
                 return
             }
-
             setMessage('')
             setFlushHook(true)
-
-
         } catch (error) {
             console.log(error);
             setToastMessage('Não foi possivel enviar a mensagem')
             setSeverity('error')
             setToastOpen(true)
         }
-
         setLoading(false)
-
-
     }
 
     return (
