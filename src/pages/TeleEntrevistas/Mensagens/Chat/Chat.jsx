@@ -23,6 +23,7 @@ const Chat = () => {
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
     const [aux, setAux] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const isSmallScreen = useMediaQuery('(max-width:800px)');
 
@@ -55,6 +56,13 @@ const Chat = () => {
             inputRef.current.value = '';
         } catch (error) {
             console.log(error);
+            if (error.response.data.msg === 63024) {
+                setErrorMessage('Esse número não tem whatsapp')
+            } else if (error.response.data.msg === 63016) {
+                setErrorMessage('Não foi possível enviar a mensagem pois, está fora da janela de 24 horas, por favor utilize um template pronto.')
+            } else {
+                setErrorMessage('Erro ao enviar mensagem')
+            }
             setError(true)
             setLoading(false)
         }
@@ -151,7 +159,7 @@ const Chat = () => {
                                                 <Typography variant='body2' color='GrayText'>
                                                     {
                                                         e.status === 'failed' || e.status === 'undelivered' ? (
-                                                            <Chip label={'ERRO AO ENVIAR'} color="error" />
+                                                            <Chip label={`Erro ao enviar - ${e.errorCode || ''}`} color="error" />
                                                         ) : (
                                                             <>
                                                                 {e.status === 'read' ? (
@@ -183,7 +191,7 @@ const Chat = () => {
                             </Box>
                             {
                                 error ? (
-                                    <Alert severity='error' >Erro ao enviar mensagem</Alert>
+                                    <Alert severity='error' >{errorMessage}</Alert>
                                 ) : null
                             }
                         </Box>
