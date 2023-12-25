@@ -1,49 +1,72 @@
-import { Container, Select, Tab, Tabs, Typography, MenuItem, TextField, Grid, InputAdornment, FormControl, InputLabel, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Avatar, Chip, Box, Button, Divider, Icon, IconButton, Tooltip } from "@mui/material"
+import { Container, Select, Tab, Tabs, Typography, MenuItem, TextField, Grid, InputAdornment, FormControl, InputLabel, Box, FormControlLabel, Switch } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import { getUsers } from "../../../_services/user.service";
 import { green, red } from "@mui/material/colors";
-import EditIcon from '@mui/icons-material/Edit';
+import ModalAdicionarUsuario from "./components/ModalAdicionarUsuario";
+import { getAllCelulas } from "../../../_services/celula.service";
+import TableUsers from "./components/TableUsers";
+
+const tabStyle = {
+    '&:hover': {
+        color: 'gray',
+        opacity: 1,
+        backgroundColor: '#fff',
+    },
+    '&.Mui-selected': {
+        color: 'black',
+        backgroundColor: '#fff',
+        fontWeight: 'bold',
+    },
+    Indicator: {
+        backgroundColor: 'black',
+    },
+    color: 'gray',
+    mr: 2,
+}
 
 const Users = () => {
 
     const [value, setValue] = useState('Todos');
+    const [flushHook, setFlushHook] = useState(false)
     const [users, setUsers] = useState([])
     const [quantidadeAtivos, setQuantidadeAtivos] = useState(0)
     const [quantidadeInativos, setQuantidadeInativos] = useState(0)
+    const [celulas, setCelulas] = useState([])
+    const [dense, setDense] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [filteredName, setFilteredName] = useState('')
+    const [selectedCelula, setSelectedCelula] = useState('')
+    const [filteredUsers, setFilteredUsers] = useState([])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
 
-    const tabStyle = {
-        '&:hover': {
-            color: 'gray',
-            opacity: 1,
-            backgroundColor: '#fff',
-        },
-        '&.Mui-selected': {
-            color: 'black',
-            backgroundColor: '#fff',
-            fontWeight: 'bold',
-        },
-        Indicator: {
-            backgroundColor: 'black',
-        },
-        color: 'gray',
-        mr: 2,
+    const handleFilter = () => {
+        if (selectedCelula === '') {
+            setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase())))
+        } else {
+            setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase()) && user.atividadePrincipal === selectedCelula))
+        }
     }
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true)
             const usersFromServer = await getUsers()
+            const celulasFromServer = await getAllCelulas()
             setUsers(usersFromServer)
+            setCelulas(celulasFromServer)
             setQuantidadeAtivos(usersFromServer.filter(user => user.inativo !== true).length)
             setQuantidadeInativos(usersFromServer.filter(user => user.inativo === true).length)
+            setFilteredUsers(usersFromServer)
+            setLoading(false)
         }
         fetchData()
-    }, [])
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <Sidebar>
@@ -79,19 +102,7 @@ const Users = () => {
                     >
                         Usuarios
                     </Typography>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: 'black',
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: '#000',
-                                color: 'white',
-                            },
-                        }}
-                    >
-                        Adicionar
-                    </Button>
+                    <ModalAdicionarUsuario setFlushHook={setFlushHook} />
                 </Box>
                 <Tabs
                     value={value}
@@ -172,10 +183,15 @@ const Users = () => {
                             <InputLabel id="demo-simple-select-label">Célula</InputLabel>
                             <Select
                                 label="Célula"
+                                value={selectedCelula}
+                                onChange={(e) => {
+                                    setSelectedCelula(e.target.value)
+                                    handleFilter()
+                                }}
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {celulas.map((celula) => (
+                                    <MenuItem key={celula._id} value={celula.celula}>{celula.celula}</MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
 
@@ -187,6 +203,11 @@ const Users = () => {
                                 width: '100%',
                                 mt: 2,
                             }}
+                            value={filteredName}
+                            onChange={(e) => {
+                                setFilteredName(e.target.value)
+                                handleFilter()
+                            }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -197,70 +218,25 @@ const Users = () => {
                         />
                     </Grid>
                 </Grid>
-                <TableContainer
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={dense}
+                            onChange={(e) => setDense(e.target.checked)}
+                            color="success"
+                        />
+                    }
+                    label="Dense"
                     sx={{
                         mt: 2,
                     }}
-                >
-                    <Table>
-                        <TableHead>
-                            <TableRow
-                                sx={{
-                                    backgroundColor: '#F5F5F5',
-                                }}
-                            >
-                                <TableCell
-                                    sx={{
-                                        width: 50,
-                                    }}
-                                ></TableCell>
-                                <TableCell>Nome</TableCell>
-                                <TableCell>Célula</TableCell>
-                                <TableCell>Ativo</TableCell>
-                                <TableCell>Editar</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users.map((user) => (
-                                <TableRow
-                                    key={user.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell
-                                        sx={{
-                                            width: 50,
-                                        }}
-                                    >
-                                        <Avatar
-                                            alt={user.name}
-                                            src={user.avatar}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography>
-                                            {user.name}
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            color="textSecondary"
-                                        >
-                                            {user.email}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>{user.atividadePrincipal}</TableCell>
-                                    <TableCell>{user.inativo ? <Chip label='Inativo' sx={{ color: red[800], backgroundColor: red[100] }} /> : <Chip label='Ativo' sx={{ color: green[800], backgroundColor: green[100] }} />}</TableCell>
-                                    <TableCell>
-                                        <Tooltip title="Editar">
-                                            <IconButton>
-                                                <EditIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+
+                />
+                <TableUsers
+                    users={filteredUsers}
+                    dense={dense}
+                    loading={loading}
+                />
             </Container>
         </Sidebar>
     )
