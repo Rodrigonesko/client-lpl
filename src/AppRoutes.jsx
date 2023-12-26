@@ -146,9 +146,6 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/protAdmiDemi" element={<ProtectedRoute>
-                    <ProtAdmissionalDemissional />
-                </ProtectedRoute>} />
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
@@ -198,6 +195,9 @@ const AppRoutes = () => {
 
                 <Route exact path="/admin/rh/admissionalDemissional" element={<ProtectedRoute>
                     <AdmissionalDemissional />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/rh/prototipoAdmissionalDemissional" element={<ProtectedRoute>
+                    <ProtAdmissionalDemissional />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />

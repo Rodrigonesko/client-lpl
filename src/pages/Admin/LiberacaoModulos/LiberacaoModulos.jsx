@@ -3,6 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup } from "@mui/material";
 import { getInfoEmail, getUsers, liberarModulos } from "../../../_services/user.service";
 import Toast from "../../../components/Toast/Toast";
+import { createDemissao } from "../../../_services/admissaoDemissao.service";
 
 const LiberacaoModulos = () => {
 
@@ -94,6 +95,12 @@ const LiberacaoModulos = () => {
 
             await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario, matricula, administrador, agendamento, contaInativada })
 
+            const result = await getInfoEmail(email)
+
+            if (contaInativada) {
+                console.log(buscarEmail);
+                createDemissao({ _id: result.user._id })
+            }
             setOpen(true)
         } catch (error) {
             console.log(error);
@@ -273,7 +280,7 @@ const LiberacaoModulos = () => {
                                             control={<Checkbox value={inativarEmail} checked={inativarEmail} />}
                                             label="Inativar conta de E-mail"
                                             labelPlacement="start"
-                                            onChange={() => {
+                                            onChange={async () => {
                                                 setInativarEmail(!inativarEmail)
                                             }}
                                         />

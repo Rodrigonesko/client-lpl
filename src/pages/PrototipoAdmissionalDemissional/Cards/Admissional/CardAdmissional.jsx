@@ -4,7 +4,7 @@ import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableCo
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
-import { filterTable, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
+import { filterTableAdmi, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
@@ -172,7 +172,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     )
 }
 
-const Filter = ({ setNomes, nomes }) => {
+const Filter = ({ setNomes }) => {
 
     const [responsaveis, setResponsaveis] = useState({
         samanthaMacielGiazzon: true,
@@ -205,7 +205,7 @@ const Filter = ({ setNomes, nomes }) => {
     }
 
     const handleClickFilter = async () => {
-        const filter = await filterTable({ status, responsavel: responsaveis })
+        const filter = await filterTableAdmi({ status, responsavel: responsaveis })
         setNomes(filter.result)
         console.log(filter)
     }

@@ -1,9 +1,8 @@
 import { Box, Container, Tab, Tabs } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import CardFiltrosDemissional from "./Cards/Demissional/CardFiltrosDemissional"
-import CardColaboradoresDemissional from "./Cards/Demissional/CardColaboradoresDemissional"
 import CardAdmissional from "./Cards/Admissional/CardAdmissional"
+import CardDemissional from "./Cards/Demissional/CardDemissional"
 
 const ProtAdmissionalDemissional = () => {
 
@@ -36,11 +35,8 @@ const ProtAdmissionalDemissional = () => {
                             <CardAdmissional />
                         </Box>
                     ) : tipoExame === 'demissional' ? (
-                        <Box display={'flex'} mt={2}>
-                            <CardFiltrosDemissional flushHook={flushHook} setFlushHook={setFlushHook} />
-                            <Box width={'100%'} ml={2} >
-                                <CardColaboradoresDemissional />
-                            </Box>
+                        <Box>
+                            <CardDemissional />
                         </Box>
                     ) : (
                         <>

@@ -157,6 +157,7 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/admissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/rh/prototipoAdmissionalDemissional'>Prototipo Checklist Admissão Demissão</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
                                 </SubMenu>
