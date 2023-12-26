@@ -1,33 +1,13 @@
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../../_services/user.service"
-import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox } from "@mui/material"
+import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent } from "@mui/material"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { blue, green, red, yellow } from "@mui/material/colors";
-import { setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
+import { blue, green, grey, red, yellow } from "@mui/material/colors";
+import { filterTableAdmi, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
-const TableEnhanced = () => {
-
-    const [nomes, setNomes] = useState([])
-    const [flushHook, setFlushHook] = useState(false)
-
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const buscarNomes = async () => {
-            try {
-                const result = await getUsers()
-                setNomes(result)
-                console.log(result)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        setFlushHook(false)
-        buscarNomes()
-    }, [flushHook])
-
+const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
 
     return (
         <Container maxWidth>
@@ -171,7 +151,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 <TableCell>
                                                     <FormControl sx={{ minWidth: 150 }}>
                                                         <InputLabel id='Status'>Status</InputLabel>
-                                                        <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)} >
+                                                        <Select value={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)} >
                                                             <MenuItem value={'naoSeAplica'}>N/A</MenuItem>
                                                             <MenuItem value={'pendente'}>PENDENTE</MenuItem>
                                                             <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
@@ -192,17 +172,142 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     )
 }
 
-const Colaboradores = () => {
+const Filter = ({ setNomes }) => {
+
+    const [responsaveis, setResponsaveis] = useState({
+        samanthaMacielGiazzon: true,
+        rodrigoDias: false,
+        administrador: false,
+        gersonDouglas: false,
+    })
+
+    const handleChangeResponsaveis = (event) => {
+        if (event.target.name === 'samanthaMacielGiazzon') {
+            setResponsaveis({ ...responsaveis, samanthaMacielGiazzon: event.target.checked });
+        } else if (event.target.name === 'administrador') {
+            setResponsaveis({ ...responsaveis, administrador: event.target.checked });
+        } else if (event.target.name === 'rodrigoDias') {
+            setResponsaveis({ ...responsaveis, rodrigoDias: event.target.checked });
+        } else if (event.target.name === 'gersonDouglas') {
+            setResponsaveis({ ...responsaveis, gersonDouglas: event.target.checked });
+        }
+    }
+
+    const [status, setStatus] = useState({
+        naoSeAplica: false,
+        pendente: false,
+        emAndamento: false,
+        concluido: false,
+    })
+
+    const handleChangeStatus = (event) => {
+        setStatus({ ...status, [event.target.name]: event.target.checked });
+    }
+
+    const handleClickFilter = async () => {
+        const filter = await filterTableAdmi({ status, responsavel: responsaveis })
+        setNomes(filter.result)
+        console.log(filter)
+    }
+
+    const handleClear = () => {
+        setResponsaveis({
+            samanthaMacielGiazzon: false,
+            administrador: false,
+            rodrigoDias: false,
+            gersonDouglas: false,
+        })
+
+        setStatus({
+            pendente: false,
+            naoSeAplica: false,
+            emAndamento: false,
+            concluido: false,
+        })
+    }
 
     return (
-        <Box component={Paper} p={1} m={1} sx={{ overflow: 'hidden' }}>
-            <TableContainer sx={{ marginBottom: '20px' }}>
-                <Table size={'small'}>
-                    <TableEnhanced />
-                </Table>
-            </TableContainer>
-        </Box>
+        <>
+            <Box m={2}>
+                <h3>Filtros</h3>
+                <br />
+                <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                    <Button variant='contained' onClick={handleClickFilter}>Filtrar</Button>
+                    <Button variant='contained' onClick={handleClear}>Limpar</Button>
+                </Box>
+                <br />
+                <Divider />
+                <Typography>
+                    <strong>Responsáveis</strong>
+                </Typography>
+                <FormGroup >
+                    <FormControlLabel control={<Checkbox checked={responsaveis.samanthaMacielGiazzon} onChange={handleChangeResponsaveis} name='samanthaMacielGiazzon' />} label='Samantha Maciel Giazzon' />
+                    <FormControlLabel control={<Checkbox checked={responsaveis.administrador} onChange={handleChangeResponsaveis} name='administrador' />} label='Administrador' />
+                    <FormControlLabel control={<Checkbox checked={responsaveis.rodrigoDias} onChange={handleChangeResponsaveis} name='rodrigoDias' />} label='Rodrigo Dias' />
+                    <FormControlLabel control={<Checkbox checked={responsaveis.gersonDouglas} onChange={handleChangeResponsaveis} name='gersonDouglas' />} label='Gerson Douglas' />
+                </FormGroup>
+                <Divider />
+                <Typography>
+                    <strong>Status</strong>
+                </Typography>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox checked={status.naoSeAplica} onChange={handleChangeStatus} name='naoSeAplica' />} label='N/A' />
+                    <FormControlLabel control={<Checkbox checked={status.pendente} onChange={handleChangeStatus} name='pendente' />} label='Pendente' />
+                    <FormControlLabel control={<Checkbox checked={status.emAndamento} onChange={handleChangeStatus} name='emAndamento' />} label='Em Andamento' />
+                    <FormControlLabel control={<Checkbox checked={status.concluido} onChange={handleChangeStatus} name='concluido' />} label='Concluído' />
+                </FormGroup>
+            </Box>
+        </>
     )
 }
 
-export default Colaboradores
+const CardAdmissional = () => {
+
+    const color = grey[300]
+
+    const [nomes, setNomes] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const buscarNomes = async () => {
+            try {
+                const result = await getUsers()
+                setNomes(result)
+                console.log(result)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        setFlushHook(false)
+        buscarNomes()
+    }, [flushHook])
+
+    return (
+        <>
+            <Box display={'flex'} mt={2}>
+                <Card sx={{ bgcolor: color, width: '350px', mb: `20px`, borderRadius: `10px`, padding: '0' }}>
+                    <CardContent sx={{ padding: '0' }} >
+                        <Box width={'100%'}>
+                            <Filter setNomes={setNomes} nomes={nomes} />
+                        </Box>
+                    </CardContent>
+                </Card>
+                <Box width={'100%'} ml={2}>
+                    <Card sx={{ bgcolor: color, borderRadius: `10px` }}>
+                        <Box component={Paper} p={1} m={1} sx={{ overflow: 'hidden' }}>
+                            <TableContainer sx={{ marginBottom: '20px' }}>
+                                <Table size={'small'}>
+                                    <TableEnhanced nomes={nomes} setFlushHook={setFlushHook} setUser={setUser} />
+                                </Table>
+                            </TableContainer>
+                        </Box>
+                    </Card>
+                </Box>
+            </Box>
+        </>
+    )
+}
+
+export default CardAdmissional
