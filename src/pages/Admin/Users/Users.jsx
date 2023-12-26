@@ -1,4 +1,4 @@
-import { Container, Select, Tab, Tabs, Typography, MenuItem, TextField, Grid, InputAdornment, FormControl, InputLabel, Box, FormControlLabel, Switch } from "@mui/material"
+import { Container, Select, Tab, Tabs, Typography, MenuItem, TextField, Grid, InputAdornment, FormControl, InputLabel, Box, FormControlLabel, Switch, Chip } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
@@ -44,13 +44,30 @@ const Users = () => {
         setValue(newValue);
     }
 
-    const handleFilter = () => {
-        if (selectedCelula === '') {
-            setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase())))
-        } else {
-            setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase()) && user.atividadePrincipal === selectedCelula))
+    useEffect(() => {
+
+        const handleFilter = () => {
+            let filtered = users
+
+            if (filteredName !== '') {
+                filtered = filtered.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase()))
+            }
+
+            if (selectedCelula !== '') {
+                filtered = filtered.filter(user => user.atividadePrincipal.toLowerCase().includes(selectedCelula.toLowerCase()))
+            }
+
+            if (value === 'Ativos') {
+                filtered = filtered.filter(user => user.inativo !== true)
+            } else if (value === 'Inativos') {
+                filtered = filtered.filter(user => user.inativo === true)
+            }
+
+            setFilteredUsers(filtered)
         }
-    }
+
+        handleFilter()
+    }, [filteredName, selectedCelula, value, users])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -173,30 +190,29 @@ const Users = () => {
                     />
                 </Tabs>
                 <Grid container alignItems="center">
-                    <Grid item xs={12} sm={2} columnSpacing={1} >
+                    <Grid item xs={12} sm={2} columnSpacing={1} sx={{ m: 1 }}>
                         <FormControl
                             fullWidth
                             sx={{
                                 mt: 2,
                             }}
                         >
-                            <InputLabel id="demo-simple-select-label">Célula</InputLabel>
+                            <InputLabel>Célula</InputLabel>
                             <Select
                                 label="Célula"
                                 value={selectedCelula}
                                 onChange={(e) => {
                                     setSelectedCelula(e.target.value)
-                                    handleFilter()
                                 }}
                             >
+                                <MenuItem value={''}>Todos</MenuItem>
                                 {celulas.map((celula) => (
                                     <MenuItem key={celula._id} value={celula.celula}>{celula.celula}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
-
                     </Grid>
-                    <Grid item xs={12} sm={10}>
+                    <Grid item xs={12} sm={9} sx={{ m: 2 }}>
                         <TextField
                             placeholder="Pesquisar"
                             sx={{
@@ -206,7 +222,6 @@ const Users = () => {
                             value={filteredName}
                             onChange={(e) => {
                                 setFilteredName(e.target.value)
-                                handleFilter()
                             }}
                             InputProps={{
                                 startAdornment: (
@@ -218,6 +233,50 @@ const Users = () => {
                         />
                     </Grid>
                 </Grid>
+                <Box
+                    sx={{
+                        mt: 2,
+                    }}
+                >
+                    <Typography
+                        variant="body2"
+                        color="textSecondary"
+                    >
+                        {filteredUsers.length} {filteredUsers.length === 1 ? 'usuário encontrado' : 'usuários encontrados'}
+                    </Typography>
+                </Box>
+                <Box>
+                    {
+                        selectedCelula !== '' &&
+                        <Chip
+                            label={selectedCelula}
+                            onDelete={() => setSelectedCelula('')}
+                            sx={{
+                                mt: 2,
+                            }}
+                        />
+                    }
+                    {
+                        filteredName !== '' &&
+                        <Chip
+                            label={filteredName}
+                            onDelete={() => setFilteredName('')}
+                            sx={{
+                                mt: 2,
+                            }}
+                        />
+                    }
+                    {
+                        value !== 'Todos' &&
+                        <Chip
+                            label={value}
+                            onDelete={() => setValue('Todos')}
+                            sx={{
+                                mt: 2,
+                            }}
+                        />
+                    }
+                </Box>
                 <FormControlLabel
                     control={
                         <Switch
