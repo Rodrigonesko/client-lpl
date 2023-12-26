@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { filterPropostasAgendadas } from "../../../../_services/teleEntrevistaExterna.service";
 import AuthContext from "../../../../context/AuthContext";
-import { buscaAnalistasTele } from "../../../../_services/user.service";
+import { buscaAnalistasTele, filterUsers } from "../../../../_services/user.service";
 import FiltroEnfermeiros from "./FiltroEnfermeiros";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -78,9 +78,13 @@ const FiltroAgendadas = () => {
     const fetchAnalistas = async () => {
         setLoading(true)
         try {
-            const resultAnalistas = await buscaAnalistasTele()
+            // const resultAnalistas = await buscaAnalistasTele()
+            const resultAnalistas = await filterUsers({
+                atividadePrincipal: 'Tele Entrevista',
+                inativo: { $ne: true }
+            })
             setResponsavel(name)
-            const findIndex = resultAnalistas.enfermeiros.findIndex(item => item.name === name)
+            const findIndex = resultAnalistas.findIndex(item => item.name === name)
             if (findIndex === -1) {
                 setResponsavel('Todos')
                 const result = await filterPropostasAgendadas({
@@ -103,7 +107,7 @@ const FiltroAgendadas = () => {
                 setLoading(false)
                 setPesquisa('')
             }
-            setAnalistas(resultAnalistas.enfermeiros)
+            setAnalistas(resultAnalistas)
 
         } catch (error) {
             console.log(error);

@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, Snackbar, Alert, Tooltip, Chip, Pagination, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, Modal, Box, Typography, InputLabel, MenuItem, FormControl, Select, TablePagination, TableFooter, IconButton, Snackbar, Alert, Tooltip, Chip } from "@mui/material";
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import PropTypes from 'prop-types';
+import { useTheme } from '@mui/material/styles';
 import { alterarSexoEntrevista, alterarTelefoneEntrevista, alterarVigenciaProposta, cancelarEntrevista, excluirPropostaEntrevista, tentativaContatoEntrevista } from "../../_services/teleEntrevista.service";
 import { FaWpforms, FaTrash } from 'react-icons/fa'
 import { TiCancel } from 'react-icons/ti'
 import { BsFillTelephoneFill } from 'react-icons/bs'
 import ModalChangeWhatsapp from "./modais/ModalChangeWhatsapp";
 import { MdPublishedWithChanges } from 'react-icons/md'
-import { paginacaoAgenda } from "../../_services/teleEntrevistaExterna.service";
 
 const style = {
     position: 'absolute',
@@ -20,13 +25,84 @@ const style = {
     p: 4,
 };
 
-const TabelaAgendarCopy = ({ atualizarTabela }) => {
+function TablePaginationActions(props) {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
 
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const handleFirstPageButtonClick = (event) => {
+        onPageChange(event, 0);
+    };
 
-    const [propostas, setPropostas] = useState([])
-    const [pesquisa, setPesquisa] = useState('')
+    const handleBackButtonClick = (event) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton
+                onClick={handleBackButtonClick}
+                disabled={page === 0}
+                aria-label="previous page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </Box>
+    );
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+};
+
+const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
+
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - propostas.length) : 0;
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const [modalCancelar, setModalCancelar] = useState(false);
     const [modalExcluir, setModalExcluir] = useState(false);
@@ -57,7 +133,7 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
             await cancelarEntrevista({ id: idCancelar, motivoCancelamento: motivoCancelar })
             setLoadingCancelar(false)
             setModalCancelar(false)
-            fetchPropostas(page)
+            atualizarTabela()
         } catch (error) {
             console.log(error);
             setLoadingCancelar(false)
@@ -70,7 +146,7 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
             await excluirPropostaEntrevista(idExcluir)
             setLoadingCancelar(false)
             setModalExcluir(false)
-            fetchPropostas(page)
+            atualizarTabela()
         } catch (error) {
             console.log(error);
             setLoadingCancelar(false)
@@ -112,124 +188,46 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
         try {
             setLoading(true)
             await tentativaContatoEntrevista({ tentativa, id })
-            fetchPropostas()
+            atualizarTabela()
             setLoading(false)
         } catch (error) {
             console.log(error);
         }
     }
-
-    const handlePageChange = (event, value) => {
-        setPage(value);
-        fetchPropostas(value)
-    }
-
-    const fetchPropostas = async (Page) => {
-        try {
-            setLoading(true)
-            console.log('chamou')
-            const result = await paginacaoAgenda({ page: Page, limit: 70 })
-            console.log('terminou');
-            setPropostas(result.result)
-            setTotalPages(result.total)
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-    }
-
-    const searchPropostas = async (e) => {
-        e.preventDefault()
-        try {
-            setLoading(true)
-            const result = await paginacaoAgenda({ page: 1, limit: 70, pesquisa })
-            setPropostas(result.result)
-            setTotalPages(result.total)
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        fetchPropostas(page)
-    }, [])
 
     return (
-        <Box
-            sx={{
-                width: '100%',
-                margin: '0 auto',
-                marginTop: '1rem',
-                marginBottom: '1rem',
-                padding: '1rem',
-                overflowX: 'auto',
-                position: 'relative'
-            }}
-        >
-            <Typography variant='h6' width='100%'>
-                Tele: {totalPages}
+        <>
+            <Typography variant='h4' width='100%'>
+                Tele: {propostas.length}
             </Typography>
-            <Box>
-                <form
-                    onSubmit={searchPropostas}
-                    style={{ display: 'flex', alignItems: 'center', width: '100%', marginBottom: '10px' }}
-                >
-                    <TextField
-                        size="small"
-                        variant="standard"
-                        placeholder="Pesquisar"
-                        onChange={e => setPesquisa(e.target.value)}
-                        value={pesquisa}
-                        style={{ marginRight: '10px' }}
-                    />
-                    <Button type="submit" variant='contained' onClick={searchPropostas}>Pesquisar</Button>
-                </form>
-            </Box>
-            <Box display={'flex'} justifyContent={'flex-end'}>
-                <Pagination count={Math.ceil(totalPages / 70)} page={page} onChange={handlePageChange} />
-            </Box>
-            <TableContainer >
+            <TableContainer>
                 {
                     loading ? (
                         <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
                     ) : null
                 }
-                <Table
-                    size="small"
-                    style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }}
-                    sx={{ minWidth: 500 }}
-                    aria-label="custom pagination table"
-                >
-                    <TableHead
-                        sx={{
-                            '& .MuiTableCell-root': {
-                                background: '#3f51b5',
-                                color: 'white',
-                                fontWeight: 'bold'
-                            }
-                        }}
-
-                    >
+                <Table size="small" style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <TableHead className="table-header">
                         <TableRow>
-                            <TableCell>Vigência</TableCell>
-                            <TableCell>Proposta</TableCell>
-                            <TableCell>Nome</TableCell>
-                            <TableCell>Data Nascimento</TableCell>
-                            <TableCell>Sexo</TableCell>
-                            <TableCell>Telefone</TableCell>
-                            <TableCell>Cancelar</TableCell>
-                            <TableCell>Excluir</TableCell>
-                            <TableCell>Formulario</TableCell>
-                            <TableCell>Contato 1</TableCell>
-                            <TableCell>Contato 2</TableCell>
-                            <TableCell>Contato 3</TableCell>
+                            <TableCell padding="none">Vigência</TableCell>
+                            <TableCell padding="none">Proposta</TableCell>
+                            <TableCell padding="none">Nome</TableCell>
+                            <TableCell padding="none">Data Nascimento</TableCell>
+                            <TableCell padding="none">Sexo</TableCell>
+                            <TableCell padding="none">Telefone</TableCell>
+                            <TableCell padding="none">Cancelar</TableCell>
+                            <TableCell padding="none">Excluir</TableCell>
+                            <TableCell padding="none">Formulario</TableCell>
+                            <TableCell padding="none">Contato 1</TableCell>
+                            <TableCell padding="none">Contato 2</TableCell>
+                            <TableCell padding="none">Contato 3</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {propostas.map((row) => {
+                        {(rowsPerPage > 0
+                            ? propostas.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : propostas
+                        ).map((row) => {
 
                             const conditionPf = row.tipoContrato.indexOf('PF') !== -1 || row.tipoContrato.indexOf('pf') !== -1
 
@@ -240,13 +238,13 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                             return (
                                 <TableRow key={row._id} style={{ background: conditionPf ? '#e6ee9c' : '' }} >
                                     <TableCell padding="none" scope="row">
-                                        <input size="small" variant="standard" type='date' defaultValue={row.vigencia} />
+                                        <TextField size="small" variant="standard" type='date' defaultValue={row.vigencia} />
                                         <Tooltip title='Alterar vigência'>
-                                            <IconButton style={{ marginLeft: '10px' }} color='warning' variant='contained' onClick={
+                                            <Button style={{ marginLeft: '10px' }} color='warning' variant='contained' onClick={
                                                 item => {
                                                     alterarVigencia(item.target.parentElement.firstChild.firstChild.firstChild.value, row._id)
                                                 }
-                                            }><MdPublishedWithChanges /></IconButton>
+                                            }><MdPublishedWithChanges /></Button>
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell align="left">
@@ -270,38 +268,38 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                                         </select>
                                     </TableCell>
                                     <TableCell>
-                                        <input style={{ minWidth: '200px' }} size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
+                                        <TextField style={{ minWidth: '200px' }} size="small" variant="standard" type='tel' defaultValue={row.telefone} onKeyUp={element => alterarTelefone(element.target.value, row._id)} />
                                         <ModalChangeWhatsapp whatsapp={row.whatsapp} _id={row._id} whatsappsAnteriores={row.whatsappsAnteriores} />
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title='Cancelar'>
-                                            <IconButton variant="contained" onClick={() => {
+                                            <Button variant="contained" onClick={() => {
                                                 setPropostaCancelar(row.proposta)
                                                 setBeneficiarioCancelar(row.nome)
                                                 setIdCancelar(row._id)
                                                 setModalCancelar(true)
                                             }} color="error">
                                                 <TiCancel />
-                                            </IconButton>
+                                            </Button>
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title='Excluir'>
-                                            <IconButton variant="contained" onClick={() => {
+                                            <Button variant="contained" onClick={() => {
                                                 setPropostaExcluir(row.proposta)
                                                 setBeneficiarioExcluir(row.nome)
                                                 setIdCExcluir(row._id)
                                                 setModalExcluir(true)
                                             }} color="error">
                                                 <FaTrash />
-                                            </IconButton>
+                                            </Button>
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title='Formulario'>
-                                            <IconButton variant="contained" href={`/entrevistas/formulario/${row._id}`} >
+                                            <Button variant="contained" href={`/entrevistas/formulario/${row._id}`} >
                                                 <FaWpforms />
-                                            </IconButton>
+                                            </Button>
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell>
@@ -309,9 +307,9 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                                             row.contato1 ? (
                                                 <span>{row.contato1}</span>
                                             ) : (
-                                                <IconButton variant='contained' size="small" onClick={() => {
+                                                <Button variant='contained' size="small" onClick={() => {
                                                     tentativaContato('tentativa 1', row._id)
-                                                }}>1° <BsFillTelephoneFill /></IconButton>
+                                                }} style={{ background: 'blue' }}>1° <BsFillTelephoneFill /></Button>
                                             )
                                         }
 
@@ -319,7 +317,7 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                                     <TableCell>
                                         {
                                             row.contato2 === undefined && row.contato1 !== undefined ? (
-                                                <IconButton variant='contained' size="small" onClick={() => { tentativaContato('tentativa 2', row._id) }} >2° <BsFillTelephoneFill /></IconButton>
+                                                <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 2', row._id) }} style={{ background: 'blue' }}>2° <BsFillTelephoneFill /></Button>
                                             ) : (
                                                 <span>{row.contato2}</span>
                                             )
@@ -328,7 +326,7 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                                     <TableCell>
                                         {
                                             row.contato3 === undefined & row.contato2 !== undefined ? (
-                                                <IconButton variant='contained' size="small" onClick={() => { tentativaContato('tentativa 3', row._id) }} >3° <BsFillTelephoneFill /></IconButton>
+                                                <Button variant='contained' size="small" onClick={() => { tentativaContato('tentativa 3', row._id) }} style={{ background: 'blue' }}>3° <BsFillTelephoneFill /></Button>
                                             ) : (
                                                 <span>{row.contato3}</span>
                                             )
@@ -337,7 +335,34 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                                 </TableRow>
                             )
                         })}
+
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                                colSpan={3}
+                                count={propostas.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                labelRowsPerPage='Linhas por página'
+                                SelectProps={{
+                                    inputProps: {
+                                        'aria-label': 'Linhas por página',
+                                    },
+                                    native: true,
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer >
             <Modal
@@ -403,8 +428,8 @@ const TabelaAgendarCopy = ({ atualizarTabela }) => {
                     Vigencia alterada com sucesso
                 </Alert>
             </Snackbar>
-        </Box>
+        </>
     )
 }
 
-export default TabelaAgendarCopy
+export default TabelaAgendarTele

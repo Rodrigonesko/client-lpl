@@ -123,7 +123,6 @@ import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/Urgencia
 
 /* Admin */
 
-import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
 import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
 import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
@@ -136,7 +135,6 @@ import Users from "./pages/Admin/Users/Users";
 
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
-import Create from "./pages/Admin/Create/Create";
 import { AuthProvider } from "./context/AuthContext";
 
 const AppRoutes = () => {
@@ -181,13 +179,6 @@ const AppRoutes = () => {
                 {/* Admin Routes*/}
 
                 {/*admin producao*/}
-
-                <Route exact path="/admin/producao/criar" element={<ProtectedRoute>
-                    <Create />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/producao/liberarModulos" element={<ProtectedRoute>
-                    <LiberacaoModulos />
-                </ProtectedRoute>} />
                 <Route exact path="/admin/producao/relatorioProdutividade" element={<ProtectedRoute>
                     <RelatorioProdutividade />
                 </ProtectedRoute>} />

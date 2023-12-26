@@ -70,3 +70,7 @@ export const updateProfilePic = async (data) => {
     return await new ApiCall('/updateProfilePic', process.env.REREACT_APP_API_KEY, token,
         { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).patch(data)
 }
+
+export const filterUsers = async (data) => {
+    return await new ApiCall('/users/filter').post(data)
+}
