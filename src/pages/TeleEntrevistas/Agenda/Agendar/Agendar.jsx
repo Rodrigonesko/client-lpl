@@ -43,7 +43,7 @@ const Agendar = () => {
 
     const searchPropostas = async () => {
         try {
-            setLoading(true)
+            // setLoading(true)
             const result = await getProposasNaoAgendadas()
             const resultRns = await getRnsNaoAgendadas()
             let arrTele = []
@@ -68,7 +68,7 @@ const Agendar = () => {
             setRns(resultRns.result)
             setPropostas(result.propostas)
             setPropostasTotal(arrTotal)
-            setLoading(false)
+            // setLoading(false)
 
         } catch (error) {
             console.log(error);
@@ -95,7 +95,7 @@ const Agendar = () => {
             }
         }
         buscarDiasDisponiveis()
-        searchPropostas()
+        //searchPropostas()
         buscarHorariosDisp()
 
     }, [])
