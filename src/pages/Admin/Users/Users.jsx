@@ -44,46 +44,55 @@ const Users = () => {
         setValue(newValue);
     }
 
-    useEffect(() => {
+    const handleFilter = () => {
+        let filtered = users
 
-        const handleFilter = () => {
-            let filtered = users
-
-            if (filteredName !== '') {
-                filtered = filtered.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase()))
-            }
-
-            if (selectedCelula !== '') {
-                filtered = filtered.filter(user => user.atividadePrincipal.toLowerCase().includes(selectedCelula.toLowerCase()))
-            }
-
-            if (value === 'Ativos') {
-                filtered = filtered.filter(user => user.inativo !== true)
-            } else if (value === 'Inativos') {
-                filtered = filtered.filter(user => user.inativo === true)
-            }
-
-            setFilteredUsers(filtered)
+        if (filteredName !== '') {
+            filtered = filtered.filter(user => user.name.toLowerCase().includes(filteredName.toLowerCase()))
         }
 
+        if (selectedCelula !== '') {
+            filtered = filtered.filter(user => user.atividadePrincipal.toLowerCase().includes(selectedCelula.toLowerCase()))
+        }
+
+        if (value === 'Ativos') {
+            filtered = filtered.filter(user => user.inativo !== true)
+        } else if (value === 'Inativos') {
+            filtered = filtered.filter(user => user.inativo === true)
+        }
+
+        setFilteredUsers(filtered)
+    }
+
+    useEffect(() => {
         handleFilter()
     }, [filteredName, selectedCelula, value, users])
 
+    const fetchData = async () => {
+        setLoading(true)
+        const usersFromServer = await getUsers()
+        const celulasFromServer = await getAllCelulas()
+        setUsers(usersFromServer)
+        setCelulas(celulasFromServer)
+        setQuantidadeAtivos(usersFromServer.filter(user => user.inativo !== true).length)
+        setQuantidadeInativos(usersFromServer.filter(user => user.inativo === true).length)
+        setFilteredUsers(usersFromServer)
+        setLoading(false)
+    }
+
+
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            const usersFromServer = await getUsers()
-            const celulasFromServer = await getAllCelulas()
-            setUsers(usersFromServer)
-            setCelulas(celulasFromServer)
-            setQuantidadeAtivos(usersFromServer.filter(user => user.inativo !== true).length)
-            setQuantidadeInativos(usersFromServer.filter(user => user.inativo === true).length)
-            setFilteredUsers(usersFromServer)
-            setLoading(false)
+        const fetch = async () => {
+            await fetchData()
+            handleFilter()
+            setFlushHook(false)
         }
-        fetchData()
-        setFlushHook(false)
+        fetch()
     }, [flushHook])
+
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     return (
         <Sidebar>
@@ -295,6 +304,7 @@ const Users = () => {
                     users={filteredUsers}
                     dense={dense}
                     loading={loading}
+                    setFlushHook={setFlushHook}
                 />
             </Container>
         </Sidebar>

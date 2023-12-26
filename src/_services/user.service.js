@@ -30,8 +30,8 @@ export const createUser = async (data) => {
     return await new ApiCall('/users').post(data)
 }
 
-export const liberarModulos = async (email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada) => {
-    return await new ApiCall('/users/modules').put(email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada)
+export const updateInfoUser = async (data) => {
+    return await new ApiCall('/users').put(data)
 }
 
 export const restaurarSenha = async (email) => {

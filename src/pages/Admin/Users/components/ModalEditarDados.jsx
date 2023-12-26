@@ -1,107 +1,38 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField, Grid, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup, FormControlLabel, Checkbox } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField, Grid, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup, FormControlLabel, Checkbox, Fade } from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { green, grey } from "@mui/material/colors";
-import { getAllCelulas } from "../../../../_services/celula.service";
+import { updateInfoUser } from "../../../../_services/user.service";
+import Toast from "../../../../components/Toast/Toast";
+import { createDemissao } from "../../../../_services/admissaoDemissao.service";
 
-const ModalEditarDados = ({ user }) => {
+const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) => {
 
-    /*
-    accessLevel
-: 
-"true"
-acessos
-: 
-{agendamento: true}
-admissao
-: 
-[]
-atividadePrincipal
-: 
-"Sindicância"
-bancoHoras
-: 
-""
-dataAdmissao
-: 
-"2022-04-11"
-dataAniversario
-: 
-"1989-07-06"
-dataBancoHoras
-: 
-"2023-12-04"
-demissao
-: 
-[]
-elegibilidade
-: 
-"false"
-email
-: 
-"fribeiro@lplseguros.com.br"
-enfermeiro
-: 
-"false"
-firstAccess
-: 
-"Não"
-horarioSaida
-: 
-"2023-12-22 17:24"
-horarioSaida2
-: 
-"17:30"
-liminares
-: 
-"true"
-liminaresAj
-: 
-"false"
-name
-: 
-"Fernanda Ribeiro"
-nomeCompleto
-: 
-"Fernanda Aparecida Ribeiro"
-online
-: 
-true
-password
-: 
-"$2b$08$E.zqQ/yOi5NI0.jm5FJD6OaflO.M7ZKchxV9lTkKGj93fHeMK6qDy"
-politicasLidas
-: 
-(6) ['64b6974349ad1d342bdcd93f', '64d673cb372904acc9402ffc', '64de5a79372904acc94232ed', '64f77445080c3c20759642e3', '65392e627ae401d0ed955efb', '6581c7ba0f9ff738fe9629b2']
-prorrogacao
-: 
-true
-socketId
-: 
-"q_PZZsfM1rt3tt5ZAF6R"
-treinamentos
-: 
-(7) ['650c458b9c387a21e94dc757', '650c459c9c387a21e94dc772', '650c4bfe9c387a21e94dd0fd', '652d32ecbbda8c10aeeeaa8b', '652d32ecbbda8c10aeeeaa8b', '652d411bbbda8c10aeeebd1e', '652d411bbbda8c10aeeebd1e']
-vencimentoFerias
-: 
-(2) [{…}, {…}]
-_id
-: 
-"6332e7608016397133492a40"
-    */
-
-    const [open, setOpen] = useState(false);
     const [userData, setUserData] = useState(user);
-    const [celulas, setCelulas] = useState([]);
+    const [openToast, setOpenToast] = useState(false);
+    const [message, setMessage] = useState('');
+    const [severity, setSeverity] = useState('success');
 
-    const handleClickOpen = async () => {
-        setOpen(true);
-        const result = await getAllCelulas()
-        setCelulas(result)
-    };
+    const handleSubmit = async () => {
+        const result = await updateInfoUser({ data: userData });
 
-    const handleSubmit = () => {
-        console.log(userData)
+        if (userData.inativo) {
+            await createDemissao({
+                _id: userData._id
+            })
+        }
+
+        if (result.msg === 'ok') {
+            setMessage('Dados atualizados com sucesso!');
+            setSeverity('success');
+            setOpenToast(true);
+            handleClose();
+            setFlushHook(true);
+        } else {
+            setMessage('Erro ao atualizar dados!');
+            setSeverity('error');
+            setOpenToast(true);
+        }
     }
 
     const handleInputChange = (e) => {
@@ -113,19 +44,15 @@ _id
         })
     }
 
+    useEffect(() => {
+        setUserData(user);
+    }, [user])
+
     return (
         <>
-            <Tooltip title="Editar">
-                <IconButton
-                    onClick={handleClickOpen}
-                >
-                    <EditIcon />
-                </IconButton>
-            </Tooltip>
-
             <Dialog
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={() => handleClose()}
                 fullWidth
                 maxWidth="lg"
             >
@@ -208,17 +135,26 @@ _id
                             <TextField
                                 fullWidth
                                 label="Matricula"
-                                defaultValue={user.matricula}
+                                value={userData.matricula}
+                                onChange={handleInputChange}
+                                name="matricula"
+                            />
+                        </Grid>
+                        <Fade
+                            in={userData.atividadePrincipal === 'Tele Entrevista'}
+                            timeout={500}
+                        >
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="COREN"
+                                    value={userData.coren}
+                                    onChange={handleInputChange}
+                                    name="coren"
+                                />
+                            </Grid>
+                        </Fade>
 
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="COREN"
-                                defaultValue={user.coren}
-                            />
-                        </Grid>
                     </Grid>
                     {/* Horários de Entrada e Saída */}
                     <Box sx={{
@@ -234,7 +170,9 @@ _id
                                 sx={{
                                     mr: 2
                                 }}
-                                value={userData.horarioEntrada}
+                                name="horarioEntrada1"
+                                value={userData.horarioEntrada1}
+                                onChange={handleInputChange}
                             />
                             <TextField
                                 label='1° Saída'
@@ -245,6 +183,9 @@ _id
                                 sx={{
                                     mr: 2
                                 }}
+                                name="horarioSaida1"
+                                value={userData.horarioSaida1}
+                                onChange={handleInputChange}
                             />
                             <TextField
                                 type="time"
@@ -255,6 +196,9 @@ _id
                                 sx={{
                                     mr: 2
                                 }}
+                                name="horarioEntrada2"
+                                value={userData.horarioEntrada2}
+                                onChange={handleInputChange}
                             />
                             <TextField
                                 type="time"
@@ -265,6 +209,9 @@ _id
                                 sx={{
                                     mr: 2
                                 }}
+                                name="horarioSaida2"
+                                value={userData.horarioSaida2}
+                                onChange={handleInputChange}
                             />
                         </Box>
                     </Box>
@@ -280,29 +227,79 @@ _id
                             <FormLabel component="legend">Acessos</FormLabel>
                             <FormGroup>
                                 <FormControlLabel
-                                    control={<Checkbox />}
+                                    control={<Checkbox
+                                        checked={userData.rsd}
+                                    />}
                                     label="RSD"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        rsd: !userData.rsd
+                                    }
+                                    )}
 
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox />}
+                                    control={<Checkbox
+                                        checked={userData.elegibilidade === 'true'}
+                                    />}
+
                                     label="Elegibilidade"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        elegibilidade: userData.elegibilidade === 'true' ? 'false' : 'true'
+                                    }
+                                    )}
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox />}
+                                    control={<Checkbox
+                                        checked={userData.enfermeiro === 'true'}
+                                    />}
                                     label="Tele Entrevista"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        enfermeiro: userData.enfermeiro === 'true' ? 'false' : 'true'
+                                    }
+                                    )}
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox />}
+                                    control={<Checkbox
+                                        checked={userData?.acessos?.agendamento}
+                                    />}
                                     label="Agendamento"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        acessos: {
+                                            ...userData.acessos,
+                                            agendamento: !userData.acessos.agendamento
+                                        }
+                                    }
+                                    )}
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox />}
+                                    control={<Checkbox
+                                        checked={userData?.acessos?.administrador}
+                                    />}
                                     label="Administrador"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        acessos: {
+                                            ...userData.acessos,
+                                            administrador: !userData.acessos.administrador
+                                        }
+                                    }
+                                    )}
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox />}
+                                    control={<Checkbox
+                                        checked={userData.deFerias}
+                                    />}
                                     label="De férias"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        deFerias: !userData.deFerias
+
+                                    }
+                                    )}
                                 />
                                 <FormControlLabel
                                     control={<Checkbox
@@ -310,6 +307,11 @@ _id
                                         color="error"
                                     />}
                                     label="Inativo"
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        inativo: !userData.inativo
+                                    }
+                                    )}
                                 />
                             </FormGroup>
                         </FormControl>
@@ -317,7 +319,7 @@ _id
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={() => setOpen(false)}
+                        onClick={() => handleClose()}
                         variant="contained"
                         sx={{
                             backgroundColor: grey[500],
@@ -346,6 +348,12 @@ _id
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
         </>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Autocomplete, TextField, Button, Box, Container, Typography, Paper, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup } from "@mui/material";
-import { getInfoEmail, getUsers, liberarModulos } from "../../../_services/user.service";
+import { getInfoEmail, getUsers, updateInfoUser } from "../../../_services/user.service";
 import Toast from "../../../components/Toast/Toast";
 
 const LiberacaoModulos = () => {
@@ -92,7 +92,7 @@ const LiberacaoModulos = () => {
         try {
             const contaInativada = inativarEmail;
 
-            await liberarModulos({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario, matricula, administrador, agendamento, contaInativada })
+            await updateInfoUser({ email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, rsd, nomeCompleto, dataAdmissao, dataAniversario, matricula, administrador, agendamento, contaInativada })
 
             setOpen(true)
         } catch (error) {

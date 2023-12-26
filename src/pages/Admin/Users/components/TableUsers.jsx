@@ -1,13 +1,35 @@
-import { Avatar, Chip, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Avatar, Chip, IconButton, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import ModalEditarDados from "./ModalEditarDados";
 import { green, red } from "@mui/material/colors";
+import { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit"
+import { getAllCelulas } from "../../../../_services/celula.service";
 
 
 const TableUsers = ({
     users,
     loading,
-    dense
+    dense,
+    setFlushHook
 }) => {
+
+    const [open, setOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState({});
+    const [celulas, setCelulas] = useState([]);
+
+    const handleClickOpen = async (user) => {
+
+        setSelectedUser(user);
+        const result = await getAllCelulas()
+        setCelulas(result);
+        console.log(selectedUser);
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
     return (
         <TableContainer
             sx={{
@@ -69,8 +91,16 @@ const TableUsers = ({
                                     <TableCell>{user.atividadePrincipal}</TableCell>
                                     <TableCell>{user.inativo ? <Chip label='Inativo' sx={{ color: red[800], backgroundColor: red[100] }} /> : <Chip label='Ativo' sx={{ color: green[800], backgroundColor: green[100] }} />}</TableCell>
                                     <TableCell>
-                                        <ModalEditarDados user={user} />
-                                    </TableCell>
+                                        <Tooltip title="Editar">
+                                            <IconButton
+                                                onClick={() => {
+                                                    handleClickOpen(user);
+
+                                                }}
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                        </Tooltip>                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -84,6 +114,13 @@ const TableUsers = ({
                     />
                 )
             }
+            <ModalEditarDados
+                open={open}
+                handleClose={handleClose}
+                user={selectedUser}
+                celulas={celulas}
+                setFlushHook={setFlushHook}
+            />
         </TableContainer>
     )
 }

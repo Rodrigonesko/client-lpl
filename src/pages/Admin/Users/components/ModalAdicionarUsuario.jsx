@@ -190,7 +190,6 @@ const ModalAdicionarUsuario = ({ setFlushHook }) => {
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    defaultChecked
                                     sx={{
                                         color: 'black',
                                         '&.Mui-checked': {

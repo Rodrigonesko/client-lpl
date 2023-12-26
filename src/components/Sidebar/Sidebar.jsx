@@ -148,8 +148,7 @@ const Sidebar = ({ children }) => {
                             <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                 <SubMenu title='Produção' icon={<FaUserSecret />}>
                                     <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/producao/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/producao/users'>Usuários</Link></MenuItem>
                                     <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu icon={<FaArchive />} title='RH'>
