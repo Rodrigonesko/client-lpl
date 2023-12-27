@@ -1,9 +1,8 @@
-import { Alert, Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Slide, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Alert, Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { red, yellow, green } from '@mui/material/colors';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalEditarInventario from "../Modais/ModalEditarInventario";
-import { filterInventario } from "../../../../_services/inventario.service";
 
 const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
@@ -17,7 +16,6 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [inventario, setInventario] = useState([]);
 
     const handleChangeStatus = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/inventario/status`, {
@@ -29,16 +27,23 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         console.log(id, status)
     }
 
-    const fetchData = async () => {
+    const fetchData = async (valor) => {
+        try {
+            const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/findAll?page=${valor}&limit=25`, {
+                withCredentials: true,
+            });
 
-        setLoading(true);
+            const solicitacoesData = resultado.data.result;
+            const sortedSolicitacoes = solicitacoesData.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta));
 
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/findAll`, { withCredentials: true })
-        const solicitacoesData = resultado.data.encontrarTodos;
-
-        const sortedSolicitacoes = solicitacoesData.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta));
-        setLoading(false)
-        setSolicitacoes(sortedSolicitacoes)
+            setLoading(false);
+            setTotalPages(resultado.data.total)
+            setSolicitacoes(sortedSolicitacoes);
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
+            setAlerta(true)
+        }
     }
 
     useEffect(() => {
@@ -50,22 +55,20 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         setSnackSelect(false)
     }
 
-    const handleFilter = async (event) => {
-        event.preventDefault()
+    const handleFilter = async (event, page) => {
+        event?.preventDefault()
 
         if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2)) {
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}`, {
-                withCredentials: true
+            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}&page=${page}&limit=25`, {
+                withCredentials: true,
             })
-            console.log(result)
-
             setLoading(true);
-            setPage(1)
-            const sortedSolicitacoes = result.data.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta))
+
+            const sortedSolicitacoes = result.data.result.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta))
             setSolicitacoes(sortedSolicitacoes)
 
-            setInventario(result.result);
-            setTotalPages(result.total);
+            setTotalPages(result.data.total)
+            console.log(result.data.total);
             setLoading(false)
         } else {
             setAlerta(true)
@@ -77,31 +80,13 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         setAlerta(false)
     }
 
-    const fetchInventario = async (page) => {
-
-        setLoading(true);
-
-        try {
-            const result = await filterInventario({
-                nomeItem: nomeItem,
-                ondeEsta: ondeEsta,
-                etiqueta: etiqueta,
-                page: page,
-                limit: 100
-            })
-            setInventario(result.result);
-            setTotalPages(result.total);
-            setLoading(false)
-
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-    }
-
     const handlePageChange = (event, value) => {
         setPage(value);
-        fetchInventario(value);
+        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2)) {
+            handleFilter(event, value);
+        } else {
+            fetchData(value)
+        }
     }
 
     return (
@@ -122,7 +107,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
             <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
                 <TableContainer>
                     <Box display={'flex'} justifyContent={'flex-end'}>
-                        <Pagination count={Math.ceil(totalPages / 10)} page={page} onChange={handlePageChange} />
+                        <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
                     </Box>
                     {
                         !loading ? (
