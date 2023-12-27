@@ -1,11 +1,14 @@
 import { Button, FormControl, InputLabel, Paper, Select, TextField, Typography, MenuItem, Alert } from "@mui/material"
 import Axios from "axios"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Toast from "../../../../components/Toast/Toast"
 import { getAgendasFechadas } from "../../../../_services/teleEntrevista.service"
 import moment from "moment"
+import AuthContext from "../../../../context/AuthContext"
 
 const FecharDia = ({ responsaveis }) => {
+
+    const {name} = useContext(AuthContext)
 
     const [data, setData] = useState('')
     const [responsavel, setResponsavel] = useState('')
@@ -16,6 +19,14 @@ const FecharDia = ({ responsaveis }) => {
     const [flushHook, setFlushHook] = useState(false)
 
     const handleFecharDia = async () => {
+
+        if(name !== 'Administrador' || name !== "Rodrigo Onesko Dias" || name !== "Bruna Tomazoni" || name !== "Luciana Tavares" || name !== "Claudia Rieth"){
+            setMessage('Você não tem permissão para realizar essa ação!')
+            setSeverity("error")
+            setToastOpen(true)
+            return
+        }
+
         try {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharDia`, { data: data, responsavel: responsavel }, { withCredentials: true })
 

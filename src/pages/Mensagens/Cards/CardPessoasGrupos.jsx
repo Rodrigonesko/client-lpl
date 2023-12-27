@@ -6,6 +6,8 @@ import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
 import { seeInternalMessage } from '../../../_services/chat.service';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import moment from 'moment';
 
 const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
 
@@ -86,15 +88,35 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                                                         color={item.online ? 'success' : 'error'}
                                                     >
                                                         <Avatar alt={(verificarNome(item.participantes))} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${(verificarNome(item.participantes)).split(' ').join('%20')}.jpg`} />
-
                                                     </Badge>
                                                 )
                                             }
-                                            {/* <Avatar src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} /> */}
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
-                                            secondary={truncatedMessage}
+                                            secondary={
+                                                item.quemEnviouUltimaMensagem === name ? (
+                                                    <>
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <DoneAllIcon sx={{ color: item.visualizado ? 'green' : 'gray', width: '14px' }} />
+                                                                <Box>{truncatedMessage}</Box>
+                                                            </Box>
+                                                            <Box sx={{ ml: 1, fontSize: '12px' }}>{moment(item.horarioUltimaMensagem).format('HH:mm')}</Box>
+                                                        </Box>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <Box >{truncatedMessage}</Box>
+                                                            </Box>
+                                                            <Box sx={{ ml: 1, fontSize: '12px' }}>{moment(item.horarioUltimaMensagem).format('HH:mm')}</Box>
+                                                        </Box>
+                                                    </>
+                                                )
+
+                                            }
                                         />
                                     </ListItem>
                                 </ListItemButton>

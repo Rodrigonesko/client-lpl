@@ -268,6 +268,9 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                         <Typography>
                                             <strong>Filial: </strong>  {item.filial}
                                         </Typography>
+                                        <Typography>
+                                            <strong>Proposta: </strong> {item.proposta}
+                                        </Typography>
                                     </Box>
                                     <Box m={1}>
                                         <Typography>
