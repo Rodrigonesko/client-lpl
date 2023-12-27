@@ -20,7 +20,7 @@ const FecharDia = ({ responsaveis }) => {
 
     const handleFecharDia = async () => {
 
-        if(name !== 'Administrador' || name !== "Rodrigo Onesko Dias" || name !== "Bruna Tomazoni" || name !== "Luciana Tavares" || name !== "Claudia Rieth"){
+        if(name !== 'Administrador' && name !== "Rodrigo Onesko Dias" && name !== "Bruna Tomazoni" && name !== "Luciana Tavares" && name !== "Claudia Rieth"){
             setMessage('Você não tem permissão para realizar essa ação!')
             setSeverity("error")
             setToastOpen(true)
