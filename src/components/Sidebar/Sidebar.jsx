@@ -139,7 +139,6 @@ const Sidebar = ({ children }) => {
                 </Box>
                 <Menu iconShape="round">
                     <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
-                    <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
                     <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
                         <ChatIcon />
                     </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
@@ -149,8 +148,7 @@ const Sidebar = ({ children }) => {
                             <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                 <SubMenu title='Produção' icon={<FaUserSecret />}>
                                     <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/producao/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/producao/users'>Usuários</Link></MenuItem>
                                     <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu icon={<FaArchive />} title='RH'>
@@ -191,7 +189,6 @@ const Sidebar = ({ children }) => {
                             <MenuItem><Link to='/entrevistas/AtendimentoHumanizado'>Atendimento Humanizado</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/RespostasJanelas'>Janelas Escolhidas</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/conversas'>Conversas</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/whatsappTwilio'>Whatsapp Twilio</Link></MenuItem>
                         </SubMenu>
                         <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                         <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>

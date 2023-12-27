@@ -148,7 +148,7 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
     }
 
     return (
-        <Box maxWidth='1500px' component={Paper} p={1} elevation={3}>
+        <Box component={Paper} p={1} elevation={3}>
             {
                 loading ? (
                     <CircularProgress style={{ position: 'absolute', top: '50%' }} />
@@ -159,13 +159,17 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
             </Typography>
             <TableContainer>
                 <Table style={{ display: 'block', overflowX: 'auto' }} size="small">
-                    <TableHead className='table-header'>
+                    <TableHead>
                         <TableRow>
                             <TableCell >Tipo</TableCell>
                             <TableCell>Data</TableCell>
                             <TableCell>Horário</TableCell>
                             <TableCell>Proposta</TableCell>
-                            <TableCell>Telefone</TableCell>
+                            <TableCell
+                                sx={{
+                                    minWidth: '300px'
+                                }}
+                            >Telefone</TableCell>
                             <TableCell>Nome</TableCell>
                             <TableCell>Idade</TableCell>
                             <TableCell>Sexo</TableCell>
@@ -184,7 +188,9 @@ const TeleAgendadas = ({ propostas, atualizarPropostas, analista }) => {
 
                                     if (e.tipo === 'Tele') {
                                         return (
-                                            <TableRow>
+                                            <TableRow
+                                                key={e._id}
+                                            >
                                                 <TableCell>{e.tipo}</TableCell>
                                                 <TableCell>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
                                                 <TableCell>{moment(e.dataEntrevista).format('HH:mm:ss')}</TableCell>

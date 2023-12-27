@@ -26,12 +26,12 @@ export const getAnalistasAgendamento = async () => {
     return await new ApiCall('/users/agendamento').get()
 }
 
-export const createUser = async (email, name, accessLevel, atividade) => {
-    return await new ApiCall('/users').post(email, name, accessLevel, atividade)
+export const createUser = async (data) => {
+    return await new ApiCall('/users').post(data)
 }
 
-export const liberarModulos = async (email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada) => {
-    return await new ApiCall('/users/modules').put(email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada)
+export const updateInfoUser = async (data) => {
+    return await new ApiCall('/users').put(data)
 }
 
 export const restaurarSenha = async (email) => {
@@ -69,4 +69,8 @@ export const updateHorarioPonto = async (data) => {
 export const updateProfilePic = async (data) => {
     return await new ApiCall('/updateProfilePic', process.env.REREACT_APP_API_KEY, token,
         { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).patch(data)
+}
+
+export const filterUsers = async (data) => {
+    return await new ApiCall('/users/filter').post(data)
 }

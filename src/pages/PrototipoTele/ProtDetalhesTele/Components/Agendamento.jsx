@@ -2,7 +2,7 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Tooltip, IconButton, Ty
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { useState } from "react";
 import { useEffect } from "react";
-import { buscaAnalistasTele } from "../../../../_services/user.service";
+import { buscaAnalistasTele, filterUsers } from "../../../../_services/user.service";
 import { getAnalistasDisponiveis, getDiasDisponiveis, getDiasDisponiveisAnalista, getHorariosDisponiveisPorDia, getHorariosDisponiveisPorDiaEAnalista } from "../../../../_services/teleEntrevista.service";
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -24,8 +24,11 @@ const Agendamento = ({ onAgendar, obj }) => {
 
     const fetchData = async () => {
         setLoading(true)
-        let result = await buscaAnalistasTele()
-        result = result?.enfermeiros?.map(analista => {
+        let result = await filterUsers({
+            atividadePrincipal: 'Tele Entrevista',
+            inativo: { $ne: true }
+        })
+        result = result?.map(analista => {
             return analista.name
         })
         setAnalistas(result)
