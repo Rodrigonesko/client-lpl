@@ -47,7 +47,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     }
 
     useEffect(() => {
-        fetchData()
+        fetchData(page)
         setFlushHook(false)
     }, [flushHook, setFlushHook])
 
@@ -95,8 +95,13 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                 <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} />
                 <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} />
                 <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} />
-                <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
-                <Button onClick={() => setFlushHook(true)} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
+                <Button type="submit" onClick={(e) => handleFilter(e, 1)} variant='contained' >Pesquisar</Button>
+                <Button onClick={() => {
+                    setNomeItem('')
+                    setOndeEsta('')
+                    setEtiqueta('')
+                    setFlushHook(true)
+                }} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
             </form>
             <Snackbar open={alerta} autoHideDuration={6000} onClose={handleCloseInput}>
                 <Alert variant="filled" onClose={handleCloseInput} severity="warning" sx={{ width: '100%' }}>
