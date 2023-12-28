@@ -130,6 +130,7 @@ import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
 import BancoHoras from "./pages/Admin/BancoHoras/BancoHoras";
 import Inventario from "./pages/Admin/Inventario/Inventario";
 import Users from "./pages/Admin/Users/Users";
+import Analitico from "./pages/Admin/Analitico/Analitico";
 
 /* Controle atividades  */
 
@@ -184,6 +185,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/producao/users" element={<ProtectedRoute>
                     <Users />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/producao/analitico" element={<ProtectedRoute>
+                    <Analitico />
                 </ProtectedRoute>} />
 
                 {/*admin rh*/}

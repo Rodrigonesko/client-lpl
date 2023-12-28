@@ -4,7 +4,7 @@ import { Button, TextField, Select, FormControl, MenuItem, InputLabel, Box, Circ
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 import moment from "moment";
-import { buscaAnalistasTele, filterUsers } from "../../../../_services/user.service";
+import { filterUsers } from "../../../../_services/user.service";
 import { getPropostasAgendadas, getRnsAgendadas } from "../../../../_services/teleEntrevista.service";
 
 
