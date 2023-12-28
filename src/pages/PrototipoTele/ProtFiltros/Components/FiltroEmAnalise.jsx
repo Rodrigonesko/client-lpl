@@ -7,6 +7,7 @@ import { blue, deepPurple, grey } from "@mui/material/colors";
 import ProtDetalhesTele from "../../ProtDetalhesTele/ProtDetalhesTele";
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import Toast from "../../../../components/Toast/Toast";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -56,6 +57,9 @@ const FiltroEmAnalise = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [cpfTitular, setCpfTitular] = useState('')
     const [selected, setSelected] = useState('')
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
 
     const handleChangeAgendado = (event) => {
         if (event.target.name === 'agendado' && status.agendar) {
@@ -418,6 +422,12 @@ const FiltroEmAnalise = () => {
                                                             color={'primary'}
                                                             size={'small'}
                                                             onClick={() => {
+                                                                if (!proposta.cpfTitular) {
+                                                                    setMessage('Sem cpf de titular')
+                                                                    setSeverity('error')
+                                                                    setOpenToast(true)
+                                                                    return;
+                                                                }
                                                                 setCpfTitular(proposta.cpfTitular)
                                                                 setOpenDialog(true)
                                                                 setSelected(proposta.cpfTitular)
@@ -466,6 +476,12 @@ const FiltroEmAnalise = () => {
                 </AppBar>
                 <ProtDetalhesTele key={cpfTitular} cpfTitular={cpfTitular} atualizarTabela={() => fetchPropostas(page)} atualizarPesquisa={handlePesquisar} pesquisa={pesquisa} />
             </Dialog>
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
         </Box >
     );
 }

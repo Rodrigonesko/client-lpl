@@ -1,9 +1,12 @@
 import { FormControl, InputLabel, Paper, Select, Typography, MenuItem, TextField, List, ListItem, ListItemButton, ListItemIcon, Checkbox, Button, ListItemText } from "@mui/material"
 import Axios from "axios"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import Toast from "../../../../components/Toast/Toast"
+import AuthContext from "../../../../context/AuthContext"
 
 const FecharHorarios = ({ responsaveis }) => {
+
+    const {name} = useContext(AuthContext)
 
     const [data, setData] = useState('')
     const [responsavel, setResponsavel] = useState('')
@@ -22,6 +25,15 @@ const FecharHorarios = ({ responsaveis }) => {
     }
 
     const handleFecharHorarios = async () => {
+
+
+        if (name !== 'Administrador' && name !== "Rodrigo Onesko Dias" && name !== "Bruna Tomazoni" && name !== "Luciana Tavares"&& name !== "Claudia Rieth") {
+            setMessage('Você não tem permissão para realizar essa ação!')
+            setSeverity("error")
+            setToastOpen(true)
+            return
+        }
+
         try {
             let horariosArr = document.getElementsByClassName('horarios-disponiveis')
             let values = Object.values(horariosArr).map(e => {

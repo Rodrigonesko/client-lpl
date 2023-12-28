@@ -42,7 +42,7 @@ const Login = () => {
                         Authorization: `Bearer ${cookie}`
                     }
                 })
-                navigate('/')
+                window.location.replace('/')
 
             }
         } catch (error) {

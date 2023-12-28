@@ -14,6 +14,8 @@ const ProtectedRoute = ({ children }) => {
         try {
             const result = await verificarToken()
 
+            console.log(result);
+
             setName(result.name)
             setAccessLevel(result.accessLevel)
             const modules = await getInfoUser(result.email)
@@ -23,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
 
         } catch (error) {
             console.log(error);
-            navigate('/login')
+            window.location.replace('/login')
         }
 
     }
