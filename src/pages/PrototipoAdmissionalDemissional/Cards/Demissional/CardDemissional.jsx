@@ -166,7 +166,6 @@ const Filter = ({ setNomes }) => {
 
     const [responsaveis, setResponsaveis] = useState({
         samanthaMacielGiazzon: true,
-        rodrigoDias: false,
         administrador: false,
         gersonDouglas: false,
     })
@@ -176,8 +175,6 @@ const Filter = ({ setNomes }) => {
             setResponsaveis({ ...responsaveis, samanthaMacielGiazzon: event.target.checked });
         } else if (event.target.name === 'administrador') {
             setResponsaveis({ ...responsaveis, administrador: event.target.checked });
-        } else if (event.target.name === 'rodrigoDias') {
-            setResponsaveis({ ...responsaveis, rodrigoDias: event.target.checked });
         } else if (event.target.name === 'gersonDouglas') {
             setResponsaveis({ ...responsaveis, gersonDouglas: event.target.checked });
         }
@@ -204,7 +201,6 @@ const Filter = ({ setNomes }) => {
         setResponsaveis({
             samanthaMacielGiazzon: false,
             administrador: false,
-            rodrigoDias: false,
             gersonDouglas: false,
         })
 
@@ -233,7 +229,6 @@ const Filter = ({ setNomes }) => {
                 <FormGroup >
                     <FormControlLabel control={<Checkbox checked={responsaveis.samanthaMacielGiazzon} onChange={handleChangeResponsaveis} name='samanthaMacielGiazzon' />} label='Samantha Maciel Giazzon' />
                     <FormControlLabel control={<Checkbox checked={responsaveis.administrador} onChange={handleChangeResponsaveis} name='administrador' />} label='Administrador' />
-                    <FormControlLabel control={<Checkbox checked={responsaveis.rodrigoDias} onChange={handleChangeResponsaveis} name='rodrigoDias' />} label='Rodrigo Dias' />
                     <FormControlLabel control={<Checkbox checked={responsaveis.gersonDouglas} onChange={handleChangeResponsaveis} name='gersonDouglas' />} label='Gerson Douglas' />
                 </FormGroup>
                 <Divider />
