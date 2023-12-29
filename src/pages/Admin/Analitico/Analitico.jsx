@@ -4,7 +4,7 @@ import { Box, Container } from "@mui/system"
 import { IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material"
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { red } from "@mui/material/colors";
-import AnaliticoTele from "./components/AnaliticoTele";
+import AnaliticoTele from "./components/Tele/AnaliticoTele";
 import ExpandIcon from '@mui/icons-material/Expand';
 
 const tabStyle = {

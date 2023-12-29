@@ -240,3 +240,7 @@ export const getAgendasFechadas = async () => {
 export const getRelatorioProdutividadeAnexosMensal = async (mes) => {
     return await new ApiCall(`/entrevistas/relatorioProdutividadeAnexosMensal/${mes}`).get()
 }
+
+export const quantidadeAnalistasPorMes = async (mes) => {
+    return await new ApiCall(`/entrevistas/quantidadeAnalistasPorMes/${mes}`).get()
+}
