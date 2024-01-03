@@ -64,7 +64,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
             })
             setLoading(true);
 
-            const sortedSolicitacoes = result.data.result.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta))
+            const sortedSolicitacoes = result.data.result.sort((a, b) => -a.etiqueta.localeCompare(-b.etiqueta))
             setSolicitacoes(sortedSolicitacoes)
 
             setTotalPages(result.data.total)

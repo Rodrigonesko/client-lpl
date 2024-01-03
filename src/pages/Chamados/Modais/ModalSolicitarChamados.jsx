@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../_services/user.service"
@@ -15,13 +15,10 @@ const ModalSolicitarChamados = () => {
         descricao: '',
         retorno: ''
     })
-    // const [snackSelect, setSnackSelect] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
     const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
     const [severitySnack, setSeveritySnack] = useState('')
-    const [alerta, setAlerta] = useState(false)
-    const [colaborador, setColaborador] = useState('')
 
     const fetchData = async () => {
         const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, { withCredentials: true })
@@ -101,37 +98,35 @@ const ModalSolicitarChamados = () => {
 
     return (
         <>
-            <Container>
-                <div className="title">
-                    <h2>Solicitação de Chamados</h2>
-                </div>
-                <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
-                    <Button onClick={handleClickOpen} variant='contained' sx={{ marginRight: '10px' }}>Abrir Chamado</Button>
-                    <Dialog open={open} onClose={handleClose} fullWidth='fullWidth' >
-                        <DialogTitle id="alert-dialog-title">{"Novo Chamado"}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {"Escreva o assunto e descreva o que está ocorrendo para que possamos auxiliar da melhor forma!"}
-                                <FormGroup >
-                                    <br />
-                                    <TextField type='text' onChange={handleChangeDados} name="assunto" label='Assunto' />
-                                    <br />
-                                    <TextField type='text' onChange={handleChangeDados} placeholder="Placeholder" multiline name="descricao" label='Descrição' />
-                                </FormGroup>
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose}>Fechar</Button>
-                            <Button onClick={handleSave} autoFocus>Salvar</Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
-                        <Alert variant="filled" onClose={handleCloseSnack} severity={severitySnack} sx={{ width: '100%' }}>
-                            {textoSnack}
-                        </Alert>
-                    </Snackbar>
-                </Box>
-            </Container>
+            <div className="title">
+                <h2>Solicitação de Chamados</h2>
+            </div>
+            <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
+                <Button onClick={handleClickOpen} variant='contained' sx={{ marginRight: '10px' }}>Abrir Chamado</Button>
+                <Dialog open={open} onClose={handleClose} fullWidth='fullWidth' >
+                    <DialogTitle id="alert-dialog-title">{"Novo Chamado"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {"Escreva o assunto e descreva o que está ocorrendo para que possamos auxiliar da melhor forma!"}
+                            <FormGroup >
+                                <br />
+                                <TextField type='text' onChange={handleChangeDados} name="assunto" label='Assunto' />
+                                <br />
+                                <TextField type='text' onChange={handleChangeDados} placeholder="Placeholder" multiline name="descricao" label='Descrição' />
+                            </FormGroup>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Fechar</Button>
+                        <Button onClick={handleSave} autoFocus>Salvar</Button>
+                    </DialogActions>
+                </Dialog>
+                <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
+                    <Alert variant="filled" onClose={handleCloseSnack} severity={severitySnack} sx={{ width: '100%' }}>
+                        {textoSnack}
+                    </Alert>
+                </Snackbar>
+            </Box>
         </>
     )
 }
