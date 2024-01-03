@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../_services/user.service"
@@ -15,13 +15,10 @@ const ModalSolicitarChamados = () => {
         descricao: '',
         retorno: ''
     })
-    // const [snackSelect, setSnackSelect] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
     const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
     const [severitySnack, setSeveritySnack] = useState('')
-    const [alerta, setAlerta] = useState(false)
-    const [colaborador, setColaborador] = useState('')
 
     const fetchData = async () => {
         const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, { withCredentials: true })

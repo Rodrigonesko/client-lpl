@@ -2,25 +2,74 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Axios from 'axios'
 import moment from "moment";
-import { Button, Table, TableHead, TableBody, TableRow, TableCell, Container, TableContainer } from "@mui/material";
+import { Button, Table, TableHead, TableBody, TableRow, TableCell, Container, TableContainer, Box, Paper, TextField, Snackbar, Alert, Pagination, CircularProgress } from "@mui/material";
+import { blue } from "@mui/material/colors";
+import axios from "axios";
 
 const UrgenciaEmergenciaTodos = () => {
 
     const [propostas, setPropostas] = useState([])
     const [total, setTotal] = useState('')
+    const [pesquisa, setPesquisa] = useState('')
+    const [alerta, setAlerta] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
 
-    const buscarPropostas = async () => {
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const buscarPropostas = async (valor) => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas`, { withCredentials: true })
+            setLoading(true);
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?page=${valor}&limit=25`, { withCredentials: true })
 
+            setLoading(false);
             setPropostas(result.data.propostas)
-            setTotal(result.data.propostas.length)
+            setTotal(result.data.total)
+            setTotalPages(result.data.total)
 
         } catch (error) {
+            setLoading(false);
             console.log(error);
         }
     }
+
+    const handleChange = (elemento) => {
+        setPesquisa(elemento.target.value)
+    }
+
+    const handleFilter = async (event, page) => {
+        event?.preventDefault()
+
+        if (pesquisa.length <= 2) {
+            setAlerta(true)
+            return
+        }
+        setLoading(true);
+
+        const result = await axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/filter?pesquisa=${pesquisa}&page=${page}&limit=25`, {
+            withCredentials: true,
+        })
+        setPropostas(result.data.result)
+        setTotalPages(result.data.total)
+        setLoading(false)
+        console.log(result);
+    }
+
+    const handleClose = () => {
+        setAlerta(false)
+    }
+
+    const handlePageChange = (event, value) => {
+        setPage(value);
+        if ((pesquisa.length > 2)) {
+            handleFilter(event, value);
+        } else {
+            buscarPropostas(value)
+        }
+    }
+
     const reportTodas = async () => {
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/todas`, { withCredentials: true })
 
@@ -119,53 +168,73 @@ const UrgenciaEmergenciaTodos = () => {
     }
 
     useEffect(() => {
-        buscarPropostas()
-    }, [])
+        buscarPropostas(page)
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <>
             <Sidebar>
-                <section className="section-padrao-tabela">
-                    <Container>
-                        <div className="title">
-                            <h3>Urgência & Emergência</h3>
-                        </div>
-                        <div>
-                            <h3>Concluídas: {total}</h3>
-                            <Button variant='contained' style={{ position: 'absolute', top: '20px', right: '50px' }} onClick={reportTodas} >Report Todas</Button>
-                        </div>
-                        <TableContainer>
-                            <Table className="table">
-                                <TableHead className="table-header">
-                                    <TableRow>
-                                        <TableCell>Nome Associado</TableCell>
-                                        <TableCell>Mo</TableCell>
-                                        <TableCell>Proposta</TableCell>
-                                        <TableCell>Idade</TableCell>
-                                        <TableCell>Telefone</TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {propostas.map(e => {
-                                        return (
-                                            <TableRow key={e._id}>
-                                                <TableCell>{e.nomeAssociado}</TableCell>
-                                                <TableCell>{e.numAssociado}</TableCell>
-                                                <TableCell>{e.proposta}</TableCell>
-                                                <TableCell>{e.idade}</TableCell>
-                                                <TableCell>{e.telefone}</TableCell>
-                                                <TableCell><Button size="small" variant='contained' href={`/urgenciaEmergencia/detalhes/${e._id}`}>Detalhes</Button></TableCell>
-                                            </TableRow>
-                                        )
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Container>
-                </section>
+                <Container maxWidth>
+                    <div className="title">
+                        <h2>Urgência & Emergência</h2>
+                    </div>
+                    < br />
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <h3>Concluídas: {total}</h3>
+                        <Button variant='contained' onClick={reportTodas} >Report Todas</Button>
+                    </Box>
+                    < br />
+                    <form action="">
+                        <TextField type='text' size='small' label='Nome, MO e Proposta' onChange={handleChange} sx={{ marginRight: '10px' }} />
+                        <Button type='submit' variant='contained' onClick={(e) => handleFilter(e, 1)}>BUSCAR</Button>
+                    </form>
+                    <Snackbar open={alerta} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert variant="filled" onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+                            Digite no minimo 3 caracteres!
+                        </Alert>
+                    </Snackbar>
+                    < br />
+                    <TableContainer component={Paper}>
+                        <Box display={'flex'} justifyContent={'flex-end'}>
+                            <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
+                        </Box>
+                        {
+                            !loading ? (
+                                <Table className="table">
+                                    <TableHead className="table-header">
+                                        <TableRow sx={{ bgcolor: blue[600] }}>
+                                            <TableCell sx={{ color: "white" }}>NOME ASSOCIADO</TableCell>
+                                            <TableCell sx={{ color: "white" }}>MO</TableCell>
+                                            <TableCell sx={{ color: "white" }}>PROPOSTA</TableCell>
+                                            <TableCell sx={{ color: "white" }}>IDADE</TableCell>
+                                            <TableCell sx={{ color: "white" }}>TELEFONE</TableCell>
+                                            <TableCell></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {propostas.map(e => {
+                                            return (
+                                                <TableRow key={e._id}>
+                                                    <TableCell>{e.nomeAssociado}</TableCell>
+                                                    <TableCell>{e.numAssociado}</TableCell>
+                                                    <TableCell>{e.proposta}</TableCell>
+                                                    <TableCell>{e.idade}</TableCell>
+                                                    <TableCell>{e.telefone}</TableCell>
+                                                    <TableCell><Button size="small" variant='contained' href={`/urgenciaEmergencia/detalhes/${e._id}`}>Detalhes</Button></TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            ) : (
+                                <Box width={'100%'} display={'flex'} justifyContent={"center"}>
+                                    <CircularProgress />
+                                </Box>
+                            )}
+                    </TableContainer>
+                </Container>
             </Sidebar>
-
         </>
     )
 }
