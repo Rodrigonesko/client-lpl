@@ -78,3 +78,11 @@ export const quantidadePropostasPorMesFiltradas = async (data) => {
 export const graficoPropostasPorMesFiltradas = async (data) => {
     return await new ApiCall('/graficoPropostasPorMesFiltradas', URL_API).post(data)
 }
+
+export const getPropostaById = async (id) => {
+    return await new ApiCall(`/proposta/${id}`, URL_API).get()
+}
+
+export const getPropostaPorNomeEProposta = async (nome, proposta) => {
+    return await new ApiCall(`/buscaPorPropostaENome/${nome}/${proposta}`, URL_API).get()
+}

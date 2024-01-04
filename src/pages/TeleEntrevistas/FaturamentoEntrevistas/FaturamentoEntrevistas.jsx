@@ -112,7 +112,9 @@ const FaturamentoEntrevistas = () => {
         const reusltRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/concluidas`, {
             withCredentials: true
         })
-        const resultUe = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas`, { withCredentials: true })
+        const resultUe = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?limit=0&page=0`, { withCredentials: true })
+
+        console.log(resultUe);
 
         let xls = '\ufeff'
         xls += "<table border='1'>"

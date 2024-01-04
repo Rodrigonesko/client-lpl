@@ -298,7 +298,6 @@ const Users = () => {
                     sx={{
                         mt: 2,
                     }}
-
                 />
                 <TableUsers
                     users={filteredUsers}

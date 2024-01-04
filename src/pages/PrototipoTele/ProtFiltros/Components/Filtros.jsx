@@ -571,8 +571,6 @@ const Filtros = ({
                     </FormControl>
                 </Box>
             </Collapse>
-
-
         </Box>
     )
 }

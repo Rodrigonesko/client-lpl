@@ -244,3 +244,7 @@ export const getRelatorioProdutividadeAnexosMensal = async (mes) => {
 export const quantidadeAnalistasPorMes = async (mes) => {
     return await new ApiCall(`/entrevistas/quantidadeAnalistasPorMes/${mes}`).get()
 }
+
+export const filterEntrevistasRealizadas = async ({ pesquisa, page, limit, entrevistaQualidade }) => {
+    return await new ApiCall('/entrevistas/filterEntrevistasRealizdas').post({ pesquisa, page, limit, entrevistaQualidade })
+}
