@@ -66,7 +66,7 @@ const BancoHoras = () => {
                                     <TableBody>
                                         {
                                             colaboradores.map(colaborador => {
-                                                if (colaborador.nomeCompleto) {
+                                                if ((colaborador.nomeCompleto) && (colaborador.inativo !== true)) {
                                                     return (
                                                         <TableRow key={colaborador.nomeCompleto}>
                                                             <TableCell>
