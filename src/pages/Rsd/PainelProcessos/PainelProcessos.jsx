@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Painel from "../../../components/Painel/Painel";
 import './PainelProcessos.css'
 import { filtroPedidosNaoFinalizados, getPedidosNaoFinalizados } from "../../../_services/rsd.service";
-import { Container, Box, Typography, Paper, TextField, Button, Skeleton } from "@mui/material";
+import { Container, Box, Typography, Paper, TextField, Button, Skeleton, Snackbar, Alert } from "@mui/material";
 
 const PainelProcessos = () => {
 
@@ -37,6 +37,9 @@ const PainelProcessos = () => {
 
     const [pedidos, setPedidos] = useState([])
 
+    const [openSnack, setOpenSnack] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
+
     const [aIniciar, setAiniciar] = useState([])
     const [agendados, setAgendados] = useState([])
     const [aguardandoContatos, setAguardandoContatos] = useState([])
@@ -46,10 +49,21 @@ const PainelProcessos = () => {
 
     const [pesquisa, setPesquisa] = useState('')
 
+    const handleCloseSnack = () => {
+        setOpenSnack(false);
+    };
+
     const pesquisaFiltro = async (e) => {
         try {
             e.preventDefault()
+
+            if (pesquisa.length <= 0) {
+                setOpenSnack(true)
+                return
+            }
+
             const result = await filtroPedidosNaoFinalizados(pesquisa)
+            setFlushHook(true)
             setPedidos(result.pedidos)
             setAiniciar([])
             setAgendados([])
@@ -70,6 +84,7 @@ const PainelProcessos = () => {
                     setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
                 }
             })
+            return
 
         } catch (error) {
             console.log(error);
@@ -111,9 +126,10 @@ const PainelProcessos = () => {
 
         }
 
+        setFlushHook(false)
         buscarPedidos()
         setStatusPedido()
-    }, [teste])
+    }, [teste, flushHook])
 
     return (
         <>
@@ -132,7 +148,11 @@ const PainelProcessos = () => {
                                 <Button type="submit" variant="contained" onClick={pesquisaFiltro} >Pesquisar</Button>
                             </Box>
                         </form>
-
+                        <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
+                            <Alert variant="filled" onClose={handleCloseSnack} severity='warning' sx={{ width: '100%' }}>
+                                Digite algum valor!
+                            </Alert>
+                        </Snackbar>
                         <div className="painel-processos">
 
                             {
@@ -162,7 +182,6 @@ const PainelProcessos = () => {
                                             <Skeleton animation="wave" />
                                             <Skeleton animation="wave" />
                                         </Box>
-
                                     </Box>
                                 ) : (
                                     <>
