@@ -320,12 +320,31 @@ const FiltroEmAnalise = () => {
 
     return (
         <Box >
-            <Typography
-                variant="h5"
-                m={2}
-            >
-                Em análise
-            </Typography>
+            <Box display={'flex'} mb={2}>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: 'bold',
+                        position: 'relative',
+                        '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            width: '30%',
+                            height: '2px',
+                            bottom: 0,
+                            left: '0%',
+                            backgroundColor: 'currentColor',
+                            transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
+                        },
+                        '&:hover::after': {
+                            width: '100%',
+                            left: '0%',
+                        },
+                    }}
+                >
+                    Em Análise
+                </Typography>
+            </Box>
             <Divider />
             <Box display={'flex'} m={2}>
                 <Filtros
@@ -347,8 +366,43 @@ const FiltroEmAnalise = () => {
                 <Box p={1} width={'100%'}>
 
                     <form action="" style={{ display: 'flex', margin: '10px' }} onSubmit={handlePesquisar} >
-                        <TextField label="Pesquisar" variant="outlined" size="small" value={pesquisa} onChange={e => setPesquisa(e.target.value)} />
-                        <Button sx={{ ml: 2 }} variant={'contained'} color={'primary'} size="small" type="submit">Pesquisar</Button>
+                        <TextField
+                            label="Pesquisar"
+                            variant="outlined"
+                            value={pesquisa}
+                            onChange={e => setPesquisa(e.target.value)}
+                            sx={{ width: '100%' }}
+                            placeholder="Nome ou proposta"
+                            size="small"
+                            InputProps={{
+                                endAdornment: (
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: blue[100],
+                                            color: blue[800],
+                                            '&:hover': {
+                                                bgcolor: blue[500],
+                                                opacity: 0.8,
+                                            },
+                                        }}
+                                        type="submit"
+                                        size="small"
+                                    >
+                                        Pesquisar
+                                    </Button>
+                                ),
+                                startAdornment: (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pt: 0.5, pb: 0.5, mr: 1 }}>
+                                        <Typography variant="h6" color="textSecondary" component="div">
+                                            <Box fontWeight="fontWeightBold">
+                                                #
+                                            </Box>
+                                        </Typography>
+                                    </Box>
+                                )
+                            }}
+                        />
                     </form>
 
                     <Typography fontWeight={'bold'}>
@@ -362,19 +416,19 @@ const FiltroEmAnalise = () => {
                             !loading ? (
                                 <Table size="small">
                                     <TableHead>
-                                        <TableRow sx={{ bgcolor: blue[600] }}>
-                                            <TableCell sx={{ color: "white" }}>Recebimento</TableCell>
-                                            <TableCell sx={{ color: "white" }} >Vigência</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Proposta</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Nome</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Associado</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Idade</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Sexo</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Tipo Contrato</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Janela Escolhida</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Status</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Risco</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Detalhes</TableCell>
+                                        <TableRow sx={{ bgcolor: '#F5F5F5' }}>
+                                            <TableCell>Recebimento</TableCell>
+                                            <TableCell>Vigência</TableCell>
+                                            <TableCell>Proposta</TableCell>
+                                            <TableCell>Nome</TableCell>
+                                            <TableCell>Associado</TableCell>
+                                            <TableCell>Idade</TableCell>
+                                            <TableCell>Sexo</TableCell>
+                                            <TableCell>Contrato</TableCell>
+                                            <TableCell>Janela</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell>Risco</TableCell>
+                                            <TableCell>Detalhes</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -419,7 +473,6 @@ const FiltroEmAnalise = () => {
                                                     >
                                                         <Button
                                                             variant={'contained'}
-                                                            color={'primary'}
                                                             size={'small'}
                                                             onClick={() => {
                                                                 if (!proposta.cpfTitular) {
@@ -431,6 +484,14 @@ const FiltroEmAnalise = () => {
                                                                 setCpfTitular(proposta.cpfTitular)
                                                                 setOpenDialog(true)
                                                                 setSelected(proposta.cpfTitular)
+                                                            }}
+                                                            sx={{
+                                                                bgcolor: 'black',
+                                                                color: 'white',
+                                                                '&:hover': {
+                                                                    bgcolor: 'black',
+                                                                    opacity: 0.8,
+                                                                },
                                                             }}
                                                         // href={`/entrevistas/protDetalhesTele/${proposta.cpfTitular}`}
                                                         // target="_blank"

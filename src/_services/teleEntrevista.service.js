@@ -248,3 +248,19 @@ export const quantidadeAnalistasPorMes = async (mes) => {
 export const filterEntrevistasRealizadas = async ({ pesquisa, page, limit, entrevistaQualidade }) => {
     return await new ApiCall('/entrevistas/filterEntrevistasRealizdas').post({ pesquisa, page, limit, entrevistaQualidade })
 }
+
+export const getPropostasAAnexar = async () => {
+    return await new ApiCall('/entrevistas/propostas/anexar').get()
+}
+
+export const mandarPropostaParaImplantacao = async ({ id }) => {
+    return await new ApiCall('/entrevistas/mandarImplatacao').put({ id })
+}
+
+export const anexarProposta = async ({ id }) => {
+    return await new ApiCall('/entrevistas/anexar').put({ id })
+}
+
+export const filterQueryDadosEntrevista = async ({ page, limit, query }) => {
+    return await new ApiCall('/entrevistas/filterQueryDadosEntrevistas').post({ page, limit, query })
+}

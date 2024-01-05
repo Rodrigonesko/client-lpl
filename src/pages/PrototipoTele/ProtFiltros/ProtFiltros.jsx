@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import FiltroEmAnalise from "./Components/FiltroEmAnalise";
 import FiltroAgendadas from "./Components/FiltroAgendadas";
 import Realizadas from "./Components/Realizadas/Realizadas";
+import Anexos from "./Components/Anexos/Anexos";
+import Implantacao from "./Components/Implantacao/Implantacao";
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -52,7 +54,7 @@ const ProtFiltros = () => {
             <Sidebar>
                 <Box sx={{ width: '100%', m: 1 }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                        <Tabs sx={{ m: 2 }} value={value} onChange={handleChange} aria-label="basic tabs example">
                             <Tab sx={{
                                 ":hover": {
                                     bgcolor: 'lightgray',
@@ -71,6 +73,18 @@ const ProtFiltros = () => {
                                     color: 'black'
                                 },
                             }} label="Realizadas" {...a11yProps(1)} />
+                            <Tab sx={{
+                                ":hover": {
+                                    bgcolor: 'lightgray',
+                                    color: 'black'
+                                },
+                            }} label="Anexos" {...a11yProps(1)} />
+                            <Tab sx={{
+                                ":hover": {
+                                    bgcolor: 'lightgray',
+                                    color: 'black'
+                                },
+                            }} label="Implantação" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
@@ -81,6 +95,12 @@ const ProtFiltros = () => {
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>
                         <Realizadas />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={3}>
+                        <Anexos />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={4}>
+                        <Implantacao />
                     </CustomTabPanel>
                 </Box>
             </Sidebar>
