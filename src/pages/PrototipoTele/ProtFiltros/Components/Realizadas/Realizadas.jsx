@@ -1,5 +1,5 @@
 import { AppBar, Button, Chip, Dialog, Divider, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, LinearProgress, MenuItem, Pagination, Select, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
-import { deepPurple, green, grey, red } from "@mui/material/colors";
+import { green, grey, red } from "@mui/material/colors";
 import { Box } from "@mui/system"
 import { forwardRef, useEffect, useState } from "react";
 import { filterEntrevistasRealizadas } from "../../../../../_services/teleEntrevista.service";
@@ -41,15 +41,12 @@ const Realizadas = () => {
     }
 
     const buscarCpfTitular = async (proposta) => {
-
         let result = ''
-
         if (!proposta.idProposta) {
             result = await getPropostaPorNomeEProposta(proposta.nome, proposta.proposta)
         } else {
             result = await getPropostaById(proposta.idProposta)
         }
-
         setCpfTitular(result.cpfTitular)
         setOpenDialog(true)
     }
@@ -334,7 +331,33 @@ const Realizadas = () => {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                <ProtDetalhesTele key={cpfTitular} cpfTitular={cpfTitular} atualizarTabela={() => handleSearch()} atualizarPesquisa={handleSearch} pesquisa={handleSearch} />
+                <ProtDetalhesTele
+                    key={cpfTitular}
+                    cpfTitular={cpfTitular}
+                    atualizarTabela={() => handleSearch(
+                        page,
+                        pesquisa,
+                        rowsPerPage,
+                        entrevistaQualidade
+                    )}
+                    atualizarPesquisa={() => {
+                        handleSearch(
+                            page,
+                            pesquisa,
+                            rowsPerPage,
+                            entrevistaQualidade
+                        )
+
+                    }}
+                    pesquisa={() => {
+                        handleSearch(
+                            page,
+                            pesquisa,
+                            rowsPerPage,
+                            entrevistaQualidade
+                        )
+                    }}
+                />
             </Dialog>
         </Box>
 

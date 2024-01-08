@@ -84,6 +84,7 @@ const PainelProcessos = () => {
                     setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
                 }
             })
+            
             return
 
         } catch (error) {
