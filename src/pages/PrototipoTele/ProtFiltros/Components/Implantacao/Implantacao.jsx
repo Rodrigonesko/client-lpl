@@ -1,4 +1,4 @@
-import { Button, Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material"
+import { Button, Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material"
 import { yellow } from "@mui/material/colors"
 import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
@@ -187,6 +187,13 @@ const Implantacao = () => {
                     <Upload />
                 </Grid>
             </Grid>
+            <Box>
+                <Pagination
+                    count={(Math.ceil(totalPages / 100))}
+                    page={page}
+                    onChange={(event, value) => setPage(value)}
+                />
+            </Box>
             <TableContainer>
                 <Table
                     size="small"
