@@ -1,12 +1,13 @@
-import { Button, Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material"
+import { Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import { yellow } from "@mui/material/colors"
 import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
 import { filterQueryDadosEntrevista } from "../../../../../_services/teleEntrevista.service"
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import moment from "moment"
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Upload from "./Upload"
+import ModalImplantar from "./ModalImplantar"
+import Relatorio from "./Relatorio"
 
 const Implantacao = () => {
 
@@ -19,6 +20,7 @@ const Implantacao = () => {
     const [contrato, setContrato] = useState('Todos')
     const [situacoesAmil, setSituacoesAmil] = useState([])
     const [situacaoAmil, setSituacaoAmil] = useState('Todos')
+    const [pesquisa, setPesquisa] = useState('')
 
     const fetchContratos = async () => {
         const result = await filterQueryDadosEntrevista({
@@ -55,6 +57,39 @@ const Implantacao = () => {
         setTotalPages(result.total)
         setLoading(false)
     }
+
+    const fetchPesquisa = async (pageValue = 1) => {
+        setLoading(true)
+        const result = await filterQueryDadosEntrevista({
+            query: {
+                implantado: { $ne: 'Sim' },
+                implantacao: 'Sim',
+                $or: [
+                    { nome: { $regex: pesquisa, $options: 'i' } },
+                    { proposta: { $regex: pesquisa, $options: 'i' } },
+                ],
+                tipoContrato: contrato === 'Todos' ? { $regex: '.*' } : contrato,
+                situacaoAmil: situacaoAmil === 'Todos' ? { $regex: '.*' } : situacaoAmil
+            },
+            page: pageValue,
+            limit: 100,
+        })
+        setPropostas(result.result)
+        setTotalPages(result.total)
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        if (pesquisa === '' && contrato === 'Todos' && situacaoAmil === 'Todos') {
+            fetchData()
+        } else {
+            fetchPesquisa()
+        }
+    }, [pesquisa, contrato, situacaoAmil])
+
+    useEffect(() => {
+        fetchPesquisa(page)
+    }, [page])
 
     useEffect(() => {
         fetchData()
@@ -98,6 +133,26 @@ const Implantacao = () => {
                     mb: 2,
                 }}
             >
+                <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={2}
+                    sx={{
+                        mr: 3,
+                    }}
+                >
+                    <TextField
+                        size="small"
+                        label="Pesquisar"
+                        variant="outlined"
+                        sx={{
+                            width: '100%',
+                        }}
+                        value={pesquisa}
+                        onChange={event => setPesquisa(event.target.value)}
+                    />
+                </Grid>
                 <Grid
                     item
                     xs={12}
@@ -187,6 +242,20 @@ const Implantacao = () => {
                     <Upload />
                 </Grid>
             </Grid>
+            <Box
+                sx={{
+                    mb: 2,
+                }}
+            >
+                <Typography
+                    variant="h6"
+                    sx={{
+                        fontWeight: 'bold',
+                    }}
+                >
+                    {totalPages} resultados encontrados
+                </Typography>
+            </Box>
             <Box>
                 <Pagination
                     count={(Math.ceil(totalPages / 100))}
@@ -225,12 +294,12 @@ const Implantacao = () => {
                             <TableCell>
                                 Divergência
                             </TableCell>
-                            <TableCell>
-                                <Tooltip title='Downalod'>
-                                    <IconButton>
-                                        <FileDownloadIcon />
-                                    </IconButton>
-                                </Tooltip>
+                            <TableCell
+                                align="center"
+                            >
+                                <Relatorio
+                                    propostas={propostas}
+                                />
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -262,14 +331,13 @@ const Implantacao = () => {
                                         <TableCell>
                                             {proposta.divergencia}
                                         </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                variant="contained"
-                                                color="warning"
-                                                size="small"
-                                            >
-                                                Implantar
-                                            </Button>
+                                        <TableCell
+                                            align="center"
+                                        >
+                                            <ModalImplantar
+                                                proposta={proposta}
+                                                setFlushHook={setFlushHook}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))

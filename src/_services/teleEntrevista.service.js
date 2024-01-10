@@ -257,6 +257,10 @@ export const mandarPropostaParaImplantacao = async ({ id }) => {
     return await new ApiCall('/entrevistas/mandarImplatacao').put({ id })
 }
 
+export const implantarProposta = async ({ id }) => {
+    return await new ApiCall('/entrevistas/implantar').put({ id })
+}
+
 export const anexarProposta = async ({ id }) => {
     return await new ApiCall('/entrevistas/anexar').put({ id })
 }
