@@ -8,6 +8,21 @@ import Realizadas from "./Components/Realizadas/Realizadas";
 import Anexos from "./Components/Anexos/Anexos";
 import Implantacao from "./Components/Implantacao/Implantacao";
 
+const tabStyle = {
+    ":hover": {
+        bgcolor: 'lightgray',
+        color: 'black'
+    },
+    '&.Mui-selected': {
+        color: 'black',
+        backgroundColor: '#fff',
+        fontWeight: 'bold',
+    },
+    Indicator: {
+        backgroundColor: 'black',
+    },
+}
+
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -55,36 +70,11 @@ const ProtFiltros = () => {
                 <Box sx={{ width: '100%', m: 1 }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs sx={{ m: 2 }} value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab sx={{
-                                ":hover": {
-                                    bgcolor: 'lightgray',
-                                    color: 'black'
-                                },
-                            }} label="Pendencias" {...a11yProps(0)} />
-                            <Tab sx={{
-                                ":hover": {
-                                    bgcolor: 'lightgray',
-                                    color: 'black'
-                                },
-                            }} label="Agendadas" {...a11yProps(1)} />
-                            <Tab sx={{
-                                ":hover": {
-                                    bgcolor: 'lightgray',
-                                    color: 'black'
-                                },
-                            }} label="Realizadas" {...a11yProps(1)} />
-                            <Tab sx={{
-                                ":hover": {
-                                    bgcolor: 'lightgray',
-                                    color: 'black'
-                                },
-                            }} label="Anexos" {...a11yProps(1)} />
-                            <Tab sx={{
-                                ":hover": {
-                                    bgcolor: 'lightgray',
-                                    color: 'black'
-                                },
-                            }} label="Implantação" {...a11yProps(1)} />
+                            <Tab sx={tabStyle} label="Pendencias" {...a11yProps(0)} />
+                            <Tab sx={tabStyle} label="Agendadas" {...a11yProps(1)} />
+                            <Tab sx={tabStyle} label="Realizadas" {...a11yProps(1)} />
+                            <Tab sx={tabStyle} label="Anexos" {...a11yProps(1)} />
+                            <Tab sx={tabStyle} label="Implantação" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>

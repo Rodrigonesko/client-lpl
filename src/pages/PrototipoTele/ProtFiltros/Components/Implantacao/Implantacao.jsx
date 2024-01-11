@@ -1,9 +1,8 @@
-import { Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Divider, FormControl, Grid, InputLabel, LinearProgress, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { yellow } from "@mui/material/colors"
 import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
 import { filterQueryDadosEntrevista } from "../../../../../_services/teleEntrevista.service"
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import moment from "moment"
 import Upload from "./Upload"
 import ModalImplantar from "./ModalImplantar"
@@ -60,17 +59,26 @@ const Implantacao = () => {
 
     const fetchPesquisa = async (pageValue = 1) => {
         setLoading(true)
+
+        let query = {
+            implantado: { $ne: 'Sim' },
+            implantacao: 'Sim',
+            $or: [
+                { nome: { $regex: pesquisa, $options: 'i' } },
+                { proposta: { $regex: pesquisa, $options: 'i' } },
+            ]
+        }
+
+        if (contrato !== 'Todos') {
+            query.tipoContrato = contrato
+        }
+
+        if (situacaoAmil !== 'Todos') {
+            query.situacaoAmil = situacaoAmil
+        }
+
         const result = await filterQueryDadosEntrevista({
-            query: {
-                implantado: { $ne: 'Sim' },
-                implantacao: 'Sim',
-                $or: [
-                    { nome: { $regex: pesquisa, $options: 'i' } },
-                    { proposta: { $regex: pesquisa, $options: 'i' } },
-                ],
-                tipoContrato: contrato === 'Todos' ? { $regex: '.*' } : contrato,
-                situacaoAmil: situacaoAmil === 'Todos' ? { $regex: '.*' } : situacaoAmil
-            },
+            query,
             page: pageValue,
             limit: 100,
         })
@@ -352,7 +360,7 @@ const Implantacao = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Box >
+        </Box>
     )
 }
 

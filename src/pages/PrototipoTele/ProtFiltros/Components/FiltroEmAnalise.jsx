@@ -18,6 +18,7 @@ const FiltroEmAnalise = () => {
     const [status, setStatus] = useState({
         agendar: true,
         agendado: false,
+        canceladoHumanizado: false,
         humanizado: false,
         naoLidas: false,
         janelas: false,
@@ -62,10 +63,12 @@ const FiltroEmAnalise = () => {
     const [message, setMessage] = useState('')
 
     const handleChangeAgendado = (event) => {
-        if (event.target.name === 'agendado' && status.agendar) {
-            setStatus({ ...status, agendado: true, agendar: false });
-        } else if (event.target.name === 'agendar' && status.agendado) {
-            setStatus({ ...status, agendado: false, agendar: true });
+        if (event.target.name === 'agendado' && (status.agendar || status.canceladoHumanizado)) {
+            setStatus({ ...status, agendado: true, agendar: false, canceladoHumanizado: false });
+        } else if (event.target.name === 'agendar' && (status.agendado || status.canceladoHumanizado)) {
+            setStatus({ ...status, agendado: false, agendar: true, canceladoHumanizado: false });
+        } else if (event.target.name === 'canceladoHumanizado' && (status.agendar || status.agendado)) {
+            setStatus({ ...status, agendado: false, agendar: false, canceladoHumanizado: true });
         } else {
             setStatus({ ...status, [event.target.name]: event.target.checked });
         }
@@ -195,6 +198,7 @@ const FiltroEmAnalise = () => {
         setStatus({
             agendar: false,
             humanizado: false,
+            canceladoHumanizado: false,
             janelas: false,
             ajustar: false,
             semWhats: false,
@@ -228,6 +232,7 @@ const FiltroEmAnalise = () => {
         setStatus({
             agendar: true,
             humanizado: true,
+            canceladoHumanizado: true,
             janelas: true,
             ajustar: true,
             semWhats: true,

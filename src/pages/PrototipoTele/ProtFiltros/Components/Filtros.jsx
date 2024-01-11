@@ -194,6 +194,25 @@ const Filtros = ({
                                 }
                                 label={open && `Agendado (${totalPropostas.agendado})`}
                             />
+                            <FormControlLabel
+                                control={
+                                    open ? (
+                                        <Checkbox
+                                            checked={status.canceladoHumanizado}
+                                            onChange={handleChangeAgendado}
+                                            name="canceladoHumanizado"
+                                        />) : (
+                                        <Tooltip title='Cancelado Humanizado' arrow>
+                                            <Checkbox
+                                                checked={status.canceladoHumanizado}
+                                                onChange={handleChangeAgendado}
+                                                name="canceladoHumanizado"
+                                            />
+                                        </Tooltip>
+                                    )
+                                }
+                                label={open && `Cancelado Humanizado (${totalPropostas.canceladoHumanizado})`}
+                            />
                             <Divider />
                             <FormControlLabel
                                 control={

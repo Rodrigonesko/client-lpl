@@ -1,17 +1,20 @@
-import { IconButton, Tooltip } from "@mui/material"
+import { CircularProgress, IconButton, Tooltip } from "@mui/material"
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { filterQueryDadosEntrevista } from "../../../../../_services/teleEntrevista.service";
+import { useState } from "react";
 
 const Relatorio = () => {
 
+    const [loading, setLoading] = useState(false)
+
     const handleGerarRelatorio = async () => {
+        setLoading(true)
         const result = await filterQueryDadosEntrevista({
             query: {
                 implantado: { $ne: 'Sim' },
                 implantacao: 'Sim'
             }
         })
-
         let xls = '\ufeff'
         xls += "<table border='1'>"
         xls += "<thead><tr>"
@@ -59,7 +62,6 @@ const Relatorio = () => {
             xls += "</tr>"
         }
         )
-
         xls += "</tbody></table>"
         const blob = new Blob([xls], { type: 'application/vnd.ms-excel' })
         const url = window.URL.createObjectURL(blob)
@@ -67,7 +69,7 @@ const Relatorio = () => {
         a.href = url
         a.download = 'relatorio-implantacao.xls'
         a.click()
-
+        setLoading(false)
     }
 
     return (
@@ -75,8 +77,15 @@ const Relatorio = () => {
             <Tooltip title='Downalod'>
                 <IconButton
                     onClick={handleGerarRelatorio}
+                    disabled={loading}
                 >
-                    <FileDownloadIcon />
+                    {
+                        loading ? (
+                            <CircularProgress size={20} />
+                        ) : (
+                            <FileDownloadIcon />
+                        )
+                    }
                 </IconButton>
             </Tooltip>
         </>

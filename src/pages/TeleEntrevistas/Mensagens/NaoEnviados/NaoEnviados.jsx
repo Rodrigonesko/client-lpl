@@ -92,7 +92,8 @@ const NaoEnviados = () => {
             let count = 0
 
             for (const item of propostas) {
-                if (quantidade !== 0 && count === quantidade) {
+                if (count === Number(quantidade)) {
+                    console.log('entrou');
                     break
                 }
                 count++
@@ -105,7 +106,6 @@ const NaoEnviados = () => {
                     withCredentials: true,
                     headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
-                console.log(result);
                 setProgressValue((count / propostas.length) * 100)
                 buscarPropostas()
             }
