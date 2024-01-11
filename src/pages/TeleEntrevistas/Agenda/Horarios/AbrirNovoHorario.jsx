@@ -66,9 +66,6 @@ const AbrirNovoHorario = ({ responsaveis }) => {
                             Responsável
                         </em>
                     </MenuItem>
-                    <MenuItem value={'Leonardo'}>
-                        Leonardo
-                    </MenuItem>
                     {
                         responsaveis.map(e => {
                             return (

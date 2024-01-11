@@ -1,13 +1,14 @@
 import { AppBar, Badge, Box, Button, Chip, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { filterPropostas, filterPropostasNaoRealizadas } from "../../../../_services/teleEntrevistaExterna.service";
+import { filterPropostas, filterPropostasNaoRealizadas } from "../../../../../_services/teleEntrevistaExterna.service";
 import Filtros from "./Filtros";
 import moment from "moment";
 import { blue, deepPurple, grey } from "@mui/material/colors";
-import ProtDetalhesTele from "../../ProtDetalhesTele/ProtDetalhesTele";
+import ProtDetalhesTele from "../../../ProtDetalhesTele/ProtDetalhesTele";
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import Toast from "../../../../components/Toast/Toast";
+import Toast from "../../../../../components/Toast/Toast";
+import GerarHorarios from "./GerarHorarios";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -351,6 +352,11 @@ const FiltroEmAnalise = () => {
                 </Typography>
             </Box>
             <Divider />
+            <Box
+                m={1}
+            >
+                <GerarHorarios />
+            </Box>
             <Box display={'flex'} m={2}>
                 <Filtros
                     status={status}
@@ -409,7 +415,6 @@ const FiltroEmAnalise = () => {
                             }}
                         />
                     </form>
-
                     <Typography fontWeight={'bold'}>
                         {totalPages} propostas encontradas
                     </Typography>

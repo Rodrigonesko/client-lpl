@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
-import FiltroEmAnalise from "./Components/FiltroEmAnalise";
+import FiltroEmAnalise from "./Components/EmAnalise/FiltroEmAnalise";
 import FiltroAgendadas from "./Components/FiltroAgendadas";
 import Realizadas from "./Components/Realizadas/Realizadas";
 import Anexos from "./Components/Anexos/Anexos";

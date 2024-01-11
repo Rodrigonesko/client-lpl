@@ -1,7 +1,7 @@
 import { Box, Button, Checkbox, CircularProgress, Collapse, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, IconButton, Paper, Radio, RadioGroup, Tooltip, Typography } from '@mui/material'
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { quantidadePropostasNaoRealizadas } from '../../../../_services/teleEntrevistaExterna.service';
+import { quantidadePropostasNaoRealizadas } from '../../../../../_services/teleEntrevistaExterna.service';
 import { Refresh, Menu, Close } from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
 
