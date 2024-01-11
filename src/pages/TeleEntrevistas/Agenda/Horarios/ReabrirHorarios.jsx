@@ -79,6 +79,10 @@ const ReabrirHorarios = ({ responsaveis }) => {
         }
     }
 
+    useEffect(() => {
+        buscarHorariosNaoDisponiveis(data, responsavel);
+    }, [data, responsavel]);
+
     return (
         <Paper style={{ padding: '20px', margin: '10px' }} elevation={3}>
             <Typography variant='h6' m={1}>
@@ -93,7 +97,6 @@ const ReabrirHorarios = ({ responsaveis }) => {
                     value={responsavel}
                     onChange={e => {
                         setResponsavel(e.target.value)
-                        setData('')
                         setHorarios([])
                         setHorariosReabertos([])
                         setHorariosReabrir([])
@@ -120,7 +123,7 @@ const ReabrirHorarios = ({ responsaveis }) => {
                 setHorariosReabertos([])
                 setHorariosReabrir([])
             }} label='Dia' focused value={data} />
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >  
                 {
                     horarios.map(value => {
                         const labelId = `checkbox-list-label-${value}`;
