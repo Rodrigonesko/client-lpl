@@ -81,41 +81,41 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
 
                 const palavras = respostas[pergunta].trim().split(' ');
 
-                for await (const palavra of palavras) {
-                    try {
+                // for await (const palavra of palavras) {
+                //     try {
 
-                        console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
+                //         console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
 
-                        if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
-                            continue
-                        }
+                //         if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
+                //             continue
+                //         }
 
-                        const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                            withCredentials: true
-                        })
+                //         const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
+                //             withCredentials: true
+                //         })
 
-                        if (result.data.length === 0) {
+                //         if (result.data.length === 0) {
 
-                            const result = await Axios.get(`https://api.dicionario-aberto.net/near/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                                withCredentials: true
-                            })
+                //             const result = await Axios.get(`https://api.dicionario-aberto.net/near/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
+                //                 withCredentials: true
+                //             })
 
-                            setPalavrasIncorretas(prevState => [...prevState, {
-                                onde: 'Principal',
-                                pergunta,
-                                palavra,
-                                sugestoes: result.data,
-                                plural: verificarPlural(palavra) ? 'Plural' : null
-                            }])
+                //             setPalavrasIncorretas(prevState => [...prevState, {
+                //                 onde: 'Principal',
+                //                 pergunta,
+                //                 palavra,
+                //                 sugestoes: result.data,
+                //                 plural: verificarPlural(palavra) ? 'Plural' : null
+                //             }])
 
-                        }
+                //         }
 
-                    } catch (error) {
-                        console.log(error);
-                        continue
-                    }
+                //     } catch (error) {
+                //         console.log(error);
+                //         continue
+                //     }
 
-                }
+                // }
 
                 count++
                 setProgress((count / totalProgress) * 100)
@@ -125,39 +125,39 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
 
                 const palavras = subRespostas[pergunta].trim().split(' ');
 
-                for await (const palavra of palavras) {
-                    try {
-                        console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
+                // for await (const palavra of palavras) {
+                //     try {
+                //         console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
 
-                        if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
-                            continue
-                        }
+                //         if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
+                //             continue
+                //         }
 
-                        const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                            withCredentials: true
-                        })
+                //         const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
+                //             withCredentials: true
+                //         })
 
-                        if (result.data.length === 0) {
+                //         if (result.data.length === 0) {
 
-                            const result = await Axios.get(`https://api.dicionario-aberto.net/near/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                                withCredentials: true
-                            })
+                //             const result = await Axios.get(`https://api.dicionario-aberto.net/near/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
+                //                 withCredentials: true
+                //             })
 
-                            setPalavrasIncorretas(prevState => [...prevState, {
-                                onde: 'Secundária',
-                                pergunta,
-                                palavra,
-                                sugestoes: result.data,
-                                plural: verificarPlural(palavra) ? 'Plural' : null
-                            }])
+                //             setPalavrasIncorretas(prevState => [...prevState, {
+                //                 onde: 'Secundária',
+                //                 pergunta,
+                //                 palavra,
+                //                 sugestoes: result.data,
+                //                 plural: verificarPlural(palavra) ? 'Plural' : null
+                //             }])
 
-                        }
+                //         }
 
-                    } catch (error) {
-                        console.log(error);
-                        continue
-                    }
-                }
+                //     } catch (error) {
+                //         console.log(error);
+                //         continue
+                //     }
+                // }
 
                 count++
                 setProgress((count / totalProgress) * 100)
