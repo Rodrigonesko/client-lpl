@@ -32,15 +32,12 @@ const InternMessages = () => {
     }, [flushHook])
 
     useEffect(() => {
-
         socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
             query: `name=${name}`
         })
-
         socket.on('receivedMessage', (message) => {
             setChatIdSocket(message.chatId)
             setFlushHook(true)
-            console.log('oi');
         })
     }, [name])
 
@@ -48,9 +45,6 @@ const InternMessages = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Typography variant="h5" mt={1}>
-                        Mensagens e Grupos
-                    </Typography>
                     <Box display={'flex'} mt={2}>
                         <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setFlushHook={setFlushHook} setReceptor={setReceptor} />
                         <Box width={'100%'} ml={2}>

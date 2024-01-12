@@ -2,10 +2,22 @@ import { Avatar, Box, IconButton, Tooltip, Typography } from "@mui/material"
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
 import { grey } from "@mui/material/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { filterUsers } from "../../../_services/user.service";
 const ProfileBar = ({ nome, showOps, setShowOps, tipo, url }) => {
 
     const [openImage, setOpenImage] = useState(false)
+    const [online, setOnline] = useState(false)
+
+    useEffect(() => {
+        if (tipo !== 'Grupo') {
+            filterUsers({
+                name: nome
+            }).then((result) => {
+                setOnline(result[0].online)
+            })
+        }
+    }, [])
 
     return (
         <Box display={'flex'} justifyContent={"space-between"} p={1} component="div" bgcolor={grey[500]}>
@@ -25,6 +37,14 @@ const ProfileBar = ({ nome, showOps, setShowOps, tipo, url }) => {
                 ></Avatar>
                 <Typography color='white'  >
                     {nome}
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            color: 'white',
+                        }}
+                    >
+                        {online ? 'Online' : ''}
+                    </Typography>
                 </Typography>
             </Box>
             {
