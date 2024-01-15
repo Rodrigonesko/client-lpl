@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Toast from "../../../../../components/Toast/Toast";
 import GerarHorarios from "./GerarHorarios";
+import BotoesRelatorios from "./BotoesRelatorio";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -352,10 +353,9 @@ const FiltroEmAnalise = () => {
                 </Typography>
             </Box>
             <Divider />
-            <Box
-                m={1}
-            >
+            <Box display={'flex'} m={1} >
                 <GerarHorarios />
+                <BotoesRelatorios />
             </Box>
             <Box display={'flex'} m={2}>
                 <Filtros

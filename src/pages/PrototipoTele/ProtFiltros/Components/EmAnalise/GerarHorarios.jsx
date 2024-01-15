@@ -35,6 +35,7 @@ const GerarHorarios = () => {
     return (
         <>
             <Button
+                type='button'
                 variant='contained'
                 onClick={() => setOpen(true)}
                 sx={{
