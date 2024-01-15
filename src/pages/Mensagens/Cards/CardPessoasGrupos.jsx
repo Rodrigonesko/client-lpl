@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Avatar, Badge, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import { Avatar, Badge, Card, CardContent, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextField } from "@mui/material";
 import { grey } from '@mui/material/colors';
 import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
 import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
@@ -8,8 +8,10 @@ import AuthContext from '../../../context/AuthContext';
 import { seeInternalMessage } from '../../../_services/chat.service';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import moment from 'moment';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 
-const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
+const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, pesquisa, setPesquisa, flushHook }) => {
 
     const { name } = useContext(AuthContext)
     const [selectedId, setSelectedId] = useState('')
@@ -49,6 +51,17 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                 <Box m={2} >
                     <ModalIniciarConversa setReceptor={setReceptor} setFlushHook={setFlushHook} setChatId={setChatId} />
                     <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
+                </Box>
+                <Box>
+                    <TextField
+                        placeholder="Pesquisar"
+                        variant="standard"
+                        sx={{ width: '90%', ml: '5%', mb: '10px' }}
+                        InputProps={{
+                            startAdornment: <SearchIcon position="start" sx={{ mr: 1 }} />,
+                            endAdornment: <IconButton size='small' sx={{ mr: 1 }}><CloseIcon /></IconButton>,
+                        }}
+                    />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh', padding: '0' }}>
                     {!!name && chats.map((item, index) => {
