@@ -1,15 +1,16 @@
 import { AppBar, Box, Button, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { filterPropostasNaoRealizadas } from "../../../../_services/teleEntrevistaExterna.service";
+import { filterPropostasNaoRealizadas } from "../../../../../_services/teleEntrevistaExterna.service";
 import moment from "moment";
 import { blue, deepPurple, grey } from "@mui/material/colors";
-import ProtDetalhesTele from "../../ProtDetalhesTele/ProtDetalhesTele";
+import ProtDetalhesTele from "../../../ProtDetalhesTele/ProtDetalhesTele";
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { filterPropostasAgendadas } from "../../../../_services/teleEntrevistaExterna.service";
-import AuthContext from "../../../../context/AuthContext";
-import { buscaAnalistasTele, filterUsers } from "../../../../_services/user.service";
+import { filterPropostasAgendadas } from "../../../../../_services/teleEntrevistaExterna.service";
+import AuthContext from "../../../../../context/AuthContext";
+import { filterUsers } from "../../../../../_services/user.service";
 import FiltroEnfermeiros from "./FiltroEnfermeiros";
+import { Close, Menu } from "@mui/icons-material";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -29,6 +30,7 @@ const FiltroAgendadas = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [cpfTitular, setCpfTitular] = useState('')
     const [selected, setSelected] = useState('')
+    const [openFilter, setOpenFilter] = useState(false)
 
     const fetchPropostas = async (page) => {
         setLoading(true);
@@ -134,19 +136,58 @@ const FiltroAgendadas = () => {
 
     return (
         <Box>
-            <Typography
-                variant='h6'
-                m={2}
-            >
-                Agendadas
-            </Typography>
+            <Box display={'flex'} mb={2}>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: 'bold',
+                        position: 'relative',
+                        '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            width: '30%',
+                            height: '2px',
+                            bottom: 0,
+                            left: '0%',
+                            backgroundColor: blue[900],
+                            transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
+                        },
+                        '&:hover::after': {
+                            width: '100%',
+                            left: '0%',
+                        },
+                    }}
+                >
+                    Agendadas
+                </Typography>
+            </Box>
             <Divider />
+            <Box>
+                {
+                    !openFilter ? (
+                        <IconButton
+                            size={'small'}
+                            onClick={() => setOpenFilter(true)}
+                        >
+                            <Menu />
+                        </IconButton>
+                    ) : (
+                        <IconButton
+                            size={'small'}
+                            onClick={() => setOpenFilter(false)}
+                        >
+                            <Close />
+                        </IconButton>
+                    )
+                }
+            </Box>
             <Box display={'flex'} m={2}>
                 <FiltroEnfermeiros
                     analistas={analistas}
                     responsavel={responsavel}
                     handleSelectAnalista={handleSelectAnalista}
                     loading={loading}
+                    openSlide={openFilter}
                 // handlePesquisar={handlePesquisar}
                 />
                 <Box>

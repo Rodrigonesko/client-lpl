@@ -14,7 +14,6 @@ const style = {
     p: 4,
 };
 
-
 const GerarHorarios = () => {
 
     const [data, setData] = useState('')
@@ -23,20 +22,14 @@ const GerarHorarios = () => {
 
     const gerarHorarios = async () => {
         try {
-
             if (data === '') {
                 setMsg('Por favor selecione uma data')
                 setModal(true)
                 return
             }
-
-            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/entrevistas/gerarHorarios`, { dataGerar: data }, { withCredentials: true })
-
             await gerarHorariosEntrevistas({ dataGerar: data })
-
             setModal(true)
             setMsg('Horario gerados com sucesso!')
-
         } catch (error) {
             console.log(error);
             setModal(true)
@@ -49,7 +42,12 @@ const GerarHorarios = () => {
             <TextField label='Gerar horarios' size='small' type='date' InputLabelProps={{
                 shrink: true,
             }} onChange={e => setData(e.target.value)} />
-            <Button onClick={gerarHorarios} variant='contained'>Gerar</Button>
+            <Button
+                onClick={gerarHorarios}
+                variant='contained'
+            >
+                Gerar
+            </Button>
             <Modal
                 open={modal}
                 onClose={() => setModal(false)}

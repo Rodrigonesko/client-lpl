@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { blueGrey } from "@mui/material/colors";
+import { blue, blueGrey } from "@mui/material/colors";
 import { useState } from "react";
 import Toast from "../../../../../components/Toast/Toast";
 import { gerarHorariosEntrevistas } from "../../../../../_services/teleEntrevista.service";
@@ -39,12 +39,13 @@ const GerarHorarios = () => {
                 variant='contained'
                 onClick={() => setOpen(true)}
                 sx={{
-                    bgcolor: blueGrey[100],
-                    color: blueGrey[900],
+                    bgcolor: blue[500],
+                    color: 'white',
                     '&:hover': {
-                        bgcolor: blueGrey[200],
-                        color: blueGrey[900],
+                        opacity: 0.8,
+                        bgcolor: blue[500],
                     },
+                    transition: 'opacity 0.3s'
                 }}
             >
                 Gerar Horarios

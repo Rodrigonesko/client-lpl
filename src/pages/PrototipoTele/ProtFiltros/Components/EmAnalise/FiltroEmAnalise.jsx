@@ -9,7 +9,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Toast from "../../../../../components/Toast/Toast";
 import GerarHorarios from "./GerarHorarios";
-import BotoesRelatorios from "./BotoesRelatorio";
+import RelatorioPropostas from "./RelatorioPropostas";
+import RelatorioNaoRealizadas from "./RelatorioNaoRealizadas";
+import RelatorioDevolverAmil from "./RelatorioDevolverAmil";
+import Search from "@mui/icons-material/Search";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -63,6 +66,7 @@ const FiltroEmAnalise = () => {
     const [openToast, setOpenToast] = useState(false)
     const [severity, setSeverity] = useState('success')
     const [message, setMessage] = useState('')
+    const [clear, setClear] = useState(false)
 
     const handleChangeAgendado = (event) => {
         if (event.target.name === 'agendado' && (status.agendar || status.canceladoHumanizado)) {
@@ -228,6 +232,10 @@ const FiltroEmAnalise = () => {
             maior60: false,
             menor60: false,
         });
+
+        setPage(1);
+        setPesquisa('');
+        fetchPropostas(1);
     }
 
     const handleAll = () => {
@@ -325,8 +333,15 @@ const FiltroEmAnalise = () => {
         fetchPropostas(page);
     }, []);
 
+    useEffect(() => {
+        if (clear) {
+            handleClear()
+            setClear(false)
+        }
+    }, [clear])
+
     return (
-        <Box >
+        <Box>
             <Box display={'flex'} mb={2}>
                 <Typography
                     variant="h4"
@@ -355,7 +370,9 @@ const FiltroEmAnalise = () => {
             <Divider />
             <Box display={'flex'} m={1} >
                 <GerarHorarios />
-                <BotoesRelatorios />
+                <RelatorioPropostas />
+                <RelatorioNaoRealizadas />
+                <RelatorioDevolverAmil />
             </Box>
             <Box display={'flex'} m={2}>
                 <Filtros
@@ -369,14 +386,118 @@ const FiltroEmAnalise = () => {
                     handleChangeVigencia={handleChangeVigencia}
                     handleChangeAltoRisco={handleChangeAltoRisco}
                     handleFilter={handleFilter}
-                    handleClear={handleClear}
+                    handleClear={setClear}
                     handleAll={handleAll}
                     idade={idade}
                     handleChangeIdade={handleChangeIdade}
                 />
                 <Box p={1} width={'100%'}>
-
-                    <form action="" style={{ display: 'flex', margin: '10px' }} onSubmit={handlePesquisar} >
+                    {/*na  box abaixo coloque em chips os filtros aplicados*/}
+                    <Box>
+                        <Typography fontWeight={'bold'}>
+                            Filtros Aplicados
+                        </Typography>
+                        <Box display={'flex'} flexWrap={'wrap'} mt={1}>
+                            {
+                                status.agendar && (
+                                    <Chip
+                                        label={'Agendar'}
+                                        sx={{
+                                            backgroundColor: blue[100],
+                                            color: blue[800],
+                                            '&:hover': {
+                                                backgroundColor: blue[500],
+                                                opacity: 0.8,
+                                            },
+                                            mr: 1,
+                                            mb: 1
+                                        }}
+                                        size="small"
+                                    />
+                                )
+                            }
+                            {
+                                status.agendado && (
+                                    <Chip
+                                        label={'Agendado'}
+                                        sx={{
+                                            backgroundColor: blue[100],
+                                            color: blue[800],
+                                            '&:hover': {
+                                                backgroundColor: blue[500],
+                                                opacity: 0.8,
+                                            },
+                                            mr: 1,
+                                            mb: 1
+                                        }}
+                                        size="small"
+                                    />
+                                )
+                            }
+                            {
+                                status.humanizado && (
+                                    <Chip
+                                        label={'Humanizado'}
+                                        sx={{
+                                            backgroundColor: deepPurple[100],
+                                            color: deepPurple[800],
+                                            '&:hover': {
+                                                backgroundColor: deepPurple[500],
+                                                opacity: 0.8,
+                                            },
+                                            mr: 1,
+                                            mb: 1
+                                        }}
+                                        size="small"
+                                    />
+                                )
+                            }
+                            {
+                                status.canceladoHumanizado && (
+                                    <Chip
+                                        label={'Cancelado Humanizado'}
+                                        sx={{
+                                            backgroundColor: deepPurple[100],
+                                            color: deepPurple[800],
+                                            '&:hover': {
+                                                backgroundColor: deepPurple[500],
+                                                opacity: 0.8,
+                                            },
+                                            mr: 1,
+                                            mb: 1
+                                        }}
+                                        size="small"
+                                    />
+                                )
+                            }
+                            {
+                                status.naoLidas && (
+                                    <Chip
+                                        label={'Não Lidas'}
+                                        sx={{
+                                            backgroundColor: grey[100],
+                                            color: grey[800],
+                                            '&:hover': {
+                                                backgroundColor: grey[500],
+                                                opacity: 0.8,
+                                            },
+                                            mr: 1,
+                                            mb: 1
+                                        }}
+                                        size="small"
+                                    />
+                                )
+                            }
+                        </Box>
+                    </Box>
+                    <form
+                        action=""
+                        style={{
+                            display: 'flex',
+                            margin: '10px'
+                        }}
+                        onSubmit={handlePesquisar}
+                    >
                         <TextField
                             label="Pesquisar"
                             variant="outlined"
@@ -386,34 +507,31 @@ const FiltroEmAnalise = () => {
                             placeholder="Nome ou proposta"
                             size="small"
                             InputProps={{
-                                endAdornment: (
-                                    <Button
-                                        variant="contained"
-                                        sx={{
-                                            bgcolor: blue[100],
-                                            color: blue[800],
-                                            '&:hover': {
-                                                bgcolor: blue[500],
-                                                opacity: 0.8,
-                                            },
-                                        }}
-                                        type="submit"
-                                        size="small"
-                                    >
-                                        Pesquisar
-                                    </Button>
-                                ),
                                 startAdornment: (
-                                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pt: 0.5, pb: 0.5, mr: 1 }}>
-                                        <Typography variant="h6" color="textSecondary" component="div">
-                                            <Box fontWeight="fontWeightBold">
-                                                #
-                                            </Box>
-                                        </Typography>
-                                    </Box>
+                                    <Search
+                                        sx={{
+                                            color: grey[800],
+                                            mr: 1
+                                        }}
+                                    />
                                 )
                             }}
                         />
+                        <Button
+                            variant="contained"
+                            sx={{
+                                bgcolor: blue[100],
+                                color: blue[800],
+                                '&:hover': {
+                                    bgcolor: blue[500],
+                                    opacity: 0.8,
+                                },
+                            }}
+                            type="submit"
+                            size="small"
+                        >
+                            Pesquisar
+                        </Button>
                     </form>
                     <Typography fontWeight={'bold'}>
                         {totalPages} propostas encontradas
