@@ -5,6 +5,7 @@ import { green, grey } from "@mui/material/colors";
 import { updateInfoUser } from "../../../../_services/user.service";
 import Toast from "../../../../components/Toast/Toast";
 import { createDemissao } from "../../../../_services/admissaoDemissao.service";
+import RestaurarSenha from "./RestaurarSenha";
 
 const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) => {
 
@@ -315,6 +316,11 @@ const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) =>
                                 />
                             </FormGroup>
                         </FormControl>
+                        <Box sx={{
+                            mt: 2
+                        }}>
+                            <RestaurarSenha user={user} />
+                        </Box>
                     </Box>
                 </DialogContent>
                 <DialogActions>
@@ -330,7 +336,7 @@ const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) =>
                             },
                         }}
                     >
-                        Cancelar
+                        Fechar
                     </Button>
                     <Button
                         onClick={() => handleSubmit()}

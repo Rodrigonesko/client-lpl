@@ -163,7 +163,6 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/contingencias'>Controle de Contingências</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
                                 </SubMenu>
                             </SubMenu>
                         ) : null

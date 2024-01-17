@@ -123,7 +123,6 @@ import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/Urgencia
 
 /* Admin */
 
-import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
 import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
 import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
@@ -226,9 +225,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/contingencias" element={<ProtectedRoute>
                     <ControleContigencias />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
-                    <ResetPassword />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />
