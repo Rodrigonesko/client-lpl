@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from '@mui/material'
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TextField, Button } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import moment from 'moment/moment';
+import { blue } from '@mui/material/colors';
+import Axios from 'axios'
 
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = useState(false);
+
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -106,17 +109,39 @@ const Row2 = (props) => {
     );
 }
 
-const TabelaProducaoMui = ({ producao }) => {
+const TabelaRnsTele = ({ producao, setProducao }) => {
+
+    const [data, setData] = useState('')
+
+    const handleFilter = async (e) => {
+        e.preventDefault()
+        try {
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/filterRns?data=${data}`, { withCredentials: true })
+
+            console.log(result);
+
+            setProducao(result.data.rns)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
+            <br />
+            <Box>
+                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} sx={{ marginRight: '3px' }} />
+                <Button type='submit' variant='contained' onClick={handleFilter} >FILTRAR</Button>
+            </Box>
+            <br />
             <TableContainer component={Paper} style={{ maxWidth: '400px' }}>
                 <Table aria-label='collapsible table' className='table'>
                     <TableHead class='table-header'>
-                        <TableRow>
+                        <TableRow sx={{ bgcolor: blue[600] }}>
                             <TableCell></TableCell>
-                            <TableCell align="center">Mês</TableCell>
-                            <TableCell align="center">Quantidade</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>MÊS</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>QUANTIDADE</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -132,4 +157,4 @@ const TabelaProducaoMui = ({ producao }) => {
     )
 }
 
-export default TabelaProducaoMui
+export default TabelaRnsTele

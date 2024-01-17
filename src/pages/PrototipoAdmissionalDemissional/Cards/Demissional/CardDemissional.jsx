@@ -7,8 +7,6 @@ import { blue, green, grey, red, yellow } from "@mui/material/colors";
 import { filterTableDemi, setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
-
-
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
 
     return (
@@ -162,13 +160,8 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     )
 }
 
-const Filter = ({ setNomes }) => {
+const Filter = ({ setNomes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter }) => {
 
-    const [responsaveis, setResponsaveis] = useState({
-        samanthaMacielGiazzon: true,
-        administrador: false,
-        gersonDouglas: false,
-    })
 
     const handleChangeResponsaveis = (event) => {
         if (event.target.name === 'samanthaMacielGiazzon') {
@@ -180,21 +173,8 @@ const Filter = ({ setNomes }) => {
         }
     }
 
-    const [status, setStatus] = useState({
-        naoSeAplica: false,
-        pendente: false,
-        emAndamento: false,
-        concluido: false,
-    })
-
     const handleChangeStatus = (event) => {
         setStatus({ ...status, [event.target.name]: event.target.checked });
-    }
-
-    const handleClickFilter = async () => {
-        const filter = await filterTableDemi({ status, responsavel: responsaveis })
-        setNomes(filter.result)
-        console.log(filter)
     }
 
     const handleClear = () => {
@@ -255,6 +235,25 @@ const CardDemissional = () => {
 
     const [user, setUser] = useState(null);
 
+    const [responsaveis, setResponsaveis] = useState({
+        samanthaMacielGiazzon: false,
+        administrador: false,
+        gersonDouglas: false,
+    })
+
+    const [status, setStatus] = useState({
+        naoSeAplica: false,
+        pendente: false,
+        emAndamento: false,
+        concluido: false,
+    })
+
+    const handleClickFilter = async () => {
+        const filter = await filterTableDemi({ status, responsavel: responsaveis })
+        setNomes(filter.result)
+        console.log(filter)
+    }
+
     useEffect(() => {
         const buscarNomes = async () => {
             try {
@@ -265,8 +264,8 @@ const CardDemissional = () => {
                 console.log(error);
             }
         }
+        handleClickFilter()
         setFlushHook(false)
-        buscarNomes()
     }, [flushHook])
 
     return (
@@ -275,7 +274,15 @@ const CardDemissional = () => {
                 <Card sx={{ bgcolor: color, width: '350px', mb: `20px`, borderRadius: `10px`, padding: '0' }}>
                     <CardContent sx={{ padding: '0' }} >
                         <Box width={'100%'}>
-                            <Filter setNomes={setNomes} nomes={nomes} />
+                            <Filter
+                                setNomes={setNomes}
+                                nomes={nomes}
+                                status={status}
+                                setStatus={setStatus}
+                                responsaveis={responsaveis}
+                                setResponsaveis={setResponsaveis}
+                                handleClickFilter={handleClickFilter}
+                            />
                         </Box>
                     </CardContent>
                 </Card>

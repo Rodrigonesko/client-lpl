@@ -136,6 +136,10 @@ import Analitico from "./pages/Admin/Analitico/Analitico";
 
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
+/* Prototipo produção entrevistas  */
+
+import ProducaoTele from "./pages/TeleEntrevistas/PrototipoProducao/ProducaoTele";
+
 import { AuthProvider } from "./context/AuthContext";
 
 const AppRoutes = () => {
@@ -146,6 +150,10 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                <Route exact path="/prototipoTele" element={<ProtectedRoute>
+                    <ProducaoTele />
+                </ProtectedRoute>} />
+                
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
