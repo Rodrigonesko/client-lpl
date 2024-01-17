@@ -29,8 +29,6 @@ const feriados = [
     moment('2023-12-25')
 ];
 
-
-
 const ModalRelatorioPropostas = () => {
 
     const [open, setOpen] = useState(false);

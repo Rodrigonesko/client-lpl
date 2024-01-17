@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
 import FiltroEmAnalise from "./Components/EmAnalise/FiltroEmAnalise";
-import FiltroAgendadas from "./Components/FiltroAgendadas";
+import FiltroAgendadas from "./Components/Agendadas/FiltroAgendadas";
 import Realizadas from "./Components/Realizadas/Realizadas";
 import Anexos from "./Components/Anexos/Anexos";
 import Implantacao from "./Components/Implantacao/Implantacao";
@@ -58,10 +58,13 @@ function a11yProps(index) {
 }
 
 const ProtFiltros = () => {
-    const [value, setValue] = React.useState(0);
+
+    const initialValue = localStorage.getItem('tabValue') ? parseInt(localStorage.getItem('tabValue')) : 0
+    const [value, setValue] = React.useState(initialValue);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        localStorage.setItem('tabValue', newValue)
     }
 
     return (

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { quantidadePropostasNaoRealizadas } from '../../../../../_services/teleEntrevistaExterna.service';
 import { Refresh, Menu, Close } from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 
 const Filtros = ({
     status,
@@ -85,9 +87,7 @@ const Filtros = ({
                                             <Close />
                                         </IconButton>
                                     </Tooltip>
-
                                 </Box>
-
                             ) : (
                                 <Tooltip title='Abrir filtros' arrow>
                                     <IconButton
@@ -101,20 +101,26 @@ const Filtros = ({
                     </Typography>
                     <Box display={'flex'} flexDirection={'column'}>
                         <Tooltip title='Filtrar'>
-                            <Button variant='contained' sx={{ m: 1, width: open ? '200px' : '30px', minWidth: '30px' }} onClick={handleFilter}>
+                            <Button
+                                variant='contained'
+                                sx={{ m: 1, width: open ? '200px' : '30px', minWidth: '30px' }}
+                                onClick={handleFilter}
+                                endIcon={open && <FilterAltIcon />}
+                            >
                                 {
-                                    open ? 'Filtrar' : 'F'
+                                    open ? 'Filtrar' : <FilterAltIcon />
                                 }
                             </Button>
                         </Tooltip>
                         <Tooltip title='Limpar filtros'>
                             <Button
-                                onClick={handleClear}
+                                onClick={() => handleClear(true)}
                                 sx={{ m: 1, width: open ? '200px' : '30px', minWidth: '30px' }}
                                 variant='contained'
+                                endIcon={open && <CleaningServicesIcon />}
                             >
                                 {
-                                    open ? 'Limpar' : 'L'
+                                    open ? 'Limpar' : <CleaningServicesIcon />
                                 }
                             </Button>
                         </Tooltip>
