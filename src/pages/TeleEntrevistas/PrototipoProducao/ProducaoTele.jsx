@@ -18,13 +18,10 @@ const ProducaoTele = () => {
 
                 setLoading(true)
 
-                //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producao`, { withCredentials: true })
-
-                // setProducao(result.data.arrQuantidadeTotalMes)
-
-                //console.log(result.data.arrRns);
-
-                //setProducaoRns(result.data.arrRns)
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producao`, { withCredentials: true })
+                setProducao(result.data.arrQuantidadeTotalMes)
+                console.log(result.data.arrRns);
+                setProducaoRns(result.data.arrRns)
 
                 setLoading(false)
 
@@ -53,7 +50,7 @@ const ProducaoTele = () => {
                                         <Typography variant='h6'>
                                             Produção Tele
                                         </Typography>
-                                        <TabelaProducaoTele producao={producao} setProducao={setProducao} />
+                                        <TabelaProducaoTele producao={producao} />
                                     </Box>
                                     <Box width={'100%'}>
                                         <Typography variant='h6'>
