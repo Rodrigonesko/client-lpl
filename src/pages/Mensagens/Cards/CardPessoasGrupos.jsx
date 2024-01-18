@@ -11,7 +11,15 @@ import moment from 'moment';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
-const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, pesquisa, setPesquisa, flushHook }) => {
+const CardPessoasGrupos = ({
+    setReceptor,
+    chats,
+    setChatId,
+    setFlushHook,
+    pesquisa,
+    setPesquisa,
+    flushHook
+}) => {
 
     const { name } = useContext(AuthContext)
     const [selectedId, setSelectedId] = useState('')
@@ -59,8 +67,10 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, pesqui
                         sx={{ width: '90%', ml: '5%', mb: '10px' }}
                         InputProps={{
                             startAdornment: <SearchIcon position="start" sx={{ mr: 1 }} />,
-                            endAdornment: <IconButton size='small' sx={{ mr: 1 }}><CloseIcon /></IconButton>,
+                            endAdornment: <IconButton size='small' sx={{ mr: 1 }} onClick={() => setPesquisa('')} ><CloseIcon /></IconButton>,
                         }}
+                        value={pesquisa}
+                        onChange={(e) => setPesquisa(e.target.value)}
                     />
                 </Box>
                 <List sx={{ width: '100%', maxWidth: 360, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh', padding: '0' }}>
