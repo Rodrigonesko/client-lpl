@@ -128,7 +128,7 @@ const Home = () => {
                     <Box>
                         {treinamentos.map(treinamento => {
                             return (
-                                <Alert severity="warning" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
+                                <Alert severity="error" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
                                     <Typography>
                                         Treinamento: {treinamento.nome}
                                     </Typography>
@@ -136,7 +136,11 @@ const Home = () => {
                                         Plataforma: {treinamento.plataforma}
                                     </Typography>
                                     <Typography>
-                                        Link: {treinamento.link}
+                                        <strong>
+                                            <a href={treinamento.link}>
+                                                Link: {treinamento.link}
+                                            </a>
+                                        </strong>
                                     </Typography>
                                     <Typography>
                                         Prazo: {moment(treinamento.prazo).format('DD/MM/YYYY')}
