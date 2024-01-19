@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../../_services/user.service"
-import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent } from "@mui/material"
+import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent, Autocomplete } from "@mui/material"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
-import { filterTableAdmi, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
+import { filterTableAdmi, findAll, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
@@ -172,7 +172,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     )
 }
 
-const Filter = ({ setNomes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter }) => {
+const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter, handleFilter }) => {
 
     const handleChangeResponsaveis = (event) => {
         if (event.target.name === 'samanthaMacielGiazzon') {
@@ -232,6 +232,30 @@ const Filter = ({ setNomes, status, setStatus, responsaveis, setResponsaveis, ha
                     <FormControlLabel control={<Checkbox checked={status.emAndamento} onChange={handleChangeStatus} name='emAndamento' />} label='Em Andamento' />
                     <FormControlLabel control={<Checkbox checked={status.concluido} onChange={handleChangeStatus} name='concluido' />} label='Concluído' />
                 </FormGroup>
+                <Divider />
+                <Typography>
+                    <strong>Ação</strong>
+                </Typography>
+                <br />
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Ação</InputLabel>
+                    {/* <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={acoes}
+                        label="Age"
+                        onChange={(e) => setAcoes(e.target.value)}
+                    >
+                        {acao.map((acao) => (
+                            <MenuItem
+                                key={acao}
+                                value={acao}
+                            >
+                                {acao}
+                            </MenuItem>
+                        ))}
+                    </Select> */}
+                </FormControl>
             </Box>
         </>
     )
@@ -255,15 +279,21 @@ const CardAdmissional = () => {
     })
 
     const [nomes, setNomes] = useState([])
+    const [acao, setAcao] = useState([])
+    const [acoes, setAcoes] = useState('')
     const [flushHook, setFlushHook] = useState(false)
-
-
     const [user, setUser] = useState(null);
 
     const handleClickFilter = async () => {
         const filter = await filterTableAdmi({ status, responsavel: responsaveis })
         setNomes(filter.result)
         console.log(filter)
+    }
+
+    const handleFilter = async () => {
+        const encontrarTodos = await findAll()
+        setAcao(encontrarTodos)
+        console.log(encontrarTodos)
     }
 
     useEffect(() => {
@@ -277,8 +307,9 @@ const CardAdmissional = () => {
             }
         }
         handleClickFilter()
+        handleFilter()
         setFlushHook(false)
-    }, [flushHook])
+    }, [flushHook, acoes])
 
     return (
         <>
@@ -287,8 +318,12 @@ const CardAdmissional = () => {
                     <CardContent sx={{ padding: '0' }} >
                         <Box width={'100%'}>
                             <Filter
-                                setNomes={setNomes}
+                                acao={acao}
+                                acoes={acoes}
                                 nomes={nomes}
+                                handleFilter={handleFilter}
+                                setAcoes={setAcoes}
+                                setUser={setUser}
                                 status={status}
                                 setStatus={setStatus}
                                 responsaveis={responsaveis}

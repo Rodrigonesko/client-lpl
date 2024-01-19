@@ -35,3 +35,7 @@ export const filterTableAdmi = async (status, responsavel) => {
 export const filterTableDemi = async (status, responsavel) => {
     return await new ApiCall('/admissaoDemissao/filterTableDemi').post(status, responsavel)
 }
+
+export const findAll = async () => {
+    return await new ApiCall('/admissaoDemissao/findAll').get()
+}

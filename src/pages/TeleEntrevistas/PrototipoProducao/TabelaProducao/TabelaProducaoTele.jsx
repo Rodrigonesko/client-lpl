@@ -4,11 +4,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import moment from 'moment/moment';
 import { blue } from '@mui/material/colors';
-import Axios from 'axios';
 
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = useState(false);
+
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -108,26 +108,14 @@ const Row2 = (props) => {
     );
 }
 
-const TabelaProducaoTele = ({ producao, setProducao }) => {
-
-    const [data, setData] = useState([])
-
-    const handleFilter = async () => {
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/filterProducao?data=${data}`, { withCredentials: true })
-            console.log(result);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+const TabelaProducaoTele = ({ producao, setData, handleFilterProducao, data }) => {
 
     return (
         <>
             <br />
             <Box>
-                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} sx={{ marginRight: '3px' }} />
-                <Button type='submit' variant='contained' onClick={handleFilter} >FILTRAR</Button>
+                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} value={data} sx={{ marginRight: '3px' }} />
+                <Button type='submit' variant='contained' onClick={handleFilterProducao} >FILTRAR</Button>
             </Box>
             <br />
             <TableContainer component={Paper} style={{ maxWidth: '400px' }}>
