@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../../_services/user.service"
-import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent, Autocomplete } from "@mui/material"
+import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent } from "@mui/material"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
-import { filterTableAdmi, findAll, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
+import { filterTableAdmi, findAcoes, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
@@ -172,7 +172,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     )
 }
 
-const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter, handleFilter }) => {
+const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter }) => {
 
     const handleChangeResponsaveis = (event) => {
         if (event.target.name === 'samanthaMacielGiazzon') {
@@ -239,22 +239,23 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                 <br />
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Ação</InputLabel>
-                    {/* <Select
+                    <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={acoes}
-                        label="Age"
+                        label="Acao"
+                        size='small'
                         onChange={(e) => setAcoes(e.target.value)}
                     >
-                        {acao.map((acao) => (
+                        {acao.map((acoes) => (
                             <MenuItem
-                                key={acao}
-                                value={acao}
+                                key={acoes}
+                                value={acoes}
                             >
-                                {acao}
+                                {acoes}
                             </MenuItem>
                         ))}
-                    </Select> */}
+                    </Select>
                 </FormControl>
             </Box>
         </>
@@ -285,15 +286,15 @@ const CardAdmissional = () => {
     const [user, setUser] = useState(null);
 
     const handleClickFilter = async () => {
-        const filter = await filterTableAdmi({ status, responsavel: responsaveis })
+        const filter = await filterTableAdmi({ status, responsavel: responsaveis, acao: acoes })
         setNomes(filter.result)
         console.log(filter)
     }
 
-    const handleFilter = async () => {
-        const encontrarTodos = await findAll()
-        setAcao(encontrarTodos)
-        console.log(encontrarTodos)
+    const handleChange = async () => {
+        const encontrarAcao = await findAcoes()
+        setAcao(encontrarAcao.acoes)
+        console.log(encontrarAcao)
     }
 
     useEffect(() => {
@@ -307,9 +308,9 @@ const CardAdmissional = () => {
             }
         }
         handleClickFilter()
-        handleFilter()
+        handleChange()
         setFlushHook(false)
-    }, [flushHook, acoes])
+    }, [flushHook])
 
     return (
         <>
@@ -319,11 +320,9 @@ const CardAdmissional = () => {
                         <Box width={'100%'}>
                             <Filter
                                 acao={acao}
-                                acoes={acoes}
                                 nomes={nomes}
-                                handleFilter={handleFilter}
+                                acoes={acoes}
                                 setAcoes={setAcoes}
-                                setUser={setUser}
                                 status={status}
                                 setStatus={setStatus}
                                 responsaveis={responsaveis}

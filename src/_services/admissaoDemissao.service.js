@@ -28,14 +28,18 @@ export const updateProrrogacao = async (name, prorrogacao) => {
     return await new ApiCall('/admissaoDemissao/prorrogacao').put(name, prorrogacao)
 }
 
-export const filterTableAdmi = async (status, responsavel) => {
-    return await new ApiCall('/admissaoDemissao/filterTableAdmi').post(status, responsavel)
+export const filterTableAdmi = async (status, responsavel, acao) => {
+    return await new ApiCall('/admissaoDemissao/filterTableAdmi').post(status, responsavel, acao)
 }
 
-export const filterTableDemi = async (status, responsavel) => {
-    return await new ApiCall('/admissaoDemissao/filterTableDemi').post(status, responsavel)
+export const filterTableDemi = async (status, responsavel, acao) => {
+    return await new ApiCall('/admissaoDemissao/filterTableDemi').post(status, responsavel, acao)
 }
 
-export const findAll = async () => {
-    return await new ApiCall('/admissaoDemissao/findAll').get()
+export const findAcoes = async () => {
+    return await new ApiCall('/admissaoDemissao/findAcoes').get()
+}
+
+export const filterAdmissaoAcoes = async (acao) => {
+    return await new ApiCall(`/admissaoDemissao/filterAdmissaoAcoes?acao=${acao}`).get(acao)
 }
