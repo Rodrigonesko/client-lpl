@@ -1,5 +1,4 @@
-import { Box, Button, Chip, Divider, IconButton, Paper, Slide, TextField, Tooltip, Typography } from "@mui/material"
-import SendIcon from '@mui/icons-material/Send';
+import { Box, Chip, Divider, IconButton, Paper, Slide, Tooltip, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import { useRef, useState } from "react";
 import { useEffect } from "react";
@@ -36,26 +35,27 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         setOpen(false)
     }
 
-    const fetchData = async () => {
-
-        const resultData = await mostrarPropostaPorId(data._id)
-        setData(resultData)
-        if (!selectedWhatsapp || selectedWhatsapp === 'whatsapp:+55undefinedundefined') {
-            setMessages([])
-            return
-        }
-        const result = await getMessagesTele(selectedWhatsapp)
-        setMessages(result)
-        await visualizarMensagem({
-            whatsapp
-        })
-    }
-
     useEffect(() => {
+
+        const fetchData = async () => {
+
+            const resultData = await mostrarPropostaPorId(data._id)
+            setData(resultData)
+            if (!selectedWhatsapp || selectedWhatsapp === 'whatsapp:+55undefinedundefined') {
+                setMessages([])
+                return
+            }
+            const result = await getMessagesTele(selectedWhatsapp)
+            setMessages(result)
+            await visualizarMensagem({
+                whatsapp
+            })
+        }
+
         setWhatsapp(selectedWhatsapp)
         fetchData()
         setFlushHook(false)
-    }, [selectedWhatsapp, flushHook])
+    }, [selectedWhatsapp, flushHook, data._id, setData, setMessages, setWhatsapp, data.whatsapp, whatsapp])
 
     useEffect(() => {
         socket.on('receivedMessage', async (message) => {
@@ -69,7 +69,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                 setFlushHook(true)
             }
         })
-    }, [])
+    }, [data.whatsapp])
 
     useEffect(() => {
         const component = chatRef.current;
@@ -122,11 +122,11 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     {
                         messages.map(message => {
                             return (
-                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' ? 'right' : 'left' }}>
+                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
                                     <Typography color='darkblue' fontSize='14px' >
                                         {message.de}
                                     </Typography>
-                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
+                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
                                     <Typography color='GrayText'>{moment(message.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                     <Typography variant='body2' color='GrayText'>
                                         {

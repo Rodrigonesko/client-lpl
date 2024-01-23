@@ -2,7 +2,7 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Tooltip, IconButton, Ty
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { useState } from "react";
 import { useEffect } from "react";
-import { buscaAnalistasTele, filterUsers } from "../../../../_services/user.service";
+import { filterUsers } from "../../../../_services/user.service";
 import { getAnalistasDisponiveis, getDiasDisponiveis, getDiasDisponiveisAnalista, getHorariosDisponiveisPorDia, getHorariosDisponiveisPorDiaEAnalista } from "../../../../_services/teleEntrevista.service";
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -48,55 +48,61 @@ const Agendamento = ({ onAgendar, obj }) => {
         fetchData()
     }
 
-    const fetchHorarios = async (data) => {
-        setLoading(true)
-        const result = await getHorariosDisponiveisPorDia(ajustarDia(data))
-        setHorarios(result)
-        setLoading(false)
-    }
 
-    const fetchDiasPorAnalista = async () => {
-        setLoading(true)
-        const result = await getDiasDisponiveisAnalista(analista)
-        setDatas(result?.dias)
-        setLoading(false)
-    }
-
-    const fetchHorariosPorAnalistaEData = async () => {
-        setLoading(true)
-        const result = await getHorariosDisponiveisPorDiaEAnalista(ajustarDia(data), analista)
-        setHorarios(result.horarios)
-        setLoading(false)
-    }
-
-    const fetchAnalistaPorDataEHora = async () => {
-        setLoading(true)
-        const result = await getAnalistasDisponiveis(ajustarDia(data), horario)
-        setAnalistas(result)
-        setLoading(false)
-    }
 
     useEffect(() => {
+
+        const fetchHorarios = async (data) => {
+            setLoading(true)
+            const result = await getHorariosDisponiveisPorDia(ajustarDia(data))
+            setHorarios(result)
+            setLoading(false)
+        }
+
+        const fetchHorariosPorAnalistaEData = async () => {
+            setLoading(true)
+            const result = await getHorariosDisponiveisPorDiaEAnalista(ajustarDia(data), analista)
+            setHorarios(result.horarios)
+            setLoading(false)
+        }
+
         if (analista === '') {
             fetchHorarios(data)
         } else {
             fetchHorariosPorAnalistaEData()
         }
-    }, [data])
+    }, [data, analista])
 
     useEffect(() => {
+
+        const fetchDiasPorAnalista = async () => {
+            setLoading(true)
+            const result = await getDiasDisponiveisAnalista(analista)
+            setDatas(result?.dias)
+            setLoading(false)
+        }
+
+
         if (data === '' && analista !== '') {
             fetchDiasPorAnalista()
         }
-    }, [analista])
+    }, [analista, data])
 
     useEffect(() => {
+
+        const fetchAnalistaPorDataEHora = async () => {
+            setLoading(true)
+            const result = await getAnalistasDisponiveis(ajustarDia(data), horario)
+            setAnalistas(result)
+            setLoading(false)
+        }
+
         if (analista === '' && data !== '') {
             fetchAnalistaPorDataEHora()
         } else if (analista !== '' && data !== '') {
             fetchAnalistaPorDataEHora()
         }
-    }, [horario])
+    }, [horario, data, analista])
 
     return (
         <Box p={1}>

@@ -1,6 +1,6 @@
 import { Box, Button, List, ListItem, ListItemButton, ListItemText, Popover, Tooltip } from "@mui/material"
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { alterarWhatsapp } from "../../../../_services/teleEntrevista.service";
 import Toast from "../../../../components/Toast/Toast";
 
@@ -50,6 +50,10 @@ const PopoverHistoricoWhatsapp = ({ data, setFlushHook, setWhatsapp, setSelected
             setToastOpen(true)
         }
     }
+
+    useEffect(() => {
+        setNumerosAnteriores(data.whatsappsAnteriores || [])
+    }, [data])
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;

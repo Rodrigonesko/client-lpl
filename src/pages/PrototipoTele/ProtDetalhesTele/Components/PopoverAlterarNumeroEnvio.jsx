@@ -1,7 +1,7 @@
 
 // Dependencias
 import { useState } from 'react';
-import { Box, Button, FormControl, IconButton, InputLabel, Popover, Select, MenuItem, TextField, Tooltip } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, Popover, Select, MenuItem, TextField, Tooltip } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import Toast from "../../../../components/Toast/Toast";
 import { changeWhatsappSender } from '../../../../_services/teleEntrevistaExterna.service';

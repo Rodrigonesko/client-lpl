@@ -2,6 +2,7 @@ import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 import Axios from 'axios'
 import moment from 'moment'
+import { filterUsers } from '../../../_services/user.service'
 
 const gerarPdf = async (proposta, nome) => {
 
@@ -27,10 +28,12 @@ const gerarPdf = async (proposta, nome) => {
         {nome: 'Camila Tomczak', coren: 'COREN PR-001.919.048'}
     ];
 
-    console.log(result);
+    let coren = await filterUsers({
+        name: result.data.result[0].responsavel
+    })
 
-    let coren = enfermeiras.find(enfermeira => enfermeira.nome === result.data.result[0].responsavel)?.coren;
-
+    coren = coren[0].coren
+    //let coren = enfermeiras.find(enfermeira => enfermeira.nome === result.data.result[0].responsavel)?.coren;
 
     let tituloHabitos
 

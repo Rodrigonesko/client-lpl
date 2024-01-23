@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
-import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper } from "@mui/material";
+import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper, Link, Chip } from "@mui/material";
 import { getInfoUser, updatePassword } from "../../_services/user.service";
 import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
 import { getPoliticasAtivas } from "../../_services/politicas.service";
@@ -12,6 +12,7 @@ import CardAniversariantes from "./cards/CardAniversariantes";
 import ModalAdicionarMural from "./modais/ModalAdicionarMural";
 import CardMural from "./cards/CardMural";
 import CardToDo from "./cards/CardToDo";
+import { red } from "@mui/material/colors";
 
 const Home = () => {
 
@@ -129,21 +130,58 @@ const Home = () => {
                         {treinamentos.map(treinamento => {
                             return (
                                 <Alert severity="error" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
-                                    <Typography>
+                                    <Typography
+                                        variant="h6"
+                                        component="div"
+                                        fontWeight={'bold'}
+                                    >
                                         Treinamento: {treinamento.nome}
                                     </Typography>
                                     <Typography>
                                         Plataforma: {treinamento.plataforma}
                                     </Typography>
-                                    <Typography>
-                                        <strong>
-                                            <a href={treinamento.link}>
-                                                Link: {treinamento.link}
-                                            </a>
-                                        </strong>
+                                    <Typography
+                                        mt={1}
+                                    >
+                                        Link:
+                                        <Link
+                                            href={'https://' + treinamento.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            color="inherit"
+                                            underline="hover"
+                                            sx={{
+                                                marginLeft: '5px',
+                                                bgcolor: red[800],
+                                                color: '#fff',
+                                                '&:hover': {
+                                                    bgcolor: red[900],
+                                                },
+                                                '&:active': {
+                                                    bgcolor: red[900],
+                                                },
+                                                '&:focus': {
+                                                    bgcolor: red[900],
+                                                },
+                                                padding: '2px',
+                                            }}
+                                        >
+                                            {treinamento.link}
+                                        </Link>
                                     </Typography>
-                                    <Typography>
-                                        Prazo: {moment(treinamento.prazo).format('DD/MM/YYYY')}
+                                    {/*Deixar o prazo mais destacado*/}
+                                    <Typography
+                                        variant="h6"
+                                        component="div"
+                                        fontWeight={'bold'}
+                                        color={'#000'}
+                                        mt={1}
+                                    >
+                                        <Chip
+                                            label={`Prazo: ${moment(treinamento.prazo).format('DD/MM/YYYY')}`}
+                                            color="warning"
+                                            sx={{ marginRight: '5px' }}
+                                        />
                                     </Typography>
                                     <Typography>
                                         {
