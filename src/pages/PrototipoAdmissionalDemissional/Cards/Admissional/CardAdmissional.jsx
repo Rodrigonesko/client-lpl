@@ -4,7 +4,7 @@ import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableCo
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
-import { filterTableAdmi, findAcoes, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
+import { filterTableAdmi, findAcoesAdmissao, setarStatus, updateData, updateObs, updateProrrogacao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
@@ -201,6 +201,7 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
             emAndamento: false,
             concluido: false,
         })
+        setAcoes('')
     }
 
     return (
@@ -244,7 +245,6 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                         id="demo-simple-select"
                         value={acoes}
                         label="Acao"
-                        size='small'
                         onChange={(e) => setAcoes(e.target.value)}
                     >
                         {acao.map((acoes) => (
@@ -292,7 +292,7 @@ const CardAdmissional = () => {
     }
 
     const handleChange = async () => {
-        const encontrarAcao = await findAcoes()
+        const encontrarAcao = await findAcoesAdmissao()
         setAcao(encontrarAcao.acoes)
         console.log(encontrarAcao)
     }

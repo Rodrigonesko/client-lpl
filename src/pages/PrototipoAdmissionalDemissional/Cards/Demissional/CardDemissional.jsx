@@ -4,7 +4,7 @@ import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableCo
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
-import { filterTableDemi, setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
+import { filterTableDemi, findAcoesDemissao, setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
@@ -160,7 +160,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     )
 }
 
-const Filter = ({ setNomes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter }) => {
+const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setResponsaveis, handleClickFilter }) => {
 
 
     const handleChangeResponsaveis = (event) => {
@@ -190,6 +190,7 @@ const Filter = ({ setNomes, status, setStatus, responsaveis, setResponsaveis, ha
             emAndamento: false,
             concluido: false,
         })
+        setAcoes('')
     }
 
     return (
@@ -221,6 +222,30 @@ const Filter = ({ setNomes, status, setStatus, responsaveis, setResponsaveis, ha
                     <FormControlLabel control={<Checkbox checked={status.emAndamento} onChange={handleChangeStatus} name='emAndamento' />} label='Em Andamento' />
                     <FormControlLabel control={<Checkbox checked={status.concluido} onChange={handleChangeStatus} name='concluido' />} label='Concluído' />
                 </FormGroup>
+                <Divider />
+                <Typography>
+                    <strong>Ação</strong>
+                </Typography>
+                <br />
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Ação</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={acoes}
+                        label="Acao"
+                        onChange={(e) => setAcoes(e.target.value)}
+                    >
+                        {acao.map((acoes) => (
+                            <MenuItem
+                                key={acoes}
+                                value={acoes}
+                            >
+                                {acoes}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </Box>
         </>
     )
@@ -232,7 +257,8 @@ const CardDemissional = () => {
 
     const [nomes, setNomes] = useState([])
     const [flushHook, setFlushHook] = useState(false)
-
+    const [acao, setAcao] = useState([])
+    const [acoes, setAcoes] = useState('')
     const [user, setUser] = useState(null);
 
     const [responsaveis, setResponsaveis] = useState({
@@ -249,9 +275,15 @@ const CardDemissional = () => {
     })
 
     const handleClickFilter = async () => {
-        const filter = await filterTableDemi({ status, responsavel: responsaveis })
+        const filter = await filterTableDemi({ status, responsavel: responsaveis, acao: acoes })
         setNomes(filter.result)
         console.log(filter)
+    }
+
+    const handleChange = async () => {
+        const encontrarAcao = await findAcoesDemissao()
+        setAcao(encontrarAcao.acoes)
+        console.log(encontrarAcao)
     }
 
     useEffect(() => {
@@ -265,6 +297,7 @@ const CardDemissional = () => {
             }
         }
         handleClickFilter()
+        handleChange()
         setFlushHook(false)
     }, [flushHook])
 
@@ -275,7 +308,9 @@ const CardDemissional = () => {
                     <CardContent sx={{ padding: '0' }} >
                         <Box width={'100%'}>
                             <Filter
-                                setNomes={setNomes}
+                                acao={acao}
+                                acoes={acoes}
+                                setAcoes={setAcoes}
                                 nomes={nomes}
                                 status={status}
                                 setStatus={setStatus}

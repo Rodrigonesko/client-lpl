@@ -36,10 +36,10 @@ export const filterTableDemi = async (status, responsavel, acao) => {
     return await new ApiCall('/admissaoDemissao/filterTableDemi').post(status, responsavel, acao)
 }
 
-export const findAcoes = async () => {
-    return await new ApiCall('/admissaoDemissao/findAcoes').get()
+export const findAcoesAdmissao = async () => {
+    return await new ApiCall('/admissaoDemissao/findAcoesAdmissional').get()
 }
 
-export const filterAdmissaoAcoes = async (acao) => {
-    return await new ApiCall(`/admissaoDemissao/filterAdmissaoAcoes?acao=${acao}`).get(acao)
+export const findAcoesDemissao = async () => {
+    return await new ApiCall('/admissaoDemissao/findAcoesDemissional').get()
 }
