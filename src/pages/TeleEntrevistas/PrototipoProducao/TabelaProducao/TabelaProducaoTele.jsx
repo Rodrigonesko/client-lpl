@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TextField, Button } from '@mui/material'
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TextField, Button, CircularProgress } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import moment from 'moment/moment';
@@ -108,14 +108,15 @@ const Row2 = (props) => {
     );
 }
 
-const TabelaProducaoTele = ({ producao, setData, handleFilterProducao, data }) => {
+const TabelaProducaoTele = ({ producao, setData, buscarDadosTele, data, loadingTele }) => {
+
 
     return (
         <>
             <br />
             <Box>
-                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} value={data} sx={{ marginRight: '3px' }} />
-                <Button type='submit' variant='contained' onClick={handleFilterProducao} >FILTRAR</Button>
+                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} value={data === '' ? moment().format('MM/YYYY') : data} sx={{ marginRight: '3px' }} />
+                <Button type='submit' variant='contained' onClick={buscarDadosTele} >FILTRAR</Button>
             </Box>
             <br />
             <TableContainer component={Paper} style={{ maxWidth: '400px' }}>
@@ -129,9 +130,13 @@ const TabelaProducaoTele = ({ producao, setData, handleFilterProducao, data }) =
                     </TableHead>
                     <TableBody>
                         {
-                            producao.map(row => (
-                                <Row key={row.data} row={row} />
-                            ))
+                            loadingTele ? (
+                                <CircularProgress style={{ position: 'initial', top: '50%', right: '50%' }} />
+                            ) : (
+                                producao.map(row => (
+                                    <Row key={row.data} row={row} />
+                                ))
+                            )
                         }
                     </TableBody>
                 </Table>
