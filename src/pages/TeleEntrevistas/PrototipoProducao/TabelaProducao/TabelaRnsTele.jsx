@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TextField, Button } from '@mui/material'
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TextField, Button, CircularProgress } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import moment from 'moment/moment';
 import { blue } from '@mui/material/colors';
-import Axios from 'axios'
 
 function Row(props) {
     const { row } = props;
@@ -109,30 +108,14 @@ const Row2 = (props) => {
     );
 }
 
-const TabelaRnsTele = ({ producao, setProducao }) => {
-
-    const [data, setData] = useState('')
-
-    const handleFilter = async (e) => {
-        e.preventDefault()
-        try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/filterRns?data=${data}`, { withCredentials: true })
-
-            console.log(result);
-
-            setProducao(result.data.rns)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+const TabelaRnsTele = ({ producao, data, setData, loadingRns, buscarDadosRns }) => {
 
     return (
         <>
             <br />
             <Box>
-                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} sx={{ marginRight: '3px' }} />
-                <Button type='submit' variant='contained' onClick={handleFilter} >FILTRAR</Button>
+                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} value={data} sx={{ marginRight: '3px' }} />
+                <Button type='submit' variant='contained' onClick={buscarDadosRns} >FILTRAR</Button>
             </Box>
             <br />
             <TableContainer component={Paper} style={{ maxWidth: '400px' }}>
@@ -146,9 +129,13 @@ const TabelaRnsTele = ({ producao, setProducao }) => {
                     </TableHead>
                     <TableBody>
                         {
-                            producao.map(row => (
-                                <Row key={row.data} row={row} />
-                            ))
+                            loadingRns ? (
+                                <CircularProgress style={{ position: 'initial', top: '50%', right: '50%' }} />
+                            ) : (
+                                producao.map(row => (
+                                    <Row key={row.data} row={row} />
+                                ))
+                            )
                         }
                     </TableBody>
                 </Table>
