@@ -9,11 +9,11 @@ import moment from "moment";
 const ProducaoTele = () => {
 
     const [producao, setProducao] = useState([])
-    // const [loading, setLoading] = useState(false)
     const [loadingTele, setLoadingTele] = useState(false)
     const [loadingRns, setLoadingRns] = useState(false)
     const [producaoRns, setProducaoRns] = useState([])
-    const [data, setData] = useState('')
+    const [dataTele, setDataTele] = useState('')
+    const [dataRns, setDataRns] = useState('')
     const [flushHook, setFlushHook] = useState(false)
 
     const buscarDadosTele = async () => {
@@ -21,7 +21,7 @@ const ProducaoTele = () => {
 
             setLoadingTele(true)
 
-            const dataBuscar = data || moment().format('MM/YYYY')
+            const dataBuscar = dataTele || moment().format('MM/YYYY')
             // console.log(dataBuscar)
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producaoTele?data=${dataBuscar}`, { withCredentials: true })
             // console.log(result.data.arrQuantidadeTotalMes);
@@ -39,11 +39,12 @@ const ProducaoTele = () => {
 
             setLoadingRns(true)
 
-            const dataBuscar = data || moment().format('MM/YYYY')
-            console.log(dataBuscar)
+            const dataBuscar = dataRns || moment().format('MM/YYYY')
+            // console.log(dataBuscar)
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producaoRns?data=${dataBuscar}`, { withCredentials: true })
-            console.log(result.data.arrRns);
+            // console.log(result.data.arrRns);
             setProducaoRns(result.data.arrRns)
+
             setLoadingRns(false)
 
         } catch (error) {
@@ -55,7 +56,6 @@ const ProducaoTele = () => {
         setFlushHook(false)
         buscarDadosTele()
         buscarDadosRns()
-        // handleFilterProducao()
     }, [flushHook])
 
     return (
@@ -72,13 +72,13 @@ const ProducaoTele = () => {
                                     <Typography variant='h6'>
                                         Produção Tele
                                     </Typography>
-                                    <TabelaProducaoTele producao={producao} data={data} setData={setData} buscarDadosTele={buscarDadosTele} loadingTele={loadingTele} />
+                                    <TabelaProducaoTele producao={producao} data={dataTele} setData={setDataTele} buscarDadosTele={buscarDadosTele} loadingTele={loadingTele} />
                                 </Box>
                                 <Box width={'100%'}>
                                     <Typography variant='h6'>
                                         Produção Rn
                                     </Typography>
-                                    <TabelaRnsTele producao={producaoRns} data={data} setData={setData} buscarDadosRns={buscarDadosRns} loadingRns={loadingRns} />
+                                    <TabelaRnsTele producao={producaoRns} data={dataRns} setData={setDataRns} buscarDadosRns={buscarDadosRns} loadingRns={loadingRns} />
                                 </Box>
                             </Box>
                         </>
