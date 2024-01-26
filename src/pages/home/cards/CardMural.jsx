@@ -4,21 +4,23 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ModalDeletarRecado from "../modais/ModalDeletarRecado";
 
-const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
+const CardMural = ({ flushHook, setFlushHook, dataUser, setLoading }) => {
 
     const [recados, setRecados] = useState([])
 
     const fetchData = async () => {
+        
+        setLoading(true)
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
             withCredentials: true
         })
-
         setRecados(result.data)
-
+        setLoading(false)
     }
 
     useEffect(() => {
         fetchData()
+        setLoading(false)
     }, [flushHook])
 
     return (
