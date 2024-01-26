@@ -1,13 +1,13 @@
 import { forwardRef, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from "@mui/material"
-import { MdOutlineSmsFailed } from 'react-icons/md'
-import { cancelarRn } from "../../../../_services/teleEntrevista.service";
+import { HiDuplicate } from "react-icons/hi";
+import { rnDuplicada } from "../../../../_services/teleEntrevista.service";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ModalCancelarRn = (props) => {
+const ModalRnDuplicada = (props) => {
 
     const [open, setOpen] = useState(false)
 
@@ -19,17 +19,17 @@ const ModalCancelarRn = (props) => {
         setOpen(false);
     };
 
-    const handleCancel = async () => {
+    const duplicada = async () => {
 
-        await cancelarRn({ id: props.id })
+        await rnDuplicada({ id: props.id })
         handleClose()
         props.flushHook(true)
     }
 
     return (
         <>
-            <Button style={{ marginLeft: '18px' }} startIcon={<MdOutlineSmsFailed />} variant="contained" color='error' onClick={handleClickOpen}>
-                Sem sucesso
+            <Button style={{ marginLeft: '18px' }} startIcon={<HiDuplicate />} variant="contained" color='warning' onClick={handleClickOpen}>
+                Duplicada
             </Button>
             <Dialog
                 open={open}
@@ -41,16 +41,16 @@ const ModalCancelarRn = (props) => {
                 <DialogTitle>{"Cancelar RN?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Você deseja cancelar a proposta <strong>{props.proposta}</strong> como sem sucesso de contato?
+                        Você tem certeza de que a proposta <strong>{props.proposta}</strong> está duplicada?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" color='inherit' onClick={handleClose}>Fechar</Button>
-                    <Button variant="contained" color="error" onClick={handleCancel}>Sem sucesso</Button>
+                    <Button variant="contained" color="warning" onClick={duplicada}>Duplicada</Button>
                 </DialogActions>
             </Dialog>
         </>
     )
 }
 
-export default ModalCancelarRn
+export default ModalRnDuplicada

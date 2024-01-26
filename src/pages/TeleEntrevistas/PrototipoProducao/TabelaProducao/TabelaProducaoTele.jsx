@@ -110,12 +110,11 @@ const Row2 = (props) => {
 
 const TabelaProducaoTele = ({ producao, setData, buscarDadosTele, data, loadingTele }) => {
 
-
     return (
         <>
             <br />
             <Box>
-                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} value={data === '' ? moment().format('MM/YYYY') : data} sx={{ marginRight: '3px' }} />
+                <TextField type='month' label='Mês' focused size='small' onChange={(e) => { setData(e.target.value) }} value={data} sx={{ marginRight: '3px' }} />
                 <Button type='submit' variant='contained' onClick={buscarDadosTele} >FILTRAR</Button>
             </Box>
             <br />

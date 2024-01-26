@@ -4,11 +4,11 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Detalhes.css'
 import { Container, Button, Box, Paper, Alert, Snackbar, TextField, Divider, Typography } from "@mui/material";
 import moment from "moment";
-import { getInfoRn, rnDuplicada, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
+import { getInfoRn, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
 import ModalCancelarRn from "./modais/ModalCancelarRn";
-import { HiDuplicate } from 'react-icons/hi'
 import { CiFloppyDisk } from 'react-icons/ci'
 import ModalConcluirRn from "./modais/ModalConcluirRn";
+import ModalRnDuplicada from "./modais/ModalRnDuplicada";
 
 const Detalhes = () => {
 
@@ -28,18 +28,6 @@ const Detalhes = () => {
     const [concluido, setConcluido] = useState(false)
 
     const [flushHook, setFlushHook] = useState(false)
-
-    const duplicada = async () => {
-        try {
-
-            await rnDuplicada({ id })
-
-            search()
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const update = async () => {
 
@@ -228,7 +216,7 @@ const Detalhes = () => {
                             !concluido && (
                                 <>
                                     <ModalConcluirRn id={id} email={email} observacoes={observacoes} flushHook={setFlushHook} />
-                                    <Button startIcon={<HiDuplicate />} color='warning' variant="contained" style={{ marginLeft: '18px' }} onClick={duplicada} >Duplicada</Button>
+                                    <ModalRnDuplicada id={id} email={email} proposta={dados.proposta} flushHook={setFlushHook} />
                                     <ModalCancelarRn id={dados._id} proposta={dados.proposta} flushHook={setFlushHook} />
                                 </>
 
