@@ -1,20 +1,164 @@
-import { AppBar, Box, Button, CircularProgress, Dialog, Divider, IconButton, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Dialog, Divider, IconButton, ListItemIcon, ListItemText, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Tooltip, Typography, MenuItem, Menu as MenuComponent, LinearProgress, TextField, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { filterPropostasNaoRealizadas } from "../../../../../_services/teleEntrevistaExterna.service";
 import moment from "moment";
 import { blue, deepPurple, grey } from "@mui/material/colors";
 import ProtDetalhesTele from "../../../ProtDetalhesTele/ProtDetalhesTele";
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { filterPropostasAgendadas } from "../../../../../_services/teleEntrevistaExterna.service";
+import { filterPropostasAgendadas, filterPropostasNaoRealizadas } from "../../../../../_services/teleEntrevistaExterna.service";
 import AuthContext from "../../../../../context/AuthContext";
 import { filterUsers } from "../../../../../_services/user.service";
 import FiltroEnfermeiros from "./FiltroEnfermeiros";
-import { Close, Menu } from "@mui/icons-material";
+import { ArrowRight, Close, FormatListNumbered, History, ManageAccounts, Menu, PhoneEnabled, Replay, Search } from "@mui/icons-material";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { reagendarEntrevista } from "../../../../../_services/teleEntrevista.service";
+import Toast from "../../../../../components/Toast/Toast";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const MenuOptions = ({ data, setSelected, setCpfTitular, setOpenDialog, fetchPropostas }) => {
+
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
+    const open = Boolean(anchorEl)
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
+    const handleReagendar = async () => {
+        try {
+            await reagendarEntrevista({ id: data._id })
+            setSeverity('success')
+            setMessage('Reagendado com sucesso')
+            setOpenToast(true)
+            handleClose()
+            fetchPropostas()
+        } catch (error) {
+            setSeverity('error')
+            setMessage('Algo deu errado')
+            setOpenToast(true)
+            console.log(error);
+        }
+    }
+
+    return (
+        <>
+            <Tooltip
+                title={'Mais opções'}
+            >
+                <IconButton
+                    size={'small'}
+                    onClick={handleClick}
+                >
+                    <MoreHorizIcon />
+                </IconButton>
+            </Tooltip>
+            <MenuComponent
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                <MenuItem
+                    onClick={() => {
+                        setOpenDialog(true)
+                        setCpfTitular(data.cpfTitular)
+                        setSelected(data.cpfTitular)
+                    }}
+                >
+                    <ListItemIcon>
+                        <ManageAccounts />
+                    </ListItemIcon>
+                    <ListItemText>
+                        Detalhes
+                    </ListItemText>
+                </MenuItem>
+                <MenuItem
+                    href={`/entrevistas/formulario/${data._id}`}
+                >
+                    <ListItemIcon>
+                        <FormatListNumbered />
+                    </ListItemIcon>
+                    <ListItemText>
+                        Formulario
+                    </ListItemText>
+                    <Typography>
+                        <IconButton
+                            href={`/entrevistas/formulario/${data._id}`}
+                            target="_blank"
+                        >
+                            <ArrowRight />
+                        </IconButton>
+                    </Typography>
+                </MenuItem>
+                <MenuItem
+                    onClick={handleReagendar}
+                >
+                    <ListItemIcon>
+                        <History />
+                    </ListItemIcon>
+                    <ListItemText>
+                        Reagendar
+                    </ListItemText>
+                </MenuItem>
+                {
+                    data.contato1 ? (
+                        <MenuItem>
+                            <ListItemIcon>
+                                <PhoneEnabled />
+                            </ListItemIcon>
+                            <ListItemText>
+                                {data.contato1}
+                            </ListItemText>
+                        </MenuItem>
+                    ) : null
+                }
+                {
+                    data.contato2 ? (
+                        <MenuItem>
+                            <ListItemIcon>
+                                <PhoneEnabled />
+                            </ListItemIcon>
+                            <ListItemText>
+                                {data.contato2}
+                            </ListItemText>
+                        </MenuItem>
+                    ) : null
+                }
+                {
+                    data.contato3 ? (
+                        <MenuItem>
+                            <ListItemIcon>
+                                <PhoneEnabled />
+                            </ListItemIcon>
+                            <ListItemText>
+                                {data.contato3}
+                            </ListItemText>
+                        </MenuItem>
+                    ) : null
+                }
+
+            </MenuComponent>
+
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
+        </>
+    )
+}
+
 
 const FiltroAgendadas = () => {
 
@@ -30,7 +174,7 @@ const FiltroAgendadas = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [cpfTitular, setCpfTitular] = useState('')
     const [selected, setSelected] = useState('')
-    const [openFilter, setOpenFilter] = useState(false)
+    const [openFilter, setOpenFilter] = useState(true)
 
     const fetchPropostas = async (page) => {
         setLoading(true);
@@ -56,31 +200,32 @@ const FiltroAgendadas = () => {
         fetchPropostas(value);
     }
 
-    // const handlePesquisar = async (e) => {
+    const handlePesquisar = async (e) => {
 
-    //     if (e) {
-    //         e.preventDefault()
-    //     }
+        if (e) {
+            e.preventDefault()
+        }
 
-    //     if (pesquisa === '') {
-    //         return;
-    //     }
-    //     setLoading(true);
-    //     setPage(1)
-    //     const result = await filterPropostasNaoRealizadas({
-    //         pesquisa: pesquisa,
-    //         page: 1,
-    //         limit: 100
-    //     })
-    //     setPropostas(result.result);
-    //     setTotalPages(result.total);
-    //     setLoading(false)
-    // }
+        if (pesquisa === '') {
+            return;
+        }
+        setLoading(true);
+        setPage(1)
+        const result = await filterPropostasAgendadas({
+            pesquisa: pesquisa,
+            page: 1,
+            limit: 100,
+            responsavel: responsavel
+        })
+        console.log(result);
+        setPropostas(result.result);
+        setTotalPages(result.total);
+        setLoading(false)
+    }
 
     const fetchAnalistas = async () => {
         setLoading(true)
         try {
-            // const resultAnalistas = await buscaAnalistasTele()
             const resultAnalistas = await filterUsers({
                 atividadePrincipal: 'Tele Entrevista',
                 inativo: { $ne: true }
@@ -135,7 +280,12 @@ const FiltroAgendadas = () => {
     }, [name]);
 
     return (
-        <Box>
+        <Box
+            sx={{
+                width: '100%',
+                height: '100%',
+            }}
+        >
             <Box display={'flex'} mb={2}>
                 <Typography
                     variant="h4"
@@ -190,11 +340,52 @@ const FiltroAgendadas = () => {
                     openSlide={openFilter}
                 // handlePesquisar={handlePesquisar}
                 />
-                <Box>
-                    {/* <form action="" style={{ display: 'flex', margin: '10px' }} onSubmit={handlePesquisar} >
-                        <TextField label="Pesquisar" variant="outlined" size="small" value={pesquisa} onChange={e => setPesquisa(e.target.value)} />
-                        <Button sx={{ ml: 2 }} variant={'contained'} color={'primary'} size="small" type="submit">Pesquisar</Button>
-                    </form> */}
+                <Box
+                    width={'100%'}
+                >
+                    <IconButton
+                        onClick={() => fetchPropostas(page)}
+                    >
+                        <Replay />
+                    </IconButton>
+                    <form
+                        action=""
+                        style={{ display: 'flex', margin: '10px' }}
+                        onSubmit={handlePesquisar}
+                    >
+                        <TextField
+                            placeholder="Pesquisar"
+                            variant="outlined"
+                            size="small"
+                            sx={{ width: '100%' }}
+                            InputProps={{
+                                startAdornment: (
+                                    <Search
+                                        sx={{
+                                            color: grey[800],
+                                            mr: 1
+                                        }}
+                                    />
+                                )
+                            }}
+                            value={pesquisa}
+                            onChange={(e) => setPesquisa(e.target.value)}
+                        />
+                        <Button
+                            sx={{
+                                ml: 2,
+                                backgroundColor: 'black',
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: 'black',
+                                    opacity: 0.8
+                                }
+                            }}
+                            variant={'contained'}
+                            size="small"
+                            type="submit"
+                        >Pesquisar</Button>
+                    </form>
                     <Typography fontWeight={'bold'}>
                         {totalPages} propostas encontradas
                     </Typography>
@@ -202,24 +393,25 @@ const FiltroAgendadas = () => {
                         <Box display={'flex'} justifyContent={'flex-end'}>
                             <Pagination count={Math.ceil(totalPages / 100)} page={page} onChange={handlePageChange} />
                         </Box>
-                        {
-                            !loading ? (
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow sx={{ bgcolor: blue[600] }}>
-                                            <TableCell sx={{ color: "white" }}>Data Entrevista</TableCell>
-                                            <TableCell sx={{ color: "white" }} >Vigência</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Proposta</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Nome</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Associado</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Idade</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Sexo</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Tipo Contrato</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Responsavel</TableCell>
-                                            <TableCell sx={{ color: "white" }}>Risco</TableCell>
-                                            <TableCell sx={{ color: "white" }}></TableCell>
-                                        </TableRow>
-                                    </TableHead>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow sx={{ bgcolor: '#F5F5F5' }}>
+                                    <TableCell>Data Entrevista</TableCell>
+                                    <TableCell >Vigência</TableCell>
+                                    <TableCell>Proposta</TableCell>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>Associado</TableCell>
+                                    <TableCell>Idade</TableCell>
+                                    <TableCell>Sexo</TableCell>
+                                    <TableCell>Tipo Contrato</TableCell>
+                                    <TableCell>Responsavel</TableCell>
+                                    <TableCell>Risco</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            {
+                                !loading ? (
+
                                     <TableBody>
                                         {propostas.map((proposta) => (
                                             <TableRow
@@ -237,30 +429,30 @@ const FiltroAgendadas = () => {
                                                 <TableCell>{proposta.enfermeiro}</TableCell>
                                                 <TableCell>{proposta.riscoBeneficiario}</TableCell>
                                                 <TableCell>
-                                                    <Button
-                                                        variant={'contained'}
-                                                        color={'primary'}
-                                                        size={'small'}
-                                                        onClick={() => {
-                                                            setCpfTitular(proposta.cpfTitular)
-                                                            setOpenDialog(true)
-                                                            setSelected(proposta.cpfTitular)
-                                                        }}
-                                                    >
-                                                        Detalhes
-                                                    </Button>
+                                                    <MenuOptions
+                                                        data={proposta}
+                                                        setSelected={setSelected}
+                                                        setCpfTitular={setCpfTitular}
+                                                        setOpenDialog={setOpenDialog}
+                                                        fetchPropostas={() => fetchPropostas(page)}
+                                                    />
                                                 </TableCell>
                                             </TableRow>
                                         ))
                                         }
                                     </TableBody>
-                                </Table>
-                            ) : (
-                                <Box width={'100%'} display={'flex'} justifyContent={"center"}>
-                                    <CircularProgress />
-                                </Box>
-                            )
-                        }
+
+                                ) : (
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell colSpan={11} align={'center'}>
+                                                <LinearProgress />
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                )
+                            }
+                        </Table>
                     </TableContainer>
                 </Box>
             </Box>
