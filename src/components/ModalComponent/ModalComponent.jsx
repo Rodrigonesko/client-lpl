@@ -22,9 +22,8 @@ const ModalComponent = ({
                     <Button
                         onClick={() => setOpen(true)}
                         color={buttonColorScheme}
-                        variant="outlined"
-                        size="small"
                         startIcon={buttonIcon}
+                        variant="contained"
                     >
                         {buttonText}
                     </Button>

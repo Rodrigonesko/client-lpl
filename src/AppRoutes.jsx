@@ -111,6 +111,7 @@ import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
 import ProtFiltros from "./pages/PrototipoTele/ProtFiltros/ProtFiltros";
 import ProtDetalhesTele from "./pages/PrototipoTele/ProtDetalhesTele/ProtDetalhesTele";
+import ProtEnviar from "./pages/PrototipoTele/ProtEnviar/ProtEnviar";
 
 /* Urgencia Emergencia */
 
@@ -149,7 +150,7 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                
+
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
@@ -317,6 +318,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/ProtDetalhesTele/:cpfTitular" element={<ProtectedRoute>
                     <ProtDetalhesTele />
+                </ProtectedRoute>} />
+                <Route exact path="/prototipoTele/enviar" element={<ProtectedRoute>
+                    <ProtEnviar />
                 </ProtectedRoute>} />
                 {/* RSD */}
 

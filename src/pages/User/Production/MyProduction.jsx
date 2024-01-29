@@ -19,39 +19,17 @@ const MyProduction = () => {
     const [celula, setCelula] = useState('')
     const [mes, setMes] = useState('')
 
-    const fetchData = async () => {
-        if (context.authToken) {
-            if (context.name !== name && context.accessLevel !== 'true') {
-                navigate('/')
-            }
-        }
-        const { user } = await getInfoUser()
-
-        if (user.atividadePrincipal === 'Tele Entrevista') {
-            setProductionComponent(<MyProductionTele />)
-        } else if (user.atividadePrincipal === 'RSD') {
-            setProductionComponent(<MyProductionRsd />)
-        } else if (user.atividadePrincipal === 'Elegibilidade') {
-            setProductionComponent(<MyProductionElegi />)
-        }
-    }
-
     const handleChange = (event) => {
         setCelula(event.target.value)
     }
 
-
     const handleClick = () => {
 
-
         let mesAux = mes;
-
         if (mesAux === '') {
             mesAux = moment().format('YYYY-MM');
         }
-
         setProductionComponent(null)
-
         if (celula === 'Tele Entrevista') {
             setProductionComponent(<MyProductionTele key={mesAux} mes={mesAux} />);
         } else if (celula === 'RSD') {
@@ -66,8 +44,24 @@ const MyProduction = () => {
     };
 
     useEffect(() => {
+        const fetchData = async () => {
+            if (context.authToken) {
+                if (context.name !== name && context.accessLevel !== 'true') {
+                    navigate('/')
+                }
+            }
+            const { user } = await getInfoUser()
+            if (user.atividadePrincipal === 'Tele Entrevista') {
+                setProductionComponent(<MyProductionTele />)
+            } else if (user.atividadePrincipal === 'RSD') {
+                setProductionComponent(<MyProductionRsd />)
+            } else if (user.atividadePrincipal === 'Elegibilidade') {
+                setProductionComponent(<MyProductionElegi />)
+            }
+        }
+
         fetchData()
-    }, [name, context])
+    }, [name, context, navigate])
 
     return (
 
