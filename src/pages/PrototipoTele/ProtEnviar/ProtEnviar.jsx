@@ -150,9 +150,10 @@ const ProtEnviar = () => {
                                             <TableCell>CPF</TableCell>
                                             <TableCell>CPF Titular</TableCell>
                                             <TableCell>Tipo Associado</TableCell>
+                                            <TableCell>Contrato</TableCell>
                                             <TableCell>Idade</TableCell>
                                             <TableCell>DDD</TableCell>
-                                            <TableCell>Telefone</TableCell>
+                                            <TableCell>Celular</TableCell>
                                             <TableCell></TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -166,9 +167,10 @@ const ProtEnviar = () => {
                                                 <TableCell>{proposta.cpf}</TableCell>
                                                 <TableCell>{proposta.cpfTitular}</TableCell>
                                                 <TableCell>{proposta.tipoAssociado}</TableCell>
+                                                <TableCell>{proposta.tipoContrato}</TableCell>
                                                 <TableCell>{proposta.idade}</TableCell>
                                                 <TableCell>{proposta.ddd}</TableCell>
-                                                <TableCell>{proposta.telefone}</TableCell>
+                                                <TableCell>{proposta.celular}</TableCell>
                                                 <TableCell>
                                                     <Tooltip
                                                         title="Enviar proposta"
