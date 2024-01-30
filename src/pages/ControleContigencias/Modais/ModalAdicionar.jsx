@@ -56,7 +56,7 @@ const ModalAdicionar = ({ setFlushHook, contingencias }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Adicionar ou atualizar nova política
+                    Adicionar ou atualizar nova Contingência
                 </DialogTitle>
                 <DialogContent>
                     <DragAndDrop

@@ -1,34 +1,38 @@
-import React, { useEffect, useState, useContext, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
 import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper, Link, Chip, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import { getInfoUser, updatePassword } from "../../_services/user.service";
 import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
 import { getPoliticasAtivas } from "../../_services/politicas.service";
-import { getVerificarTreinamento } from "../../_services/treinamento.service";
+import { getVerificarTreinamento, uploadCertificados } from "../../_services/treinamento.service";
 import moment from "moment";
 import CardBancoHoras from "./cards/CardBancoHoras";
 import CardAniversariantes from "./cards/CardAniversariantes";
 import ModalAdicionarMural from "./modais/ModalAdicionarMural";
 import CardMural from "./cards/CardMural";
 import CardToDo from "./cards/CardToDo";
-import { blue, red } from "@mui/material/colors";
-import { useDropzone } from "react-dropzone";
+import { red } from "@mui/material/colors";
+import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
 
 const Home = () => {
 
     const [firstAccess, setFirstAccess] = useState(false)
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState(false)
     const [message, setMessage] = useState('')
+
+    const [file, setFile] = useState()
+    const [openSnack, setOpenSnack] = useState(false)
+    const [severitySnack, setSeveritySnack] = useState('')
+    // const [certificado, setCertificado] = useState('')
+
     const [open, setOpen] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
     const [loading, setLoading] = useState(false)
     const [idPolitica, setIdPolitica] = useState('')
     const [treinamentos, setTreinamentos] = useState([])
     const [dataUser, setDataUser] = useState(null)
-    const [uploadedFiles, setUploadedFiles] = useState([]);
     const [userData, setUserData] = useState({})
 
     const { name } = useContext(AuthContext)
@@ -40,55 +44,8 @@ const Home = () => {
 
     const handleClose = async () => {
         setOpen(false)
+        setOpenSnack(false)
     }
-
-    const onDrop = useCallback((acceptedFiles) => {
-        console.log(acceptedFiles);
-        setUploadedFiles(acceptedFiles);
-    }, []);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: '*',
-        multiple: true,
-    });
-
-    const activeDropzoneStyles = {
-        border: `2px solid ${blue[200]}`, // Change as needed
-        borderRadius: '4px',
-        padding: '20px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        backgroundColor: blue[50], // Change as needed
-        transition: 'all 0.3s ease-in-out',
-    };
-
-    const dropzoneStyles = {
-        border: '2px solid #cccccc',
-        borderRadius: '4px',
-        padding: '20px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        '&:hover': {
-            backgroundColor: '#eeeeee',
-        },
-        transition: 'all 0.3s ease-in-out',
-    };
-
-    const uploadedFileItems = useMemo(() => (
-        uploadedFiles.map((file, index) => (
-            <Chip
-                m={1}
-                key={index}
-                label={file.name}
-                onDelete={() => {
-                    const newFiles = [...uploadedFiles];
-                    newFiles.splice(index, 1);
-                    setUploadedFiles(newFiles);
-                }}
-            >{file.name}</Chip>
-        ))
-    ), [uploadedFiles]);
 
     const fetchData = async () => {
         const { user } = await getInfoUser()
@@ -108,9 +65,31 @@ const Home = () => {
             window.location.reload()
         } catch (error) {
             setMessage(error.response.data.message)
-            setError(true)
+            setSeveritySnack('error')
         }
+    }
 
+    const handleUpload = async (_id) => {
+        const formData = new FormData()
+        formData.append('file', file, file.name)
+
+        const result = await uploadCertificados(
+            formData,
+            _id
+        )
+
+        if (result.msg === 'ok') {
+            setOpenSnack(true)
+            setMessage('Certificado adicionado com sucesso')
+            setSeveritySnack('success')
+            setFile('')
+            handleClose()
+            setFlushHook(true)
+        } else {
+            setOpenSnack(true)
+            setMessage('Algo deu errado ou ja existe esse Certificado')
+            setSeveritySnack('warning')
+        }
     }
 
     const fetchInfoUser = async () => {
@@ -178,10 +157,10 @@ const Home = () => {
 
                         <Snackbar
                             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={error}
-                            onClose={() => setError(false)}
+                            open={openSnack}
+                            onClose={handleClose}
                         >
-                            <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
+                            <Alert onClose={handleClose} variant='filled' severity={severitySnack} sx={{ width: '100%' }}>
                                 {message}
                             </Alert>
                         </Snackbar>
@@ -257,7 +236,7 @@ const Home = () => {
                                                 )
                                             }
                                         </Typography>
-                                        Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br
+                                        {/* Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br */}
                                     </Box>
                                     <Box sx={{ display: 'flex' }}>
                                         <Button variant='contained' onClick={handleClickOpen} >Enviar Certificado do Curso</Button>
@@ -272,22 +251,34 @@ const Home = () => {
                                             </DialogTitle>
                                             <DialogContent>
                                                 <DialogContentText id="alert-dialog-description">
-                                                    <Box
-                                                        {...getRootProps()}
-                                                        sx={isDragActive ? activeDropzoneStyles : dropzoneStyles}
-                                                    >
-                                                        <input {...getInputProps()} />
-                                                        <p>Arraste e solte arquivos aqui ou clique para selecionar.</p>
-                                                    </Box>
-                                                    <Box mt={2}>
-                                                        <h4>Arquivos enviados:</h4>
-                                                        {uploadedFileItems}
-                                                    </Box>
+                                                    <DragAndDrop
+                                                        file={file}
+                                                        setFile={setFile}
+                                                        fontColor={'black'}
+                                                        bgColor={'red'}
+                                                        textOnDrag={'Solte aqui'}
+                                                        text={'Arraste e solte o pdf aqui'}
+                                                        textOnDrop={<object data={file ? URL.createObjectURL(file) : null} type="application/pdf" height={500} >
+                                                            PDF
+                                                        </object>}
+                                                    />
+                                                    {/* <Box mt={2}>
+                                                        <TextField
+                                                            type='text'
+                                                            variant='outlined'
+                                                            name='certificado'
+                                                            id='certificado'
+                                                            label='Certificado'
+                                                            value={certificado}
+                                                            onChange={e => { setCertificado(e.target.value) }}
+                                                            fullWidth
+                                                        />
+                                                    </Box> */}
                                                 </DialogContentText>
                                             </DialogContent>
                                             <DialogActions>
                                                 <Button onClick={handleClose} color='error'>Fechar</Button>
-                                                <Button onClick={handleClose} color='success' autoFocus>Enviar</Button>
+                                                <Button onClick={() => { handleUpload(treinamento._id) }} color='success' autoFocus>Enviar</Button>
                                             </DialogActions>
                                         </Dialog>
                                     </Box>
