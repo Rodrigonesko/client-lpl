@@ -244,7 +244,7 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={acoes}
-                        label="Acao"
+                        label='Acao'
                         onChange={(e) => setAcoes(e.target.value)}
                     >
                         {acao.map((acoes) => (

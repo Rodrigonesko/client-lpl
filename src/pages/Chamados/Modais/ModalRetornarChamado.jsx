@@ -1,4 +1,4 @@
-import { Alert, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TableCell, TextField } from "@mui/material"
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../_services/user.service"
@@ -11,7 +11,6 @@ const ModalRetornarChamados = ({ item }) => {
     const [dados, setDados] = useState({
         retorno: ''
     })
-    // const [snackSelect, setSnackSelect] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
     const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
