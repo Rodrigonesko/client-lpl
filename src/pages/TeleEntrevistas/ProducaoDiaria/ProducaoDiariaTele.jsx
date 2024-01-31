@@ -16,7 +16,12 @@ const ProducaoDiariaTele = () => {
     const buscarDados = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${moment().format('YYYY-MM-DD')}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${moment().format('YYYY-MM-DD')}`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setProducao(result.data.producao)
             setTotal(result.data.total)
@@ -28,7 +33,12 @@ const ProducaoDiariaTele = () => {
 
     const buscarDadosData = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${data}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${data}`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setProducao(result.data.producao)
             setTotal(result.data.total)

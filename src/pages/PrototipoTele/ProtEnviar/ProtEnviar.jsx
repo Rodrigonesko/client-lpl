@@ -5,6 +5,7 @@ import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../_servi
 import { ArrowRight } from "@mui/icons-material";
 import Toast from "../../../components/Toast/Toast";
 import ProtAjustar from "./Components/ProtAjustar";
+import NaoRespondias from "./Components/NaoRespondidas";
 
 const ProtEnviar = () => {
 
@@ -69,6 +70,7 @@ const ProtEnviar = () => {
                     <Tab label="Enviar" value='Enviar' />
                     <Tab label="Ajustar" value={'Ajustar'} />
                     <Tab label="Enviadas" value={'Enviadas'} />
+                    <Tab label="Não Respondias" value={'NaoRespondidas'} />
                 </Tabs>
                 {
                     tab === 'Enviar' && (
@@ -216,6 +218,12 @@ const ProtEnviar = () => {
                     tab === 'Ajustar' && (
                         <ProtAjustar />
                     )
+                }
+                {
+                    tab === 'Enviadas' && 'Enviadas'
+                }
+                {
+                    tab === 'NaoRespondidas' && <NaoRespondias />
                 }
             </Box>
         </Sidebar >

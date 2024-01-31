@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Modal, Box, Typography, Button, CircularProgress, Alert, Snackbar } from '@mui/material';
-import Axios from 'axios'
 import NestedList from '../NestedList/NestedList';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import gerarPdf from '../../pages/TeleEntrevistas/Pdf/Pdf';
@@ -78,86 +77,11 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
             let count = 0
 
             for await (const pergunta of Object.keys(respostas)) {
-
-                const palavras = respostas[pergunta].trim().split(' ');
-
-                // for await (const palavra of palavras) {
-                //     try {
-
-                //         console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
-
-                //         if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
-                //             continue
-                //         }
-
-                //         const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                //             withCredentials: true
-                //         })
-
-                //         if (result.data.length === 0) {
-
-                //             const result = await Axios.get(`https://api.dicionario-aberto.net/near/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                //                 withCredentials: true
-                //             })
-
-                //             setPalavrasIncorretas(prevState => [...prevState, {
-                //                 onde: 'Principal',
-                //                 pergunta,
-                //                 palavra,
-                //                 sugestoes: result.data,
-                //                 plural: verificarPlural(palavra) ? 'Plural' : null
-                //             }])
-
-                //         }
-
-                //     } catch (error) {
-                //         console.log(error);
-                //         continue
-                //     }
-
-                // }
-
                 count++
                 setProgress((count / totalProgress) * 100)
             }
 
             for await (const pergunta of Object.keys(subRespostas)) {
-
-                const palavras = subRespostas[pergunta].trim().split(' ');
-
-                // for await (const palavra of palavras) {
-                //     try {
-                //         console.log(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''));
-
-                //         if (dicionario.includes(palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, ''))) {
-                //             continue
-                //         }
-
-                //         const result = await Axios.get(`https://api.dicionario-aberto.net/word/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                //             withCredentials: true
-                //         })
-
-                //         if (result.data.length === 0) {
-
-                //             const result = await Axios.get(`https://api.dicionario-aberto.net/near/${palavra.toLowerCase().replace(/[^a-zA-ZÀ-ú]/g, '')}`, {
-                //                 withCredentials: true
-                //             })
-
-                //             setPalavrasIncorretas(prevState => [...prevState, {
-                //                 onde: 'Secundária',
-                //                 pergunta,
-                //                 palavra,
-                //                 sugestoes: result.data,
-                //                 plural: verificarPlural(palavra) ? 'Plural' : null
-                //             }])
-
-                //         }
-
-                //     } catch (error) {
-                //         console.log(error);
-                //         continue
-                //     }
-                // }
 
                 count++
                 setProgress((count / totalProgress) * 100)

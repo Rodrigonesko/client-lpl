@@ -104,7 +104,7 @@ const NaoEnviados = () => {
                     data2: moment(data2).format('DD/MM/YYYY')
                 }, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${getCookie('token')}` }
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
                 })
                 setProgressValue((count / propostas.length) * 100)
                 buscarPropostas()
@@ -122,7 +122,7 @@ const NaoEnviados = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoEnviadas`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             setPropostas(result.data)
@@ -141,7 +141,7 @@ const NaoEnviados = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()

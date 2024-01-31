@@ -78,6 +78,11 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                 etiqueta: dados.etiqueta,
                 ondeEsta: dados.ondeEsta,
                 descricao: dados.descricao
+            }, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
             console.log(resultado)
             setOpenSnack(true)

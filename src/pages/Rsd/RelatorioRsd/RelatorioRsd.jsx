@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment/moment";
 import { Container, Box, Paper, Divider, Button, TextField, CircularProgress, Typography } from "@mui/material";
@@ -20,19 +19,16 @@ const RelatorioRsd = () => {
             let result
 
             if (aPartir === '' && ate === '') {
-                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
                 result = await getTodosOsPedidos()
             }
 
             if (aPartir === '' && ate !== '') {
-                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, { withCredentials: true })
 
                 result = await getRelatorio(moment(new Date()).format('YYYY-MM-DD'), ate)
 
             }
 
             if (aPartir !== '' && ate === '') {
-                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, { withCredentials: true })
 
                 result = await getRelatorio(aPartir, moment(new Date()).format('YYYY-MM-DD'))
             }
@@ -158,20 +154,14 @@ const RelatorioRsd = () => {
             let result
 
             if (aPartir === '' && ate === '') {
-                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pedidos/todos`, { withCredentials: true })
                 result = await getTodosOsPedidos()
             }
 
             if (aPartir === '' && ate !== '') {
-                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${moment(new Date()).format('YYYY-MM-DD')}/${ate}`, { withCredentials: true })
-
                 result = await getRelatorio(moment(new Date()).format('YYYY-MM-DD'), ate)
-
             }
 
             if (aPartir !== '' && ate === '') {
-                //result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/relatorio/${aPartir}/${moment(new Date()).format('YYYY-MM-DD')}`, { withCredentials: true })
-
                 result = await getRelatorio(aPartir, moment(new Date()).format('YYYY-MM-DD'))
             }
 

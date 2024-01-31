@@ -13,7 +13,12 @@ const Horarios = () => {
 
     const buscarEnfermeira = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setResponsaveis(result.data.enfermeiros)
 

@@ -35,7 +35,10 @@ const EntrevistasRealizadas = () => {
             await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/alterarSexo`, {
                 id, sexo
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
         } catch (error) {
@@ -52,7 +55,12 @@ const EntrevistasRealizadas = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/${pesquisa}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/${pesquisa}`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setLoading(false)
 
@@ -69,7 +77,10 @@ const EntrevistasRealizadas = () => {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/voltar`, {
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -85,7 +96,12 @@ const EntrevistasRealizadas = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             //console.log(dataInicio, dataFim);
 
@@ -156,7 +172,10 @@ const EntrevistasRealizadas = () => {
             setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/qualidade`, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             setEntrevistas(result.data)

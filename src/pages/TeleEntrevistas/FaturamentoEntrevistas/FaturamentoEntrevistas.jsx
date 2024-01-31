@@ -70,7 +70,12 @@ const FaturamentoEntrevistas = () => {
                 }
             }
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/faturar`, { entrevistas: faturar }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/faturar`, { entrevistas: faturar }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             if (result.status === 200) {
                 openModal()
@@ -88,11 +93,21 @@ const FaturamentoEntrevistas = () => {
             setLoading(true)
 
             if (data === '') {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/faturamento/filtros/${status}/todos`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/faturamento/filtros/${status}/todos`, {
+                    withCredentials: true,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
                 console.log(result);
                 setEntrevistas(result.data.entrevistas)
             } else {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/faturamento/filtros/${status}/${data}`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/faturamento/filtros/${status}/${data}`, {
+                    withCredentials: true,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
                 console.log(result);
                 setEntrevistas(result.data.entrevistas)
             }
@@ -108,11 +123,24 @@ const FaturamentoEntrevistas = () => {
 
         setLoading(true)
 
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
-        const reusltRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/concluidas`, {
-            withCredentials: true
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, {
+            withCredentials: true,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
-        const resultUe = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?limit=0&page=0`, { withCredentials: true })
+        const reusltRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/concluidas`, {
+            withCredentials: true,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        const resultUe = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?limit=0&page=0`, {
+            withCredentials: true,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
 
         console.log(resultUe);
 

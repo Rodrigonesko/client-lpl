@@ -27,14 +27,6 @@ const CriarOperadoraBeneficiario = () => {
                 setOpen(true)
                 return
             }
-
-            // const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/rsd/operadoras/criar`, {
-            //     descricao,
-            //     sla
-            // }, {
-            //     withCredentials: true
-            // })
-
             await criarOperadora({
                 descricao,
                 sla

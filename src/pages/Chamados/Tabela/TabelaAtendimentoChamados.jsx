@@ -22,7 +22,10 @@ const TabelaAtendimentoChamados = () => {
 
         if ((colaborador.length > 2) || (analista.length > 2)) {
             const result = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/filter?colaborador=${colaborador}&analista=${analista}`, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
             console.log(result)
             setChamados(result.data)
@@ -44,6 +47,11 @@ const TabelaAtendimentoChamados = () => {
     const handleChangeAnalist = async (id, analista) => {
         const result = await axios.put(`${process.env.REACT_APP_API_KEY}/tasks/analist`, {
             analista: analista, _id: id
+        }, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         setSnackSelect(true)
         console.log(result)
@@ -51,7 +59,12 @@ const TabelaAtendimentoChamados = () => {
     }
 
     const fetchData = async () => {
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, { withCredentials: true })
+        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         setChamados(resultado.data.encontrarTodos)
     }
 

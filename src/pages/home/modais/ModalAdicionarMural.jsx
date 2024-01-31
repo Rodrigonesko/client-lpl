@@ -44,6 +44,7 @@ const ModalAdicionarMural = ({ setFlushHook }) => {
         await Axios.post(`${process.env.REACT_APP_API_KEY}/mural`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                authorization: `Bearer ${localStorage.getItem('token')}`
             },
             withCredentials: true
         })

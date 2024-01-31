@@ -20,6 +20,11 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const handleChangeStatus = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/inventario/status`, {
             status: status, _id: id
+        }, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         setFlushHook(true)
         setSnackSelect(true)
@@ -31,6 +36,9 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         try {
             const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/findAll?page=${valor}&limit=25`, {
                 withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             });
 
             const solicitacoesData = resultado.data.result;

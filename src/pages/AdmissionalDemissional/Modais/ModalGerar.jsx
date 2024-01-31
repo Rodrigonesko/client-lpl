@@ -57,6 +57,11 @@ const ModalGerar = ({ setFlushHook, flushHook, setNomeCompleto, setNumero }) => 
             const resultado = await axios.post(process.env.REACT_APP_API_KEY + '/admissaoDemissao/create', {
                 nome: dados.nomeCompleto,
                 numero: dados.numero
+            }, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
             console.log(resultado)
             setOpenSnack(true)

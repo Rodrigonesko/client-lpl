@@ -22,7 +22,12 @@ const UrgenciaEmergenciaTodos = () => {
         try {
 
             setLoading(true);
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?page=${valor}&limit=25`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?page=${valor}&limit=25`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setLoading(false);
             setPropostas(result.data.propostas)
@@ -50,6 +55,9 @@ const UrgenciaEmergenciaTodos = () => {
 
         const result = await axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/filter?pesquisa=${pesquisa}&page=${page}&limit=25`, {
             withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         setPropostas(result.data.result)
         setTotalPages(result.data.total)
@@ -71,7 +79,12 @@ const UrgenciaEmergenciaTodos = () => {
     }
 
     const reportTodas = async () => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/todas`, { withCredentials: true })
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/todas`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
 
         let xls = '\ufeff'
         xls += "<table border='1'>"

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios';
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import moment from "moment";
 import ProducaoDiariaMui from "../../../components/TabelaProducaoMui/ProducaoDiariaMui";
@@ -15,8 +14,6 @@ const ProducaoDiariaRsd = () => {
     const buscarDados = async () => {
         try {
 
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/producaoDiaria/${moment().format('YYYY-MM-DD')}`, { withCredentials: true })
-
             const result = await getProducaoDiaria(moment().format('YYYY-MM-DD'))
 
             setProducao(result.producao)
@@ -29,10 +26,7 @@ const ProducaoDiariaRsd = () => {
 
     const buscarDadosData = async () => {
         try {
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/producaoDiaria/${data}`, { withCredentials: true })
-
             const result = await getProducaoDiaria(data)
-
             setProducao(result.producao)
             setTotal(result.total)
         } catch (error) {
