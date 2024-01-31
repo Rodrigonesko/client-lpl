@@ -267,9 +267,6 @@ const AppRoutes = () => {
                     <ReportTeleEntrevistas />
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/producao" element={<ProtectedRoute>
-                    <ProducaoEntrevistas />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/producaoTeleRns" element={<ProtectedRoute>
                     <ProducaoTele />
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/reportAgendadas" element={<ProtectedRoute>
