@@ -25,7 +25,13 @@ const UploadUrgenciaEmergencia = () => {
 
             console.log(formData);
 
-            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
+            const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/upload`, formData, {
+                headers: {
+                    "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                withCredentials: true
+            })
 
             console.log(result);
 

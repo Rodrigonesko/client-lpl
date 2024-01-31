@@ -11,7 +11,12 @@ const SolicitarChamados = () => {
     const [flushHook, setFlushHook] = useState(false)
 
     const fetchData = async () => {
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, { withCredentials: true })
+        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         setChamados(resultado.data.encontrarTodos)
     }
 

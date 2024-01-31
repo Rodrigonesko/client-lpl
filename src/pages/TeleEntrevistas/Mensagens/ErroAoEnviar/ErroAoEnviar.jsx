@@ -38,7 +38,10 @@ const ErroAoEnviar = () => {
 
             setLoading(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar, motivoCancelamento: motivoCancelar }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/cancelar`, { id: idCancelar, motivoCancelamento: motivoCancelar }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
 
             console.log(result);
 
@@ -58,7 +61,7 @@ const ErroAoEnviar = () => {
 
             const result = await Axios.delete(`${process.env.REACT_APP_API_TELE_KEY}/delete/${idExcluir}`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
 
             if (result.status === 200) {
@@ -83,7 +86,7 @@ const ErroAoEnviar = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
 
             console.log(result);
@@ -104,7 +107,7 @@ const ErroAoEnviar = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/erroMensagem`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
 
             console.log(result);

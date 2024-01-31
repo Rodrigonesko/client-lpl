@@ -184,6 +184,7 @@ const FiltroAgendadas = () => {
                 limit: 100,
                 responsavel: responsavel
             })
+            console.log(result);
             setPropostas(result.result);
             setTotalPages(result.total);
             setLoading(false)

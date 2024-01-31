@@ -268,3 +268,11 @@ export const anexarProposta = async ({ id }) => {
 export const filterQueryDadosEntrevista = async ({ page, limit, query }) => {
     return await new ApiCall('/entrevistas/filterQueryDadosEntrevistas').post({ page, limit, query })
 }
+
+export const getCids = async (cid) => {
+    return await new ApiCall(`/entrevistas/cids/pesquisa/${cid}`).get()
+}
+
+export const getPerguntas = async () => {
+    return await new ApiCall('/entrevistas/perguntas').get()
+}

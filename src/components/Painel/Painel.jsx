@@ -89,7 +89,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
 
                                     protocolos.map(e => {
 
-                                        //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${e.mo}`, {withCredentials: true})
 
                                         let hoje = new Date()
 
@@ -130,7 +129,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                 {
                                     protocolos.map(e => {
 
-                                        //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${e.mo}`, {withCredentials: true})
 
                                         let hoje = new Date()
 

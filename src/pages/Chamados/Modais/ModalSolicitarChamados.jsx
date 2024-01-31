@@ -21,7 +21,12 @@ const ModalSolicitarChamados = () => {
     const [severitySnack, setSeveritySnack] = useState('')
 
     const fetchData = async () => {
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, { withCredentials: true })
+        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         setChamados(resultado.data.encontrarTodos)
     }
 
@@ -44,7 +49,10 @@ const ModalSolicitarChamados = () => {
             assunto: dados.assunto,
             descricao: dados.descricao
         }, {
-            withCredentials: true
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         console.log(resultado)
         setOpenSnack(true)

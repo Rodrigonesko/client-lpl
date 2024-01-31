@@ -1,5 +1,4 @@
 import React, { useState, useEffect, } from "react";
-import Axios from 'axios'
 import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
@@ -10,9 +9,9 @@ import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, Circular
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import ModalFormulario from "../../../components/ModalFormulario/ModalFormulario";
 import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
-
 import './Formulario.css'
-import { getCookie } from "react-use-cookie";
+import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
+import { getCids, getPerguntas } from "../../../_services/teleEntrevista.service";
 
 let arrCids = []
 
@@ -43,8 +42,8 @@ const Formulario = () => {
 
     const buscarPerguntas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, { withCredentials: true })
-            setPerguntas(result.data.perguntas)
+            const result = await getPerguntas()
+            setPerguntas(result.perguntas)
         } catch (error) {
             console.log(error);
         }
@@ -114,8 +113,9 @@ const Formulario = () => {
             if (cid === '' || cid.length <= 2) {
                 setCids([])
             } else {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/cids/pesquisa/${cid}`, { withCredentials: true })
-                setCids(result.data.cids)
+                const result = await getCids(cid)
+                console.log(result);
+                setCids(result.cids)
             }
         } catch (error) {
             console.log(error);
@@ -156,16 +156,8 @@ const Formulario = () => {
         try {
             setLoading(true)
             if (novoFormulario !== '') {
-                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/alterarFormulario`, {
-                    formulario: novoFormulario,
-                    id: id
-                }, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${getCookie('token')}` }
-                })
-                if (result.status === 200) {
-                    window.location.reload()
-                }
+                await alterarFormularioEntrevista({ id, formulario: novoFormulario })
+                window.location.reload()
             } else {
                 return
             }
@@ -177,17 +169,14 @@ const Formulario = () => {
     useEffect(() => {
         const buscarInfoPessoa = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/proposta/${id}`, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${getCookie('token')}` }
-                })
-                setPessoa(result.data)
-                setFormulario(result.data.formulario)
-                setSexo(result.data.sexo)
-                if (result.data.formulario !== 'adulto') {
+                const result = await getPropostaById(id)
+                setPessoa(result)
+                setFormulario(result.formulario)
+                setSexo(result.sexo)
+                if (result.formulario !== 'adulto') {
                     setHabitos(false)
                 }
-                setInfoAdicional(result.data)
+                setInfoAdicional(result)
             } catch (error) {
                 console.log(error);
             }

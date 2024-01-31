@@ -9,7 +9,12 @@ const ReportAgendadas = () => {
 
     const buscarAgendadas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/report/agendadas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/report/agendadas`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setPropostas(result.data.report)
         } catch (error) {

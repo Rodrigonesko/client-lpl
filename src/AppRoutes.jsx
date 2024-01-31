@@ -93,7 +93,7 @@ import Anexos from "./pages/TeleEntrevistas/Agenda/Anexos/Anexos";
 import Horarios from "./pages/TeleEntrevistas/Agenda/Horarios/Horarios";
 import FaturamentoEntrevistas from "./pages/TeleEntrevistas/FaturamentoEntrevistas/FaturamentoEntrevistas";
 import ReportTeleEntrevistas from "./pages/TeleEntrevistas/ReportTeleEntrevistas/ReportTeleEntrevistas";
-import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoEntrevistas";
+import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoTele";
 import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgendadas";
 import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
 import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
@@ -137,9 +137,6 @@ import Analitico from "./pages/Admin/Analitico/Analitico";
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
 /* Prototipo produção entrevistas  */
-
-import ProducaoTele from "./pages/TeleEntrevistas/PrototipoProducao/ProducaoTele";
-
 import { AuthProvider } from "./context/AuthContext";
 
 const AppRoutes = () => {
@@ -268,9 +265,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/producao" element={<ProtectedRoute>
                     <ProducaoEntrevistas />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/producaoTeleRns" element={<ProtectedRoute>
-                    <ProducaoTele />
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/reportAgendadas" element={<ProtectedRoute>
                     <ReportAgendadas />

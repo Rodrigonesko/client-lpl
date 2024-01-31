@@ -55,7 +55,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         setWhatsapp(selectedWhatsapp)
         fetchData()
         setFlushHook(false)
-    }, [selectedWhatsapp, flushHook, data._id, setData, setMessages, setWhatsapp, data.whatsapp, whatsapp])
+    }, [selectedWhatsapp, flushHook, data._id])
 
     useEffect(() => {
         socket.on('receivedMessage', async (message) => {

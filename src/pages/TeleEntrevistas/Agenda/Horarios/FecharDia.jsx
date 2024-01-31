@@ -8,7 +8,7 @@ import AuthContext from "../../../../context/AuthContext"
 
 const FecharDia = ({ responsaveis }) => {
 
-    const {name} = useContext(AuthContext)
+    const { name } = useContext(AuthContext)
 
     const [data, setData] = useState('')
     const [responsavel, setResponsavel] = useState('')
@@ -20,7 +20,7 @@ const FecharDia = ({ responsaveis }) => {
 
     const handleFecharDia = async () => {
 
-        if(name !== 'Administrador' && name !== "Rodrigo Onesko Dias" && name !== "Bruna Tomazoni" && name !== "Luciana Tavares" && name !== "Claudia Rieth"){
+        if (name !== 'Administrador' && name !== "Rodrigo Onesko Dias" && name !== "Bruna Tomazoni" && name !== "Luciana Tavares" && name !== "Claudia Rieth") {
             setMessage('Você não tem permissão para realizar essa ação!')
             setSeverity("error")
             setToastOpen(true)
@@ -28,7 +28,12 @@ const FecharDia = ({ responsaveis }) => {
         }
 
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharDia`, { data: data, responsavel: responsavel }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharDia`, { data: data, responsavel: responsavel }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             if (result.status === 200) {
                 setMessage('Dia fechado com sucesso!')

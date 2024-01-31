@@ -6,7 +6,7 @@ import TabelaProducaoTele from "./TabelaProducao/TabelaProducaoTele";
 import TabelaRnsTele from "./TabelaProducao/TabelaRnsTele";
 import moment from "moment";
 
-const ProducaoTele = () => {
+const ProducaoEntrevistas = () => {
 
     const [producao, setProducao] = useState([])
     const [loadingTele, setLoadingTele] = useState(false)
@@ -23,7 +23,12 @@ const ProducaoTele = () => {
 
             const dataBuscar = dataTele || moment().format('MM/YYYY')
             // console.log(dataBuscar)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producaoTele?data=${dataBuscar}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producaoTele?data=${dataBuscar}`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             // console.log(result.data.arrQuantidadeTotalMes);
             setProducao(result.data.arrQuantidadeTotalMes)
 
@@ -41,7 +46,12 @@ const ProducaoTele = () => {
 
             const dataBuscar = dataRns || moment().format('MM/YYYY')
             // console.log(dataBuscar)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producaoRns?data=${dataBuscar}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/teste/producaoRns?data=${dataBuscar}`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             // console.log(result.data.arrRns);
             setProducaoRns(result.data.arrRns)
 
@@ -89,4 +99,4 @@ const ProducaoTele = () => {
     )
 }
 
-export default ProducaoTele
+export default ProducaoEntrevistas

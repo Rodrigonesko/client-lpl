@@ -208,7 +208,10 @@ const Enviados = () => {
 
             //console.log(moment().businessAdd(3).format('YYYY-MM-DD'));
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${data}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${data}`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
 
             const dia = data
             const horarios = result.data
@@ -228,7 +231,8 @@ const Enviados = () => {
                     horarios,
                     proposta
                 }, {
-                    withCredentials: true
+                    withCredentials: true,
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
                 })
                 setProgressValue((count / arr.length) * 100)
                 buscarPropostas()
@@ -248,7 +252,7 @@ const Enviados = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/situacao/Enviada`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             let arr = result.data.filter(e => {
