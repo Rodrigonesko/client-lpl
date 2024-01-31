@@ -10,7 +10,7 @@ import MensagemSemSucessoContato from './mensagensPadrao/MensagemSemSucessoConta
 import MensagemDiaAnterior from './mensagensPadrao/MensagemDiaAnterior';
 import { io } from "socket.io-client";
 
-const socket = io(`http://18.230.122.26:3001`);
+const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
 const Chat = () => {
 
