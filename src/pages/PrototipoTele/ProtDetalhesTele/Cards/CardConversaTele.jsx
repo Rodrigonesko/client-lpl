@@ -41,7 +41,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
 
             const resultData = await mostrarPropostaPorId(data._id)
             setData(resultData)
-            if (!selectedWhatsapp || selectedWhatsapp === 'whatsapp:+55undefinedundefined') {
+            if (!selectedWhatsapp || selectedWhatsapp === 'whatsapp:+55undefinedundefined' || selectedWhatsapp === 'whatsapp:+55') {
                 setMessages([])
                 return
             }

@@ -72,7 +72,7 @@ const Chat = () => {
 
         try {
 
-            if (whatsapp === 'whatsapp:+55undefinedundefined') {
+            if (whatsapp === 'whatsapp:+55undefinedundefined' || whatsapp === 'whatsapp:+55') {
                 return
             }
 
