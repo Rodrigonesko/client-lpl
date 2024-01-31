@@ -197,7 +197,6 @@ const Sidebar = ({ children }) => {
                                 <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/producao'>Produção</Link></MenuItem>
-                                <MenuItem><Link to='/entrevistas/producaoTeleRns'>Prototipo Produção</Link></MenuItem>
                             </>
                             ) : null
                         }
