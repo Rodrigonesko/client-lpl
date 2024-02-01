@@ -19,7 +19,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { io } from "socket.io-client";
 
-const socket = io(`http://18.230.122.26:3001`);
+const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
 const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendimento, setResponsavelAtendimento, selectedWhatsapp, setSelectedWhatsapp, data, setData }) => {
 
@@ -55,7 +55,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         setWhatsapp(selectedWhatsapp)
         fetchData()
         setFlushHook(false)
-    }, [selectedWhatsapp, flushHook, data._id, setData, setMessages, setWhatsapp, data.whatsapp, whatsapp])
+    }, [selectedWhatsapp, flushHook, data._id])
 
     useEffect(() => {
         socket.on('receivedMessage', async (message) => {

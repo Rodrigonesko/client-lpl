@@ -30,6 +30,7 @@ const Login = () => {
                 setAuthToken(authToken)
                 const cookie = result.data.token
                 document.cookie = `token=${cookie}`
+                localStorage.setItem('token', cookie)
 
                 await Axios.post(`${process.env.REACT_APP_API_KEY}/controleAtividade/iniciarPadrao`, {
                     name: result.data.user

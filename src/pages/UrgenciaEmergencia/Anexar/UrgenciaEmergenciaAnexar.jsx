@@ -12,7 +12,12 @@ const UrgenciaEmergenciaAnexar = () => {
     const buscarPropostas = async () => {
         try {
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/anexar`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/anexar`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)
@@ -28,7 +33,10 @@ const UrgenciaEmergenciaAnexar = () => {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluirAnexo`, {
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {

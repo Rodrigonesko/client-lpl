@@ -12,7 +12,10 @@ const CardMural = ({ flushHook, setFlushHook, dataUser, setLoading }) => {
 
         setLoading(true)
         const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
-            withCredentials: true
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         setRecados(result.data)
         setLoading(false)

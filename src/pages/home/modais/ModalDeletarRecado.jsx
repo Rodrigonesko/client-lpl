@@ -3,7 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import Axios from "axios";
 
-const ModalDeletarRecado = ({setFlushHook, id}) => {
+const ModalDeletarRecado = ({ setFlushHook, id }) => {
 
     const [open, setOpen] = useState(false);
     const [openSnack, setOpenSnack] = useState(false);
@@ -19,7 +19,10 @@ const ModalDeletarRecado = ({setFlushHook, id}) => {
     const handleDelete = async () => {
 
         await Axios.delete(`${process.env.REACT_APP_API_KEY}/mural/${id}`, {
-            withCredentials: true
+            withCredentials: true,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
 
         setOpenSnack(true)

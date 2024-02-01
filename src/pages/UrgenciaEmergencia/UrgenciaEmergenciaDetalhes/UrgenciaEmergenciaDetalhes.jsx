@@ -34,7 +34,10 @@ const UrgenciaEmergenciaDetalhes = () => {
                 obj,
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -67,7 +70,10 @@ const UrgenciaEmergenciaDetalhes = () => {
                 obj,
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -96,7 +102,10 @@ const UrgenciaEmergenciaDetalhes = () => {
                 obj,
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -114,7 +123,12 @@ const UrgenciaEmergenciaDetalhes = () => {
     useEffect(() => {
         const buscarInfoProposta = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/detalhes/${id}`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/detalhes/${id}`, {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
 
                 setProposta(result.data.proposta)
                 setEmail(result.data.proposta.email)

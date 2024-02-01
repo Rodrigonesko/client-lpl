@@ -3,7 +3,7 @@ import { getCookie } from "react-use-cookie";
 
 export class ApiCall {
 
-    constructor(route, apiBaseUrl = process.env.REACT_APP_API_KEY, token = getCookie('token'), config = undefined) {
+    constructor(route, apiBaseUrl = process.env.REACT_APP_API_KEY, token = localStorage.getItem('token'), config = undefined) {
         this.base = apiBaseUrl;
         this.currentRoute = route;
         this.currentConfig = config;

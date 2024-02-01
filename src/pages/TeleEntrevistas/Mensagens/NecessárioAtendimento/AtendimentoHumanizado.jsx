@@ -195,7 +195,7 @@ const AtendimentoHumanizado = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()
@@ -214,7 +214,7 @@ const AtendimentoHumanizado = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             console.log(result);
@@ -234,7 +234,7 @@ const AtendimentoHumanizado = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/atendimentoHumanizado`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             setPropostas(result.data)

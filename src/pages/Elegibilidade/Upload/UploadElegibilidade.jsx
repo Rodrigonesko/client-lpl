@@ -20,8 +20,6 @@ const UploadElegibilidade = () => {
 
             setStatus('Enviando')
 
-            //const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/elegibilidade/upload`, formData, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` }, withCredentials: true })
-
             const result = await uploadPropostas(formData)
 
             setStatus('Concluido')

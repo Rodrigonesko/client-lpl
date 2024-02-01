@@ -16,7 +16,12 @@ const UrgenciaEmergencia = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/andamento`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/andamento`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setPropostas(result.data.propostas)
             setTotal(result.data.propostas.length)

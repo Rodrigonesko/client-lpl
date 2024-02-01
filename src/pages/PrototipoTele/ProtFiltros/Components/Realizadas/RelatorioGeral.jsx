@@ -11,7 +11,12 @@ const RelatorioGeral = () => {
         try {
             setLoading(true)
 
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             //console.log(dataInicio, dataFim);
 

@@ -31,7 +31,12 @@ const EditarEntrevista = () => {
 
     const buscarPerguntas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             setPerguntas(result.data.perguntas)
         } catch (error) {
             console.log(error);
@@ -49,7 +54,12 @@ const EditarEntrevista = () => {
 
     const salvar = async () => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             if (result.status === 200) {
                 setMessage('Entrevista salva com sucesso!')
                 setSeverity("success")
@@ -68,7 +78,12 @@ const EditarEntrevista = () => {
         setFlushHook(false)
         const buscarDadosEntrevista = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, {
+                    withCredentials: true,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
                 setDadosEntrevista(result.data.proposta)
                 setHouveDivergencia(result.data.proposta.houveDivergencia)
                 setDataNascimento(result.data.proposta.dataNascimento)

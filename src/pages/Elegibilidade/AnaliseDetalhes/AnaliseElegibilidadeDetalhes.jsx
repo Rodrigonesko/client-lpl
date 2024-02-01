@@ -22,13 +22,8 @@ const AnaliseElegibilidadeDetalhes = () => {
 
     const buscarBlacklist = async () => {
         try {
-
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/blacklist`, { withCredentials: true })
-
             const result = await getBlacklist()
-
             setBlacklist(result)
-
         } catch (error) {
             console.log(error);
         }

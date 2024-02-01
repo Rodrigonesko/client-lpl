@@ -48,61 +48,55 @@ const Agendamento = ({ onAgendar, obj }) => {
         fetchData()
     }
 
+    const fetchHorarios = async (data) => {
+        setLoading(true)
+        const result = await getHorariosDisponiveisPorDia(ajustarDia(data))
+        setHorarios(result)
+        setLoading(false)
+    }
 
+    const fetchDiasPorAnalista = async () => {
+        setLoading(true)
+        const result = await getDiasDisponiveisAnalista(analista)
+        setDatas(result?.dias)
+        setLoading(false)
+    }
+
+    const fetchHorariosPorAnalistaEData = async () => {
+        setLoading(true)
+        const result = await getHorariosDisponiveisPorDiaEAnalista(ajustarDia(data), analista)
+        setHorarios(result.horarios)
+        setLoading(false)
+    }
+
+    const fetchAnalistaPorDataEHora = async () => {
+        setLoading(true)
+        const result = await getAnalistasDisponiveis(ajustarDia(data), horario)
+        setAnalistas(result)
+        setLoading(false)
+    }
 
     useEffect(() => {
-
-        const fetchHorarios = async (data) => {
-            setLoading(true)
-            const result = await getHorariosDisponiveisPorDia(ajustarDia(data))
-            setHorarios(result)
-            setLoading(false)
-        }
-
-        const fetchHorariosPorAnalistaEData = async () => {
-            setLoading(true)
-            const result = await getHorariosDisponiveisPorDiaEAnalista(ajustarDia(data), analista)
-            setHorarios(result.horarios)
-            setLoading(false)
-        }
-
         if (analista === '') {
             fetchHorarios(data)
         } else {
             fetchHorariosPorAnalistaEData()
         }
-    }, [data, analista])
+    }, [data])
 
     useEffect(() => {
-
-        const fetchDiasPorAnalista = async () => {
-            setLoading(true)
-            const result = await getDiasDisponiveisAnalista(analista)
-            setDatas(result?.dias)
-            setLoading(false)
-        }
-
-
         if (data === '' && analista !== '') {
             fetchDiasPorAnalista()
         }
-    }, [analista, data])
+    }, [analista])
 
     useEffect(() => {
-
-        const fetchAnalistaPorDataEHora = async () => {
-            setLoading(true)
-            const result = await getAnalistasDisponiveis(ajustarDia(data), horario)
-            setAnalistas(result)
-            setLoading(false)
-        }
-
         if (analista === '' && data !== '') {
             fetchAnalistaPorDataEHora()
         } else if (analista !== '' && data !== '') {
             fetchAnalistaPorDataEHora()
         }
-    }, [horario, data, analista])
+    }, [horario])
 
     return (
         <Box p={1}>

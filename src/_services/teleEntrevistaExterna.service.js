@@ -1,6 +1,6 @@
 //import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const URL_API = process.env.REACT_APP_API_TELE_KEY //'http://localhost:3002'
+const URL_API = process.env.REACT_APP_API_TELE_KEY  //'http://localhost:3002'
 //const token = getCookie('token')
 
 export const getMessagesTele = async (whatsapp) => {
@@ -81,6 +81,10 @@ export const graficoPropostasPorMesFiltradas = async (data) => {
 
 export const getPropostaById = async (id) => {
     return await new ApiCall(`/proposta/${id}`, URL_API).get()
+}
+
+export const alterarFormularioEntrevista = async ({ id, formulario }) => {
+    return await new ApiCall(`/alterarFormulario`, URL_API).put({ id, formulario })
 }
 
 export const getPropostaPorNomeEProposta = async (nome, proposta) => {

@@ -20,7 +20,10 @@ const EditarOperadoraBeneficiario = () => {
                 sla,
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -38,7 +41,12 @@ const EditarOperadoraBeneficiario = () => {
         const buscarOperadora = async () => {
             try {
 
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadora/${id}`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/operadora/${id}`, {
+                    withCredentials: true,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
 
                 setDescricao(result.data.operadora.descricao)
                 setSla(result.data.operadora.sla)

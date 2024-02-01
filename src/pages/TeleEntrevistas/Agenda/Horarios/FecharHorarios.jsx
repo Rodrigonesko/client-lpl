@@ -17,7 +17,12 @@ const FecharHorarios = ({ responsaveis }) => {
 
     const buscarHorariosDisponiveis = async (data) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${responsavel}/${data}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${responsavel}/${data}`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             setHorarioDisponiveis(result.data.horarios)
         } catch (error) {
             console.log(error);
@@ -42,7 +47,12 @@ const FecharHorarios = ({ responsaveis }) => {
                 }
                 return null
             })
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             if (result.status === 200) {
                 setMessage('Horarios fechados com sucesso!')
                 setSeverity("success")

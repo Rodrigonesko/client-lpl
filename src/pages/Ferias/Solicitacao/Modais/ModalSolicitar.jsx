@@ -90,6 +90,11 @@ const ModalSolicitar = ({ setFlushHook }) => {
                 dataInicio2: dados.data2,
                 totalDias: dados.tipoSolicitacao,
                 statusRh: dados.statusRh
+            }, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
             console.log(resultado)
             setOpenSnack(true)
