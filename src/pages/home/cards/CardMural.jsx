@@ -65,8 +65,11 @@ const CardMural = ({ flushHook, setFlushHook, dataUser, setLoading }) => {
                                     Recado feito por: {recado.responsavel}
                                 </Typography>
                                 {
-                                    dataUser.name === recado.responsavel && (
+                                    (dataUser.name === recado.responsavel) || (dataUser.name === 'Samantha Maciel Giazzon') ? (
                                         <ModalDeletarRecado setFlushHook={setFlushHook} id={recado._id} />
+                                    ) : (
+                                        <>
+                                        </>
                                     )
                                 }
                             </Box>

@@ -262,18 +262,6 @@ const Home = () => {
                                                             PDF
                                                         </object>}
                                                     />
-                                                    {/* <Box mt={2}>
-                                                        <TextField
-                                                            type='text'
-                                                            variant='outlined'
-                                                            name='certificado'
-                                                            id='certificado'
-                                                            label='Certificado'
-                                                            value={certificado}
-                                                            onChange={e => { setCertificado(e.target.value) }}
-                                                            fullWidth
-                                                        />
-                                                    </Box> */}
                                                 </DialogContentText>
                                             </DialogContent>
                                             <DialogActions>
