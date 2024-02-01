@@ -59,7 +59,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
 
     useEffect(() => {
         socket.on('receivedMessage', async (message) => {
-            if (message.whatsapp === data.whatsapp) {
+            if (message.whatsapp === data.whatsapp) {       
                 setFlushHook(true)
             }
         });
