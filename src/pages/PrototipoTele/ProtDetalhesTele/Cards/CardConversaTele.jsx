@@ -65,7 +65,8 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         });
         socket.on('statusMessage', async (data) => {
             const { From, To } = data
-            if (From === data.whatsapp || To === data.whatsapp) {
+            console.log(data);
+            if (To === data.whatsapp) {
                 setFlushHook(true)
             }
         })

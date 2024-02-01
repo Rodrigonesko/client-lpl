@@ -115,10 +115,15 @@ const Formulario = () => {
             } else {
                 const result = await getCids(cid)
                 console.log(result);
+                if (!result.cids) {
+                    setCids([])
+                    return
+                }
                 setCids(result.cids)
             }
         } catch (error) {
             console.log(error);
+            setCids([])
         }
     }
 

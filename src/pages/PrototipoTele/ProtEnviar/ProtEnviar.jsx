@@ -22,13 +22,9 @@ const ProtEnviar = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            setLoading(true)
-            const res = await filterPropostasNaoEnviadas({
-                status: 'Cancelado'
-            })
+            const res = await filterPropostasNaoEnviadas()
             setPropostas(res.propostasSemDependentes)
             setTodasPropostas(res.result)
-            setLoading(false)
         }
         fetch()
         setFlush(false)

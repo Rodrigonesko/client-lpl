@@ -118,11 +118,13 @@ const Chat = () => {
                 }
             }
         });
-        socket.on('statusMessage', async () => {
-            buscarMensagens()
-            const component = chatRef.current;
-            if (component) {
-                component.scrollTop = component.scrollHeight;
+        socket.on('statusMessage', async (result) => {
+            if (result.To === whatsapp) {
+                buscarMensagens()
+                const component = chatRef.current;
+                if (component) {
+                    component.scrollTop = component.scrollHeight;
+                }
             }
         })
     }, [])

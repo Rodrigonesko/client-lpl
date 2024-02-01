@@ -2,8 +2,9 @@ import { IconButton, ListItemIcon, MenuItem, Tooltip, Typography, Menu as MenuCo
 import { useState } from "react"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Toast from "../../../../components/Toast/Toast"
-import { ArrowRight, Chat, FormatListNumbered, ManageAccounts, People } from "@mui/icons-material"
+import { ArrowRight, Chat, FormatListNumbered, ManageAccounts, People, Send } from "@mui/icons-material"
 import { mandarParaAtendimentoHumanizado } from "../../../../_services/teleEntrevista.service"
+import { sendMessageSaudacao } from "../../../../_services/teleEntrevistaExterna.service"
 
 const OptionsMenu = ({
     data,
@@ -27,7 +28,6 @@ const OptionsMenu = ({
 
     const handleMandaHumanizado = async () => {
         try {
-            console.log(data._id);
             const result = await mandarParaAtendimentoHumanizado({ id: data._id })
             console.log(result);
             setOpenToast(true)
@@ -39,6 +39,25 @@ const OptionsMenu = ({
             setOpenToast(true)
             setSeverity('error')
             setMessage('Erro ao enviar Manda Humanizado')
+        }
+    }
+
+    const handelReenviar = async () => {
+        try {
+
+            const result = await sendMessageSaudacao({
+                _id: data._id
+            })
+
+            console.log(result);
+            setOpenToast(true)
+            setSeverity('success')
+            setMessage('Mensagem reenviada com sucesso')
+        } catch (error) {
+            console.log(error);
+            setOpenToast(true)
+            setSeverity('error')
+            setMessage('Erro ao reenviar a mensagem')
         }
     }
 
@@ -120,6 +139,16 @@ const OptionsMenu = ({
                     </ListItemIcon>
                     <ListItemText>
                         Manda Humanizado
+                    </ListItemText>
+                </MenuItem>
+                <MenuItem
+                    onClick={handelReenviar}
+                >
+                    <ListItemIcon>
+                        <Send />
+                    </ListItemIcon>
+                    <ListItemText>
+                        Reenviar
                     </ListItemText>
                 </MenuItem>
             </MenuComponent>

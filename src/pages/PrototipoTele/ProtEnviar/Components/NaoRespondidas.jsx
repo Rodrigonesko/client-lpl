@@ -46,10 +46,8 @@ const NaoRespondias = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            setLoading(true)
             const result = await getPropostasSemResposta()
             setPropostas(result)
-            setLoading(false)
         }
         fetch()
     }, [flush])
