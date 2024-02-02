@@ -4,6 +4,7 @@ import { useState } from "react";
 import ProtAjustar from "./Components/ProtAjustar";
 import NaoRespondias from "./Components/NaoRespondidas";
 import NaoEnviadas from "./Components/NaoEnviadas";
+import Estatisticas from "./Components/Estatisticas";
 
 const ProtEnviar = () => {
 
@@ -22,6 +23,7 @@ const ProtEnviar = () => {
                     <Tab label="Ajustar" value={'Ajustar'} />
                     <Tab label="Enviadas" value={'Enviadas'} />
                     <Tab label="Não Respondias" value={'NaoRespondidas'} />
+                    <Tab label="Estatisticas" value={'Estatisticas'} />
                 </Tabs>
                 {
                     tab === 'Enviar' && (
@@ -38,6 +40,9 @@ const ProtEnviar = () => {
                 }
                 {
                     tab === 'NaoRespondidas' && <NaoRespondias />
+                }
+                {
+                    tab === 'Estatisticas' && <Estatisticas />
                 }
             </Box>
         </Sidebar >

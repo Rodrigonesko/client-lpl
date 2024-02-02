@@ -1,7 +1,7 @@
 
 // Dependencias
 import { useState, useEffect } from 'react'
-import { Box, Typography, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, LinearProgress, Switch, FormControlLabel, Tooltip, Button, FormControl, FormLabel, RadioGroup, Radio, CircularProgress } from '@mui/material'
+import { Box, Typography, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, LinearProgress, FormControlLabel, Tooltip, Button, FormControl, FormLabel, RadioGroup, Radio, CircularProgress } from '@mui/material'
 import Toast from '../../../../components/Toast/Toast'
 import { ArrowRight } from '@mui/icons-material'
 import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../../_services/teleEntrevistaExterna.service'
@@ -91,11 +91,7 @@ const NaoEnviadas = () => {
     const [propostas, setPropostas] = useState([])
     const [pesquisa, setPesquisa] = useState('')
     const [loading, setLoading] = useState(false)
-    const [selecionarTodas, setSelecionarTodas] = useState(false)
-    const [openToast, setOpenToast] = useState(false)
-    const [toastMessage, setToastMessage] = useState('')
-    const [toastSeverity, setToastSeverity] = useState('success')
-    const [filterText, setFilterText] = useState('')
+    const [filterText, setFilterText] = useState('titular unico')
     const [flushFilter, setFlushFilter] = useState(false)
 
     useEffect(() => {
@@ -103,30 +99,10 @@ const NaoEnviadas = () => {
             const res = await filterPropostasNaoEnviadas({
                 filter: filterText
             })
-            setPropostas(res.propostasSemDependentes)
+            setPropostas(res.filtradas)
         }
         fetch()
     }, [])
-
-    const handleEnviar = async (id) => {
-        console.log(id);
-        try {
-            const result = await sendMessageSaudacao({ _id: id })
-            if (result.msg !== 'ok') {
-                throw new Error('Erro ao enviar mensagem!')
-            }
-            setOpenToast(true)
-            setToastMessage('Mensagem enviada com sucesso!')
-            setToastSeverity('success')
-            if (filterText !== '') {
-                setFlushFilter(!flushFilter)
-            }
-        } catch (error) {
-            setOpenToast(true)
-            setToastMessage('Erro ao enviar mensagem!')
-            setToastSeverity('error')
-        }
-    }
 
     useEffect(() => {
         const fetch = async () => {
@@ -191,17 +167,6 @@ const NaoEnviadas = () => {
                     mt={2}
                 >
                     Total de propostas: {propostas.length}
-                    <FormControlLabel
-                        control={<Switch
-                            size="small"
-                            sx={{
-                                ml: 2
-                            }}
-                        />}
-                        checked={selecionarTodas}
-                        onChange={(e) => setSelecionarTodas(e.target.checked)}
-                        label="Selecionar todas"
-                    />
                 </Typography>
                 <FormControl>
                     <FormLabel>
@@ -232,10 +197,15 @@ const NaoEnviadas = () => {
                             control={<Radio />}
                             label="Maior de 18 e menor de 8 anos"
                         />
-                          <FormControlLabel
+                        <FormControlLabel
                             value="titular com dependente maior de 9 anos e menor de 17 anos"
                             control={<Radio />}
                             label="9 a 17 anos"
+                        />
+                        <FormControlLabel
+                            value="todas"
+                            control={<Radio />}
+                            label="Todas"
                         />
                     </RadioGroup>
                 </FormControl>
@@ -283,13 +253,6 @@ const NaoEnviadas = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-            <Toast
-                open={openToast}
-                onClose={() => setOpenToast(false)}
-                severity={toastSeverity}
-                message={toastMessage}
-            />
         </>
     )
 }
