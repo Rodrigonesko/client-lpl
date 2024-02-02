@@ -1,10 +1,90 @@
 
 // Dependencias
 import { useState, useEffect } from 'react'
-import { Box, Typography, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, LinearProgress, Switch, FormControlLabel, Tooltip, Button, FormControl, FormLabel, RadioGroup, Radio } from '@mui/material'
+import { Box, Typography, TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, LinearProgress, Switch, FormControlLabel, Tooltip, Button, FormControl, FormLabel, RadioGroup, Radio, CircularProgress } from '@mui/material'
 import Toast from '../../../../components/Toast/Toast'
 import { ArrowRight } from '@mui/icons-material'
 import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../../_services/teleEntrevistaExterna.service'
+
+const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
+
+    const [loading, setLoading] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [toastMessage, setToastMessage] = useState('')
+    const [toastSeverity, setToastSeverity] = useState('success')
+
+    const handleEnviar = async (id) => {
+        console.log(id);
+        setLoading(true)
+        try {
+            const result = await sendMessageSaudacao({ _id: id })
+            if (result.msg !== 'ok') {
+                throw new Error('Erro ao enviar mensagem!')
+            }
+            setOpenToast(true)
+            setToastMessage('Mensagem enviada com sucesso!')
+            setToastSeverity('success')
+            if (filterText !== '') {
+                setFlushFilter(!flushFilter)
+            }
+            setLoading(false)
+        } catch (error) {
+            setOpenToast(true)
+            setToastMessage('Erro ao enviar mensagem!')
+            setToastSeverity('error')
+            setLoading(false)
+        }
+    }
+
+    return (
+        <TableRow
+            key={index}
+        >
+            <TableCell>{proposta.proposta}</TableCell>
+            <TableCell>{proposta.nome}</TableCell>
+            <TableCell>{proposta.cpf}</TableCell>
+            <TableCell>{proposta.cpfTitular}</TableCell>
+            <TableCell>{proposta.tipoAssociado}</TableCell>
+            <TableCell>{proposta.tipoContrato}</TableCell>
+            <TableCell>{proposta.idade}</TableCell>
+            <TableCell>{proposta.ddd}</TableCell>
+            <TableCell>{proposta.celular}</TableCell>
+            <TableCell>
+                {
+                    !!proposta.ddd && !!proposta.celular ? (
+                        <Tooltip
+                            title="Enviar proposta"
+                            placement="top"
+                        >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                sx={{
+                                    textTransform: 'none'
+                                }}
+                                onClick={() => {
+                                    handleEnviar(proposta._id)
+                                }}
+                                disabled={loading}
+                                endIcon={loading && <CircularProgress color='primary' size={'20px'} />}
+                            >
+                                <ArrowRight />
+                            </Button>
+                        </Tooltip>
+                    ) : null
+                }
+
+            </TableCell>
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={toastSeverity}
+                message={toastMessage}
+            />
+        </TableRow>
+    )
+}
 
 const NaoEnviadas = () => {
 
@@ -38,6 +118,9 @@ const NaoEnviadas = () => {
             setOpenToast(true)
             setToastMessage('Mensagem enviada com sucesso!')
             setToastSeverity('success')
+            if (filterText !== '') {
+                setFlushFilter(!flushFilter)
+            }
         } catch (error) {
             setOpenToast(true)
             setToastMessage('Erro ao enviar mensagem!')
@@ -144,6 +227,16 @@ const NaoEnviadas = () => {
                             control={<Radio />}
                             label="Depentes maiores de 18 anos"
                         />
+                        <FormControlLabel
+                            value="titular com dependente maior de 18 anos e menor de 9 anos"
+                            control={<Radio />}
+                            label="Maior de 18 e menor de 8 anos"
+                        />
+                          <FormControlLabel
+                            value="titular com dependente maior de 9 anos e menor de 17 anos"
+                            control={<Radio />}
+                            label="9 a 17 anos"
+                        />
                     </RadioGroup>
                 </FormControl>
             </Box>
@@ -171,45 +264,14 @@ const NaoEnviadas = () => {
                     </TableHead>
                     <TableBody>
                         {!loading ? (propostas.filter(proposta => proposta.nome.toLocaleLowerCase().includes(pesquisa.toLocaleLowerCase()) || proposta.proposta.toLocaleLowerCase().includes(pesquisa.toLocaleLowerCase())).map((proposta, index) => (
-                            <TableRow
+                            <Row
                                 key={index}
-                            >
-                                <TableCell>{proposta.proposta}</TableCell>
-                                <TableCell>{proposta.nome}</TableCell>
-                                <TableCell>{proposta.cpf}</TableCell>
-                                <TableCell>{proposta.cpfTitular}</TableCell>
-                                <TableCell>{proposta.tipoAssociado}</TableCell>
-                                <TableCell>{proposta.tipoContrato}</TableCell>
-                                <TableCell>{proposta.idade}</TableCell>
-                                <TableCell>{proposta.ddd}</TableCell>
-                                <TableCell>{proposta.celular}</TableCell>
-                                <TableCell>
-                                    <Tooltip
-                                        title="Enviar proposta"
-                                        placement="top"
-                                    >
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="small"
-                                            sx={{
-                                                textTransform: 'none'
-                                            }}
-                                            onClick={() => {
-                                                if (filterText !== '') {
-                                                    handleEnviar(proposta._id)
-                                                    setFlushFilter(!flushFilter)
-                                                } else {
-                                                    handleEnviar(proposta._id)
-                                                }
-                                            }}
-                                        >
-                                            <ArrowRight />
-                                        </Button>
-                                    </Tooltip>
-
-                                </TableCell>
-                            </TableRow>
+                                proposta={proposta}
+                                index={index}
+                                filterText={filterText}
+                                flushFilter={flushFilter}
+                                setFlushFilter={setFlushFilter}
+                            />
                         ))) : (
                             <TableRow>
                                 <TableCell colSpan={8}>

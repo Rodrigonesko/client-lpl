@@ -5,7 +5,7 @@ const MensagemSemSucessoContato = ({ hookMsg }) => {
     const handlerSemContato = async () => {
         try {
 
-            hookMsg('Somos da Amil. Estamos tentando contato conforme agendamento realizado. O(a) Sr(a) pode falar no momento?')
+            hookMsg('Estamos tentando contato com o Sr (a) porém sem sucesso. A Sr (a) pode por favor ligar no número 11 4240-0422 e pedir para falar com a equipe médica.')
 
         } catch (error) {
             console.log(error);
