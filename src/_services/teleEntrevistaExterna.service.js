@@ -110,3 +110,15 @@ export const getPropostasSemCpf = async () => {
 export const getPropostasSemResposta = async () => {
     return await new ApiCall(`/semResposta`, URL_API).get()
 }
+
+export const estatisticasAutoAgendamento = async ({ de, ate, filterText }) => {
+    return await new ApiCall(`/estatisticasAutoAgendamento`, URL_API).post({ de, ate, filterText })
+}
+
+export const producaoIndividualAgendamentos = async (mes, analista) => {
+    return await new ApiCall(`/producaoIndividualAgendamentos/${analista}/${mes}`, URL_API).get()
+}
+
+export const comparativoAgendamentos = async (mes, analista) => {
+    return await new ApiCall(`/comparativoAgendamentos/${analista}/${mes}`, URL_API).get()
+}

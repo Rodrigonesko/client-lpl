@@ -9,6 +9,7 @@ import MyProductionRsd from "./Celulas/MyProductionRsd";
 import MyProductionElegi from "./Celulas/MyProductionElegi";
 import Chart from "react-google-charts";
 import AuthContext from "../../../context/AuthContext";
+import ProducaoIndividualAgendamento from "../../../components/ProducaoIndividual/ProducaoIndividualAgendamento";
 
 const MyProduction = () => {
 
@@ -38,6 +39,8 @@ const MyProduction = () => {
             setProductionComponent(<MyProductionElegi key={mesAux} mes={mesAux} />)
         } else if (celula === 'Sindicância') {
             // ...
+        } else if (celula === 'Agendamento') {
+            setProductionComponent(<ProducaoIndividualAgendamento key={mesAux} mes={mesAux} />)
         } else {
             setProductionComponent(null);
         }
@@ -90,6 +93,7 @@ const MyProduction = () => {
                             <MenuItem value={'RSD'}>RSD</MenuItem>
                             <MenuItem value={'Sindicância'}>Sindicância</MenuItem>
                             <MenuItem value={'Elegibilidade'}>Elegibilidade</MenuItem>
+                            <MenuItem value={'Agendamento'}>Agendamento</MenuItem>
                         </Select>
                     </FormControl>
                     <Button onClick={handleClick} sx={{ mr: '10px' }} variant="contained" >Alterar</Button>
