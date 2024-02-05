@@ -6,6 +6,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { red } from "@mui/material/colors";
 import AnaliticoTele from "./components/Tele/AnaliticoTele";
 import ExpandIcon from '@mui/icons-material/Expand';
+import AnaliticoAgendamento from "./components/Agendamento/AnaliticoAgendamento";
 
 const tabStyle = {
     '&:hover': {
@@ -91,8 +92,10 @@ const Analitico = () => {
                         }} />
                     } />
                     <Tab label="RSD" value="RSD" sx={tabStyle} />
+                    <Tab label="Agendamento" value="Agendamento" sx={tabStyle} />
                 </Tabs>
                 {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />}
+                {tab === 'Agendamento' && <AnaliticoAgendamento key={'Agendamento'} />}
             </Container>
         </Sidebar>
     )
