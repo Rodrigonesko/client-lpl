@@ -285,6 +285,106 @@ const ProducaoIndividualAgendamento = ({
 
                 </Box>
             </Box>
+            <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mt={2}
+                gap={2}
+                flexWrap={'wrap'}
+            >
+                <Box
+                    bgcolor={blue[100]}
+                    p={2}
+                    borderRadius={2}
+                    color={blue[800]}
+                    width={'200px'}
+                >
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Propostas Realizadas
+                    </Typography>
+                    <Typography
+                        variant={'h4'}
+                    >
+                        5000
+                    </Typography>
+                </Box>
+                <Box
+                    bgcolor={indigo[100]}
+                    p={2}
+                    borderRadius={2}
+                    color={indigo[800]}
+                    width={'200px'}
+                >
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Propostas Anexadas
+                    </Typography>
+                    <Typography
+                        variant={'h4'}
+                    >
+                        5000
+                    </Typography>
+                </Box>
+                <Box
+                    bgcolor={green[100]}
+                    p={2}
+                    borderRadius={2}
+                    color={green[800]}
+                    width={'200px'}
+                >
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Implantação
+                    </Typography>
+                    <Typography
+                        variant={'h4'}
+                    >
+                        5000
+                    </Typography>
+                </Box>
+                <Box
+                    bgcolor={deepPurple[100]}
+                    p={2}
+                    borderRadius={2}
+                    color={deepPurple[800]}
+                    width={'200px'}
+                >
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Implantadas
+                    </Typography>
+                    <Typography
+                        variant={'h4'}
+                    >
+                        {!loadingData ? dataAgendamento?.analistaQueMaisAgendou[0]?.total : <CircularProgress size={'40px'} sx={{ color: deepPurple[800] }} />}
+                    </Typography>
+                </Box>
+                <Box
+                    bgcolor={amber[100]}
+                    p={2}
+                    borderRadius={2}
+                    color={amber[800]}
+                    width={'200px'}
+                >
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Média
+                    </Typography>
+                    <Typography
+                        variant={'h4'}
+                    >
+                        ...
+                    </Typography>
+                </Box>
+            </Box>
         </Box>
     )
 

@@ -94,7 +94,7 @@ const Analitico = () => {
                     <Tab label="RSD" value="RSD" sx={tabStyle} />
                     <Tab label="Agendamento" value="Agendamento" sx={tabStyle} />
                 </Tabs>
-                {/* {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />} */}
+                {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />}
                 {tab === 'Agendamento' && <AnaliticoAgendamento key={'Agendamento'} />}
             </Container>
         </Sidebar>
