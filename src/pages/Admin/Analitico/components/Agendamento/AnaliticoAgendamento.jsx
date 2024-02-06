@@ -6,6 +6,7 @@ import AnaliticoChart from "./AnaliticoChart";
 import AnaliticoTable from "./AnaliticoTable";
 import PropostasCards from "./PropostasCards";
 import PropostasChart from "./PropostasChart";
+import PropostasTable from "./PropostasTable";
 
 const AnaliticoAgendamento = () => {
 
@@ -34,7 +35,8 @@ const AnaliticoAgendamento = () => {
             <AnaliticoChart mes={mes} />  {/*Gráfico Analitico*/}
             <AnaliticoTable mes={mes} />  {/*Tabela Analitico*/}
             <PropostasCards mes={mes} />  {/*Card propostas*/}
-            <PropostasChart mes={mes} />  {/*Desenvolvendo ainda*/}
+            <PropostasChart mes={mes} />  {/*Gráfico propostas*/}
+            <PropostasTable mes={mes} />  {/*Tabela propostas*/}
         </Box>
     );
 }
