@@ -100,9 +100,9 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     return (
         <>
             <form action="" >
-                <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} value={nomeItem} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} value={ondeEsta} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} value={etiqueta} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} />
                 <Button type="submit" onClick={(e) => handleFilter(e, 1)} variant='contained' >Pesquisar</Button>
                 <Button onClick={() => {
                     setNomeItem('')
