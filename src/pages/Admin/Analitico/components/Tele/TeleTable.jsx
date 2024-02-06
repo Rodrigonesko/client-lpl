@@ -22,11 +22,12 @@ const TeleTable = ({ mes }) => {
         setLoadingTabela(true)
         try {
             const result = await quantidadeAnalistasPorMes(mes)
+            console.log(result);
             setTableData(result.result)
             setMedia(result.media)
             setMediaDiasTrabalhados(result.mediaDiasTrabalhados)
             setMediaTotal(result.mediaTotal)
-            console.log(result);
+           
             setLoadingTabela(false)
         } catch (error) {
             console.log(error)
@@ -75,7 +76,7 @@ const TeleTable = ({ mes }) => {
                                 Média Analistas
                             </Typography>
                             <Chip
-                                label={`Média: ${media.toFixed(2)}`}
+                                label={`Média: ${media?.toFixed(2)}`}
                                 sx={{
                                     backgroundColor: blue[100],
                                     color: blue[800],
@@ -83,7 +84,7 @@ const TeleTable = ({ mes }) => {
                                 }}
                             />
                             <Chip
-                                label={`Média Dias Trabalhados: ${mediaDiasTrabalhados.toFixed(2)}`}
+                                label={`Média Dias Trabalhados: ${mediaDiasTrabalhados?.toFixed(2)}`}
                                 sx={{
                                     backgroundColor: blue[100],
                                     color: blue[800],
@@ -91,7 +92,7 @@ const TeleTable = ({ mes }) => {
                                 }}
                             />
                             <Chip
-                                label={`Média Total: ${mediaTotal.toFixed(2)}`}
+                                label={`Média Total: ${mediaTotal?.toFixed(2)}`}
                                 sx={{
                                     backgroundColor: blue[100],
                                     color: blue[800],
@@ -184,7 +185,7 @@ const TeleTable = ({ mes }) => {
                                                 <Typography>
                                                     {item.media >= media ? (
                                                         <Chip
-                                                            label={item.media.toFixed(2)}
+                                                            label={item.media?.toFixed(2)}
                                                             sx={{
                                                                 backgroundColor: green[100],
                                                                 color: green[800],
@@ -193,7 +194,7 @@ const TeleTable = ({ mes }) => {
                                                         />
                                                     ) : (
                                                         <Chip
-                                                            label={item.media.toFixed(2)}
+                                                            label={item.media?.toFixed(2)}
                                                             sx={{
                                                                 backgroundColor: red[100],
                                                                 color: red[800],
@@ -207,7 +208,7 @@ const TeleTable = ({ mes }) => {
                                                 <Typography>
                                                     {item.mediaDiasTrabalhados >= mediaDiasTrabalhados ? (
                                                         <Chip
-                                                            label={item.mediaDiasTrabalhados.toFixed(2)}
+                                                            label={item.mediaDiasTrabalhados?.toFixed(2)}
                                                             sx={{
                                                                 backgroundColor: green[100],
                                                                 color: green[800],
@@ -216,7 +217,7 @@ const TeleTable = ({ mes }) => {
                                                         />
                                                     ) : (
                                                         <Chip
-                                                            label={item.mediaDiasTrabalhados.toFixed(2)}
+                                                            label={item.mediaDiasTrabalhados?.toFixed(2)}
                                                             sx={{
                                                                 backgroundColor: red[100],
                                                                 color: red[800],
