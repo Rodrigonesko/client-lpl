@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { comparativoAgendamentos, producaoIndividualAgendamentos } from "../../_services/teleEntrevistaExterna.service";
 import { useParams } from "react-router-dom";
+import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes } from "../../_services/teleEntrevista.service";
 
 const ProducaoIndividualAgendamento = ({
     mes
@@ -15,11 +16,24 @@ const ProducaoIndividualAgendamento = ({
         totalPropostasMes: 0,
         totalAgendadas: 0,
         agendadasAnalista: 0,
-        analistaQueMaisAgendou: [{ total: 0, nome: '' }]
+        analistaQueMaisAgendou: [{ total: 0, nome: '' }],
+        totalEntrevistas: 0
     })
     const [chartDataAgendamentos, setChartDataAgendamentos] = useState()
+    const [dataAnexos, setDataAnexos] = useState({
+        analistaQueMaisAnexou: [{ total: 0, nome: '' }],
+        analistaQueMaisImplantou: [{ total: 0, nome: '' }],
+        analistaQueMaisMandouImplantacao: [{ total: 0, nome: '' }],
+        anexos: 0,
+        implantados: 0,
+        mandouImplantacao: 0,
+        totalAnexos: 0,
+        totalImplantados: 0,
+        totalMandouImplantacao: 0
+    })
     const [loadingChart, setLoadingChart] = useState(true)
     const [loadingData, setLoadingData] = useState(true)
+
 
     useEffect(() => {
         const fetch = async () => {
@@ -29,6 +43,11 @@ const ProducaoIndividualAgendamento = ({
                 name
             )
             setDataAgendamento(result)
+            const resultTotalEntrevistas = await getEntrevistasPorMes(mes)
+            setDataAgendamento(prevState => ({
+                ...prevState,
+                totalEntrevistas: resultTotalEntrevistas
+            }))
             setLoadingData(false)
         }
         fetch()
@@ -45,6 +64,20 @@ const ProducaoIndividualAgendamento = ({
             setLoadingChart(false)
         }
         fetch()
+    }, [])
+
+    useEffect(() => {
+        const fetch = async () => {
+            setLoadingData(true)
+            const result = await getProducaoIndividualAnexosPorMes(
+                mes,
+                name
+            )
+            setDataAnexos(result)
+            setLoadingData(false)
+        }
+        fetch()
+
     }, [])
 
     return (
@@ -102,6 +135,24 @@ const ProducaoIndividualAgendamento = ({
                     </Typography>
                 </Box>
                 <Box
+                    bgcolor={amber[100]}
+                    p={2}
+                    borderRadius={2}
+                    color={amber[800]}
+                    width={'200px'}
+                >
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Entrevistas
+                    </Typography>
+                    <Typography
+                        variant={'h4'}
+                    >
+                        {!loadingData ? dataAgendamento?.totalEntrevistas : <CircularProgress size={'40px'} sx={{ color: amber[800] }} />}
+                    </Typography>
+                </Box>
+                <Box
                     bgcolor={indigo[100]}
                     p={2}
                     borderRadius={2}
@@ -153,24 +204,6 @@ const ProducaoIndividualAgendamento = ({
                         variant={'h4'}
                     >
                         {!loadingData ? dataAgendamento?.analistaQueMaisAgendou[0]?.total : <CircularProgress size={'40px'} sx={{ color: deepPurple[800] }} />}
-                    </Typography>
-                </Box>
-                <Box
-                    bgcolor={amber[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={amber[800]}
-                    width={'200px'}
-                >
-                    <Typography
-                        variant={'body1'}
-                    >
-                        Média
-                    </Typography>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        ...
                     </Typography>
                 </Box>
             </Box>
@@ -295,24 +328,6 @@ const ProducaoIndividualAgendamento = ({
                 flexWrap={'wrap'}
             >
                 <Box
-                    bgcolor={blue[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={blue[800]}
-                    width={'30%'}
-                >
-                    <Typography
-                        variant={'h4'}
-                    >
-                        5000
-                    </Typography>
-                    <Typography
-                        variant={'body1'}
-                    >
-                        Entrevistas realizadas
-                    </Typography>
-                </Box>
-                <Box
                     bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
@@ -329,7 +344,7 @@ const ProducaoIndividualAgendamento = ({
                     <Typography
                         variant={'h4'}
                     >
-                        5000
+                        {!loadingData ? dataAnexos?.totalAnexos : ''}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -345,7 +360,7 @@ const ProducaoIndividualAgendamento = ({
                         <Typography
                             variant={'body1'}
                         >
-                            1000
+                            {!loadingData ? dataAnexos?.anexos : ''}
                         </Typography>
                     </Box>
                     <Box
@@ -362,7 +377,7 @@ const ProducaoIndividualAgendamento = ({
                         <Typography
                             variant={'body1'}
                         >
-                            2000
+                            {!loadingData ? dataAnexos?.analistaQueMaisAnexou[0]?.total : ''}
                         </Typography>
                     </Box>
                 </Box>
@@ -383,7 +398,7 @@ const ProducaoIndividualAgendamento = ({
                     <Typography
                         variant={'h4'}
                     >
-                        5000
+                        {!loadingData ? dataAnexos?.totalMandouImplantacao : ''}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -399,7 +414,7 @@ const ProducaoIndividualAgendamento = ({
                         <Typography
                             variant={'body1'}
                         >
-                            1000
+                            {!loadingData ? dataAnexos?.mandouImplantacao : ''}
                         </Typography>
                     </Box>
                     <Box
@@ -416,45 +431,117 @@ const ProducaoIndividualAgendamento = ({
                         <Typography
                             variant={'body1'}
                         >
-                            2000
+                            {!loadingData ? dataAnexos?.analistaQueMaisMandouImplantacao[0]?.total : ''}
                         </Typography>
                     </Box>
                 </Box>
                 <Box
-                    bgcolor={deepPurple[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={deepPurple[800]}
                     width={'30%'}
                 >
                     <Typography
-                        variant={'body1'}
+                        sx={{
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Implantadas
+                        Total Implatadas
                     </Typography>
                     <Typography
                         variant={'h4'}
                     >
-                        5000
+                        {!loadingData ? dataAnexos?.totalImplantados : ''}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Eu
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            {!loadingData ? dataAnexos?.implantados : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Melhor
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            {!loadingData ? dataAnexos?.analistaQueMaisImplantou[0]?.total : ''}
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
-                    bgcolor={amber[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={amber[800]}
                     width={'30%'}
                 >
                     <Typography
-                        variant={'body1'}
+                        sx={{
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Média
+                        Soma Implantação + Anexadas
                     </Typography>
                     <Typography
                         variant={'h4'}
                     >
-                        ...
+                        {!loadingData ? dataAnexos?.totalAnexos + dataAnexos?.totalImplantados : ''}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Eu
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            {!loadingData ? dataAnexos?.anexos + dataAnexos?.implantados : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Melhor
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            {!loadingData ? dataAnexos?.analistaQueMaisAnexou[0]?.total + dataAnexos?.analistaQueMaisImplantou[0]?.total : ''}
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
         </Box>

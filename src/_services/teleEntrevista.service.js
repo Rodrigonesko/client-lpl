@@ -276,3 +276,11 @@ export const getCids = async (cid) => {
 export const getPerguntas = async () => {
     return await new ApiCall('/entrevistas/perguntas').get()
 }
+
+export const getEntrevistasPorMes = async (mes) => {
+    return await new ApiCall(`/entrevistas/quantidadeEntrevistasMes/${mes}`).get()
+}
+
+export const getProducaoIndividualAnexosPorMes = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/produtividadeAnexosIndividual/${mes}/${analista}`).get()
+}
