@@ -299,61 +299,133 @@ const ProducaoIndividualAgendamento = ({
                     p={2}
                     borderRadius={2}
                     color={blue[800]}
-                    width={'200px'}
+                    width={'30%'}
                 >
-                    <Typography
-                        variant={'body1'}
-                    >
-                        Propostas Realizadas
-                    </Typography>
                     <Typography
                         variant={'h4'}
                     >
                         5000
+                    </Typography>
+                    <Typography
+                        variant={'body1'}
+                    >
+                        Entrevistas realizadas
                     </Typography>
                 </Box>
                 <Box
-                    bgcolor={indigo[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={indigo[800]}
-                    width={'200px'}
+                    width={'30%'}
                 >
                     <Typography
-                        variant={'body1'}
+                        sx={{
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Propostas Anexadas
+                        Total Propostas Anexadas
                     </Typography>
                     <Typography
                         variant={'h4'}
                     >
                         5000
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Eu
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            1000
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Melhor
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            2000
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
-                    bgcolor={green[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={green[800]}
-                    width={'200px'}
+                    width={'30%'}
                 >
                     <Typography
-                        variant={'body1'}
+                        sx={{
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Implantação
+                        Total Implantação
                     </Typography>
                     <Typography
                         variant={'h4'}
                     >
                         5000
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Eu
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            1000
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body1'}
+                            color={grey[600]}
+                        >
+                            Melhor
+                        </Typography>
+                        <Typography
+                            variant={'body1'}
+                        >
+                            2000
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
                     bgcolor={deepPurple[100]}
                     p={2}
                     borderRadius={2}
                     color={deepPurple[800]}
-                    width={'200px'}
+                    width={'30%'}
                 >
                     <Typography
                         variant={'body1'}
@@ -363,7 +435,7 @@ const ProducaoIndividualAgendamento = ({
                     <Typography
                         variant={'h4'}
                     >
-                        {!loadingData ? dataAgendamento?.analistaQueMaisAgendou[0]?.total : <CircularProgress size={'40px'} sx={{ color: deepPurple[800] }} />}
+                        5000
                     </Typography>
                 </Box>
                 <Box
@@ -371,7 +443,7 @@ const ProducaoIndividualAgendamento = ({
                     p={2}
                     borderRadius={2}
                     color={amber[800]}
-                    width={'200px'}
+                    width={'30%'}
                 >
                     <Typography
                         variant={'body1'}
