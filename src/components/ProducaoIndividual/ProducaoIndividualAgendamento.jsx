@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes } from "../../_services/teleEntrevista.service";
 
 const ProducaoIndividualAgendamento = ({
-    mes
+    mes,
+    analista
 }) => {
 
     const { name } = useParams()
@@ -40,7 +41,7 @@ const ProducaoIndividualAgendamento = ({
             setLoadingData(true)
             const result = await producaoIndividualAgendamentos(
                 mes,
-                name
+                name || analista
             )
             setDataAgendamento(result)
             const resultTotalEntrevistas = await getEntrevistasPorMes(mes)
@@ -58,7 +59,7 @@ const ProducaoIndividualAgendamento = ({
             setLoadingChart(true)
             const result = await comparativoAgendamentos(
                 mes,
-                name
+                name || analista
             )
             setChartDataAgendamentos(result)
             setLoadingChart(false)
@@ -71,7 +72,7 @@ const ProducaoIndividualAgendamento = ({
             setLoadingData(true)
             const result = await getProducaoIndividualAnexosPorMes(
                 mes,
-                name
+                name || analista
             )
             setDataAnexos(result)
             setLoadingData(false)

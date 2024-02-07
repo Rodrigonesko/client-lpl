@@ -122,3 +122,15 @@ export const producaoIndividualAgendamentos = async (mes, analista) => {
 export const comparativoAgendamentos = async (mes, analista) => {
     return await new ApiCall(`/comparativoAgendamentos/${analista}/${mes}`, URL_API).get()
 }
+
+export const getAnaliticoAgendamentoMensal = async (mes) => {
+    return await new ApiCall(`/analiticoAgendamentoMensal/${mes}`, URL_API).get()
+}
+
+export const getProducaoAnalistasAgendamento = async (mes) => {
+    return await new ApiCall(`/producaoAnalistasAgendamento/${mes}`, URL_API).get()
+}
+
+export const getGraficoPropostasAgendadas = async (mes) => {
+    return await new ApiCall(`/graficoPropostasAgendadas/${mes}`, URL_API).get()
+}

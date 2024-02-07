@@ -1,7 +1,9 @@
 import { CircularProgress, Typography } from "@mui/material"
 import { Box } from "@mui/system"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Chart from "react-apexcharts"
+import { getGraficoPropostasAgendadas } from "../../../../../_services/teleEntrevistaExterna.service"
+import { blue } from "@mui/material/colors"
 
 const options = {
     chart: {
@@ -33,6 +35,27 @@ const AnaliticoChart = ({ mes }) => {
 
     const [loadingGrafico, setLoadingGrafico] = useState(false)
     const [graficoData, setGraficoData] = useState([])
+
+    useEffect(() => {
+        const fetch = async () => {
+            setLoadingGrafico(true)
+            const result = await getGraficoPropostasAgendadas(mes)
+            console.log(result);
+            setGraficoData([
+                {
+                    name: 'Agendadas',
+                    data: result,
+                    color: blue[500],
+                    type: 'column'
+                }
+            ])
+            setLoadingGrafico(false)
+
+        }
+
+        fetch()
+
+    }, [])
 
     return (
         <Box>

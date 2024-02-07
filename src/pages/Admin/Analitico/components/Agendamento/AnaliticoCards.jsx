@@ -1,18 +1,34 @@
 import { CircularProgress, Typography } from "@mui/material";
 import { blue, deepPurple, green, red, yellow } from "@mui/material/colors";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAnaliticoAgendamentoMensal } from "../../../../../_services/teleEntrevistaExterna.service";
 
 
 const AnaliticoCards = ({ mes }) => {
 
     const [loading, setLoading] = useState(false)
     const [totalData, setTotalData] = useState({
-        total: 0,
-        concluidos: 0,
-        cancelados: 0,
-        pendencias: 0,
+        propostasRecebidas: 0,
+        propostasAgendadas: 0,
+        propostasNaoAgendadas: 0,
+        propostasNaoAgendadasECanceladas: 0,
+        propostasNaoAgendadasEConcluidas: 0,
     })
+
+    useEffect(() => {
+
+        const fetch = async () => {
+            setLoading(true)
+            const result = await getAnaliticoAgendamentoMensal(mes)
+            console.log(result);
+            setTotalData(result)
+            setLoading(false)
+        }
+
+        fetch()
+
+    }, [])
 
     return (
         <Box
@@ -37,7 +53,7 @@ const AnaliticoCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.total : <CircularProgress size={20} />}
+                    {!loading ? totalData.propostasRecebidas : <CircularProgress size={20} />}
                 </Typography>
                 <Typography variant="body2" >
                     Propostas Recebidas
@@ -57,7 +73,7 @@ const AnaliticoCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.concluidos : <CircularProgress size={20} sx={{
+                    {!loading ? totalData.propostasAgendadas : <CircularProgress size={20} sx={{
                         color: green[900]
                     }} />}
                 </Typography>
@@ -79,7 +95,7 @@ const AnaliticoCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.cancelados : <CircularProgress size={20} sx={{
+                    {!loading ? totalData.propostasNaoAgendadas : <CircularProgress size={20} sx={{
                         color: deepPurple[900]
                     }} />}
                 </Typography>
@@ -101,7 +117,7 @@ const AnaliticoCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.pendencias : <CircularProgress size={20} sx={{
+                    {!loading ? totalData.propostasNaoAgendadasEConcluidas : <CircularProgress size={20} sx={{
                         color: yellow[900]
                     }} />}
                 </Typography>
@@ -123,7 +139,7 @@ const AnaliticoCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.pendencias : <CircularProgress size={20} sx={{
+                    {!loading ? totalData.propostasNaoAgendadasECanceladas : <CircularProgress size={20} sx={{
                         color: red[900]
                     }} />}
                 </Typography>
