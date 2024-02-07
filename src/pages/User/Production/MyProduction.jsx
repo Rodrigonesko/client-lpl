@@ -10,6 +10,7 @@ import MyProductionElegi from "./Celulas/MyProductionElegi";
 import Chart from "react-google-charts";
 import AuthContext from "../../../context/AuthContext";
 import ProducaoIndividualAgendamento from "../../../components/ProducaoIndividual/ProducaoIndividualAgendamento";
+import ProducaoIndividualTele from "../../../components/ProducaoIndividual/ProduçãoIndividualTele/ProducaoIndividualTele";
 
 const MyProduction = () => {
 
@@ -32,7 +33,7 @@ const MyProduction = () => {
         }
         setProductionComponent(null)
         if (celula === 'Tele Entrevista') {
-            setProductionComponent(<MyProductionTele key={mesAux} mes={mesAux} />);
+            setProductionComponent(<ProducaoIndividualTele key={mesAux} mes={mesAux} />);
         } else if (celula === 'RSD') {
             setProductionComponent(<MyProductionRsd key={mesAux} mes={mesAux} />)
         } else if (celula === 'Elegibilidade') {
@@ -76,12 +77,13 @@ const MyProduction = () => {
                 <Typography variant="body2" color='gray' mt={2}>
                     De uma olhada nos seus resultados
                 </Typography>
-                <Box display='flex' component={Paper} p={1} mt={1} mb={1}>
-                    <TextField type='month' size="small" sx={{ mr: '10px' }} focused label='Mês' value={mes} onChange={event => setMes(event.target.value)} />
+                <Box display='flex' component={Paper} elevation={7} p={1} mt={1} mb={1}>
+                    <TextField type='month' size="small" sx={{ mr: '10px' }} focused label='Mês' variant='standard' value={mes} onChange={event => setMes(event.target.value)} />
                     <FormControl sx={{ width: '200px', mr: '10px' }} size="small">
                         <InputLabel>Célula</InputLabel>
                         <Select
                             label="Célula"
+                            variant='standard'
                             onChange={handleChange}
                         >
                             <MenuItem>
