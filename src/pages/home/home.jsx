@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
-import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper, Link, Chip, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper, Link, Chip, CircularProgress } from "@mui/material";
 import { getInfoUser, updatePassword } from "../../_services/user.service";
 import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
 import { getPoliticasAtivas } from "../../_services/politicas.service";
-import { getVerificarTreinamento, uploadCertificados } from "../../_services/treinamento.service";
+import { getVerificarTreinamento } from "../../_services/treinamento.service";
 import moment from "moment";
 import CardBancoHoras from "./cards/CardBancoHoras";
 import CardAniversariantes from "./cards/CardAniversariantes";
@@ -13,7 +13,7 @@ import ModalAdicionarMural from "./modais/ModalAdicionarMural";
 import CardMural from "./cards/CardMural";
 import CardToDo from "./cards/CardToDo";
 import { red } from "@mui/material/colors";
-import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
+import ModalAnexarArquivoTreinamento from "./modais/ModalAnexarArquivoTreinamento";
 
 const Home = () => {
 
@@ -22,10 +22,8 @@ const Home = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [message, setMessage] = useState('')
 
-    const [file, setFile] = useState()
     const [openSnack, setOpenSnack] = useState(false)
     const [severitySnack, setSeveritySnack] = useState('')
-    // const [certificado, setCertificado] = useState('')
 
     const [open, setOpen] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
@@ -36,11 +34,6 @@ const Home = () => {
     const [userData, setUserData] = useState({})
 
     const { name } = useContext(AuthContext)
-
-
-    const handleClickOpen = async () => {
-        setOpen(true)
-    }
 
     const handleClose = async () => {
         setOpen(false)
@@ -66,29 +59,6 @@ const Home = () => {
         } catch (error) {
             setMessage(error.response.data.message)
             setSeveritySnack('error')
-        }
-    }
-
-    const handleUpload = async (_id) => {
-        const formData = new FormData()
-        formData.append('file', file, file.name)
-
-        const result = await uploadCertificados(
-            formData,
-            _id
-        )
-
-        if (result.msg === 'ok') {
-            setOpenSnack(true)
-            setMessage('Certificado adicionado com sucesso')
-            setSeveritySnack('success')
-            setFile('')
-            handleClose()
-            setFlushHook(true)
-        } else {
-            setOpenSnack(true)
-            setMessage('Algo deu errado ou ja existe esse Certificado')
-            setSeveritySnack('warning')
         }
     }
 
@@ -238,38 +208,10 @@ const Home = () => {
                                         </Typography>
                                         {/* Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br */}
                                     </Box>
-                                    <Box sx={{ display: 'flex' }}>
-                                        <Button variant='contained' onClick={handleClickOpen} >Enviar Certificado do Curso</Button>
-                                        <Dialog
-                                            open={open}
-                                            onClose={handleClose}
-                                            aria-labelledby="alert-dialog-title"
-                                            aria-describedby="alert-dialog-description"
-                                        >
-                                            <DialogTitle id="alert-dialog-title">
-                                                {"Enviar Certificado de Conclusão de Curso"}
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText id="alert-dialog-description">
-                                                    <DragAndDrop
-                                                        file={file}
-                                                        setFile={setFile}
-                                                        fontColor={'black'}
-                                                        bgColor={'red'}
-                                                        textOnDrag={'Solte aqui'}
-                                                        text={'Arraste e solte o pdf aqui'}
-                                                        textOnDrop={<object data={file ? URL.createObjectURL(file) : null} type="application/pdf" height={500} >
-                                                            PDF
-                                                        </object>}
-                                                    />
-                                                </DialogContentText>
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={handleClose} color='error'>Fechar</Button>
-                                                <Button onClick={() => { handleUpload(treinamento._id) }} color='success' autoFocus>Enviar</Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    </Box>
+                                    <ModalAnexarArquivoTreinamento 
+                                    id={treinamento._id} 
+                                    setFlushHook={setFlushHook}
+                                    />
                                 </Alert>
                             )
                         })}
