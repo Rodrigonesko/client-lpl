@@ -1,18 +1,39 @@
-import React from 'react';
-import { Box, Chip, CircularProgress, FormControlLabel, LinearProgress, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ToggleButton, Typography } from '@mui/material';
+import React, { forwardRef, useEffect } from 'react';
+import { AppBar, Box, CircularProgress, Container, Dialog, FormControlLabel, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@mui/material';
 import { Avatar, IconButton, Tooltip } from '@mui/material';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useState } from 'react';
-import { blue, green, red } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+import ProducaoIndividualAgendamento from '../../../../../components/ProducaoIndividual/ProducaoIndividualAgendamento';
+import CloseIcon from '@mui/icons-material/Close';
+import { ArrowDownward } from '@mui/icons-material';
 
-const PropostasTable = (mes) => {
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
+const PropostasTable = ({ mes, data }) => {
 
     const [tableData, setTableData] = useState([])
     const [loadingTabela, setLoadingTabela] = useState(false)
-    const [media, setMedia] = useState(0)
-    const [mediaDiasTrabalhados, setMediaDiasTrabalhados] = useState(0)
-    const [mediaTotal, setMediaTotal] = useState(0)
     const [dense, setDense] = useState(true)
+    const [openDialog, setOpenDialog] = useState(false)
+    const [analistaSelecionado, setAnalistaSelecionado] = useState('')
+    const [key, setKey] = useState('')
+
+    useEffect(() => {
+        const fetch = async () => {
+            setTableData(data.producao)
+            console.log(data);
+        }
+        fetch()
+    }, [mes, data])
+
+    const handleSort = (key) => {
+        const sorted = [...tableData].sort((a, b) => b[key] - a[key])
+        setTableData(sorted)
+    }
 
     return (
         <Box>
@@ -73,7 +94,47 @@ const PropostasTable = (mes) => {
                                         Nome
                                     </TableCell>
                                     <TableCell>
-                                        Quantidade
+                                        Anexos
+                                        <IconButton
+                                            size='small'
+                                            onClick={() => {
+                                                handleSort('totalAnexos')
+                                                setKey('totalAnexos')
+                                            }}
+                                            color={key === 'totalAnexos' ? 'primary' : 'default'}
+                                        >
+                                            <ArrowDownward />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell
+                                    >
+                                        Implantação
+                                        <IconButton
+                                            size='small'
+                                            onClick={() => {
+                                                handleSort('totalImplantacao')
+                                                setKey('totalImplantacao')
+                                            }}
+                                            color={key === 'totalImplantacao' ? 'primary' : 'default'}
+                                        >
+                                            <ArrowDownward />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell>
+                                        Implantadas
+                                        <IconButton
+                                            size='small'
+                                            onClick={() => {
+                                                handleSort('totalImplantados')
+                                                setKey('totalImplantados')
+                                            }}
+                                            color={key === 'totalImplantados' ? 'primary' : 'default'}
+                                        >
+                                            <ArrowDownward />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell>
+                                        Soma Anexos + Implantação
                                     </TableCell>
                                     <TableCell>
                                     </TableCell>
@@ -102,34 +163,23 @@ const PropostasTable = (mes) => {
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
-                                                <Typography>
-                                                    {item.total >= mediaTotal ? (
-                                                        <Chip
-                                                            label={item.total}
-                                                            sx={{
-                                                                backgroundColor: green[100],
-                                                                color: green[800],
-                                                                fontWeight: 'bold'
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <Chip
-                                                            label={item.total}
-                                                            sx={{
-                                                                backgroundColor: red[100],
-                                                                color: red[800],
-                                                                fontWeight: 'bold'
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Typography>
+                                                {item.totalAnexos}
+                                            </TableCell>
+                                            <TableCell>
+                                                {item.totalImplantacao}
+                                            </TableCell>
+                                            <TableCell>
+                                                {item.totalImplantados}
+                                            </TableCell>
+                                            <TableCell>
+                                                {item.totalAnexos + item.totalImplantacao}
                                             </TableCell>
                                             <TableCell>
                                                 <Tooltip title="Detalhes">
                                                     <IconButton
                                                         onClick={() => {
-                                                            // handleClickOpen(user);
-
+                                                            setAnalistaSelecionado(item.analista)
+                                                            setOpenDialog(true)
                                                         }}
                                                     >
                                                         <AnalyticsIcon />
@@ -144,6 +194,39 @@ const PropostasTable = (mes) => {
                     </TableContainer>
                 )
             }
+            <Dialog
+                fullScreen
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                TransitionComponent={Transition}
+            >
+                <AppBar sx={{ position: 'relative' }}>
+                    <Toolbar
+                        sx={{
+                            bgcolor: grey[500]
+                        }}
+                    >
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={() => setOpenDialog(false)}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Produção - {analistaSelecionado}
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Container>
+                    <ProducaoIndividualAgendamento
+                        mes={mes}
+                        analista={analistaSelecionado}
+                        key={analistaSelecionado}
+                    />
+                </Container>
+            </Dialog>
         </Box>
     )
 }

@@ -1,6 +1,6 @@
 import { CircularProgress, Typography } from "@mui/material"
 import { Box } from "@mui/system"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Chart from "react-apexcharts"
 
 // const options = {
@@ -29,10 +29,24 @@ import Chart from "react-apexcharts"
 //     },
 // }
 
-const PropostasChart = ({ mes }) => {
+const PropostasChart = ({ mes, data }) => {
 
     const [loadingGrafico, setLoadingGrafico] = useState(false)
-    // const [graficoData, setGraficoData] = useState([])
+    const [graficoData, setGraficoData] = useState([])
+
+    useEffect(() => {
+        setLoadingGrafico(true)
+        if (data) {
+            setGraficoData(data.situacoesAmil.map(item => {
+                return {
+                    _id: item._id || 'Sem Situação',
+                    total: item.total
+                }
+            }))
+            console.log(data.situacoesAmil);
+            setLoadingGrafico(false)
+        }
+    }, [data, mes])
 
     return (
         <Box>
@@ -41,7 +55,7 @@ const PropostasChart = ({ mes }) => {
                     mt: 2,
                     mb: 1,
                 }}>
-                    Gráfico Agendamentos Propostas
+                    Gráfico de % de Propostas por Situação
                 </Typography>
             </Box>
             <Box
@@ -51,15 +65,28 @@ const PropostasChart = ({ mes }) => {
             >
                 {
                     loadingGrafico ? <CircularProgress size={'100px'} /> : (
-                        <Chart
-                            type='pie'
-                            options={{
-                                labels: ['Agendar', 'Agendado', 'Cancelado Humanizado', 'Humanizado', 'Não lidas', 'Janelas', 'Ajustar', 'Sem Whatsapp', 'Erro Whatsapp'],
-                                inverseColors: false,
-                            }}
-                            series={[20, 10, 10, 10, 10, 10, 10, 10, 10]}
-                            width={'100%'}
-                            height={500} />
+                        <>
+                            <Chart
+                                type="bar"
+                                options={{
+                                    labels: graficoData.map(item => item?._id),
+                                    inverseColors: false,
+                                }}
+                                series={graficoData.map(item => item?.total)}
+                                width={'50%'}
+                                height={500}
+                            />
+                            <Chart
+                                type='pie'
+                                options={{
+                                    labels: graficoData.map(item => item?._id),
+                                    inverseColors: false,
+                                }}
+                                series={graficoData.map(item => item?.total)}
+                                width={'35%'}
+                                height={500} />
+                        </>
+
                     )
                 }
             </Box>

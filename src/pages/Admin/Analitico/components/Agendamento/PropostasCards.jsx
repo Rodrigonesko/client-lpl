@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 
 
-const PropostasCards = ({ mes }) => {
+const PropostasCards = ({ mes, data }) => {
 
     const [loading, setLoading] = useState(false)
     const [totalData, setTotalData] = useState({
@@ -37,7 +37,7 @@ const PropostasCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.total : <CircularProgress size={20} />}
+                    {!loading ? totalData.data : <CircularProgress size={20} />}
                 </Typography>
                 <Typography variant="body2" >
                     Propostas Feitas
@@ -57,7 +57,7 @@ const PropostasCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.concluidos : <CircularProgress size={20} sx={{
+                    {!loading ? data.totalAnexos : <CircularProgress size={20} sx={{
                         color: green[900]
                     }} />}
                 </Typography>
@@ -79,7 +79,7 @@ const PropostasCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.cancelados : <CircularProgress size={20} sx={{
+                    {!loading ? data.totalEnviadosImplantacao : <CircularProgress size={20} sx={{
                         color: deepPurple[900]
                     }} />}
                 </Typography>
@@ -101,7 +101,7 @@ const PropostasCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.pendencias : <CircularProgress size={20} sx={{
+                    {!loading ? data.totalImplantados : <CircularProgress size={20} sx={{
                         color: yellow[900]
                     }} />}
                 </Typography>
