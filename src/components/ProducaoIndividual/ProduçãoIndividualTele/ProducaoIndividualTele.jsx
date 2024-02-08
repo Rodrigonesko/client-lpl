@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { amber, blue, green, grey, indigo } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
@@ -17,6 +17,7 @@ const ProducaoIndividualTele = ({ mes }) => {
         analistaQueMaisAgendou: [{ total: 0, nome: '' }],
         totalEntrevistas: 0
     })
+
     const [chartDataAgendamentos, setChartDataAgendamentos] = useState()
     const [dataAnexos, setDataAnexos] = useState({
         analistaQueMaisAnexou: [{ total: 0, nome: '' }],
@@ -32,6 +33,15 @@ const ProducaoIndividualTele = ({ mes }) => {
     const [loadingChart, setLoadingChart] = useState(true)
     const [loadingData, setLoadingData] = useState(true)
 
+    const options = {
+        title: 'Produção',
+        vAxis: { title: 'Entrevistas' },
+        hAxis: { title: 'Dias' },
+    };
+
+    const [anexados, setAnexados] = useState([])
+    const [implantados, setImplantados] = useState([])
+    const [mandouImplantacao, setMandouImplantacao] = useState([])
 
     useEffect(() => {
         const fetch = async () => {
@@ -170,6 +180,7 @@ const ProducaoIndividualTele = ({ mes }) => {
                 </Box>
             </Box>
             <Box
+                width={'100%'}
                 display={'flex'}
                 flexDirection={'row'}
                 justifyContent={'space-between'}
@@ -177,7 +188,7 @@ const ProducaoIndividualTele = ({ mes }) => {
                 mt={2}
             >
                 <Box
-                    width={'58%'}
+                    width={'60%'}
                     bgcolor={grey[100]}
                     height={'400px'}
                     p={2}
@@ -327,6 +338,126 @@ const ProducaoIndividualTele = ({ mes }) => {
                                     inverseColors: false,
                                 }}
                                 series={[70, 30]}
+                                width={'100%'}
+                                height={350}
+                            />
+                        )
+                    }
+                </Box>
+            </Box>
+            <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mt={2}
+            >
+                <Box
+                    width={'100%'}
+                    bgcolor={grey[100]}
+                    height={'400px'}
+                    p={2}
+                    borderRadius={2}
+                    textAlign={'center'}
+                >
+                    <Typography
+                        variant='body1'>
+                        Quantidade de Tentativa de Contatos
+                    </Typography>
+                    {
+                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
+                            <Chart
+                                type='bar'
+                                options={{
+                                    labels: ['1° Tentativa', '2° Tentativa', '3° Tentativa'],
+                                    inverseColors: false,
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: true
+                                        }
+                                    }
+                                }}
+                                series={[20, 40, 40]}
+                                width={'100%'}
+                                height={350}
+                            />
+                        )
+                    }
+                </Box>
+            </Box>
+            <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mt={2}
+            >
+                <Box
+                    width={'100%'}
+                    bgcolor={grey[100]}
+                    height={'400px'}
+                    p={2}
+                    borderRadius={2}
+                    textAlign={'center'}
+                >
+                    <Typography
+                        variant='body1'>
+                        Total RNs Mensal
+                    </Typography>
+                    {
+                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
+                            <Chart
+                                type='bar'
+                                options={{
+                                    labels: ['Insira os dados'],
+                                    inverseColors: false,
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: true
+                                        }
+                                    }
+                                }}
+                                series={[]}
+                                width={'100%'}
+                                height={350}
+                            />
+                        )
+                    }
+                </Box>
+            </Box>
+            <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mt={2}
+            >
+                <Box
+                    width={'100%'}
+                    bgcolor={grey[100]}
+                    height={'400px'}
+                    p={2}
+                    borderRadius={2}
+                    textAlign={'center'}
+                >
+                    <Typography
+                        variant='body1'>
+                        Total UE Mensal
+                    </Typography>
+                    {
+                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
+                            <Chart
+                                type='bar'
+                                options={{
+                                    labels: ['Insira os dados'],
+                                    inverseColors: false,
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: true
+                                        }
+                                    }
+                                }}
+                                series={[]}
                                 width={'100%'}
                                 height={350}
                             />
