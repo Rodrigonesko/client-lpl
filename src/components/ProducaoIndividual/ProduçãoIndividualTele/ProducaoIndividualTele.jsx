@@ -1,82 +1,51 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
-import { amber, blue, green, grey, indigo } from "@mui/material/colors";
+import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
+import { amber, blue, green, grey, indigo, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
 import { comparativoAgendamentos, producaoIndividualAgendamentos } from "../../../_services/teleEntrevistaExterna.service";
-import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes } from "../../../_services/teleEntrevista.service";
+import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes, getProducaoIndividualEntrevistas } from "../../../_services/teleEntrevista.service";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { TrendingDown } from "@mui/icons-material";
 
-const ProducaoIndividualTele = ({ mes }) => {
+const ProducaoIndividualTele = ({ mes, analista }) => {
 
     const { name } = useParams()
-
-    const [dataAgendamento, setDataAgendamento] = useState({
-        totalPropostasMes: 0,
-        totalAgendadas: 0,
-        agendadasAnalista: 0,
-        analistaQueMaisAgendou: [{ total: 0, nome: '' }],
-        totalEntrevistas: 0
+    const [loadingChart, setLoadingChart] = useState(false)
+    const [qtdDiaUtil, setQtdDiaUtil] = useState(0)
+    const [dataCard, setDataCard] = useState({
+        minhasEntrevistas: 0,
+        analistaComMelhorDesempenho: [],
+        minhasEntrevistasMesPassado: 0,
+    })
+    const [totalEntrevistas, setTotalEntrevistas] = useState({
+        totalConcluidas: 0,
+        totalCanceladas: 0,
+        totalConcluidasMesPassado: 0,
     })
 
-    const [chartDataAgendamentos, setChartDataAgendamentos] = useState()
-    const [dataAnexos, setDataAnexos] = useState({
-        analistaQueMaisAnexou: [{ total: 0, nome: '' }],
-        analistaQueMaisImplantou: [{ total: 0, nome: '' }],
-        analistaQueMaisMandouImplantacao: [{ total: 0, nome: '' }],
-        anexos: 0,
-        implantados: 0,
-        mandouImplantacao: 0,
-        totalAnexos: 0,
-        totalImplantados: 0,
-        totalMandouImplantacao: 0
-    })
-    const [loadingChart, setLoadingChart] = useState(true)
-    const [loadingData, setLoadingData] = useState(true)
-
     useEffect(() => {
         const fetch = async () => {
-            setLoadingData(true)
-            const result = await producaoIndividualAgendamentos(
-                mes,
-                name
-            )
-            setDataAgendamento(result)
-            const resultTotalEntrevistas = await getEntrevistasPorMes(mes)
-            setDataAgendamento(prevState => ({
-                ...prevState,
-                totalEntrevistas: resultTotalEntrevistas
-            }))
-            setLoadingData(false)
+            try {
+                const result = await getProducaoIndividualEntrevistas(mes, name || analista)
+                setQtdDiaUtil(result.qtdDiaUtil)
+                setDataCard(result)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        const fetchTotal = async () => {
+            try {
+                const result = await getEntrevistasPorMes(mes)
+                setTotalEntrevistas(result)
+            } catch (error) {
+                console.log(error);
+            }
         }
         fetch()
-    }, [])
-
-    useEffect(() => {
-        const fetch = async () => {
-            setLoadingChart(true)
-            const result = await comparativoAgendamentos(
-                mes,
-                name
-            )
-            setChartDataAgendamentos(result)
-            setLoadingChart(false)
-        }
-        fetch()
-    }, [])
-
-    useEffect(() => {
-        const fetch = async () => {
-            setLoadingData(true)
-            const result = await getProducaoIndividualAnexosPorMes(
-                mes,
-                name
-            )
-            setDataAnexos(result)
-            setLoadingData(false)
-        }
-        fetch()
-
-    }, [])
+        fetchTotal()
+    }, [mes, analista, name])
 
     return (
         <Box>
@@ -115,58 +84,239 @@ const ProducaoIndividualTele = ({ mes }) => {
                 flexWrap={'wrap'}
             >
                 <Box
-                    bgcolor={blue[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={blue[800]}
-                    width={'350px'}
+                    color={grey[800]}
+                    width={'30%'}
                 >
                     <Typography
                         variant={'body1'}
                     >
-                        Meu rendimento
+                        Meu Rendimento
                     </Typography>
+                    <Tooltip title="Comparado ao mês passado">
+                        <Box
+                            display={'flex'}
+                            flexDirection={'row'}
+                            alignItems={'center'}
+                            gap={1}
+                        >
+                            {
+                                dataCard.minhasEntrevistas > dataCard.minhasEntrevistasMesPassado ? (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
+                                ) : (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                )
+                            }
+                            {
+                                dataCard.minhasEntrevistas > dataCard.minhasEntrevistasMesPassado ? (
+                                    `+${((dataCard.minhasEntrevistas - dataCard.minhasEntrevistasMesPassado) / dataCard.minhasEntrevistasMesPassado * 100).toFixed(2)}%`
+                                ) : (
+                                    `-${((dataCard.minhasEntrevistasMesPassado - dataCard.minhasEntrevistas) / dataCard.minhasEntrevistasMesPassado * 100).toFixed(2)}%`
+                                )
+                            }
+                        </Box>
+                    </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {!loadingData ? dataAgendamento?.totalPropostasMes : <CircularProgress size={'40px'} sx={{ color: blue[800] }} />}
+                        {dataCard.minhasEntrevistas}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Média por dia trabalhado
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            100
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Média por dia util
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {(dataCard.minhasEntrevistas / qtdDiaUtil).toFixed(2)}
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
-                    bgcolor={amber[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={amber[800]}
-                    width={'350px'}
+                    color={grey[800]}
+                    width={'30%'}
                 >
                     <Typography
                         variant={'body1'}
                     >
-                        Melhor rendimento
+                        Melhor Rendimento
                     </Typography>
+                    <Tooltip title="Comparado ao desempenho do melhor rendimento">
+                        <Box
+                            display={'flex'}
+                            flexDirection={'row'}
+                            alignItems={'center'}
+                            gap={1}
+                        >
+                            {
+                                dataCard.analistaComMelhorDesempenho.length > 0 ? (
+                                    dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
+                                        <TrendingDown sx={{ color: red[800] }} />
+                                    ) : (
+                                        <TrendingUpIcon sx={{ color: green[800] }} />
+                                    )
+                                ) : null
+                            }
+                            {
+                                dataCard.analistaComMelhorDesempenho.length > 0 ? (
+                                    dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
+                                        `-${((dataCard.analistaComMelhorDesempenho[0].total - dataCard.minhasEntrevistas) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
+                                    ) : (
+                                        `+${((dataCard.minhasEntrevistas - dataCard.analistaComMelhorDesempenho[0].total) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
+                                    )
+                                ) : null
+                            }
+                        </Box>
+                    </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {!loadingData ? dataAgendamento?.totalEntrevistas : <CircularProgress size={'40px'} sx={{ color: amber[800] }} />}
+                        {dataCard.analistaComMelhorDesempenho.length > 0 ? dataCard.analistaComMelhorDesempenho[0].total : 0}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Média por dia trabalhado
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            100
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Média por dia util
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {dataCard.analistaComMelhorDesempenho.length > 0 ? (dataCard.analistaComMelhorDesempenho[0].total / qtdDiaUtil).toFixed(2) : 0}
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
-                    bgcolor={indigo[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={indigo[800]}
-                    width={'350px'}
+                    color={grey[800]}
+                    width={'30%'}
                 >
                     <Typography
                         variant={'body1'}
                     >
-                        Meta mensal da equipe
+                        Total de Entrevistas
                     </Typography>
+                    <Tooltip title="Comparado ao mês passado">
+                        <Box
+                            display={'flex'}
+                            flexDirection={'row'}
+                            alignItems={'center'}
+                            gap={1}
+                        >
+                            {
+                                totalEntrevistas.totalConcluidas > totalEntrevistas.totalConcluidasMesPassado ? (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
+                                ) : (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                )
+                            }
+                            {
+                                totalEntrevistas.totalConcluidas > totalEntrevistas.totalConcluidasMesPassado ? (
+                                    `+${((totalEntrevistas.totalConcluidas - totalEntrevistas.totalConcluidasMesPassado) / totalEntrevistas.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                ) : (
+                                    `-${((totalEntrevistas.totalConcluidasMesPassado - totalEntrevistas.totalConcluidas) / totalEntrevistas.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                )
+                            }
+                        </Box>
+                    </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {!loadingData ? dataAgendamento?.totalAgendadas : <CircularProgress size={'40px'} sx={{ color: indigo[800] }} />}
+                        {totalEntrevistas.totalConcluidas}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            meta para cada analista
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {qtdDiaUtil * 22}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            total de canceladas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {totalEntrevistas.totalCanceladas}
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
             <Box
@@ -178,7 +328,7 @@ const ProducaoIndividualTele = ({ mes }) => {
                 mt={2}
             >
                 <Box
-                    width={'60%'}
+                    width={'100%'}
                     bgcolor={grey[100]}
                     height={'400px'}
                     p={2}
@@ -189,96 +339,14 @@ const ProducaoIndividualTele = ({ mes }) => {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
-                                    chart: {
-                                        id: 'basic-bar'
-                                    },
-                                    plotOptions: {
-                                        bar: {
-                                            distributed: false, // Altere para false
-                                        }
-                                    },
-                                    colors: [green[500], amber[500]], xaxis: {
-                                        categories: chartDataAgendamentos !== undefined ? chartDataAgendamentos?.dates : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
-                                    }
+                                    labels: ['Agendados', 'Não agendados'],
+                                    inverseColors: false,
                                 }}
-                                series={[
-                                    {
-                                        name: chartDataAgendamentos !== undefined ? chartDataAgendamentos.series[0]?.name : 'Agendamentos',
-                                        data: chartDataAgendamentos !== undefined ? chartDataAgendamentos.series[0]?.data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // Adicione seus próprios dados aqui
-                                    },
-                                    {
-                                        name: 'Melhor',
-                                        data: chartDataAgendamentos !== undefined ? chartDataAgendamentos?.series[1]?.data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // Adicione seus próprios dados aqui
-                                    }
-                                ]}
                                 type={'bar'}
                                 height={350}
                             />
                         )
                     }
-                </Box>
-                <Box
-                    width={'38%'}
-                    bgcolor={grey[100]}
-                    height={'400px'}
-                    p={2}
-                    borderRadius={2}
-                >
-                    <Typography
-                        variant="body1"
-                    >
-                        Média de agendamentos por dia
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            100
-                        </Typography>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                    >
-                        Média de agendamentos por dia útil
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            {dataAgendamento?.agendadasAnalista > 0 ? (dataAgendamento?.agendadasAnalista / 22).toFixed(2) : 0}
-                        </Typography>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                    >
-                        Comparação com o total de agendamentos
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            {dataAgendamento?.totalAgendadas > 0 ? ((dataAgendamento?.agendadasAnalista / dataAgendamento?.totalAgendadas) * 100).toFixed(2) : 0}%
-                        </Typography>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                    >
-                        Comparação com o analista com mais agendamentos
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            {dataAgendamento?.analistaQueMaisAgendou[0]?.total > 0 ? ((dataAgendamento?.agendadasAnalista / dataAgendamento?.analistaQueMaisAgendou[0]?.total) * 100).toFixed(2) : 0}%
-                        </Typography>
-                    </Typography>
-                </Box>
-                <Box>
-
                 </Box>
             </Box>
             <Box

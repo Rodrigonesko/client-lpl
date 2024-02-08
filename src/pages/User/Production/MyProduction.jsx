@@ -77,13 +77,22 @@ const MyProduction = () => {
                 <Typography variant="body2" color='gray' mt={2}>
                     De uma olhada nos seus resultados
                 </Typography>
-                <Box display='flex' component={Paper} elevation={7} p={1} mt={1} mb={1}>
-                    <TextField type='month' size="small" sx={{ mr: '10px' }} focused label='Mês' variant='standard' value={mes} onChange={event => setMes(event.target.value)} />
+                <Box display='flex' elevation={7} p={1} mt={1} mb={1}>
+                    <TextField
+                        type='month'
+                        size="small"
+                        sx={{ mr: '10px' }}
+                        label='Mês'
+                        value={mes}
+                        onChange={event => setMes(event.target.value)}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                    />
                     <FormControl sx={{ width: '200px', mr: '10px' }} size="small">
                         <InputLabel>Célula</InputLabel>
                         <Select
                             label="Célula"
-                            variant='standard'
                             onChange={handleChange}
                         >
                             <MenuItem>

@@ -288,3 +288,7 @@ export const getProducaoIndividualAnexosPorMes = async (mes, analista) => {
 export const getAnaliticoAnexos = async (mes) => {
     return await new ApiCall(`/entrevistas/dadosAnalaticoAnexos/${mes}`).get()
 }
+
+export const getProducaoIndividualEntrevistas = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/producaoIndividualTele/${mes}/${analista}`).get()
+}
