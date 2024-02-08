@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { amber, blue, green, grey, indigo } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
@@ -32,16 +32,6 @@ const ProducaoIndividualTele = ({ mes }) => {
     })
     const [loadingChart, setLoadingChart] = useState(true)
     const [loadingData, setLoadingData] = useState(true)
-
-    const options = {
-        title: 'Produção',
-        vAxis: { title: 'Entrevistas' },
-        hAxis: { title: 'Dias' },
-    };
-
-    const [anexados, setAnexados] = useState([])
-    const [implantados, setImplantados] = useState([])
-    const [mandouImplantacao, setMandouImplantacao] = useState([])
 
     useEffect(() => {
         const fetch = async () => {
@@ -411,11 +401,6 @@ const ProducaoIndividualTele = ({ mes }) => {
                                 options={{
                                     labels: ['Insira os dados'],
                                     inverseColors: false,
-                                    plotOptions: {
-                                        bar: {
-                                            horizontal: true
-                                        }
-                                    }
                                 }}
                                 series={[]}
                                 width={'100%'}
@@ -451,11 +436,6 @@ const ProducaoIndividualTele = ({ mes }) => {
                                 options={{
                                     labels: ['Insira os dados'],
                                     inverseColors: false,
-                                    plotOptions: {
-                                        bar: {
-                                            horizontal: true
-                                        }
-                                    }
                                 }}
                                 series={[]}
                                 width={'100%'}
