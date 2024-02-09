@@ -292,3 +292,11 @@ export const getAnaliticoAnexos = async (mes) => {
 export const getProducaoIndividualEntrevistas = async (mes, analista) => {
     return await new ApiCall(`/entrevistas/producaoIndividualTele/${mes}/${analista}`).get()
 }
+
+export const getComparativoProducao = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/comparativoProducao/${mes}/${analista}`).get()
+}
+
+export const getQuantidadeDivergencias = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/totalDivergencias/${mes}/${analista}`).get()
+}

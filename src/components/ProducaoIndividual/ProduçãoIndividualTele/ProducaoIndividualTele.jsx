@@ -1,12 +1,13 @@
 import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
-import { amber, blue, green, grey, indigo, red } from "@mui/material/colors";
+import { amber, green, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
-import { comparativoAgendamentos, producaoIndividualAgendamentos } from "../../../_services/teleEntrevistaExterna.service";
-import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes, getProducaoIndividualEntrevistas } from "../../../_services/teleEntrevista.service";
+import { getComparativoProducao, getEntrevistasPorMes, getProducaoIndividualEntrevistas, getQuantidadeDivergencias } from "../../../_services/teleEntrevista.service";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
+import { producaoIndividualAgendamentos } from "../../../_services/teleEntrevistaExterna.service";
+import { getProducaoMensalRn } from "../../../_services/rn.service";
 
 const ProducaoIndividualTele = ({ mes, analista }) => {
 
@@ -22,6 +23,15 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
         totalConcluidas: 0,
         totalCanceladas: 0,
         totalConcluidasMesPassado: 0,
+    })
+    const [chartData, setChartData] = useState()
+    const [divergencias, setDivergencias] = useState({
+        totalDivergenciaAnalista: 0,
+        totalSemDivergenciaAnalista: 0,
+    })
+    const [dataAgendamento, setDataAgendamento] = useState({})
+    const [dataRns, setDataRns] = useState({
+
     })
 
     useEffect(() => {
@@ -43,8 +53,53 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                 console.log(error);
             }
         }
+
+        const fetchChart = async () => {
+            setLoadingChart(true)
+            try {
+                const result = await getComparativoProducao(mes, name || analista)
+                setChartData(result)
+                setLoadingChart(false)
+            } catch (error) {
+                console.log(error);
+                setLoadingChart(false)
+            }
+        }
+
+        const fetchDivergencias = async () => {
+            try {
+                const result = await getQuantidadeDivergencias(mes, name || analista)
+                setDivergencias(result)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        const fetchDataAgendamento = async () => {
+            try {
+                const result = await producaoIndividualAgendamentos(mes, name || analista)
+                setDataAgendamento(result)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        const fetchProducaoRns = async () => {
+            try {
+                const result = await getProducaoMensalRn(mes, name || analista)
+                setDataRns(result)
+                console.log(result);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         fetch()
         fetchTotal()
+        fetchChart()
+        fetchDivergencias()
+        fetchDataAgendamento()
+        fetchProducaoRns()
     }, [mes, analista, name])
 
     return (
@@ -138,7 +193,9 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            100
+                            {
+                                (dataCard.minhasEntrevistas / (chartData ? chartData.series[0].data.filter(quantidade => quantidade > 0).length : 1)).toFixed(2)
+                            }
                         </Typography>
                     </Box>
                     <Box
@@ -219,7 +276,9 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            100
+                            {
+                                (dataCard.analistaComMelhorDesempenho.length > 0 && (dataCard.analistaComMelhorDesempenho[0].total / (chartData ? chartData.series[1].data.filter(quantidade => quantidade > 0).length : 1)).toFixed(2))
+                            }
                         </Typography>
                     </Box>
                     <Box
@@ -339,11 +398,29 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
-                                    labels: ['Agendados', 'Não agendados'],
-                                    inverseColors: false,
+                                    plotOptions: {
+                                        bar: {
+                                            distributed: false
+                                        }
+                                    },
+                                    colors: [green[500], amber[500]],
+                                    xaxis: {
+                                        categories: chartData ? chartData.dates : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
+                                    }
                                 }}
                                 type={'bar'}
                                 height={350}
+                                series={[
+                                    {
+                                        name: chartData ? chartData.series[0].name : 'Analista',
+                                        data: chartData ? chartData.series[0].data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                    },
+                                    {
+                                        name: 'Melhor',
+                                        data: chartData ? chartData.series[1].data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                    }
+                                ]}
+                                width={'100%'}
                             />
                         )
                     }
@@ -372,7 +449,7 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                                     labels: ['Agendado', 'Não agendado'],
                                     inverseColors: false,
                                 }}
-                                series={[45, 55]}
+                                series={dataAgendamento ? [dataAgendamento.realizadaAgendada, dataAgendamento.realizadaNaoAgendada] : [0, 0]}
                                 width={'100%'}
                                 height={350}
                             />
@@ -395,7 +472,7 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                                     labels: ['Não houve divergencia', 'Houve divergencia'],
                                     inverseColors: false,
                                 }}
-                                series={[70, 30]}
+                                series={[divergencias.totalDivergenciaAnalista, divergencias.totalSemDivergenciaAnalista]}
                                 width={'100%'}
                                 height={350}
                             />
@@ -435,12 +512,47 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                                         }
                                     }
                                 }}
-                                series={[20, 40, 40]}
+                                series={
+                                    [
+                                        {
+                                            name: 'Tentativas',
+                                            data: dataAgendamento ? [dataAgendamento.quantidadePrimeiroContato, dataAgendamento.quantidadeSegundoContato, dataAgendamento.quantidadeTerceiroContato] : [10, 20, 30]
+                                        }
+                                    ]
+                                }
                                 width={'100%'}
                                 height={350}
                             />
                         )
                     }
+                </Box>
+            </Box>
+            <Box
+                display={'flex'}
+                flexDirection={'row'}
+                alignItems={'center'}
+                gap={2}
+                mt={2}
+            >
+                <Box
+                    width={'49%'}
+                    bgcolor={grey[100]}
+                    p={2}
+                    borderRadius={2}
+                    textAlign={'center'}
+                    height={'200px'}
+                >
+
+                </Box>
+                <Box
+                    width={'49%'}
+                    bgcolor={grey[100]}
+                    p={2}
+                    borderRadius={2}
+                    textAlign={'center'}
+                    height={'200px'}
+                >
+
                 </Box>
             </Box>
             <Box
