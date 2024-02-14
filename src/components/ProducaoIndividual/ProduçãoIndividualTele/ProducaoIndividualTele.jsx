@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Tooltip, Typography } from "@mui/material";
 import { amber, green, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
@@ -158,6 +158,16 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                     Produção Individual Tele-Entrevista
                 </Typography>
             </Box>
+            {
+                dataCard.minhasEntrevistas === dataCard.analistaComMelhorDesempenho[0].total && dataCard.analistaComMelhorDesempenho.length !== 0 ? (
+                    <>
+                        <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
+                    </>
+                ) : (
+                    <>
+                    </>
+                )
+            }
             <Box
                 display={'flex'}
                 flexDirection={'row'}
