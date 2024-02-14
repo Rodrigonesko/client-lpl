@@ -7,7 +7,6 @@ import AnaliticoTable from "./AnaliticoTable";
 import PropostasCards from "./PropostasCards";
 import PropostasChart from "./PropostasChart";
 import PropostasTable from "./PropostasTable";
-import { getAnaliticoAgendamentoMensal, getProducaoAnalistasAgendamento } from "../../../../../_services/teleEntrevistaExterna.service";
 import { getAnaliticoAnexos } from "../../../../../_services/teleEntrevista.service";
 
 const AnaliticoAgendamento = () => {

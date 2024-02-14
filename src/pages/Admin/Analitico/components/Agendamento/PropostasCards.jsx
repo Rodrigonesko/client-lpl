@@ -1,7 +1,8 @@
 import { CircularProgress, Typography } from "@mui/material";
 import { blue, deepPurple, green, red, yellow } from "@mui/material/colors";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getEntrevistasPorMes } from "../../../../../_services/teleEntrevista.service";
 
 
 const PropostasCards = ({ mes, data }) => {
@@ -14,6 +15,18 @@ const PropostasCards = ({ mes, data }) => {
         pendencias: 0,
     })
 
+    useEffect(() => {
+
+        const fetch = async () => {
+            const result = await getEntrevistasPorMes(mes)
+            console.log(result);
+            setTotalData({
+                ...totalData,
+                total: result.totalConcluidas,
+            })
+        }
+        fetch()
+    }, [mes])
     return (
         <Box
             sx={{
@@ -37,7 +50,7 @@ const PropostasCards = ({ mes, data }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? totalData.data : <CircularProgress size={20} />}
+                    {!loading ? totalData.total : <CircularProgress size={20} />}
                 </Typography>
                 <Typography variant="body2" >
                     Propostas Feitas

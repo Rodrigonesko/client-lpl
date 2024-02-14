@@ -20,6 +20,7 @@ const ProducaoIndividualAgendamento = ({
         analistaQueMaisAgendou: [{ total: 0, nome: '' }],
         totalEntrevistas: 0
     })
+    const [dataEntrevistas, setDataEntrevistas] = useState()
     const [chartDataAgendamentos, setChartDataAgendamentos] = useState()
     const [dataAnexos, setDataAnexos] = useState({
         analistaQueMaisAnexou: [{ total: 0, nome: '' }],
@@ -45,10 +46,8 @@ const ProducaoIndividualAgendamento = ({
             )
             setDataAgendamento(result)
             const resultTotalEntrevistas = await getEntrevistasPorMes(mes)
-            setDataAgendamento(prevState => ({
-                ...prevState,
-                totalEntrevistas: resultTotalEntrevistas
-            }))
+            console.log(resultTotalEntrevistas);
+            setDataEntrevistas(resultTotalEntrevistas)
             setLoadingData(false)
         }
         fetch()
@@ -150,7 +149,7 @@ const ProducaoIndividualAgendamento = ({
                     <Typography
                         variant={'h4'}
                     >
-                        {!loadingData ? dataAgendamento?.totalEntrevistas : <CircularProgress size={'40px'} sx={{ color: amber[800] }} />}
+                        {!loadingData ? dataEntrevistas?.totalConcluidas : <CircularProgress size={'40px'} sx={{ color: amber[800] }} />}
                     </Typography>
                 </Box>
                 <Box

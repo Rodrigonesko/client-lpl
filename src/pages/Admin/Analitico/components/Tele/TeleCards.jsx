@@ -3,6 +3,7 @@ import { blue, green, red, yellow } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { quantidadePropostasPorMesFiltradas } from "../../../../../_services/teleEntrevistaExterna.service";
+import { getEntrevistasPorMes } from "../../../../../_services/teleEntrevista.service";
 
 const TeleCards = ({ mes }) => {
 
@@ -35,10 +36,13 @@ const TeleCards = ({ mes }) => {
                 status: { $nin: ['Concluído', 'Cancelado'] }
             })
 
+            const resultEntrevistas = await getEntrevistasPorMes(mes)
+            console.log(resultEntrevistas);
+
             setTotalData({
                 total: resultTotal,
-                concluidos: resultConcluidos,
-                cancelados: resultCancelados,
+                concluidos: resultEntrevistas.totalConcluidas,
+                cancelados: resultEntrevistas.totalCanceladas,
                 pendencias: resultPendencias,
             })
 

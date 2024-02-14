@@ -8,6 +8,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
 import { producaoIndividualAgendamentos } from "../../../_services/teleEntrevistaExterna.service";
 import { getProducaoMensalRn } from "../../../_services/rn.service";
+import { getProducaoMensalUrgenciaEmergencia } from "../../../_services/urgenciaEmergencia.service";
 
 const ProducaoIndividualTele = ({ mes, analista }) => {
 
@@ -31,7 +32,24 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
     })
     const [dataAgendamento, setDataAgendamento] = useState({})
     const [dataRns, setDataRns] = useState({
-
+        totalRns: 0,
+        totalRnsMesPassado: 0,
+        totalRnsAnalista: 0,
+        totalRnsCanceladas: 0,
+        totalRnsCanceladasMesPassado: 0,
+        totalRnsConcluidas: 0,
+        totalRnsConcluidasMesPassado: 0,
+        series: [],
+        dates: []
+    })
+    const [dataUe, setDataUe] = useState({
+        dates: [],
+        series: [],
+        totalUe: 0,
+        totalUeMesPassado: 0,
+        totalUeAnalista: 0,
+        totalUeConcluido: 0,
+        totalUeConcluidoMesPassado: 0,
     })
 
     useEffect(() => {
@@ -94,12 +112,23 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
             }
         }
 
+        const fetchUe = async () => {
+            try {
+                const result = await getProducaoMensalUrgenciaEmergencia(mes, name || analista)
+                setDataUe(result)
+                console.log(result);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         fetch()
         fetchTotal()
         fetchChart()
         fetchDivergencias()
         fetchDataAgendamento()
         fetchProducaoRns()
+        fetchUe()
     }, [mes, analista, name])
 
     return (
@@ -539,20 +568,116 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                     bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    textAlign={'center'}
-                    height={'200px'}
+                    height={'150px'}
                 >
-
+                    <Typography
+                        variant='body1'>
+                        Total de Rns Mensal
+                    </Typography>
+                    <Tooltip title="Comparado ao mês passado">
+                        <Box
+                            display={'flex'}
+                            flexDirection={'row'}
+                            alignItems={'center'}
+                            gap={1}
+                        >
+                            {
+                                dataRns.totalRns > dataRns.totalRnsMesPassado ? (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
+                                ) : (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                )
+                            }
+                            {
+                                dataRns.totalRns > dataRns.totalRnsMesPassado ? (
+                                    `+${((dataRns.totalRns - dataRns.totalRnsMesPassado) / dataRns.totalRnsMesPassado * 100).toFixed(2)}%`
+                                ) : (
+                                    `-${((dataRns.totalRnsMesPassado - dataRns.totalRns) / dataRns.totalRnsMesPassado * 100).toFixed(2)}%`
+                                )
+                            }
+                        </Box>
+                    </Tooltip>
+                    <Typography
+                        variant='h4'
+                    >
+                        {dataRns.totalRns}
+                    </Typography>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                    >
+                        <Typography
+                            variant='body2'
+                        >
+                            Rns Concluidas
+                        </Typography>
+                        <Typography
+                            variant='body2'
+                            fontWeight={'bold'}
+                        >
+                            {dataRns.totalRnsConcluidas}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                    >
+                        <Typography
+                            variant='body2'
+                        >
+                            Rns Canceladas
+                        </Typography>
+                        <Typography
+                            variant='body2'
+                            fontWeight={'bold'}
+                        >
+                            {dataRns.totalRnsCanceladas}
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
                     width={'49%'}
                     bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    textAlign={'center'}
-                    height={'200px'}
+                    height={'150px'}
                 >
-
+                    <Typography
+                        variant='body1'>
+                        Meu rendimento
+                    </Typography>
+                    <Tooltip title="Comparado ao total">
+                        <Box
+                            display={'flex'}
+                            flexDirection={'row'}
+                            alignItems={'center'}
+                            gap={1}
+                        >
+                            {
+                                dataRns.totalRnsAnalista > dataRns.totalRns ? (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
+                                ) : (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                )
+                            }
+                            {
+                                dataRns.totalRnsAnalista > dataRns.totalRns ? (
+                                    `+${((dataRns.totalRnsAnalista - dataRns.totalRns) / dataRns.totalRns * 100).toFixed(2)}%`
+                                ) : (
+                                    `-${((dataRns.totalRns - dataRns.totalRnsAnalista) / dataRns.totalRns * 100).toFixed(2)}%`
+                                )
+                            }
+                        </Box>
+                    </Tooltip>
+                    <Typography
+                        variant='h4'
+                    >
+                        {dataRns.totalRnsAnalista}
+                    </Typography>
                 </Box>
             </Box>
             <Box
@@ -581,13 +706,93 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                                 options={{
                                     labels: ['Insira os dados'],
                                     inverseColors: false,
+                                    colors: [green[500], amber[500]],
+                                    xaxis: {
+                                        categories: dataRns.dates
+                                    }
                                 }}
-                                series={[]}
+                                series={dataRns.series}
                                 width={'100%'}
                                 height={350}
                             />
                         )
                     }
+                </Box>
+            </Box>
+            <Box
+                gap={2}
+                mt={2}
+                bgcolor={grey[100]}
+                p={2}
+                borderRadius={2}
+                width={'50%'}
+            >
+                <Typography>
+                    Total de UEs Mensal
+                </Typography>
+                <Tooltip title="Comparado ao mês passado">
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        alignItems={'center'}
+                        gap={1}
+                    >
+                        {
+                            dataUe.totalUe > dataUe.totalUeMesPassado ? (
+                                <TrendingUpIcon sx={{ color: green[800] }} />
+                            ) : (
+                                <TrendingDown sx={{ color: red[800] }} />
+                            )
+                        }
+                        {
+                            dataUe.totalUe > dataUe.totalUeMesPassado ? (
+                                `+${((dataUe.totalUe - dataUe.totalUeMesPassado) / dataUe.totalUeMesPassado * 100).toFixed(2)}%`
+                            ) : (
+                                `-${((dataUe.totalUeMesPassado - dataUe.totalUe) / dataUe.totalUeMesPassado * 100).toFixed(2)}%`
+                            )
+                        }
+                    </Box>
+                </Tooltip>
+                <Typography
+                    variant={'h4'}
+                >
+                    {dataUe.totalUe}
+                </Typography>
+                <Box
+                    display={'flex'}
+                    flexDirection={'row'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                >
+                    <Typography
+                        variant={'body2'}
+                    >
+                        UEs Concluidas
+                    </Typography>
+                    <Typography
+                        variant={'body2'}
+                        fontWeight={'bold'}
+                    >
+                        {dataUe.totalUeConcluido}
+                    </Typography>
+                </Box>
+                <Box
+                    display={'flex'}
+                    flexDirection={'row'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                >
+                    <Typography
+                        variant={'body2'}
+                    >
+                        Minha Produção
+                    </Typography>
+                    <Typography
+                        variant={'body2'}
+                        fontWeight={'bold'}
+                    >
+                        {dataUe.totalUeAnalista}
+                    </Typography>
                 </Box>
             </Box>
             <Box
@@ -616,8 +821,12 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                                 options={{
                                     labels: ['Insira os dados'],
                                     inverseColors: false,
+                                    colors: [green[500], amber[500]],
+                                    xaxis: {
+                                        categories: dataUe.dates
+                                    }
                                 }}
-                                series={[]}
+                                series={dataUe.series}
                                 width={'100%'}
                                 height={350}
                             />
@@ -627,7 +836,6 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
             </Box>
         </Box >
     )
-
 }
 
 export default ProducaoIndividualTele;

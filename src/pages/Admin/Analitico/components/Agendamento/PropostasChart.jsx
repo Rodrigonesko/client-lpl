@@ -3,32 +3,6 @@ import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
 import Chart from "react-apexcharts"
 
-// const options = {
-//     chart: {
-//         type: 'pie'
-//     },
-//     stroke: {
-//         width: [5, 5, 1],
-//         curve: 'smooth'
-//     },
-//     plotOptions: {
-//         pie: {
-//             columnWidth: '50%'
-//         }
-//     },
-//     fill: {
-//         opacity: [0.1, 1, 0.5],
-//         gradient: {
-//             inverseColors: false,
-//             shade: 'light',
-//             type: "circular",
-//             opacityFrom: 0.85,
-//             opacityTo: 0.55,
-//             stops: [0, 100, 100, 100]
-//         }
-//     },
-// }
-
 const PropostasChart = ({ mes, data }) => {
 
     const [loadingGrafico, setLoadingGrafico] = useState(false)
@@ -66,7 +40,7 @@ const PropostasChart = ({ mes, data }) => {
                 {
                     loadingGrafico ? <CircularProgress size={'100px'} /> : (
                         <>
-                            <Chart
+                            {/* <Chart
                                 type="bar"
                                 options={{
                                     labels: graficoData.map(item => item?._id),
@@ -75,7 +49,7 @@ const PropostasChart = ({ mes, data }) => {
                                 series={graficoData.map(item => item?.total)}
                                 width={'50%'}
                                 height={500}
-                            />
+                            /> */}
                             <Chart
                                 type='pie'
                                 options={{
@@ -83,7 +57,7 @@ const PropostasChart = ({ mes, data }) => {
                                     inverseColors: false,
                                 }}
                                 series={graficoData.map(item => item?.total)}
-                                width={'35%'}
+                                width={'100%'}
                                 height={500} />
                         </>
 

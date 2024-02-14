@@ -1,13 +1,20 @@
 
 // Dependencias
-import React from 'react';
-import { Box, Chip, CircularProgress, FormControlLabel, LinearProgress, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ToggleButton, Typography } from '@mui/material';
+import React, { forwardRef } from 'react';
+import { AppBar, Box, Chip, CircularProgress, Dialog, FormControlLabel, LinearProgress, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ToggleButton, Toolbar, Typography, Container } from '@mui/material';
 import { Avatar, IconButton, Tooltip } from '@mui/material';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { quantidadeAnalistasPorMes } from '../../../../../_services/teleEntrevista.service';
-import { blue, green, red } from '@mui/material/colors';
+import { blue, green, grey, red } from '@mui/material/colors';
+import CloseIcon from '@mui/icons-material/Close';
+import ProducaoIndividualTele from '../../../../../components/ProducaoIndividual/ProduçãoIndividualTele/ProducaoIndividualTele';
+
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 
 const TeleTable = ({ mes }) => {
 
@@ -17,6 +24,8 @@ const TeleTable = ({ mes }) => {
     const [mediaDiasTrabalhados, setMediaDiasTrabalhados] = useState(0)
     const [mediaTotal, setMediaTotal] = useState(0)
     const [dense, setDense] = useState(true)
+    const [openDialog, setOpenDialog] = useState(false)
+    const [analistaSelecionado, setAnalistaSelecionado] = useState('')
 
     const fetchDataAnalistas = async () => {
         setLoadingTabela(true)
@@ -27,7 +36,7 @@ const TeleTable = ({ mes }) => {
             setMedia(result.media)
             setMediaDiasTrabalhados(result.mediaDiasTrabalhados)
             setMediaTotal(result.mediaTotal)
-           
+
             setLoadingTabela(false)
         } catch (error) {
             console.log(error)
@@ -233,7 +242,8 @@ const TeleTable = ({ mes }) => {
                                                     <IconButton
                                                         onClick={() => {
                                                             // handleClickOpen(user);
-
+                                                            setAnalistaSelecionado(item.analista)
+                                                            setOpenDialog(true)
                                                         }}
                                                     >
                                                         <AnalyticsIcon />
@@ -248,6 +258,39 @@ const TeleTable = ({ mes }) => {
                     </TableContainer>
                 )
             }
+            <Dialog
+                fullScreen
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                TransitionComponent={Transition}
+            >
+                <AppBar sx={{ position: 'relative' }}>
+                    <Toolbar
+                        sx={{
+                            bgcolor: grey[500]
+                        }}
+                    >
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={() => setOpenDialog(false)}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Produção - {analistaSelecionado}
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Container>
+                    <ProducaoIndividualTele
+                        analista={analistaSelecionado}
+                        mes={mes}
+                        key={analistaSelecionado}
+                    />
+                </Container>
+            </Dialog>
         </Box>
     )
 }
