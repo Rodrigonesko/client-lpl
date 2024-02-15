@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Typography } from "@mui/material";
 import { amber, blue, deepPurple, green, grey, indigo, yellow } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
@@ -107,6 +107,16 @@ const ProducaoIndividualAgendamento = ({
                     Produção Individual Agendamento
                 </Typography>
             </Box>
+            {
+                dataAgendamento.agendadasAnalista.length !== 0 &&  dataAgendamento.agendadasAnalista === dataAgendamento.analistaQueMaisAgendou[0].total ? (
+                    <>
+                        <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
+                    </>
+                ) : (
+                    <>
+                    </>
+                )
+            }
             <Box
                 display={'flex'}
                 flexDirection={'row'}
