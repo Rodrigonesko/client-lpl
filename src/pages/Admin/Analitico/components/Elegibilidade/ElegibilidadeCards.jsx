@@ -27,7 +27,7 @@ const ElegibilidadeCards = ({ mes }) => {
             }}
         >
             <Box sx={{
-                width: '33%',
+                width: '24%',
                 height: 150,
                 mx: 1,
                 p: 2,
@@ -70,7 +70,7 @@ const ElegibilidadeCards = ({ mes }) => {
                 </Typography>
             </Box>
             <Box sx={{
-                width: '33%',
+                width: '24%',
                 height: 150,
                 mx: 1,
                 p: 2,
@@ -115,7 +115,29 @@ const ElegibilidadeCards = ({ mes }) => {
                 </Typography>
             </Box>
             <Box sx={{
-                width: '33%',
+                width: '24%',
+                height: 150,
+                mx: 1,
+                p: 2,
+                borderRadius: 4,
+                backgroundColor: red[50],
+                color: red[900],
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+            }}>
+                <Typography variant="h4">
+                    {!loading ? 156 : <CircularProgress size={20} sx={{
+                        color: deepPurple[900]
+                    }} />}
+                </Typography>
+                <Typography variant="body2" >
+                    Elegibilidades Canceladas
+                </Typography>
+            </Box>
+            <Box sx={{
+                width: '24%',
                 height: 150,
                 mx: 1,
                 p: 2,
@@ -128,7 +150,7 @@ const ElegibilidadeCards = ({ mes }) => {
                 flexDirection: 'column',
             }}>
                 <Typography variant="h4">
-                    {!loading ? 156 : <CircularProgress size={20} sx={{
+                    {!loading ? 12 : <CircularProgress size={20} sx={{
                         color: deepPurple[900]
                     }} />}
                 </Typography>
