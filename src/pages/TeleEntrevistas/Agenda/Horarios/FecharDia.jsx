@@ -5,6 +5,7 @@ import Toast from "../../../../components/Toast/Toast"
 import { getAgendasFechadas } from "../../../../_services/teleEntrevista.service"
 import moment from "moment"
 import AuthContext from "../../../../context/AuthContext"
+import AgendaDeFechamentos from "./AgendaDeFechamentos"
 
 const FecharDia = ({ responsaveis }) => {
 
@@ -91,10 +92,11 @@ const FecharDia = ({ responsaveis }) => {
             </FormControl>
             <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => setData(e.target.value)} value={data} label='Dia' focused />
             <Button variant="contained" onClick={handleFecharDia} >Fechar Dia</Button>
+            <AgendaDeFechamentos />
             {
                 agendasFechadas.map(e => {
                     return (
-                        <Alert severity="info" style={{ margin: '10px' }}>
+                        <Alert severity={e.data === moment().format('YYYY-MM-DD') ? 'error' : e.data === moment().businessAdd(1, 'days').format('YYYY-MM-DD') ? 'warning' : 'info'} style={{ margin: '10px' }}>
                             {e.analista} - {moment(e.data).format('DD/MM/YYYY')} - Fechado por: {e.fechadoPor}
                         </Alert>
                     )

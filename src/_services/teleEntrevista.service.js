@@ -300,3 +300,15 @@ export const getComparativoProducao = async (mes, analista) => {
 export const getQuantidadeDivergencias = async (mes, analista) => {
     return await new ApiCall(`/entrevistas/totalDivergencias/${mes}/${analista}`).get()
 }
+
+export const getNextCloseSchedules = async () => {
+    return await new ApiCall('/entrevistas/nextCloseSchedule').get()
+}
+
+export const createNextCloseSchedules = async (data) => {
+    return await new ApiCall('/entrevistas/nextCloseSchedule').post(data)
+}
+
+export const deleteNextCloseSchedules = async (id) => {
+    return await new ApiCall(`/entrevistas/nextCloseSchedule/${id}`).delete()
+}
