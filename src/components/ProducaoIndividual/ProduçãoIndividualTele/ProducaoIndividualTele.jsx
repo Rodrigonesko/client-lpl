@@ -159,7 +159,7 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                 </Typography>
             </Box>
             {
-                dataCard.minhasEntrevistas === dataCard.analistaComMelhorDesempenho[0].total && dataCard.analistaComMelhorDesempenho.length !== 0 ? (
+                  dataCard.analistaComMelhorDesempenho.length !== 0 && dataCard.minhasEntrevistas === dataCard.analistaComMelhorDesempenho[0].total   ? (
                     <>
                         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
                     </>
