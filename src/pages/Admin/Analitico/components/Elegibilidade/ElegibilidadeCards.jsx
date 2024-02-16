@@ -1,7 +1,9 @@
-import { CircularProgress, Typography } from "@mui/material";
-import { blue, deepPurple, green, yellow } from "@mui/material/colors";
+import { CircularProgress, Tooltip, Typography } from "@mui/material";
+import { blue, deepPurple, green, red } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { useState } from "react";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { TrendingDown } from "@mui/icons-material";
 
 
 const ElegibilidadeCards = ({ mes }) => {
@@ -25,7 +27,7 @@ const ElegibilidadeCards = ({ mes }) => {
             }}
         >
             <Box sx={{
-                width: '24%',
+                width: '33%',
                 height: 150,
                 mx: 1,
                 p: 2,
@@ -37,6 +39,29 @@ const ElegibilidadeCards = ({ mes }) => {
                 justifyContent: 'center',
                 flexDirection: 'column',
             }}>
+                <Tooltip title="Comparado ao mês passado">
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        alignItems={'center'}
+                        gap={1}
+                    >
+                        {
+                            100 > 0 ? (
+                                <TrendingUpIcon sx={{ color: green[800] }} />
+                            ) : (
+                                <TrendingDown sx={{ color: red[800] }} />
+                            )
+                        }
+                        {
+                            100 > 0 ? (
+                                `+${(100).toFixed(2)}%`
+                            ) : (
+                                `-${(100).toFixed(2)}%`
+                            )
+                        }
+                    </Box>
+                </Tooltip>
                 <Typography variant="h4">
                     {!loading ? 5620 : <CircularProgress size={20} />}
                 </Typography>
@@ -45,7 +70,7 @@ const ElegibilidadeCards = ({ mes }) => {
                 </Typography>
             </Box>
             <Box sx={{
-                width: '24%',
+                width: '33%',
                 height: 150,
                 mx: 1,
                 p: 2,
@@ -57,6 +82,29 @@ const ElegibilidadeCards = ({ mes }) => {
                 justifyContent: 'center',
                 flexDirection: 'column',
             }}>
+                <Tooltip title="Comparado ao mês passado">
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        alignItems={'center'}
+                        gap={1}
+                    >
+                        {
+                            100 > 0 ? (
+                                <TrendingUpIcon sx={{ color: green[800] }} />
+                            ) : (
+                                <TrendingDown sx={{ color: red[800] }} />
+                            )
+                        }
+                        {
+                            100 > 0 ? (
+                                `+${(50).toFixed(2)}%`
+                            ) : (
+                                `-${(50).toFixed(2)}%`
+                            )
+                        }
+                    </Box>
+                </Tooltip>
                 <Typography variant="h4">
                     {!loading ? 871 : <CircularProgress size={20} sx={{
                         color: green[900]
@@ -67,7 +115,7 @@ const ElegibilidadeCards = ({ mes }) => {
                 </Typography>
             </Box>
             <Box sx={{
-                width: '24%',
+                width: '33%',
                 height: 150,
                 mx: 1,
                 p: 2,
@@ -86,28 +134,6 @@ const ElegibilidadeCards = ({ mes }) => {
                 </Typography>
                 <Typography variant="body2" >
                     Elegibilidades a Fazer
-                </Typography>
-            </Box>
-            <Box sx={{
-                width: '24%',
-                height: 150,
-                mx: 1,
-                p: 2,
-                borderRadius: 4,
-                backgroundColor: yellow[50],
-                color: yellow[900],
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-            }}>
-                <Typography variant="h4">
-                    {!loading ? 200 : <CircularProgress size={20} sx={{
-                        color: yellow[900]
-                    }} />}
-                </Typography>
-                <Typography variant="body2" >
-                    Elegibilidades em Aberto
                 </Typography>
             </Box>
         </Box>
