@@ -193,3 +193,7 @@ export const getRelatorioProducaoMensal = async (mes) => {
 export const getAnalaticoElegibilidadeMensal = async (mes) => {
     return await new ApiCall(`/elegibilidade/analitico/${mes}`).get()
 }
+
+export const getProducaoAnalistasElegi = async (mes) => {
+    return await new ApiCall(`/analitico/${mes}`).get()
+}
