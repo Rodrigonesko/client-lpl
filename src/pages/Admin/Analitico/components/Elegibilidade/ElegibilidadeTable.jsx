@@ -6,9 +6,9 @@ import { Avatar, IconButton, Tooltip } from '@mui/material';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useState } from 'react';
 import { green, grey } from '@mui/material/colors';
-import { getProducaoAnalistasAgendamento } from '../../../../../_services/teleEntrevistaExterna.service';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividualElegi from '../../../../../components/ProducaoIndividual/ProducaoIndividualElegi/ProducaoIndividualElegi';
+import { getProducaoAnalistasElegi } from '../../../../../_services/elegibilidade.service';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -23,14 +23,21 @@ const ElegibilidadeTable = ({ mes }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const [analistaSelecionado, setAnalistaSelecionado] = useState('')
 
-    useEffect(() => {
-        const fetch = async () => {
-            setLoadingTabela(true)
-            const result = await getProducaoAnalistasAgendamento(mes)
-            setTableData(result)
+    const getAnalistasElegi = async () => {
+        setLoadingTabela(true)
+        try {
+            const result = await getProducaoAnalistasElegi(mes)
+            console.log(result);
+            setTableData(result.contagemAnalistasOrdenada)
+            setLoadingTabela(false)
+        } catch (error) {
+            console.log(error);
             setLoadingTabela(false)
         }
-        fetch()
+    }
+
+    useEffect(() => {
+        getAnalistasElegi()
     }, [])
 
     return (
@@ -114,34 +121,39 @@ const ElegibilidadeTable = ({ mes }) => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    tableData.map((item, index) => (
+                                    Object.entries(tableData).map((item, index) => (
                                         <TableRow
                                             key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
+                                            <TableCell
+                                                sx={{
+                                                    width: 50
+                                                }}
+                                            >
+                                                {/* <Avatar
+                                                    alt={item.analista}
+                                                    src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${item.analista.split(' ').join('%20')}.jpg`}
+                                                /> */}
+                                            </TableCell>
                                             <TableCell>
-                                                <Avatar
-                                                    src={item.foto}
-                                                    sx={{
-                                                        width: 30,
-                                                        height: 30,
-                                                    }}
+                                                <Chip
+                                                    label={item[0]}
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                {item._id}
+                                                <Chip
+                                                    label={item[1]}
+                                                />
                                             </TableCell>
                                             <TableCell>
-                                                {item.total}
-                                            </TableCell>
-                                            <TableCell>
-                                                {item.media.toFixed(2)}
+                                                {/* {item.media.toFixed(2)} */}
                                             </TableCell>
                                             <TableCell>
                                                 <Tooltip title="Ver detalhes">
                                                     <IconButton
                                                         onClick={() => {
-                                                            setAnalistaSelecionado(item._id)
+                                                            setAnalistaSelecionado(item.analista)
                                                             setOpenDialog(true)
                                                         }}
                                                     >
