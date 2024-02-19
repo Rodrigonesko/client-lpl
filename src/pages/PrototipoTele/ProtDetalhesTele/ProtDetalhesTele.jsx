@@ -54,7 +54,6 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
             setData(result)
             setLoading(false)
         }
-
         setFlushHook(false)
         fetchData()
         buscarHorariosDisp()
@@ -63,7 +62,7 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
         } else {
             atualizarTabelaCallback()
         }
-    }, [cpfTitular, conversaSelecionada, flushHook, pesquisa, atualizarPesquisaCallback, atualizarTabelaCallback])
+    }, [cpfTitular, flushHook])
 
     useEffect(() => {
         //Quanto o flushHook for chamado ira atualizar os dados dos selectedObjects com o status do newStatus
