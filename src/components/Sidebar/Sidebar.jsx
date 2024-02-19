@@ -15,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import { deepPurple, green } from "@mui/material/colors";
+import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
@@ -255,6 +256,9 @@ const Sidebar = ({ children }) => {
                     </SubMenu>
                     <SubMenu title='Prototipo Tele' icon={<FaClipboard />}>
                         <MenuItem><Link to='/prototipoTele/filtros'>Pendencias</Link></MenuItem>
+                    </SubMenu>
+                    <SubMenu title='Sindicância' icon={<GavelOutlinedIcon />}>
+                        <MenuItem><Link to='/demandas'>Demandas</Link></MenuItem>
                     </SubMenu>
                 </Menu>
             </ProSidebar>

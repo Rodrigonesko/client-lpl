@@ -132,6 +132,10 @@ import Inventario from "./pages/Admin/Inventario/Inventario";
 import Users from "./pages/Admin/Users/Users";
 import Analitico from "./pages/Admin/Analitico/Analitico";
 
+/* Sindicancia*/
+
+import Demandas from "./pages/Sindicancia/Demandas";
+
 /* Controle atividades  */
 
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
@@ -146,6 +150,11 @@ const AppRoutes = () => {
                 <Route exact path="/login" element={<Login />} />
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
+
+
+                <Route exact path="/demandas" element={<ProtectedRoute>
+                    <Demandas />
+                </ProtectedRoute>} />
 
 
                 <Route exact path="/internMessages" element={<ProtectedRoute>
