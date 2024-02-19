@@ -28,9 +28,9 @@ const AnaliticoElegibilidade = () => {
                     onChange={(e) => { setMes(e.target.value) }}
                 />
             </Box>
-            <ElegibilidadeCards mes={mes} />
-            <ElegibilidadeChart mes={mes} />
-            <ElegibilidadeTable mes={mes} />
+            <ElegibilidadeCards mes={mes} key={`card-${mes}`} />
+            <ElegibilidadeChart mes={mes} key={`chart-${mes}`} />
+            <ElegibilidadeTable mes={mes} key={`table-${mes}`} />
         </Box>
     )
 }

@@ -131,10 +131,10 @@ const ElegibilidadeTable = ({ mes }) => {
                                                     width: 50
                                                 }}
                                             >
-                                                {/* <Avatar
-                                                    alt={item.analista}
-                                                    src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${item.analista.split(' ').join('%20')}.jpg`}
-                                                /> */}
+                                                <Avatar
+                                                    alt={item[0]}
+                                                    src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${item[0].split(' ').join('%20')}.jpg`}
+                                                />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
