@@ -1,8 +1,9 @@
-import { Box, Button, Chip, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import ExpandIcon from '@mui/icons-material/Expand';
 import { useState } from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { blue } from "@mui/material/colors";
 
 const Demandas = () => {
 
@@ -56,11 +57,54 @@ const Demandas = () => {
                     alignContent: 'center',
                     mt: 2
                 }}>
-                    <TextField type='text' variant='standard' label='Área/Empresa' size='small' sx={{ mr: 4 }} />
-                    <TextField type='text' variant='standard' label='Tipo de Serviço' size='small' sx={{ mr: 4 }} />
-                    <TextField type='text' variant='standard' label='Status' size='small' sx={{ mr: 4 }} />
-                    <TextField type='text' variant='standard' label='Analista Executor' size='small' sx={{ mr: 4 }} />
-                    <TextField type='text' variant='standard' label='Data' focused size='small' sx={{ mr: 4 }} />
+                    <FormControl>
+                        <InputLabel>Área/Empresa</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Age"
+                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                        >
+                            <MenuItem>1</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel>Tipo de Serviço</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Age"
+                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                        >
+                            <MenuItem>1</MenuItem>
+
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Age"
+                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                        >
+                            <MenuItem>1</MenuItem>
+
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel>Analista Executor</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Age"
+                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                        >
+                            <MenuItem>1</MenuItem>
+
+                        </Select>
+                    </FormControl>
+                    <TextField type='date' variant='outlined' label='Data' focused sx={{ mr: 4, borderRadius: '20px' }} />
                 </Box>
                 <Box sx={{
                     mt: 2
@@ -74,7 +118,7 @@ const Demandas = () => {
                 <Box sx={{
                     mt: 2
                 }}>
-                    <TextField type='text' variant='standard' label='Pesquisar' size='small' />
+                    <TextField type='text' variant='outlined' label='Pesquisar' />
                 </Box>
                 <Box sx={{
                     mt: 4
@@ -83,16 +127,16 @@ const Demandas = () => {
                         <Table size='small' >
                             <TableHead>
                                 <TableRow className="table-header">
-                                    <TableCell>CÓDIGO</TableCell>
-                                    <TableCell>TIPO DE INVESTIGAÇÃO</TableCell>
-                                    <TableCell>NOME INVESTIGADO</TableCell>
-                                    <TableCell>ESPECIALIDADE</TableCell>
-                                    <TableCell>FRENTE</TableCell>
-                                    <TableCell>STATUS</TableCell>
-                                    <TableCell>DATA DE INÍCIO</TableCell>
-                                    <TableCell>DATA ULTIMA ATUALIZAÇÃO</TableCell>
-                                    <TableCell>DIAS SEM ATUALIZAÇÃO</TableCell>
-                                    <TableCell>EMPRESA/ÁREA</TableCell>
+                                    <TableCell>Código</TableCell>
+                                    <TableCell>Tipo de Investigação</TableCell>
+                                    <TableCell>Nome Investigado</TableCell>
+                                    <TableCell>Especialidade</TableCell>
+                                    <TableCell>Frente</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Data de Início</TableCell>
+                                    <TableCell>Data Ultima Atualização</TableCell>
+                                    <TableCell>Dias sem Atualização</TableCell>
+                                    <TableCell>Empresa/Área</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
