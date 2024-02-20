@@ -1,13 +1,82 @@
-import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import ExpandIcon from '@mui/icons-material/Expand';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { blue } from "@mui/material/colors";
+import { getAnalistasSindicancia, getAreaEmpresa, getDemandas, getStatus, getTipoServico } from "../../_services/sindicancia.service";
+import moment from "moment";
 
 const Demandas = () => {
 
     const [fullWidth, setFullWidth] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [areaEmpresa, setAreaEmpresa] = useState([])
+    const [status, setStatus] = useState([])
+    const [dados, setDados] = useState([])
+    const [tipoServico, setTipoServico] = useState([])
+    const [analista, setAnalista] = useState([])
+
+    const setarAreaDaEmpresa = async () => {
+        try {
+            const result = await getAreaEmpresa()
+            // console.log(result);
+            setAreaEmpresa(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const setarStatus = async () => {
+        try {
+            const result = await getStatus()
+            // console.log(result);
+            setStatus(result)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const setarTipoServico = async () => {
+        try {
+            const result = await getTipoServico()
+            // console.log(result);
+            setTipoServico(result)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const setarAnalista = async () => {
+        try {
+            const result = await getAnalistasSindicancia()
+            console.log(result);
+            setAnalista(result)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const pegarDados = async () => {
+        try {
+            setLoading(true)
+            const result = await getDemandas()
+            // console.log(result);
+            setDados(result)
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        pegarDados()
+        setarAreaDaEmpresa()
+        setarStatus()
+        setarTipoServico()
+        setarAnalista()
+    }, [])
 
     return (
         <Sidebar>
@@ -62,10 +131,15 @@ const Demandas = () => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            label="Age"
+                            label="Area/Empresa"
+                            onChange={(e) => { setAreaEmpresa(e.target.value) }}
                             sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
                         >
-                            <MenuItem>1</MenuItem>
+                            {
+                                areaEmpresa.map((item) => (
+                                    <MenuItem value={item.id[0]} >{item.nome}</MenuItem>
+                                ))
+                            }
                         </Select>
                     </FormControl>
                     <FormControl>
@@ -73,11 +147,14 @@ const Demandas = () => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            label="Age"
+                            label="Tipo de Servico"
+                            onChange={(e) => { setTipoServico(e.target.value) }}
                             sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
-                        >
-                            <MenuItem>1</MenuItem>
-
+                        >{
+                                tipoServico.map((item) => (
+                                    <MenuItem value={item.id} >{item.nome}</MenuItem>
+                                ))
+                            }
                         </Select>
                     </FormControl>
                     <FormControl>
@@ -85,11 +162,15 @@ const Demandas = () => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            label="Age"
+                            label="Status"
+                            onChange={(e) => { setStatus(e.target.value) }}
                             sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
                         >
-                            <MenuItem>1</MenuItem>
-
+                            {
+                                status.map((item) => (
+                                    <MenuItem value={item.id} >{item.nome}</MenuItem>
+                                ))
+                            }
                         </Select>
                     </FormControl>
                     <FormControl>
@@ -97,11 +178,15 @@ const Demandas = () => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            label="Age"
+                            label="Analista Executor"
+                            onChange={(e) => { setAnalista(e.target.value) }}
                             sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
                         >
-                            <MenuItem>1</MenuItem>
-
+                            {
+                                analista.map((item) => (
+                                    <MenuItem value={item.id} >{item.nome}</MenuItem>
+                                ))
+                            }
                         </Select>
                     </FormControl>
                     <TextField type='date' variant='outlined' label='Data' focused sx={{ mr: 4, borderRadius: '20px' }} />
@@ -116,9 +201,12 @@ const Demandas = () => {
                     />
                 </Box>
                 <Box sx={{
+                    display: 'flex',
+                    alignContent: 'center',
                     mt: 2
                 }}>
                     <TextField type='text' variant='outlined' label='Pesquisar' />
+                    <Button variant='contained' sx={{ ml: 2, borderRadius: '20px' }} >BUSCAR</Button>
                 </Box>
                 <Box sx={{
                     mt: 4
@@ -141,17 +229,32 @@ const Demandas = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableCell>1</TableCell>
-                                <TableCell>2</TableCell>
-                                <TableCell>3</TableCell>
-                                <TableCell>4</TableCell>
-                                <TableCell>5</TableCell>
-                                <TableCell>6</TableCell>
-                                <TableCell>7</TableCell>
-                                <TableCell>8</TableCell>
-                                <TableCell>9</TableCell>
-                                <TableCell>10</TableCell>
-                                <TableCell><Button variant='contained' sx={{ borderRadius: '25px' }}><MoreHorizIcon /></Button></TableCell>
+                                {
+                                    loading ? (
+                                        <Box sx={{ width: '100%' }} >
+                                            <LinearProgress color='secondary' sx={{ width: '100%', m: 2 }} />
+                                        </Box>
+                                    ) : (
+                                        dados.map((item) => {
+                                            return (
+                                                <TableRow key={item.key}>
+                                                    <TableCell>{item.codigo}</TableCell>
+                                                    <TableCell>{item.tipo_investigado_nome}</TableCell>
+                                                    <TableCell>{item.nome}</TableCell>
+                                                    <TableCell>{item.especialidade}</TableCell>
+                                                    <TableCell>{item.tipo_servico_nome}</TableCell>
+                                                    <TableCell>{item.status_nome}</TableCell>
+                                                    <TableCell>{moment(item.dataDemanda).format('DD/MM/YYYY')}</TableCell>
+                                                    <TableCell>{moment(item.data_atualizacao).format('DD/MM/YYYY')}</TableCell>
+                                                    <TableCell>{ }</TableCell>
+                                                    <TableCell>{item.area_empresa_nome}</TableCell>
+                                                    <TableCell><Button variant='contained' sx={{ borderRadius: '25px' }}><MoreHorizIcon /></Button></TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+
+                                    )
+                                }
                             </TableBody>
                         </Table>
                     </TableContainer >
