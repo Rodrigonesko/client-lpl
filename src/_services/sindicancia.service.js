@@ -1,7 +1,7 @@
 import { ApiCall } from "./api";
 
 export const getDemandas = async () => {
-    return await new ApiCall('/sindicancia/').get();
+    return await new ApiCall('/sindicancia/demanda').get();
 }
 
 export const getAreaEmpresa = async () => {
