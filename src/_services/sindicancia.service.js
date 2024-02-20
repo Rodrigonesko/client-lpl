@@ -1,7 +1,7 @@
 import { ApiCall } from "./api";
 
-export const getDemandas = async () => {
-    return await new ApiCall('/sindicancia/demanda').get();
+export const getDemandas = async (limit, page, areaEmpresa, status, servico, analista, codigo, data) => {
+    return await new ApiCall(`/sindicancia/demanda?limit=${limit}&page=${page}&areaEmpresa=${areaEmpresa}&status=${status}&servico=${servico}&analista=${analista}&codigo=${codigo}&data=${data}`).get();
 }
 
 export const getAreaEmpresa = async () => {

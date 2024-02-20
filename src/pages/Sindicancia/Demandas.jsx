@@ -1,10 +1,12 @@
-import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import ExpandIcon from '@mui/icons-material/Expand';
 import { useEffect, useState } from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { getAnalistasSindicancia, getAreaEmpresa, getDemandas, getStatus, getTipoServico } from "../../_services/sindicancia.service";
 import moment from "moment";
+import { grey } from "@mui/material/colors";
+import { Search } from "@mui/icons-material";
 
 const Demandas = () => {
 
@@ -15,11 +17,21 @@ const Demandas = () => {
     const [dados, setDados] = useState([])
     const [tipoServico, setTipoServico] = useState([])
     const [analista, setAnalista] = useState([])
+    const [filtros, setFiltros] = useState([{
+        areaEmpresa: null,
+        tipoServico: null,
+        status: null,
+        analista: null,
+        data: '',
+        pesquisa: ''
+    }])
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [totalPages, setTotalPages] = useState(0)
 
     const setarAreaDaEmpresa = async () => {
         try {
             const result = await getAreaEmpresa()
-            // console.log(result);
             setAreaEmpresa(result)
         } catch (error) {
             console.log(error);
@@ -29,7 +41,6 @@ const Demandas = () => {
     const setarStatus = async () => {
         try {
             const result = await getStatus()
-            // console.log(result);
             setStatus(result)
         } catch (error) {
             console.log(error)
@@ -39,7 +50,6 @@ const Demandas = () => {
     const setarTipoServico = async () => {
         try {
             const result = await getTipoServico()
-            // console.log(result);
             setTipoServico(result)
         } catch (error) {
             console.log(error)
@@ -49,7 +59,6 @@ const Demandas = () => {
     const setarAnalista = async () => {
         try {
             const result = await getAnalistasSindicancia()
-            console.log(result);
             setAnalista(result)
         } catch (error) {
             console.log(error)
@@ -59,9 +68,26 @@ const Demandas = () => {
     const pegarDados = async () => {
         try {
             setLoading(true)
-            const result = await getDemandas()
-            // console.log(result);
-            setDados(result)
+
+            const auxAreaEmpresa = filtros.areaEmpresa ? filtros.areaEmpresa.id[0] : ''
+            const auxStatus = filtros.status ? filtros.status.id : ''
+            const auxTipoServico = filtros.tipoServico ? filtros.tipoServico.id : ''
+            const auxAnalista = filtros.analista ? filtros.analista.id : ''
+            const auxData = filtros.data ? filtros.data : ''
+            const auxPesquisa = filtros.pesquisa ? filtros.pesquisa : ''
+
+            const result = await getDemandas(
+                rowsPerPage,
+                page,
+                auxAreaEmpresa,
+                auxStatus,
+                auxTipoServico,
+                auxAnalista,
+                auxPesquisa,
+                auxData
+            )
+            setDados(result.demandas)
+            setTotalPages(result.count)
             setLoading(false)
 
         } catch (error) {
@@ -77,6 +103,10 @@ const Demandas = () => {
         setarTipoServico()
         setarAnalista()
     }, [])
+
+    useEffect(() => {
+        pegarDados()
+    }, [filtros, page, rowsPerPage])
 
     return (
         <Sidebar>
@@ -126,95 +156,196 @@ const Demandas = () => {
                     alignContent: 'center',
                     mt: 2
                 }}>
-                    <FormControl>
+                    <FormControl size="small">
                         <InputLabel>Área/Empresa</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Area/Empresa"
-                            onChange={(e) => { setAreaEmpresa(e.target.value) }}
-                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            value={filtros.areaEmpresa}
+                            onChange={(e) => { setFiltros({ ...filtros, areaEmpresa: e.target.value }) }}
                         >
+                            <MenuItem value={''} >Todos</MenuItem>
                             {
                                 areaEmpresa.map((item) => (
-                                    <MenuItem value={item.id[0]} >{item.nome}</MenuItem>
+                                    <MenuItem value={item} >{item.nome}</MenuItem>
                                 ))
                             }
                         </Select>
                     </FormControl>
-                    <FormControl>
+                    <FormControl size="small">
                         <InputLabel>Tipo de Serviço</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Tipo de Servico"
-                            onChange={(e) => { setTipoServico(e.target.value) }}
-                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
-                        >{
+                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            onChange={(e) => { setFiltros({ ...filtros, tipoServico: e.target.value }) }}
+                            value={filtros.tipoServico}
+                        >
+                            <MenuItem value={''} >Todos</MenuItem>
+                            {
                                 tipoServico.map((item) => (
-                                    <MenuItem value={item.id} >{item.nome}</MenuItem>
+                                    <MenuItem value={item} >{item.nome}</MenuItem>
                                 ))
                             }
                         </Select>
                     </FormControl>
-                    <FormControl>
+                    <FormControl size="small">
                         <InputLabel>Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Status"
-                            onChange={(e) => { setStatus(e.target.value) }}
-                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            onChange={(e) => { setFiltros({ ...filtros, status: e.target.value }) }}
+                            value={filtros.status}
                         >
+                            <MenuItem value={''} >Todos</MenuItem>
                             {
                                 status.map((item) => (
-                                    <MenuItem value={item.id} >{item.nome}</MenuItem>
+                                    <MenuItem value={item} >{item.nome}</MenuItem>
                                 ))
                             }
                         </Select>
                     </FormControl>
-                    <FormControl>
+                    <FormControl size="small">
                         <InputLabel>Analista Executor</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Analista Executor"
-                            onChange={(e) => { setAnalista(e.target.value) }}
-                            sx={{ width: '200px', mr: 4, borderRadius: '20px' }}
+                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            onChange={(e) => { setFiltros({ ...filtros, analista: e.target.value }) }}
+                            value={filtros.analista}
                         >
+                            <MenuItem value={''} >Todos</MenuItem>
                             {
                                 analista.map((item) => (
-                                    <MenuItem value={item.id} >{item.nome}</MenuItem>
+                                    <MenuItem value={item} >{item.nome}</MenuItem>
                                 ))
                             }
                         </Select>
                     </FormControl>
-                    <TextField type='date' variant='outlined' label='Data' focused sx={{ mr: 4, borderRadius: '20px' }} />
+                    <TextField
+                        size="small"
+                        type='date'
+                        variant='outlined'
+                        label='Data'
+                        sx={{ mr: 4 }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            style: {
+                                borderRadius: '10px'
+                            }
+                        }}
+                        value={filtros.data}
+                        onChange={(e) => { setFiltros({ ...filtros, data: e.target.value }) }}
+                    />
                 </Box>
+
                 <Box sx={{
-                    mt: 2
+                    display: 'flex',
+                    alignContent: 'center',
+                    mt: 2,
+                    width: '100%'
                 }}>
-                    <Chip
-                        label={`Total de Registros Apresentados: ${12}`}
-                        color='success'
-                        sx={{ fontSize: 15 }}
+                    <TextField size="small" type='text' variant='outlined' placeholder='Codigo'
+                        InputProps={{
+                            style: {
+                                borderRadius: '10px',
+                            },
+                            startAdornment: <Search sx={{ mr: 1 }} />
+                        }}
+                        fullWidth
+                        value={filtros.pesquisa}
+                        onChange={(e) => { setFiltros({ ...filtros, pesquisa: e.target.value }) }}
                     />
                 </Box>
                 <Box sx={{
                     display: 'flex',
                     alignContent: 'center',
-                    mt: 2
+                    mt: 2,
+                    width: '100%'
                 }}>
-                    <TextField type='text' variant='outlined' label='Pesquisar' />
-                    <Button variant='contained' sx={{ ml: 2, borderRadius: '20px' }} >BUSCAR</Button>
+                    {
+                        filtros.areaEmpresa && (
+                            <Chip label={filtros.areaEmpresa.nome} onDelete={() => { setFiltros({ ...filtros, areaEmpresa: null }) }} sx={{ mr: 1 }} />
+                        )
+                    }
+                    {
+                        filtros.tipoServico && (
+                            <Chip label={filtros.tipoServico.nome} onDelete={() => { setFiltros({ ...filtros, tipoServico: null }) }} sx={{ mr: 1 }} />
+                        )
+                    }
+                    {
+                        filtros.status && (
+                            <Chip label={filtros.status.nome} onDelete={() => { setFiltros({ ...filtros, status: null }) }} sx={{ mr: 1 }} />
+                        )
+                    }
+                    {
+                        filtros.analista && (
+                            <Chip label={filtros.analista.nome} onDelete={() => { setFiltros({ ...filtros, analista: null }) }} sx={{ mr: 1 }} />
+                        )
+                    }
+                    {
+                        filtros.data && (
+                            <Chip label={filtros.data} onDelete={() => { setFiltros({ ...filtros, data: '' }) }} sx={{ mr: 1 }} />
+                        )
+                    }
+                    {
+                        filtros.pesquisa && (
+                            <Chip label={filtros.pesquisa} onDelete={() => { setFiltros({ ...filtros, pesquisa: '' }) }} sx={{ mr: 1 }} />
+                        )
+                    }
+                </Box>
+                <Box>
+                    <Typography variant='h6' sx={{ fontWeight: 'bold' }}>Total: {totalPages}</Typography>
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        mt: 2
+                    }}
+                >
+                    <FormControl size="small" sx={{ ml: 2 }}>
+                        <InputLabel>Linhas</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Linhas"
+                            sx={{ width: '100px', borderRadius: '10px' }}
+                            value={rowsPerPage}
+                            onChange={(e) => setRowsPerPage(e.target.value)}
+                        >
+                            <MenuItem value={10} >10</MenuItem>
+                            <MenuItem value={20} >20</MenuItem>
+                            <MenuItem value={30} >30</MenuItem>
+                            <MenuItem value={40} >40</MenuItem>
+                            <MenuItem value={50} >50</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Pagination count={
+                        totalPages % rowsPerPage === 0 ?
+                            Math.floor(totalPages / rowsPerPage) :
+                            Math.floor(totalPages / rowsPerPage) + 1
+                    } page={page} onChange={(e, value) => setPage(value)} />
                 </Box>
                 <Box sx={{
                     mt: 4
                 }}>
-                    <TableContainer component={Paper} >
+                    <TableContainer>
                         <Table size='small' >
-                            <TableHead>
-                                <TableRow className="table-header">
+                            <TableHead
+                                sx={{
+                                    bgcolor: grey[200],
+                                }}
+                            >
+                                <TableRow>
                                     <TableCell>Código</TableCell>
                                     <TableCell>Tipo de Investigação</TableCell>
                                     <TableCell>Nome Investigado</TableCell>
@@ -240,7 +371,6 @@ const Demandas = () => {
                                         dados.map((item) => {
                                             const dataDemanda = moment(item.dataDemanda);
                                             const dataAtualizacao = moment(item.data_atualizacao);
-
                                             // Calculando a diferença em dias
                                             const diasSemAtualizacao = dataAtualizacao.diff(dataDemanda, 'days');
                                             return (
@@ -251,23 +381,26 @@ const Demandas = () => {
                                                     <TableCell>{item.especialidade}</TableCell>
                                                     <TableCell>{item.tipo_servico_nome}</TableCell>
                                                     <TableCell>{item.status_nome}</TableCell>
-                                                    <TableCell>{moment(item.dataDemanda).format('DD/MM/YYYY')}</TableCell>
+                                                    <TableCell>{moment(item.data_demanda).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{moment(item.data_atualizacao).format('DD/MM/YYYY')}</TableCell>
-                                                    <TableCell>{diasSemAtualizacao}</TableCell>
+                                                    <TableCell>{diasSemAtualizacao * (-1)}</TableCell>
                                                     <TableCell>{item.area_empresa_nome}</TableCell>
-                                                    <TableCell><Button variant='contained' sx={{ borderRadius: '25px' }}><MoreHorizIcon /></Button></TableCell>
+                                                    <TableCell>
+                                                        <IconButton variant='contained' size='small' color='secondary'>
+                                                            <MoreHorizIcon />
+                                                    </IconButton>
+                                                </TableCell>
                                                 </TableRow>
-                                            )
+                            )
                                         })
-
-                                    )
+                            )
                                 }
-                            </TableBody>
-                        </Table>
-                    </TableContainer >
-                </Box>
-            </Container>
-        </Sidebar>
+                        </TableBody>
+                    </Table>
+                </TableContainer >
+            </Box>
+        </Container>
+        </Sidebar >
     )
 }
 
