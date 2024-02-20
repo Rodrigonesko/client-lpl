@@ -231,11 +231,18 @@ const Demandas = () => {
                             <TableBody>
                                 {
                                     loading ? (
-                                        <Box sx={{ width: '100%' }} >
-                                            <LinearProgress color='secondary' sx={{ width: '100%', m: 2 }} />
-                                        </Box>
+                                        <TableRow>
+                                            <TableCell colSpan={10}>
+                                                <LinearProgress color='secondary' sx={{ width: '100%', m: 2 }} />
+                                            </TableCell>
+                                        </TableRow>
                                     ) : (
                                         dados.map((item) => {
+                                            const dataDemanda = moment(item.dataDemanda);
+                                            const dataAtualizacao = moment(item.data_atualizacao);
+
+                                            // Calculando a diferença em dias
+                                            const diasSemAtualizacao = dataAtualizacao.diff(dataDemanda, 'days');
                                             return (
                                                 <TableRow key={item.key}>
                                                     <TableCell>{item.codigo}</TableCell>
@@ -246,7 +253,7 @@ const Demandas = () => {
                                                     <TableCell>{item.status_nome}</TableCell>
                                                     <TableCell>{moment(item.dataDemanda).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{moment(item.data_atualizacao).format('DD/MM/YYYY')}</TableCell>
-                                                    <TableCell>{ }</TableCell>
+                                                    <TableCell>{diasSemAtualizacao}</TableCell>
                                                     <TableCell>{item.area_empresa_nome}</TableCell>
                                                     <TableCell><Button variant='contained' sx={{ borderRadius: '25px' }}><MoreHorizIcon /></Button></TableCell>
                                                 </TableRow>
