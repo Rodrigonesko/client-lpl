@@ -17,5 +17,5 @@ export const getStatus = async () => {
 }
 
 export const getAnalistasSindicancia = async () => {
-    return await new ApiCall('/sindicancia/analistas').get();
+    return await new ApiCall('/sindicancia/analistasExecucao').get();
 }
