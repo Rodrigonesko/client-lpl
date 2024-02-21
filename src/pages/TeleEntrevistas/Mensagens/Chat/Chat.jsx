@@ -9,6 +9,8 @@ import PrimeiroContato from './mensagensPadrao/PrimeiroContato';
 import MensagemSemSucessoContato from './mensagensPadrao/MensagemSemSucessoContato';
 import MensagemDiaAnterior from './mensagensPadrao/MensagemDiaAnterior';
 import { io } from "socket.io-client";
+import MensagemAdiantarTele from './mensagensPadrao/MensagemAdiantarTele';
+import MensagemDependentesFaltantes from './mensagensPadrao/MensagemDependentesFaltantes';
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
@@ -203,6 +205,8 @@ const Chat = () => {
                                 <Button variant='contained' sx={{ marginLeft: '10px' }}>Atualizar</Button>
                             </Box> */}
                             <MensagemDiaAnterior setLoading={setLoading} setMensagem={setMensagem} />
+                            <MensagemAdiantarTele setLoading={setLoading} setMensagem={setMensagem} />
+                            <MensagemDependentesFaltantes setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemSemSucessoContato hookMsg={setMensagem} />
                             <PrimeiroContato hookMsg={setMensagem} />
                         </Box>
