@@ -134,7 +134,7 @@ import Analitico from "./pages/Admin/Analitico/Analitico";
 
 /* Sindicancia*/
 
-import Demandas from "./pages/Sindicancia/Demandas";
+import Demandas from "./pages/Sindicancia/Demandas/Demandas";
 
 /* Controle atividades  */
 
