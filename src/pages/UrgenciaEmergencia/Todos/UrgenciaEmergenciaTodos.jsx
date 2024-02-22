@@ -152,7 +152,7 @@ const UrgenciaEmergenciaTodos = () => {
             if (e.observacoes === undefined) {
                 xls += `<td></td>`
             } else {
-                xls += `<td>${e.observacoes}</td>`
+                xls += `<td>${e.observacoes.replaceAll("#", " ")}</td>`
             }
             xls += `<td>${moment(e.createdAt).format('DD/MM/YYYY')}</td>`
             if (e.dataConclusao === undefined) {
