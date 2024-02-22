@@ -1,5 +1,3 @@
-
-// Dependencias
 import React, { forwardRef, useEffect } from 'react';
 import { AppBar, Box, Chip, CircularProgress, Container, Dialog, FormControlLabel, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@mui/material';
 import { Avatar, IconButton, Tooltip } from '@mui/material';
@@ -8,14 +6,14 @@ import { useState } from 'react';
 import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividualElegi from '../../../../../components/ProducaoIndividual/ProducaoIndividualElegi/ProducaoIndividualElegi';
-import { getProducaoAnalistasElegi } from '../../../../../_services/elegibilidade.service';
+import { producaoIndividualRsd } from '../../../../../_services/rsd.service';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 
-const ElegibilidadeTable = ({ mes }) => {
+const RsdTable = ({ mes }) => {
 
     const [tableData, setTableData] = useState([])
     const [loadingTabela, setLoadingTabela] = useState(false)
@@ -23,10 +21,10 @@ const ElegibilidadeTable = ({ mes }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const [analistaSelecionado, setAnalistaSelecionado] = useState('')
 
-    const getAnalistasElegi = async () => {
+    const getAnalistasRsd = async () => {
         setLoadingTabela(true)
         try {
-            const result = await getProducaoAnalistasElegi(mes)
+            const result = await producaoIndividualRsd(mes)
             console.log(result);
             setTableData(result.contagemAnalistasOrdenada)
             setLoadingTabela(false)
@@ -37,7 +35,7 @@ const ElegibilidadeTable = ({ mes }) => {
     }
 
     useEffect(() => {
-        getAnalistasElegi()
+        getAnalistasRsd()
     }, [])
 
     return (
@@ -74,7 +72,7 @@ const ElegibilidadeTable = ({ mes }) => {
                                 mt: 2,
                                 mb: 1,
                             }}>
-                                Média Analistas Elegibilidades
+                                Média Analistas RSD
                             </Typography>
                             {/* <Chip
                                 label={`Média Total: ${media.toFixed(2)}`}
@@ -110,7 +108,7 @@ const ElegibilidadeTable = ({ mes }) => {
                                         Quantidade
                                     </TableCell>
                                     <TableCell>
-                                        Média/Dia util
+                                        Quantidade de Indeferidos
                                     </TableCell>
                                     <TableCell>
                                         Produção
@@ -209,4 +207,4 @@ const ElegibilidadeTable = ({ mes }) => {
     )
 }
 
-export default ElegibilidadeTable;
+export default RsdTable;

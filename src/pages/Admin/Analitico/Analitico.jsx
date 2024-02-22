@@ -8,6 +8,7 @@ import AnaliticoTele from "./components/Tele/AnaliticoTele";
 import ExpandIcon from '@mui/icons-material/Expand';
 import AnaliticoAgendamento from "./components/Agendamento/AnaliticoAgendamento";
 import AnaliticoElegibilidade from "./components/Elegibilidade/AnaliticoElegibilidade";
+import AnaliticoRsd from "./components/RSD/AnaliticoRsd";
 
 const tabStyle = {
     '&:hover': {
@@ -97,6 +98,7 @@ const Analitico = () => {
                     <Tab label="Elegibilidade" value="Elegibilidade" sx={tabStyle} />
                 </Tabs>
                 {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />}
+                {tab === 'RSD' && <AnaliticoRsd key={'RSD'} />}
                 {tab === 'Agendamento' && <AnaliticoAgendamento key={'Agendamento'} />}
                 {tab === 'Elegibilidade' && <AnaliticoElegibilidade key={'Elegibilidade'} />}
             </Container>
