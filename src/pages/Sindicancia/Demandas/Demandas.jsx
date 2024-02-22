@@ -1,12 +1,15 @@
 import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
-import Sidebar from "../../components/Sidebar/Sidebar"
+import Sidebar from "../../../components/Sidebar/Sidebar"
 import ExpandIcon from '@mui/icons-material/Expand';
 import { useEffect, useState } from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { getAnalistasSindicancia, getAreaEmpresa, getDemandas, getStatus, getTipoServico } from "../../_services/sindicancia.service";
+import { getAnalistasSindicancia, getAreaEmpresa, getDemandas, getStatus, getTipoServico } from "../../../_services/sindicancia.service";
 import moment from "moment";
 import { grey } from "@mui/material/colors";
-import { Search } from "@mui/icons-material";
+import { ArrowForward, Search } from "@mui/icons-material";
+import DrawerDetails from "./DrawerDetails";
+import ModalRelatorio from "./ModalRelatorio";
+import ModalCriarTipoIrregularidade from "./ModalCriarTipoIrregularidade";
 
 const Demandas = () => {
 
@@ -28,6 +31,7 @@ const Demandas = () => {
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(0)
+    const [selectedDemanda, setSelectedDemanda] = useState(0)
 
     const setarAreaDaEmpresa = async () => {
         try {
@@ -86,6 +90,9 @@ const Demandas = () => {
                 auxPesquisa,
                 auxData
             )
+
+            console.log(result.demandas);
+
             setDados(result.demandas)
             setTotalPages(result.count)
             setLoading(false)
@@ -245,6 +252,8 @@ const Demandas = () => {
                         value={filtros.data}
                         onChange={(e) => { setFiltros({ ...filtros, data: e.target.value }) }}
                     />
+                    <ModalRelatorio />
+                    <ModalCriarTipoIrregularidade />
                 </Box>
 
                 <Box sx={{
@@ -347,14 +356,13 @@ const Demandas = () => {
                             >
                                 <TableRow>
                                     <TableCell>Código</TableCell>
-                                    <TableCell>Tipo de Investigação</TableCell>
+                                    <TableCell>Investigação</TableCell>
                                     <TableCell>Nome Investigado</TableCell>
                                     <TableCell>Especialidade</TableCell>
                                     <TableCell>Frente</TableCell>
                                     <TableCell>Status</TableCell>
                                     <TableCell>Data de Início</TableCell>
-                                    <TableCell>Data Ultima Atualização</TableCell>
-                                    <TableCell>Dias sem Atualização</TableCell>
+                                    <TableCell>Ultima Att</TableCell>
                                     <TableCell>Empresa/Área</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
@@ -374,7 +382,13 @@ const Demandas = () => {
                                             // Calculando a diferença em dias
                                             const diasSemAtualizacao = dataAtualizacao.diff(dataDemanda, 'days');
                                             return (
-                                                <TableRow key={item.key}>
+                                                <TableRow
+                                                    key={item.key}
+                                                    sx={{
+                                                        '&:last-child td, &:last-child th': { border: 0 },
+                                                        bgcolor: selectedDemanda === item.id ? grey[100] : ''
+                                                    }}
+                                                >
                                                     <TableCell>{item.codigo}</TableCell>
                                                     <TableCell>{item.tipo_investigado_nome}</TableCell>
                                                     <TableCell>{item.nome}</TableCell>
@@ -382,24 +396,29 @@ const Demandas = () => {
                                                     <TableCell>{item.tipo_servico_nome}</TableCell>
                                                     <TableCell>{item.status_nome}</TableCell>
                                                     <TableCell>{moment(item.data_demanda).format('DD/MM/YYYY')}</TableCell>
-                                                    <TableCell>{moment(item.data_atualizacao).format('DD/MM/YYYY')}</TableCell>
-                                                    <TableCell>{diasSemAtualizacao * (-1)}</TableCell>
+                                                    <TableCell>
+                                                        {moment(item.data_atualizacao).format('DD/MM/YYYY')}
+                                                        <Typography
+                                                            variant="body2"
+                                                            color={grey[500]}
+                                                        >
+                                                            {diasSemAtualizacao * (-1)}
+                                                        </Typography>
+                                                    </TableCell>
                                                     <TableCell>{item.area_empresa_nome}</TableCell>
                                                     <TableCell>
-                                                        <IconButton variant='contained' size='small' color='secondary'>
-                                                            <MoreHorizIcon />
-                                                    </IconButton>
-                                                </TableCell>
+                                                        <DrawerDetails demanda={item} setSelectedDemanda={setSelectedDemanda} />
+                                                    </TableCell>
                                                 </TableRow>
-                            )
+                                            )
                                         })
-                            )
+                                    )
                                 }
-                        </TableBody>
-                    </Table>
-                </TableContainer >
-            </Box>
-        </Container>
+                            </TableBody>
+                        </Table>
+                    </TableContainer >
+                </Box>
+            </Container>
         </Sidebar >
     )
 }
