@@ -18,6 +18,8 @@ import PopoverAlterarNumeroEnvio from "../Components/PopoverAlterarNumeroEnvio";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { io } from "socket.io-client";
+import MensagemDependentesFaltantes from "../Components/MensagemDependentesFaltantes";
+import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
@@ -59,7 +61,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
 
     useEffect(() => {
         socket.on('receivedMessage', async (message) => {
-            if (message.whatsapp === data.whatsapp) {       
+            if (message.whatsapp === data.whatsapp) {
                 setFlushHook(true)
             }
         });
@@ -157,6 +159,8 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     <MensagemSemSucesso setMessage={setMessage} />
                     <MensagemPadrao setMessage={setMessage} nome={nome} />
                     <MensagemHorarios setMessage={setMessage} />
+                    <MensagemDependentesFaltantes setMessage={setMessage} />
+                    <MensagemAdiantarTele setMessage={setMessage} />
                 </Box>
             </Box>
         </Slide >
