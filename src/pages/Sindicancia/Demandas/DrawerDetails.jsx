@@ -5,6 +5,9 @@ import { useState } from "react";
 import { BiCollapse } from "react-icons/bi";
 import { createBeneficiario, createIrregularidade, createPrestador, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
 import Toast from "../../../components/Toast/Toast";
+import Agenda from "./Agenda";
+import ValueInput from "./ValueInput";
+import FinalizacaoDemanda from "./FinalizacaoDemanda";
 
 const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
 
@@ -26,6 +29,7 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
     const [openToast, setOpenToast] = useState(false);
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('success');
+    const [valor, setValor] = useState('');
 
     const handleOpen = async () => {
         setSelectedDemanda(demanda.id);
@@ -188,7 +192,7 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
                     m: 2,
                 }}>
 
-                    Detalhes da Demanda
+                    Detalhes da Demanda {demanda.codigo}
                 </Typography>
                 <Accordion
                     disabled={loading}
@@ -413,7 +417,26 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
                         </Box>
                     </AccordionDetails>
                 </Accordion>
+                <Agenda
+                    id={demanda.id}
+                />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        m: 2
+                    }}
+                >
+                    <ValueInput
+                        id={demanda.id}
+                        value={valor}
+                    />
+                </Box>
+                <FinalizacaoDemanda
+                    demanda={demanda}
+                />
+
             </Drawer>
+
             <Toast
                 message={msg}
                 severity={severity}
