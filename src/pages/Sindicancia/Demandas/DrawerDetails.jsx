@@ -4,6 +4,7 @@ import { grey } from "@mui/material/colors";
 import { useState } from "react";
 import { BiCollapse } from "react-icons/bi";
 import { createBeneficiario, createIrregularidade, createPrestador, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
+import Toast from "../../../components/Toast/Toast";
 
 const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
 
@@ -20,6 +21,11 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
     const [loadingDeletePrestador, setLoadingDeletePrestador] = useState(false);
     const [tiposIrregularidades, setTiposIrregularidades] = useState([]);
     const [irregularidades, setIrregularidades] = useState([]);
+    const [irregularidadeId, setIrregularidadeId] = useState(0);
+    const [loadingIrregularidade, setLoadingIrregularidade] = useState(false);
+    const [openToast, setOpenToast] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [severity, setSeverity] = useState('success');
 
     const handleOpen = async () => {
         setSelectedDemanda(demanda.id);
@@ -57,6 +63,9 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
         if (result.msg === 'ok') {
             setBeneficiarios([...beneficiarios, { nome: novoBeneficiario, id: result.id }]);
             setNovoBeneficiario('');
+            setMsg('Beneficiário adicionado com sucesso');
+            setSeverity('success');
+            setOpenToast(true);
         }
         setLoadingAddBeneficiario(false);
     }
@@ -71,6 +80,9 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
             setPrestadores([...prestadores, { nome: novoPrestador, id: result.id }]);
             setNovoPrestador('');
             setLoadingAddPrestador(false);
+            setMsg('Prestador adicionado com sucesso');
+            setSeverity('success');
+            setOpenToast(true);
         }
     }
 
@@ -81,8 +93,12 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
         })
         if (result.msg === 'ok') {
             setBeneficiarios(beneficiarios.filter(b => b.id !== id));
+            setMsg('Beneficiário removido com sucesso');
+            setSeverity('success');
+            setOpenToast(true);
         }
         setLoadingDeleteBeneficiario(false);
+
     }
 
     const handleDeletePrestador = async (id) => {
@@ -92,16 +108,23 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
         })
         if (result.msg === 'ok') {
             setPrestadores(prestadores.filter(p => p.id !== id));
+            setMsg('Prestador removido com sucesso');
+            setSeverity('success');
+            setOpenToast(true);
         }
         setLoadingDeletePrestador(false);
     }
 
     const handleToggleIrregularidade = async (id, irregularidade, idIrregularidade) => {
-
+        setLoadingIrregularidade(true);
+        setIrregularidadeId(id);
         if (irregularidades.some(i => i.nome === irregularidade)) {
             const result = await deleteIrregularidade(idIrregularidade)
             if (result.msg === 'ok') {
                 setIrregularidades(irregularidades.filter(i => i.nome !== irregularidade));
+                setMsg('Irregularidade removida com sucesso');
+                setSeverity('success');
+                setOpenToast(true);
             }
         } else {
             const result = await createIrregularidade({
@@ -110,8 +133,13 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
             })
             if (result.msg === 'ok') {
                 setIrregularidades([...irregularidades, { nome: irregularidade, id: result.id }]);
+                setMsg('Irregularidade adicionada com sucesso');
+                setSeverity('success');
+                setOpenToast(true);
             }
         }
+        setLoadingIrregularidade(false);
+
     }
 
     return (
@@ -354,25 +382,44 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
                             <FormGroup>
                                 {
                                     tiposIrregularidades.map((tipo, index) => (
-                                        <FormControlLabel
+                                        <Box
                                             key={index}
-                                            control={
-                                                <Checkbox
-                                                    checked={irregularidades.some(i => i.nome === tipo.nome)}
-                                                    disabled={loading}
-                                                />
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                mt: 1
+                                            }}
+                                        >
+                                            <FormControlLabel
+                                                key={index}
+                                                control={
+                                                    <Checkbox
+                                                        checked={irregularidades.some(i => i.nome === tipo.nome)}
+                                                        disabled={loading}
+                                                    />
+                                                }
+                                                label={tipo.nome}
+                                                onChange={() => handleToggleIrregularidade(tipo.id, tipo.nome, irregularidades.find(i => i.nome === tipo.nome)?.id)}
+                                            />
+                                            {
+                                                loadingIrregularidade && irregularidadeId === tipo.id ? <CircularProgress size={'20px'} /> : null
                                             }
-                                            label={tipo.nome}
-                                            onChange={() => handleToggleIrregularidade(tipo.id, tipo.nome, irregularidades.find(i => i.nome === tipo.nome)?.id)}
-                                        />
+                                        </Box>
+
                                     ))
                                 }
                             </FormGroup>
                         </Box>
                     </AccordionDetails>
                 </Accordion>
-
             </Drawer>
+            <Toast
+                message={msg}
+                severity={severity}
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+            />
         </>
     )
 
