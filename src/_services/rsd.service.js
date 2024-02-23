@@ -185,3 +185,7 @@ export const relatorioProducaoMensal = async (mes) => {
 export const producaoIndividualRsd = async (mes) => {
     return await new ApiCall(`/rsd/producaoIndividualRsd/${mes}`).get()
 }
+
+export const getQuantidadeProducaoRsd = async (mes) => {
+    return await new ApiCall(`/rsd/quantidadeProducaoRsd/${mes}`).get()
+}
