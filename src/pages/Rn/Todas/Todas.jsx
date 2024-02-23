@@ -7,6 +7,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Todas.css'
 import { filterRn, getRns } from "../../../_services/teleEntrevista.service";
 import { Container } from "@mui/material";
+import { getRnByDate } from "../../../_services/rn.service";
 
 
 const Todas = () => {
@@ -57,6 +58,8 @@ const Todas = () => {
             return
         }
 
+        console.log(pesquisa);
+
         const resultado = await filterRn(pesquisa)
         setRns(resultado)
     }
@@ -78,7 +81,10 @@ const Todas = () => {
     const transformData = async () => {
         try {
 
-            const result = await getRns()
+            const result = await getRnByDate(
+                dataInicioReport,
+                dataFimReport
+            )
 
             rnsForExcel = result.map(e => {
 
@@ -149,9 +155,6 @@ const Todas = () => {
             setDataFimReport('')
             setDataInicioReport('')
             setOpenReport(false)
-
-            console.log(ws);
-
         } catch (error) {
             console.log(error);
         }
@@ -162,7 +165,10 @@ const Todas = () => {
         try {
             let xls = '\ufeff'
 
-            const result = await getRns()
+            const result = await getRnByDate(
+                dataInicioReportGerencial,
+                dataFimReportGerencial
+            )
 
             if ((dataInicioReportGerencial === '') && (dataFimReportGerencial === '')) {
                 setAlerta(true)
@@ -170,6 +176,7 @@ const Todas = () => {
                 setSeverity('warning')
                 return
             }
+
             xls += "<table border='1'>"
             xls += "<thead><tr>"
             xls += "<th>Data Conclusão</th>"

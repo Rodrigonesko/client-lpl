@@ -33,13 +33,15 @@ const ModalRelatorio = () => {
         xls += "<th>QTD Beneficiarios</th>"
         xls += "<th>QTD Prestadores</th>"
         xls += "<th>Data Inicio</th>"
-        xls += "<th>Data Fim</th>"
+        xls += "<th>Data Finalização Sistema</th>"
+        xls += "<th>Data Finalização</th>"
         xls += "<th>Justificativa</th>"
         xls += "<th>Valor</th>"
         xls += "<th>Período</th>"
         xls += "<th>Status</th>"
-        xls += "<th>Analista</th>"
-        xls += "<th>Analista Criador</th>"
+        xls += "<th>Analista Demandante</th>"
+        xls += "<th>Analista Responsável</th>"
+        xls += "<th>Analista Executor</th>"
         result[0].irregularidadesObj.forEach((item) => {
             xls += "<th>" + item.nome + "</th>"
         })
@@ -54,13 +56,15 @@ const ModalRelatorio = () => {
             xls += `<td>${item.num_beneficiarios || ''}</td>`
             xls += `<td>${item.num_prestadores || ''}</td>`
             xls += `<td>${moment(item.data_demanda).format('DD/MM/YYYY') || ''}</td>`
+            xls += `<td>${item.data_finalizacao_sistema ? moment(item.data_finalizacao_sistema).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${item.data_finalizacao ? moment(item.data_finalizacao).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${item.justificativa_finalizacao || ''}</td>`
             xls += `<td>${item.valor || ''}</td>`
             xls += `<td>${item.periodo || ''}</td>`
             xls += `<td>${item.status_nome || ''}</td>`
-            xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
             xls += `<td>${item.usuario_criador_nome || ''}</td>`
+            xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
+            xls += `<td>${item.usuario_executor_nome || ''}</td>`
             item.irregularidadesObj.forEach((irregularidade) => {
                 xls += `<td>${irregularidade.value || ''}</td>`
             })
