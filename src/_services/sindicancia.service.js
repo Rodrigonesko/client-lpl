@@ -71,3 +71,31 @@ export const getIrregularidade = async (id) => {
 export const deleteIrregularidade = async (id) => {
     return await new ApiCall(`/sindicancia/demanda/irregularidade/${id}`).delete();
 }
+
+export const createAgenda = async (data) => {
+    return await new ApiCall('/sindicancia/demanda/agenda').post(data);
+}
+
+export const getAgenda = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/agenda/${id}`).get();
+}
+
+export const deleteAgenda = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/agenda/${id}`).delete();
+}
+
+export const createValor = async (data) => {
+    return await new ApiCall('/sindicancia/demanda/valor').post(data);
+}
+
+export const getValor = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/valor/${id}`).get();
+}
+
+export const deleteValor = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/valor/${id}`).delete();
+}
+
+export const finalizarDemanda = async (data) => {
+    return await new ApiCall(`/sindicancia/demanda/finalizar`).post(data);
+}
