@@ -24,10 +24,7 @@ const ModalRelatorio = () => {
         setLoading(true)
         e.preventDefault()
         const result = await getRelatorio({ dataInicio, dataFim })
-        console.log(result);
-
         let xls = '\ufeff'
-        xls += '<table>'
         xls += "<table border='1'>"
         xls += "<thead><tr>"
         xls += "<th>Código</th>"
@@ -37,24 +34,36 @@ const ModalRelatorio = () => {
         xls += "<th>QTD Prestadores</th>"
         xls += "<th>Data Inicio</th>"
         xls += "<th>Data Fim</th>"
+        xls += "<th>Justificativa</th>"
+        xls += "<th>Valor</th>"
+        xls += "<th>Período</th>"
         xls += "<th>Status</th>"
         xls += "<th>Analista</th>"
         xls += "<th>Analista Criador</th>"
+        result[0].irregularidadesObj.forEach((item) => {
+            xls += "<th>" + item.nome + "</th>"
+        })
         xls += "</tr></thead>"
         xls += "<tbody>"
 
         result.forEach((item) => {
             xls += "<tr>"
             xls += `<td>${item.codigo || ''}</td>`
-            xls += `<td>${item.cliente || ''}</td>`
+            xls += `<td>${item.area_empresa_nome || ''}</td>`
             xls += `<td>${item.tipo_servico_nome || ''}</td>`
             xls += `<td>${item.num_beneficiarios || ''}</td>`
             xls += `<td>${item.num_prestadores || ''}</td>`
             xls += `<td>${moment(item.data_demanda).format('DD/MM/YYYY') || ''}</td>`
-            xls += `<td>${moment(item.data_fim).format('DD/MM/YYYY') || ''}</td>`
+            xls += `<td>${item.data_finalizacao ? moment(item.data_finalizacao).format('DD/MM/YYYY') : ''}</td>`
+            xls += `<td>${item.justificativa_finalizacao || ''}</td>`
+            xls += `<td>${item.valor || ''}</td>`
+            xls += `<td>${item.periodo || ''}</td>`
             xls += `<td>${item.status_nome || ''}</td>`
             xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
             xls += `<td>${item.usuario_criador_nome || ''}</td>`
+            item.irregularidadesObj.forEach((irregularidade) => {
+                xls += `<td>${irregularidade.value || ''}</td>`
+            })
             xls += "</tr>"
         })
 
