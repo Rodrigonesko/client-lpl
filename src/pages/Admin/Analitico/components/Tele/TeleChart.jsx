@@ -61,7 +61,6 @@ const TeleChart = ({ mes }) => {
                 },
                 key: 'dataConclusao'
             })
-
             const graficoData = [
                 {
                     name: 'Concluídas',
@@ -82,12 +81,8 @@ const TeleChart = ({ mes }) => {
                     type: 'bar',
                 }
             ]
-
-            console.log(graficoData);
-
             setGraficoData(graficoData)
             setLoadingGrafico(false)
-
         } catch (error) {
             console.log(error)
             setLoadingGrafico(false)

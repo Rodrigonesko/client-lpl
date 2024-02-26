@@ -153,7 +153,7 @@ const ElegibilidadeTable = ({ mes }) => {
                                                 <Tooltip title="Ver detalhes">
                                                     <IconButton
                                                         onClick={() => {
-                                                            setAnalistaSelecionado(item.analista)
+                                                            setAnalistaSelecionado(item[0])
                                                             setOpenDialog(true)
                                                         }}
                                                     >

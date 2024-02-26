@@ -255,6 +255,7 @@ const Sidebar = ({ children }) => {
                     </SubMenu>
                     <SubMenu title='Prototipo Tele' icon={<FaClipboard />}>
                         <MenuItem><Link to='/prototipoTele/filtros'>Pendencias</Link></MenuItem>
+                        <MenuItem><Link to='/prototipoTele/enviar'>Envio</Link></MenuItem>
                     </SubMenu>
                     <SubMenu title='Sindicância' icon={<GavelOutlinedIcon />}>
                         <MenuItem><Link to='/demandas'>Demandas</Link></MenuItem>

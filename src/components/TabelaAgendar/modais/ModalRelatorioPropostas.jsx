@@ -26,7 +26,20 @@ const feriados = [
     moment('2023-10-12'),
     moment('2023-11-02'),
     moment('2023-11-15'),
-    moment('2023-12-25')
+    moment('2023-12-25'),
+    moment('2024-01-01'),
+    moment('2024-02-12'),
+    moment('2024-02-13'),
+    moment('2024-03-29'),
+    moment('2024-04-21'),
+    moment('2024-05-01'),
+    moment('2024-05-30'),
+    moment('2024-09-07'),
+    moment('2024-10-12'),
+    moment('2024-11-02'),
+    moment('2024-11-15'),
+    moment('2024-11-20'),
+    moment('2024-12-25'),
 ];
 
 const ModalRelatorioPropostas = () => {
@@ -67,7 +80,7 @@ const ModalRelatorioPropostas = () => {
         xls += "<th>Administrador</th>"
         xls += "<th>Risco</th>"
         xls += "<th>Sinistralidade</th>"
-        xls += "<th>Divergencia</th>"
+        xls += "<th>Houve Divergência</th>"
         xls += "<th>Cid Irregularidade</th>"
         xls += "<th>Status</th>"
         xls += "<th>Cid Identificado</th>"
@@ -114,7 +127,7 @@ const ModalRelatorioPropostas = () => {
             xls += `<td>${e.administradora || ''}</td>`
             xls += `<td>${e.riscoImc || ''}</td>`
             xls += `<td>${e.sinistral || ''}</td>`
-            xls += `<td>${e.divergencia || ''}</td>`
+            xls += `<td>${e.houveDivergencia || ''}</td>`
             xls += `<td>${e.cid || ''}</td>`
             xls += `<td>${e.status || ''}</td>`
             xls += `<td>${e.cids || ''}</td>`

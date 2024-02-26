@@ -7,112 +7,34 @@ import { comparativoAgendamentos, producaoIndividualAgendamentos } from "../../.
 import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes } from "../../../_services/teleEntrevista.service";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
+import { getProducaoIndividualElegibilidade } from "../../../_services/elegibilidade.service";
 
 const ProducaoIndividualElegi = ({ mes, analista }) => {
 
     const { name } = useParams()
 
-    const [dataAgendamento, setDataAgendamento] = useState({
-        totalPropostasMes: 0,
-        totalAgendadas: 0,
-        agendadasAnalista: 0,
-        analistaQueMaisAgendou: [{ total: 0, nome: '' }],
-        totalEntrevistas: 0
-    })
-    const [dataEntrevistas, setDataEntrevistas] = useState()
-    const [chartDataAgendamentos, setChartDataAgendamentos] = useState()
-    const [dataAnexos, setDataAnexos] = useState({
-        analistaQueMaisAnexou: [{ total: 0, nome: '' }],
-        analistaQueMaisImplantou: [{ total: 0, nome: '' }],
-        analistaQueMaisMandouImplantacao: [{ total: 0, nome: '' }],
-        anexos: 0,
-        implantados: 0,
-        mandouImplantacao: 0,
-        totalAnexos: 0,
-        totalImplantados: 0,
-        totalMandouImplantacao: 0
-    })
-    const [loadingChart, setLoadingChart] = useState(true)
-    const [loadingData, setLoadingData] = useState(true)
-    const [qtdDiaUtil, setQtdDiaUtil] = useState(0)
-    const [dataCard, setDataCard] = useState({
-        minhasEntrevistas: 0,
-        analistaComMelhorDesempenho: [],
-        minhasEntrevistasMesPassado: 0,
-    })
-    const [totalEntrevistas, setTotalEntrevistas] = useState({
-        totalConcluidas: 0,
-        totalCanceladas: 0,
-        totalConcluidasMesPassado: 0,
-    })
-    const [chartData, setChartData] = useState()
-    const [divergencias, setDivergencias] = useState({
-        totalDivergenciaAnalista: 0,
-        totalSemDivergenciaAnalista: 0,
-    })
-
-    const [dataRns, setDataRns] = useState({
-        totalRns: 0,
-        totalRnsMesPassado: 0,
-        totalRnsAnalista: 0,
-        totalRnsCanceladas: 0,
-        totalRnsCanceladasMesPassado: 0,
-        totalRnsConcluidas: 0,
-        totalRnsConcluidasMesPassado: 0,
-        series: [],
-        dates: []
-    })
-    const [dataUe, setDataUe] = useState({
-        dates: [],
-        series: [],
-        totalUe: 0,
-        totalUeMesPassado: 0,
-        totalUeAnalista: 0,
-        totalUeConcluido: 0,
-        totalUeConcluidoMesPassado: 0,
+    const [loadingChart, setLoadingChart] = useState(false)
+    const [chartData, setChartData] = useState(null)
+    const [cardData, setCardData] = useState({
+        totalAnalista: 0,
+        totalAnalistaMesPassado: 0,
+        totalCancelados: 0,
+        totalCanceladosMelhorAnalista: 0,
+        totalLigacaoRealizada: 0,
+        totalLigacaoRealizadaMelhorAnalista: 0,
+        melhorAnalista: [
+            { _id: '', quantidade: 0 }
+        ]
     })
 
     useEffect(() => {
         const fetch = async () => {
-            setLoadingData(true)
-            const result = await producaoIndividualAgendamentos(
-                mes,
-                name || analista
-            )
-            setDataAgendamento(result)
-            const resultTotalEntrevistas = await getEntrevistasPorMes(mes)
-            console.log(resultTotalEntrevistas);
-            setDataEntrevistas(resultTotalEntrevistas)
-            setLoadingData(false)
+            const result = await getProducaoIndividualElegibilidade(mes, analista)
+            console.log(result);
+            setCardData(result)
         }
-        fetch()
-    }, [])
 
-    useEffect(() => {
-        const fetch = async () => {
-            setLoadingChart(true)
-            const result = await comparativoAgendamentos(
-                mes,
-                name || analista
-            )
-            setChartDataAgendamentos(result)
-            setLoadingChart(false)
-        }
         fetch()
-    }, [])
-
-    useEffect(() => {
-        const fetch = async () => {
-            setLoadingData(true)
-            const result = await getProducaoIndividualAnexosPorMes(
-                mes,
-                name || analista
-            )
-            setDataAnexos(result)
-            setLoadingData(false)
-        }
-        fetch()
-
     }, [])
 
     return (
@@ -142,7 +64,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     Produção Individual Elegibilidade
                 </Typography>
             </Box>
-            {
+            {/* {
                 dataAgendamento.agendadasAnalista.length !== 0 && dataAgendamento.agendadasAnalista === dataAgendamento.analistaQueMaisAgendou[0].total ? (
                     <>
                         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
@@ -151,7 +73,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <>
                     </>
                 )
-            }
+            } */}
             <Box
                 display={'flex'}
                 flexDirection={'row'}
@@ -181,17 +103,17 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             gap={1}
                         >
                             {
-                                dataCard.minhasEntrevistas > dataCard.minhasEntrevistasMesPassado ? (
+                                cardData.totalAnalista > cardData.totalAnalistaMesPassado ? (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 ) : (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 )
                             }
                             {
-                                dataCard.minhasEntrevistas > dataCard.minhasEntrevistasMesPassado ? (
-                                    `+${((dataCard.minhasEntrevistas - dataCard.minhasEntrevistasMesPassado) / dataCard.minhasEntrevistasMesPassado * 100).toFixed(2)}%`
+                                cardData.totalAnalista > cardData.totalAnalistaMesPassado ? (
+                                    `+${((cardData.totalAnalista - cardData.totalAnalistaMesPassado) / cardData.totalAnalistaMesPassado * 100).toFixed(2)}%`
                                 ) : (
-                                    `-${((dataCard.minhasEntrevistasMesPassado - dataCard.minhasEntrevistas) / dataCard.minhasEntrevistasMesPassado * 100).toFixed(2)}%`
+                                    `-${((cardData.totalAnalistaMesPassado - cardData.totalAnalista) / cardData.totalAnalistaMesPassado * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
@@ -199,28 +121,8 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <Typography
                         variant={'h4'}
                     >
-                        {dataCard.minhasEntrevistas}
+                        {cardData.totalAnalista}
                     </Typography>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Média por dia trabalhado
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {
-                                (dataCard.minhasEntrevistas / (chartData ? chartData.series[0].data.filter(quantidade => quantidade > 0).length : 1)).toFixed(2)
-                            }
-                        </Typography>
-                    </Box>
                     <Box
                         display={'flex'}
                         alignItems={'center'}
@@ -236,7 +138,45 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {(dataCard.minhasEntrevistas / qtdDiaUtil).toFixed(2)}
+                            {
+                                (cardData.totalAnalista / 22).toFixed(2)
+                            }
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Canceladas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {cardData.totalCancelados}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Ligações Realizadas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {cardData.totalLigacaoRealizada}
                         </Typography>
                     </Box>
                 </Box>
@@ -250,7 +190,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <Typography
                         variant={'body1'}
                     >
-                        Melhor Rendimento
+                        Analista com melhor desempenho
                     </Typography>
                     <Tooltip title="Comparado ao desempenho do melhor rendimento">
                         <Box
@@ -260,29 +200,25 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             gap={1}
                         >
                             {
-                                dataCard.analistaComMelhorDesempenho.length > 0 ? (
-                                    dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
-                                        <TrendingDown sx={{ color: red[800] }} />
-                                    ) : (
-                                        <TrendingUpIcon sx={{ color: green[800] }} />
-                                    )
-                                ) : null
+                                cardData.melhorAnalista[0].quantidade > cardData.totalAnalista ? (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                ) : (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
+                                )
                             }
                             {
-                                dataCard.analistaComMelhorDesempenho.length > 0 ? (
-                                    dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
-                                        `-${((dataCard.analistaComMelhorDesempenho[0].total - dataCard.minhasEntrevistas) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
-                                    ) : (
-                                        `+${((dataCard.minhasEntrevistas - dataCard.analistaComMelhorDesempenho[0].total) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
-                                    )
-                                ) : null
+                                cardData.melhorAnalista[0].quantidade > cardData.totalAnalista ? (
+                                    `-${((cardData.melhorAnalista[0].quantidade - cardData.totalAnalista) / cardData.melhorAnalista[0].quantidade * 100).toFixed(2)}%`
+                                ) : (
+                                    `+${((cardData.totalAnalista - cardData.melhorAnalista[0].quantidade) / cardData.melhorAnalista[0].quantidade * 100).toFixed(2)}%`
+                                )
                             }
                         </Box>
                     </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {dataCard.analistaComMelhorDesempenho.length > 0 ? dataCard.analistaComMelhorDesempenho[0].total : 0}
+                        {cardData.melhorAnalista[0].quantidade}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -293,14 +229,14 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Média por dia trabalhado
+                            Média por dia útil
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
                             {
-                                (dataCard.analistaComMelhorDesempenho.length > 0 && (dataCard.analistaComMelhorDesempenho[0].total / (chartData ? chartData.series[1].data.filter(quantidade => quantidade > 0).length : 1)).toFixed(2))
+                                (cardData.melhorAnalista[0].quantidade / 22).toFixed(2)
                             }
                         </Typography>
                     </Box>
@@ -313,13 +249,35 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Média por dia util
+                            Total cancelados
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {dataCard.analistaComMelhorDesempenho.length > 0 ? (dataCard.analistaComMelhorDesempenho[0].total / qtdDiaUtil).toFixed(2) : 0}
+                            {
+                                cardData.totalCanceladosMelhorAnalista
+                            }
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total ligações realizadas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {
+                                cardData.totalLigacaoRealizadaMelhorAnalista
+                            }
                         </Typography>
                     </Box>
                 </Box>
@@ -333,7 +291,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <Typography
                         variant={'body1'}
                     >
-                        Total de Entrevistas
+                        Total de Propostas
                     </Typography>
                     <Tooltip title="Comparado ao mês passado">
                         <Box
@@ -342,7 +300,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             alignItems={'center'}
                             gap={1}
                         >
-                            {
+                            {/* {
                                 totalEntrevistas.totalConcluidas > totalEntrevistas.totalConcluidasMesPassado ? (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 ) : (
@@ -355,13 +313,13 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                                 ) : (
                                     `-${((totalEntrevistas.totalConcluidasMesPassado - totalEntrevistas.totalConcluidas) / totalEntrevistas.totalConcluidasMesPassado * 100).toFixed(2)}%`
                                 )
-                            }
+                            } */}
                         </Box>
                     </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {totalEntrevistas.totalConcluidas}
+                        {/* {totalEntrevistas.totalConcluidas} */}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -378,7 +336,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {qtdDiaUtil * 22}
+                            {/* {qtdDiaUtil * 22} */}
                         </Typography>
                     </Box>
                     <Box
@@ -396,7 +354,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {totalEntrevistas.totalCanceladas}
+                            {/* {totalEntrevistas.totalCanceladas} */}
                         </Typography>
                     </Box>
                 </Box>
@@ -417,7 +375,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     borderRadius={2}
                     textAlign={'center'}
                 >
-                    {
+                    {/* {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
@@ -446,7 +404,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                                 width={'100%'}
                             />
                         )
-                    }
+                    } */}
                 </Box>
             </Box>
 
@@ -497,7 +455,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <Typography
                         variant={'h4'}
                     >
-                        {dataCard.minhasEntrevistas}
+                        {/* {dataCard.minhasEntrevistas} */}
                     </Typography>
                 </Box>
                 <Box
@@ -519,7 +477,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             alignItems={'center'}
                             gap={1}
                         >
-                            {
+                            {/* {
                                 dataCard.analistaComMelhorDesempenho.length > 0 ? (
                                     dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
                                         <TrendingDown sx={{ color: red[800] }} />
@@ -536,13 +494,13 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                                         `+${((dataCard.minhasEntrevistas - dataCard.analistaComMelhorDesempenho[0].total) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
                                     )
                                 ) : null
-                            }
+                            } */}
                         </Box>
                     </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {dataCard.analistaComMelhorDesempenho.length > 0 ? dataCard.analistaComMelhorDesempenho[0].total : 0}
+                        {/* {dataCard.analistaComMelhorDesempenho.length > 0 ? dataCard.analistaComMelhorDesempenho[0].total : 0} */}
                     </Typography>
                 </Box>
             </Box>
@@ -562,7 +520,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     borderRadius={2}
                     textAlign={'center'}
                 >
-                    {
+                    {/* {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
@@ -589,7 +547,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                                 width={'100%'}
                             />
                         )
-                    }
+                    } */}
                 </Box>
             </Box>
         </Box>

@@ -5,6 +5,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import gerarPdf from '../../pages/TeleEntrevistas/Pdf/Pdf';
 import { preencherFormulario } from '../../_services/teleEntrevista.service';
 import { getDicionario } from '../../_services/dicionario.service';
+import Toast from '../Toast/Toast';
 
 const style = {
     position: 'absolute',
@@ -24,6 +25,8 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
 
     const [open, setOpen] = useState(false);
     const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
     const [progress, setProgress] = useState(0)
     const [palavrasIncorretas, setPalavrasIncorretas] = useState([])
     const [enviado, setEnviado] = useState(false)
@@ -53,7 +56,16 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
     const corrigirOrtografia = async () => {
         try {
 
+            if (!respostas.divergencia && divergencia) {
+                setMessage('Campo de divergência não preenchido')
+                setSeverity('error')
+                setOpenSnack(true)
+                return
+            }
+
             if (cids.length === 0 && divergencia) {
+                setMessage('Campo de CID não preenchido')
+                setSeverity('error')
                 setOpenSnack(true)
                 return
             }
@@ -97,11 +109,7 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
             <Box m={2}>
                 <Button variant="contained" onClick={corrigirOrtografia} >Enviar</Button>
             </Box>
-            <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
-                <Alert variant='filled' onClose={() => setOpenSnack(false)} severity="error" sx={{ width: '100%' }}>
-                    Cid obrigatório caso haja divergência!
-                </Alert>
-            </Snackbar>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -148,26 +156,14 @@ const ModalFormulario = ({ respostas, subRespostas, simOuNao, pessoa, cids, dive
                     </Box>
                 </Box>
             </Modal>
+            <Toast
+                open={openSnack}
+                onClose={() => setOpenSnack(false)}
+                severity={severity}
+                message={message}
+            />
         </>
     )
 }
 
 export default ModalFormulario
-
-function verificarPlural(palavra) {
-    // Lista de terminações plurais em português
-    const terminacoesPlurais = [
-        "s", "es", "is", "us", "os", "as", "ns", "rs", "x", "z",
-        "is", "ois", "eis", "éis", "uis", "ões"
-    ];
-
-    // Verifica se a palavra termina com uma das terminações plurais
-    for (let i = 0; i < terminacoesPlurais.length; i++) {
-        const terminacao = terminacoesPlurais[i];
-        if (palavra.endsWith(terminacao)) {
-            return true; // Palavra está no plural
-        }
-    }
-
-    return false; // Palavra está no singular
-}

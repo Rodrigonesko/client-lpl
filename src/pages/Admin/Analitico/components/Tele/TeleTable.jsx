@@ -10,6 +10,7 @@ import { quantidadeAnalistasPorMes } from '../../../../../_services/teleEntrevis
 import { blue, green, grey, red } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividualTele from '../../../../../components/ProducaoIndividual/ProduçãoIndividualTele/ProducaoIndividualTele';
+import { getProducaoConcluidasSemAgendar } from '../../../../../_services/teleEntrevistaExterna.service';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -27,24 +28,33 @@ const TeleTable = ({ mes }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const [analistaSelecionado, setAnalistaSelecionado] = useState('')
 
-    const fetchDataAnalistas = async () => {
-        setLoadingTabela(true)
-        try {
-            const result = await quantidadeAnalistasPorMes(mes)
-            console.log(result);
-            setTableData(result.result)
-            setMedia(result.media)
-            setMediaDiasTrabalhados(result.mediaDiasTrabalhados)
-            setMediaTotal(result.mediaTotal)
-
-            setLoadingTabela(false)
-        } catch (error) {
-            console.log(error)
-            setLoadingTabela(false)
-        }
-    }
-
     useEffect(() => {
+
+        const fetchDataAnalistas = async () => {
+            setLoadingTabela(true)
+            try {
+                let result = await quantidadeAnalistasPorMes(mes)
+                let resultSemAgendar = await getProducaoConcluidasSemAgendar(mes)
+                console.log(resultSemAgendar);
+                result.result = result.result.map((item, index) => {
+                    let itemSemAgendar = resultSemAgendar.find(itemSemAgendar => itemSemAgendar._id === item.analista)
+                    if (itemSemAgendar) {
+                        item.semAgendar = itemSemAgendar.total
+                    }
+                    return item
+                })
+                setTableData(result.result)
+                setMedia(result.media)
+                setMediaDiasTrabalhados(result.mediaDiasTrabalhados)
+                setMediaTotal(result.mediaTotal)
+
+                setLoadingTabela(false)
+            } catch (error) {
+                console.log(error)
+                setLoadingTabela(false)
+            }
+        }
+
         fetchDataAnalistas()
     }, [])
 
@@ -93,14 +103,6 @@ const TeleTable = ({ mes }) => {
                                 }}
                             />
                             <Chip
-                                label={`Média Dias Trabalhados: ${mediaDiasTrabalhados?.toFixed(2)}`}
-                                sx={{
-                                    backgroundColor: blue[100],
-                                    color: blue[800],
-                                    fontWeight: 'bold'
-                                }}
-                            />
-                            <Chip
                                 label={`Média Total: ${mediaTotal?.toFixed(2)}`}
                                 sx={{
                                     backgroundColor: blue[100],
@@ -139,7 +141,10 @@ const TeleTable = ({ mes }) => {
                                         Média/Dia util
                                     </TableCell>
                                     <TableCell>
-                                        Média/Dia trabalhado
+                                        Total Divergencias
+                                    </TableCell>
+                                    <TableCell>
+                                        Total Sem Agendar
                                     </TableCell>
                                     <TableCell>
                                     </TableCell>
@@ -215,26 +220,38 @@ const TeleTable = ({ mes }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Typography>
-                                                    {item.mediaDiasTrabalhados >= mediaDiasTrabalhados ? (
+                                                    {item.houveDivergencia}
+                                                </Typography>
+                                                <Typography
+                                                    variant='body2'
+                                                    color={grey[500]}
+                                                >
+                                                    {item.mediaDivergencia.toFixed(2)}%
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {item.semAgendar}
+                                                </Typography>
+                                                <Typography>
+                                                    {item.semAgendar > 0 ? (
+                                                        <Typography
+                                                            variant='body2'
+                                                            color={grey[500]}
+                                                        >
+                                                            {`${((item.semAgendar / item.total) * 100).toFixed(2)}%`}
+                                                        </Typography>
+
+                                                    ) : (
                                                         <Chip
-                                                            label={item.mediaDiasTrabalhados?.toFixed(2)}
+                                                            label='0%'
                                                             sx={{
                                                                 backgroundColor: green[100],
                                                                 color: green[800],
                                                                 fontWeight: 'bold'
                                                             }}
                                                         />
-                                                    ) : (
-                                                        <Chip
-                                                            label={item.mediaDiasTrabalhados?.toFixed(2)}
-                                                            sx={{
-                                                                backgroundColor: red[100],
-                                                                color: red[800],
-                                                                fontWeight: 'bold'
-                                                            }}
-                                                        />
-                                                    )
-                                                    }
+                                                    )}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>

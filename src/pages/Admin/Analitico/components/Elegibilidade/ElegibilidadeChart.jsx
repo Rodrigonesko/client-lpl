@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Chart from "react-apexcharts"
 import { getGraficoPropostasAgendadas } from "../../../../../_services/teleEntrevistaExterna.service"
 import { blue } from "@mui/material/colors"
+import { getChartDataElegibilidade } from "../../../../../_services/elegibilidade.service"
 
 const options = {
     chart: {
@@ -39,18 +40,10 @@ const ElegibilidadeChart = ({ mes }) => {
     useEffect(() => {
         const fetch = async () => {
             setLoadingGrafico(true)
-            const result = await getGraficoPropostasAgendadas(mes)
+            const result = await getChartDataElegibilidade(mes)
             console.log(result);
-            setGraficoData([
-                {
-                    name: 'Agendadas',
-                    data: result,
-                    color: blue[500],
-                    type: 'column'
-                }
-            ])
+            setGraficoData(result.series)
             setLoadingGrafico(false)
-
         }
 
         fetch()

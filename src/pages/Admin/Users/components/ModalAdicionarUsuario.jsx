@@ -5,6 +5,7 @@ import { getAllCelulas } from "../../../../_services/celula.service";
 import { useEffect } from "react";
 import Toast from "../../../../components/Toast/Toast";
 import { createUser } from "../../../../_services/user.service";
+import { createAdmissao } from "../../../../_services/admissaoDemissao.service";
 
 const inputStyle = {
     '& label.Mui-focused': {
@@ -69,6 +70,8 @@ const ModalAdicionarUsuario = ({ setFlushHook }) => {
             setOpenToast(true);
             setOpen(false);
 
+            await createAdmissao(result._id)
+            
             setName('');
             setEmail('');
             setSector('');

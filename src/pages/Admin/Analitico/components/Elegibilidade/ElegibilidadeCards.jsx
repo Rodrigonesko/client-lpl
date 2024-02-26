@@ -124,7 +124,7 @@ const ElegibilidadeCards = ({ mes }) => {
                     }} />}
                 </Typography>
                 <Typography variant="body2" >
-                    Elegibilidades Realizadas
+                    Propostas Realizadas
                 </Typography>
             </Box>
             <Box sx={{
@@ -168,7 +168,7 @@ const ElegibilidadeCards = ({ mes }) => {
                     }} />}
                 </Typography>
                 <Typography variant="body2" >
-                    Elegibilidades Canceladas
+                    Propostas Canceladas
                 </Typography>
             </Box>
             <Box sx={{
@@ -190,7 +190,7 @@ const ElegibilidadeCards = ({ mes }) => {
                     }} />}
                 </Typography>
                 <Typography variant="body2" >
-                    Elegibilidades a Fazer
+                    Propostas a fazer
                 </Typography>
             </Box>
         </Box>
