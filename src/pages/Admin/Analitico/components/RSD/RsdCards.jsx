@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
 import { getAnalaticoElegibilidadeMensal } from "../../../../../_services/elegibilidade.service";
+import { getQuantidadeProducaoRsd } from "../../../../../_services/rsd.service";
 
 const RsdCards = ({ mes }) => {
 
@@ -12,17 +13,27 @@ const RsdCards = ({ mes }) => {
     const [totalData, setTotalData] = useState({
         total: 0,
         totalMesPassado: 0,
-        totalConcluidas: 0,
-        totalConcluidasMesPassado: 0,
-        totalCanceladas: 0,
-        totalCanceladasMesPassado: 0,
-        totalEmAnalise: 0
+        totalPedidosRsd: 0,
+        totalPedidosMesPassadoRsd: 0,
+        totalPedidosIndeferidos: 0,
+        totalPedidosMesPassadoIndeferidos: 0,
+        totalPedidosAltaFrequencia: 0,
+        totalPedidosMesPassadoAltaFrequencia: 0,
+        totalPedidosInativos: 0,
+        totalPedidosMesPassadoInativos: 0,
+        totalPedidosConcluidos: 0,
+        totalPedidosMesPassadoConcluidos: 0,
+        totalPedidosAIniciar: 0,
+        totalPedidosMesPassadoAIniciar: 0,
+        totalPedidosAgendados: 0,
+        totalPedidosAguardandoContato: 0,
+        totalPedidosAguardandoDocs: 0,
     })
 
     useEffect(() => {
         const fetch = async () => {
             setLoading(true)
-            const result = await getAnalaticoElegibilidadeMensal(mes)
+            const result = await getQuantidadeProducaoRsd(mes)
             setTotalData(result)
             console.log(result);
             setLoading(false)
@@ -104,28 +115,28 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
+                                totalData.totalPedidosMesPassadoRsd > totalData.totalPedidosRsd ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
-                                    `-${((totalData.totalConcluidasMesPassado - totalData.totalConcluidas) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                totalData.totalPedidosMesPassadoRsd > totalData.totalPedidosRsd ? (
+                                    `-${((totalData.totalPedidosMesPassadoRsd - totalData.totalPedidosRsd) / totalData.totalPedidosMesPassadoRsd * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((totalData.totalConcluidas - totalData.totalConcluidasMesPassado) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                    `+${((totalData.totalPedidosRsd - totalData.totalPedidosMesPassadoRsd) / totalData.totalPedidosMesPassadoRsd * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
                     </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalConcluidas : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosRsd : <CircularProgress size={20} sx={{
                             color: green[900]
                         }} />}
                     </Typography>
                     <Typography variant="body2" >
-                        Total Pedidos PF
+                        Total Pedidos RSD
                     </Typography>
                 </Box>
                 <Box sx={{
@@ -148,28 +159,28 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
+                                totalData.totalPedidosMesPassadoIndeferidos > totalData.totalPedidosIndeferidos ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    `-${((totalData.totalCanceladasMesPassado - totalData.totalCanceladas) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
+                                totalData.totalPedidosMesPassadoIndeferidos > totalData.totalPedidosIndeferidos ? (
+                                    `-${((totalData.totalPedidosMesPassadoIndeferidos - totalData.totalPedidosIndeferidos) / totalData.totalPedidosMesPassadoIndeferidos * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((totalData.totalCanceladas - totalData.totalCanceladasMesPassado) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
+                                    `+${((totalData.totalPedidosIndeferidos - totalData.totalPedidosMesPassadoIndeferidos) / totalData.totalPedidosMesPassadoIndeferidos * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
                     </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalCanceladas : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosIndeferidos : <CircularProgress size={20} sx={{
                             color: deepPurple[900]
                         }} />}
                     </Typography>
                     <Typography variant="body2" >
-                        Total Pedidos PJ
+                        Total Pedidos Indeferidos
                     </Typography>
                 </Box>
                 <Box sx={{
@@ -192,23 +203,23 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
+                                totalData.totalCanceladasMesPassado > totalData.totalPedidosAltaFrequencia ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    `-${((totalData.totalCanceladasMesPassado - totalData.totalCanceladas) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
+                                totalData.totalPedidosMesPassadoAltaFrequencia > totalData.totalPedidosAltaFrequencia ? (
+                                    `-${((totalData.totalPedidosMesPassadoAltaFrequencia - totalData.totalPedidosAltaFrequencia) / totalData.totalPedidosMesPassadoAltaFrequencia * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((totalData.totalCanceladas - totalData.totalCanceladasMesPassado) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
+                                    `+${((totalData.totalPedidosAltaFrequencia - totalData.totalPedidosMesPassadoAltaFrequencia) / totalData.totalPedidosMesPassadoAltaFrequencia * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
                     </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalEmAnalise : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosAltaFrequencia : <CircularProgress size={20} sx={{
                             color: grey[900]
                         }} />}
                     </Typography>
@@ -236,23 +247,23 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
+                                totalData.totalPedidosMesPassadoInativos > totalData.totalConcluidas ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
-                                    `-${((totalData.totalConcluidasMesPassado - totalData.totalConcluidas) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                totalData.totalPedidosMesPassadoInativos > totalData.totalPedidosInativos ? (
+                                    `-${((totalData.totalPedidosMesPassadoInativos - totalData.totalPedidosInativos) / totalData.totalPedidosMesPassadoInativos * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((totalData.totalConcluidas - totalData.totalConcluidasMesPassado) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                    `+${((totalData.totalPedidosInativos - totalData.totalPedidosMesPassadoInativos) / totalData.totalPedidosMesPassadoInativos * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
                     </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalConcluidas : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosInativos : <CircularProgress size={20} sx={{
                             color: green[900]
                         }} />}
                     </Typography>
@@ -280,23 +291,23 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
+                                totalData.totalPedidosMesPassadoConcluidos > totalData.totalPedidosConcluidos ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
-                                    `-${((totalData.totalConcluidasMesPassado - totalData.totalConcluidas) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                totalData.totalPedidosMesPassadoConcluidos > totalData.totalPedidosConcluidos ? (
+                                    `-${((totalData.totalPedidosMesPassadoConcluidos - totalData.totalPedidosConcluidos) / totalData.totalPedidosMesPassadoConcluidos * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((totalData.totalConcluidas - totalData.totalConcluidasMesPassado) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                    `+${((totalData.totalPedidosConcluidos - totalData.totalPedidosMesPassadoConcluidos) / totalData.totalPedidosMesPassadoConcluidos * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
                     </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalConcluidas : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosConcluidos : <CircularProgress size={20} sx={{
                             color: green[900]
                         }} />}
                     </Typography>
@@ -326,31 +337,8 @@ const RsdCards = ({ mes }) => {
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                totalData.totalMesPassado > totalData.total ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                totalData.totalMesPassado > totalData.total ? (
-                                    `-${((totalData.totalMesPassado - totalData.total) / totalData.totalMesPassado * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((totalData.total - totalData.totalMesPassado) / totalData.totalMesPassado * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.total : <CircularProgress size={20} />}
+                        {!loading ? totalData.totalPedidosAIniciar : <CircularProgress size={20} />}
                     </Typography>
                     <Typography variant="body2" >
                         Total Pedidos A Iniciar
@@ -368,31 +356,8 @@ const RsdCards = ({ mes }) => {
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                totalData.totalConcluidasMesPassado > totalData.totalConcluidas ? (
-                                    `-${((totalData.totalConcluidasMesPassado - totalData.totalConcluidas) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((totalData.totalConcluidas - totalData.totalConcluidasMesPassado) / totalData.totalConcluidasMesPassado * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalConcluidas : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosAgendados : <CircularProgress size={20} sx={{
                             color: green[900]
                         }} />}
                     </Typography>
@@ -412,31 +377,8 @@ const RsdCards = ({ mes }) => {
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    `-${((totalData.totalCanceladasMesPassado - totalData.totalCanceladas) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((totalData.totalCanceladas - totalData.totalCanceladasMesPassado) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalCanceladas : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosAguardandoContato : <CircularProgress size={20} sx={{
                             color: deepPurple[900]
                         }} />}
                     </Typography>
@@ -456,89 +398,13 @@ const RsdCards = ({ mes }) => {
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    `-${((totalData.totalCanceladasMesPassado - totalData.totalCanceladas) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((totalData.totalCanceladas - totalData.totalCanceladasMesPassado) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
                     <Typography variant="h4">
-                        {!loading ? totalData.totalEmAnalise : <CircularProgress size={20} sx={{
+                        {!loading ? totalData.totalPedidosAguardandoDocs : <CircularProgress size={20} sx={{
                             color: grey[900]
                         }} />}
                     </Typography>
                     <Typography variant="body2" >
                         Total de Pedidos Aguardando Doc
-                    </Typography>
-                </Box>
-            </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    mt: 2,
-                }}
-            >
-                <Box sx={{
-                    width: '100%',
-                    height: 150,
-                    mx: 1,
-                    p: 2,
-                    borderRadius: 4,
-                    backgroundColor: grey[100],
-                    color: grey[900],
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                totalData.totalCanceladasMesPassado > totalData.totalCanceladas ? (
-                                    `-${((totalData.totalCanceladasMesPassado - totalData.totalCanceladas) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((totalData.totalCanceladas - totalData.totalCanceladasMesPassado) / totalData.totalCanceladasMesPassado * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
-                    <Typography variant="h4">
-                        {!loading ? totalData.totalEmAnalise : <CircularProgress size={20} sx={{
-                            color: grey[900]
-                        }} />}
-                    </Typography>
-                    <Typography variant="body2" >
-                        Total de Pedidos Indeferidos
                     </Typography>
                 </Box>
             </Box>

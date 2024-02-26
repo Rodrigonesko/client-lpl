@@ -8,7 +8,7 @@ import AnaliticoTele from "./components/Tele/AnaliticoTele";
 import ExpandIcon from '@mui/icons-material/Expand';
 import AnaliticoAgendamento from "./components/Agendamento/AnaliticoAgendamento";
 import AnaliticoElegibilidade from "./components/Elegibilidade/AnaliticoElegibilidade";
-import AnaliticoRsd from "./components/rsd/AnaliticoRsd";
+import AnaliticoRsd from "./components/RSD/AnaliticoRsd";
 
 const tabStyle = {
     '&:hover': {

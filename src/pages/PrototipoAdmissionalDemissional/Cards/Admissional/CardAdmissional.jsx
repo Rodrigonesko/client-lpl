@@ -147,7 +147,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 <TableCell>{item.responsavel}</TableCell>
                                                 <TableCell>{item.acao}</TableCell>
                                                 <TableCell>{item.fornecedor}</TableCell>
-                                                <TableCell>{<TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />}</TableCell>
+                                                <TableCell>{<TextField value={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />}</TableCell>
                                                 <TableCell>
                                                     <FormControl sx={{ minWidth: 150 }}>
                                                         <InputLabel id='Status'>Status</InputLabel>
