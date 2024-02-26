@@ -26,7 +26,7 @@ const RsdTable = ({ mes }) => {
         try {
             const result = await producaoIndividualRsd(mes)
             console.log(result);
-            setTableData(result.contagemAnalistasOrdenada)
+            setTableData(result)
             setLoadingTabela(false)
         } catch (error) {
             console.log(error);
@@ -119,7 +119,7 @@ const RsdTable = ({ mes }) => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    Object.entries(tableData).map((item, index) => (
+                                    Object.entries(tableData.contagemAnalistasOrdenada || {}).map((item, index) => (
                                         <TableRow
                                             key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -145,7 +145,9 @@ const RsdTable = ({ mes }) => {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                {/* {item.media.toFixed(2)} */}
+                                                <Chip
+                                                    label={tableData.pedidosIndeferidosIndividual[item[0]]}
+                                                />
                                             </TableCell>
                                             <TableCell>
                                                 <Tooltip title="Ver detalhes">
