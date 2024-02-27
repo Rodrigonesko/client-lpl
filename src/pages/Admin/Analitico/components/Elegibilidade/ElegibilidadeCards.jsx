@@ -19,7 +19,7 @@ const ElegibilidadeCards = ({ mes }) => {
         totalCanceladasMesPassado: 0,
         totalEmAnalise: 0
     })
-
+    
     useEffect(() => {
         const fetch = async () => {
             setLoading(true)
@@ -28,7 +28,6 @@ const ElegibilidadeCards = ({ mes }) => {
             console.log(result);
             setLoading(false)
         }
-
         fetch()
     }, [mes])
 

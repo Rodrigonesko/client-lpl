@@ -1,11 +1,12 @@
 import { Box, Chip, CircularProgress, Tooltip, Typography } from "@mui/material";
-import { amber, green, grey, red } from "@mui/material/colors";
+import { amber, blue, green, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
 import { getAnalaticoElegibilidadeMensal, getComparativoProducaoElegibilidade, getProducaoIndividualElegibilidade } from "../../../_services/elegibilidade.service";
+import { getAnaliticoElegibilidadeMensalPme } from "../../../_services/elegibilidadePme.service";
 
 const ProducaoIndividualElegi = ({ mes, analista }) => {
 
@@ -29,6 +30,18 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
         totalMesPassado: 0,
         totalCanceladas: 0
     })
+    const [pmeData, setPmeData] = useState({
+        concluidas: 0,
+        concluidasPorAnalista: 0,
+        concluidasPorMelhorAnalista: 0,
+        devolvidas: 0,
+        devolvidasPorAnalista: 0,
+        devolvidasPorMelhorAnalista: 0,
+        melhorAnalista: '',
+        series: [],
+        totalPropostas: 0,
+        totalPropostasMesPassado: 0
+    })
 
     useEffect(() => {
         const fetch = async () => {
@@ -42,7 +55,13 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
             setLoadingChart(false)
         }
 
+        const fetchPme = async () => {
+            const result = await getAnaliticoElegibilidadeMensalPme(mes, analista || name)
+            setPmeData(result)
+            console.log(result);
+        }
         fetch()
+        fetchPme()
     }, [])
 
     return (
@@ -450,27 +469,63 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             alignItems={'center'}
                             gap={1}
                         >
-                            {/* {
-                                dataCard.minhasEntrevistas > dataCard.minhasEntrevistasMesPassado ? (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                ) : (
+                            {
+                                pmeData.totalPropostasMesPassado > pmeData.totalPropostas ? (
                                     <TrendingDown sx={{ color: red[800] }} />
+                                ) : (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                dataCard.minhasEntrevistas > dataCard.minhasEntrevistasMesPassado ? (
-                                    `+${((dataCard.minhasEntrevistas - dataCard.minhasEntrevistasMesPassado) / dataCard.minhasEntrevistasMesPassado * 100).toFixed(2)}%`
+                                pmeData.totalPropostasMesPassado > pmeData.totalPropostas ? (
+                                    `-${((pmeData.totalPropostasMesPassado - pmeData.totalPropostas) / pmeData.totalPropostasMesPassado * 100).toFixed(2)}%`
                                 ) : (
-                                    `-${((dataCard.minhasEntrevistasMesPassado - dataCard.minhasEntrevistas) / dataCard.minhasEntrevistasMesPassado * 100).toFixed(2)}%`
+                                    `+${((pmeData.totalPropostas - pmeData.totalPropostasMesPassado) / pmeData.totalPropostasMesPassado * 100).toFixed(2)}%`
                                 )
-                            } */}
+                            }
                         </Box>
                     </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {/* {dataCard.minhasEntrevistas} */}
+                        {pmeData.totalPropostas}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Concluídas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {pmeData.concluidas}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Devolvidas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {pmeData.devolvidas}
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
                     bgcolor={grey[100]}
@@ -482,7 +537,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <Typography
                         variant={'body1'}
                     >
-                        Propostas PMEs do mês atual
+                        Minhas estatísticas
                     </Typography>
                     <Tooltip title="Comparado ao desempenho do melhor rendimento">
                         <Box
@@ -491,31 +546,62 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             alignItems={'center'}
                             gap={1}
                         >
-                            {/* {
-                                dataCard.analistaComMelhorDesempenho.length > 0 ? (
-                                    dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
-                                        <TrendingDown sx={{ color: red[800] }} />
-                                    ) : (
-                                        <TrendingUpIcon sx={{ color: green[800] }} />
-                                    )
-                                ) : null
+                            {
+                                pmeData.concluidasPorMelhorAnalista > pmeData.concluidasPorAnalista ? (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                ) : (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
+                                )
                             }
                             {
-                                dataCard.analistaComMelhorDesempenho.length > 0 ? (
-                                    dataCard.analistaComMelhorDesempenho[0].total > dataCard.minhasEntrevistas ? (
-                                        `-${((dataCard.analistaComMelhorDesempenho[0].total - dataCard.minhasEntrevistas) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
-                                    ) : (
-                                        `+${((dataCard.minhasEntrevistas - dataCard.analistaComMelhorDesempenho[0].total) / dataCard.analistaComMelhorDesempenho[0].total * 100).toFixed(2)}%`
-                                    )
-                                ) : null
-                            } */}
+                                pmeData.concluidasPorMelhorAnalista > pmeData.concluidasPorAnalista ? (
+                                    `-${((pmeData.concluidasPorMelhorAnalista - pmeData.concluidasPorAnalista) / pmeData.concluidasPorMelhorAnalista * 100).toFixed(2)}%`
+                                ) : (
+                                    `+${((pmeData.concluidasPorAnalista - pmeData.concluidasPorMelhorAnalista) / pmeData.concluidasPorMelhorAnalista * 100).toFixed(2)}%`
+                                )
+                            }
                         </Box>
                     </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {/* {dataCard.analistaComMelhorDesempenho.length > 0 ? dataCard.analistaComMelhorDesempenho[0].total : 0} */}
+                        {pmeData.concluidasPorAnalista}
                     </Typography>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Devolvidas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {pmeData.devolvidasPorAnalista}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
             <Box
@@ -534,34 +620,24 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     borderRadius={2}
                     textAlign={'center'}
                 >
-                    {/* {
+                    {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
                                     plotOptions: {
                                         bar: {
                                             distributed: false,
-                                            horizontal: true
                                         }
                                     },
-                                    colors: [green[500], amber[500]],
-                                    xaxis: {
-                                        categories: chartData ? chartData.dates : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
-                                    }
+                                    colors: [blue[500], red[500]]
                                 }}
                                 type={'bar'}
                                 height={350}
-                                series={[
-                                    {
-                                        name: chartData ? chartData.series[0].name : 'PME',
-                                        data: chartData ? chartData.series[0].data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                                    },
-
-                                ]}
+                                series={pmeData.series || []}
                                 width={'100%'}
                             />
                         )
-                    } */}
+                    }
                 </Box>
             </Box>
         </Box>
