@@ -5,8 +5,8 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useState } from 'react';
 import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
-import ProducaoIndividualElegi from '../../../../../components/ProducaoIndividual/ProducaoIndividualElegi/ProducaoIndividualElegi';
 import { producaoIndividualRsd } from '../../../../../_services/rsd.service';
+import ProducaoIndividualRsd from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividualRsd';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -111,6 +111,9 @@ const RsdTable = ({ mes }) => {
                                         Quantidade de Indeferidos
                                     </TableCell>
                                     <TableCell>
+                                        Quantidade de Cancelados
+                                    </TableCell>
+                                    <TableCell>
                                         Produção
                                     </TableCell>
                                     <TableCell>
@@ -147,6 +150,11 @@ const RsdTable = ({ mes }) => {
                                             <TableCell>
                                                 <Chip
                                                     label={tableData.pedidosIndeferidosIndividual[item[0]]}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={tableData.pedidosCanceladosIndividual[item[0]]}
                                                 />
                                             </TableCell>
                                             <TableCell>
@@ -197,7 +205,7 @@ const RsdTable = ({ mes }) => {
                     </Toolbar>
                 </AppBar>
                 <Container>
-                    <ProducaoIndividualElegi
+                    <ProducaoIndividualRsd
                         mes={mes}
                         analista={analistaSelecionado}
                         key={analistaSelecionado}
