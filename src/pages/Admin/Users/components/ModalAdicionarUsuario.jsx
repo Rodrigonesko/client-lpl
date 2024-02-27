@@ -70,8 +70,8 @@ const ModalAdicionarUsuario = ({ setFlushHook }) => {
             setOpenToast(true);
             setOpen(false);
 
-            await createAdmissao(result._id)
-            
+            await createAdmissao({ _id: result._id })
+
             setName('');
             setEmail('');
             setSector('');
