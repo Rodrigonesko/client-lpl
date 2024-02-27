@@ -11,6 +11,7 @@ import Chart from "react-google-charts";
 import AuthContext from "../../../context/AuthContext";
 import ProducaoIndividualAgendamento from "../../../components/ProducaoIndividual/ProducaoIndividualAgendamento";
 import ProducaoIndividualTele from "../../../components/ProducaoIndividual/ProduçãoIndividualTele/ProducaoIndividualTele";
+import ProducaoIndividualElegi from "../../../components/ProducaoIndividual/ProducaoIndividualElegi/ProducaoIndividualElegi";
 
 const MyProduction = () => {
 
@@ -37,7 +38,7 @@ const MyProduction = () => {
         } else if (celula === 'RSD') {
             setProductionComponent(<MyProductionRsd key={mesAux} mes={mesAux} />)
         } else if (celula === 'Elegibilidade') {
-            setProductionComponent(<MyProductionElegi key={mesAux} mes={mesAux} />)
+            setProductionComponent(<ProducaoIndividualElegi key={mesAux} mes={mesAux} />)
         } else if (celula === 'Sindicância') {
             // ...
         } else if (celula === 'Agendamento') {

@@ -36,7 +36,7 @@ const Modelo1 = ({ data1, data2 }) => {
             7. Das 15:00 às 17:00<br />
             8. Das 17:00 às 19:00<br />
             Qual o melhor horário?<br />
-            Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
+            Informamos que vamos ligar dos números 11 42407120 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
             Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.<br />
         </Typography>
     )
@@ -61,7 +61,7 @@ const Modelo2 = ({ data1, data2 }) => {
             9. Das 15:00 às 17:00<br />
             10. Das 17:00 às 19:00<br />
             Qual o melhor horário?<br />
-            Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
+            Informamos que vamos ligar dos números 11 42407120 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
             Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.<br />
         </Typography>
     )
