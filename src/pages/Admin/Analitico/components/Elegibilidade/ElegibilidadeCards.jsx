@@ -1,5 +1,5 @@
 import { CircularProgress, Tooltip, Typography } from "@mui/material";
-import { blue, deepPurple, green, grey, red } from "@mui/material/colors";
+import { deepPurple, green, grey, red } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';

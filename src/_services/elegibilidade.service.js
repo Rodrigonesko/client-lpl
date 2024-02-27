@@ -205,3 +205,7 @@ export const getChartDataElegibilidade = async (mes) => {
 export const getProducaoIndividualElegibilidade = async (mes, analista) => {
     return await new ApiCall(`/elegibilidade/producaoIndividual/${mes}/${analista}`).get()
 }
+
+export const getComparativoProducaoElegibilidade = async (mes, analista) => {
+    return await new ApiCall(`/elegibilidade/comparativoProducao/${mes}/${analista}`).get()
+}

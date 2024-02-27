@@ -1,13 +1,11 @@
 import { Box, Chip, CircularProgress, Tooltip, Typography } from "@mui/material";
-import { amber, blue, deepPurple, green, grey, indigo, red } from "@mui/material/colors";
+import { amber, green, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
-import { comparativoAgendamentos, producaoIndividualAgendamentos } from "../../../_services/teleEntrevistaExterna.service";
-import { getEntrevistasPorMes, getProducaoIndividualAnexosPorMes } from "../../../_services/teleEntrevista.service";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
-import { getProducaoIndividualElegibilidade } from "../../../_services/elegibilidade.service";
+import { getAnalaticoElegibilidadeMensal, getComparativoProducaoElegibilidade, getProducaoIndividualElegibilidade } from "../../../_services/elegibilidade.service";
 
 const ProducaoIndividualElegi = ({ mes, analista }) => {
 
@@ -26,12 +24,22 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
             { _id: '', quantidade: 0 }
         ]
     })
+    const [dataGeral, setDataGeral] = useState({
+        total: 0,
+        totalMesPassado: 0,
+        totalCanceladas: 0
+    })
 
     useEffect(() => {
         const fetch = async () => {
-            const result = await getProducaoIndividualElegibilidade(mes, analista)
-            console.log(result);
+            setLoadingChart(true)
+            const result = await getProducaoIndividualElegibilidade(mes, analista || name)
+            const resultGeral = await getAnalaticoElegibilidadeMensal(mes)
             setCardData(result)
+            setDataGeral(resultGeral)
+            const comparativoProducao = await getComparativoProducaoElegibilidade(mes, analista || name)
+            setChartData(comparativoProducao)
+            setLoadingChart(false)
         }
 
         fetch()
@@ -64,8 +72,8 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     Produção Individual Elegibilidade
                 </Typography>
             </Box>
-            {/* {
-                dataAgendamento.agendadasAnalista.length !== 0 && dataAgendamento.agendadasAnalista === dataAgendamento.analistaQueMaisAgendou[0].total ? (
+            {
+                cardData.melhorAnalista[0].quantidade !== 0 && cardData.melhorAnalista[0].quantidade === cardData.totalAnalista ? (
                     <>
                         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
                     </>
@@ -73,7 +81,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     <>
                     </>
                 )
-            } */}
+            }
             <Box
                 display={'flex'}
                 flexDirection={'row'}
@@ -300,26 +308,26 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             alignItems={'center'}
                             gap={1}
                         >
-                            {/* {
-                                totalEntrevistas.totalConcluidas > totalEntrevistas.totalConcluidasMesPassado ? (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                ) : (
+                            {
+                                dataGeral.totalMesPassado > dataGeral.total ? (
                                     <TrendingDown sx={{ color: red[800] }} />
+                                ) : (
+                                    <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                totalEntrevistas.totalConcluidas > totalEntrevistas.totalConcluidasMesPassado ? (
-                                    `+${((totalEntrevistas.totalConcluidas - totalEntrevistas.totalConcluidasMesPassado) / totalEntrevistas.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                dataGeral.totalMesPassado > dataGeral.total ? (
+                                    `-${((dataGeral.totalMesPassado - dataGeral.total) / dataGeral.totalMesPassado * 100).toFixed(2)}%`
                                 ) : (
-                                    `-${((totalEntrevistas.totalConcluidasMesPassado - totalEntrevistas.totalConcluidas) / totalEntrevistas.totalConcluidasMesPassado * 100).toFixed(2)}%`
+                                    `+${((dataGeral.total - dataGeral.totalMesPassado) / dataGeral.totalMesPassado * 100).toFixed(2)}%`
                                 )
-                            } */}
+                            }
                         </Box>
                     </Tooltip>
                     <Typography
                         variant={'h4'}
                     >
-                        {/* {totalEntrevistas.totalConcluidas} */}
+                        {dataGeral.total}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -336,7 +344,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {/* {qtdDiaUtil * 22} */}
+                            {/* {22 * 22} */}
                         </Typography>
                     </Box>
                     <Box
@@ -348,13 +356,31 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            total de canceladas
+                            Canceladas
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {/* {totalEntrevistas.totalCanceladas} */}
+                            {dataGeral.totalCanceladas}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Concluídas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {dataGeral.totalConcluidas}
                         </Typography>
                     </Box>
                 </Box>
@@ -375,7 +401,7 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                     borderRadius={2}
                     textAlign={'center'}
                 >
-                    {/* {
+                    {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
@@ -385,26 +411,14 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
                                         }
                                     },
                                     colors: [green[500], amber[500]],
-                                    xaxis: {
-                                        categories: chartData ? chartData.dates : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
-                                    }
                                 }}
                                 type={'bar'}
                                 height={350}
-                                series={[
-                                    {
-                                        name: chartData ? chartData.series[0].name : 'Analista',
-                                        data: chartData ? chartData.series[0].data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                                    },
-                                    {
-                                        name: 'Melhor',
-                                        data: chartData ? chartData.series[1].data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                                    }
-                                ]}
+                                series={chartData || []}
                                 width={'100%'}
                             />
                         )
-                    } */}
+                    }
                 </Box>
             </Box>
 

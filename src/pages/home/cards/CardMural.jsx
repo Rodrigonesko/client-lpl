@@ -8,20 +8,20 @@ const CardMural = ({ flushHook, setFlushHook, dataUser, setLoading }) => {
 
     const [recados, setRecados] = useState([])
 
-    const fetchData = async () => {
-
-        setLoading(true)
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
-            withCredentials: true,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        setRecados(result.data)
-        setLoading(false)
-    }
-
     useEffect(() => {
+
+        const fetchData = async () => {
+            setLoading(true)
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            setRecados(result.data)
+            setLoading(false)
+        }
+
         fetchData()
         setLoading(false)
     }, [flushHook])
