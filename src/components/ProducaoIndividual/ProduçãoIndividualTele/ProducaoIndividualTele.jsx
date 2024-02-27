@@ -159,7 +159,7 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                 </Typography>
             </Box>
             {
-                  dataCard.analistaComMelhorDesempenho.length !== 0 && dataCard.minhasEntrevistas === dataCard.analistaComMelhorDesempenho[0].total   ? (
+                dataCard.analistaComMelhorDesempenho.length !== 0 && dataCard.minhasEntrevistas === dataCard.analistaComMelhorDesempenho[0].total ? (
                     <>
                         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
                     </>
@@ -508,7 +508,7 @@ const ProducaoIndividualTele = ({ mes, analista }) => {
                             <Chart
                                 type='pie'
                                 options={{
-                                    labels: ['Não houve divergencia', 'Houve divergencia'],
+                                    labels: ['Houve divergencia', 'Não houve divergencia'],
                                     inverseColors: false,
                                 }}
                                 series={[divergencias.totalDivergenciaAnalista, divergencias.totalSemDivergenciaAnalista]}

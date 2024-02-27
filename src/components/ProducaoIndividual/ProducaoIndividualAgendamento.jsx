@@ -31,7 +31,12 @@ const ProducaoIndividualAgendamento = ({
         mandouImplantacao: 0,
         totalAnexos: 0,
         totalImplantados: 0,
-        totalMandouImplantacao: 0
+        totalMandouImplantacao: 0,
+        quantidadadeCanceladoHumanizado: 0,
+        quantidadeHumanizado: 0,
+        quantidadeJanela: 0,
+        quantidadeSemWhats: 0,
+
     })
     const [loadingChart, setLoadingChart] = useState(true)
     const [loadingData, setLoadingData] = useState(true)
@@ -44,6 +49,7 @@ const ProducaoIndividualAgendamento = ({
                 mes,
                 name || analista
             )
+            console.log(result);
             setDataAgendamento(result)
             const resultTotalEntrevistas = await getEntrevistasPorMes(mes)
             console.log(resultTotalEntrevistas);
@@ -108,7 +114,7 @@ const ProducaoIndividualAgendamento = ({
                 </Typography>
             </Box>
             {
-                dataAgendamento.agendadasAnalista.length !== 0 &&  dataAgendamento.agendadasAnalista === dataAgendamento.analistaQueMaisAgendou[0].total ? (
+                dataAgendamento.agendadasAnalista.length !== 0 && dataAgendamento.agendadasAnalista === dataAgendamento.analistaQueMaisAgendou[0].total ? (
                     <>
                         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
                     </>
@@ -127,96 +133,187 @@ const ProducaoIndividualAgendamento = ({
                 flexWrap={'wrap'}
             >
                 <Box
-                    bgcolor={blue[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={blue[800]}
-                    width={'200px'}
+                    width={'48%'}
                 >
                     <Typography
-                        variant={'body1'}
+                        sx={{
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Propostas
+                        Meus Agendamentos
                     </Typography>
-                    <Typography
-                        variant={'h4'}
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
                     >
-                        {!loadingData ? dataAgendamento?.totalPropostasMes : <CircularProgress size={'40px'} sx={{ color: blue[800] }} />}
-                    </Typography>
+                        <Typography
+                            variant={'h4'}
+                        >
+                            {!loadingData ? dataAgendamento?.agendadasAnalista : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Humanizado
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataAgendamento?.quantidadeHumanizado : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Janela
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataAgendamento?.quantidadeJanela : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Sem Whats
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataAgendamento?.quantidadeSemWhats : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Cancelado Humanizado
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataAgendamento?.quantidadadeCanceladoHumanizado : ''}
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box
-                    bgcolor={amber[100]}
+                    bgcolor={grey[100]}
                     p={2}
                     borderRadius={2}
-                    color={amber[800]}
-                    width={'200px'}
+                    width={'48%'}
                 >
                     <Typography
-                        variant={'body1'}
+                        sx={{
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Entrevistas
+                        Total Agendadas
                     </Typography>
-                    <Typography
-                        variant={'h4'}
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
                     >
-                        {!loadingData ? dataEntrevistas?.totalConcluidas : <CircularProgress size={'40px'} sx={{ color: amber[800] }} />}
-                    </Typography>
-                </Box>
-                <Box
-                    bgcolor={indigo[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={indigo[800]}
-                    width={'200px'}
-                >
-                    <Typography
-                        variant={'body1'}
+                        <Typography
+                            variant={'h4'}
+                        >
+                            {!loadingData ? dataAgendamento?.totalAgendadas : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
                     >
-                        Agendadas
-                    </Typography>
-                    <Typography
-                        variant={'h4'}
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Recebidas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataAgendamento?.totalPropostasMes : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
                     >
-                        {!loadingData ? dataAgendamento?.totalAgendadas : <CircularProgress size={'40px'} sx={{ color: indigo[800] }} />}
-                    </Typography>
-                </Box>
-                <Box
-                    bgcolor={green[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={green[800]}
-                    width={'200px'}
-                >
-                    <Typography
-                        variant={'body1'}
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Entrevistas Realizadas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataEntrevistas?.totalConcluidas : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
                     >
-                        Meus agendamentos
-                    </Typography>
-                    <Typography
-                        variant={'h4'}
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Total Canceladas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {!loadingData ? dataEntrevistas?.totalCanceladas : ''}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
                     >
-                        {!loadingData ? dataAgendamento?.agendadasAnalista : <CircularProgress size={'40px'} sx={{ color: green[800] }} />}
-                    </Typography>
-                </Box>
-                <Box
-                    bgcolor={deepPurple[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={deepPurple[800]}
-                    width={'200px'}
-                >
-                    <Typography
-                        variant={'body1'}
-                    >
-                        Mais agendamentos
-                    </Typography>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        {!loadingData ? dataAgendamento?.analistaQueMaisAgendou[0]?.total : <CircularProgress size={'40px'} sx={{ color: deepPurple[800] }} />}
-                    </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            SUA Média de agendamentos por dia útil
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                        >
+                            {dataAgendamento?.agendadasAnalista > 0 ? (dataAgendamento?.agendadasAnalista / 22).toFixed(2) : 0}
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
+
             <Box
                 display={'flex'}
                 flexDirection={'row'}
@@ -225,7 +322,7 @@ const ProducaoIndividualAgendamento = ({
                 mt={2}
             >
                 <Box
-                    width={'60%'}
+                    width={'100%'}
                     bgcolor={grey[100]}
                     height={'400px'}
                     p={2}
@@ -263,69 +360,6 @@ const ProducaoIndividualAgendamento = ({
                             />
                         )
                     }
-                </Box>
-                <Box
-                    width={'35%'}
-                    bgcolor={grey[100]}
-                    height={'400px'}
-                    p={2}
-                    borderRadius={2}
-                >
-                    <Typography
-                        variant="body1"
-                    >
-                        Média de agendamentos por dia
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            100
-                        </Typography>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                    >
-                        Média de agendamentos por dia útil
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            {dataAgendamento?.agendadasAnalista > 0 ? (dataAgendamento?.agendadasAnalista / 22).toFixed(2) : 0}
-                        </Typography>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                    >
-                        Comparação com o total de agendamentos
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            {dataAgendamento?.totalAgendadas > 0 ? ((dataAgendamento?.agendadasAnalista / dataAgendamento?.totalAgendadas) * 100).toFixed(2) : 0}%
-                        </Typography>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                    >
-                        Comparação com o analista com mais agendamentos
-                        <Typography
-                            variant={'body2'}
-                            sx={{
-                                color: green[800]
-                            }}
-                        >
-                            {dataAgendamento?.analistaQueMaisAgendou[0]?.total > 0 ? ((dataAgendamento?.agendadasAnalista / dataAgendamento?.analistaQueMaisAgendou[0]?.total) * 100).toFixed(2) : 0}%
-                        </Typography>
-                    </Typography>
-                </Box>
-                <Box>
-
                 </Box>
             </Box>
             <Box
