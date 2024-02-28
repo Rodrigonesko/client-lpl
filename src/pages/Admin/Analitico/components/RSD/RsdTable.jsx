@@ -5,13 +5,12 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useState } from 'react';
 import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
+import ProducaoIndividual from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividual';
 import { producaoIndividualRsd } from '../../../../../_services/rsd.service';
-import ProducaoIndividualRsd from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividualRsd';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 const RsdTable = ({ mes }) => {
 
@@ -22,11 +21,11 @@ const RsdTable = ({ mes }) => {
     const [analistaSelecionado, setAnalistaSelecionado] = useState('')
 
     const getAnalistasRsd = async () => {
-        setLoadingTabela(true)
         try {
+            setLoadingTabela(true)
             const result = await producaoIndividualRsd(mes)
-            console.log(result);
             setTableData(result)
+            // console.log(result);
             setLoadingTabela(false)
         } catch (error) {
             console.log(error);
@@ -161,7 +160,7 @@ const RsdTable = ({ mes }) => {
                                                 <Tooltip title="Ver detalhes">
                                                     <IconButton
                                                         onClick={() => {
-                                                            setAnalistaSelecionado(item.analista)
+                                                            setAnalistaSelecionado(item[0])
                                                             setOpenDialog(true)
                                                         }}
                                                     >
@@ -205,7 +204,7 @@ const RsdTable = ({ mes }) => {
                     </Toolbar>
                 </AppBar>
                 <Container>
-                    <ProducaoIndividualRsd
+                    <ProducaoIndividual
                         mes={mes}
                         analista={analistaSelecionado}
                         key={analistaSelecionado}

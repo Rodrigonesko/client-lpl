@@ -51,7 +51,7 @@ const RsdChart = ({ mes }) => {
         const fetch = async () => {
             setLoadingGrafico(true)
             const result = await getQuantidadePagamentosRsd(mes)
-            console.log(result);
+            // console.log(result);
             setGraficoData([
                 {
                     name: 'Agendadas',
@@ -67,7 +67,7 @@ const RsdChart = ({ mes }) => {
         const gerencial = async () => {
             setLoadingGrafico(true)
             const result = await getQuantidadeStatusGerenciais(mes)
-            console.log(result);
+            // console.log(result);
             setStatusGerencial(result)
             setLoadingGrafico(false)
         }
@@ -75,7 +75,7 @@ const RsdChart = ({ mes }) => {
         const amil = async () => {
             setLoadingGrafico(true)
             const result = await getQuantidadeStatusAmil(mes)
-            console.log(result);
+            // console.log(result);
             setStatusAmil(result)
             setLoadingGrafico(false)
         }
