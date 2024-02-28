@@ -10,25 +10,33 @@ const FinalizacaoDemanda = ({ demanda }) => {
     const dataFim = moment(demanda.data_finalizacao || new Date())
     const diff = dataFim.diff(dataInicio, 'days')
     let data = demanda
-
     const [justificativa, setJustificativa] = useState(demanda.justificativa_finalizacao || '')
     const [loading, setLoading] = useState(false)
     const [toast, setToast] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
+    const [dataFinalizacao, setDataFinalizacao] = useState('')
 
     const handleFinalizar = async () => {
         setLoading(true)
         if (diff > 3 && !justificativa) {
             setToast(true)
             setMessage('Justificativa é obrigatória')
-            setSeverity('warning')
+            setSeverity('error')
+            setLoading(false)
+            return
+        }
+        if (!dataFinalizacao) {
+            setToast(true)
+            setMessage('Data é obrigatória')
+            setSeverity('error')
             setLoading(false)
             return
         }
         const result = await finalizarDemanda({
             id_demanda: demanda.id,
-            justificativa
+            justificativa,
+            data: dataFinalizacao
         })
         if (!result.error) {
             setToast(true)
@@ -59,7 +67,6 @@ const FinalizacaoDemanda = ({ demanda }) => {
                         sx={{
                             display: 'flex',
                             gap: 2,
-                            flexDirection: 'column'
                         }}
                     >
                         <Button
@@ -69,21 +76,33 @@ const FinalizacaoDemanda = ({ demanda }) => {
                         >
                             Finalizar
                         </Button>
-                        {
-                            diff > 3 && (
-                                <TextField
-                                    label="Justificativa"
-                                    variant="outlined"
-                                    size="small"
-                                    multiline
-                                    rows={2}
-                                    color="error"
-                                    value={justificativa}
-                                    onChange={(e) => setJustificativa(e.target.value)}
-                                />
-                            )
-                        }
+                        <TextField
+                            label="Data"
+                            variant="outlined"
+                            size="small"
+                            type="date"
+                            value={dataFinalizacao}
+                            onChange={(e) => setDataFinalizacao(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+
                     </Box>
+                )
+            }
+            {
+                diff > 3 && (
+                    <TextField
+                        label="Justificativa"
+                        variant="outlined"
+                        size="small"
+                        multiline
+                        rows={2}
+                        color="error"
+                        value={justificativa}
+                        onChange={(e) => setJustificativa(e.target.value)}
+                    />
                 )
             }
             {

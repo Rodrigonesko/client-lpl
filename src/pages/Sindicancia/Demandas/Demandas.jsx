@@ -161,7 +161,9 @@ const Demandas = () => {
                 <Box sx={{
                     display: 'flex',
                     alignContent: 'center',
-                    mt: 2
+                    mt: 2,
+                    flexWrap: 'wrap',
+                    gap: 2
                 }}>
                     <FormControl size="small">
                         <InputLabel>Área/Empresa</InputLabel>
@@ -169,7 +171,7 @@ const Demandas = () => {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Area/Empresa"
-                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            sx={{ width: '200px', borderRadius: '10px' }}
                             value={filtros.areaEmpresa}
                             onChange={(e) => { setFiltros({ ...filtros, areaEmpresa: e.target.value }) }}
                         >
@@ -187,7 +189,7 @@ const Demandas = () => {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Tipo de Servico"
-                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            sx={{ width: '200px', borderRadius: '10px' }}
                             onChange={(e) => { setFiltros({ ...filtros, tipoServico: e.target.value }) }}
                             value={filtros.tipoServico}
                         >
@@ -205,7 +207,7 @@ const Demandas = () => {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Status"
-                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            sx={{ width: '200px', borderRadius: '10px' }}
                             onChange={(e) => { setFiltros({ ...filtros, status: e.target.value }) }}
                             value={filtros.status}
                         >
@@ -223,7 +225,7 @@ const Demandas = () => {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Analista Executor"
-                            sx={{ width: '200px', mr: 4, borderRadius: '10px' }}
+                            sx={{ width: '200px', borderRadius: '10px' }}
                             onChange={(e) => { setFiltros({ ...filtros, analista: e.target.value }) }}
                             value={filtros.analista}
                         >
@@ -240,7 +242,6 @@ const Demandas = () => {
                         type='date'
                         variant='outlined'
                         label='Data'
-                        sx={{ mr: 4 }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -357,6 +358,7 @@ const Demandas = () => {
                                 <TableRow>
                                     <TableCell>Código</TableCell>
                                     <TableCell>Investigação</TableCell>
+                                    <TableCell>Responsável</TableCell>
                                     <TableCell>Nome Investigado</TableCell>
                                     <TableCell>Especialidade</TableCell>
                                     <TableCell>Frente</TableCell>
@@ -391,6 +393,20 @@ const Demandas = () => {
                                                 >
                                                     <TableCell>{item.codigo}</TableCell>
                                                     <TableCell>{item.tipo_investigado_nome}</TableCell>
+                                                    <TableCell>
+                                                        {item.usuario_distribuicao_nome}
+                                                        <Typography
+                                                            variant="body2"
+                                                            color={grey[500]}
+                                                        >
+                                                            {
+                                                                item.usuario_distribuicao_nome !== item.usuario_executor_nome ? (
+                                                                    item.usuario_executor_nome
+                                                                ) : ''
+                                                            }
+                                                        </Typography>
+
+                                                    </TableCell>
                                                     <TableCell>{item.nome}</TableCell>
                                                     <TableCell>{item.especialidade}</TableCell>
                                                     <TableCell>{item.tipo_servico_nome}</TableCell>

@@ -48,9 +48,6 @@ const ModalCriarTipoIrregularidade = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleClickOpen}
-                sx={{
-                    ml: 2
-                }}
             >
                 Irregularidades
             </Button>
