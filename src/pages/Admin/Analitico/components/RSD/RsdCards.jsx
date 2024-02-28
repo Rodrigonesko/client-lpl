@@ -35,7 +35,7 @@ const RsdCards = ({ mes }) => {
             setLoading(true)
             const result = await getQuantidadeProducaoRsd(mes)
             setTotalData(result)
-            console.log(result);
+            // console.log(result);
             setLoading(false)
         }
 

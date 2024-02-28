@@ -5,10 +5,10 @@ import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
-import { getAnalaticoElegibilidadeMensal, getComparativoProducaoElegibilidade, getProducaoIndividualElegibilidade } from "../../../_services/elegibilidade.service";
-import { getAnaliticoElegibilidadeMensalPme } from "../../../_services/elegibilidadePme.service";
+import { getComparativoProducaoElegibilidade } from "../../../_services/elegibilidade.service";
+import { getAnaliticoRsdMensal, getComparativoProducaoRsd, getProducaoIndividualRsd } from "../../../_services/rsd.service";
 
-const ProducaoIndividualRsd = ({ mes, analista }) => {
+const ProducaoIndividual = ({ mes, analista }) => {
 
     const { name } = useParams()
 
@@ -19,8 +19,10 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
         totalAnalistaMesPassado: 0,
         totalCancelados: 0,
         totalCanceladosMelhorAnalista: 0,
-        totalLigacaoRealizada: 0,
-        totalLigacaoRealizadaMelhorAnalista: 0,
+        totalConcluido: 0,
+        totalIndeferido: 0,
+        totalIndeferidosMelhorAnalista: 0,
+        totalConcluidoMelhorAnalista: 0,
         melhorAnalista: [
             { _id: '', quantidade: 0 }
         ]
@@ -28,40 +30,24 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
     const [dataGeral, setDataGeral] = useState({
         total: 0,
         totalMesPassado: 0,
-        totalCanceladas: 0
-    })
-    const [pmeData, setPmeData] = useState({
-        concluidas: 0,
-        concluidasPorAnalista: 0,
-        concluidasPorMelhorAnalista: 0,
-        devolvidas: 0,
-        devolvidasPorAnalista: 0,
-        devolvidasPorMelhorAnalista: 0,
-        melhorAnalista: '',
-        series: [],
-        totalPropostas: 0,
-        totalPropostasMesPassado: 0
+        totalCanceladas: 0,
+        totalConcluidas: 0,
+        totalIndeferidas: 0,
     })
 
     useEffect(() => {
         const fetch = async () => {
             setLoadingChart(true)
-            const result = await getProducaoIndividualElegibilidade(mes, analista || name)
-            const resultGeral = await getAnalaticoElegibilidadeMensal(mes)
+            const result = await getProducaoIndividualRsd(mes, analista || name)
+            const resultGeral = await getAnaliticoRsdMensal(mes)
             setCardData(result)
             setDataGeral(resultGeral)
-            const comparativoProducao = await getComparativoProducaoElegibilidade(mes, analista || name)
-            setChartData(comparativoProducao)
+            console.log(resultGeral);
+            const comparativoPedido = await getComparativoProducaoRsd(mes, analista || name)
+            setChartData(comparativoPedido)
             setLoadingChart(false)
         }
-
-        const fetchPme = async () => {
-            const result = await getAnaliticoElegibilidadeMensalPme(mes, analista || name)
-            setPmeData(result)
-            console.log(result);
-        }
         fetch()
-        fetchPme()
     }, [])
 
     return (
@@ -179,13 +165,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total Canceladas
+                            Total Indeferidas
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {cardData.totalCancelados}
+                            {cardData.totalIndeferido}
                         </Typography>
                     </Box>
                     <Box
@@ -197,13 +183,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total Ligações Realizadas
+                            Total Canceladas
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {cardData.totalLigacaoRealizada}
+                            {cardData.totalCancelados}
                         </Typography>
                     </Box>
                 </Box>
@@ -262,9 +248,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {
-                                (cardData.melhorAnalista[0].quantidade / 22).toFixed(2)
-                            }
+                            {(cardData.melhorAnalista[0].quantidade / 22).toFixed(2)}
                         </Typography>
                     </Box>
                     <Box
@@ -276,15 +260,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total cancelados
+                            Total Indeferidos
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {
-                                cardData.totalCanceladosMelhorAnalista
-                            }
+                            {cardData.totalIndeferidosMelhorAnalista}
                         </Typography>
                     </Box>
                     <Box
@@ -296,15 +278,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total ligações realizadas
+                            Total Canceladas
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {
-                                cardData.totalLigacaoRealizadaMelhorAnalista
-                            }
+                            {cardData.totalCanceladosMelhorAnalista}
                         </Typography>
                     </Box>
                 </Box>
@@ -318,7 +298,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     <Typography
                         variant={'body1'}
                     >
-                        Total de Propostas
+                        Total de Pedidos
                     </Typography>
                     <Tooltip title="Comparado ao mês passado">
                         <Box
@@ -357,13 +337,31 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            meta para cada analista
+                            Concluídas
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {/* {22 * 22} */}
+                            {dataGeral.totalConcluidas}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        gap={1}
+                        justifyContent={'space-between'}
+                    >
+                        <Typography
+                            variant={'body2'}
+                        >
+                            Indeferidas
+                        </Typography>
+                        <Typography
+                            variant={'body2'}
+                            fontWeight={'bold'}
+                        >
+                            {dataGeral.totalIndeferidas}
                         </Typography>
                     </Box>
                     <Box
@@ -382,24 +380,6 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             fontWeight={'bold'}
                         >
                             {dataGeral.totalCanceladas}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Concluídas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {dataGeral.totalConcluidas}
                         </Typography>
                     </Box>
                 </Box>
@@ -440,209 +420,9 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     }
                 </Box>
             </Box>
-
-            <Box
-                display={'flex'}
-                flexDirection={'row'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-                mt={2}
-                gap={2}
-                flexWrap={'wrap'}
-            >
-                <Box
-                    bgcolor={grey[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={grey[800]}
-                    width={'30%'}
-                >
-                    <Typography
-                        variant={'body1'}
-                    >
-                        Quantidade total de Propostas PME
-                    </Typography>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                pmeData.totalPropostasMesPassado > pmeData.totalPropostas ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                pmeData.totalPropostasMesPassado > pmeData.totalPropostas ? (
-                                    `-${((pmeData.totalPropostasMesPassado - pmeData.totalPropostas) / pmeData.totalPropostasMesPassado * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((pmeData.totalPropostas - pmeData.totalPropostasMesPassado) / pmeData.totalPropostasMesPassado * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        {pmeData.totalPropostas}
-                    </Typography>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Concluídas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {pmeData.concluidas}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Devolvidas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {pmeData.devolvidas}
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box
-                    bgcolor={grey[100]}
-                    p={2}
-                    borderRadius={2}
-                    color={grey[800]}
-                    width={'30%'}
-                >
-                    <Typography
-                        variant={'body1'}
-                    >
-                        Minhas estatísticas
-                    </Typography>
-                    <Tooltip title="Comparado ao desempenho do melhor rendimento">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                pmeData.concluidasPorMelhorAnalista > pmeData.concluidasPorAnalista ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                pmeData.concluidasPorMelhorAnalista > pmeData.concluidasPorAnalista ? (
-                                    `-${((pmeData.concluidasPorMelhorAnalista - pmeData.concluidasPorAnalista) / pmeData.concluidasPorMelhorAnalista * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((pmeData.concluidasPorAnalista - pmeData.concluidasPorMelhorAnalista) / pmeData.concluidasPorMelhorAnalista * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        {pmeData.concluidasPorAnalista}
-                    </Typography>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Devolvidas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {pmeData.devolvidasPorAnalista}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            -
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                        </Typography>
-                    </Box>
-                </Box>
-            </Box>
-            <Box
-                width={'100%'}
-                display={'flex'}
-                flexDirection={'row'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-                mt={2}
-            >
-                <Box
-                    width={'100%'}
-                    bgcolor={grey[100]}
-                    height={'400px'}
-                    p={2}
-                    borderRadius={2}
-                    textAlign={'center'}
-                >
-                    {
-                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
-                            <Chart
-                                options={{
-                                    plotOptions: {
-                                        bar: {
-                                            distributed: false,
-                                        }
-                                    },
-                                    colors: [blue[500], red[500]]
-                                }}
-                                type={'bar'}
-                                height={350}
-                                series={pmeData.series || []}
-                                width={'100%'}
-                            />
-                        )
-                    }
-                </Box>
-            </Box>
         </Box>
     )
 
 }
 
-export default ProducaoIndividualRsd
+export default ProducaoIndividual

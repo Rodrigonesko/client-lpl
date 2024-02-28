@@ -205,3 +205,15 @@ export const getQuantidadeStatusAmil = async (mes) => {
 export const getQuantidadePedidosIndeferidos = async (mes) => {
     return await new ApiCall(`/rsd/quantidadePedidosIndeferidos/${mes}`).get()
 }
+
+export const getAnaliticoRsdMensal = async (mes) => {
+    return await new ApiCall(`/rsd/analitico/${mes}`).get()
+}
+
+export const getProducaoIndividualRsd = async (mes, analista) => {
+    return await new ApiCall(`/rsd/producaoIndividual/${mes}/${analista}`).get()
+}
+
+export const getComparativoProducaoRsd = async (mes, analista) => {
+    return await new ApiCall(`/rsd/comparativoProducao/${mes}/${analista}`).get()
+}
