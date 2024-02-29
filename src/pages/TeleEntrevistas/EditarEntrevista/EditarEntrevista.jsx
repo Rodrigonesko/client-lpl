@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { Form, useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import './EditarEntrevista.css'
-import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button } from '@mui/material'
+import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button, FormControlLabel, Checkbox, Chip } from '@mui/material'
 import Toast from '../../../components/Toast/Toast'
+import { getCids } from '../../../_services/teleEntrevista.service'
 
 const EditarEntrevista = () => {
 
@@ -26,7 +27,8 @@ const EditarEntrevista = () => {
     const [flushHook, setFlushHook] = useState(false)
     const [qualDivergencia, setQualDivergencia] = useState('')
     const [patologias, setPatologias] = useState('')
-    const [cids, setCids] = useState('')
+    const [cids, setCids] = useState([])
+    const [cidsList, setCidsList] = useState([])
     const [respostas, setRespostas] = useState({})
 
     const buscarPerguntas = async () => {
@@ -74,6 +76,17 @@ const EditarEntrevista = () => {
         }
     }
 
+    const fetchCids = async (cid) => {
+        try {
+            if (cid.length < 3) return
+            const result = await getCids(cid)
+            console.log(result.cids);
+            setCidsList(result.cids)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         setFlushHook(false)
         const buscarDadosEntrevista = async () => {
@@ -91,7 +104,7 @@ const EditarEntrevista = () => {
                 setCpf(result.data.proposta.cpf)
                 setQualDivergencia(result.data.proposta.divergencia)
                 setPatologias(result.data.proposta.patologias)
-                setCids(result.data.proposta.cids)
+                setCids(result.data.proposta.cids.split(', '))
 
             } catch (error) {
                 console.log(error);
@@ -205,19 +218,49 @@ const EditarEntrevista = () => {
                                 />
                             </Box>
                             <Box m={1}>
+                                {
+                                    cids.map(e => {
+                                        return (
+                                            <Chip
+                                                label={e}
+                                            />
+                                        )
+                                    })
+                                }
                                 <Typography>CID:</Typography>
                                 <TextField
                                     id="cids"
                                     multiline
                                     size='small'
-                                    value={cids}
                                     onChange={e => {
-                                        setCids(e.target.value)
-                                        handleChange(e.target)
+                                        fetchCids(e.target.value)
                                     }}
                                     fullWidth
                                     sx={{ marginBottom: '10px' }}
                                 />
+                                {
+                                    cidsList.map(e => {
+                                        return (
+                                            <Box>
+                                                <FormControlLabel
+                                                    control={<Checkbox />}
+                                                    value={`${e.subCategoria} - ${e.descricao}`}
+                                                    label={`${e.subCategoria} - ${e.descricao}`}
+                                                    checked={cids.includes(`${e.subCategoria} - ${e.descricao}`)}
+                                                    onChange={e => {
+                                                        if (cids.includes(e.target.value)) {
+                                                            cids.splice(cids.indexOf(e.target.value), 1)
+                                                        } else {
+                                                            cids.push(e.target.value)
+                                                        }
+                                                        handleChange({ id: 'cids', value: cids })
+
+                                                    }}
+                                                />
+                                            </Box>
+                                        )
+                                    })
+                                }
                             </Box>
                         </Box>
                     </Box>

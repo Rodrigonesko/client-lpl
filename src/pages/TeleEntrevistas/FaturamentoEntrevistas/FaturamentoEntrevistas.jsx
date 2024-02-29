@@ -281,63 +281,10 @@ const FaturamentoEntrevistas = () => {
                             <Button variant='contained' onClick={marcarTodos}>Marcar Todos</Button>
                             <Button disabled={loading} endIcon={loading && <CircularProgress size={'20px'} />} variant='contained' onClick={gerarRelatorio}>Report</Button>
                         </div>
-                        {/* <div className="entrevistas-faturamento">
-                            {
-                                loading ? (
-                                    <CircularProgress style={{ position: 'absolute', top: '40%' }} />
-                                ) : null
-                            }
-                            <table className="table">
-                                <thead className="table-header">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Analista</th>
-                                        <th>Tipo</th>
-                                        <th>Proposta</th>
-                                        <th>Nome</th>
-                                        <th>Data Entrevista</th>
-                                        <th>Faturado</th>
-                                        <th>Nota Fiscal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        entrevistas.map(e => {
-                                            return (
-                                                <tr key={e._id}>
-                                                    <td className="id-faturamento">{e._id}</td>
-                                                    <td>{e.analista}</td>
-                                                    <td className="tipo">{e.tipo}</td>
-                                                    <td>{e.proposta}</td>
-                                                    <td>{e.nome}</td>
-                                                    <td>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>
-                                                    <td><input type="checkbox" name="" id="" className="check-faturado" defaultChecked={e.faturado === 'Faturado'} /></td>
-                                                    <td><input type="text" name="" id="" className="td-nf" defaultValue={e.nf} /></td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                            </table>
-                        </div> */}
                         <div>
                             <button onClick={realizarFaturamento}>Faturar</button>
                         </div>
                     </div>
-                    {/* <Modal
-                        isOpen={modalIsOpen}
-                        onRequestClose={closeModal}
-                        contentLabel="Exemplo"
-                        overlayClassName='modal-overlay'
-                        className='modal-content'>
-                        <div className="title">
-                            <h2>Faturamento feito com sucesso!</h2>
-                        </div>
-                        <button onClick={() => {
-                            closeModal()
-                            window.location.reload()
-                        }}>Fechar</button>
-                    </Modal> */}
                     <Dialog
                         open={modalIsOpen}
                         onClose={closeModal}
