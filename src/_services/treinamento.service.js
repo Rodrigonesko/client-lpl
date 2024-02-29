@@ -1,6 +1,5 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const getAllTreinamentos = async () => {
     return await new ApiCall('/treinamento').get()

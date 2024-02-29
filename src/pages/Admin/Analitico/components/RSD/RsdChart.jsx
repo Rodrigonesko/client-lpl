@@ -143,21 +143,19 @@ const RsdChart = ({ mes }) => {
             </Box>
             <Box
                 display={'flex'}
-                flexDirection={'row'}
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 mt={2}
             >
                 <Box
-                    width={'49%'}
+                    width={'30%'}
                     bgcolor={grey[100]}
-                    height={'400px'}
                     p={2}
                     borderRadius={2}
-                    textAlign={'center'}
+                    minHeight={'400px'}
                 >
                     <Divider size='small'  >
-                        <Chip label='Relação entre Status Gerenciais' color='primary' sx={{ fontSize: '20px', p: 2 }} />
+                        <Chip label='Relação entre Status Gerenciais' color='primary' />
                     </Divider>
                     <Typography
                         variant="body1"
@@ -250,39 +248,19 @@ const RsdChart = ({ mes }) => {
                             {statusGerencial.protocoloCancelado}
                         </Typography>
                     </Typography>
-                    {/* {
-                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
-                            <Chart
-                                type='pie'
-                                options={{
-                                    labels: ['Aguardando Comprovante',
-                                        'Aguardando Retorno Contato',
-                                        'Comprovante Correto',
-                                        'Devolvido Amil',
-                                        'Pagamento Não Realizado',
-                                        'Pago pela Amil sem Comprovante',
-                                        'Protocolo Cancelado'],
-                                    inverseColors: false,
-                                }}
-                                series={[2, 10, 12, 14, 15, 16]}
-                                // width={'100%'}
-                                height={350}
-                            />
-                        )
-                    } */}
                 </Box>
                 <Box
-                    width={'49%'}
+                    width={'69%'}
                     bgcolor={grey[100]}
-                    height={'400px'}
                     p={2}
                     borderRadius={2}
                     textAlign={'center'}
+                    minHeight={'400px'}
                 >
                     <Divider size='small'  >
-                        <Chip label='Relação entre os Status Amil' color='primary' sx={{ fontSize: '20px', p: 2 }} />
+                        <Chip label='Relação entre os Status Amil' color='primary' />
                     </Divider>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }} >
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} >
                         <Typography
                             variant="body1"
                         >
@@ -340,30 +318,6 @@ const RsdChart = ({ mes }) => {
                             PAGAMENTO LIBERADO - {statusAmil.pagamentoLiberado}
                         </Typography>
                     </Box>
-                    {/* {
-                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
-                            <Chart
-                                type='pie'
-                                options={{
-                                    labels: ['A Iniciar',
-                                        'AGD - Em ligação beneficiaria afirma ter pago em dinheiro, solicitando declaração de quitação',
-                                        'AGD - Em ligação beneficiaria afirma ter pago, solicitando comprovante',
-                                        'CANCELAMENTO - Comprovante não Recebido',
-                                        'CANCELAMENTO - Não reconheçe Procedimento/Consulta',
-                                        'CANCELAMENTO - Sem retorno pós 5 dias úteis',
-                                        'Devolvido Amil',
-                                        'E-MAIL - Sem sucesso de contrato pós 3 tentativas, solicitado retorno',
-                                        'INDEFERIR - Em contato beneficiário confirma que não realizou pagamento',
-                                        'INDEFERIR - Em contato beneficiário foi confirmado fracionamento de Nota Fiscal',
-                                        'PAGAMENTO LIBERADO'],
-                                    inverseColors: false,
-                                }}
-                                series={[12, 54, 10, 10, 10, 10, 10, 10, 10, 23, 175]}
-                                // width={'100%'}
-                                height={350}
-                            />
-                        )
-                    } */}
                 </Box>
             </Box >
         </>

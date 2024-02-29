@@ -1,6 +1,5 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const showPropostas = async () => {
     return await new ApiCall('/elegibilidade/show').get()

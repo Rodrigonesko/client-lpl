@@ -1,6 +1,5 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const buscarInformacoesMo = async (mo) => {
     return await new ApiCall(`/rsd/pessoas/${mo}`).get()

@@ -9,6 +9,7 @@ import ExpandIcon from '@mui/icons-material/Expand';
 import AnaliticoAgendamento from "./components/Agendamento/AnaliticoAgendamento";
 import AnaliticoElegibilidade from "./components/Elegibilidade/AnaliticoElegibilidade";
 import AnaliticoRsd from "./components/RSD/AnaliticoRsd";
+import AnaliticoSindicancia from "./components/Sindicancia/AnaliticoSindicancia";
 
 const tabStyle = {
     '&:hover': {
@@ -93,14 +94,18 @@ const Analitico = () => {
                             color: tab === 'Tele Entrevista' ? red[500] : red[200],
                         }} />
                     } />
-                    <Tab label="RSD" value="RSD" sx={tabStyle} />
                     <Tab label="Agendamento" value="Agendamento" sx={tabStyle} />
+                    <Tab label="RSD" value="RSD" sx={tabStyle} />
                     <Tab label="Elegibilidade" value="Elegibilidade" sx={tabStyle} />
+                    <Tab label="Sindicância" value={'Sindicancia'} sx={tabStyle} />
+
                 </Tabs>
                 {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />}
                 {tab === 'RSD' && <AnaliticoRsd key={'RSD'} />}
                 {tab === 'Agendamento' && <AnaliticoAgendamento key={'Agendamento'} />}
                 {tab === 'Elegibilidade' && <AnaliticoElegibilidade key={'Elegibilidade'} />}
+                {tab === 'Sindicancia' && <AnaliticoSindicancia key={'Sindicancia'} />}
+
             </Container>
         </Sidebar>
     )

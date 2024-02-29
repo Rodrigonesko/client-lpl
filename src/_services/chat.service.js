@@ -1,7 +1,6 @@
 import { ApiCall } from "./api";
-import { getCookie } from "react-use-cookie";
 const URL_API = process.env.REACT_APP_CHAT_SERVICE
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const sendMessageInterno = async ({ receptor, mensagem, chatId, resposta }) => {
     return await new ApiCall('/sendMessage', URL_API).post({ receptor, mensagem, chatId, resposta })

@@ -125,7 +125,8 @@ const Todas = () => {
                         '2º CTTO': contato2,
                         '3º CTTO': contato3,
                         'OBSERVAÇÕES DO CONTATO': e.observacoes,
-                        'Analista': e.analistaAmil || ''
+                        'Analista': e.analistaAmil || '',
+                        'Data Inclusão': moment(e.createdAt).format('DD/MM/YYYY'),
                     }
                 )
             })

@@ -4,7 +4,6 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
-import { getAnalaticoElegibilidadeMensal } from "../../../../../_services/elegibilidade.service";
 import { getQuantidadeProducaoRsd } from "../../../../../_services/rsd.service";
 
 const RsdCards = ({ mes }) => {
