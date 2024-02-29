@@ -62,7 +62,8 @@ const FecharHorarios = ({ responsaveis }) => {
                 setHorarioDisponiveis([])
             }
         } catch (error) {
-            setMessage('Erro ao fechar dia!')
+            console.log(error)
+            setMessage(error.response.data.message)
             setSeverity("error")
             setToastOpen(true)
         }

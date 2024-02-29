@@ -88,7 +88,8 @@ const ReabrirHorarios = ({ responsaveis }) => {
             }
 
         } catch (error) {
-            setMessage('Erro!')
+            console.log(error)
+            setMessage(error.response.data.msg)
             setSeverity("error")
             setToastOpen(true)
         }
