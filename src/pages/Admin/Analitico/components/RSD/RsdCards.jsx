@@ -202,7 +202,7 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalCanceladasMesPassado > totalData.totalPedidosAltaFrequencia ? (
+                                totalData.totalPedidosMesPassadoAltaFrequencia > totalData.totalPedidosAltaFrequencia ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
@@ -246,7 +246,7 @@ const RsdCards = ({ mes }) => {
                             gap={1}
                         >
                             {
-                                totalData.totalPedidosMesPassadoInativos > totalData.totalConcluidas ? (
+                                totalData.totalPedidosMesPassadoInativos > totalData.totalPedidosInativos ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
