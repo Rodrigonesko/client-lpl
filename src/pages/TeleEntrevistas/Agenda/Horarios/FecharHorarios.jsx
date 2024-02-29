@@ -108,7 +108,7 @@ const FecharHorarios = ({ responsaveis }) => {
             }} label='Dia' focused value={data} />
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
                 {
-                    horariosDisponiveis.map(value => {
+                    horariosDisponiveis.sort().map(value => {
                         const labelId = `checkbox-list-label-${value}`;
                         return (
                             <ListItem

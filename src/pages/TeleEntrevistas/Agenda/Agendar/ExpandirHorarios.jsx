@@ -25,7 +25,7 @@ const ExpandirHorarios = ({ analistasDisponiveis, dia }) => {
                             <Box component={Paper} p={1} mb={1} key={index}>
                                 <strong>{item.analista + ': '}</strong>
                                 {
-                                    item.horarios.map((horario) => {
+                                    item.horarios.sort().map((horario) => {
                                         return <span key={horario} style={{ color: 'gray' }}>{horario} - </span>
                                     })
                                 }
