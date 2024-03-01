@@ -42,6 +42,9 @@ const ModalRelatorio = () => {
         xls += "<th>Analista Demandante</th>"
         xls += "<th>Analista Responsável</th>"
         xls += "<th>Analista Executor</th>"
+        xls += "<th>Complemento</th>"
+        xls += "<th>Data Complemente</th>"
+        xls += "<th>Motivo</th>"
         result[0].irregularidadesObj.forEach((item) => {
             xls += "<th>" + item.nome + "</th>"
         })
@@ -65,6 +68,9 @@ const ModalRelatorio = () => {
             xls += `<td>${item.usuario_criador_nome || ''}</td>`
             xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
             xls += `<td>${item.usuario_executor_nome || ''}</td>`
+            xls += `<td>${item.complementacao ? 'Sim' : 'Não'}</td>`
+            xls += `<td>${(item.data_complementacao || item.data_complementacao !== null) ? moment(item.data_complementacao).format('DD/MM/YYYY') : ''}</td>`
+            xls += `<td>${item.motivo || ''}</td>`
             item.irregularidadesObj.forEach((irregularidade) => {
                 xls += `<td>${irregularidade.value || ''}</td>`
             })

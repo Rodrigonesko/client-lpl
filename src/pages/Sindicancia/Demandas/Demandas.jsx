@@ -423,7 +423,7 @@ const Demandas = () => {
                                                     </TableCell>
                                                     <TableCell>{item.area_empresa_nome}</TableCell>
                                                     <TableCell>
-                                                        <DrawerDetails demanda={item} setSelectedDemanda={setSelectedDemanda} />
+                                                        <DrawerDetails data={item} setSelectedDemanda={setSelectedDemanda} />
                                                     </TableCell>
                                                 </TableRow>
                                             )

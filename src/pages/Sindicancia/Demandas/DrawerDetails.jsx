@@ -1,16 +1,22 @@
 import { Add, ArrowForward, Close, Delete, Expand, ExpandMoreOutlined } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, CircularProgress, Drawer, FormControlLabel, FormGroup, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { BiCollapse } from "react-icons/bi";
 import { createBeneficiario, createIrregularidade, createPrestador, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
 import Toast from "../../../components/Toast/Toast";
 import Agenda from "./Agenda";
 import ValueInput from "./ValueInput";
 import FinalizacaoDemanda from "./FinalizacaoDemanda";
+import Complementacao from "./Complementacao";
+import AuthContext from "../../../context/AuthContext";
 
-const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
+const DrawerDetails = ({ data, setSelectedDemanda }) => {
 
+    const { acessos } = useContext(AuthContext);
+
+
+    const [demanda, setDemanda] = useState(data);
     const [open, setOpen] = useState(false);
     const [size, setSize] = useState('35%');
     const [beneficiarios, setBeneficiarios] = useState([]);
@@ -384,8 +390,38 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
                     <AccordionDetails>
                         <Box>
                             <FormGroup>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        width: '100%',
+                                        mt: 1
+                                    }}
+                                >
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={irregularidades.some(i => i.nome === "Sem Irregularidade")}
+                                                disabled={loading}
+                                            />
+                                        }
+                                        label={"Sem Irregularidade"}
+                                        onChange={() => handleToggleIrregularidade(0, "Sem Irregularidade", irregularidades.find(i => i.nome === "Sem Irregularidade")?.id)}
+                                    />
+                                    {
+                                        loadingIrregularidade && irregularidadeId === 0 ? <CircularProgress size={'20px'} /> : null
+                                    }
+                                </Box>
                                 {
-                                    tiposIrregularidades.map((tipo, index) => (
+                                    tiposIrregularidades.sort((a, b) => {
+                                        if (a.nome > b.nome) {
+                                            return 1;
+                                        }
+                                        if (a.nome < b.nome) {
+                                            return -1;
+                                        }
+                                        return 0;
+                                    }).map((tipo, index) => (
                                         <Box
                                             key={index}
                                             sx={{
@@ -410,7 +446,6 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
                                                 loadingIrregularidade && irregularidadeId === tipo.id ? <CircularProgress size={'20px'} /> : null
                                             }
                                         </Box>
-
                                     ))
                                 }
                             </FormGroup>
@@ -431,12 +466,13 @@ const DrawerDetails = ({ demanda, setSelectedDemanda }) => {
                         value={valor}
                     />
                 </Box>
+                {
+                    acessos.administrador ? <Complementacao data={demanda} setData={setDemanda} /> : null
+                }
                 <FinalizacaoDemanda
                     demanda={demanda}
                 />
-
             </Drawer>
-
             <Toast
                 message={msg}
                 severity={severity}
