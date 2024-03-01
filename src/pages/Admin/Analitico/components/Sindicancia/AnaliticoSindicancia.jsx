@@ -10,7 +10,11 @@ const AnaliticoSindicancia = () => {
     const [mes, setMes] = useState(moment().format('YYYY-MM'))
 
     return (
-        <Box>
+        <Box
+            sx={{
+                width: '100%',
+            }}
+        >
             <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
