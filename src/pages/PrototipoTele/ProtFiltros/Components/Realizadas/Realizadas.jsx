@@ -1,8 +1,8 @@
-import { AppBar, Button, Chip, Dialog, Divider, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, LinearProgress, MenuItem, Pagination, Select, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, Checkbox, Chip, Dialog, Divider, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, LinearProgress, MenuItem, Pagination, Select, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import { green, grey, red } from "@mui/material/colors";
 import { Box } from "@mui/system"
-import { forwardRef, useEffect, useState } from "react";
-import { filterEntrevistasRealizadas } from "../../../../../_services/teleEntrevista.service";
+import { forwardRef, useContext, useEffect, useState } from "react";
+import { divergenciaAnexo, filterEntrevistasRealizadas } from "../../../../../_services/teleEntrevista.service";
 import moment from "moment";
 import SearchIcon from '@mui/icons-material/Search';
 import ProtDetalhesTele from "../../../ProtDetalhesTele/ProtDetalhesTele";
@@ -10,12 +10,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getPropostaById, getPropostaPorNomeEProposta } from "../../../../../_services/teleEntrevistaExterna.service";
 import RelatorioMensal from "./RelatorioMensal";
 import RelatorioGeral from "./RelatorioGeral";
+import AuthContext from "../../../../../context/AuthContext";
+import Toast from "../../../../../components/Toast/Toast";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const Realizadas = () => {
+
+    const { acessos } = useContext(AuthContext)
+
+    console.log(acessos);
 
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -26,6 +32,9 @@ const Realizadas = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [cpfTitular, setCpfTitular] = useState('');
     const [entrevistaQualidade, setEntrevistaQualidade] = useState(false);
+    const [openToast, setOpenToast] = useState(false);
+    const [severity, setSeverity] = useState('info');
+    const [message, setMessage] = useState('Salvando...');
 
     const handleSearch = async (page = page, pesquisa = pesquisa, rowsPerPage = rowsPerPage, entrevistaQualidade = entrevistaQualidade) => {
         setLoading(true);
@@ -49,6 +58,29 @@ const Realizadas = () => {
         }
         setCpfTitular(result.cpfTitular)
         setOpenDialog(true)
+    }
+
+    const handleChangeDivergenciaAnexo = async (e, id) => {
+
+        setPropostas(propostas.map((proposta) => {
+            if (proposta._id === id) {
+                return {
+                    ...proposta,
+                    divergenciaAnexo: e.target.checked
+                }
+            }
+            return proposta
+        }))
+
+        await divergenciaAnexo({
+            id,
+            divergenciaAnexo: e.target.checked
+        })
+
+        setSeverity('success')
+        setMessage('Salvo com sucesso!')
+        setOpenToast(true)
+
     }
 
     useEffect(() => {
@@ -219,6 +251,13 @@ const Realizadas = () => {
                             <TableCell>
                                 Status
                             </TableCell>
+                            {
+                                acessos.administrador ? (
+                                    <TableCell>
+                                        Divergência Anexo
+                                    </TableCell>
+                                ) : null
+                            }
                             <TableCell>
 
                             </TableCell>
@@ -273,6 +312,22 @@ const Realizadas = () => {
                                             />
                                         )}
                                     </TableCell>
+                                    {
+                                        acessos.administrador ? (
+                                            <TableCell
+                                                align="center"
+                                            >
+                                                <FormControlLabel
+                                                    control={<Checkbox
+                                                        checked={proposta.divergenciaAnexo}
+                                                        onChange={(e) => handleChangeDivergenciaAnexo(e, proposta._id)}
+                                                        color="error"
+                                                    />
+                                                    }
+                                                />
+                                            </TableCell>
+                                        ) : null
+                                    }
                                     <TableCell>
                                         <Button
                                             variant="contained"
@@ -310,6 +365,12 @@ const Realizadas = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Toast
+                open={openToast}
+                severity={severity}
+                message={message}
+                onClose={() => setOpenToast(false)}
+            />
             <Dialog
                 open={openDialog}
                 onClose={() => setOpenDialog(false)}

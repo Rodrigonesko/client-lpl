@@ -467,7 +467,7 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
                     />
                 </Box>
                 {
-                    acessos.administrador ? <Complementacao data={demanda} setData={setDemanda} /> : null
+                    acessos?.administrador ? <Complementacao data={demanda} setData={setDemanda} /> : null
                 }
                 <FinalizacaoDemanda
                     demanda={demanda}

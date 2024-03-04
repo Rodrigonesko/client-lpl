@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Dialog, FormControl, InputLabel, Select, TextField, MenuItem } from "@mui/material"
+import { Box, Button, CircularProgress, Dialog, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import { useState } from "react"
 import { FaFileExcel } from "react-icons/fa"
@@ -12,6 +12,7 @@ const ModalRelatorio = ({ statusList }) => {
     const [dataFim, setDataFim] = useState('')
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState(0)
+    const [agenda, setAgenda] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -35,7 +36,8 @@ const ModalRelatorio = ({ statusList }) => {
         xls += "<th>Serviço</th>"
         xls += "<th>QTD Beneficiarios</th>"
         xls += "<th>QTD Prestadores</th>"
-        xls += "<th>Data Inicio</th>"
+        xls += "<th>Data Criação Demanda</th>"
+        xls += "<th>Data Iniciou Execução</th>"
         xls += "<th>Data Finalização Sistema</th>"
         xls += "<th>Data Finalização</th>"
         xls += "<th>Justificativa</th>"
@@ -48,7 +50,9 @@ const ModalRelatorio = ({ statusList }) => {
         xls += "<th>Complemento</th>"
         xls += "<th>Data Complemento</th>"
         xls += "<th>Motivo</th>"
-        xls += "<th>Agenda</th>"
+        {
+            agenda && (xls += "<th>Agenda</th>")
+        }
         result[0].irregularidadesObj.forEach((item) => {
             xls += "<th>" + item.nome + "</th>"
         })
@@ -59,12 +63,13 @@ const ModalRelatorio = ({ statusList }) => {
             xls += "<tr>"
             xls += `<td>${item.codigo || ''}</td>`
             xls += `<td>${item.area_empresa_nome || ''}</td>`
-            xls += `<td>${item.tipo_servico_nome || ''}</td>`
             xls += `<td>${item.nome || ''}</td>`
             xls += `<td>${item.cpf_cnpj || ''}</td>`
+            xls += `<td>${item.tipo_servico_nome || ''}</td>`
             xls += `<td>${item.num_beneficiarios || ''}</td>`
             xls += `<td>${item.num_prestadores || ''}</td>`
             xls += `<td>${moment(item.data_demanda).format('DD/MM/YYYY') || ''}</td>`
+            xls += `<td>${item.data_criacao_pacote ? moment(item.data_criacao_pacote).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${item.data_finalizacao_sistema ? moment(item.data_finalizacao_sistema).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${item.data_finalizacao ? moment(item.data_finalizacao).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${item.justificativa_finalizacao || ''}</td>`
@@ -77,9 +82,11 @@ const ModalRelatorio = ({ statusList }) => {
             xls += `<td>${item.complementacao ? 'Sim' : 'Não'}</td>`
             xls += `<td>${(item.data_complementacao && item.data_complementacao !== 'null') ? moment(item.data_complementacao).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${(item.motivo && item.motivo !== 'null') || ''}</td>`
-            xls += `<td>${item.observacoes ? item.observacoes.map(observacao => {
-                return `${observacao} |\n`
-            }) : ''}</td>`
+            {
+                agenda && (xls += `<td>${item.observacoes !== 'null' ? item.observacoes.map(observacao => {
+                    return `${observacao} |\n`
+                }) : ''}</td>`)
+            }
             item.irregularidadesObj.forEach((irregularidade) => {
                 xls += `<td>${irregularidade.value || ''}</td>`
             })
@@ -149,6 +156,25 @@ const ModalRelatorio = ({ statusList }) => {
                             }
                         </Select>
                     </FormControl>
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px',
+                        pl: '20px'
+                    }}
+                >
+                    <FormControlLabel
+                        label="Agenda"
+                        control={
+                            <Checkbox
+                                checked={agenda}
+                                onChange={(e) => setAgenda(e.target.checked)}
+                                color="default"
+                            />
+                        }
+                    />
                 </Box>
                 <Box
                     sx={{
