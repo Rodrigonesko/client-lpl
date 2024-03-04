@@ -1,16 +1,17 @@
-import { Box, Button, CircularProgress, Dialog, TextField } from "@mui/material"
+import { Box, Button, CircularProgress, Dialog, FormControl, InputLabel, Select, TextField, MenuItem } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import { useState } from "react"
 import { FaFileExcel } from "react-icons/fa"
 import { getRelatorio } from "../../../_services/sindicancia.service"
 import moment from "moment"
 
-const ModalRelatorio = () => {
+const ModalRelatorio = ({ statusList }) => {
 
     const [open, setOpen] = useState(false)
     const [dataInicio, setDataInicio] = useState('')
     const [dataFim, setDataFim] = useState('')
     const [loading, setLoading] = useState(false)
+    const [status, setStatus] = useState(0)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -23,12 +24,14 @@ const ModalRelatorio = () => {
     const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault()
-        const result = await getRelatorio({ dataInicio, dataFim })
+        const result = await getRelatorio({ dataInicio, dataFim, status })
         let xls = '\ufeff'
         xls += "<table border='1'>"
         xls += "<thead><tr>"
         xls += "<th>Código</th>"
         xls += "<th>Cliente</th>"
+        xls += "<th>Nome Investigado</th>"
+        xls += "<th>CPF / CNPJ</th>"
         xls += "<th>Serviço</th>"
         xls += "<th>QTD Beneficiarios</th>"
         xls += "<th>QTD Prestadores</th>"
@@ -43,8 +46,9 @@ const ModalRelatorio = () => {
         xls += "<th>Analista Responsável</th>"
         xls += "<th>Analista Executor</th>"
         xls += "<th>Complemento</th>"
-        xls += "<th>Data Complemente</th>"
+        xls += "<th>Data Complemento</th>"
         xls += "<th>Motivo</th>"
+        xls += "<th>Agenda</th>"
         result[0].irregularidadesObj.forEach((item) => {
             xls += "<th>" + item.nome + "</th>"
         })
@@ -56,6 +60,8 @@ const ModalRelatorio = () => {
             xls += `<td>${item.codigo || ''}</td>`
             xls += `<td>${item.area_empresa_nome || ''}</td>`
             xls += `<td>${item.tipo_servico_nome || ''}</td>`
+            xls += `<td>${item.nome || ''}</td>`
+            xls += `<td>${item.cpf_cnpj || ''}</td>`
             xls += `<td>${item.num_beneficiarios || ''}</td>`
             xls += `<td>${item.num_prestadores || ''}</td>`
             xls += `<td>${moment(item.data_demanda).format('DD/MM/YYYY') || ''}</td>`
@@ -69,8 +75,11 @@ const ModalRelatorio = () => {
             xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
             xls += `<td>${item.usuario_executor_nome || ''}</td>`
             xls += `<td>${item.complementacao ? 'Sim' : 'Não'}</td>`
-            xls += `<td>${(item.data_complementacao || item.data_complementacao !== null) ? moment(item.data_complementacao).format('DD/MM/YYYY') : ''}</td>`
-            xls += `<td>${item.motivo || ''}</td>`
+            xls += `<td>${(item.data_complementacao && item.data_complementacao !== 'null') ? moment(item.data_complementacao).format('DD/MM/YYYY') : ''}</td>`
+            xls += `<td>${(item.motivo && item.motivo !== 'null') || ''}</td>`
+            xls += `<td>${item.observacoes ? item.observacoes.map(observacao => {
+                return `${observacao} |\n`
+            }) : ''}</td>`
             item.irregularidadesObj.forEach((irregularidade) => {
                 xls += `<td>${irregularidade.value || ''}</td>`
             })
@@ -113,6 +122,34 @@ const ModalRelatorio = () => {
                 fullWidth
                 maxWidth="sm"
             >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        padding: '20px'
+                    }}
+                >
+                    <FormControl
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                    >
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                            label="Status"
+                            size="small"
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value)}
+                        >
+                            <MenuItem value={0}>Todos</MenuItem>
+                            {
+                                statusList.map((item) => (
+                                    <MenuItem key={item.id} value={item.id}>{item.nome}</MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
+                </Box>
                 <Box
                     sx={{
                         display: 'flex',

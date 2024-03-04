@@ -253,7 +253,7 @@ const Demandas = () => {
                         value={filtros.data}
                         onChange={(e) => { setFiltros({ ...filtros, data: e.target.value }) }}
                     />
-                    <ModalRelatorio />
+                    <ModalRelatorio statusList={status} />
                     <ModalCriarTipoIrregularidade />
                 </Box>
 

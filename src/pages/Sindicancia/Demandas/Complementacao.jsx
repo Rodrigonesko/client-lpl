@@ -51,8 +51,7 @@ const Complementacao = ({ data, setData }) => {
                 }
             />
             {
-                data.complementacao &&
-                <>
+                data.complementacao ? (<>
                     <TextField
                         placeholder="Data"
                         variant="outlined"
@@ -81,7 +80,9 @@ const Complementacao = ({ data, setData }) => {
                     >
                         Salvar
                     </Button>
-                </>
+                </>) : (
+                    null
+                )
             }
             <Toast
                 open={openToast}
