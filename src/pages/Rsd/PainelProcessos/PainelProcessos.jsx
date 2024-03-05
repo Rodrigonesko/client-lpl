@@ -3,7 +3,8 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Painel from "../../../components/Painel/Painel";
 import './PainelProcessos.css'
 import { filtroPedidosNaoFinalizados, getPedidosNaoFinalizados } from "../../../_services/rsd.service";
-import { Container, Box, Typography, Paper, TextField, Button, Skeleton, Snackbar, Alert } from "@mui/material";
+import { Container, Box, Typography, Paper, TextField, Button, Skeleton, Snackbar, Alert, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { filterUsers } from "../../../_services/user.service";
 
 const PainelProcessos = () => {
 
@@ -47,7 +48,11 @@ const PainelProcessos = () => {
 
     const [teste, setTeste] = useState('')
 
+    const [loading, setLoading] = useState(false)
+
+    const [analistas, setAnalistas] = useState([])
     const [pesquisa, setPesquisa] = useState('')
+    const [selectedAnalista, setSelectedAnalista] = useState('')
 
     const handleCloseSnack = () => {
         setOpenSnack(false);
@@ -57,12 +62,12 @@ const PainelProcessos = () => {
         try {
             e.preventDefault()
 
-            if (pesquisa.length <= 0) {
+            if (pesquisa.length <= 0 && selectedAnalista.length <= 0) {
                 setOpenSnack(true)
                 return
             }
-
-            const result = await filtroPedidosNaoFinalizados(pesquisa)
+            setLoading(true)
+            const result = await filtroPedidosNaoFinalizados(pesquisa, selectedAnalista)
             setFlushHook(true)
             setPedidos(result.pedidos)
             setAiniciar([])
@@ -84,9 +89,8 @@ const PainelProcessos = () => {
                     setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
                 }
             })
-            
+            setLoading(false)
             return
-
         } catch (error) {
             console.log(error);
         }
@@ -96,13 +100,11 @@ const PainelProcessos = () => {
 
         const buscarPedidos = async () => {
             try {
-
+                setLoading(true)
                 const result = await getPedidosNaoFinalizados()
-
                 setPedidos(result.pedidos)
-
                 setTeste('teste')
-
+                setLoading(false)
             } catch (error) {
                 console.log(error);
             }
@@ -110,7 +112,6 @@ const PainelProcessos = () => {
 
         const setStatusPedido = () => {
             pedidos.forEach(e => {
-
                 if (e.status === 'A iniciar') {
                     setAiniciar(aIniciar => [...aIniciar, e])
                 }
@@ -124,12 +125,24 @@ const PainelProcessos = () => {
                     setAguardandoDocs(aguardandoDocs => [...aguardandoDocs, e])
                 }
             })
+        }
 
+        const fetchAnalistas = async () => {
+            try {
+                const result = await filterUsers({
+                    atividadePrincipal: 'RSD',
+                    inativo: { $ne: true }
+                })
+                setAnalistas(result)
+            } catch (error) {
+                console.log(error);
+            }
         }
 
         setFlushHook(false)
         buscarPedidos()
         setStatusPedido()
+        fetchAnalistas()
     }, [teste, flushHook])
 
     return (
@@ -141,12 +154,35 @@ const PainelProcessos = () => {
                             Painel de Processos
                         </Typography>
                         <form action="">
-                            <Box component={Paper} display='flex' p={2} mb={2} mt={2} >
+                            <Box component={Paper} display='flex' p={2} mb={2} mt={2} gap={2} >
                                 <TextField size="small" type="text" label="Marca ótica, nome, CPF, Protocolo" onChange={e => setPesquisa(e.target.value)} style={{ marginRight: '10px' }} />
                                 {/* <select name="analista" id="analista">
                                 <option value="">Analista</option>
                             </select> */}
-                                <Button type="submit" variant="contained" onClick={pesquisaFiltro} >Pesquisar</Button>
+                                <FormControl
+                                    size="small"
+                                    sx={{ minWidth: '120px', marginRight: '10px' }}
+                                >
+                                    <InputLabel htmlFor="analista">Analista</InputLabel>
+                                    <Select
+                                        labelId="analista"
+                                        id="analista"
+                                        label="Analista"
+                                        value={selectedAnalista}
+                                        onChange={e => setSelectedAnalista(e.target.value)}
+                                    >
+                                        <MenuItem value="">
+                                            <em>Analista</em>
+                                        </MenuItem>
+                                        {
+                                            analistas.map((e, i) => (
+                                                <MenuItem key={i} value={e.name}>{e.name}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                                <Button size="small" type="submit" variant="contained" onClick={pesquisaFiltro} >Pesquisar</Button>
+                                <Button size="small" type="button" variant="contained" onClick={() => setFlushHook(true)} >Limpar</Button>
                             </Box>
                         </form>
                         <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
@@ -155,9 +191,8 @@ const PainelProcessos = () => {
                             </Alert>
                         </Snackbar>
                         <div className="painel-processos">
-
                             {
-                                pedidos.length === 0 ? (
+                                loading ? (
                                     <Box minWidth='500px' width='100%' display='flex' justifyContent='space-between' >
                                         <Box width='100px' >
                                             <Skeleton animation="wave" />

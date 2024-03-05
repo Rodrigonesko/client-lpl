@@ -71,7 +71,8 @@ const ProcessamentoPacote = () => {
         servicos,
         finalizacoes,
         justificativa,
-        dataSelo
+        dataSelo,
+        dataAgendamento
     ) => {
         try {
 
@@ -91,7 +92,8 @@ const ProcessamentoPacote = () => {
                 confirmacaoServico: servicos,
                 finalizacao: finalizacoes,
                 justificativa,
-                dataSelo
+                dataSelo,
+                dataAgendamento
             })
             setSeverity('success')
             setMsg('Pacote salvo com sucesso')

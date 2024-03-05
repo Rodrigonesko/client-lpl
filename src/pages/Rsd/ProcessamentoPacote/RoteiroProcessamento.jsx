@@ -9,6 +9,7 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, sal
     const [motivoContato, setMotivoContato] = useState([])
     const [confirmacaoServico, setConfirmacaoServico] = useState([])
     const [finalizacoes, setFinalizacoes] = useState([])
+    const [dataAgendamento, setDataAgendamento] = useState(pedidos[0].dataAgendamento)
 
     const [openSegundaEtapa, setOpenSegundaEtapa] = useState(!pedidos[0].contato ? false : true)
     const [openTerceiraEtapa, setOpenTerceiraEtapa] = useState(!pedidos[0].dataSelo ? false : true)
@@ -89,6 +90,11 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, sal
                             {
                                 contatoChecked === 'Não foi entrado em contato' && (
                                     <TextField label='Justificativa' helperText='Justificativa por não entrar em contato' size="small" variant='standard' value={justificativa} onChange={e => setJustificativa(e.target.value)} />
+                                )
+                            }
+                            {
+                                contatoChecked === 'Necessário Agendar Horario' && (
+                                    <TextField label='Data Agendamento' helperText='Data e horário para agendamento' size="small" variant='standard' value={dataAgendamento} onChange={e => setDataAgendamento(e.target.value)} type="datetime-local" InputLabelProps={{ shrink: true }} />
                                 )
                             }
                         </TableCell>
@@ -254,7 +260,8 @@ const RoteiroProcessamento = ({ pedidos, formasPagamento, statusFinalizacao, sal
                                     confirmacaoServico,
                                     finalizacoes,
                                     justificativa,
-                                    dataSelo
+                                    dataSelo,
+                                    dataAgendamento
                                 )
                             }}>Salvar</Button>
                         </TableCell>

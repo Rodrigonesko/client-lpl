@@ -53,8 +53,8 @@ export const getPedidosNaoFinalizados = async () => {
     return await new ApiCall('/rsd/pedidos/naoFinalizados/naoFinalizados').get()
 }
 
-export const filtroPedidosNaoFinalizados = async (pesquisa) => {
-    return await new ApiCall(`/rsd/pedidos/naoFinalizados/filtro/${pesquisa}`).get()
+export const filtroPedidosNaoFinalizados = async (pesquisa, analista) => {
+    return await new ApiCall(`/rsd/pedidos/naoFinalizados/filtro?pesquisa=${pesquisa}&analista=${analista}`).get()
 }
 
 export const criarPacoteRsd = async (data) => {
