@@ -6,6 +6,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
 import { filterTableDemi, findAcoesDemissao, setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
+import TableObs from "./Components/TableObs";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
 
@@ -60,18 +61,18 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
         console.log(_id, status, id)
     }
 
-    const ativarObs = async (_id, obs, id) => {
-        try {
-            const result = await updateObs({
-                _id: user._id, obs: obs, id: id, tipoExame: 'demissao'
-            });
-            setUser(result)
-            console.log(_id, obs, id);
-        } catch (error) {
-            console.error('Erro no Update das Observações:', error);
-        }
-        setFlushHook(true)
-    }
+    // const ativarObs = async (_id, obs, id) => {
+    //     try {
+    //         const result = await updateObs({
+    //             _id: user._id, obs: obs, id: id, tipoExame: 'demissao'
+    //         });
+    //         setUser(result)
+    //         console.log(_id, obs, id);
+    //     } catch (error) {
+    //         console.error('Erro no Update das Observações:', error);
+    //     }
+    //     setFlushHook(true)
+    // }
 
     const ativarData = async (_id, data, id) => {
         try {
@@ -135,11 +136,25 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 <TableCell>{item.responsavel}</TableCell>
                                                 <TableCell>{item.acao}</TableCell>
                                                 <TableCell>{item.fornecedor}</TableCell>
-                                                <TableCell>{<TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />}</TableCell>
+                                                <TableCell>{
+                                                    <TableObs item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
+                                                    // <TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />
+                                                }</TableCell>
                                                 <TableCell>
                                                     <FormControl sx={{ minWidth: 150 }}>
                                                         <InputLabel id='Status'>Status</InputLabel>
-                                                        <Select value={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)} >
+                                                        <Select
+                                                            value={item.status}
+                                                            labelId="Status"
+                                                            id='Status'
+                                                            label='Status'
+                                                            size='small'
+                                                            onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)}
+                                                            sx={{ borderRadius: '10px' }}
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                        >
                                                             <MenuItem value={'naoSeAplica'}>N/A</MenuItem>
                                                             <MenuItem value={'pendente'}>PENDENTE</MenuItem>
                                                             <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
@@ -147,7 +162,23 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                         </Select>
                                                     </FormControl>
                                                 </TableCell>
-                                                <TableCell>{<TextField defaultValue={item.data} type='date' focused label='Data' onChange={(elemento) => ativarData(user._id, elemento.target.value, item.id)} />}</TableCell>
+                                                <TableCell>{<TextField
+                                                    value={item.data}
+                                                    type='date'
+                                                    label='Data'
+                                                    size='small'
+                                                    onChange={(elemento) => ativarData(user._id, elemento.target.value, item.id)}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    InputProps={{
+                                                        style: {
+                                                            borderRadius: '10px'
+                                                        }
+                                                    }}
+                                                />
+                                                }
+                                                </TableCell>
                                             </TableRow>)
                                     })}
                                 </TableBody>

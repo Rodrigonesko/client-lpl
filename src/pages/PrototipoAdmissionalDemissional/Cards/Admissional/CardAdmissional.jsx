@@ -151,12 +151,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 <TableCell>{item.fornecedor}</TableCell>
                                                 <TableCell>{
                                                     <TableObs item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
-                                                    // <TextField
-                                                    // value={item.obs}
-                                                    // size='small'
-                                                    // type='text'
-                                                    // label='Obs'
-                                                    // onBlur={(e) => ativarObs(user._id, e.target.value, item.id)}
+                                                    // <TextField value={item.obs} size='small' type='text' label='Obs' onBlur={(e) => ativarObs(user._id, e.target.value, item.id)} 
                                                     // InputLabelProps={{
                                                     //     shrink: true,
                                                     // }}
