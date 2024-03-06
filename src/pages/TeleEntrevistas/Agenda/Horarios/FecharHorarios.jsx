@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, Paper, Select, Typography, MenuItem, TextField, List, ListItem, ListItemButton, ListItemIcon, Checkbox, Button, ListItemText } from "@mui/material"
 import Axios from "axios"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Toast from "../../../../components/Toast/Toast"
 import AuthContext from "../../../../context/AuthContext"
 
@@ -40,15 +40,6 @@ const FecharHorarios = ({ responsaveis }) => {
         }
 
         try {
-
-            if (name !== 'Administrador' && name !== 'Claudia Rieth' && name !== 'Luciana Tavares' && name !== 'Bruna Tomazoni' && name !== 'Rodrigo Onesko Dias') {
-                setMessage('Você não tem permissão para fechar horários!')
-                setSeverity("error")
-                setToastOpen(true)
-                return
-            }
-
-
             let horariosArr = document.getElementsByClassName('horarios-disponiveis')
             let values = Object.values(horariosArr).map(e => {
                 if (e.firstChild.checked) {
@@ -71,7 +62,8 @@ const FecharHorarios = ({ responsaveis }) => {
                 setHorarioDisponiveis([])
             }
         } catch (error) {
-            setMessage('Erro ao fechar horarios!')
+            console.log(error)
+            setMessage(error.response.data.message)
             setSeverity("error")
             setToastOpen(true)
         }
