@@ -3,12 +3,12 @@ import moment from "moment"
 import Toast from "../../../components/Toast/Toast"
 import { finalizarDemanda } from "../../../_services/sindicancia.service"
 import { useState } from "react"
-
+require('moment-business-days')
 const FinalizacaoDemanda = ({ demanda }) => {
 
     const dataInicio = moment(demanda.data_demanda)
     const dataFim = moment(demanda.data_finalizacao || new Date())
-    const diff = dataFim.diff(dataInicio, 'days')
+    const diff = dataFim.businessDiff(dataInicio)
     let data = demanda
     const [justificativa, setJustificativa] = useState(demanda.justificativa_finalizacao || '')
     const [loading, setLoading] = useState(false)
