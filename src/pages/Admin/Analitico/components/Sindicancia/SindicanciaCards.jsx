@@ -1,8 +1,32 @@
 import { TrendingDown, TrendingUp } from "@mui/icons-material"
-import { Box, Paper, Typography } from "@mui/material"
+import { Box, CircularProgress, Paper, Typography } from "@mui/material"
 import { green, red } from "@mui/material/colors"
+import { useEffect, useState } from "react"
+import { getQuantidadeSindicancias } from "../../../../../_services/sindicancia.service"
 
 const SindicanciaCards = ({ mes }) => {
+
+    const [loading, setLoading] = useState(false)
+    const [totalData, setTotalData] = useState({
+        find: 0,
+        findMesPassado: 0,
+        findConcluidas: 0,
+        findConcluidasMesPassado: 0,
+        findDistribuicao: 0,
+        findAbertas: 0,
+    })
+
+    useEffect(() => {
+        const fetch = async () => {
+            setLoading(true)
+            const result = await getQuantidadeSindicancias(mes)
+            setTotalData(result)
+            // console.log(result);
+            setLoading(false)
+        }
+        fetch()
+    }, [mes])
+
     return (
         <Box
             display={"flex"}
@@ -35,17 +59,29 @@ const SindicanciaCards = ({ mes }) => {
                         variant="h3"
                         fontWeight={600}
                     >
-                        0
+                        {!loading ? totalData.find : <CircularProgress size={20} />}
                     </Typography>
                     <Box>
                         <Typography
                             variant="body1"
-                            color={green[500]}
+                            color={totalData.findMesPassado > totalData.find ? (red[500]) : (green[500])}
                             display={"flex"}
                             alignItems={"flex-end"}
                         >
-                            <TrendingUp />
-                            +20%
+                            {
+                                totalData.findMesPassado > totalData.find ? (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                ) : (
+                                    <TrendingUp sx={{ color: green[800] }} />
+                                )
+                            }
+                            {
+                                totalData.findMesPassado > totalData.find ? (
+                                    `-${((totalData.findMesPassado - totalData.find) / totalData.findMesPassado * 100).toFixed(2)}%`
+                                ) : (
+                                    `+${((totalData.find - totalData.findMesPassado) / totalData.findMesPassado * 100).toFixed(2)}%`
+                                )
+                            }
                         </Typography>
                         <Typography
                             color={"text.secondary"}
@@ -79,17 +115,29 @@ const SindicanciaCards = ({ mes }) => {
                         variant="h3"
                         fontWeight={600}
                     >
-                        0
+                        {!loading ? totalData.findConcluidas : <CircularProgress size={20} />}
                     </Typography>
                     <Box>
                         <Typography
                             variant="body1"
-                            color={red[500]}
+                            color={totalData.findConcluidasMesPassado > totalData.findConcluidas ? (red[500]) : (green[500])}
                             display={"flex"}
                             alignItems={"flex-end"}
                         >
-                            <TrendingDown />
-                            -20%
+                            {
+                                totalData.findConcluidasMesPassado > totalData.findConcluidas ? (
+                                    <TrendingDown sx={{ color: red[800] }} />
+                                ) : (
+                                    <TrendingUp sx={{ color: green[800] }} />
+                                )
+                            }
+                            {
+                                totalData.findConcluidasMesPassado > totalData.findConcluidas ? (
+                                    `-${((totalData.findConcluidasMesPassado - totalData.findConcluidas) / totalData.findConcluidasMesPassado * 100).toFixed(2)}%`
+                                ) : (
+                                    `+${((totalData.findConcluidas - totalData.findConcluidasMesPassado) / totalData.findConcluidasMesPassado * 100).toFixed(2)}%`
+                                )
+                            }
                         </Typography>
                         <Typography
                             color={"text.secondary"}
