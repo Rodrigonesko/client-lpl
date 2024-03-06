@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from 'axios'
 import { Modal, Button, Box, Typography, TextField, Select, FormControl, InputLabel, MenuItem, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { enviarFaseCancelamento } from "../../../../_services/elegibilidade.service";

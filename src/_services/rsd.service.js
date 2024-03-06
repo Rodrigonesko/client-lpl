@@ -1,6 +1,5 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const buscarInformacoesMo = async (mo) => {
     return await new ApiCall(`/rsd/pessoas/${mo}`).get()
@@ -54,8 +53,8 @@ export const getPedidosNaoFinalizados = async () => {
     return await new ApiCall('/rsd/pedidos/naoFinalizados/naoFinalizados').get()
 }
 
-export const filtroPedidosNaoFinalizados = async (pesquisa) => {
-    return await new ApiCall(`/rsd/pedidos/naoFinalizados/filtro/${pesquisa}`).get()
+export const filtroPedidosNaoFinalizados = async (pesquisa, analista) => {
+    return await new ApiCall(`/rsd/pedidos/naoFinalizados/filtro?pesquisa=${pesquisa}&analista=${analista}`).get()
 }
 
 export const criarPacoteRsd = async (data) => {
@@ -180,4 +179,40 @@ export const deleteFinalizacao = async (id) => {
 
 export const relatorioProducaoMensal = async (mes) => {
     return await new ApiCall(`/rsd/relatorioProducaoMensal/${mes}`).get()
+}
+
+export const producaoIndividualRsd = async (mes) => {
+    return await new ApiCall(`/rsd/producaoIndividualRsd/${mes}`).get()
+}
+
+export const getQuantidadeProducaoRsd = async (mes) => {
+    return await new ApiCall(`/rsd/quantidadeProducaoRsd/${mes}`).get()
+}
+
+export const getQuantidadePagamentosRsd = async (mes) => {
+    return await new ApiCall(`/rsd/quantidadePagamentosRsd/${mes}`).get()
+}
+
+export const getQuantidadeStatusGerenciais = async (mes) => {
+    return await new ApiCall(`/rsd/quantidadeStatusGerenciais/${mes}`).get()
+}
+
+export const getQuantidadeStatusAmil = async (mes) => {
+    return await new ApiCall(`/rsd/quantidadeStatusAmil/${mes}`).get()
+}
+
+export const getQuantidadePedidosIndeferidos = async (mes) => {
+    return await new ApiCall(`/rsd/quantidadePedidosIndeferidos/${mes}`).get()
+}
+
+export const getAnaliticoRsdMensal = async (mes) => {
+    return await new ApiCall(`/rsd/analitico/${mes}`).get()
+}
+
+export const getProducaoIndividualRsd = async (mes, analista) => {
+    return await new ApiCall(`/rsd/producaoIndividual/${mes}/${analista}`).get()
+}
+
+export const getComparativoProducaoRsd = async (mes, analista) => {
+    return await new ApiCall(`/rsd/comparativoProducao/${mes}/${analista}`).get()
 }

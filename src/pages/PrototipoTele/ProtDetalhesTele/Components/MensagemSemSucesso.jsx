@@ -4,7 +4,7 @@ import PhonelinkEraseIcon from '@mui/icons-material/PhonelinkErase';
 const MensagemSemSucesso = ({ setMessage }) => {
 
     const handleClick = () => {
-        setMessage('Somos da Amil. Estamos tentando contato conforme agendamento realizado. O(a) Sr(a) pode falar no momento?')
+        setMessage('Estamos tentando contato com o Sr (a) porém sem sucesso. A Sr (a) pode por favor ligar no número 11 4240-0422 e pedir para falar com a equipe médica.')
     }
 
     return (

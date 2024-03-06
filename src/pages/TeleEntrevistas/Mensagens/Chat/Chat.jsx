@@ -9,8 +9,10 @@ import PrimeiroContato from './mensagensPadrao/PrimeiroContato';
 import MensagemSemSucessoContato from './mensagensPadrao/MensagemSemSucessoContato';
 import MensagemDiaAnterior from './mensagensPadrao/MensagemDiaAnterior';
 import { io } from "socket.io-client";
+import MensagemAdiantarTele from './mensagensPadrao/MensagemAdiantarTele';
+import MensagemDependentesFaltantes from './mensagensPadrao/MensagemDependentesFaltantes';
 
-const socket = io(`http://18.230.122.26:3001`);
+const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
 const Chat = () => {
 
@@ -40,7 +42,7 @@ const Chat = () => {
                 mensagem
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
 
             console.log(result);
@@ -72,13 +74,13 @@ const Chat = () => {
 
         try {
 
-            if (whatsapp === 'whatsapp:+55undefinedundefined') {
+            if (whatsapp === 'whatsapp:+55undefinedundefined' || whatsapp === 'whatsapp:+55') {
                 return
             }
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/chat/${whatsapp}`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             setChat(result.data)
@@ -89,7 +91,7 @@ const Chat = () => {
                 whatsapp
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
         } catch (error) {
@@ -118,11 +120,13 @@ const Chat = () => {
                 }
             }
         });
-        socket.on('statusMessage', async () => {
-            buscarMensagens()
-            const component = chatRef.current;
-            if (component) {
-                component.scrollTop = component.scrollHeight;
+        socket.on('statusMessage', async (result) => {
+            if (result.To === whatsapp) {
+                buscarMensagens()
+                const component = chatRef.current;
+                if (component) {
+                    component.scrollTop = component.scrollHeight;
+                }
             }
         })
     }, [])
@@ -137,14 +141,14 @@ const Chat = () => {
                                 {
                                     chat.map(e => {
                                         return (
-                                            <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' ? 'right' : 'left' }}>
+                                            <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>
                                                 <Typography
                                                     style={{
                                                         display: 'inline-block',
-                                                        backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' ? '#0066FF' : 'gray',
+                                                        backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' ? '#0066FF' : 'gray',
                                                         color: 'white',
                                                         padding: '10px',
                                                         borderRadius: '10px',
@@ -201,6 +205,8 @@ const Chat = () => {
                                 <Button variant='contained' sx={{ marginLeft: '10px' }}>Atualizar</Button>
                             </Box> */}
                             <MensagemDiaAnterior setLoading={setLoading} setMensagem={setMensagem} />
+                            <MensagemAdiantarTele setLoading={setLoading} setMensagem={setMensagem} />
+                            <MensagemDependentesFaltantes setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemSemSucessoContato hookMsg={setMensagem} />
                             <PrimeiroContato hookMsg={setMensagem} />
                         </Box>

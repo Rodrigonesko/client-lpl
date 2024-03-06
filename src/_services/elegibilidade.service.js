@@ -1,6 +1,5 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const showPropostas = async () => {
     return await new ApiCall('/elegibilidade/show').get()
@@ -188,4 +187,24 @@ export const voltarPropostaElegibilidade = async (data) => {
 
 export const getRelatorioProducaoMensal = async (mes) => {
     return await new ApiCall(`/elegibilidade/relatorioProducaoMensal/${mes}`).get()
+}
+
+export const getAnalaticoElegibilidadeMensal = async (mes) => {
+    return await new ApiCall(`/elegibilidade/analitico/${mes}`).get()
+}
+
+export const getProducaoAnalistasElegi = async (mes) => {
+    return await new ApiCall(`/elegibilidade/producaoIndividualElegi/${mes}`).get()
+}
+
+export const getChartDataElegibilidade = async (mes) => {
+    return await new ApiCall(`/elegibilidade/chartData/${mes}`).get()
+}
+
+export const getProducaoIndividualElegibilidade = async (mes, analista) => {
+    return await new ApiCall(`/elegibilidade/producaoIndividual/${mes}/${analista}`).get()
+}
+
+export const getComparativoProducaoElegibilidade = async (mes, analista) => {
+    return await new ApiCall(`/elegibilidade/comparativoProducao/${mes}/${analista}`).get()
 }

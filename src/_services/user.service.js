@@ -1,6 +1,5 @@
 import { ApiCall } from "./api";
-import { getCookie } from "react-use-cookie";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const getInfoUser = async () => {
     return await new ApiCall(`/infoUser`).get()
@@ -26,12 +25,12 @@ export const getAnalistasAgendamento = async () => {
     return await new ApiCall('/users/agendamento').get()
 }
 
-export const createUser = async (email, name, accessLevel, atividade) => {
-    return await new ApiCall('/users').post(email, name, accessLevel, atividade)
+export const createUser = async (data) => {
+    return await new ApiCall('/users').post(data)
 }
 
-export const liberarModulos = async (email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada) => {
-    return await new ApiCall('/users/modules').put(email, enfermeiro, elegibilidade, entrada1, saida1, entrada2, saida2, atividadePrincipal, coren, contaInativada)
+export const updateInfoUser = async (data) => {
+    return await new ApiCall('/users').put(data)
 }
 
 export const restaurarSenha = async (email) => {
@@ -66,35 +65,11 @@ export const updateHorarioPonto = async (data) => {
     return await new ApiCall('/horarioPonto').patch(data)
 }
 
-// export const createAdmissao = async (_id) => {
-//     return await new ApiCall('/admissaoDemissao/createAdmissao').post(_id)
-// }
-
-// export const createDemissao = async (_id) => {
-//     return await new ApiCall('/admissaoDemissao/createDemissao').post(_id)
-// }
-
-// export const setarStatus = async (_id, status, id, tipoExame) => {
-//     return await new ApiCall('/admissaoDemissao/status').put(_id, status, id, tipoExame)
-// }
-
-// export const updateObs = async (_id, obs, id, tipoExame) => {
-//     return await new ApiCall('/admissaoDemissao/obs').put(_id, obs, id, tipoExame)
-// }
-
-// export const updateData = async (_id, data, id, tipoExame) => {
-//     return await new ApiCall('/admissaoDemissao/data').put(_id, data, id, tipoExame)
-// }
-
-// export const getAllItens = async () => {
-//     return await new ApiCall('/admissaoDemissao/itens').get()
-// }
-
-// export const updateProrrogacao = async (name, prorrogacao) => {
-//     return await new ApiCall('/admissaoDemissao/prorrogacao').put(name, prorrogacao)
-// }
-
 export const updateProfilePic = async (data) => {
     return await new ApiCall('/updateProfilePic', process.env.REREACT_APP_API_KEY, token,
         { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).patch(data)
+}
+
+export const filterUsers = async (data) => {
+    return await new ApiCall('/users/filter').post(data)
 }

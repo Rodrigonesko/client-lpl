@@ -36,7 +36,7 @@ const Modelo1 = ({ data1, data2 }) => {
             7. Das 15:00 às 17:00<br />
             8. Das 17:00 às 19:00<br />
             Qual o melhor horário?<br />
-            Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
+            Informamos que vamos ligar dos números 11 42407120 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
             Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.<br />
         </Typography>
     )
@@ -61,7 +61,7 @@ const Modelo2 = ({ data1, data2 }) => {
             9. Das 15:00 às 17:00<br />
             10. Das 17:00 às 19:00<br />
             Qual o melhor horário?<br />
-            Informamos que vamos ligar dos números 11 42404975 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
+            Informamos que vamos ligar dos números 11 42407120 ou 42403554, pedimos tirar do spam para evitar bloqueio da ligação. Desde já agradecemos.<br />
             Atenção: o preenchimento dos horários é feito em tempo real. Caso o horário informado não esteja mais disponível, apresentarei uma nova opção.<br />
         </Typography>
     )
@@ -92,7 +92,8 @@ const NaoEnviados = () => {
             let count = 0
 
             for (const item of propostas) {
-                if (quantidade !== 0 && count === quantidade) {
+                if (count === Number(quantidade)) {
+                    console.log('entrou');
                     break
                 }
                 count++
@@ -103,9 +104,8 @@ const NaoEnviados = () => {
                     data2: moment(data2).format('DD/MM/YYYY')
                 }, {
                     withCredentials: true,
-                    headers: { Authorization: `Bearer ${getCookie('token')}` }
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
                 })
-                console.log(result);
                 setProgressValue((count / propostas.length) * 100)
                 buscarPropostas()
             }
@@ -122,7 +122,7 @@ const NaoEnviados = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoEnviadas`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             setPropostas(result.data)
@@ -141,7 +141,7 @@ const NaoEnviados = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()

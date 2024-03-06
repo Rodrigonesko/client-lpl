@@ -29,7 +29,7 @@ const Ajustar = () => {
                 propostas: ajustados
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
 
             if (result.status === 200) {
@@ -50,7 +50,7 @@ const Ajustar = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/ajustar`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
             setPropostas(result.data)
 

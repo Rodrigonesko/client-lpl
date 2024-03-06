@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip, TextField, Snackbar, Alert, Tooltip } from "@mui/material"
 import { useState } from "react"
-import { getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
+import { getAllTreinamentos, getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
 import { AiOutlineCheck, AiFillFileExcel } from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
 import { useEffect } from "react";
@@ -8,6 +8,7 @@ import moment from "moment";
 import InsightsIcon from '@mui/icons-material/InsightsOutlined';
 import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 
 const ModalDetalhesTreinamento = ({ nome, id }) => {
 
@@ -51,6 +52,14 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
             idTreinamento: id,
             nome,
             ativo
+        })
+        setFlushHook(true)
+    }
+
+    const handleVerificarCertificado = async () => {
+        await getAllTreinamentos({
+            idTreinamento: id,
+            nome: nome,
         })
         setFlushHook(true)
     }
@@ -108,7 +117,7 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                fullWidth
+                maxWidth
             >
                 <DialogTitle id="alert-dialog-title">
                     {`Treinamento: ${nome}`}
@@ -164,7 +173,12 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                                             <IconButton color="error" onClick={() => {
                                                                 handleNaoPrecisaTreinamento(user.nome, user.ativo)
                                                             }}>
-                                                                {user.ativo ? (<PersonOutlineOutlinedIcon color="primary"/>) : (<PersonOffOutlinedIcon color="error"/>)}
+                                                                {user.ativo ? (<PersonOutlineOutlinedIcon color="primary" />) : (<PersonOffOutlinedIcon color="error" />)}
+                                                            </IconButton>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="inherit" href={`${process.env.REACT_APP_API_KEY}/media/certificados/${user.nome}-${id}.pdf`} target='_blank'>
+                                                                {user.anexado ? (<FeedOutlinedIcon color="inherit" />) : (<FeedOutlinedIcon color="error" />)}
                                                             </IconButton>
                                                         </TableCell>
                                                     </>
@@ -182,6 +196,11 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                                                 handleNaoPrecisaTreinamento(user.nome)
                                                             }}>
                                                                 <PersonOffOutlinedIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="inherit" href={`${process.env.REACT_APP_API_KEY}/media/certificados/${user.nome}-${id}.pdf`} target='_blank'>
+                                                                {user.anexado ? (<FeedOutlinedIcon color="inherit" />) : (<FeedOutlinedIcon color="error" />)}
                                                             </IconButton>
                                                         </TableCell>
                                                     </>

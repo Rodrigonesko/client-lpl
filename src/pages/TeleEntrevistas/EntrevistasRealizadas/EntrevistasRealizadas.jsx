@@ -35,7 +35,10 @@ const EntrevistasRealizadas = () => {
             await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/alterarSexo`, {
                 id, sexo
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
         } catch (error) {
@@ -52,7 +55,12 @@ const EntrevistasRealizadas = () => {
                 return
             }
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/${pesquisa}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/${pesquisa}`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setLoading(false)
 
@@ -69,7 +77,10 @@ const EntrevistasRealizadas = () => {
             const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/voltar`, {
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -85,7 +96,12 @@ const EntrevistasRealizadas = () => {
         try {
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             //console.log(dataInicio, dataFim);
 
@@ -150,82 +166,16 @@ const EntrevistasRealizadas = () => {
         }
     }
 
-    const gerarRelatorioMensal = async () => {
-        try {
-            setLoading(true)
-
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista`, { withCredentials: true })
-
-            //console.log(dataInicio, dataFim);
-
-            let xls = '\ufeff'
-            xls += "<table border='1'>"
-            xls += "<thead><tr>"
-            xls += "<th>Id</th>"
-            xls += "<th>Ano Ref</th>"
-            xls += "<th>Mês Ref</th>"
-            xls += "<th>Data Conclusão</th>"
-            xls += "<th>Porte</th>"
-            xls += "<th>Proposta</th>"
-            xls += "<th>Nome</th>"
-            xls += "<th>CPF</th>"
-            xls += "<th>Idade</th>"
-            xls += "<th>UF</th>"
-            xls += "<th>Status Final</th>"
-            xls += "<th>Divergência DS</th>"
-            xls += "<th>Observações</th>"
-            xls += "<th>Cids</th>"
-            xls += "</tr></thead><tbody>"
-
-            result.data.entrevistas.forEach(e => {
-                xls += "<tr>"
-                xls += `<td>${e._id}</td>`
-                xls += `<td>${moment(e.dataEntrevista).format('YYYY')}</td>`
-                xls += `<td>${moment(e.dataEntrevista).format('MM')}</td>`
-                xls += `<td>${e.dataEntrevista || ''}</td>`
-                xls += `<td>${e.tipoContrato || ''}</td>`
-                xls += `<td>${e.proposta || ''}</td>`
-                xls += `<td>${e.nome || ''}</td>`
-                xls += `<td>${e.cpf || ''}</td>`
-                xls += `<td>${e.idade || ''}</td>`
-                xls += `<td>${e.filial || ''}</td>`
-                xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
-                xls += `<td>${e.houveDivergencia}</td>`
-                xls += `<td>${e.divergencia || ''}</td>`
-                // xls += `<td>${e.cids}</td>`
-                if (e.cids) {
-                    const arrCids = e.codigosCids.split('-')
-                    arrCids.forEach(cid => {
-                        xls += `<td>${cid}</td>`
-                    })
-                } else {
-                    xls += `<td></td>`
-                }
-                xls += `</tr>`
-            })
-
-            xls += "</tbody></table>"
-
-            var a = document.createElement('a');
-            var data_type = 'data:application/vnd.ms-excel';
-            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-            a.download = 'Relatorio Propostas.xls'
-            a.click()
-
-            setLoading(false)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const entrevistasQualidade = async () => {
         try {
 
             setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/qualidade`, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             setEntrevistas(result.data)

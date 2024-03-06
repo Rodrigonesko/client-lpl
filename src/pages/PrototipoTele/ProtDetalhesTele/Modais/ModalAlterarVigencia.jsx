@@ -18,7 +18,7 @@ const ModalAlterarVigencia = ({ data, setFlushHook }) => {
 
     const handleAlterarVigencia = async () => {
         console.log(vigencia)
-        const result = await alterarVigenciaPorCpfTitular({ cpfTitular: data.cpf, vigencia: vigencia })
+        await alterarVigenciaPorCpfTitular({ cpfTitular: data.cpf, vigencia: vigencia })
         setFlushHook(true)
         setOpen(false);
     }

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { Form, useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import './EditarEntrevista.css'
-import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button } from '@mui/material'
+import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button, FormControlLabel, Checkbox, Chip } from '@mui/material'
 import Toast from '../../../components/Toast/Toast'
+import { getCids } from '../../../_services/teleEntrevista.service'
 
 const EditarEntrevista = () => {
 
@@ -26,12 +27,18 @@ const EditarEntrevista = () => {
     const [flushHook, setFlushHook] = useState(false)
     const [qualDivergencia, setQualDivergencia] = useState('')
     const [patologias, setPatologias] = useState('')
-    const [cids, setCids] = useState('')
+    const [cids, setCids] = useState([])
+    const [cidsList, setCidsList] = useState([])
     const [respostas, setRespostas] = useState({})
 
     const buscarPerguntas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             setPerguntas(result.data.perguntas)
         } catch (error) {
             console.log(error);
@@ -49,7 +56,12 @@ const EditarEntrevista = () => {
 
     const salvar = async () => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             if (result.status === 200) {
                 setMessage('Entrevista salva com sucesso!')
                 setSeverity("success")
@@ -64,11 +76,27 @@ const EditarEntrevista = () => {
         }
     }
 
+    const fetchCids = async (cid) => {
+        try {
+            if (cid.length < 3) return
+            const result = await getCids(cid)
+            console.log(result.cids);
+            setCidsList(result.cids)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         setFlushHook(false)
         const buscarDadosEntrevista = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, {
+                    withCredentials: true,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
                 setDadosEntrevista(result.data.proposta)
                 setHouveDivergencia(result.data.proposta.houveDivergencia)
                 setDataNascimento(result.data.proposta.dataNascimento)
@@ -76,7 +104,7 @@ const EditarEntrevista = () => {
                 setCpf(result.data.proposta.cpf)
                 setQualDivergencia(result.data.proposta.divergencia)
                 setPatologias(result.data.proposta.patologias)
-                setCids(result.data.proposta.cids)
+                setCids(result.data.proposta.cids.split(', '))
 
             } catch (error) {
                 console.log(error);
@@ -190,19 +218,49 @@ const EditarEntrevista = () => {
                                 />
                             </Box>
                             <Box m={1}>
+                                {
+                                    cids.map(e => {
+                                        return (
+                                            <Chip
+                                                label={e}
+                                            />
+                                        )
+                                    })
+                                }
                                 <Typography>CID:</Typography>
                                 <TextField
                                     id="cids"
                                     multiline
                                     size='small'
-                                    value={cids}
                                     onChange={e => {
-                                        setCids(e.target.value)
-                                        handleChange(e.target)
+                                        fetchCids(e.target.value)
                                     }}
                                     fullWidth
                                     sx={{ marginBottom: '10px' }}
                                 />
+                                {
+                                    cidsList.map(e => {
+                                        return (
+                                            <Box>
+                                                <FormControlLabel
+                                                    control={<Checkbox />}
+                                                    value={`${e.subCategoria} - ${e.descricao}`}
+                                                    label={`${e.subCategoria} - ${e.descricao}`}
+                                                    checked={cids.includes(`${e.subCategoria} - ${e.descricao}`)}
+                                                    onChange={e => {
+                                                        if (cids.includes(e.target.value)) {
+                                                            cids.splice(cids.indexOf(e.target.value), 1)
+                                                        } else {
+                                                            cids.push(e.target.value)
+                                                        }
+                                                        handleChange({ id: 'cids', value: cids })
+
+                                                    }}
+                                                />
+                                            </Box>
+                                        )
+                                    })
+                                }
                             </Box>
                         </Box>
                     </Box>

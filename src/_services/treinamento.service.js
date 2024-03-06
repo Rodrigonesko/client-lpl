@@ -1,4 +1,5 @@
 import { ApiCall } from "./api";
+const token = localStorage.getItem('token')
 
 export const getAllTreinamentos = async () => {
     return await new ApiCall('/treinamento').get()
@@ -30,4 +31,8 @@ export const getVerificarTreinamento = async () => {
 
 export const naoPrecisaTreinamento = async (data) => {
     return await new ApiCall(`/treinamento/naoPrecisaTreinamento`).put(data)
+}
+
+export const uploadCertificados = async (formData, _id) => {
+    return await new ApiCall(`/treinamento/${_id}`, process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` } }).post(formData)
 }

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import ReplyIcon from '@mui/icons-material/Reply';
 import ModalExpandirImagem from "../Modal/ModalExpandirImagem";
 import { grey } from "@mui/material/colors";
+import AddReactionIcon from '@mui/icons-material/AddReaction';
 
 const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelectedRespondedMessage }) => {
 
@@ -22,9 +23,7 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
 
     const isImageByExtension = (url) => {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp', '.tiff', '.ico', '.exif', '.raw'];
-
         const fileExtension = url.slice(((url.lastIndexOf(".") - 1) >>> 0) + 2); // Extrai a extensão do arquivo da URL
-
         return imageExtensions.includes('.' + fileExtension.toLowerCase());
     }
 
@@ -97,13 +96,24 @@ const IndividualMessage = ({ item, index, name, setMessageReplayed, loadSelected
                             ) : (
                                 item.mensagem
                             )}
-                        </Typography> 
+                        </Typography>
                         <Typography textAlign={'end'} fontSize='10px' color={grey[100]}>{moment(item.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                     </div>
+                    {/* <Fade in={showReplyButton} unmountOnExit mountOnEnter>
+                        <Tooltip title="Reagir">
+                            <IconButton sx={{
+                                m: 1
+                            }} size="small">
+                                <AddReactionIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Fade> */}
                 </Typography>
                 <Fade in={showReplyButton} unmountOnExit mountOnEnter>
                     <Tooltip title="Responder">
-                        <IconButton sx={{ m: 1 }} size="small" onClick={() => handleMessageReplayed(item.mensagem, item._id)}>
+                        <IconButton sx={{
+                            m: 1
+                        }} size="small" onClick={() => handleMessageReplayed(item.mensagem, item._id)}>
                             <ReplyIcon />
                         </IconButton>
                     </Tooltip>

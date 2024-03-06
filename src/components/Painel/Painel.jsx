@@ -13,7 +13,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
     let total = 0
 
     protocolos = protocolos.filter((item, pos, array) => {
-
         return array.map(x => x.mo).indexOf(item.mo) === pos
     })
 
@@ -74,7 +73,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                     <FaAngleDown />
                     <span>Vencido ({qtdVencidos})</span>
                 </div>
-
                 {
                     statusVencido && (
                         <table>
@@ -86,18 +84,18 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                             </thead>
                             <tbody>
                                 {
-
                                     protocolos.map(e => {
-
-                                        //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${e.mo}`, {withCredentials: true})
-
                                         let hoje = new Date()
-
                                         if (moment(hoje).format('YYYY-MM-DD') > moment(e.dataSla).format('YYYY-MM-DD')) {
                                             return (
                                                 <tr key={e._id} >
                                                     <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
+                                                    {
+                                                        e.contato === 'Necessário Agendar Horario' && (
+                                                            <td className="necessario-agendar">{moment(e.dataAgendamento).format('DD/MM/YYYY HH:mm')}</td>
+                                                        )
+                                                    }
                                                 </tr>
                                             )
                                         }
@@ -130,7 +128,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                 {
                                     protocolos.map(e => {
 
-                                        //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/pessoas/${e.mo}`, {withCredentials: true})
 
                                         let hoje = new Date()
 
@@ -139,6 +136,11 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                                 <tr key={e._id} >
                                                     <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
+                                                    {
+                                                        e.contato === 'Necessário Agendar Horario' && (
+                                                            <td className="necessario-agendar">{moment(e.dataAgendamento).format('DD/MM/YYYY HH:mm')}</td>
+                                                        )
+                                                    }
                                                 </tr>
                                             )
                                         }
@@ -181,6 +183,11 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                                 <tr key={e._id} >
                                                     <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
+                                                    {
+                                                        e.contato === 'Necessário Agendar Horario' && (
+                                                            <td className="necessario-agendar">{moment(e.dataAgendamento).format('DD/MM/YYYY HH:mm')}</td>
+                                                        )
+                                                    }
                                                 </tr>
                                             )
                                         }
@@ -191,7 +198,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                         </table>
                     )
                 }
-
             </div>
             <div className="vence-2-dias">
                 <div className="change" onClick={() => {
@@ -200,7 +206,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                     <FaAngleDown />
                     <span>Vence em 2 Dias ({qtdVence2})</span>
                 </div>
-
                 {
                     statusVence2 && (
                         <table>
@@ -213,17 +218,19 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                             <tbody>
                                 {
                                     protocolos.map(e => {
-
                                         let hoje = new Date()
-
                                         hoje = moment(hoje).add(2, 'days').toDate()
-
                                         if (moment(hoje).format('YYYY-MM-DD') === moment(e.dataSla).format('YYYY-MM-DD')) {
 
                                             return (
                                                 <tr key={e._id} >
                                                     <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
+                                                    {
+                                                        e.contato === 'Necessário Agendar Horario' && e.dataAgendamento && (
+                                                            <td className="necessario-agendar">{moment(e.dataAgendamento).format('DD/MM/YYYY HH:mm')}</td>
+                                                        )
+                                                    }
                                                 </tr>
                                             )
                                         }
@@ -234,7 +241,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                         </table>
                     )
                 }
-
             </div>
             <div className="vence-3-dias">
                 <div className="change" onClick={() => {
@@ -243,7 +249,6 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                     <FaAngleDown />
                     <span>Vence em 3 Dias ({qtdVence3})</span>
                 </div>
-
                 {
                     statusVence3 && (
                         <table>
@@ -267,6 +272,11 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                                 <tr key={e._id} >
                                                     <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
+                                                    {
+                                                        e.contato === 'Necessário Agendar Horario' && (
+                                                            <td className="necessario-agendar">{moment(e.dataAgendamento).format('DD/MM/YYYY HH:mm')}</td>
+                                                        )
+                                                    }
                                                 </tr>
                                             )
                                         }
@@ -309,6 +319,11 @@ const Painel = ({ statusVencido, statusVenceHoje, statusVenceAmanha, statusVence
                                                 <tr key={e._id} >
                                                     <td><Link to={`/rsd/FichaBeneficiario/${e.mo}`}>{e.mo}</Link></td>
                                                     <td>{e.pessoa}</td>
+                                                    {
+                                                        e.contato === 'Necessário Agendar Horario' && (
+                                                            <td className="necessario-agendar">{moment(e.dataAgendamento).format('DD/MM/YYYY HH:mm')}</td>
+                                                        )
+                                                    }
                                                 </tr>
                                             )
                                         }

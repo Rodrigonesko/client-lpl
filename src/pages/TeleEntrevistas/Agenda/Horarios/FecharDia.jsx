@@ -1,11 +1,15 @@
 import { Button, FormControl, InputLabel, Paper, Select, TextField, Typography, MenuItem, Alert } from "@mui/material"
 import Axios from "axios"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Toast from "../../../../components/Toast/Toast"
 import { getAgendasFechadas } from "../../../../_services/teleEntrevista.service"
 import moment from "moment"
+import AuthContext from "../../../../context/AuthContext"
+import AgendaDeFechamentos from "./AgendaDeFechamentos"
 
 const FecharDia = ({ responsaveis }) => {
+
+    const { name } = useContext(AuthContext)
 
     const [data, setData] = useState('')
     const [responsavel, setResponsavel] = useState('')
@@ -16,8 +20,21 @@ const FecharDia = ({ responsaveis }) => {
     const [flushHook, setFlushHook] = useState(false)
 
     const handleFecharDia = async () => {
+
+        if (name !== 'Administrador' && name !== "Rodrigo Onesko Dias" && name !== "Bruna Tomazoni" && name !== "Luciana Tavares" && name !== "Claudia Rieth") {
+            setMessage('Você não tem permissão para realizar essa ação!')
+            setSeverity("error")
+            setToastOpen(true)
+            return
+        }
+
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharDia`, { data: data, responsavel: responsavel }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharDia`, { data: data, responsavel: responsavel }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             if (result.status === 200) {
                 setMessage('Dia fechado com sucesso!')
@@ -75,10 +92,11 @@ const FecharDia = ({ responsaveis }) => {
             </FormControl>
             <TextField style={{ marginRight: '20px' }} size="small" type='date' onChange={e => setData(e.target.value)} value={data} label='Dia' focused />
             <Button variant="contained" onClick={handleFecharDia} >Fechar Dia</Button>
+            <AgendaDeFechamentos />
             {
                 agendasFechadas.map(e => {
                     return (
-                        <Alert severity="info" style={{ margin: '10px' }}>
+                        <Alert severity={e.data === moment().format('YYYY-MM-DD') ? 'error' : e.data === moment().businessAdd(1, 'days').format('YYYY-MM-DD') ? 'warning' : 'info'} style={{ margin: '10px' }}>
                             {e.analista} - {moment(e.data).format('DD/MM/YYYY')} - Fechado por: {e.fechadoPor}
                         </Alert>
                     )

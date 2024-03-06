@@ -206,7 +206,7 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                         <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
                     ) : null
                 }
-                <Table size="small" style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table" className="table">
+                <Table size="small" style={{ display: 'block', overflowX: 'auto', whiteSpace: 'nowrap' }} sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead className="table-header">
                         <TableRow>
                             <TableCell padding="none">Vigência</TableCell>

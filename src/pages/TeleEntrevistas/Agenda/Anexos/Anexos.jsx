@@ -31,7 +31,12 @@ const Anexos = () => {
     const buscarPropostas = async () => {
         try {
             setLoading(true)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             setPropostas(result.data.propostas)
             setLoading(false)
@@ -48,7 +53,10 @@ const Anexos = () => {
             await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/mandarImplatacao`, {
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             buscarPropostas()
@@ -65,7 +73,12 @@ const Anexos = () => {
 
             setLoading(true)
 
-            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { id }, { withCredentials: true })
+            await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { id }, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
 
             buscarPropostas()
@@ -86,7 +99,12 @@ const Anexos = () => {
 
             setDivergencia(divergencia)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/propostas/anexar`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             if (divergencia === 'Todos') {
                 setPropostas(result.data.propostas)

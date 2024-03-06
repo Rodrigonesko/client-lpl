@@ -26,7 +26,10 @@ const AbrirNovoHorario = ({ responsaveis }) => {
                 dia: dia,
                 horario: horario
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             if (result.status === 200) {
@@ -65,9 +68,6 @@ const AbrirNovoHorario = ({ responsaveis }) => {
                         <em>
                             Responsável
                         </em>
-                    </MenuItem>
-                    <MenuItem value={'Leonardo'}>
-                        Leonardo
                     </MenuItem>
                     {
                         responsaveis.map(e => {

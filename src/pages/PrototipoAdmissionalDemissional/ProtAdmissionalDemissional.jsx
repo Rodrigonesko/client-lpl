@@ -1,10 +1,8 @@
-import { Box, Container, Tab, Tabs } from "@mui/material"
+import { Box, Container, Tab, Tabs, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import CardColaboradoresAdmissional from "./Cards/Admissional/CardColaboradores"
-import CardFiltrosAdmissional from "./Cards/Admissional/CardFiltros"
-import CardFiltrosDemissional from "./Cards/Demissional/CardFiltrosDemissional"
-import CardColaboradoresDemissional from "./Cards/Demissional/CardColaboradoresDemissional"
+import CardAdmissional from "./Cards/Admissional/CardAdmissional"
+import CardDemissional from "./Cards/Demissional/CardDemissional"
 
 const ProtAdmissionalDemissional = () => {
 
@@ -23,9 +21,38 @@ const ProtAdmissionalDemissional = () => {
     return (
         <Sidebar>
             <Container maxWidth>
-                <div className="title">
-                    <h2>Admissional / Demissional</h2>
-                </div>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        mt: 2,
+                    }}
+                >
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontWeight: 'bold',
+                            position: 'relative',
+                            '&::after': {
+                                content: '""',
+                                position: 'absolute',
+                                width: '30%',
+                                height: '2px',
+                                bottom: 0,
+                                left: '0%',
+                                backgroundColor: 'currentColor',
+                                transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
+                            },
+                            '&:hover::after': {
+                                width: '100%',
+                                left: '0%',
+                            },
+                        }}
+                    >
+                        Admissional / Demissional
+                    </Typography>
+                </Box>
                 <br />
                 <Tabs value={tipoExame} onChange={handleChange} aria-label="wrapped label tabs example" >
                     <Tab value="admissional" label="Admissional" />
@@ -33,18 +60,12 @@ const ProtAdmissionalDemissional = () => {
                 </Tabs>
                 {
                     tipoExame === 'admissional' ? (
-                        <Box display={'flex'} mt={2}>
-                            <CardFiltrosAdmissional flushHook={flushHook} setFlushHook={setFlushHook} />
-                            <Box width={'100%'} ml={2} >
-                                <CardColaboradoresAdmissional />
-                            </Box>
+                        <Box>
+                            <CardAdmissional />
                         </Box>
                     ) : tipoExame === 'demissional' ? (
-                        <Box display={'flex'} mt={2}>
-                            <CardFiltrosDemissional flushHook={flushHook} setFlushHook={setFlushHook} />
-                            <Box width={'100%'} ml={2} >
-                                <CardColaboradoresDemissional />
-                            </Box>
+                        <Box>
+                            <CardDemissional />
                         </Box>
                     ) : (
                         <>

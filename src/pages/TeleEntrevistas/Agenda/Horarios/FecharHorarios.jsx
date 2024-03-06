@@ -17,7 +17,12 @@ const FecharHorarios = ({ responsaveis }) => {
 
     const buscarHorariosDisponiveis = async (data) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${responsavel}/${data}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosDisponiveis/${responsavel}/${data}`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             setHorarioDisponiveis(result.data.horarios)
         } catch (error) {
             console.log(error);
@@ -25,6 +30,15 @@ const FecharHorarios = ({ responsaveis }) => {
     }
 
     const handleFecharHorarios = async () => {
+
+
+        if (name !== 'Administrador' && name !== "Rodrigo Onesko Dias" && name !== "Bruna Tomazoni" && name !== "Luciana Tavares" && name !== "Claudia Rieth" && name !== "Leonardo Lonque") {
+            setMessage('Você não tem permissão para realizar essa ação!')
+            setSeverity("error")
+            setToastOpen(true)
+            return
+        }
+
         try {
 
             if (name !== 'Administrador' && name !== 'Claudia Rieth' && name !== 'Luciana Tavares' && name !== 'Bruna Tomazoni' && name !== 'Rodrigo Onesko Dias') {
@@ -42,7 +56,12 @@ const FecharHorarios = ({ responsaveis }) => {
                 }
                 return null
             })
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             if (result.status === 200) {
                 setMessage('Horarios fechados com sucesso!')
                 setSeverity("success")
@@ -52,11 +71,20 @@ const FecharHorarios = ({ responsaveis }) => {
                 setHorarioDisponiveis([])
             }
         } catch (error) {
+<<<<<<< HEAD
             setMessage('Erro ao fechar horarios!')
+=======
+            console.log(error)
+            setMessage(error.response.data.message)
+>>>>>>> main
             setSeverity("error")
             setToastOpen(true)
         }
     }
+
+    useEffect(() => {
+        buscarHorariosDisponiveis(data, responsavel);
+    }, [data, responsavel]);
 
     return (
         <Paper style={{ padding: '20px', margin: '10px' }} elevation={3}>
@@ -94,7 +122,7 @@ const FecharHorarios = ({ responsaveis }) => {
             }} label='Dia' focused value={data} />
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
                 {
-                    horariosDisponiveis.map(value => {
+                    horariosDisponiveis.sort().map(value => {
                         const labelId = `checkbox-list-label-${value}`;
                         return (
                             <ListItem

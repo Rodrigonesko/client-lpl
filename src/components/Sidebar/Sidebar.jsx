@@ -15,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import { deepPurple, green } from "@mui/material/colors";
+import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
@@ -139,7 +140,6 @@ const Sidebar = ({ children }) => {
                 </Box>
                 <Menu iconShape="round">
                     <MenuItem icon={<FaHome />}><Link to='/'>Home</Link></MenuItem>
-                    <MenuItem icon={<FaUserCircle />}><Link to='/profile'>Perfil</Link></MenuItem>
                     <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
                         <ChatIcon />
                     </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
@@ -149,14 +149,14 @@ const Sidebar = ({ children }) => {
                             <SubMenu title="Admin" icon={<FaShieldAlt />} >
                                 <SubMenu title='Produção' icon={<FaUserSecret />}>
                                     <MenuItem><Link to='/admin/producao/solicitarChamados'>Abrir Chamados</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/producao/criar'>Criar Usuário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/producao/liberarModulos' >Liberação Módulos</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/producao/analitico'>Analítico</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/producao/users'>Usuários</Link></MenuItem>
                                     <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu icon={<FaArchive />} title='RH'>
                                     <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/rh/admissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/rh/prototipoAdmissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
                                 </SubMenu>
@@ -164,7 +164,6 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/contingencias'>Controle de Contingências</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/infra/resetPassword'>Restaurar Senha</Link></MenuItem>
                                 </SubMenu>
                             </SubMenu>
                         ) : null
@@ -190,7 +189,6 @@ const Sidebar = ({ children }) => {
                             <MenuItem><Link to='/entrevistas/AtendimentoHumanizado'>Atendimento Humanizado</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/RespostasJanelas'>Janelas Escolhidas</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/conversas'>Conversas</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/whatsappTwilio'>Whatsapp Twilio</Link></MenuItem>
                         </SubMenu>
                         <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                         <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
@@ -257,6 +255,10 @@ const Sidebar = ({ children }) => {
                     </SubMenu>
                     <SubMenu title='Prototipo Tele' icon={<FaClipboard />}>
                         <MenuItem><Link to='/prototipoTele/filtros'>Pendencias</Link></MenuItem>
+                        <MenuItem><Link to='/prototipoTele/enviar'>Envio</Link></MenuItem>
+                    </SubMenu>
+                    <SubMenu title='Sindicância' icon={<GavelOutlinedIcon />}>
+                        <MenuItem><Link to='/demandas'>Demandas</Link></MenuItem>
                     </SubMenu>
                 </Menu>
             </ProSidebar>

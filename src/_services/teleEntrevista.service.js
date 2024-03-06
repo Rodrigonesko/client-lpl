@@ -1,7 +1,6 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
 const URL_API = process.env.REACT_APP_API_TELE_KEY
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 
 export const showPropostas = async () => {
@@ -239,4 +238,80 @@ export const getAgendasFechadas = async () => {
 
 export const getRelatorioProdutividadeAnexosMensal = async (mes) => {
     return await new ApiCall(`/entrevistas/relatorioProdutividadeAnexosMensal/${mes}`).get()
+}
+
+export const quantidadeAnalistasPorMes = async (mes) => {
+    return await new ApiCall(`/entrevistas/quantidadeAnalistasPorMes/${mes}`).get()
+}
+
+export const filterEntrevistasRealizadas = async ({ pesquisa, page, limit, entrevistaQualidade }) => {
+    return await new ApiCall('/entrevistas/filterEntrevistasRealizdas').post({ pesquisa, page, limit, entrevistaQualidade })
+}
+
+export const getPropostasAAnexar = async () => {
+    return await new ApiCall('/entrevistas/propostas/anexar').get()
+}
+
+export const mandarPropostaParaImplantacao = async ({ id }) => {
+    return await new ApiCall('/entrevistas/mandarImplatacao').put({ id })
+}
+
+export const implantarProposta = async ({ id }) => {
+    return await new ApiCall('/entrevistas/implantar').put({ id })
+}
+
+export const anexarProposta = async ({ id }) => {
+    return await new ApiCall('/entrevistas/anexar').put({ id })
+}
+
+export const filterQueryDadosEntrevista = async ({ page, limit, query }) => {
+    return await new ApiCall('/entrevistas/filterQueryDadosEntrevistas').post({ page, limit, query })
+}
+
+export const getCids = async (cid) => {
+    return await new ApiCall(`/entrevistas/cids/pesquisa/${cid}`).get()
+}
+
+export const getPerguntas = async () => {
+    return await new ApiCall('/entrevistas/perguntas').get()
+}
+
+export const getEntrevistasPorMes = async (mes) => {
+    return await new ApiCall(`/entrevistas/quantidadeEntrevistasMes/${mes}`).get()
+}
+
+export const getProducaoIndividualAnexosPorMes = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/produtividadeAnexosIndividual/${mes}/${analista}`).get()
+}
+
+export const getAnaliticoAnexos = async (mes) => {
+    return await new ApiCall(`/entrevistas/dadosAnalaticoAnexos/${mes}`).get()
+}
+
+export const getProducaoIndividualEntrevistas = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/producaoIndividualTele/${mes}/${analista}`).get()
+}
+
+export const getComparativoProducao = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/comparativoProducao/${mes}/${analista}`).get()
+}
+
+export const getQuantidadeDivergencias = async (mes, analista) => {
+    return await new ApiCall(`/entrevistas/totalDivergencias/${mes}/${analista}`).get()
+}
+
+export const getNextCloseSchedules = async () => {
+    return await new ApiCall('/entrevistas/nextCloseSchedule').get()
+}
+
+export const createNextCloseSchedules = async (data) => {
+    return await new ApiCall('/entrevistas/nextCloseSchedule').post(data)
+}
+
+export const deleteNextCloseSchedules = async (id) => {
+    return await new ApiCall(`/entrevistas/nextCloseSchedule/${id}`).delete()
+}
+
+export const divergenciaAnexo = async (data) => {
+    return await new ApiCall('/entrevistas/divergenciaAnexo').put(data)
 }

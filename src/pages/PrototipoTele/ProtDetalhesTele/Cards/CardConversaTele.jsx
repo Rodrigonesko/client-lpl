@@ -1,5 +1,4 @@
-import { Box, Button, Chip, Divider, IconButton, Paper, Slide, TextField, Tooltip, Typography } from "@mui/material"
-import SendIcon from '@mui/icons-material/Send';
+import { Box, Chip, Divider, IconButton, Paper, Slide, Tooltip, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import { useRef, useState } from "react";
 import { useEffect } from "react";
@@ -19,8 +18,10 @@ import PopoverAlterarNumeroEnvio from "../Components/PopoverAlterarNumeroEnvio";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { io } from "socket.io-client";
+import MensagemDependentesFaltantes from "../Components/MensagemDependentesFaltantes";
+import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
 
-const socket = io(`http://18.230.122.26:3001`);
+const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
 const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendimento, setResponsavelAtendimento, selectedWhatsapp, setSelectedWhatsapp, data, setData }) => {
 
@@ -36,26 +37,27 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         setOpen(false)
     }
 
-    const fetchData = async () => {
-
-        const resultData = await mostrarPropostaPorId(data._id)
-        setData(resultData)
-        if (!selectedWhatsapp || selectedWhatsapp === 'whatsapp:+55undefinedundefined') {
-            setMessages([])
-            return
-        }
-        const result = await getMessagesTele(selectedWhatsapp)
-        setMessages(result)
-        await visualizarMensagem({
-            whatsapp
-        })
-    }
-
     useEffect(() => {
+
+        const fetchData = async () => {
+
+            const resultData = await mostrarPropostaPorId(data._id)
+            setData(resultData)
+            if (!selectedWhatsapp || selectedWhatsapp === 'whatsapp:+55undefinedundefined' || selectedWhatsapp === 'whatsapp:+55') {
+                setMessages([])
+                return
+            }
+            const result = await getMessagesTele(selectedWhatsapp)
+            setMessages(result)
+            await visualizarMensagem({
+                whatsapp
+            })
+        }
+
         setWhatsapp(selectedWhatsapp)
         fetchData()
         setFlushHook(false)
-    }, [selectedWhatsapp, flushHook])
+    }, [selectedWhatsapp, flushHook, data._id])
 
     useEffect(() => {
         socket.on('receivedMessage', async (message) => {
@@ -65,11 +67,12 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         });
         socket.on('statusMessage', async (data) => {
             const { From, To } = data
-            if (From === data.whatsapp || To === data.whatsapp) {
+            console.log(data);
+            if (To === data.whatsapp) {
                 setFlushHook(true)
             }
         })
-    }, [])
+    }, [data.whatsapp])
 
     useEffect(() => {
         const component = chatRef.current;
@@ -122,11 +125,11 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     {
                         messages.map(message => {
                             return (
-                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' ? 'right' : 'left' }}>
+                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
                                     <Typography color='darkblue' fontSize='14px' >
                                         {message.de}
                                     </Typography>
-                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
+                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
                                     <Typography color='GrayText'>{moment(message.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                     <Typography variant='body2' color='GrayText'>
                                         {
@@ -156,6 +159,8 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     <MensagemSemSucesso setMessage={setMessage} />
                     <MensagemPadrao setMessage={setMessage} nome={nome} />
                     <MensagemHorarios setMessage={setMessage} />
+                    <MensagemDependentesFaltantes setMessage={setMessage} />
+                    <MensagemAdiantarTele setMessage={setMessage} />
                 </Box>
             </Box>
         </Slide >

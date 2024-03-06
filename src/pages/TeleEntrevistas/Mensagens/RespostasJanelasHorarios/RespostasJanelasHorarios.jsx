@@ -44,7 +44,10 @@ const RespostasJanelasHorarios = () => {
 
     const buscarHorarios = async (dia) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${ajustarDia(dia)}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/horariosDisponiveis/${ajustarDia(dia)}`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
             setHorariosDisponiveis(result.data)
         } catch (error) {
             console.log(error);
@@ -56,7 +59,10 @@ const RespostasJanelasHorarios = () => {
 
             console.log(dataEntrevista, horario);
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/analistasDisponiveis/${ajustarDia(dataEntrevista)}/${horario}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/analistasDisponiveis/${ajustarDia(dataEntrevista)}/${horario}`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
 
             setResponsaveis(result.data)
 
@@ -70,7 +76,10 @@ const RespostasJanelasHorarios = () => {
 
             setLoading(true)
 
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { id, responsavel, data: dataEntrevista, horario: horarioEntrevista }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/agendar`, { id, responsavel, data: dataEntrevista, horario: horarioEntrevista }, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
 
             if (result.status === 200) {
                 window.location.reload()
@@ -90,7 +99,7 @@ const RespostasJanelasHorarios = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()
@@ -108,7 +117,7 @@ const RespostasJanelasHorarios = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/janelasEscolhidas`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             setPropostas(result.data)
@@ -129,7 +138,7 @@ const RespostasJanelasHorarios = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()
@@ -148,7 +157,7 @@ const RespostasJanelasHorarios = () => {
                 id
             }, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()
@@ -170,7 +179,8 @@ const RespostasJanelasHorarios = () => {
                 whatsapps: propostasReenviar,
                 data: dataReenviar
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
 
             buscarPropostas()
@@ -194,7 +204,10 @@ const RespostasJanelasHorarios = () => {
 
         const buscarDiasDisponiveis = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, { withCredentials: true })
+                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/diasDisponiveis`, {
+                    withCredentials: true,
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
+                })
                 setDatasEntrevista(result.data)
             } catch (error) {
                 console.log(error);

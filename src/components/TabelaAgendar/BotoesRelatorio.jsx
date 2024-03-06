@@ -176,7 +176,6 @@ const BotoesRelatorios = () => {
 
             const { propostas } = await getPropostasNaoRealizadasTele()
 
-
             let xls = '\ufeff'
             xls += "<table border='1'>"
             xls += "<thead><tr>"

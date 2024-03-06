@@ -13,9 +13,6 @@ const ConcluidosRsd = () => {
         try {
 
             e.preventDefault()
-
-            //const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/rsd/concluidos/${pesquisa}`, { withCredentials: true })
-
             const result = await getConcluidoRsd(pesquisa)
             setConcluidos(result.pedidos)
 

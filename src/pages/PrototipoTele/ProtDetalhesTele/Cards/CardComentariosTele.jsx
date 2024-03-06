@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Button, Divider, IconButton, Paper, Popover, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, IconButton, Paper, Popover, TextField, Tooltip, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { useEffect } from "react";
 import { createComentario, deleteComentario, getComentariosByCpf } from "../../../../_services/teleEntrevistaExterna.service";
@@ -37,20 +37,25 @@ const CardComentariosTele = ({ cpf }) => {
         fetchData()
     }
 
-    const fetchData = async () => {
-        const result = await getComentariosByCpf(cpf)
 
-        setComentarios(result)
-    }
 
     const handleDeleteComentario = async (id) => {
         await deleteComentario(id)
         fetchData()
     }
 
+    const fetchData = async () => {
+        const result = await getComentariosByCpf(cpf)
+        setComentarios(result)
+    }
+
     useEffect(() => {
+        const fetchData = async () => {
+            const result = await getComentariosByCpf(cpf)
+            setComentarios(result)
+        }
         fetchData()
-    }, [])
+    }, [cpf])
 
 
 

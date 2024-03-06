@@ -2,14 +2,25 @@ import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 import Axios from 'axios'
 import moment from 'moment'
+import { filterUsers } from '../../../_services/user.service'
 
 const gerarPdf = async (proposta, nome) => {
 
     pdfMake.vfs = pdfFonts.pdfMake.vfs
 
-    const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista/${proposta}/${nome}`, { withCredentials: true })
+    const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista/${proposta}/${nome}`, {
+        withCredentials: true,
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    })
 
-    const resultPerguntas = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, { withCredentials: true })
+    const resultPerguntas = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, {
+        withCredentials: true,
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    })
 
     const enfermeiras = [
         { nome: "Marcia Rocha", coren: "COREN PR-000.233.985" },
@@ -24,13 +35,15 @@ const gerarPdf = async (proposta, nome) => {
         { nome: "Cristiane Antonioli", coren: "COREN PR-000.356.705" },
         { nome: "Liliane Antunes Laureano", coren: "COREN PR-001.794.387" },
         { nome: "Michelle Jonsson", coren: "COREN PR-000.552.516" },
-        {nome: 'Camila Tomczak', coren: 'COREN PR-001.919.048'}
+        { nome: 'Camila Tomczak', coren: 'COREN PR-001.919.048' }
     ];
 
-    console.log(result);
+    let coren = await filterUsers({
+        name: result.data.result[0].responsavel
+    })
 
-    let coren = enfermeiras.find(enfermeira => enfermeira.nome === result.data.result[0].responsavel)?.coren;
-
+    coren = coren[0].coren
+    //let coren = enfermeiras.find(enfermeira => enfermeira.nome === result.data.result[0].responsavel)?.coren;
 
     let tituloHabitos
 
@@ -84,7 +97,7 @@ const gerarPdf = async (proposta, nome) => {
 
     let divergencias
 
-    if (result.data.result[0].houveDivergencia === 'Sim' ) {
+    if (result.data.result[0].houveDivergencia === 'Sim') {
         divergencias = [
             {
                 text: [{ text: 'Identifica divergência? ' }, { text: 'Sim', color: '#0070c0', bold: true, italics: true }], margin: [20, 0, 20, 0]

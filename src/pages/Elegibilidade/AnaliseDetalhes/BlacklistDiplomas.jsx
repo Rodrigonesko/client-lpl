@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Box, Paper, Typography, IconButton, TextField, Button, Alert, Snackbar, Autocomplete } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Axios from "axios";
 import { buscaDiploma, getCursos, getUniversidade, salvaDiploma } from "../../../_services/elegibilidade.service";
 
 const BlacklistDiplomas = ({ proposta }) => {

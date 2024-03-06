@@ -49,7 +49,7 @@ const AnaliseElegibilidade = () => {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/elegibilidade/propostas/Andamento/${name}`, {
                 withCredentials: true,
                 headers: {
-                    Authorization: `Bearer ${cookie}`
+                    Authorization: `Bearer ${localStorage.getItem('token') || cookie}`
                 }
             })
 

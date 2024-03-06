@@ -33,7 +33,7 @@ const ControleContigencias = () => {
                             <ModalAdicionar setFlushHook={setFlushHook} contingencias={contingencias} />
                         </Box>
                         <Divider />
-                        <Box component={Paper} p={1} mt={1} display='flex' flexWrap='wrap'>
+                        <Box component={Paper} elevation={7} p={1} mt={1} display='flex' flexWrap='wrap'>
                             {
                                 contingencias.map(contingencia => {
                                     return (

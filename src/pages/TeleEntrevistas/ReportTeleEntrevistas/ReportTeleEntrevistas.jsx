@@ -14,7 +14,7 @@ const ReportTeleEntrevistas = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/naoRealizadas`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${document.cookie.split('=')[1]}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
 
             let quantidadeAgendar = 0

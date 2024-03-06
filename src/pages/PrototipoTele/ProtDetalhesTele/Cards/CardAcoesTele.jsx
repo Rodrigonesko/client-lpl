@@ -1,6 +1,5 @@
 import { Box, Divider, Paper, Typography } from "@mui/material"
 
-import ModalDeletar from "../Modais/ModalDeletar";
 import ModalCancelar from "../Modais/ModalCancelar";
 import ModalEnviarHumanizado from "../Modais/ModalEnviarHumanizado";
 import ModalRetroceder from "../Modais/ModalRetroceder";

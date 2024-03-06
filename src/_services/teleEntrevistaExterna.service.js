@@ -1,6 +1,6 @@
 //import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const URL_API = process.env.REACT_APP_API_TELE_KEY //'http://localhost:3002'
+const URL_API = process.env.REACT_APP_API_TELE_KEY  //'http://localhost:3002'
 //const token = getCookie('token')
 
 export const getMessagesTele = async (whatsapp) => {
@@ -47,8 +47,8 @@ export const quantidadePropostasNaoRealizadas = async () => {
     return await new ApiCall('/totalPropostasNaoRealizadas', URL_API).get()
 }
 
-export const filterPropostasAgendadas = async ({ responsavel, page, limit }) => {
-    return await new ApiCall('/filterPropostasAgendadas', URL_API).post({ responsavel, page, limit })
+export const filterPropostasAgendadas = async ({ responsavel, page, limit, pesquisa }) => {
+    return await new ApiCall('/filterPropostasAgendadas', URL_API).post({ responsavel, page, limit, pesquisa })
 }
 
 export const visualizarMensagem = async ({ whatsapp }) => {
@@ -65,4 +65,76 @@ export const encerrarAtendimentoHumanizado = async ({ id }) => {
 
 export const encerrarAtendimentoJanela = async ({ id }) => {
     return await new ApiCall('/encerrarAtendimento', URL_API).put({ id })
+}
+
+export const paginacaoAgenda = async ({ page, limit }) => {
+    return await new ApiCall('/paginacaoAgenda', URL_API).post({ page, limit })
+}
+
+export const quantidadePropostasPorMesFiltradas = async (data) => {
+    return await new ApiCall('/quantidadePropostasPorMesFiltradas', URL_API).post(data)
+}
+
+export const graficoPropostasPorMesFiltradas = async (data) => {
+    return await new ApiCall('/graficoPropostasPorMesFiltradas', URL_API).post(data)
+}
+
+export const getPropostaById = async (id) => {
+    return await new ApiCall(`/proposta/${id}`, URL_API).get()
+}
+
+export const alterarFormularioEntrevista = async ({ id, formulario }) => {
+    return await new ApiCall(`/alterarFormulario`, URL_API).put({ id, formulario })
+}
+
+export const getPropostaPorNomeEProposta = async (nome, proposta) => {
+    return await new ApiCall(`/buscaPorPropostaENome/${nome}/${proposta}`, URL_API).get()
+}
+
+export const filterPropostasNaoEnviadas = async (data) => {
+    return await new ApiCall(`/prototipoNaoEnviadas`, URL_API).post(data)
+}
+
+export const sendMessageSaudacao = async ({ _id }) => {
+    return await new ApiCall(`/sendMessageSaudacao`, URL_API).post({ _id })
+}
+
+export const ajustarPropostasSemCpf = async ({ propostas }) => {
+    return await new ApiCall(`/ajustar`, URL_API).put({ propostas })
+}
+
+export const getPropostasSemCpf = async () => {
+    return await new ApiCall(`/ajustar`, URL_API).get()
+}
+
+export const getPropostasSemResposta = async () => {
+    return await new ApiCall(`/semResposta`, URL_API).get()
+}
+
+export const estatisticasAutoAgendamento = async ({ de, ate, filterText }) => {
+    return await new ApiCall(`/estatisticasAutoAgendamento`, URL_API).post({ de, ate, filterText })
+}
+
+export const producaoIndividualAgendamentos = async (mes, analista) => {
+    return await new ApiCall(`/producaoIndividualAgendamentos/${analista}/${mes}`, URL_API).get()
+}
+
+export const comparativoAgendamentos = async (mes, analista) => {
+    return await new ApiCall(`/comparativoAgendamentos/${analista}/${mes}`, URL_API).get()
+}
+
+export const getAnaliticoAgendamentoMensal = async (mes) => {
+    return await new ApiCall(`/analiticoAgendamentoMensal/${mes}`, URL_API).get()
+}
+
+export const getProducaoAnalistasAgendamento = async (mes) => {
+    return await new ApiCall(`/producaoAnalistasAgendamento/${mes}`, URL_API).get()
+}
+
+export const getGraficoPropostasAgendadas = async (mes) => {
+    return await new ApiCall(`/graficoPropostasAgendadas/${mes}`, URL_API).get()
+}
+
+export const getProducaoConcluidasSemAgendar = async (mes) => {
+    return await new ApiCall(`/producaoConcluidasSemAgendar/${mes}`, URL_API).get()
 }

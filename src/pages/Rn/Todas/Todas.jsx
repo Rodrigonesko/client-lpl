@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
-import { Button, Box, TextField, TableContainer, TableBody, TableHead, Table, TableRow, TableCell, Alert, Snackbar } from "@mui/material";
+import { Button, Box, TextField, TableContainer, TableBody, TableHead, Table, TableRow, TableCell, Alert, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText } from "@mui/material";
 import * as XLSX from "xlsx";
 import moment from "moment";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Todas.css'
 import { filterRn, getRns } from "../../../_services/teleEntrevista.service";
 import { Container } from "@mui/material";
+import { getRnByDate } from "../../../_services/rn.service";
 
 
 const Todas = () => {
@@ -14,12 +15,32 @@ const Todas = () => {
     const [rns, setRns] = useState([])
     const [pesquisa, setPesquisa] = useState('')
     const [alerta, setAlerta] = useState(false)
+
+    const [openReport, setOpenReport] = useState(false)
+    const [dataInicioReport, setDataInicioReport] = useState('')
+    const [dataFimReport, setDataFimReport] = useState('')
+    const [dataInicioReportGerencial, setDataInicioReportGerencial] = useState('')
+    const [dataFimReportGerencial, setDataFimReportGerencial] = useState('')
+    const [snackMsg, setSnackMsg] = useState('')
+    const [severity, setSeverity] = useState('')
+
+    const [openReportGerencial, setOpenReportGerencial] = useState(false)
     //   const [loading, setLoading] = useState(false)
 
     let rnsForExcel
 
     const handleClose = () => {
         setAlerta(false)
+        setOpenReport(false)
+        setOpenReportGerencial(false)
+    }
+
+    const handleOpenReport = () => {
+        setOpenReport(true)
+    }
+
+    const handleOpenReportGerencial = () => {
+        setOpenReportGerencial(true)
     }
 
     const handleChange = (elemento) => {
@@ -32,8 +53,12 @@ const Todas = () => {
 
         if (pesquisa.length <= 2) {
             setAlerta(true)
+            setSnackMsg('Digite no minimo 3 caracteres!')
+            setSeverity('warning')
             return
         }
+
+        console.log(pesquisa);
 
         const resultado = await filterRn(pesquisa)
         setRns(resultado)
@@ -56,7 +81,10 @@ const Todas = () => {
     const transformData = async () => {
         try {
 
-            const result = await getRns()
+            const result = await getRnByDate(
+                dataInicioReport,
+                dataFimReport
+            )
 
             rnsForExcel = result.map(e => {
 
@@ -97,7 +125,8 @@ const Todas = () => {
                         '2º CTTO': contato2,
                         '3º CTTO': contato3,
                         'OBSERVAÇÕES DO CONTATO': e.observacoes,
-                        'Analista': e.analistaAmil || ''
+                        'Analista': e.analistaAmil || '',
+                        'Data Inclusão': moment(e.createdAt).format('DD/MM/YYYY'),
                     }
                 )
             })
@@ -112,12 +141,21 @@ const Todas = () => {
         await transformData()
 
         try {
+            if ((dataInicioReport === '') && (dataFimReport === '')) {
+                setAlerta(true)
+                setSnackMsg('Insira as datas!')
+                setSeverity('warning')
+                return
+            }
             const ws = XLSX.utils.json_to_sheet(rnsForExcel)
             const wb = { Sheets: { data: ws }, SheetNames: ["data"] }
             XLSX.writeFile(wb, 'reportRn.xlsx')
-
-            console.log(ws);
-
+            setAlerta(true)
+            setSnackMsg('Report gerado com sucesso!')
+            setSeverity('success')
+            setDataFimReport('')
+            setDataInicioReport('')
+            setOpenReport(false)
         } catch (error) {
             console.log(error);
         }
@@ -128,7 +166,17 @@ const Todas = () => {
         try {
             let xls = '\ufeff'
 
-            const result = await getRns()
+            const result = await getRnByDate(
+                dataInicioReportGerencial,
+                dataFimReportGerencial
+            )
+
+            if ((dataInicioReportGerencial === '') && (dataFimReportGerencial === '')) {
+                setAlerta(true)
+                setSnackMsg('Insira as datas!')
+                setSeverity('warning')
+                return
+            }
 
             xls += "<table border='1'>"
             xls += "<thead><tr>"
@@ -205,6 +253,12 @@ const Todas = () => {
             a.href = data_type + ', ' + xls.replace(/ /g, '%20');
             a.download = 'Relatorio Propostas.xls'
             a.click()
+            setAlerta(true)
+            setSnackMsg('Report Gerencial gerado com sucesso!')
+            setSeverity('success')
+            setDataFimReportGerencial('')
+            setDataInicioReportGerencial('')
+            setOpenReportGerencial(false)
 
         } catch (error) {
 
@@ -231,13 +285,105 @@ const Todas = () => {
                             <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                         </form>
                         <Box position={'absolute'} right='20px'>
-                            <Button variant="outlined" onClick={report} sx={{ marginRight: '10px' }}>Report</Button>
-                            <Button variant="contained" onClick={reportGerencial} >Report Gerencial</Button>
+                            <Button variant="outlined" onClick={handleOpenReport} sx={{ marginRight: '10px' }}>Report</Button>
+                            <Button variant="contained" onClick={handleOpenReportGerencial} >Report Gerencial</Button>
                         </Box>
+                        <Dialog
+                            open={openReport}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Insira as Datas do Relatório!"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    <TextField
+                                        type='date'
+                                        margin='normal'
+                                        fullWidth
+                                        label='Data de Início'
+                                        focused
+                                        value={dataInicioReport}
+                                        onChange={(e) => { setDataInicioReport(e.target.value) }}
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px'
+                                            }
+                                        }}
+                                    ></TextField>
+                                    <TextField
+                                        type='date'
+                                        margin='normal'
+                                        fullWidth
+                                        label='Data Final'
+                                        focused
+                                        value={dataFimReport}
+                                        onChange={(e) => { setDataFimReport(e.target.value) }}
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px'
+                                            }
+                                        }}
+                                    ></TextField>
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color='error' >Fechar</Button>
+                                <Button onClick={report} color='success' autoFocus >Report</Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Dialog
+                            open={openReportGerencial}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Insira as Datas do Relatório Gerencial!"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    <TextField
+                                        type='date'
+                                        margin='normal'
+                                        fullWidth
+                                        label='Data de Início'
+                                        focused
+                                        value={dataInicioReportGerencial}
+                                        onChange={(e) => { setDataInicioReportGerencial(e.target.value) }}
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px'
+                                            }
+                                        }}
+                                    ></TextField>
+                                    <TextField
+                                        type='date'
+                                        margin='normal'
+                                        fullWidth
+                                        label='Data Final'
+                                        focused
+                                        value={dataFimReportGerencial}
+                                        onChange={(e) => { setDataFimReportGerencial(e.target.value) }}
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px'
+                                            }
+                                        }}
+                                    ></TextField>
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color='error' >Fechar</Button>
+                                <Button onClick={reportGerencial} color='success' autoFocus >Report</Button>
+                            </DialogActions>
+                        </Dialog>
                     </Box>
                     <Snackbar open={alerta} autoHideDuration={6000} onClose={handleClose}>
-                        <Alert variant="filled" onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-                            Digite no minimo 3 caracteres!
+                        <Alert variant="filled" onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                            {snackMsg}
                         </Alert>
                     </Snackbar>
 

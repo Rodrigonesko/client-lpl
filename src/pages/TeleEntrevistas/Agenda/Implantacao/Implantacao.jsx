@@ -39,7 +39,10 @@ const Implantacao = () => {
             await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/implantar`, {
                 id
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             setModalImplantar(false)
@@ -60,7 +63,12 @@ const Implantacao = () => {
 
             setLoading(true)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             if (tipoContrato === 'Todos') {
                 setPropostas(result.data)
@@ -95,7 +103,12 @@ const Implantacao = () => {
 
         setLoading(true)
 
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, { withCredentials: true })
+        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, {
+            withCredentials: true,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
 
         if (situacaoAmil === 'Todos') {
             setPropostas(result.data)

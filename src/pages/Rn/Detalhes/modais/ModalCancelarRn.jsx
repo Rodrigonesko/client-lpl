@@ -21,7 +21,7 @@ const ModalCancelarRn = (props) => {
 
     const handleCancel = async () => {
 
-        await cancelarRn({id: props.id})
+        await cancelarRn({ id: props.id })
         handleClose()
         props.flushHook(true)
     }
@@ -41,7 +41,7 @@ const ModalCancelarRn = (props) => {
                 <DialogTitle>{"Cancelar RN?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Você deseja cancelar a proposta {props.proposta} como sem sucesso de contato?
+                        Você deseja cancelar a proposta <strong>{props.proposta}</strong> como sem sucesso de contato?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

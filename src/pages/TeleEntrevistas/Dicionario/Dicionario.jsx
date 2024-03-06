@@ -19,7 +19,10 @@ const Dicionario = () => {
             await Axios.post(`${process.env.REACT_APP_API_KEY}/dicionario`, {
                 palavra
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
             setMsg('Palavra Adicionada com sucesso')
             setOpenSnack(true)
@@ -37,7 +40,10 @@ const Dicionario = () => {
             setLoading(true)
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/dicionario`, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             setPalavras(result.data)
@@ -52,7 +58,10 @@ const Dicionario = () => {
         try {
 
             await Axios.delete(`${process.env.REACT_APP_API_KEY}/dicionario/${element}`, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
 
             setMsg('Palavra excluida com sucesso!')

@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from 'react-router-dom'
 import { Alert, AlertTitle, TextField, CircularProgress } from "@mui/material";
 import AuthContext from "../../context/AuthContext";
 import Axios from 'axios'
@@ -12,10 +11,8 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
-
     const { setAuthToken } = useContext(AuthContext)
 
-    const navigate = useNavigate()
 
     const login = async (e) => {
         e.preventDefault()
@@ -33,7 +30,8 @@ const Login = () => {
                 setAuthToken(authToken)
                 const cookie = result.data.token
                 document.cookie = `token=${cookie}`
-                
+                localStorage.setItem('token', cookie)
+
                 await Axios.post(`${process.env.REACT_APP_API_KEY}/controleAtividade/iniciarPadrao`, {
                     name: result.data.user
                 }, {
@@ -42,7 +40,7 @@ const Login = () => {
                         Authorization: `Bearer ${cookie}`
                     }
                 })
-                navigate('/')
+                window.location.replace('/')
 
             }
         } catch (error) {

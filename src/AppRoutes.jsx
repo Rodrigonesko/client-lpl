@@ -93,7 +93,7 @@ import Anexos from "./pages/TeleEntrevistas/Agenda/Anexos/Anexos";
 import Horarios from "./pages/TeleEntrevistas/Agenda/Horarios/Horarios";
 import FaturamentoEntrevistas from "./pages/TeleEntrevistas/FaturamentoEntrevistas/FaturamentoEntrevistas";
 import ReportTeleEntrevistas from "./pages/TeleEntrevistas/ReportTeleEntrevistas/ReportTeleEntrevistas";
-import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoEntrevistas";
+import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoTele";
 import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgendadas";
 import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
 import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
@@ -111,6 +111,7 @@ import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
 import ProtFiltros from "./pages/PrototipoTele/ProtFiltros/ProtFiltros";
 import ProtDetalhesTele from "./pages/PrototipoTele/ProtDetalhesTele/ProtDetalhesTele";
+import ProtEnviar from "./pages/PrototipoTele/ProtEnviar/ProtEnviar";
 
 /* Urgencia Emergencia */
 
@@ -123,19 +124,23 @@ import UrgenciaEmergenciaAnexar from "./pages/UrgenciaEmergencia/Anexar/Urgencia
 
 /* Admin */
 
-import LiberacaoModulos from "./pages/Admin/LiberacaoModulos/LiberacaoModulos";
-import ResetPassword from "./pages/Admin/ResetPassword/ResetPassword";
 import RelatorioProdutividade from "./pages/Admin/RelatorioProdutividade/RelatorioProdutividade";
 import ControlePoliticas from "./pages/Admin/ControlePoliticas/ControlePoliticas";
 import Treinamentos from "./pages/Admin/Treinamentos/Treinamentos";
 import BancoHoras from "./pages/Admin/BancoHoras/BancoHoras";
 import Inventario from "./pages/Admin/Inventario/Inventario";
+import Users from "./pages/Admin/Users/Users";
+import Analitico from "./pages/Admin/Analitico/Analitico";
+
+/* Sindicancia*/
+
+import Demandas from "./pages/Sindicancia/Demandas/Demandas";
 
 /* Controle atividades  */
 
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
-import Create from "./pages/Admin/Create/Create";
+/* Prototipo produção entrevistas  */
 import { AuthProvider } from "./context/AuthContext";
 
 const AppRoutes = () => {
@@ -146,9 +151,12 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
-                <Route exact path="/protAdmiDemi" element={<ProtectedRoute>
-                    <ProtAdmissionalDemissional />
+
+                <Route exact path="/demandas" element={<ProtectedRoute>
+                    <Demandas />
                 </ProtectedRoute>} />
+
+
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
@@ -183,21 +191,23 @@ const AppRoutes = () => {
                 {/* Admin Routes*/}
 
                 {/*admin producao*/}
-
-                <Route exact path="/admin/producao/criar" element={<ProtectedRoute>
-                    <Create />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/producao/liberarModulos" element={<ProtectedRoute>
-                    <LiberacaoModulos />
-                </ProtectedRoute>} />
                 <Route exact path="/admin/producao/relatorioProdutividade" element={<ProtectedRoute>
                     <RelatorioProdutividade />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/producao/users" element={<ProtectedRoute>
+                    <Users />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/producao/analitico" element={<ProtectedRoute>
+                    <Analitico />
                 </ProtectedRoute>} />
 
                 {/*admin rh*/}
 
                 <Route exact path="/admin/rh/admissionalDemissional" element={<ProtectedRoute>
                     <AdmissionalDemissional />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/rh/prototipoAdmissionalDemissional" element={<ProtectedRoute>
+                    <ProtAdmissionalDemissional />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
                     <ControlePoliticas />
@@ -219,9 +229,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/contingencias" element={<ProtectedRoute>
                     <ControleContigencias />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/infra/resetPassword" element={<ProtectedRoute>
-                    <ResetPassword />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />
@@ -314,6 +321,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/ProtDetalhesTele/:cpfTitular" element={<ProtectedRoute>
                     <ProtDetalhesTele />
+                </ProtectedRoute>} />
+                <Route exact path="/prototipoTele/enviar" element={<ProtectedRoute>
+                    <ProtEnviar />
                 </ProtectedRoute>} />
                 {/* RSD */}
 

@@ -1,6 +1,5 @@
-import { getCookie } from "react-use-cookie";
 import { ApiCall } from "./api";
-const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const uploadPropostasElegibilidadePme = async (data) => {
     return await new ApiCall('/elegibilidadePme/upload', process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` } }).post(data)
@@ -52,4 +51,8 @@ export const getProducaoMensalPme = async (mes, analista) => {
 
 export const getRelatorioProducaoMensalPme = async (mes) => {
     return await new ApiCall(`/elegibilidadePme/relatorioProducaoMensal/${mes}`).get()
+}
+
+export const getAnaliticoElegibilidadeMensalPme = async (mes, analista) => {
+    return await new ApiCall(`/elegibilidadePme/analitico/${mes}/${analista}`).get()
 }

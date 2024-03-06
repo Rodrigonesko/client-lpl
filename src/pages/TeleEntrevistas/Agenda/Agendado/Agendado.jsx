@@ -4,7 +4,7 @@ import { Button, TextField, Select, FormControl, MenuItem, InputLabel, Box, Circ
 import TeleAgendadas from "../../../../components/Agendadas/TeleAgendadas";
 import './Agendado.css'
 import moment from "moment";
-import { buscaAnalistasTele } from "../../../../_services/user.service";
+import { filterUsers } from "../../../../_services/user.service";
 import { getPropostasAgendadas, getRnsAgendadas } from "../../../../_services/teleEntrevista.service";
 
 
@@ -18,8 +18,11 @@ const Agendado = () => {
 
     const searchEnfermeiro = async () => {
         try {
-            const result = await buscaAnalistasTele()
-            setEnfermeiros(result.enfermeiros)
+            const result = await filterUsers({
+                atividadePrincipal: 'Tele Entrevista',
+                inativo: { $ne: true }
+            })
+            setEnfermeiros(result)
         } catch (error) {
             console.log(error);
         }

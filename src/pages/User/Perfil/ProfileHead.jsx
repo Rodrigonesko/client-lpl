@@ -59,11 +59,20 @@ const ProfileHead = ({ userData }) => {
                     <Typography>
                         Célula:
                     </Typography>
-
                 </Grid>
                 <Grid xs={7}>
                     <Typography color='gray'>
                         {userData.atividadePrincipal}
+                    </Typography>
+                </Grid>
+                <Grid xs={5}>
+                    <Typography>
+                        Aniversário:
+                    </Typography>
+                </Grid>
+                <Grid xs={7}>
+                    <Typography color='gray'>
+                        {moment(userData.dataAniversario).format('DD/MM/YYYY')}
                     </Typography>
                 </Grid>
                 <Grid xs={1}>

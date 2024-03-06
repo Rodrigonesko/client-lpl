@@ -4,21 +4,26 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ModalDeletarRecado from "../modais/ModalDeletarRecado";
 
-const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
+const CardMural = ({ flushHook, setFlushHook, dataUser, setLoading }) => {
 
     const [recados, setRecados] = useState([])
 
-    const fetchData = async () => {
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
-            withCredentials: true
-        })
-
-        setRecados(result.data)
-
-    }
-
     useEffect(() => {
+
+        const fetchData = async () => {
+            setLoading(true)
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/mural`, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            setRecados(result.data)
+            setLoading(false)
+        }
+
         fetchData()
+        setLoading(false)
     }, [flushHook])
 
     return (
@@ -60,8 +65,11 @@ const CardMural = ({ flushHook, setFlushHook, dataUser }) => {
                                     Recado feito por: {recado.responsavel}
                                 </Typography>
                                 {
-                                    dataUser.name === recado.responsavel && (
+                                    (dataUser.name === recado.responsavel) || (dataUser.name === 'Samantha Maciel Giazzon') ? (
                                         <ModalDeletarRecado setFlushHook={setFlushHook} id={recado._id} />
+                                    ) : (
+                                        <>
+                                        </>
                                     )
                                 }
                             </Box>

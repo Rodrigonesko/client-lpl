@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import SideBar from '../../components/Sidebar/Sidebar'
 import AuthContext from "../../context/AuthContext";
-import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper } from "@mui/material";
+import { Button, TextField, Box, Snackbar, Alert, Container, Typography, Paper, Link, Chip, CircularProgress } from "@mui/material";
 import { getInfoUser, updatePassword } from "../../_services/user.service";
 import ModalAceitarPoliticas from "../../components/ModalAceitarPoliticas/ModalAceitarPoliticas";
 import { getPoliticasAtivas } from "../../_services/politicas.service";
@@ -12,22 +12,33 @@ import CardAniversariantes from "./cards/CardAniversariantes";
 import ModalAdicionarMural from "./modais/ModalAdicionarMural";
 import CardMural from "./cards/CardMural";
 import CardToDo from "./cards/CardToDo";
+import { red } from "@mui/material/colors";
+import ModalAnexarArquivoTreinamento from "./modais/ModalAnexarArquivoTreinamento";
 
 const Home = () => {
 
     const [firstAccess, setFirstAccess] = useState(false)
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState(false)
     const [message, setMessage] = useState('')
+
+    const [openSnack, setOpenSnack] = useState(false)
+    const [severitySnack, setSeveritySnack] = useState('')
+
     const [open, setOpen] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [idPolitica, setIdPolitica] = useState('')
     const [treinamentos, setTreinamentos] = useState([])
     const [dataUser, setDataUser] = useState(null)
+    const [userData, setUserData] = useState({})
+
     const { name } = useContext(AuthContext)
 
-    const [userData, setUserData] = useState({})
+    const handleClose = async () => {
+        setOpen(false)
+        setOpenSnack(false)
+    }
 
     const fetchData = async () => {
         const { user } = await getInfoUser()
@@ -47,9 +58,8 @@ const Home = () => {
             window.location.reload()
         } catch (error) {
             setMessage(error.response.data.message)
-            setError(true)
+            setSeveritySnack('error')
         }
-
     }
 
     const fetchInfoUser = async () => {
@@ -117,10 +127,10 @@ const Home = () => {
 
                         <Snackbar
                             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={error}
-                            onClose={() => setError(false)}
+                            open={openSnack}
+                            onClose={handleClose}
                         >
-                            <Alert onClose={() => setError(false)} variant='filled' severity="error" sx={{ width: '100%' }}>
+                            <Alert onClose={handleClose} variant='filled' severity={severitySnack} sx={{ width: '100%' }}>
                                 {message}
                             </Alert>
                         </Snackbar>
@@ -128,32 +138,80 @@ const Home = () => {
                     <Box>
                         {treinamentos.map(treinamento => {
                             return (
-                                <Alert severity="warning" sx={{ width: '100%', textAlign: 'start', m: 1 }}>
-                                    <Typography>
-                                        Treinamento: {treinamento.nome}
-                                    </Typography>
-                                    <Typography>
-                                        Plataforma: {treinamento.plataforma}
-                                    </Typography>
-                                    <Typography>
-                                        Link: {treinamento.link}
-                                    </Typography>
-                                    <Typography>
-                                        Prazo: {moment(treinamento.prazo).format('DD/MM/YYYY')}
-                                    </Typography>
-                                    <Typography>
-                                        {
-                                            treinamento.observacoes && (
-                                                <>
-                                                    Observacões:
-                                                    {treinamento.observacoes.split('\n').map((item, key) => {
-                                                        return <span key={key}>{item}<br /></span>
-                                                    })}
-                                                </>
-                                            )
-                                        }
-                                    </Typography>
-                                    Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br
+                                <Alert severity="error" sx={{ width: '100%', m: 1, borderRadius: '15px' }}>
+                                    <Box sx={{ textAlign: 'start' }}>
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            fontWeight={'bold'}
+                                        >
+                                            Treinamento: {treinamento.nome}
+                                        </Typography>
+                                        <Typography>
+                                            Plataforma: {treinamento.plataforma}
+                                        </Typography>
+                                        <Typography
+                                            mt={1}
+                                        >
+                                            Link:
+                                            <Link
+                                                href={'https://' + treinamento.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                color="inherit"
+                                                underline="hover"
+                                                sx={{
+                                                    marginLeft: '5px',
+                                                    bgcolor: red[800],
+                                                    color: '#fff',
+                                                    '&:hover': {
+                                                        bgcolor: red[900],
+                                                    },
+                                                    '&:active': {
+                                                        bgcolor: red[900],
+                                                    },
+                                                    '&:focus': {
+                                                        bgcolor: red[900],
+                                                    },
+                                                    padding: '2px',
+                                                    borderRadius: '10px'
+                                                }}
+                                            >
+                                                {treinamento.link}
+                                            </Link>
+                                        </Typography>
+                                        {/*Deixar o prazo mais destacado*/}
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            fontWeight={'bold'}
+                                            color={'#000'}
+                                            mt={1}
+                                        >
+                                            <Chip
+                                                label={`Prazo: ${moment(treinamento.prazo).format('DD/MM/YYYY')}`}
+                                                color="warning"
+                                                sx={{ marginRight: '5px' }}
+                                            />
+                                        </Typography>
+                                        <Typography>
+                                            {
+                                                treinamento.observacoes && (
+                                                    <>
+                                                        Observacões:
+                                                        {treinamento.observacoes.split('\n').map((item, key) => {
+                                                            return <span key={key}>{item}<br /></span>
+                                                        })}
+                                                    </>
+                                                )
+                                            }
+                                        </Typography>
+                                        {/* Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br */}
+                                    </Box>
+                                    <ModalAnexarArquivoTreinamento 
+                                    id={treinamento._id} 
+                                    setFlushHook={setFlushHook}
+                                    />
                                 </Alert>
                             )
                         })}
@@ -183,8 +241,12 @@ const Home = () => {
                         </Box>
                         <Box width={'100%'} ml={2}>
                             {
-                                dataUser !== null && (
-                                    <CardMural dataUser={dataUser} flushHook={flushHook} setFlushHook={setFlushHook} />
+                                loading ? (
+                                    <CircularProgress style={{ position: 'initial', top: '50%', right: '50%' }} />
+                                ) : (
+                                    dataUser !== null && (
+                                        <CardMural dataUser={dataUser} flushHook={flushHook} setFlushHook={setFlushHook} setLoading={setLoading} />
+                                    )
                                 )
                             }
                         </Box>

@@ -16,7 +16,12 @@ const ReabrirHorarios = ({ responsaveis }) => {
 
     const buscarHorariosNaoDisponiveis = async (data) => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosNaoDisponiveis/${responsavel}/${data}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscarHorariosNaoDisponiveis/${responsavel}/${data}`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             setHorarios(result.data.horarios)
         } catch (error) {
             console.log(error);
@@ -37,7 +42,12 @@ const ReabrirHorarios = ({ responsaveis }) => {
             newValue.splice(index, 1)
         } else {
             newValue.push(horario)
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/verificarHorarioReaberto?enfermeiro=${responsavel}&dia=${data}&horario=${horario}`, { withCredentials: true })
+            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/verificarHorarioReaberto?enfermeiro=${responsavel}&dia=${data}&horario=${horario}`, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             console.log(result.data);
             if (result.data.quemReabriu) {
                 arrAux.push({
@@ -60,7 +70,12 @@ const ReabrirHorarios = ({ responsaveis }) => {
 
                 return null
             })
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reabrirHorarios`, { horarios, data: data, responsavel: responsavel }, { withCredentials: true })
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/reabrirHorarios`, { horarios, data: data, responsavel: responsavel }, {
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             if (result.status === 200) {
                 setMessage('Horarios reabertos com sucesso!')
                 setSeverity("success")
@@ -73,11 +88,16 @@ const ReabrirHorarios = ({ responsaveis }) => {
             }
 
         } catch (error) {
-            setMessage('Erro!')
+            console.log(error)
+            setMessage(error.response.data.msg)
             setSeverity("error")
             setToastOpen(true)
         }
     }
+
+    useEffect(() => {
+        buscarHorariosNaoDisponiveis(data, responsavel);
+    }, [data, responsavel]);
 
     return (
         <Paper style={{ padding: '20px', margin: '10px' }} elevation={3}>
@@ -93,7 +113,6 @@ const ReabrirHorarios = ({ responsaveis }) => {
                     value={responsavel}
                     onChange={e => {
                         setResponsavel(e.target.value)
-                        setData('')
                         setHorarios([])
                         setHorariosReabertos([])
                         setHorariosReabrir([])
@@ -122,7 +141,7 @@ const ReabrirHorarios = ({ responsaveis }) => {
             }} label='Dia' focused value={data} />
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
                 {
-                    horarios.map(value => {
+                    horarios.sort().map(value => {
                         const labelId = `checkbox-list-label-${value}`;
                         return (
                             <ListItem

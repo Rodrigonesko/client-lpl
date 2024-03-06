@@ -18,11 +18,14 @@ const InternMessages = () => {
     const [receptor, setReceptor] = useState('')
     const [chatId, setChatId] = useState(null)
     const [chats, setChats] = useState([])
+    const [copyChats, setCopyChats] = useState([])
     const [chatIdSocket, setChatIdSocket] = useState(null)
+    const [pesquisa, setPesquisa] = useState('')
 
     const fetchData = async () => {
         const result = await getChats()
         setChats(result.chats)
+        setCopyChats(result.chats)
         document.title = `LPL (${result.naoLidas})`
     }
 
@@ -32,27 +35,52 @@ const InternMessages = () => {
     }, [flushHook])
 
     useEffect(() => {
-
         socket = io(`${process.env.REACT_APP_CHAT_SERVICE}`, {
             query: `name=${name}`
         })
-
         socket.on('receivedMessage', (message) => {
             setChatIdSocket(message.chatId)
             setFlushHook(true)
-            console.log('oi');
         })
     }, [name])
+
+    useEffect(() => {
+
+        if (pesquisa === '') {
+            setCopyChats(chats)
+            return
+        }
+
+        const filteredChats = chats.filter(chat => {
+            if (chat.tipo === 'Grupo') {
+                if (chat.nome.toLowerCase().includes(pesquisa.toLowerCase())) {
+                    return chat
+                }
+            } else {
+                if (chat.participantes[0].toLowerCase().includes(pesquisa.toLowerCase()) || chat.participantes[1].toLowerCase().includes(pesquisa.toLowerCase())) {
+                    return chat
+                }
+            }
+        })
+
+        setCopyChats(filteredChats)
+
+    }, [pesquisa])
 
     return (
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Typography variant="h5" mt={1}>
-                        Mensagens e Grupos
-                    </Typography>
                     <Box display={'flex'} mt={2}>
-                        <CardPessoasGrupos chats={chats} setChatId={setChatId} flushHook={flushHook} setFlushHook={setFlushHook} setReceptor={setReceptor} />
+                        <CardPessoasGrupos
+                            chats={copyChats}
+                            setChatId={setChatId}
+                            flushHook={flushHook}
+                            setFlushHook={setFlushHook}
+                            setReceptor={setReceptor}
+                            pesquisa={pesquisa}
+                            setPesquisa={setPesquisa}
+                        />
                         <Box width={'100%'} ml={2}>
                             {
                                 receptor !== '' && (

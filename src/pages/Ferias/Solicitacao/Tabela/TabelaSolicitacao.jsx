@@ -19,6 +19,11 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
     const handleChangeSelect = async (id, status) => {
         const resultado = await axios.put(`${process.env.REACT_APP_API_KEY}/vacation/status`, {
             statusRh: status, _id: id
+        }, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         setFlushHook(true)
         setSnackSelect(true)
@@ -31,7 +36,12 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
     }
 
     const fetchData = async () => {
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/findAll`, { withCredentials: true })
+        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/findAll`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         setSolicitacoes(resultado.data.encontrarTodos)
     }
 
@@ -45,7 +55,10 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
 
         if (colaborador.length > 2 || mes.length > 2 || vencimento.length > 2 || setor.length > 2) {
             const result = await axios.get(`${process.env.REACT_APP_API_KEY}/vacation/filter?colaborador=${colaborador}&mes=${mes}&vencimento=${vencimento}&setor=${setor}`, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
             console.log(result)
             setSolicitacoes(result.data)

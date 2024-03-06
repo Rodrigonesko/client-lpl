@@ -5,7 +5,7 @@ import CardInfoTitular from "./Cards/CardInfoTitular";
 import CardComentariosTele from "./Cards/CardComentariosTele";
 import CardInfoTele from "./Cards/CardInfoTele";
 //import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getDataByCpfTitular, getHorariosDisponiveis } from "../../../_services/teleEntrevista.service";
 import CardAcoesTele from "./Cards/CardAcoesTele";
 import HorariosDisponiveis from "../../TeleEntrevistas/Agenda/Agendar/HorariosDisponiveis";
@@ -28,18 +28,6 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
     const [loading, setLoading] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
 
-    const fetchData = async () => {
-        setLoading(true)
-        const result = await getDataByCpfTitular(cpfTitular)
-        result.forEach(item => {
-            if (item.cpf === item.cpfTitular) {
-                setTitular(item)
-            }
-        })
-        setData(result)
-        setLoading(false)
-    }
-
     const buscarHorariosDisp = async () => {
         try {
             const result = await getHorariosDisponiveis()
@@ -50,17 +38,31 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
         }
     }
 
+    const atualizarPesquisaCallback = useCallback(atualizarPesquisa, []);
+    const atualizarTabelaCallback = useCallback(atualizarTabela, []);
+
     useEffect(() => {
+
+        const fetchData = async () => {
+            setLoading(true)
+            const result = await getDataByCpfTitular(cpfTitular)
+            result.forEach(item => {
+                if (item.cpf === item.cpfTitular) {
+                    setTitular(item)
+                }
+            })
+            setData(result)
+            setLoading(false)
+        }
         setFlushHook(false)
         fetchData()
         buscarHorariosDisp()
         if (pesquisa !== '') {
-            console.log('pesquia');
-            atualizarPesquisa()
+            atualizarPesquisaCallback()
         } else {
-            atualizarTabela()
+            atualizarTabelaCallback()
         }
-    }, [cpfTitular, conversaSelecionada, flushHook])
+    }, [cpfTitular, flushHook])
 
     useEffect(() => {
         //Quanto o flushHook for chamado ira atualizar os dados dos selectedObjects com o status do newStatus

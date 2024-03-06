@@ -1,4 +1,4 @@
-import { Alert, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TableCell, TextField } from "@mui/material"
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../_services/user.service"
@@ -11,7 +11,6 @@ const ModalRetornarChamados = ({ item }) => {
     const [dados, setDados] = useState({
         retorno: ''
     })
-    // const [snackSelect, setSnackSelect] = useState(false)
     const [flushHook, setFlushHook] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
     const [textoSnack, setTextoSnack] = useState('Insira o nome do Colaborador!')
@@ -20,7 +19,12 @@ const ModalRetornarChamados = ({ item }) => {
 
 
     const fetchData = async () => {
-        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, { withCredentials: true })
+        const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/tasks/findAll`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         setChamados(resultado.data.encontrarTodos)
     }
 
@@ -40,7 +44,10 @@ const ModalRetornarChamados = ({ item }) => {
         const resultado = await axios.post(process.env.REACT_APP_API_KEY + '/tasks/retorno', {
             retorno: dados.retorno, _id: item._id
         }, {
-            withCredentials: true
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
         console.log(resultado)
         setOpenSnack(true)

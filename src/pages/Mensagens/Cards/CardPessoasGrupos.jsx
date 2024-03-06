@@ -1,13 +1,25 @@
 import React, { useContext, useState } from 'react';
-import { Avatar, Badge, Card, CardContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import { Avatar, Badge, Card, CardContent, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextField } from "@mui/material";
 import { grey } from '@mui/material/colors';
 import ModalCriarGrupo from '../Modal/ModalCriarGrupo';
 import ModalIniciarConversa from '../Modal/ModalIniciarConversa';
 import { Box } from '@mui/system';
 import AuthContext from '../../../context/AuthContext';
 import { seeInternalMessage } from '../../../_services/chat.service';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import moment from 'moment';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 
-const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushHook }) => {
+const CardPessoasGrupos = ({
+    setReceptor,
+    chats,
+    setChatId,
+    setFlushHook,
+    pesquisa,
+    setPesquisa,
+    flushHook
+}) => {
 
     const { name } = useContext(AuthContext)
     const [selectedId, setSelectedId] = useState('')
@@ -48,6 +60,19 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                     <ModalIniciarConversa setReceptor={setReceptor} setFlushHook={setFlushHook} setChatId={setChatId} />
                     <ModalCriarGrupo setReceptor={setReceptor} setFlushHook={setFlushHook} />
                 </Box>
+                <Box>
+                    <TextField
+                        placeholder="Pesquisar"
+                        variant="standard"
+                        sx={{ width: '90%', ml: '5%', mb: '10px' }}
+                        InputProps={{
+                            startAdornment: <SearchIcon position="start" sx={{ mr: 1 }} />,
+                            endAdornment: <IconButton size='small' sx={{ mr: 1 }} onClick={() => setPesquisa('')} ><CloseIcon /></IconButton>,
+                        }}
+                        value={pesquisa}
+                        onChange={(e) => setPesquisa(e.target.value)}
+                    />
+                </Box>
                 <List sx={{ width: '100%', maxWidth: 360, borderRadius: '15px', overflowY: 'auto', display: 'block', height: '80vh', padding: '0' }}>
                     {!!name && chats.map((item, index) => {
                         const findindex = item.ultimasVisualizacoes.findIndex(e => e.nome === name)
@@ -86,15 +111,35 @@ const CardPessoasGrupos = ({ setReceptor, chats, setChatId, setFlushHook, flushH
                                                         color={item.online ? 'success' : 'error'}
                                                     >
                                                         <Avatar alt={(verificarNome(item.participantes))} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${(verificarNome(item.participantes)).split(' ').join('%20')}.jpg`} />
-
                                                     </Badge>
                                                 )
                                             }
-                                            {/* <Avatar src={`${process.env.REACT_APP_CHAT_SERVICE}/media/${item.imageGroup}`} /> */}
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={item.tipo === 'Grupo' ? item.nome : (verificarNome(item.participantes))}
-                                            secondary={truncatedMessage}
+                                            secondary={
+                                                item.quemEnviouUltimaMensagem === name ? (
+                                                    <>
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <DoneAllIcon sx={{ color: item.visualizado ? 'green' : 'gray', width: '14px' }} />
+                                                                <Box>{truncatedMessage}</Box>
+                                                            </Box>
+                                                            <Box sx={{ ml: 1, fontSize: '12px' }}>{moment(item.horarioUltimaMensagem).format('HH:mm')}</Box>
+                                                        </Box>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <Box >{truncatedMessage}</Box>
+                                                            </Box>
+                                                            <Box sx={{ ml: 1, fontSize: '12px' }}>{moment(item.horarioUltimaMensagem).format('HH:mm')}</Box>
+                                                        </Box>
+                                                    </>
+                                                )
+
+                                            }
                                         />
                                     </ListItem>
                                 </ListItemButton>

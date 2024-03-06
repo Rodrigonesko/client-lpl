@@ -9,6 +9,7 @@ import TabelaProtocolosProcessamento from "./TabelaProtocolosProcessamento";
 import AgendaProcessamentoRsd from "./AgendaProcessamentoRsd";
 import TabelaArquivosProcessamento from "./TabelaArquivosProcessamento";
 import RoteiroProcessamento from "./RoteiroProcessamento";
+import { red } from "@mui/material/colors";
 
 const ProcessamentoPacote = () => {
 
@@ -28,6 +29,7 @@ const ProcessamentoPacote = () => {
     const [openRoteiro, setOpenRoteiro] = useState(false)
     const [open, setOpen] = useState(false)
     const [msg, setMsg] = useState('')
+    const [severity, setSeverity] = useState('')
 
     const handleClose = () => {
         setOpen(false)
@@ -35,6 +37,7 @@ const ProcessamentoPacote = () => {
 
     const handleShowRoteiro = () => {
 
+        setSeverity('success')
         setMsg('Processamento iniciado!')
         setOpen(true)
         setOpenRoteiro(true)
@@ -68,7 +71,8 @@ const ProcessamentoPacote = () => {
         servicos,
         finalizacoes,
         justificativa,
-        dataSelo
+        dataSelo,
+        dataAgendamento
     ) => {
         try {
 
@@ -88,9 +92,10 @@ const ProcessamentoPacote = () => {
                 confirmacaoServico: servicos,
                 finalizacao: finalizacoes,
                 justificativa,
-                dataSelo
+                dataSelo,
+                dataAgendamento
             })
-
+            setSeverity('success')
             setMsg('Pacote salvo com sucesso')
             setOpen(true)
             setFlushHook(true)
@@ -108,8 +113,7 @@ const ProcessamentoPacote = () => {
             await voltarFasePacote({
                 pacote: idPacote
             })
-
-
+            setSeverity('success')
             setMsg('Fase retrocedida!')
             setOpen(true)
             setFlushHook(true)
@@ -126,7 +130,7 @@ const ProcessamentoPacote = () => {
                 pacote: idPacote,
                 prioridade
             })
-
+            setSeverity('success')
             setMsg('Prioridade atribuída com sucesso!')
             setOpen(true)
             setFlushHook(true)
@@ -188,6 +192,10 @@ const ProcessamentoPacote = () => {
             setProtocolos(arrAuxProtocolos)
 
             setStatusPacote(result.pedidos[0].statusPacote)
+            // if (result.pedidos[0].statusPacote === '3° Tentativa') {
+            //     setSeverity('warning')
+            //     setMsg('Favor inserir o print da tela de Monitoramento!')
+            // }
             console.log(result.pedidos[0].statusPacote);
             if (result.pedidos[0].statusPacote === 'Finalizado') {
                 console.log('finalizado');
@@ -229,6 +237,16 @@ const ProcessamentoPacote = () => {
                         <Typography m={1} variant="h6" >
                             Status Pacote: {statusPacote}
                         </Typography>
+                        {
+                            statusPacote === '3° Tentativa' ? (
+                                <Typography m={1} sx={{ color: red[900] }}>
+                                    Mensagem: <strong>Favor inserir o print da tela de Monitoramento!</strong>
+                                </Typography>
+                            ) : (
+                                <>
+                                </>
+                            )
+                        }
                         <Box m={1}>
                             <ModalPatologias idCelula={idPacote} celula={'RSD'} />
                         </Box>
@@ -283,12 +301,12 @@ const ProcessamentoPacote = () => {
                         </Box>
                     </Container>
                     <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                        <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        <Alert variant="filled" onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
                             {msg}
                         </Alert>
                     </Snackbar>
                 </Box>
-            </Sidebar>
+            </Sidebar >
         </>
     )
 }

@@ -17,7 +17,7 @@ const Conversas = () => {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/conversas/${pesquisa}`, {
                 withCredentials: true,
-                headers: { Authorization: `Bearer ${getCookie('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
             setPropostas(result.data)
 
