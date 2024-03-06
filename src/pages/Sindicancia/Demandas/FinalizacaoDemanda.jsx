@@ -73,6 +73,7 @@ const FinalizacaoDemanda = ({ demanda }) => {
                             variant="contained"
                             color="error"
                             onClick={handleFinalizar}
+                            disabled={loading}
                         >
                             Finalizar
                         </Button>
@@ -86,6 +87,7 @@ const FinalizacaoDemanda = ({ demanda }) => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            disabled={loading}
                         />
 
                     </Box>

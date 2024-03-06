@@ -20,9 +20,6 @@ const Transition = forwardRef(function Transition(props, ref) {
 const Realizadas = () => {
 
     const { acessos } = useContext(AuthContext)
-
-    console.log(acessos);
-
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [pesquisa, setPesquisa] = useState('');
@@ -252,7 +249,7 @@ const Realizadas = () => {
                                 Status
                             </TableCell>
                             {
-                                acessos.administrador ? (
+                                acessos?.administrador ? (
                                     <TableCell>
                                         Divergência Anexo
                                     </TableCell>
@@ -313,7 +310,7 @@ const Realizadas = () => {
                                         )}
                                     </TableCell>
                                     {
-                                        acessos.administrador ? (
+                                        acessos?.administrador ? (
                                             <TableCell
                                                 align="center"
                                             >
