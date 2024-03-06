@@ -103,3 +103,7 @@ export const finalizarDemanda = async (data) => {
 export const createComplementacao = async (data) => {
     return await new ApiCall('/sindicancia/demanda/complementacao').post(data);
 }
+
+export const getQuantidadeSindicancias = async (mes) => {
+    return await new ApiCall(`/sindicancia/demanda/quantidadeDemandasResponsaveis/${mes}`).get()
+}
