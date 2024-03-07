@@ -107,3 +107,11 @@ export const createComplementacao = async (data) => {
 export const getQuantidadeSindicancias = async (mes) => {
     return await new ApiCall(`/sindicancia/demanda/quantidadeDemandasResponsaveis/${mes}`).get()
 }
+
+export const getQuantidadeDemandasSindicancia = async (mes) => {
+    return await new ApiCall(`/sindicancia/demanda/quantidadeDemandasSindicancia/${mes}`).get()
+}
+
+export const getQuantidadeIndividualSindicancia = async (mes) => {
+    return await new ApiCall(`/sindicancia/demanda/quantidadeIndividualSindicancia/${mes}`).get()
+}

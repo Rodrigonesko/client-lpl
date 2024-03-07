@@ -31,7 +31,7 @@ const SindicanciaCards = ({ mes }) => {
         <Box
             display={"flex"}
             width={"100%"}
-            m={2}
+            mt={2}
             justifyContent={"space-between"}
             flexWrap={"wrap"}
             gap={2}
