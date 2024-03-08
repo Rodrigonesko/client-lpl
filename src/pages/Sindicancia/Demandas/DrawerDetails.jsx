@@ -15,7 +15,6 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
 
     const { acessos } = useContext(AuthContext);
 
-
     const [demanda, setDemanda] = useState(data);
     const [open, setOpen] = useState(false);
     const [size, setSize] = useState('35%');

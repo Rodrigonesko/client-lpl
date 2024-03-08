@@ -143,7 +143,7 @@ import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 /* Whatsapp */
 
 import Templates from "./pages/Whatsapp/Templates/Templates";
-import WhatsappChat from "./pages/Whatsapp/Chat/Chat";
+import WhatsappChat from "./pages/Whatsapp/Chat/Index";
 
 /* Prototipo produção entrevistas  */
 import { AuthProvider } from "./context/AuthContext";

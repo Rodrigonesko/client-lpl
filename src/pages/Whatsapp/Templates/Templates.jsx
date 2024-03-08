@@ -2,22 +2,31 @@ import { Box } from "@mui/system"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { useState, useEffect } from "react"
-import { getTemplates } from "../../../_services/whatsapp.service"
+import { deleteTemplate, getTemplates } from "../../../_services/whatsapp.service"
 import ModalCreateTemplates from "./ModalCreateTemplate"
+import ModalComponent from "../../../components/ModalComponent/ModalComponent"
+import { Delete } from "@mui/icons-material"
+import { red } from "@mui/material/colors"
+import ModalNumeros from "./ModalNumeros"
 
 const Templates = () => {
 
     const [templates, setTemplates] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
+
+    const handleDelteTemplate = async (id) => {
+        await deleteTemplate(id)
+        setFlushHook(prev => !prev)
+    }
 
     useEffect(() => {
         const fetch = async () => {
             const result = await getTemplates()
-            console.log(result);
             setTemplates(result)
         }
 
         fetch()
-    }, [])
+    }, [flushHook])
 
     return (
         <Sidebar>
@@ -60,10 +69,10 @@ const Templates = () => {
                     m: 2,
                 }}
             >
-                <ModalCreateTemplates />
-                <Button>
-                    Adicionar Número
-                </Button>
+                <ModalCreateTemplates
+                    setFlushHook={setFlushHook}
+                />
+                <ModalNumeros />
             </Box>
             <TableContainer>
                 <Table>
@@ -83,7 +92,9 @@ const Templates = () => {
                     <TableBody>
                         {
                             templates.map(template => (
-                                <TableRow>
+                                <TableRow
+                                    key={template._id}
+                                >
                                     <TableCell>
                                         {template.name}
                                     </TableCell>
@@ -91,12 +102,17 @@ const Templates = () => {
                                         {template.message}
                                     </TableCell>
                                     <TableCell>
-                                        <Button>
-                                            Editar
-                                        </Button>
-                                        <Button>
-                                            Excluir
-                                        </Button>
+                                        <ModalComponent
+                                            isButton
+                                            buttonIcon={<Delete />}
+                                            buttonText="Excluir"
+                                            buttonColorScheme="error"
+                                            headerText="Excluir"
+                                            saveButtonColorScheme={red[500]}
+                                            onAction={() => handleDelteTemplate(template._id)}
+                                        >
+                                            Deseja excluir o template {template.name}?
+                                        </ModalComponent>
                                     </TableCell>
                                 </TableRow>
                             ))

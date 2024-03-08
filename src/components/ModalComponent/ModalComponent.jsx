@@ -50,7 +50,10 @@ const ModalComponent = ({
                     <Button color="inherit" variant="contained" onClick={() => setOpen(false)}>Cancelar</Button>
                     <Button
                         variant="contained"
-                        onClick={() => onAction()}
+                        onClick={() => {
+                            onAction()
+                            setOpen(false)
+                        }}
                         sx={{
                             backgroundColor: saveButtonColorScheme || 'primary.main',
                             '&:hover': {
