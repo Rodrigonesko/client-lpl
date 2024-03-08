@@ -140,6 +140,11 @@ import Demandas from "./pages/Sindicancia/Demandas/Demandas";
 
 import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
+/* Whatsapp */
+
+import Templates from "./pages/Whatsapp/Templates/Templates";
+import WhatsappChat from "./pages/Whatsapp/Chat/Chat";
+
 /* Prototipo produção entrevistas  */
 import { AuthProvider } from "./context/AuthContext";
 
@@ -465,6 +470,15 @@ const AppRoutes = () => {
 
                 <Route path="/controleAtividades" element={<ProtectedRoute>
                     <ControleAtividades />
+                </ProtectedRoute>} />
+
+                {/* Whatsapp */}
+
+                <Route path="/whatsapp/templates" element={<ProtectedRoute>
+                    <Templates />
+                </ProtectedRoute>} />
+                <Route path="/whatsapp/chat" element={<ProtectedRoute>
+                    <WhatsappChat />
                 </ProtectedRoute>} />
 
             </Routes>

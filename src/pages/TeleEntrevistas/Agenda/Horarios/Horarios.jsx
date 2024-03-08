@@ -6,6 +6,7 @@ import FecharDia from "./FecharDia";
 import FecharHorarios from "./FecharHorarios";
 import ReabrirHorarios from "./ReabrirHorarios";
 import AbrirNovoHorario from "./AbrirNovoHorario";
+import { filterUsers } from "../../../../_services/user.service";
 
 const Horarios = () => {
 
@@ -13,14 +14,12 @@ const Horarios = () => {
 
     const buscarEnfermeira = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/users/enfermeiros`, {
-                withCredentials: true,
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            const result = await filterUsers({
+                atividadePrincipal: "Tele Entrevista",
+                inativo: { $ne: true }
             })
 
-            setResponsaveis(result.data.enfermeiros)
+            setResponsaveis(result)
 
         } catch (error) {
             console.log(error);
