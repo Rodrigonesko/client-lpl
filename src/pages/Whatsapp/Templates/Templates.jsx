@@ -3,7 +3,6 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { useState, useEffect } from "react"
 import { getTemplates } from "../../../_services/whatsapp.service"
-import axios from "axios"
 import ModalCreateTemplates from "./ModalCreateTemplate"
 
 const Templates = () => {
