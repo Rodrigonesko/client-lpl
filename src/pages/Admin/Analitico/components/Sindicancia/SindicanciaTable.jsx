@@ -147,6 +147,9 @@ const SindicanciaTable = ({ mes }) => {
                                                 />
                                             </TableCell>
                                             <TableCell>
+                                                <Chip
+                                                    label={tableData.findDemandaIndividual[item[0]]}
+                                                />
                                             </TableCell>
                                             <TableCell>
                                             </TableCell>

@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Paper, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import Chart from "react-apexcharts"
-import { getQuantidadeDemandasSindicancia } from "../../../../../_services/sindicancia.service"
+import { getQuantidadeDemandasMensal } from "../../../../../_services/sindicancia.service"
 
 const SindicanciaChart = ({ mes }) => {
 
@@ -9,9 +9,9 @@ const SindicanciaChart = ({ mes }) => {
     const [grafico, setGrafico] = useState([])
 
     useEffect(() => {
-        const fetch = () => {
+        const fetch = async () => {
             setLoading(true)
-            const result = getQuantidadeDemandasSindicancia(mes)
+            const result = await getQuantidadeDemandasMensal(mes)
             console.log(result);
             setGrafico(result)
             setLoading(false)
@@ -39,17 +39,18 @@ const SindicanciaChart = ({ mes }) => {
                     (Últimos 30 dias)
                 </Typography>
             </Box>
-            {
-                loading ? <CircularProgress size={'100px'} />
-                    : (
+            <Box
+                sx={{
+                    textAlign: 'center',
+                }}
+            >
+                {
+                    loading ? <CircularProgress size={'100px'} /> : (
                         <Chart
                             height={500}
                             type="line"
                             series={[{
-                                name: 'Demandas',
-                                data: [
-                                    30, 40, 35, 50, 49, 60, 70
-                                ]
+                                data: grafico.findDemanda || []
                             }]}
                             options={{
                                 chart: {
@@ -74,14 +75,10 @@ const SindicanciaChart = ({ mes }) => {
                                         opacity: 0.5
                                     },
                                 },
-                                xaxis: {
-                                    categories: [
-                                        '01', '02', '03', '04', '05', '06', '07',
-                                    ],
-                                }
                             }}
                         />
                     )}
+            </Box>
         </Box>
     )
 }
