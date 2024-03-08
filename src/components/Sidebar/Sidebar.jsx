@@ -260,6 +260,10 @@ const Sidebar = ({ children }) => {
                     <SubMenu title='Sindicância' icon={<GavelOutlinedIcon />}>
                         <MenuItem><Link to='/demandas'>Demandas</Link></MenuItem>
                     </SubMenu>
+                    <SubMenu title={"Whastapp"} icon={<FaWhatsapp />}>
+                        <MenuItem><Link to='/whatsapp/chat'>Chat</Link></MenuItem>
+                        <MenuItem><Link to='/whatsapp/templates'>Templates</Link></MenuItem>
+                    </SubMenu>
                 </Menu>
             </ProSidebar>
             <Box width={'100%'} >
