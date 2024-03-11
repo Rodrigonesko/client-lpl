@@ -26,7 +26,7 @@ const FinalizacaoDemanda = ({ demanda }) => {
             setLoading(false)
             return
         }
-        if (!dataFinalizacao) {
+        if (!dataFinalizacao || dataFinalizacao === '') {
             setToast(true)
             setMessage('Data é obrigatória')
             setSeverity('error')

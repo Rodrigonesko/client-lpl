@@ -6,7 +6,7 @@ import { useState } from "react"
 import Toast from "../../../components/Toast/Toast"
 import { createTemplate } from "../../../_services/whatsapp.service"
 
-const ModalCreateTemplates = () => {
+const ModalCreateTemplates = ({ setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
@@ -40,6 +40,7 @@ const ModalCreateTemplates = () => {
             setMessagingServiceSid('')
             setContentVariable('')
             setContentVariables([])
+            setFlushHook((prev) => !prev)
 
         } catch (error) {
             setMessageToast('Erro ao criar template')

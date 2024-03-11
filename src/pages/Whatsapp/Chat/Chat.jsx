@@ -1,11 +1,11 @@
-import Sidebar from "../../../components/Sidebar/Sidebar";
+import { Box } from "@mui/material";
 
-const WhatsappChat = () => {
+const Chat = () => {
     return (
-        <Sidebar>
-            
-        </Sidebar>
+        <Box>
+
+        </Box>
     )
 }
 
-export default WhatsappChat;
+export default Chat;
