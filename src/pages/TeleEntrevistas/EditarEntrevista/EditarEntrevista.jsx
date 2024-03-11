@@ -244,9 +244,9 @@ const EditarEntrevista = () => {
                                             <Box>
                                                 <FormControlLabel
                                                     control={<Checkbox />}
-                                                    value={`${e.subCategoria} - ${e.descricao}`}
-                                                    label={`${e.subCategoria} - ${e.descricao}`}
-                                                    checked={cids.includes(`${e.subCategoria} - ${e.descricao}`)}
+                                                    value={`${e.subCategoria} (${e.descricao})`}
+                                                    label={`${e.subCategoria} (${e.descricao})`}
+                                                    checked={cids.includes(`${e.subCategoria} (${e.descricao})`)}
                                                     onChange={e => {
                                                         if (cids.includes(e.target.value)) {
                                                             cids.splice(cids.indexOf(e.target.value), 1)
@@ -254,6 +254,7 @@ const EditarEntrevista = () => {
                                                             cids.push(e.target.value)
                                                         }
                                                         handleChange({ id: 'cids', value: cids })
+                                                        console.log(cids);
 
                                                     }}
                                                 />

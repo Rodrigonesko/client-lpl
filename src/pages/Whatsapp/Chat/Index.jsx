@@ -4,6 +4,7 @@ import { ChatProvider } from "./ChatContext";
 import WhatsappSenders from "./WhatsappSenders";
 import { Close, PersonAdd, Search } from "@mui/icons-material";
 import Chat from "./Chat";
+import Contacts from "./Contacts";
 
 const WhatsappChat = () => {
     return (
@@ -57,75 +58,9 @@ const WhatsappChat = () => {
                                 }}
                             />
                         </Box>
-                        <Box>
-                            <List>
-                                <ListItemButton
-                                    sx={{
-                                        borderRadius: '10px',
-                                        p: 1,
-                                    }}
-                                >
-                                    <ListItem
-                                        sx={{
-                                            borderRadius: '10px',
-                                            p: 1,
-                                        }}
-                                    >
-                                        <ListItemText primary="Primary" secondary="Secondary" />
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'flex-end',
-                                            }}
-                                        >
-                                            <Typography
-                                                variant="caption"
-                                                color="textSecondary"
-                                            >
-                                                10:00
-                                            </Typography>
-                                            <Badge sx={{ m: 1 }} badgeContent={4} color="primary" />
-                                        </Box>
-                                    </ListItem>
-                                </ListItemButton>
-                                <ListItemButton
-                                    sx={{
-                                        borderRadius: '10px',
-                                        p: 1,
-                                    }}
-                                >
-                                    <ListItem
-                                        sx={{
-                                            borderRadius: '10px',
-                                            p: 1,
-                                        }}
-                                    >
-                                        <ListItemText primary="Primary" secondary="Secondary" />
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'flex-end',
-                                            }}
-                                        >
-                                            <Typography
-                                                variant="caption"
-                                                color="textSecondary"
-                                            >
-                                                10:00
-                                            </Typography>
-                                            <Badge sx={{ m: 1 }} badgeContent={4} color="primary" />
-                                        </Box>
-                                    </ListItem>
-                                </ListItemButton>
-                            </List>
-                        </Box>
+                        <Contacts />
                     </Box>
-                    <Box>
-                        {/* Chat */}
-
-                    </Box>
+                    <Chat />
                 </Box>
             </ChatProvider>
         </Sidebar>
