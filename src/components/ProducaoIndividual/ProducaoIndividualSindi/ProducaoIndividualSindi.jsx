@@ -1,44 +1,37 @@
 import { Box, Chip, CircularProgress, Tooltip, Typography } from "@mui/material";
-import { amber, blue, green, grey, red } from "@mui/material/colors";
+import { amber, green, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
-import { getAnaliticoRsdMensal, getComparativoProducaoRsd, getProducaoIndividualRsd } from "../../../_services/rsd.service";
+import { getComparativoProducaoRsd } from "../../../_services/rsd.service";
+import { getProducaoIndividualSindi, getQuantidadeIndividualSindicancia } from "../../../_services/sindicancia.service";
 
-const ProducaoIndividualRsd = ({ mes, analista }) => {
+const ProducaoIndividualSindi = ({ mes, analista }) => {
 
     const { name } = useParams()
 
     const [loadingChart, setLoadingChart] = useState(false)
     const [chartData, setChartData] = useState(null)
     const [cardData, setCardData] = useState({
-        totalAnalista: 0,
-        totalAnalistaMesPassado: 0,
-        totalCancelados: 0,
-        totalCanceladosMelhorAnalista: 0,
-        totalConcluido: 0,
-        totalIndeferido: 0,
-        totalIndeferidosMelhorAnalista: 0,
-        totalConcluidoMelhorAnalista: 0,
-        melhorAnalista: [
-            { _id: '', quantidade: 0 }
-        ]
+        findDemandaIndividual: 0,
+        findPacote: 0,
+        findPacoteMesPassado: 0,
     })
     const [dataGeral, setDataGeral] = useState({
-        total: 0,
-        totalMesPassado: 0,
-        totalCanceladas: 0,
-        totalConcluidas: 0,
-        totalIndeferidas: 0,
+        totalPacotesIndividual: 0,
+        totalPacotesIndividualMesPassado: 0,
+        totalPacotesMelhorAnalista: 0,
+        totalDemandasGeral: 0,
+        totalDemandasGeralMesPassado: 0,
     })
 
     useEffect(() => {
         const fetch = async () => {
             setLoadingChart(true)
-            const result = await getProducaoIndividualRsd(mes, analista || name)
-            const resultGeral = await getAnaliticoRsdMensal(mes)
+            const result = await getQuantidadeIndividualSindicancia(mes, analista || name)
+            const resultGeral = await getProducaoIndividualSindi(mes, analista || name)
             setCardData(result)
             setDataGeral(resultGeral)
             console.log(resultGeral);
@@ -73,18 +66,18 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         },
                     }}
                 >
-                    Produção Individual RSD
+                    Produção Individual Sindicância
                 </Typography>
             </Box>
             {
-                cardData.melhorAnalista[0].quantidade !== 0 && cardData.melhorAnalista[0].quantidade === cardData.totalAnalista ? (
-                    <>
-                        <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
-                    </>
-                ) : (
-                    <>
-                    </>
-                )
+                // cardData.melhorAnalista[0].quantidade !== 0 && cardData.melhorAnalista[0].quantidade === cardData.totalAnalista ? (
+                //     <>
+                //         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
+                //     </>
+                // ) : (
+                //     <>
+                //     </>
+                // )
             }
             <Box
                 display={'flex'}
@@ -115,17 +108,17 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             gap={1}
                         >
                             {
-                                cardData.totalAnalista > cardData.totalAnalistaMesPassado ? (
+                                dataGeral.totalPacotesIndividual[0]?.quantidade_pacote > dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote ? (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 ) : (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 )
                             }
                             {
-                                cardData.totalAnalista > cardData.totalAnalistaMesPassado ? (
-                                    `+${((cardData.totalAnalista - cardData.totalAnalistaMesPassado) / cardData.totalAnalistaMesPassado * 100).toFixed(2)}%`
+                                dataGeral.totalPacotesIndividual[0]?.quantidade_pacote > dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote ? (
+                                    `+${((dataGeral.totalPacotesIndividual[0]?.quantidade_pacote - dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote) / dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote * 100).toFixed(2)}%`
                                 ) : (
-                                    `-${((cardData.totalAnalistaMesPassado - cardData.totalAnalista) / cardData.totalAnalistaMesPassado * 100).toFixed(2)}%`
+                                    `-${((dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote - dataGeral.totalPacotesIndividual[0]?.quantidade_pacote) / dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
@@ -133,7 +126,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     <Typography
                         variant={'h4'}
                     >
-                        {cardData.totalAnalista}
+                        {dataGeral.totalPacotesIndividual[0]?.quantidade_pacote}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -151,7 +144,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             fontWeight={'bold'}
                         >
                             {
-                                (cardData.totalAnalista / 22).toFixed(2)
+                                (dataGeral.totalPacotesIndividual[0]?.quantidade_pacote / 22).toFixed(2)
                             }
                         </Typography>
                     </Box>
@@ -164,13 +157,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total Indeferidas
+                            Total Fraudes
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {cardData.totalIndeferido}
+                            {/* {cardData.totalIndeferido} */}
                         </Typography>
                     </Box>
                     <Box
@@ -182,13 +175,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total Canceladas
+                            Total Abertos
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {cardData.totalCancelados}
+                            {/* {cardData.totalCancelados} */}
                         </Typography>
                     </Box>
                 </Box>
@@ -212,17 +205,17 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             gap={1}
                         >
                             {
-                                cardData.melhorAnalista[0].quantidade > cardData.totalAnalista ? (
+                                dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote > dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                cardData.melhorAnalista[0].quantidade > cardData.totalAnalista ? (
-                                    `-${((cardData.melhorAnalista[0].quantidade - cardData.totalAnalista) / cardData.melhorAnalista[0].quantidade * 100).toFixed(2)}%`
+                                dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote > dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
+                                    `-${((dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote - dataGeral.totalPacotesIndividual[0]?.quantidade_pacote) / dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((cardData.totalAnalista - cardData.melhorAnalista[0].quantidade) / cardData.melhorAnalista[0].quantidade * 100).toFixed(2)}%`
+                                    `+${((dataGeral.totalPacotesIndividual[0]?.quantidade_pacote - dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote) / dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
@@ -230,7 +223,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     <Typography
                         variant={'h4'}
                     >
-                        {cardData.melhorAnalista[0].quantidade}
+                        {dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -247,7 +240,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {(cardData.melhorAnalista[0].quantidade / 22).toFixed(2)}
+                            {/* {(cardData.melhorAnalista[0].quantidade / 22).toFixed(2)} */}
                         </Typography>
                     </Box>
                     <Box
@@ -259,13 +252,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total Indeferidos
+                            Total Fraudes
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {cardData.totalIndeferidosMelhorAnalista}
+                            {/* {cardData.totalIndeferidosMelhorAnalista} */}
                         </Typography>
                     </Box>
                     <Box
@@ -277,13 +270,13 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                         <Typography
                             variant={'body2'}
                         >
-                            Total Canceladas
+                            Total Abertos
                         </Typography>
                         <Typography
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {cardData.totalCanceladosMelhorAnalista}
+                            {/* {cardData.totalCanceladosMelhorAnalista} */}
                         </Typography>
                     </Box>
                 </Box>
@@ -297,7 +290,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     <Typography
                         variant={'body1'}
                     >
-                        Total de Pedidos
+                        Total de Demandas
                     </Typography>
                     <Tooltip title="Comparado ao mês passado">
                         <Box
@@ -307,17 +300,17 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             gap={1}
                         >
                             {
-                                dataGeral.totalMesPassado > dataGeral.total ? (
+                                dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda > dataGeral.totalDemandasGeral[0]?.quantidade_demanda ? (
                                     <TrendingDown sx={{ color: red[800] }} />
                                 ) : (
                                     <TrendingUpIcon sx={{ color: green[800] }} />
                                 )
                             }
                             {
-                                dataGeral.totalMesPassado > dataGeral.total ? (
-                                    `-${((dataGeral.totalMesPassado - dataGeral.total) / dataGeral.totalMesPassado * 100).toFixed(2)}%`
+                                dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda > dataGeral.totalDemandasGeral[0]?.quantidade_demanda ? (
+                                    `-${((dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda - dataGeral.totalDemandasGeral[0]?.quantidade_demanda) / dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda * 100).toFixed(2)}%`
                                 ) : (
-                                    `+${((dataGeral.total - dataGeral.totalMesPassado) / dataGeral.totalMesPassado * 100).toFixed(2)}%`
+                                    `+${((dataGeral.totalDemandasGeral[0]?.quantidade_demanda - dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda) / dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda * 100).toFixed(2)}%`
                                 )
                             }
                         </Box>
@@ -325,7 +318,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     <Typography
                         variant={'h4'}
                     >
-                        {dataGeral.total}
+                        {dataGeral.totalDemandasGeral[0]?.quantidade_demanda}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -342,7 +335,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {dataGeral.totalConcluidas}
+                            {/* {dataGeral.totalConcluidas} */}
                         </Typography>
                     </Box>
                     <Box
@@ -360,7 +353,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {dataGeral.totalIndeferidas}
+                            {/* {dataGeral.totalIndeferidas} */}
                         </Typography>
                     </Box>
                     <Box
@@ -378,7 +371,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                             variant={'body2'}
                             fontWeight={'bold'}
                         >
-                            {dataGeral.totalCanceladas}
+                            {/* {dataGeral.totalCanceladas} */}
                         </Typography>
                     </Box>
                 </Box>
@@ -399,7 +392,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                     borderRadius={2}
                     textAlign={'center'}
                 >
-                    {
+                    {/* {
                         loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
                             <Chart
                                 options={{
@@ -416,7 +409,7 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
                                 width={'100%'}
                             />
                         )
-                    }
+                    } */}
                 </Box>
             </Box>
         </Box>
@@ -424,4 +417,4 @@ const ProducaoIndividualRsd = ({ mes, analista }) => {
 
 }
 
-export default ProducaoIndividualRsd
+export default ProducaoIndividualSindi

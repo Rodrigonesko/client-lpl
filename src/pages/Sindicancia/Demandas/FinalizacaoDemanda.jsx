@@ -1,10 +1,15 @@
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Button, TextField, Tooltip } from "@mui/material"
 import moment from "moment"
 import Toast from "../../../components/Toast/Toast"
 import { finalizarDemanda } from "../../../_services/sindicancia.service"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import UndoOutlinedIcon from '@mui/icons-material/UndoOutlined';
+import AuthContext from "../../../context/AuthContext"
+
 require('moment-business-days')
 const FinalizacaoDemanda = ({ demanda }) => {
+
+    const { acessos } = useContext(AuthContext)
 
     const dataInicio = moment(demanda.data_demanda)
     const dataFim = moment(demanda.data_finalizacao || new Date())
@@ -50,6 +55,14 @@ const FinalizacaoDemanda = ({ demanda }) => {
             setSeverity('error')
         }
         setLoading(false)
+    }
+
+    const handleVoltar = async () => {
+        try {
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -148,7 +161,16 @@ const FinalizacaoDemanda = ({ demanda }) => {
                         />
                     </Box>
                 )
-
+            }
+            {
+                data.data_finalizacao && acessos?.administrador ? (
+                    <Tooltip title='Voltar Demanda'>
+                        <Button onClick={handleVoltar} type='submit' variant='contained'><UndoOutlinedIcon /></Button>
+                    </Tooltip>
+                ) : (
+                    <>
+                    </>
+                )
             }
             <Toast
                 open={toast}

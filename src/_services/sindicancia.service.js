@@ -120,6 +120,10 @@ export const getQuantidadeIndividualSindicancia = async (mes) => {
     return await new ApiCall(`/sindicancia/demanda/quantidadeIndividualSindicancia/${mes}`).get()
 }
 
+export const getProducaoIndividualSindi = async (mes, analista) => {
+    return await new ApiCall(`/sindicancia/demanda/producaoIndividualSindi/${mes}/${analista}`).get()
+}
+
 export const getQuantidadeDemandasMensal = async (mes) => {
     return await new ApiCall(`/sindicancia/demanda/quantidadeDemandasMensal/${mes}`).get()
 }

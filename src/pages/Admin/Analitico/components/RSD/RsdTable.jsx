@@ -204,7 +204,7 @@ const RsdTable = ({ mes }) => {
                     </Toolbar>
                 </AppBar>
                 <Container>
-                    <ProducaoIndividual
+                    <producaoIndividualRsd
                         mes={mes}
                         analista={analistaSelecionado}
                         key={analistaSelecionado}
