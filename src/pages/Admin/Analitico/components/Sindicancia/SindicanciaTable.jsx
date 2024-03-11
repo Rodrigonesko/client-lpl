@@ -104,7 +104,7 @@ const SindicanciaTable = ({ mes }) => {
                                         Nome
                                     </TableCell>
                                     <TableCell>
-                                        Quantidade de Concluidos
+                                        Quantidade de Pacotes
                                     </TableCell>
                                     <TableCell>
                                         Quantidade Demandas
@@ -121,7 +121,7 @@ const SindicanciaTable = ({ mes }) => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    Object.entries(tableData?.find || {}).map((item, index) => (
+                                    Object.entries(tableData?.findPacote || {}).map((item, index) => (
                                         <TableRow
                                             key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -148,16 +148,13 @@ const SindicanciaTable = ({ mes }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={tableData.findMesPassado[item[0]]}
+                                                    label={tableData.findDemandaIndividual[item[0]]}
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                {/* <Chip
-                                                    label={tableData.pedidosCanceladosIndividual[item[0]]}
-                                                /> */}
                                             </TableCell>
                                             <TableCell>
-                                                {/* <Tooltip title="Ver detalhes">
+                                                <Tooltip title="Ver detalhes">
                                                     <IconButton
                                                         onClick={() => {
                                                             setAnalistaSelecionado(item[0])
@@ -168,7 +165,7 @@ const SindicanciaTable = ({ mes }) => {
                                                             color: green[500],
                                                         }} />
                                                     </IconButton>
-                                                </Tooltip> */}
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     ))

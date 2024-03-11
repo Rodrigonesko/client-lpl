@@ -119,3 +119,7 @@ export const getQuantidadeDemandasSindicancia = async (mes) => {
 export const getQuantidadeIndividualSindicancia = async (mes) => {
     return await new ApiCall(`/sindicancia/demanda/quantidadeIndividualSindicancia/${mes}`).get()
 }
+
+export const getQuantidadeDemandasMensal = async (mes) => {
+    return await new ApiCall(`/sindicancia/demanda/quantidadeDemandasMensal/${mes}`).get()
+}
