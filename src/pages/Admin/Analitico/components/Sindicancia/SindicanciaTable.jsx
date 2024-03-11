@@ -7,6 +7,7 @@ import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividual from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividual';
 import { getQuantidadeIndividualSindicancia, getQuantidadeSindicancias } from '../../../../../_services/sindicancia.service';
+import ProducaoIndividualSindi from '../../../../../components/ProducaoIndividual/ProducaoIndividualSindi/ProducaoIndividualSindi';
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -201,7 +202,7 @@ const SindicanciaTable = ({ mes }) => {
                     </Toolbar>
                 </AppBar>
                 <Container>
-                    <ProducaoIndividual
+                    <ProducaoIndividualSindi
                         mes={mes}
                         analista={analistaSelecionado}
                         key={analistaSelecionado}
