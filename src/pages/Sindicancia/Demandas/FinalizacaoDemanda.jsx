@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Tooltip } from "@mui/material"
 import moment from "moment"
 import Toast from "../../../components/Toast/Toast"
-import { finalizarDemanda } from "../../../_services/sindicancia.service"
+import { finalizarDemanda, voltarDemanda } from "../../../_services/sindicancia.service"
 import { useContext, useState } from "react"
 import UndoOutlinedIcon from '@mui/icons-material/UndoOutlined';
 import AuthContext from "../../../context/AuthContext"
@@ -11,7 +11,7 @@ const FinalizacaoDemanda = ({ demanda }) => {
 
     const { acessos } = useContext(AuthContext)
 
-    const dataInicio = moment(demanda.data_demanda)
+    const dataInicio = moment(demanda.data_criacao_pacote)
     const dataFim = moment(demanda.data_finalizacao || new Date())
     const diff = dataFim.businessDiff(dataInicio)
     let data = demanda
@@ -58,10 +58,29 @@ const FinalizacaoDemanda = ({ demanda }) => {
     }
 
     const handleVoltar = async () => {
+        setLoading(true)
         try {
+            const result = await voltarDemanda(demanda.id)
+
+            if (result.msg === 'ok') {
+                setToast(true)
+                setMessage('Demanda retornada com sucesso')
+                setSeverity('success')
+                data.data_finalizacao = null
+                data.justificativa_finalizacao = ''
+            } else {
+                setToast(true)
+                setMessage('Erro ao retornar demanda')
+                setSeverity('error')
+            }
+            setLoading(false)
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            setToast(true)
+            setMessage('Erro ao retornar demanda')
+            setSeverity('error')
+            setLoading(false)
         }
     }
 
@@ -165,7 +184,7 @@ const FinalizacaoDemanda = ({ demanda }) => {
             {
                 data.data_finalizacao && acessos?.administrador ? (
                     <Tooltip title='Voltar Demanda'>
-                        <Button onClick={handleVoltar} type='submit' variant='contained'><UndoOutlinedIcon /></Button>
+                        <Button disabled={loading} onClick={handleVoltar} type='submit' variant='contained'><UndoOutlinedIcon /></Button>
                     </Tooltip>
                 ) : (
                     <>
