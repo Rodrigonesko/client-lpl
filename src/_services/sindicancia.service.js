@@ -100,6 +100,10 @@ export const finalizarDemanda = async (data) => {
     return await new ApiCall(`/sindicancia/demanda/finalizar`).post(data);
 }
 
+export const voltarDemanda = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/finalizacao/${id}`).delete();
+}
+
 export const createComplementacao = async (data) => {
     return await new ApiCall('/sindicancia/demanda/complementacao').post(data);
 }

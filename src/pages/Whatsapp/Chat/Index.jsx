@@ -123,10 +123,10 @@ const WhatsappChat = () => {
                         </Box>
                     </Box>
                     <Box>
-                        <Chat />
+                        {/* Chat */}
+
                     </Box>
                 </Box>
-
             </ChatProvider>
         </Sidebar>
     )
