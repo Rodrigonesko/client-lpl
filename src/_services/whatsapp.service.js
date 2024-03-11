@@ -25,3 +25,15 @@ export const getAllWhatsappNumbers = async () => {
 export const deleteWhatsappNumber = async (id) => {
     return await new ApiCall(`/whatsapp/whatsappNumber/${id}`, URL_API).delete()
 }
+
+export const sendTemplateMessage = async ({ de, para, mensagem, contentSid, contentVariables, messagingServiceSid }) => {
+    return await new ApiCall('/whatsapp/sendTemplateMessage', URL_API).post({ de, para, mensagem, contentSid, contentVariables, messagingServiceSid })
+}
+
+export const getMessages = async (whatsapp) => {
+    return await new ApiCall(`/whatsapp/chat/${whatsapp}`, URL_API).get()
+}
+
+export const getContacts = async (whatsapp) => {
+    return await new ApiCall(`/whatsapp/contacts/${whatsapp}`, URL_API).get()
+}
