@@ -5,20 +5,14 @@ import Chart from 'react-apexcharts';
 import { useParams } from "react-router-dom";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { TrendingDown } from "@mui/icons-material";
-import { getComparativoProducaoRsd } from "../../../_services/rsd.service";
-import { getProducaoIndividualSindi, getQuantidadeIndividualSindicancia } from "../../../_services/sindicancia.service";
+import { getProducaoIndividualSindi, getcomparativoProducaoSindi } from "../../../_services/sindicancia.service";
 
 const ProducaoIndividualSindi = ({ mes, analista }) => {
 
     const { name } = useParams()
 
     const [loadingChart, setLoadingChart] = useState(false)
-    const [chartData, setChartData] = useState(null)
-    const [cardData, setCardData] = useState({
-        findDemandaIndividual: 0,
-        findPacote: 0,
-        findPacoteMesPassado: 0,
-    })
+    const [chartData, setChartData] = useState([])
     const [dataGeral, setDataGeral] = useState({
         totalPacotesIndividual: 0,
         totalPacotesIndividualMesPassado: 0,
@@ -30,13 +24,11 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
     useEffect(() => {
         const fetch = async () => {
             setLoadingChart(true)
-            const result = await getQuantidadeIndividualSindicancia(mes, analista || name)
             const resultGeral = await getProducaoIndividualSindi(mes, analista || name)
-            setCardData(result)
             setDataGeral(resultGeral)
             console.log(resultGeral);
-            const comparativoPedido = await getComparativoProducaoRsd(mes, analista || name)
-            setChartData(comparativoPedido)
+            const comparativoPacote = await getcomparativoProducaoSindi(mes, analista || name)
+            setChartData(comparativoPacote)
             setLoadingChart(false)
         }
         fetch()
@@ -70,14 +62,14 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
                 </Typography>
             </Box>
             {
-                // cardData.melhorAnalista[0].quantidade !== 0 && cardData.melhorAnalista[0].quantidade === cardData.totalAnalista ? (
-                //     <>
-                //         <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
-                //     </>
-                // ) : (
-                //     <>
-                //     </>
-                // )
+                dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote !== 0 && dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote === dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
+                    <>
+                        <Chip label='Você é o colaborador com o melhor rendimento do mês' color='success' />
+                    </>
+                ) : (
+                    <>
+                    </>
+                )
             }
             <Box
                 display={'flex'}
@@ -100,90 +92,98 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
                     >
                         Meu Rendimento
                     </Typography>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                dataGeral.totalPacotesIndividual[0]?.quantidade_pacote > dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote ? (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                ) : (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                )
-                            }
-                            {
-                                dataGeral.totalPacotesIndividual[0]?.quantidade_pacote > dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote ? (
-                                    `+${((dataGeral.totalPacotesIndividual[0]?.quantidade_pacote - dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote) / dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote * 100).toFixed(2)}%`
-                                ) : (
-                                    `-${((dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote - dataGeral.totalPacotesIndividual[0]?.quantidade_pacote) / dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        {dataGeral.totalPacotesIndividual[0]?.quantidade_pacote}
-                    </Typography>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Média por dia util
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {
-                                (dataGeral.totalPacotesIndividual[0]?.quantidade_pacote / 22).toFixed(2)
-                            }
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Total Fraudes
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {cardData.totalIndeferido} */}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Total Abertos
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {cardData.totalCancelados} */}
-                        </Typography>
-                    </Box>
+                    {
+                        loadingChart ? (
+                            <CircularProgress size={70} />
+                        ) : (
+                            <>
+                                <Tooltip title="Comparado ao mês passado">
+                                    <Box
+                                        display={'flex'}
+                                        flexDirection={'row'}
+                                        alignItems={'center'}
+                                        gap={1}
+                                    >
+                                        {
+                                            dataGeral.totalPacotesIndividual[0]?.quantidade_pacote > dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote ? (
+                                                <TrendingUpIcon sx={{ color: green[800] }} />
+                                            ) : (
+                                                <TrendingDown sx={{ color: red[800] }} />
+                                            )
+                                        }
+                                        {
+                                            dataGeral.totalPacotesIndividual[0]?.quantidade_pacote > dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote ? (
+                                                `+${((dataGeral.totalPacotesIndividual[0]?.quantidade_pacote - dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote) / dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote * 100).toFixed(2)}%`
+                                            ) : (
+                                                `-${((dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote - dataGeral.totalPacotesIndividual[0]?.quantidade_pacote) / dataGeral.totalPacotesIndividualMesPassado[0]?.quantidade_pacote * 100).toFixed(2)}%`
+                                            )
+                                        }
+                                    </Box>
+                                </Tooltip>
+                                <Typography
+                                    variant={'h4'}
+                                >
+                                    {dataGeral.totalPacotesIndividual[0]?.quantidade_pacote}
+                                </Typography>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Média por dia util
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {
+                                            (dataGeral.totalPacotesIndividual[0]?.quantidade_pacote / 22).toFixed(2)
+                                        }
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Total Fraudes
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {cardData.totalIndeferido} */}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Total Abertos
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {cardData.totalCancelados} */}
+                                    </Typography>
+                                </Box>
+                            </>
+                        )
+                    }
                 </Box>
                 <Box
                     bgcolor={grey[100]}
@@ -197,88 +197,95 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
                     >
                         Analista com melhor desempenho
                     </Typography>
-                    <Tooltip title="Comparado ao desempenho do melhor rendimento">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote > dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote > dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
-                                    `-${((dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote - dataGeral.totalPacotesIndividual[0]?.quantidade_pacote) / dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((dataGeral.totalPacotesIndividual[0]?.quantidade_pacote - dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote) / dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        {dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote}
-                    </Typography>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Média por dia útil
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {(cardData.melhorAnalista[0].quantidade / 22).toFixed(2)} */}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Total Fraudes
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {cardData.totalIndeferidosMelhorAnalista} */}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Total Abertos
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {cardData.totalCanceladosMelhorAnalista} */}
-                        </Typography>
-                    </Box>
+                    {
+                        loadingChart ? (
+                            <CircularProgress size={70} />
+                        ) : (
+                            <>
+                                <Tooltip title="Comparado ao desempenho do melhor rendimento">
+                                    <Box
+                                        display={'flex'}
+                                        flexDirection={'row'}
+                                        alignItems={'center'}
+                                        gap={1}
+                                    >
+                                        {
+                                            dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote > dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
+                                                <TrendingDown sx={{ color: red[800] }} />
+                                            ) : (
+                                                <TrendingUpIcon sx={{ color: green[800] }} />
+                                            )
+                                        }
+                                        {
+                                            dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote > dataGeral.totalPacotesIndividual[0]?.quantidade_pacote ? (
+                                                `-${((dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote - dataGeral.totalPacotesIndividual[0]?.quantidade_pacote) / dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote * 100).toFixed(2)}%`
+                                            ) : (
+                                                `+${((dataGeral.totalPacotesIndividual[0]?.quantidade_pacote - dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote) / dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote * 100).toFixed(2)}%`
+                                            )
+                                        }
+                                    </Box>
+                                </Tooltip>
+                                <Typography
+                                    variant={'h4'}
+                                >
+                                    {dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote}
+                                </Typography>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Média por dia útil
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {(dataGeral.totalPacotesMelhorAnalista[0]?.quantidade_pacote / 22).toFixed(2)}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Total Fraudes
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {cardData.totalIndeferidosMelhorAnalista} */}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Total Abertos
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {cardData.totalCanceladosMelhorAnalista} */}
+                                    </Typography>
+                                </Box>
+                            </>
+                        )}
                 </Box>
                 <Box
                     bgcolor={grey[100]}
@@ -292,88 +299,95 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
                     >
                         Total de Demandas
                     </Typography>
-                    <Tooltip title="Comparado ao mês passado">
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            gap={1}
-                        >
-                            {
-                                dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda > dataGeral.totalDemandasGeral[0]?.quantidade_demanda ? (
-                                    <TrendingDown sx={{ color: red[800] }} />
-                                ) : (
-                                    <TrendingUpIcon sx={{ color: green[800] }} />
-                                )
-                            }
-                            {
-                                dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda > dataGeral.totalDemandasGeral[0]?.quantidade_demanda ? (
-                                    `-${((dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda - dataGeral.totalDemandasGeral[0]?.quantidade_demanda) / dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda * 100).toFixed(2)}%`
-                                ) : (
-                                    `+${((dataGeral.totalDemandasGeral[0]?.quantidade_demanda - dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda) / dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda * 100).toFixed(2)}%`
-                                )
-                            }
-                        </Box>
-                    </Tooltip>
-                    <Typography
-                        variant={'h4'}
-                    >
-                        {dataGeral.totalDemandasGeral[0]?.quantidade_demanda}
-                    </Typography>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Concluídas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {dataGeral.totalConcluidas} */}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Indeferidas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {dataGeral.totalIndeferidas} */}
-                        </Typography>
-                    </Box>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        gap={1}
-                        justifyContent={'space-between'}
-                    >
-                        <Typography
-                            variant={'body2'}
-                        >
-                            Canceladas
-                        </Typography>
-                        <Typography
-                            variant={'body2'}
-                            fontWeight={'bold'}
-                        >
-                            {/* {dataGeral.totalCanceladas} */}
-                        </Typography>
-                    </Box>
+                    {
+                        loadingChart ? (
+                            <CircularProgress size={70} />
+                        ) : (
+                            <>
+                                <Tooltip title="Comparado ao mês passado">
+                                    <Box
+                                        display={'flex'}
+                                        flexDirection={'row'}
+                                        alignItems={'center'}
+                                        gap={1}
+                                    >
+                                        {
+                                            dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda > dataGeral.totalDemandasGeral[0]?.quantidade_demanda ? (
+                                                <TrendingDown sx={{ color: red[800] }} />
+                                            ) : (
+                                                <TrendingUpIcon sx={{ color: green[800] }} />
+                                            )
+                                        }
+                                        {
+                                            dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda > dataGeral.totalDemandasGeral[0]?.quantidade_demanda ? (
+                                                `-${((dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda - dataGeral.totalDemandasGeral[0]?.quantidade_demanda) / dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda * 100).toFixed(2)}%`
+                                            ) : (
+                                                `+${((dataGeral.totalDemandasGeral[0]?.quantidade_demanda - dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda) / dataGeral.totalDemandasGeralMesPassado[0]?.quantidade_demanda * 100).toFixed(2)}%`
+                                            )
+                                        }
+                                    </Box>
+                                </Tooltip>
+                                <Typography
+                                    variant={'h4'}
+                                >
+                                    {dataGeral.totalDemandasGeral[0]?.quantidade_demanda}
+                                </Typography>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Concluídas
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {dataGeral.totalConcluidas} */}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Indeferidas
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {dataGeral.totalIndeferidas} */}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    justifyContent={'space-between'}
+                                >
+                                    <Typography
+                                        variant={'body2'}
+                                    >
+                                        Canceladas
+                                    </Typography>
+                                    <Typography
+                                        variant={'body2'}
+                                        fontWeight={'bold'}
+                                    >
+                                        {/* {dataGeral.totalCanceladas} */}
+                                    </Typography>
+                                </Box>
+                            </>
+                        )}
                 </Box>
             </Box>
             <Box
@@ -392,8 +406,10 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
                     borderRadius={2}
                     textAlign={'center'}
                 >
-                    {/* {
-                        loadingChart ? <CircularProgress sx={{ color: grey[800] }} /> : (
+                    {
+                        loadingChart ? (
+                            <CircularProgress sx={{ color: grey[800] }} />
+                        ) : (
                             <Chart
                                 options={{
                                     plotOptions: {
@@ -405,11 +421,12 @@ const ProducaoIndividualSindi = ({ mes, analista }) => {
                                 }}
                                 type={'bar'}
                                 height={350}
-                                series={chartData || []}
+                                series={chartData.series || []}
                                 width={'100%'}
                             />
                         )
-                    } */}
+                    }
+
                 </Box>
             </Box>
         </Box>
