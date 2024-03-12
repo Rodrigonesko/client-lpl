@@ -12,7 +12,6 @@ const WhatsappSenders = () => {
     useEffect(() => {
         const fetch = async () => {
             const result = await getAllWhatsappNumbers()
-            console.log(result);
             setWhatsappSenders(result)
         }
 

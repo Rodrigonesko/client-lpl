@@ -37,3 +37,15 @@ export const getMessages = async (whatsapp) => {
 export const getContacts = async (whatsapp) => {
     return await new ApiCall(`/whatsapp/contacts/${whatsapp}`, URL_API).get()
 }
+
+export const getMessagesRsd = async (whatsapp) => {
+    return await new ApiCall(`/whatsapp/messageByPessoa/${whatsapp}`, URL_API).get()
+}
+
+export const readMessagesRsd = async (whatsapp) => {
+    return await new ApiCall(`/whatsapp/readMessagesPessoa/${whatsapp}`, URL_API).patch()
+}
+
+export const sendMessage = async ({ de, para, mensagem }) => {
+    return await new ApiCall('/whatsapp/message', URL_API).post({ de, para, mensagem })
+}
