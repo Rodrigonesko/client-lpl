@@ -18,7 +18,7 @@ const Contacts = () => {
             setContacts(response)
         }
 
-        fetch()
+        //fetch()
 
     }, [whatsappSender])
 

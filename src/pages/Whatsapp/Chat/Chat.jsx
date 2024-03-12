@@ -18,7 +18,7 @@ const Chat = () => {
             setMessages(response)
         }
 
-        fetchMessages()
+        //fetchMessages()
     }, [])
 
     useEffect(() =>{
