@@ -4,7 +4,7 @@ export const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
     const [flushHook, setFlushHook] = useState(false);
-    const [whatsappSender, setWhatsappSender] = useState('');
+    const [whatsappSender, setWhatsappSender] = useState(localStorage.getItem('whatsappSender') || '');
     const [whatsappReceiver, setWhatsappReceiver] = useState({
         _id: '',
         nome: '',

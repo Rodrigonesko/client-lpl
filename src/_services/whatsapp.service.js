@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const URL_API = 'http://localhost:3005' //process.env.REACT_APP_API_TELE_KEY
+const URL_API = process.env.REACT_APP_WHATSAPP_SERVICE
 //const token = getCookie('token')
 
 export const getTemplates = async () => {
@@ -36,6 +36,10 @@ export const getMessages = async (whatsapp) => {
 
 export const getContacts = async (whatsapp) => {
     return await new ApiCall(`/whatsapp/contacts/${whatsapp}`, URL_API).get()
+}
+
+export const getFilterContactsRsd = async (whatsapp, filter) => {
+    return await new ApiCall(`/whatsapp/contacts/${whatsapp}/${filter}`, URL_API).get()
 }
 
 export const getMessagesRsd = async (whatsapp) => {

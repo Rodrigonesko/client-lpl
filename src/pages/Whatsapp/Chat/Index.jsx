@@ -46,21 +46,6 @@ const WhatsappChat = () => {
                             <PersonAdd />
                         </IconButton>
                     </Box>
-                    <Box>
-                        <TextField
-                            fullWidth
-                            placeholder="Pesquisar"
-                            size="small"
-                            InputProps={{
-                                startAdornment: (
-                                    <Search sx={{ mr: 1 }} />
-                                ),
-                                endAdornment: (
-                                    <Close />
-                                )
-                            }}
-                        />
-                    </Box>
                     <Contacts />
                 </Box>
                 <Chat key={whatsappReceiver.whatsapp} />

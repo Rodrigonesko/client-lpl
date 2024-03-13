@@ -1,10 +1,10 @@
-import { Box, Typography, TextField } from "@mui/material";
+import { Box, Typography, TextField, CircularProgress, Link } from "@mui/material";
 import { grey, blue } from "@mui/material/colors";
 import { Add, Send } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import TemplateMenu from "./TemplateMenu";
 import { useContext, useEffect, useState } from "react";
-import { getMessagesRsd, readMessagesRsd } from "../../../_services/whatsapp.service";
+import { getMessagesRsd, readMessagesRsd, sendMessage } from "../../../_services/whatsapp.service";
 import { ChatContext } from "./ChatContext";
 import moment from "moment";
 import { io } from "socket.io-client";
@@ -17,24 +17,22 @@ const Chat = () => {
 
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
+    const [loadingSend, setLoadingSend] = useState(false)
 
-    const sendMessage = async () => {
+    const handleSendMessage = async () => {
         try {
-
             if (message === '') return
-
-            const result = await sendMessage({
+            setLoadingSend(true)
+            await sendMessage({
                 de: whatsappSender,
                 para: whatsappReceiver.whatsapp,
                 mensagem: message
             })
-
             setMessage('')
-
-            console.log(result);
-
+            setLoadingSend(false)
         } catch (error) {
             console.log(error);
+            setLoadingSend(false)
         }
     }
 
@@ -131,12 +129,43 @@ const Chat = () => {
                                     }}
                                 >
                                     {message.mensagem}
+                                    {
+                                        message.arquivo ? (
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    gap: '10px',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <Link href={message.arquivo} target="_blank" rel="noreferrer" color={blue[500]} underline="hover">
+                                                    Arquivo
+                                                </Link>
+                                                <img
+                                                    src={message.arquivo}
+                                                    alt="Arquivo"
+                                                    style={{
+                                                        maxWidth: '300px',
+                                                        maxHeight: '300px',
+                                                        objectFit: 'cover',
+                                                    }}
+                                                />
+                                            </Box>
+
+                                        ) : null
+                                    }
                                 </Typography>
                                 <Typography
                                     color="textSecondary"
                                     fontSize={12}
                                 >
                                     {moment(message.horario).format('DD/MM/YYYY HH:mm')}
+                                    <Typography
+                                        fontSize={10}
+                                    >
+                                        {message.status}
+                                    </Typography>
                                 </Typography>
                             </Box>
                         ))
@@ -164,11 +193,16 @@ const Chat = () => {
                     placeholder="Digite uma mensagem"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    disabled={loadingSend}
+                    multiline
                 />
                 <IconButton
-                    onClick={sendMessage}
+                    onClick={handleSendMessage}
+                    disabled={loadingSend}
                 >
-                    <Send />
+                    {
+                        loadingSend ? <CircularProgress size={20} /> : <Send />
+                    }
                 </IconButton>
             </Box>
         </Box>

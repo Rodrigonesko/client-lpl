@@ -31,7 +31,10 @@ const WhatsappSenders = () => {
                 id="whatsapp-senders"
                 label="Números"
                 value={whatsappSender}
-                onChange={(e) => setWhatsappSender(e.target.value)}
+                onChange={(e) => {
+                    setWhatsappSender(e.target.value)
+                    localStorage.setItem('whatsappSender', e.target.value)
+                }}
                 sx={{ borderRadius: '10px' }} // Adicione esta linha
             >
                 <MenuItem value="">
