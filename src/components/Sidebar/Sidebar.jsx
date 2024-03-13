@@ -159,6 +159,7 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/rh/prototipoAdmissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/rh/agenda'>Agenda</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu title='Infra' icon={<FaTools />}>
                                     <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>

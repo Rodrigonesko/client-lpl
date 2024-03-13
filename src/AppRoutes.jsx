@@ -7,7 +7,6 @@ import Detalhes from "./pages/Rn/Detalhes/Detalhes";
 import Todas from "./pages/Rn/Todas/Todas";
 import ProtectedRoute from "./ProtectedRoute";
 
-
 /* User */
 
 import Profile from "./pages/User/Perfil/Profile";
@@ -31,6 +30,7 @@ import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
 /* Modulo de Mensagens*/
 
 import InternMessages from "./pages/Mensagens/InternMessages";
+
 
 /* Modulo de Ferias*/
 
@@ -131,6 +131,7 @@ import BancoHoras from "./pages/Admin/BancoHoras/BancoHoras";
 import Inventario from "./pages/Admin/Inventario/Inventario";
 import Users from "./pages/Admin/Users/Users";
 import Analitico from "./pages/Admin/Analitico/Analitico";
+import Agenda from "./pages/Admin/Agenda/Agenda";
 
 /* Sindicancia*/
 
@@ -156,7 +157,6 @@ const AppRoutes = () => {
                 <Route exact path="/login" element={<Login />} />
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
-
 
                 <Route exact path="/demandas" element={<ProtectedRoute>
                     <Demandas />
@@ -226,6 +226,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/ferias" element={<ProtectedRoute>
                     <SolicitacaoFerias />
+                </ProtectedRoute>} />
+                <Route exact path="/admin/rh/agenda" element={<ProtectedRoute>
+                    <Agenda />
                 </ProtectedRoute>} />
 
                 {/*admin infra*/}
