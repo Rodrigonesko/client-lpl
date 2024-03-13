@@ -1,12 +1,11 @@
-import { Box, Button, Chip, Container, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Chip, Container, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import ExpandIcon from '@mui/icons-material/Expand';
 import { useEffect, useState } from "react";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { getAnalistasSindicancia, getAreaEmpresa, getDemandas, getStatus, getTipoServico } from "../../../_services/sindicancia.service";
 import moment from "moment";
 import { grey } from "@mui/material/colors";
-import { ArrowForward, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import DrawerDetails from "./DrawerDetails";
 import ModalRelatorio from "./ModalRelatorio";
 import ModalCriarTipoIrregularidade from "./ModalCriarTipoIrregularidade";
@@ -69,7 +68,7 @@ const Demandas = () => {
         }
     }
 
-    const pegarDados = async () => {
+    const fetchData = async () => {
         try {
             setLoading(true)
 
@@ -104,7 +103,7 @@ const Demandas = () => {
     }
 
     useEffect(() => {
-        pegarDados()
+        fetchData()
         setarAreaDaEmpresa()
         setarStatus()
         setarTipoServico()
@@ -112,7 +111,7 @@ const Demandas = () => {
     }, [])
 
     useEffect(() => {
-        pegarDados()
+        fetchData()
     }, [filtros, page, rowsPerPage])
 
     return (
@@ -165,7 +164,7 @@ const Demandas = () => {
                     flexWrap: 'wrap',
                     gap: 2
                 }}>
-                    <FormControl size="small">
+                    <FormControl size="small" disabled={loading}>
                         <InputLabel>Área/Empresa</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -183,7 +182,7 @@ const Demandas = () => {
                             }
                         </Select>
                     </FormControl>
-                    <FormControl size="small">
+                    <FormControl size="small" disabled={loading}>
                         <InputLabel>Tipo de Serviço</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -201,7 +200,7 @@ const Demandas = () => {
                             }
                         </Select>
                     </FormControl>
-                    <FormControl size="small">
+                    <FormControl size="small" disabled={loading}>
                         <InputLabel>Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -219,7 +218,7 @@ const Demandas = () => {
                             }
                         </Select>
                     </FormControl>
-                    <FormControl size="small">
+                    <FormControl size="small" disabled={loading}>
                         <InputLabel>Analista Executor</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -252,6 +251,7 @@ const Demandas = () => {
                         }}
                         value={filtros.data}
                         onChange={(e) => { setFiltros({ ...filtros, data: e.target.value }) }}
+                        disabled={loading}
                     />
                     <ModalRelatorio statusList={status} />
                     <ModalCriarTipoIrregularidade />
@@ -273,6 +273,7 @@ const Demandas = () => {
                         fullWidth
                         value={filtros.pesquisa}
                         onChange={(e) => { setFiltros({ ...filtros, pesquisa: e.target.value }) }}
+                        disabled={loading}
                     />
                 </Box>
                 <Box sx={{
@@ -322,7 +323,7 @@ const Demandas = () => {
                         mt: 2
                     }}
                 >
-                    <FormControl size="small" sx={{ ml: 2 }}>
+                    <FormControl size="small" sx={{ ml: 2 }} disabled={loading}>
                         <InputLabel>Linhas</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -343,7 +344,7 @@ const Demandas = () => {
                         totalPages % rowsPerPage === 0 ?
                             Math.floor(totalPages / rowsPerPage) :
                             Math.floor(totalPages / rowsPerPage) + 1
-                    } page={page} onChange={(e, value) => setPage(value)} />
+                    } page={page} onChange={(e, value) => setPage(value)} disabled={loading} />
                 </Box>
                 <Box sx={{
                     mt: 4

@@ -54,7 +54,6 @@ const ModalInsertVariables = ({ template }) => {
             setOpenToast(true)
             setMessageToast('Mensagem enviada com sucesso')
             setSeverity('success')
-            console.log(result)
 
         } catch (error) {
             console.log(error);

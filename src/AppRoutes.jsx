@@ -147,6 +147,7 @@ import WhatsappChat from "./pages/Whatsapp/Chat/Index";
 
 /* Prototipo produção entrevistas  */
 import { AuthProvider } from "./context/AuthContext";
+import { ChatProvider } from "./pages/Whatsapp/Chat/ChatContext";
 
 const AppRoutes = () => {
     return (
@@ -478,7 +479,9 @@ const AppRoutes = () => {
                     <Templates />
                 </ProtectedRoute>} />
                 <Route path="/whatsapp/chat" element={<ProtectedRoute>
-                    <WhatsappChat />
+                    <ChatProvider>
+                        <WhatsappChat />
+                    </ChatProvider>
                 </ProtectedRoute>} />
 
             </Routes>

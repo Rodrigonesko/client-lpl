@@ -62,12 +62,16 @@ export class ApiCall {
         }
     }
 
-    async get() {
+    async get(abortSignal) {
         try {
-            const data = await this.caller().get(this.currentRoute, this.currentConfig);
+            const data = await this.caller().get(this.currentRoute, { ...this.currentConfig, cancelToken: abortSignal });
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            if (axios.isCancel(err)) {
+                console.log('Request canceled', err.message);
+            } else {
+                return err.response?.data;
+            }
         }
     }
 
