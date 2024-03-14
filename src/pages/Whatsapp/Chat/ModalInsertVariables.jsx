@@ -63,7 +63,6 @@ const ModalInsertVariables = ({ template }) => {
             const value = variables.find(v => v.name === variable)?.value
             return acc.replace(`{{${index + 1}}}`, value)
         }, template.message)
-        console.log(message);
         setTemplateMessage(message)
     }, [variables])
 
@@ -115,6 +114,12 @@ const ModalInsertVariables = ({ template }) => {
                                                 }
                                                 return v
                                             })
+                                            if (!variables.find(v => v.name === variable)) {
+                                                newVariables.push({
+                                                    name: variable,
+                                                    value: e.target.value
+                                                })
+                                            }
                                             setVariables(newVariables)
                                         }}
                                     />
