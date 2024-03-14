@@ -3,6 +3,7 @@ import { atualizarInformacoesMo, buscarInformacoesMo } from "../../_services/rsd
 import { Box, Paper, TextField, Button, Alert, Snackbar } from "@mui/material";
 import { ImFloppyDisk } from 'react-icons/im'
 import InputMask from "react-input-mask";
+import Toast from "../Toast/Toast";
 
 const InformacoesGerais = ({ mo }) => {
 
@@ -14,7 +15,11 @@ const InformacoesGerais = ({ mo }) => {
     const [fone2, setFone2] = useState('')
     const [fone3, setFone3] = useState('')
     const [contratoEmpresa, setContratoEmpresa] = useState('')
+    const [whatsapp, setWhatsapp] = useState('')
     const [open, setOpen] = useState(false)
+    const [toast, setToast] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
 
     const handleClose = () => {
         setOpen(false)
@@ -28,6 +33,8 @@ const InformacoesGerais = ({ mo }) => {
         try {
             const result = await buscarInformacoesMo(mo)
 
+            console.log(result);
+
             setNome(result.pessoa.nome)
             setCpf(result.pessoa.cpf)
             setDataNascimento(result.pessoa.dataNascimento)
@@ -36,12 +43,22 @@ const InformacoesGerais = ({ mo }) => {
             setFone2(result.pessoa.fone2)
             setFone3(result.pessoa.fone3)
             setContratoEmpresa(result.pessoa.contratoEmpresa)
+            setWhatsapp(result.pessoa.whatsapp ? result.pessoa.whatsapp.toUpperCase() : '')
         } catch (error) {
             console.log(error);
         }
     }
 
     const atualizarInformacoes = async () => {
+
+        if (whatsapp.length !== 23 && whatsapp.length !== 0) {
+            setToast(true)
+            setMessage('Número de whatsapp inválido, o número deve conter 22 dígitos, exemplo: whatsapp:+5541912345678')
+            setSeverity('error')
+            return
+        }
+
+        console.log(whatsapp);
 
         await atualizarInformacoesMo({
             cpf,
@@ -51,7 +68,8 @@ const InformacoesGerais = ({ mo }) => {
             fone2,
             fone3,
             contratoEmpresa,
-            mo
+            mo,
+            whatsapp: whatsapp.toLowerCase()
         })
 
         setOpen(true)
@@ -69,8 +87,9 @@ const InformacoesGerais = ({ mo }) => {
                 <TextField size="small" label='Nome' style={{ marginRight: '10px', marginBottom: '5px', width: '430px' }} value={nome} />
                 <TextField size="small" label='CPF' style={{ marginRight: '10px', marginBottom: '5px' }} value={cpf} onChange={e => setCpf(e.target.value)} />
                 <TextField type="date" size="small" label='Data Nascimento' style={{ marginRight: '10px', marginBottom: '5px', width: '210px' }} focused value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} />
+
             </Box>
-            <Box display='flex' m={1} flexWrap='wrap'>
+            <Box display='flex' m={1} gap={1} flexWrap='wrap'>
                 <InputMask
                     mask="(99) 99999-9999"
                     disabled={false}
@@ -100,6 +119,15 @@ const InformacoesGerais = ({ mo }) => {
                 </InputMask>
                 <TextField size="small" label='Contrato/Empresa' style={{ marginRight: '10px', marginBottom: '5px' }} value={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} />
                 <TextField size="small" label='Email' style={{ marginRight: '10px', marginBottom: '5px' }} value={email} onChange={e => setEmail(e.target.value)} />
+                <InputMask
+                    mask="WHATSAPP:+5599999999999"
+                    disabled={false}
+                    maskChar=" "
+                    value={whatsapp}
+                    onChange={e => setWhatsapp(e.target.value)}
+                >
+                    {() => <TextField size="small" label='Whatsapp' style={{ marginRight: '10px', marginBottom: '5px' }} />}
+                </InputMask>
             </Box>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert variant='filled' onClose={handleClose} severity="success" sx={{ width: '100%' }}>
@@ -109,6 +137,12 @@ const InformacoesGerais = ({ mo }) => {
             <Box mt={2}>
                 <Button onClick={atualizarInformacoes} startIcon={<ImFloppyDisk />} size="small" variant='contained' >Salvar</Button>
             </Box>
+            <Toast
+                open={toast}
+                message={message}
+                severity={severity}
+                onClose={() => setToast(false)}
+            />
         </ Box>
 
     )

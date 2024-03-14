@@ -53,7 +53,6 @@ const ModalRelatorio = ({ statusList }) => {
         {
             agenda && (xls += "<th>Agenda</th>")
         }
-        xls += "<th>Sem Irregularidade</th>"
         result[0].irregularidadesObj.forEach((item) => {
             xls += "<th>" + item.nome + "</th>"
         })
