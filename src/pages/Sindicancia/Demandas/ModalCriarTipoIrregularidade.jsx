@@ -15,7 +15,7 @@ const ModalCriarTipoIrregularidade = () => {
         setOpen(true)
         setLoading(true)
         const result = await getTipoIrregularidade()
-        setIrregularidades(result)
+        setIrregularidades(result.sort((a, b) => a.nome.localeCompare(b.nome)))
         setLoading(false)
     }
 

@@ -1,9 +1,12 @@
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, MenuItem, TextField, Typography } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { sendTemplateMessage } from "../../../_services/whatsapp.service"
 import Toast from "../../../components/Toast/Toast"
+import { ChatContext } from "./ChatContext"
 
 const ModalInsertVariables = ({ template }) => {
+
+    const { whatsappReceiver, whatsappSender } = useContext(ChatContext)
 
     const [open, setOpen] = useState(false)
     const [templateMessage, setTemplateMessage] = useState(template?.message || '')
@@ -21,16 +24,6 @@ const ModalInsertVariables = ({ template }) => {
         setOpen(false)
     }
 
-    useEffect(() => {
-        const variables = template.contentVariables.map(variable => {
-            return {
-                name: variable,
-                value: ''
-            }
-        })
-        setVariables(variables)
-    }, [])
-
     const handleSave = async () => {
         setLoading(true)
         const message = template.contentVariables.reduce((acc, variable, index) => {
@@ -40,9 +33,9 @@ const ModalInsertVariables = ({ template }) => {
 
         try {
 
-            const result = await sendTemplateMessage({
-                de: 'whatsapp:+551150264875',
-                para: 'whatsapp:+5541997971794',
+            await sendTemplateMessage({
+                de: whatsappSender,
+                para: whatsappReceiver.whatsapp,
                 mensagem: message,
                 contentSid: template.contentSid,
                 contentVariables: variables,
@@ -64,6 +57,15 @@ const ModalInsertVariables = ({ template }) => {
 
         }
     }
+
+    useEffect(() => {
+        const message = template.contentVariables.reduce((acc, variable, index) => {
+            const value = variables.find(v => v.name === variable)?.value
+            return acc.replace(`{{${index + 1}}}`, value)
+        }, template.message)
+        console.log(message);
+        setTemplateMessage(message)
+    }, [variables])
 
     return (
         <>

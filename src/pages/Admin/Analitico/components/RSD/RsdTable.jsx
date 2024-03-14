@@ -5,7 +5,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useState } from 'react';
 import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
-import ProducaoIndividual from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividual';
+import ProducaoIndividualRsd from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividual';
 import { producaoIndividualRsd } from '../../../../../_services/rsd.service';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -204,7 +204,7 @@ const RsdTable = ({ mes }) => {
                     </Toolbar>
                 </AppBar>
                 <Container>
-                    <producaoIndividualRsd
+                    <ProducaoIndividualRsd
                         mes={mes}
                         analista={analistaSelecionado}
                         key={analistaSelecionado}
