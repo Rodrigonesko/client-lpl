@@ -6,6 +6,8 @@ import AdicionarAgenda from "./Components/AdicionarAgenda";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
 import { createAgenda, getAgenda } from "../../../_services/agenda.service";
+import moment from "moment";
+import ModalExcluir from "./Components/ModalExcluir";
 
 const Agenda = () => {
 
@@ -16,6 +18,15 @@ const Agenda = () => {
     const [quantidadeRepeticao, setQuantidadeRepeticao] = useState('')
     const [dataInicio, setDataInicio] = useState('')
     const [descricao, setDescricao] = useState('')
+    const [open, setOpen] = useState(false)
+
+    const handleOpen = async () => {
+        setOpen(true)
+    }
+
+    const handleClose = async () => {
+        setOpen(false)
+    }
 
     const criarAgenda = async () => {
         try {
@@ -26,6 +37,7 @@ const Agenda = () => {
                 descricao
             })
             setFlushHook(true)
+            setOpen(false)
         } catch (error) {
             console.log(error);
         }
@@ -35,7 +47,7 @@ const Agenda = () => {
         try {
             const find = await getAgenda()
             console.log(find);
-            setAgendas(find.find)
+            setAgendas(find)
         } catch (error) {
             console.log(error);
         }
@@ -97,6 +109,9 @@ const Agenda = () => {
                         setDataInicio={setDataInicio}
                         setDescricao={setDescricao}
                         createAgenda={criarAgenda}
+                        open={open}
+                        handleOpen={handleOpen}
+                        handleClose={handleClose}
                     />
                 </Box>
                 <Box
@@ -144,10 +159,15 @@ const Agenda = () => {
                                     return (
                                         <TableRow key={item._id}>
                                             <TableCell>{item.nome}</TableCell>
-                                            <TableCell>{item.quantidadeRepeticao}</TableCell>
-                                            <TableCell>{item.dataInicio}</TableCell>
+                                            <TableCell>{item.quantidadeRepeticao.toUpperCase()}</TableCell>
+                                            <TableCell>{moment(item.dataInicio).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{item.descricao}</TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell>
+                                                <ModalExcluir 
+                                                id={item._id} 
+                                                setFlushHook={setFlushHook}
+                                                />
+                                            </TableCell>
                                         </TableRow>
                                     )
                                 })

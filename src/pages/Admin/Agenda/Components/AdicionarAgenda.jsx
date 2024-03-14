@@ -1,22 +1,11 @@
 import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { useState } from "react"
 
-const AdicionarAgenda = ({ user, setNome, setQuantidadeRepeticao, setDataInicio, setDescricao, createAgenda }) => {
-
-    const [open, setOpen] = useState(false)
-
-    const handleOpen = async () => {
-        setOpen(true)
-    }
-
-    const handleClose = async () => {
-        setOpen(false)
-    }
+const AdicionarAgenda = ({ user, setNome, setQuantidadeRepeticao, setDataInicio, setDescricao, createAgenda, open, handleOpen, handleClose }) => {
 
     return (
         <Box>
             <Button type='button' variant='contained' onClick={handleOpen} sx={{ borderRadius: '10px' }} >Adicionar Agenda</Button>
-
             <Dialog
                 open={open}
                 onClose={handleClose}

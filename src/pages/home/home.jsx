@@ -208,9 +208,9 @@ const Home = () => {
                                         </Typography>
                                         {/* Por gentileza realizar o treinamento e enviar o certificado para o coordenador no e-mail: sgiazzon@lplseguros.com.br */}
                                     </Box>
-                                    <ModalAnexarArquivoTreinamento 
-                                    id={treinamento._id} 
-                                    setFlushHook={setFlushHook}
+                                    <ModalAnexarArquivoTreinamento
+                                        id={treinamento._id}
+                                        setFlushHook={setFlushHook}
                                     />
                                 </Alert>
                             )
@@ -235,7 +235,7 @@ const Home = () => {
                             }
                             {
                                 dataUser !== null && (
-                                    <CardToDo data={userData} flushHook={flushHook} />
+                                    <CardToDo data={userData} flushHook={flushHook} setFlushHook={setFlushHook} />
                                 )
                             }
                         </Box>
