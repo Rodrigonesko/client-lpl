@@ -315,3 +315,7 @@ export const deleteNextCloseSchedules = async (id) => {
 export const divergenciaAnexo = async (data) => {
     return await new ApiCall('/entrevistas/divergenciaAnexo').put(data)
 }
+
+export const alterarRetrabalhoEntrevista = async (data) => {
+    return await new ApiCall('/entrevistas/retrabalho').put(data)
+}

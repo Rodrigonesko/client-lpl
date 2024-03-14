@@ -2,7 +2,7 @@ import { AppBar, Button, Checkbox, Chip, Dialog, Divider, FormControl, FormContr
 import { green, grey, red } from "@mui/material/colors";
 import { Box } from "@mui/system"
 import { forwardRef, useContext, useEffect, useState } from "react";
-import { divergenciaAnexo, filterEntrevistasRealizadas } from "../../../../../_services/teleEntrevista.service";
+import { alterarRetrabalhoEntrevista, divergenciaAnexo, filterEntrevistasRealizadas } from "../../../../../_services/teleEntrevista.service";
 import moment from "moment";
 import SearchIcon from '@mui/icons-material/Search';
 import ProtDetalhesTele from "../../../ProtDetalhesTele/ProtDetalhesTele";
@@ -20,6 +20,9 @@ const Transition = forwardRef(function Transition(props, ref) {
 const Realizadas = () => {
 
     const { acessos } = useContext(AuthContext)
+
+    console.log(acessos);
+
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [pesquisa, setPesquisa] = useState('');
@@ -78,6 +81,28 @@ const Realizadas = () => {
         setMessage('Salvo com sucesso!')
         setOpenToast(true)
 
+    }
+
+    const handleRetrabalho = async (e, id) => {
+
+        setPropostas(propostas.map((proposta) => {
+            if (proposta._id === id) {
+                return {
+                    ...proposta,
+                    retrabalho: e.target.checked
+                }
+            }
+            return proposta
+        }))
+
+        await alterarRetrabalhoEntrevista({
+            id,
+            retrabalho: e.target.checked
+        })
+
+        setSeverity('success')
+        setMessage('Salvo com sucesso!')
+        setOpenToast(true)
     }
 
     useEffect(() => {
@@ -249,9 +274,9 @@ const Realizadas = () => {
                                 Status
                             </TableCell>
                             {
-                                acessos?.administrador ? (
+                                acessos?.administrador || acessos?.agendamento ? (
                                     <TableCell>
-                                        Divergência Anexo
+                                        Divergência
                                     </TableCell>
                                 ) : null
                             }
@@ -310,18 +335,37 @@ const Realizadas = () => {
                                         )}
                                     </TableCell>
                                     {
-                                        acessos?.administrador ? (
+                                        acessos?.administrador || acessos?.agendamento ? (
                                             <TableCell
                                                 align="center"
                                             >
-                                                <FormControlLabel
-                                                    control={<Checkbox
-                                                        checked={proposta.divergenciaAnexo}
-                                                        onChange={(e) => handleChangeDivergenciaAnexo(e, proposta._id)}
-                                                        color="error"
-                                                    />
+                                                <Box
+                                                    display={'flex'}
+                                                    flexDirection={'column'}
+                                                >
+                                                    {
+                                                        acessos?.administrador && (
+                                                            <FormControlLabel
+                                                                label="Divergência Anexo"
+                                                                control={<Checkbox
+                                                                    checked={proposta.divergenciaAnexo}
+                                                                    onChange={(e) => handleChangeDivergenciaAnexo(e, proposta._id)}
+                                                                    color="error"
+                                                                />
+                                                                }
+                                                            />
+                                                        )
                                                     }
-                                                />
+                                                    <FormControlLabel
+                                                        label="Sem pdf e/ou ligação"
+                                                        control={<Checkbox
+                                                            checked={proposta.retrabalho}
+                                                            onChange={(e) => handleRetrabalho(e, proposta._id)}
+                                                            color="error"
+                                                        />
+                                                        }
+                                                    />
+                                                </Box>
                                             </TableCell>
                                         ) : null
                                     }

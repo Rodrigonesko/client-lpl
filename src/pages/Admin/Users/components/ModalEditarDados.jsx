@@ -270,8 +270,8 @@ const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) =>
                                     onChange={() => setUserData({
                                         ...userData,
                                         acessos: {
-                                            ...userData.acessos,
-                                            agendamento: !userData.acessos.agendamento
+                                            ...userData?.acessos,
+                                            agendamento: !userData?.acessos?.agendamento
                                         }
                                     }
                                     )}
@@ -284,8 +284,8 @@ const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) =>
                                     onChange={() => setUserData({
                                         ...userData,
                                         acessos: {
-                                            ...userData.acessos,
-                                            administrador: !userData.acessos.administrador
+                                            ...userData?.acessos,
+                                            administrador: !userData?.acessos?.administrador
                                         }
                                     }
                                     )}
