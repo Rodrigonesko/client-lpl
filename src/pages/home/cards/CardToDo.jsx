@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Checkbox, FormControlLabel, Tooltip, Typography } from "@mui/material";
-import { grey } from '@mui/material/colors';
+import { green, grey, red } from '@mui/material/colors';
 import { getAllItens } from '../../../_services/admissaoDemissao.service';
 import { getAgendaToDo, updateAgendaCheck } from '../../../_services/agenda.service';
 import moment from 'moment';
@@ -61,20 +61,30 @@ const CardToDo = ({ data, flushHook, setFlushHook }) => {
                                 )}
                         </Typography>
                     ))}
-                    {atividadesFazerAgenda.map(item => (
-                        <Typography key={item._id} sx={{ alignItems: 'center' }} >
-                            {item.descricao} - {moment(item.data).format('DD/MM/YYYY')} {
-                                <Tooltip title='Concluido'>
-                                    <FormControlLabel value={item.concluido}
-                                        control={<Checkbox value={item.concluido} checked={item.concluido} />}
-                                        labelPlacement="start"
-                                        onClick={() => {
-                                            handleFeitoAgenda(item._id)
-                                        }} />
-                                </Tooltip>
-                            }
-                        </Typography>
-                    ))}
+                    {atividadesFazerAgenda.map(item => {
+                        let color
+                        if (item.data < moment().format('YYYY-MM-DD')) {
+                            color = red[500]
+                        } if (item.data === moment().format('YYYY-MM-DD')) {
+                            color = green[500]
+                        }
+                        return (
+                            <Typography key={item._id}
+                                sx={{ alignItems: 'center' }} style={{ color: color }}
+                            >
+                                {item.descricao} - {moment(item.data).format('DD/MM/YYYY')} {
+                                    <Tooltip title='Concluido'>
+                                        <FormControlLabel value={item.concluido}
+                                            control={<Checkbox value={item.concluido} checked={item.concluido} />}
+                                            labelPlacement="start"
+                                            onClick={() => {
+                                                handleFeitoAgenda(item._id)
+                                            }} />
+                                    </Tooltip>
+                                }
+                            </Typography>
+                        )
+                    })}
                 </Typography>
             </CardContent>
         </Card>
