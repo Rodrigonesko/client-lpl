@@ -92,7 +92,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     return (
         <>
             <TableRow key={user._id}>
-                <TableCell >{user.name}</TableCell>
+                <TableCell >{user.nomeCompleto ? (user.nomeCompleto): (user.name)}</TableCell>
                 <TableCell >{user.email}</TableCell>
                 <TableCell >{user.dataAdmissao ? (moment(user.dataAdmissao).format('DD/MM/YYYY')) : ('')}</TableCell>
                 <TableCell >{user.atividadePrincipal}</TableCell>
