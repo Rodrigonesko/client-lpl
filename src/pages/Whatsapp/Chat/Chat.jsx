@@ -59,7 +59,6 @@ const Chat = () => {
     useEffect(() => {
         socket.on('messageReceived', (message) => {
             const lastMessage = message.mensagens[message.mensagens.length - 1]
-            console.log(lastMessage);
             if (message.whatsapp === whatsappReceiver.whatsapp || lastMessage.de === whatsappSender) {
                 setMessages(message.mensagens)
             }
@@ -74,7 +73,6 @@ const Chat = () => {
                 flexDirection: 'column',
                 gap: '10px',
                 height: '100%',
-                p: 2,
                 width: '100%',
             }}
         >
@@ -86,9 +84,27 @@ const Chat = () => {
                     height: '100%',
                     width: '100%',
                     maxHeight: 'calc(100% - 50px)', // Ajuste este valor para corresponder à altura do TextField
-                    p: 2,
                 }}
             >
+                <Box
+                    sx={{
+                        bgcolor: blue[50], // Adicione a cor de fundo desejada
+                        p: 2,
+                        borderRadius: '10px',
+                    }}
+                >
+                    <Typography
+                        variant="h6"
+                    >
+                        {whatsappReceiver.nome}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        color="textSecondary"
+                    >
+                        {whatsappReceiver.whatsapp}
+                    </Typography>
+                </Box>
                 <Box
                     sx={{
                         display: 'flex',
