@@ -5,6 +5,7 @@ import { Box, Typography, TextField, TableContainer, Table, TableHead, TableRow,
 import Toast from '../../../../components/Toast/Toast'
 import { ArrowRight } from '@mui/icons-material'
 import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../../_services/teleEntrevistaExterna.service'
+import ModalEnviarMensagens from './ModalEnviarMensagens'
 
 const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
 
@@ -209,6 +210,12 @@ const NaoEnviadas = () => {
                         />
                     </RadioGroup>
                 </FormControl>
+            </Box>
+            <Box>
+                <ModalEnviarMensagens
+                    propostas={propostas}
+                    enviarMensagem={sendMessageSaudacao}
+                />
             </Box>
             <TableContainer>
                 <Table
