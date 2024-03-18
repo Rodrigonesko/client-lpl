@@ -19,3 +19,7 @@ export const deleteAgenda = async (id) => {
 export const updateAgendaCheck = async (item) => {
     return await new ApiCall('/agenda/updateAgendaCheck').put(item)
 }
+
+export const setData = async (_id, data) => {
+    return await new ApiCall('agenda/data').put(_id, data)
+}

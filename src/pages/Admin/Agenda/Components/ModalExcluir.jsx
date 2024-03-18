@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar } from "@mui/material"
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar, Tooltip } from "@mui/material"
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useState } from "react";
 import { deleteAgenda } from "../../../../_services/agenda.service";
@@ -25,8 +25,10 @@ const ModalExcluir = ({ id, setFlushHook }) => {
     }
 
     return (
-        <Box>
-            <IconButton onClick={handleOpen} color='error' ><DeleteOutlineOutlinedIcon /></IconButton>
+        <>
+            <Tooltip title='Deletar' >
+                <IconButton onClick={handleOpen} color='error' ><DeleteOutlineOutlinedIcon /></IconButton>
+            </Tooltip>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -51,7 +53,7 @@ const ModalExcluir = ({ id, setFlushHook }) => {
                     Treinamento deletado com sucesso!
                 </Alert>
             </Snackbar>
-        </Box>
+        </>
 
     )
 }
