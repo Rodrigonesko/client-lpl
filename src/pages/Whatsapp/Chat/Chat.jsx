@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, CircularProgress, Link } from "@mui/material";
-import { grey, blue } from "@mui/material/colors";
+import { grey, blue, green, red } from "@mui/material/colors";
 import { Add, Send } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import TemplateMenu from "./TemplateMenu";
@@ -179,6 +179,9 @@ const Chat = () => {
                                     {moment(message.horario).format('DD/MM/YYYY HH:mm')}
                                     <Typography
                                         fontSize={10}
+                                        sx={{
+                                            color: message.status === 'read' ? green[500] : message.status === 'undelivered' || message.status === 'failed' ? red[500] : grey[500],
+                                        }}
                                     >
                                         {message.status}
                                     </Typography>

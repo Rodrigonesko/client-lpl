@@ -258,7 +258,6 @@ const NaoEnviadas = () => {
                                     <LinearProgress />
                                 </TableCell>
                             </TableRow>
-
                         )}
                     </TableBody>
                 </Table>

@@ -32,9 +32,6 @@ const InformacoesGerais = ({ mo }) => {
     const buscarInformacoes = async () => {
         try {
             const result = await buscarInformacoesMo(mo)
-
-            console.log(result);
-
             setNome(result.pessoa.nome)
             setCpf(result.pessoa.cpf)
             setDataNascimento(result.pessoa.dataNascimento)
@@ -43,7 +40,10 @@ const InformacoesGerais = ({ mo }) => {
             setFone2(result.pessoa.fone2)
             setFone3(result.pessoa.fone3)
             setContratoEmpresa(result.pessoa.contratoEmpresa)
-            setWhatsapp(result.pessoa.whatsapp ? result.pessoa.whatsapp.toUpperCase() : '')
+            let wpp = result.pessoa.whatsapp ? result.pessoa.whatsapp.slice(12) : ''
+            wpp = wpp ? `(${wpp.slice(0, 2)}) ${wpp.slice(2, 7)}-${wpp.slice(7)}` : ''
+            console.log(wpp);
+            setWhatsapp(wpp)
         } catch (error) {
             console.log(error);
         }
@@ -51,14 +51,14 @@ const InformacoesGerais = ({ mo }) => {
 
     const atualizarInformacoes = async () => {
 
-        if (whatsapp.length !== 23 && whatsapp.length !== 0) {
+        let wpp = whatsapp ? `whatsapp:+55${whatsapp.slice(1, 3)}${whatsapp.slice(5, 10)}${whatsapp.slice(11)}` : ''
+
+        if (wpp.replace(/\D/g, '').length !== 13 && wpp !== '') {
             setToast(true)
-            setMessage('Número de whatsapp inválido, o número deve conter 22 dígitos, exemplo: whatsapp:+5541912345678')
+            setMessage('Número de Whatsapp inválido')
             setSeverity('error')
             return
         }
-
-        console.log(whatsapp);
 
         await atualizarInformacoesMo({
             cpf,
@@ -69,7 +69,7 @@ const InformacoesGerais = ({ mo }) => {
             fone3,
             contratoEmpresa,
             mo,
-            whatsapp: whatsapp.toLowerCase()
+            whatsapp: wpp
         })
 
         setOpen(true)
@@ -120,7 +120,7 @@ const InformacoesGerais = ({ mo }) => {
                 <TextField size="small" label='Contrato/Empresa' style={{ marginRight: '10px', marginBottom: '5px' }} value={contratoEmpresa} onChange={e => setContratoEmpresa(e.target.value)} />
                 <TextField size="small" label='Email' style={{ marginRight: '10px', marginBottom: '5px' }} value={email} onChange={e => setEmail(e.target.value)} />
                 <InputMask
-                    mask="WHATSAPP:+5599999999999"
+                    mask="(99) 99999-9999"
                     disabled={false}
                     maskChar=" "
                     value={whatsapp}

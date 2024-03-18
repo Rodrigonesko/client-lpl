@@ -37,7 +37,7 @@ const WhatsappSenders = () => {
                 }}
                 sx={{ borderRadius: '10px' }} // Adicione esta linha
             >
-                <MenuItem value="">
+                <MenuItem value="Nenhum">
                     <em>None</em>
                 </MenuItem>
                 {whatsappSenders.map((sender, index) => (

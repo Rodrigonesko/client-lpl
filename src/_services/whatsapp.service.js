@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const URL_API = process.env.REACT_APP_WHATSAPP_SERVICE
+const URL_API = "http://localhost:3005" //process.env.REACT_APP_WHATSAPP_SERVICE
 //const token = getCookie('token')
 
 export const getTemplates = async () => {
@@ -34,12 +34,12 @@ export const getMessages = async (whatsapp) => {
     return await new ApiCall(`/whatsapp/chat/${whatsapp}`, URL_API).get()
 }
 
-export const getContacts = async (whatsapp) => {
-    return await new ApiCall(`/whatsapp/contacts/${whatsapp}`, URL_API).get()
+export const getContacts = async (whatsapp, responsavel) => {
+    return await new ApiCall(`/whatsapp/contacts/${whatsapp}/${responsavel}`, URL_API).get()
 }
 
-export const getFilterContactsRsd = async (whatsapp, filter) => {
-    return await new ApiCall(`/whatsapp/contacts/${whatsapp}/${filter}`, URL_API).get()
+export const getFilterContactsRsd = async (whatsapp, filter, responsavel) => {
+    return await new ApiCall(`/whatsapp/contacts/${whatsapp}/${filter}/${responsavel}`, URL_API).get()
 }
 
 export const getMessagesRsd = async (whatsapp) => {
@@ -52,4 +52,8 @@ export const readMessagesRsd = async (whatsapp) => {
 
 export const sendMessage = async ({ de, para, mensagem }) => {
     return await new ApiCall('/whatsapp/message', URL_API).post({ de, para, mensagem })
+}
+
+export const assumirConversaRsd = async (data) => {
+    return await new ApiCall(`/whatsapp/assumirConversaRsd`, URL_API).patch(data)
 }
