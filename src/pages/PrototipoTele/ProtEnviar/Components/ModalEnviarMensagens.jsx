@@ -4,7 +4,8 @@ import { useState } from "react";
 
 const ModalEnviarMensagens = ({
     propostas,
-    enviarMensagem
+    enviarMensagem,
+    setFlushHook
 }) => {
 
     const [open, setOpen] = useState(false)
@@ -16,6 +17,7 @@ const ModalEnviarMensagens = ({
         for (let i = 0; i < propostas.length; i++) {
             await enviarMensagem(propostas[i])
             setProgress((i + 1) / propostas.length * 100)
+            setFlushHook((prev) => !prev)
         }
         setLoading(false)
         setOpen(false)
