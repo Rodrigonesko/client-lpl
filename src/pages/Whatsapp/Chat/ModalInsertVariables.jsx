@@ -33,6 +33,10 @@ const ModalInsertVariables = ({ template }) => {
 
         try {
 
+            if (variables.length !== template.contentVariables.length) {
+                throw new Error('Preencha todas as variáveis')
+            }
+
             await sendTemplateMessage({
                 de: whatsappSender,
                 para: whatsappReceiver.whatsapp,
@@ -52,7 +56,7 @@ const ModalInsertVariables = ({ template }) => {
             console.log(error);
             setLoading(false)
             setOpenToast(true)
-            setMessageToast('Erro ao enviar mensagem')
+            setMessageToast('Erro ao enviar mensagem', error.message)
             setSeverity('error')
 
         }

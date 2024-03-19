@@ -12,6 +12,7 @@ import AuthContext from "../../../context/AuthContext";
 import ProducaoIndividualAgendamento from "../../../components/ProducaoIndividual/ProducaoIndividualAgendamento";
 import ProducaoIndividualTele from "../../../components/ProducaoIndividual/ProduçãoIndividualTele/ProducaoIndividualTele";
 import ProducaoIndividualElegi from "../../../components/ProducaoIndividual/ProducaoIndividualElegi/ProducaoIndividualElegi";
+import ProducaoIndividualRsd from "../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividual";
 
 const MyProduction = () => {
 
@@ -36,7 +37,7 @@ const MyProduction = () => {
         if (celula === 'Tele Entrevista') {
             setProductionComponent(<ProducaoIndividualTele key={mesAux} mes={mesAux} />);
         } else if (celula === 'RSD') {
-            setProductionComponent(<MyProductionRsd key={mesAux} mes={mesAux} />)
+            setProductionComponent(<ProducaoIndividualRsd mes={mesAux} key={mesAux} />)
         } else if (celula === 'Elegibilidade') {
             setProductionComponent(<ProducaoIndividualElegi key={mesAux} mes={mesAux} />)
         } else if (celula === 'Sindicância') {

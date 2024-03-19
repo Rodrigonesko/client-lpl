@@ -1,19 +1,21 @@
-import { Box, Typography, TextField, CircularProgress, Link } from "@mui/material";
-import { grey, blue } from "@mui/material/colors";
+import { Box, Typography, TextField, CircularProgress, Link, Button } from "@mui/material";
+import { grey, blue, green, red } from "@mui/material/colors";
 import { Add, Send } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import TemplateMenu from "./TemplateMenu";
 import { useContext, useEffect, useState } from "react";
-import { getMessagesRsd, readMessagesRsd, sendMessage } from "../../../_services/whatsapp.service";
+import { assumirConversaRsd, getMessagesRsd, readMessagesRsd, sendMessage } from "../../../_services/whatsapp.service";
 import { ChatContext } from "./ChatContext";
 import moment from "moment";
 import { io } from "socket.io-client";
+import AuthContext from "../../../context/AuthContext";
 
 const socket = io(process.env.REACT_APP_WHATSAPP_SERVICE)
 
 const Chat = () => {
 
     const { whatsappReceiver, whatsappSender, setFlushHook } = useContext(ChatContext)
+    const { name } = useContext(AuthContext)
 
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
@@ -35,6 +37,15 @@ const Chat = () => {
             setLoadingSend(false)
         }
     }
+
+    const handleAssumirConversa = async () => {
+        try {
+            await assumirConversaRsd(whatsappReceiver)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -59,7 +70,6 @@ const Chat = () => {
     useEffect(() => {
         socket.on('messageReceived', (message) => {
             const lastMessage = message.mensagens[message.mensagens.length - 1]
-            console.log(lastMessage);
             if (message.whatsapp === whatsappReceiver.whatsapp || lastMessage.de === whatsappSender) {
                 setMessages(message.mensagens)
             }
@@ -74,7 +84,6 @@ const Chat = () => {
                 flexDirection: 'column',
                 gap: '10px',
                 height: '100%',
-                p: 2,
                 width: '100%',
             }}
         >
@@ -86,9 +95,46 @@ const Chat = () => {
                     height: '100%',
                     width: '100%',
                     maxHeight: 'calc(100% - 50px)', // Ajuste este valor para corresponder à altura do TextField
-                    p: 2,
                 }}
             >
+                <Box
+                    sx={{
+                        bgcolor: blue[50], // Adicione a cor de fundo desejada
+                        p: 2,
+                        borderRadius: '10px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Box>
+                        <Typography
+                            variant="h6"
+                        >
+                            {whatsappReceiver.nome}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                        >
+                            {whatsappReceiver.whatsapp}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        {
+                            whatsappReceiver.responsavelConversa !== name ? (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleAssumirConversa}
+                                >
+                                    Assumir
+                                </Button>
+                            ) : null
+                        }
+                        {whatsappReceiver.responsavelConversa}
+                    </Box>
+                </Box>
                 <Box
                     sx={{
                         display: 'flex',
@@ -163,6 +209,9 @@ const Chat = () => {
                                     {moment(message.horario).format('DD/MM/YYYY HH:mm')}
                                     <Typography
                                         fontSize={10}
+                                        sx={{
+                                            color: message.status === 'read' ? green[500] : message.status === 'undelivered' || message.status === 'failed' ? red[500] : grey[500],
+                                        }}
                                     >
                                         {message.status}
                                     </Typography>

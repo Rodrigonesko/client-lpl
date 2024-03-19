@@ -7,7 +7,7 @@ import { Close, Search } from '@mui/icons-material'
 
 const Contacts = () => {
 
-    const { whatsappSender, whatsappReceiver, setWhatsappReceiver, flushHook, setFlushHook } = useContext(ChatContext)
+    const { whatsappSender, whatsappReceiver, setWhatsappReceiver, flushHook, setFlushHook, responsavel } = useContext(ChatContext)
 
     const [contacts, setContacts] = useState([])
     const [search, setSearch] = useState('')
@@ -15,7 +15,8 @@ const Contacts = () => {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const response = await getContacts(whatsappSender)
+                console.log(whatsappSender, responsavel);
+                const response = await getContacts(whatsappSender, responsavel)
                 if (response.error) {
                     return
                 }
@@ -26,13 +27,13 @@ const Contacts = () => {
             }
         }
         fetch()
-    }, [whatsappSender, flushHook])
+    }, [whatsappSender, flushHook, responsavel])
 
     useEffect(() => {
 
         const fetch = async () => {
             try {
-                const response = await getFilterContactsRsd(whatsappSender, search)
+                const response = await getFilterContactsRsd(whatsappSender, search, responsavel)
                 if (response.error) {
                     return
                 }

@@ -5,6 +5,7 @@ import { Box, Typography, TextField, TableContainer, Table, TableHead, TableRow,
 import Toast from '../../../../components/Toast/Toast'
 import { ArrowRight } from '@mui/icons-material'
 import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../../_services/teleEntrevistaExterna.service'
+import ModalEnviarMensagens from './ModalEnviarMensagens'
 
 const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
 
@@ -14,7 +15,6 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
     const [toastSeverity, setToastSeverity] = useState('success')
 
     const handleEnviar = async (id) => {
-        console.log(id);
         setLoading(true)
         try {
             const result = await sendMessageSaudacao({ _id: id })
@@ -210,6 +210,16 @@ const NaoEnviadas = () => {
                     </RadioGroup>
                 </FormControl>
             </Box>
+            <Box
+                mt={2}
+                mb={2}
+            >
+                <ModalEnviarMensagens
+                    propostas={propostas}
+                    enviarMensagem={sendMessageSaudacao}
+                    setFlushHook={setFlushFilter}
+                />
+            </Box>
             <TableContainer>
                 <Table
                     size="small"
@@ -248,7 +258,6 @@ const NaoEnviadas = () => {
                                     <LinearProgress />
                                 </TableCell>
                             </TableRow>
-
                         )}
                     </TableBody>
                 </Table>

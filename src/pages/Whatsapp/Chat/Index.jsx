@@ -1,11 +1,12 @@
-import { Box, IconButton, TextField } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { ChatContext } from "./ChatContext";
 import WhatsappSenders from "./WhatsappSenders";
-import { Close, PersonAdd, Search } from "@mui/icons-material";
+import { PersonAdd } from "@mui/icons-material";
 import Chat from "./Chat";
 import Contacts from "./Contacts";
 import { useContext } from "react";
+import ResponsavelConversa from "./ResponsavelConversa";
 
 const WhatsappChat = () => {
 
@@ -39,12 +40,11 @@ const WhatsappChat = () => {
                             alignItems: 'center',
                             borderBottom: '1px solid #f0f0f0',
                             maxWidth: '400px',
+                            flexDirection: 'column',
                         }}
                     >
                         <WhatsappSenders />
-                        <IconButton>
-                            <PersonAdd />
-                        </IconButton>
+                        <ResponsavelConversa />
                     </Box>
                     <Contacts />
                 </Box>

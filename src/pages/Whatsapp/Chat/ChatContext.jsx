@@ -10,6 +10,7 @@ export const ChatProvider = ({ children }) => {
         nome: '',
         whatsapp: '',
     });
+    const [responsavel, setResponsavel] = useState('Todos');
 
     return (
         <ChatContext.Provider value={{
@@ -18,7 +19,9 @@ export const ChatProvider = ({ children }) => {
             whatsappSender,
             setWhatsappSender,
             whatsappReceiver,
-            setWhatsappReceiver
+            setWhatsappReceiver,
+            responsavel,
+            setResponsavel
         }}>
             {children}
         </ChatContext.Provider>
