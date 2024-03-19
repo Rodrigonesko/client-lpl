@@ -1,4 +1,4 @@
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import { deleteItemChecklist, getItemChecklist } from "../../../_services/sindicancia.service"
@@ -110,7 +110,7 @@ const ItensChecklist = () => {
                         </TableHead>
                         <TableBody>
                             {
-                                itens.filter(item => {
+                                !loading ? (itens.filter(item => {
                                     if (pesquisa === '') {
                                         return item
                                     } else if (item.item.toLowerCase().includes(pesquisa.toLowerCase())) {
@@ -131,7 +131,7 @@ const ItensChecklist = () => {
                                         </TableCell>
                                         <TableCell>
                                             <ModalComponent
-                                                buttonIcon={<Delete />}
+                                                buttonIcon={<Delete color="error" />}
                                                 buttonColorScheme="error"
                                                 headerText="Excluir Item"
                                                 onAction={() => handleDelete(item.id)}
@@ -146,8 +146,16 @@ const ItensChecklist = () => {
                                             </ModalComponent>
                                         </TableCell>
                                     </TableRow>
-                                ))
+                                ))) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={4}
+                                        >
+                                            <LinearProgress />
+                                        </TableCell>
+                                    </TableRow>
 
+                                )
                             }
                         </TableBody>
                     </Table>

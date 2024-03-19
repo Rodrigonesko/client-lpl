@@ -9,6 +9,7 @@ const ModalAdicionarItem = ({
     const [open, setOpen] = useState(false)
     const [nome, setNome] = useState('')
     const [descricao, setDescricao] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -19,6 +20,7 @@ const ModalAdicionarItem = ({
     }
 
     const handleAdcionar = async () => {
+        setLoading(true)
         await createItemChecklist({
             item: nome,
             descricao
@@ -27,6 +29,7 @@ const ModalAdicionarItem = ({
         setOpen(false)
         setDescricao('')
         setNome('')
+        setLoading(false)
     }
 
     return (
@@ -64,6 +67,7 @@ const ModalAdicionarItem = ({
                         }}
                         value={nome}
                         onChange={(e) => setNome(e.target.value)}
+                        disabled={loading}
                     />
                     <Typography>
                         Descrição
@@ -78,6 +82,7 @@ const ModalAdicionarItem = ({
                         }}
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
+                        disabled={loading}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -92,8 +97,12 @@ const ModalAdicionarItem = ({
                         variant="contained"
                         color="primary"
                         onClick={handleAdcionar}
+                        disabled={loading}
+
                     >
-                        Adicionar
+                        {
+                            loading ? 'Adicionando...' : 'Adicionar'
+                        }
                     </Button>
                 </DialogActions>
             </Dialog>

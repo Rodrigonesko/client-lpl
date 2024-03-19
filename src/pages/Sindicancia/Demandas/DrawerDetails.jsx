@@ -10,6 +10,7 @@ import ValueInput from "./ValueInput";
 import FinalizacaoDemanda from "./FinalizacaoDemanda";
 import Complementacao from "./Complementacao";
 import AuthContext from "../../../context/AuthContext";
+import DrawerFinalizacao from "./DrawerFinalizacao";
 
 const DrawerDetails = ({ data, setSelectedDemanda }) => {
 
@@ -468,9 +469,10 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
                 {
                     acessos?.administrador ? <Complementacao data={demanda} setData={setDemanda} /> : null
                 }
-                <FinalizacaoDemanda
+                {/* <FinalizacaoDemanda
                     demanda={demanda}
-                />
+                /> */}
+                <DrawerFinalizacao demanda={demanda} />
             </Drawer>
             <Toast
                 message={msg}

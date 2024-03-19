@@ -143,3 +143,7 @@ export const getItemChecklist = async () => {
 export const deleteItemChecklist = async (id) => {
     return await new ApiCall(`/sindicancia/itemChecklist/${id}`).delete();
 }
+
+export const getChecklist = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/checklist/${id}`).get();
+}
