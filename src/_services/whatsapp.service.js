@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const URL_API = "http://localhost:3005" //process.env.REACT_APP_WHATSAPP_SERVICE
+const URL_API = process.env.REACT_APP_WHATSAPP_SERVICE
 //const token = getCookie('token')
 
 export const getTemplates = async () => {

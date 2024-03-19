@@ -136,6 +136,7 @@ import Agenda from "./pages/Admin/Agenda/Agenda";
 /* Sindicancia*/
 
 import Demandas from "./pages/Sindicancia/Demandas/Demandas";
+import ItensChecklist from "./pages/Sindicancia/ItensChecklist/ItensChecklist";
 
 /* Controle atividades  */
 
@@ -160,6 +161,9 @@ const AppRoutes = () => {
 
                 <Route exact path="/demandas" element={<ProtectedRoute>
                     <Demandas />
+                </ProtectedRoute>} />
+                <Route exact path="/sindicancia/itensChecklist" element={<ProtectedRoute>
+                    <ItensChecklist />
                 </ProtectedRoute>} />
 
 
