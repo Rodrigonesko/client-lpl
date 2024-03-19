@@ -40,19 +40,10 @@ const WhatsappChat = () => {
                             alignItems: 'center',
                             borderBottom: '1px solid #f0f0f0',
                             maxWidth: '400px',
+                            flexDirection: 'column',
                         }}
                     >
                         <WhatsappSenders />
-                        <IconButton>
-                            <PersonAdd />
-                        </IconButton>
-                    </Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                        }}
-                        id="chat"
-                    >
                         <ResponsavelConversa />
                     </Box>
                     <Contacts />

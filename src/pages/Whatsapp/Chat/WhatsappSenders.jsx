@@ -24,6 +24,7 @@ const WhatsappSenders = () => {
                 m: 1,
                 minWidth: '25ch',
             }}
+            fullWidth
         >
             <InputLabel id="whatsapp-senders-label">Números</InputLabel>
             <Select
