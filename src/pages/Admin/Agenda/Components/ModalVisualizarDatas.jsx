@@ -1,13 +1,13 @@
 import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import moment from "moment";
+import DataAgenda from "./DataAgenda";
 
 const ModalVisualizarDatas = ({ datasAgenda, setDatasAgenda, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
-    const [data, setData] = useState(datasAgenda?.proximasDatas.map(item => item.data))
 
     const handleOpen = async () => {
         setOpen(true)
@@ -16,15 +16,6 @@ const ModalVisualizarDatas = ({ datasAgenda, setDatasAgenda, setFlushHook }) => 
     const handleClose = async () => {
         setOpen(false)
     }
-
-    // const handleUpdate = async () => {
-    //     const find = await setData()
-    //     console.log(find.proximasDatas.data);
-    //     setDatasAgenda(find)
-    //     setFlushHook(true)
-    //     setOpenSnack(true)
-    //     handleClose()
-    // }
 
     return (
         <>
@@ -58,15 +49,12 @@ const ModalVisualizarDatas = ({ datasAgenda, setDatasAgenda, setFlushHook }) => 
                                     (datasAgenda?.proximasDatas || []).map((item, index) => (
                                         <TableRow key={index}>
                                             <TableCell>
-                                                <TextField label='Data' type='date' size='small' value={item.data} onChange={(e) => { setData(e.target.value) }}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    InputProps={{
-                                                        style: {
-                                                            borderRadius: '10px'
-                                                        }
-                                                    }}
+                                                <DataAgenda
+                                                    item={item}
+                                                    setDatasAgenda={setDatasAgenda}
+                                                    setOpenSnack={setOpenSnack}
+                                                    setOpen={setOpen}
+                                                    setFlushHook={setFlushHook}
                                                 />
                                             </TableCell>
                                             <TableCell>
@@ -79,8 +67,8 @@ const ModalVisualizarDatas = ({ datasAgenda, setDatasAgenda, setFlushHook }) => 
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Fechar</Button>
-                    <Button onClick={handleClose} color='error' autoFocus>Deletar</Button>
+                    <Button onClick={handleClose} >Fechar</Button>
+                    {/* <Button onClick={handleClose} color='success' autoFocus>Atualizar Datas</Button> */}
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
