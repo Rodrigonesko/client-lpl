@@ -216,3 +216,7 @@ export const getProducaoIndividualRsd = async (mes, analista) => {
 export const getComparativoProducaoRsd = async (mes, analista) => {
     return await new ApiCall(`/rsd/comparativoProducao/${mes}/${analista}`).get()
 }
+
+export const encontrarPessoas = async (pesquisa) => {
+    return await new ApiCall(`/rsd/findPessoas/${pesquisa}`).get()
+}

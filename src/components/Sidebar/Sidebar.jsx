@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FaUserCircle, FaExchangeAlt, FaArchive, FaHome, FaClipboard, FaCalendar, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaUserSecret, FaTools } from "react-icons/fa";
+import { FaExchangeAlt, FaArchive, FaHome, FaClipboard, FaCalendar, FaShieldAlt, FaDonate, FaClipboardCheck, FaWhatsapp, FaUserSecret, FaTools } from "react-icons/fa";
 import { RiAlarmWarningLine } from 'react-icons/ri'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
@@ -223,6 +223,7 @@ const Sidebar = ({ children }) => {
                     </SubMenu>
                     <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
                         <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
+                        <MenuItem><Link to='/rsd/Beneficiarios'>Beneficiários</Link></MenuItem>
                         <MenuItem><Link to='/rsd/CriarPedidoIndividual/'>Criar Pedido/Protocolo</Link></MenuItem>
                         <MenuItem><Link to='/rsd/OperadoraBeneficiario/'>Operadora Beneficiário</Link></MenuItem>
                         <MenuItem><Link to='/rsd/Concluidos/'>Concluidos</Link></MenuItem>

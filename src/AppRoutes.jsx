@@ -149,6 +149,7 @@ import WhatsappChat from "./pages/Whatsapp/Chat/Index";
 /* Prototipo produção entrevistas  */
 import { AuthProvider } from "./context/AuthContext";
 import { ChatProvider } from "./pages/Whatsapp/Chat/ChatContext";
+import Beneficiarios from "./pages/Rsd/Beneficiarios/Beneficiarios";
 
 const AppRoutes = () => {
     return (
@@ -334,10 +335,13 @@ const AppRoutes = () => {
                 <Route exact path="/prototipoTele/enviar" element={<ProtectedRoute>
                     <ProtEnviar />
                 </ProtectedRoute>} />
-                {/* RSD */}
 
+                {/* RSD */}
                 <Route exact path="/rsd/PainelProcesso" element={<ProtectedRoute>
                     <PainelProcessos />
+                </ProtectedRoute>} />
+                <Route exact path="/rsd/Beneficiarios" element={<ProtectedRoute>
+                    <Beneficiarios />
                 </ProtectedRoute>} />
                 <Route exact path="/rsd/UploadArquivo" element={<ProtectedRoute>
                     <UploadRsd />
