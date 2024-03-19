@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Checkbox, FormControlLabel, Tooltip, Typography } from "@mui/material";
-import { grey } from '@mui/material/colors';
+import { green, grey, red } from '@mui/material/colors';
 import { getAllItens } from '../../../_services/admissaoDemissao.service';
 import { getAgendaToDo, updateAgendaCheck } from '../../../_services/agenda.service';
+import moment from 'moment';
 
 const CardToDo = ({ data, flushHook, setFlushHook }) => {
 
@@ -16,17 +17,18 @@ const CardToDo = ({ data, flushHook, setFlushHook }) => {
             setAtividadesFazer(fazer);
             const aFazerAgenda = await getAgendaToDo()
             console.log(aFazerAgenda);
-            const fazerAgenda = aFazerAgenda.filter(data => data.descricao)
+            const fazerAgenda = aFazerAgenda.filter(item => item.descricao)
             setAtividadesFazerAgenda(fazerAgenda)
         } catch (error) {
             console.error(error);
         }
     }
 
-    const handleFeitoAgenda = async () => {
+    let concluido = false
+
+    const handleFeitoAgenda = async (_id) => {
         try {
-            let concluido = false
-            const result = await updateAgendaCheck({ _id: data._id, concluido: !concluido })
+            const result = await updateAgendaCheck({ _id, concluido: !concluido })
             console.log(result)
             concluido = (!concluido)
             setFlushHook(true)
@@ -37,7 +39,7 @@ const CardToDo = ({ data, flushHook, setFlushHook }) => {
 
     useEffect(() => {
         fetchInfoUser();
-        setFlushHook(false)
+        setFlushHook(false);
     }, [flushHook])
 
     const color = grey[300];
@@ -59,21 +61,30 @@ const CardToDo = ({ data, flushHook, setFlushHook }) => {
                                 )}
                         </Typography>
                     ))}
-                    {atividadesFazerAgenda.map(data => (
-                        <Typography key={data._id} sx={{ alignItems: 'center' }} >
-                            {data.nome} - {data.descricao} - {
-                                <Tooltip title='Concluido'>
-                                    <FormControlLabel value={data.concluido}
-                                        control={<Checkbox value={data.concluido} checked={data.concluido} />}
-                                        labelPlacement="start"
-                                        onClick={() => {
-                                            handleFeitoAgenda(data._id)
-                                            //Estou trazendo um _id errado, verificar amanhâ
-                                        }} />
-                                </Tooltip>
-                            }
-                        </Typography>
-                    ))}
+                    {atividadesFazerAgenda.map(item => {
+                        let color
+                        if (item.data < moment().format('YYYY-MM-DD')) {
+                            color = red[500]
+                        } if (item.data === moment().format('YYYY-MM-DD')) {
+                            color = green[500]
+                        }
+                        return (
+                            <Typography key={item._id}
+                                sx={{ alignItems: 'center' }} style={{ color: color }}
+                            >
+                                {item.descricao} - {moment(item.data).format('DD/MM/YYYY')} {
+                                    <Tooltip title='Concluido'>
+                                        <FormControlLabel value={item.concluido}
+                                            control={<Checkbox value={item.concluido} checked={item.concluido} />}
+                                            labelPlacement="start"
+                                            onClick={() => {
+                                                handleFeitoAgenda(item._id)
+                                            }} />
+                                    </Tooltip>
+                                }
+                            </Typography>
+                        )
+                    })}
                 </Typography>
             </CardContent>
         </Card>

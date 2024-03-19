@@ -5,9 +5,10 @@ import { blue } from "@mui/material/colors";
 import AdicionarAgenda from "./Components/AdicionarAgenda";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
-import { createAgenda, getAgenda } from "../../../_services/agenda.service";
+import { createAgenda, getAgenda, getAgendaToDo } from "../../../_services/agenda.service";
 import moment from "moment";
 import ModalExcluir from "./Components/ModalExcluir";
+import ModalVisualizarDatas from "./Components/ModalVisualizarDatas";
 
 const Agenda = () => {
 
@@ -19,6 +20,8 @@ const Agenda = () => {
     const [dataInicio, setDataInicio] = useState('')
     const [descricao, setDescricao] = useState('')
     const [open, setOpen] = useState(false)
+
+    const [datasAgenda, setDatasAgenda] = useState(null)
 
     const handleOpen = async () => {
         setOpen(true)
@@ -58,7 +61,7 @@ const Agenda = () => {
             try {
                 const result = await getUsers()
                 setUser(result)
-                console.log(result);
+                // console.log(result);
             } catch (error) {
                 console.log(error);
             }
@@ -163,9 +166,15 @@ const Agenda = () => {
                                             <TableCell>{moment(item.dataInicio).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{item.descricao}</TableCell>
                                             <TableCell>
-                                                <ModalExcluir 
-                                                id={item._id} 
-                                                setFlushHook={setFlushHook}
+                                                <ModalExcluir
+                                                    id={item._id}
+                                                    setFlushHook={setFlushHook}
+                                                />
+                                                <ModalVisualizarDatas
+                                                    id={item._id}
+                                                    setFlushHook={setFlushHook}
+                                                    datasAgenda={item}
+                                                    setDatasAgenda={setDatasAgenda}
                                                 />
                                             </TableCell>
                                         </TableRow>
