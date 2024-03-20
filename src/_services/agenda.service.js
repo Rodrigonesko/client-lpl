@@ -21,5 +21,9 @@ export const updateAgendaCheck = async (item) => {
 }
 
 export const setarData = async (_id, data) => {
-    return await new ApiCall('agenda/data').put(_id, data)
+    return await new ApiCall('/agenda/data').put(_id, data)
+}
+
+export const filterAgenda = async (pesquisa) => {
+    return await new ApiCall(`/agenda/filterAgenda/${pesquisa}`).get()
 }

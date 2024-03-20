@@ -1,11 +1,11 @@
-import { Box, Container, InputAdornment, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Container, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import SearchIcon from '@mui/icons-material/Search';
 import { blue } from "@mui/material/colors";
 import AdicionarAgenda from "./Components/AdicionarAgenda";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
-import { createAgenda, getAgenda } from "../../../_services/agenda.service";
+import { createAgenda, filterAgenda, getAgenda } from "../../../_services/agenda.service";
 import moment from "moment";
 import ModalExcluir from "./Components/ModalExcluir";
 import ModalVisualizarDatas from "./Components/ModalVisualizarDatas";
@@ -20,6 +20,7 @@ const Agenda = () => {
     const [dataInicio, setDataInicio] = useState('')
     const [descricao, setDescricao] = useState('')
     const [open, setOpen] = useState(false)
+    const [pesquisa, setPesquisa] = useState('')
 
     const handleOpen = async () => {
         setOpen(true)
@@ -40,6 +41,17 @@ const Agenda = () => {
             console.log(create);
             setFlushHook(true)
             setOpen(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const pesquisar = async (event) => {
+        try {
+            event.preventDefault()
+            const result = await filterAgenda(pesquisa)
+            console.log(result);
+            setAgendas(result)
         } catch (error) {
             console.log(error);
         }
@@ -119,18 +131,17 @@ const Agenda = () => {
                 <Box
                     sx={{ mt: 10 }}
                 >
-                    <TextField type='text' size='small' label='Pesquisar' fullWidth InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon />
-                            </InputAdornment>
-                        ),
-                        style: {
-                            borderRadius: '10px',
-
-                        }
-                    }}
-                    />
+                    <form action="">
+                        <TextField type='text' size='small' label='Pesquisar' onChange={(e) => { setPesquisa(e.target.value) }} fullWidth InputProps={{
+                            startAdornment: (
+                                <IconButton position="start" type='submit' onClick={pesquisar} ><SearchIcon /></IconButton>
+                            ),
+                            style: {
+                                borderRadius: '10px',
+                            }
+                        }}
+                        />
+                    </form>
                 </Box>
                 <Box
                     sx={{ mt: 3 }}
@@ -157,7 +168,7 @@ const Agenda = () => {
                         </TableHead>
                         <TableBody>
                             {
-                                agendas.map((item) => {
+                                (agendas || []).map((item) => {
                                     return (
                                         <TableRow key={item._id}>
                                             <TableCell>{item.nome}</TableCell>
