@@ -6,7 +6,6 @@ import Toast from "../../../components/Toast/Toast"
 import moment from "moment"
 import AuthContext from "../../../context/AuthContext"
 
-
 const ItemChecklist = ({
     item,
     index,
@@ -269,13 +268,11 @@ const DrawerFinalizacao = ({ demanda }) => {
         >
             <Button
                 variant="contained"
-                color={data.data_finalizacao ? 'primary' : 'error'}
+                color={data.data_finalizacao ? 'success' : 'error'}
                 endIcon={<East />}
                 onClick={handleOpen}
             >
-                {
-                    data.data_finalizacao ? 'Detalhes Finalização' : 'Finalizar'
-                }
+                Checklist
             </Button>
 
             <Drawer
