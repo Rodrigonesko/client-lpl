@@ -131,3 +131,19 @@ export const getcomparativoProducaoSindi = async (mes, analista) => {
 export const getQuantidadeDemandasMensal = async (mes) => {
     return await new ApiCall(`/sindicancia/demanda/quantidadeDemandasMensal/${mes}`).get()
 }
+
+export const createItemChecklist = async (data) => {
+    return await new ApiCall('/sindicancia/itemChecklist').post(data);
+}
+
+export const getItemChecklist = async () => {
+    return await new ApiCall('/sindicancia/itemChecklist').get();
+}
+
+export const deleteItemChecklist = async (id) => {
+    return await new ApiCall(`/sindicancia/itemChecklist/${id}`).delete();
+}
+
+export const getChecklist = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/checklist/${id}`).get();
+}
