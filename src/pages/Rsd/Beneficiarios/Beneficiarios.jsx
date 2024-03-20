@@ -1,9 +1,10 @@
-import { Box, CircularProgress, Container, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, CircularProgress, Container, IconButton, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import SearchIcon from '@mui/icons-material/Search';
 import { blue } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { encontrarPessoas } from "../../../_services/rsd.service";
+import ModalConcluidos from "./Modais/ModalConcluidos";
 
 const Beneficiarios = () => {
 
@@ -11,17 +12,28 @@ const Beneficiarios = () => {
     const [flushHook, setFlushHook] = useState(false)
     const [loading, setLoading] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
+    const [message, setMessage] = useState('')
+    const [openSnack, setOpenSnack] = useState(false)
+    const [severity, setSeverity] = useState('')
 
     const pessoasEncontrar = async (event) => {
         try {
             event.preventDefault()
-            if (pesquisa.length > 3) {
-                setLoading(true)
-                const find = await encontrarPessoas(pesquisa)
-                console.log(find);
-                setPessoas(find)
-                setLoading(false)
+            if (pesquisa.length < 3) {
+                setOpenSnack(true)
+                setMessage('Digite no minimo 3 caracteres!')
+                setSeverity('warning')
+                return
             }
+            setLoading(true)
+            const find = await encontrarPessoas(pesquisa)
+            console.log(find);
+            setPessoas(find)
+            setLoading(false)
+            setOpenSnack(true)
+            setMessage('Dados encontrados com sucesso!')
+            setSeverity('success')
+
         } catch (error) {
             console.log(error);
         }
@@ -85,7 +97,7 @@ const Beneficiarios = () => {
                         </form>
                     </Box>
                     <Box
-                        sx={{ mt: 2, alignItems: 'center' }}
+                        sx={{ mt: 2, textAlign: 'center' }}
                     >
                         {
                             loading ? (
@@ -117,7 +129,9 @@ const Beneficiarios = () => {
                                                         <TableCell>{item.mo}</TableCell>
                                                         <TableCell>{item.cpf}</TableCell>
                                                         <TableCell>
-
+                                                            <ModalConcluidos 
+                                                            item={item}
+                                                            />
                                                         </TableCell>
                                                     </TableRow>
                                                 )
@@ -128,6 +142,11 @@ const Beneficiarios = () => {
                             )
                         }
                     </Box>
+                    <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
+                        <Alert variant="filled" onClose={() => setOpenSnack(false)} severity={severity} sx={{ width: '100%' }}>
+                            {message}
+                        </Alert>
+                    </Snackbar>
                 </Container>
             </Sidebar>
         </>
