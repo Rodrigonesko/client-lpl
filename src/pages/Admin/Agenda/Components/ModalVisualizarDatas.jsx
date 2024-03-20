@@ -1,10 +1,9 @@
-import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from "@mui/material"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useState } from "react";
-import moment from "moment";
 import DataAgenda from "./DataAgenda";
 
-const ModalVisualizarDatas = ({ datasAgenda, setDatasAgenda, setFlushHook }) => {
+const ModalVisualizarDatas = ({ datasAgenda, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [openSnack, setOpenSnack] = useState(false)
@@ -51,7 +50,6 @@ const ModalVisualizarDatas = ({ datasAgenda, setDatasAgenda, setFlushHook }) => 
                                             <TableCell>
                                                 <DataAgenda
                                                     item={item}
-                                                    setDatasAgenda={setDatasAgenda}
                                                     setOpenSnack={setOpenSnack}
                                                     setOpen={setOpen}
                                                     setFlushHook={setFlushHook}

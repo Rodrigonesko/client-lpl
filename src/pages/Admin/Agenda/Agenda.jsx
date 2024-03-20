@@ -5,7 +5,7 @@ import { blue } from "@mui/material/colors";
 import AdicionarAgenda from "./Components/AdicionarAgenda";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../_services/user.service";
-import { createAgenda, getAgenda, getAgendaToDo } from "../../../_services/agenda.service";
+import { createAgenda, getAgenda } from "../../../_services/agenda.service";
 import moment from "moment";
 import ModalExcluir from "./Components/ModalExcluir";
 import ModalVisualizarDatas from "./Components/ModalVisualizarDatas";
@@ -20,8 +20,6 @@ const Agenda = () => {
     const [dataInicio, setDataInicio] = useState('')
     const [descricao, setDescricao] = useState('')
     const [open, setOpen] = useState(false)
-
-    const [datasAgenda, setDatasAgenda] = useState(null)
 
     const handleOpen = async () => {
         setOpen(true)
@@ -39,6 +37,7 @@ const Agenda = () => {
                 dataInicio,
                 descricao
             })
+            console.log(create);
             setFlushHook(true)
             setOpen(false)
         } catch (error) {
@@ -174,7 +173,6 @@ const Agenda = () => {
                                                     id={item._id}
                                                     setFlushHook={setFlushHook}
                                                     datasAgenda={item}
-                                                    setDatasAgenda={setDatasAgenda}
                                                 />
                                             </TableCell>
                                         </TableRow>
