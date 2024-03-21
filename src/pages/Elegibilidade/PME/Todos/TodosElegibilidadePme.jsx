@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react"
 import Sidebar from "../../../../components/Sidebar/Sidebar"
-import { Box, LinearProgress, Container, Typography, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, FormControl, InputLabel, Select, MenuItem, TextField, Tooltip, Snackbar, Alert } from "@mui/material"
+import { Box, LinearProgress, Container, Typography, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, FormControl, InputLabel, Select, MenuItem, TextField, Tooltip, Snackbar, Alert, Badge, Chip } from "@mui/material"
 import { atribuirAnalistaPme, getPropostaElegibilidadePmePorStatusEProposta, getPropostasElegibilidadePmePorStatus, getPropostasElegibilidadePmePorStatusEAnalista } from "../../../../_services/elegibilidadePme.service"
 import { getAnalistasElegibilidade } from "../../../../_services/user.service"
 import { BiSearchAlt, BiFilterAlt } from 'react-icons/bi'
@@ -199,6 +199,7 @@ const TodosElegibilidadePme = () => {
                                 <TableHead className="table-header">
                                     <TableRow>
                                         <TableCell>Proposta</TableCell>
+                                        <TableCell align="center">Prioridade</TableCell>
                                         <TableCell>Data Recebida</TableCell>
                                         <TableCell>Motor</TableCell>
                                         <TableCell>Analista</TableCell>
@@ -212,6 +213,7 @@ const TodosElegibilidadePme = () => {
                                             return (
                                                 <TableRow key={proposta._id}>
                                                     <TableCell>{proposta.proposta}</TableCell>
+                                                    <TableCell align="center">{proposta.prioridade && <Chip label='Prioridade' color="error" />}</TableCell>
                                                     <TableCell>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{proposta.motor}</TableCell>
                                                     <TableCell>

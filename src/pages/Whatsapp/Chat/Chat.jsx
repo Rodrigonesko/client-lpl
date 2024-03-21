@@ -120,7 +120,14 @@ const Chat = () => {
                             {whatsappReceiver.whatsapp}
                         </Typography>
                     </Box>
-                    <Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            gap: '10px',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
                         {
                             whatsappReceiver.responsavelConversa !== name ? (
                                 <Button
