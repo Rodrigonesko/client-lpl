@@ -66,12 +66,11 @@ const ModalVisualizarDatas = ({ datasAgenda, setFlushHook }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} >Fechar</Button>
-                    {/* <Button onClick={handleClose} color='success' autoFocus>Atualizar Datas</Button> */}
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
                 <Alert variant="filled" onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
-                    Treinamento deletado com sucesso!
+                    Dados atualizado com sucesso!
                 </Alert>
             </Snackbar>
         </>
