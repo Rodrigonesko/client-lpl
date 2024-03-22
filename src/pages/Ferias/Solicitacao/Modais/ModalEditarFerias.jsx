@@ -1,6 +1,7 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, TextField } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Snackbar, TextField } from "@mui/material";
 import { useState } from "react";
 import { UpdateFerias } from "../../../../_services/ferias";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const ModalEditarFerias = ({ setFlushHook, id, trocaData }) => {
 
@@ -42,7 +43,7 @@ const ModalEditarFerias = ({ setFlushHook, id, trocaData }) => {
 
     return (
         <>
-            <Button onClick={handleClickOpen} variant='contained' color="success" size="small">Editar</Button>
+            <IconButton onClick={handleClickOpen} variant='contained' color="success"><EditOutlinedIcon /></IconButton>
 
             <Dialog
                 open={open}
@@ -55,7 +56,16 @@ const ModalEditarFerias = ({ setFlushHook, id, trocaData }) => {
                 </DialogTitle>
                 <DialogContent sx={{ width: '500px' }}>
                     <Box display='flex' flexDirection='column' minHeight='150px' justifyContent='space-around'>
-                        <TextField type="date" label='Altere a data de Férias selecionada' focused size="small" value={data} onChange={e => setData(e.target.value)} />
+                        <TextField type="date" label='Altere a data de Férias selecionada' size="small" value={data} onChange={e => setData(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px'
+                                }
+                            }}
+                        />
                     </Box>
                 </DialogContent>
                 <DialogActions>
