@@ -9,6 +9,7 @@ import { ChatContext } from "./ChatContext";
 import moment from "moment";
 import { io } from "socket.io-client";
 import AuthContext from "../../../context/AuthContext";
+import ModalEnviarArquivo from "./ModalEnviarArquivo";
 
 const socket = io(process.env.REACT_APP_WHATSAPP_SERVICE)
 
@@ -240,9 +241,7 @@ const Chat = () => {
                 }}
             >
                 <TemplateMenu />
-                <IconButton>
-                    <Add />
-                </IconButton>
+                <ModalEnviarArquivo />
                 <TextField
                     fullWidth
                     size="small"

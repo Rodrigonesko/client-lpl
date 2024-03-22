@@ -88,7 +88,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell align="center" padding={'none'}>
                     {
-                        item.newStatus !== 'Concluído' && (
+                        (item.newStatus !== 'Concluído' || item.status !== 'Concluído') && (
                             <Checkbox
                                 checked={selectedObjects.some(obj => obj._id === item._id)}
                                 onChange={(e) => {
@@ -173,12 +173,12 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                 </TableCell>
                 <TableCell align="center" padding="none">
                     {
-                        item.newStatus !== 'Cancelado' && (
+                        item.status !== 'Cancelado' && (
                             <Box display={'flex'}>
-                                <Tooltip title={item.newStatus !== 'Concluído' ? 'Formulario' : 'Editar Formulario'}>
-                                    <IconButton href={item.newStatus !== 'Concluído' ? `/entrevistas/formulario/${item._id}` : `/entrevistas/propostas/editar/${item._id}`} target="_blank" color="primary">
+                                <Tooltip title={item.status !== 'Concluído' ? 'Formulario' : 'Editar Formulario'}>
+                                    <IconButton href={item.status !== 'Concluído' ? `/entrevistas/formulario/${item._id}` : `/entrevistas/propostas/editar/${item._id}`} target="_blank" color="primary">
                                         {
-                                            item.newStatus !== 'Concluído' ? (
+                                            item.status !== 'Concluído' ? (
                                                 <ListAltIcon />
                                             ) : (
                                                 <AppRegistrationIcon />
@@ -187,7 +187,7 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                     </IconButton>
                                 </Tooltip>
                                 {
-                                    item.newStatus === 'Concluído' && (
+                                    (item.newStatus === 'Concluído' || item.status === 'Concluído') &&  (
                                         <Tooltip title='PDF'>
                                             <IconButton onClick={() => { gerarPdf(item.proposta, item.nome) }} color="error">
                                                 <PictureAsPdfIcon />
