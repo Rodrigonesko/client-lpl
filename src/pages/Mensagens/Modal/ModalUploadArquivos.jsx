@@ -31,7 +31,6 @@ const ModalUploadArquivos = ({ chatId, receptor, setFlushHook }) => {
         cursor: 'pointer',
         backgroundColor: blue[50], // Change as needed
         transition: 'all 0.3s ease-in-out',
-
     };
 
     const uploadedFileItems = useMemo(() => (
