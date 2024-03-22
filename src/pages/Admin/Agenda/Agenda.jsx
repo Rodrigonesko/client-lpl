@@ -1,4 +1,5 @@
-import { Box, Container, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+
+import { Alert, Box, Container, IconButton, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import SearchIcon from '@mui/icons-material/Search';
 import { blue } from "@mui/material/colors";
@@ -21,6 +22,9 @@ const Agenda = () => {
     const [descricao, setDescricao] = useState('')
     const [open, setOpen] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
 
     const handleOpen = async () => {
         setOpen(true)
@@ -28,6 +32,7 @@ const Agenda = () => {
 
     const handleClose = async () => {
         setOpen(false)
+        setOpenSnack(false)
     }
 
     const criarAgenda = async () => {
@@ -41,6 +46,26 @@ const Agenda = () => {
             console.log(create);
             setFlushHook(true)
             setOpen(false)
+            setOpenSnack(true)
+            setMessage('Agenda criada com sucesso!')
+            setSeverity('success')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const pesquisar = async (event) => {
+        try {
+            event.preventDefault()
+            if (pesquisa.length < 3) {
+                setOpenSnack(true)
+                setMessage('Digite no minímo 3 caracteres para filtrar!')
+                setSeverity('warning')
+                return
+            }
+            const result = await filterAgenda(pesquisa)
+            console.log(result);
+            setAgendas(result)
         } catch (error) {
             console.log(error);
         }
@@ -192,6 +217,11 @@ const Agenda = () => {
                             }
                         </TableBody>
                     </Table>
+                    <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleClose} >
+                        <Alert variant="filled" onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                            {message}
+                        </Alert>
+                    </Snackbar>
                 </Box>
             </Container>
         </Sidebar>

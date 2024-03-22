@@ -82,10 +82,36 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
     return (
         <>
             <form action="" >
-                <TextField type='text' onChange={(e) => { setColaborador(e.target.value) }} size='small' label='Colaborador' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='month' onChange={(e) => { setMes(e.target.value) }} size='small' focused label='Mês' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='month' onChange={(e) => { setVencimento(e.target.value) }} size='small' focused label='Vencimento' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='text' onChange={(e) => { setSetor(e.target.value) }} size='small' label='Setor' sx={{ marginRight: '10px', width: '170px' }} />
+                <TextField type='text' onChange={(e) => { setColaborador(e.target.value) }} size='small' label='Colaborador' sx={{ marginRight: '10px', width: '170px' }}
+                    InputProps={{
+                        style: {
+                            borderRadius: '10px'
+                        }
+                    }} />
+                <TextField type='month' onChange={(e) => { setMes(e.target.value) }} size='small' label='Mês' sx={{ marginRight: '10px', width: '170px' }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    InputProps={{
+                        style: {
+                            borderRadius: '10px'
+                        }
+                    }} />
+                <TextField type='month' onChange={(e) => { setVencimento(e.target.value) }} size='small' label='Vencimento' sx={{ marginRight: '10px', width: '170px' }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    InputProps={{
+                        style: {
+                            borderRadius: '10px'
+                        }
+                    }} />
+                <TextField type='text' onChange={(e) => { setSetor(e.target.value) }} size='small' label='Setor' sx={{ marginRight: '10px', width: '170px' }}
+                    InputProps={{
+                        style: {
+                            borderRadius: '10px'
+                        }
+                    }} />
                 <Button type="submit" onClick={handleFilter} variant='contained' >Pesquisar</Button>
                 <Button onClick={() => setFlushHook(true)} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
             </form>
@@ -99,16 +125,34 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                 <TableContainer>
                     <Table>
                         <TableHead>
-                            <TableRow className="table-header">
-                                <TableCell>MÊS</TableCell>
-                                <TableCell>VENCIMENTO</TableCell>
-                                <TableCell>COLABORADOR</TableCell>
-                                <TableCell>DATA DE INICIO</TableCell>
-                                <TableCell>DATA FIM</TableCell>
-                                <TableCell>TOTAL DIAS</TableCell>
-                                <TableCell>STATUS RH</TableCell>
-                                <TableCell>GESTOR APROVOU?</TableCell>
-                                <TableCell>EDITAR</TableCell>
+                            <TableRow sx={{ bgcolor: blue[600] }}>
+                                <TableCell sx={{ color: "white" }} >
+                                    MÊS
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    VENCIMENTO
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    COLABORADOR
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    DATA DE INICIO
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    DATA FIM
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    TOTAL DIAS
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    STATUS RH
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    GESTOR APROVOU?
+                                </TableCell>
+                                <TableCell sx={{ color: "white" }}>
+                                    EDITAR
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -142,9 +186,9 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                         <TableCell>{item.dataRetorno}</TableCell>
                                         <TableCell>{item.totalDias}</TableCell>
                                         <TableCell>
-                                            <FormControl sx={{ minWidth: 135 }}>
+                                            <FormControl size='small' margin='none' sx={{ minWidth: 140 }}>
                                                 <InputLabel id='StatusRh'>Status do RH</InputLabel>
-                                                <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)} >
+                                                <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)}>
                                                     <MenuItem value={'solicitado'}>SOLICITADO</MenuItem>
                                                     <MenuItem value={'assinado'}>ASSINADO</MenuItem>
                                                     <MenuItem value={'retirada'}>RETIRADA</MenuItem>
