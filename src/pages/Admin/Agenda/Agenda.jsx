@@ -1,3 +1,4 @@
+
 import { Alert, Box, Container, IconButton, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import SearchIcon from '@mui/icons-material/Search';
@@ -21,7 +22,6 @@ const Agenda = () => {
     const [descricao, setDescricao] = useState('')
     const [open, setOpen] = useState(false)
     const [pesquisa, setPesquisa] = useState('')
-
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
@@ -63,6 +63,17 @@ const Agenda = () => {
                 setSeverity('warning')
                 return
             }
+            const result = await filterAgenda(pesquisa)
+            console.log(result);
+            setAgendas(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const pesquisar = async (event) => {
+        try {
+            event.preventDefault()
             const result = await filterAgenda(pesquisa)
             console.log(result);
             setAgendas(result)

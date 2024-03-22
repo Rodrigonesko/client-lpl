@@ -1,6 +1,6 @@
 import { ApiCall } from "./api";
 const URL_API = process.env.REACT_APP_WHATSAPP_SERVICE
-//const token = getCookie('token')
+const token = localStorage.getItem('token')
 
 export const getTemplates = async () => {
     return await new ApiCall('/whatsapp/template', URL_API).get()
@@ -50,10 +50,16 @@ export const readMessagesRsd = async (whatsapp) => {
     return await new ApiCall(`/whatsapp/readMessagesPessoa/${whatsapp}`, URL_API).patch()
 }
 
-export const sendMessage = async ({ de, para, mensagem }) => {
-    return await new ApiCall('/whatsapp/message', URL_API).post({ de, para, mensagem })
+export const sendMessage = async ({ de, para, mensagem, mediaUrl }) => {
+    return await new ApiCall('/whatsapp/message', URL_API).post({ de, para, mensagem, mediaUrl })
 }
 
 export const assumirConversaRsd = async (data) => {
     return await new ApiCall(`/whatsapp/assumirConversaRsd`, URL_API).patch(data)
+}
+
+export const sendFiles = async (data) => {
+    return await new ApiCall('/whatsapp/sendFiles', URL_API, token, {
+        headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` }
+    }).post(data)
 }

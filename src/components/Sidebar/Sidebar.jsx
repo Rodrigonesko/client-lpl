@@ -261,7 +261,11 @@ const Sidebar = ({ children }) => {
                     </SubMenu>
                     <SubMenu title='Sindicância' icon={<GavelOutlinedIcon />}>
                         <MenuItem><Link to='/demandas'>Demandas</Link></MenuItem>
-                        <MenuItem><Link to='/sindicancia/itensChecklist'>Itens Checklist</Link></MenuItem>
+                        {
+                            acessos?.administrador && (
+                                <MenuItem><Link to='/sindicancia/itensChecklist'>Itens Checklist</Link></MenuItem>
+                            )
+                        }
                     </SubMenu>
                     <SubMenu title={"Whastapp"} icon={<FaWhatsapp />}>
                         <MenuItem><Link to='/whatsapp/chat'>Chat</Link></MenuItem>
