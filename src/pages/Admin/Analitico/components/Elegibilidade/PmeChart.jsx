@@ -39,7 +39,7 @@ const PmeChart = ({ mes }) => {
         const fetch = async () => {
             setLoadingGrafico(true)
             const result = await chartDataPme(mes)
-            console.log(result.series.data);
+            console.log(result.series);
             setGraficoData(result.series)
             setLoadingGrafico(false)
         }
