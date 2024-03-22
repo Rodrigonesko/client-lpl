@@ -4,6 +4,8 @@ import { useState } from "react"
 import ElegibilidadeCards from "./ElegibilidadeCards"
 import ElegibilidadeChart from "./ElegibilidadeChart"
 import ElegibilidadeTable from "./ElegibilidadeTable"
+import PmeCards from "./PmeCards"
+import PmeChart from "./PmeChart"
 
 const AnaliticoElegibilidade = () => {
 
@@ -31,6 +33,8 @@ const AnaliticoElegibilidade = () => {
             <ElegibilidadeCards mes={mes} key={`card-${mes}`} />
             <ElegibilidadeChart mes={mes} key={`chart-${mes}`} />
             <ElegibilidadeTable mes={mes} key={`table-${mes}`} />
+            <PmeCards mes={mes} key={`pmeCard-${mes}`}/>
+            <PmeChart mes={mes} key={`pmeChart-${mes}`} />
         </Box>
     )
 }
