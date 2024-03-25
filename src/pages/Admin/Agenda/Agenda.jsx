@@ -71,17 +71,6 @@ const Agenda = () => {
         }
     }
 
-    const pesquisar = async (event) => {
-        try {
-            event.preventDefault()
-            const result = await filterAgenda(pesquisa)
-            console.log(result);
-            setAgendas(result)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const pegarAgenda = async () => {
         try {
             const find = await getAgenda()
