@@ -56,3 +56,11 @@ export const getRelatorioProducaoMensalPme = async (mes) => {
 export const getAnaliticoElegibilidadeMensalPme = async (mes, analista) => {
     return await new ApiCall(`/elegibilidadePme/analitico/${mes}/${analista}`).get()
 }
+
+export const analiticoPme = async (mes) => {
+    return await new ApiCall(`/elegibilidadePme/analiticoPme/${mes}`).get()
+}
+
+export const chartDataPme = async (mes) => {
+    return await new ApiCall(`/elegibilidadePme/chartDataPme/${mes}`).get()
+}
