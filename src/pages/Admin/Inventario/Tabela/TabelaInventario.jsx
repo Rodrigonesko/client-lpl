@@ -1,5 +1,5 @@
 import { Alert, Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
-import { red, yellow, green } from '@mui/material/colors';
+import { red, yellow, green, blue } from '@mui/material/colors';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalEditarInventario from "../Modais/ModalEditarInventario";
@@ -126,13 +126,13 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                         !loading ? (
                             <Table size='small'>
                                 <TableHead>
-                                    <TableRow className="table-header">
-                                        <TableCell>NOME ITEM</TableCell>
-                                        <TableCell>ETIQUETA</TableCell>
-                                        <TableCell>COM QUEM ESTÁ</TableCell>
-                                        <TableCell>DESCRIÇÃO</TableCell>
-                                        <TableCell>STATUS</TableCell>
-                                        <TableCell>BOTÕES</TableCell>
+                                    <TableRow className="table-header" sx={{ bgcolor: blue[600] }}>
+                                        <TableCell sx={{ color: "white" }} >NOME ITEM</TableCell>
+                                        <TableCell sx={{ color: "white" }} >ETIQUETA</TableCell>
+                                        <TableCell sx={{ color: "white" }} >COM QUEM ESTÁ</TableCell>
+                                        <TableCell sx={{ color: "white" }} >DESCRIÇÃO</TableCell>
+                                        <TableCell sx={{ color: "white" }} >STATUS</TableCell>
+                                        <TableCell sx={{ color: "white" }} >BOTÕES</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -152,9 +152,16 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                                 <TableCell>{item.ondeEsta}</TableCell>
                                                 <TableCell>{item.descricao}</TableCell>
                                                 <TableCell>
-                                                    <FormControl sx={{ minWidth: 190 }}>
+                                                    <FormControl size='small' sx={{ minWidth: 190 }} >
                                                         <InputLabel id='Status'>Status</InputLabel>
-                                                        <Select defaultValue={item.status} labelId="Status" id='Status' label='Status' onChange={(elemento) => handleChangeStatus(item._id, elemento.target.value)} >
+                                                        <Select
+                                                            defaultValue={item.status}
+                                                            labelId="Status"
+                                                            margin='dense'
+                                                            id='Status'
+                                                            label='Status'
+                                                            onChange={(elemento) => handleChangeStatus(item._id, elemento.target.value)}
+                                                            sx={{ borderRadius: '10px' }} >
                                                             <MenuItem value={'emEstoque'}>EM ESTOQUE</MenuItem>
                                                             <MenuItem value={'emUso'}>EM USO</MenuItem>
                                                             <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
