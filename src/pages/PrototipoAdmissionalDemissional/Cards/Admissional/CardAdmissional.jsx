@@ -92,7 +92,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
     return (
         <>
             <TableRow key={user._id}>
-                <TableCell >{user.nomeCompleto ? (user.nomeCompleto): (user.name)}</TableCell>
+                <TableCell >{user.nomeCompleto ? (user.nomeCompleto) : (user.name)}</TableCell>
                 <TableCell >{user.email}</TableCell>
                 <TableCell >{user.dataAdmissao ? (moment(user.dataAdmissao).format('DD/MM/YYYY')) : ('')}</TableCell>
                 <TableCell >{user.atividadePrincipal}</TableCell>
@@ -163,12 +163,11 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 }
                                                 </TableCell>
                                                 <TableCell>
-                                                    <FormControl sx={{ minWidth: 150 }}>
+                                                    <FormControl sx={{ minWidth: 150 }} size='small'>
                                                         <InputLabel id='Status'>Status</InputLabel>
                                                         <Select
                                                             value={item.status}
                                                             labelId="Status"
-                                                            size='small'
                                                             id='Status'
                                                             label='Status'
                                                             onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)}

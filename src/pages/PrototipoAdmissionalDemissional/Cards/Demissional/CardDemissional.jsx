@@ -141,14 +141,13 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                     // <TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />
                                                 }</TableCell>
                                                 <TableCell>
-                                                    <FormControl sx={{ minWidth: 150 }}>
+                                                    <FormControl sx={{ minWidth: 150 }} size='small'>
                                                         <InputLabel id='Status'>Status</InputLabel>
                                                         <Select
                                                             value={item.status}
                                                             labelId="Status"
                                                             id='Status'
                                                             label='Status'
-                                                            size='small'
                                                             onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)}
                                                             sx={{ borderRadius: '10px' }}
                                                             InputLabelProps={{
