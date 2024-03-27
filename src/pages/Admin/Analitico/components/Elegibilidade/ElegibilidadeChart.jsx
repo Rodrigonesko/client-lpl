@@ -41,7 +41,7 @@ const ElegibilidadeChart = ({ mes }) => {
         const fetch = async () => {
             setLoadingGrafico(true)
             const result = await getChartDataElegibilidade(mes)
-            console.log(result);
+            console.log(result.series);
             setGraficoData(result.series)
             setLoadingGrafico(false)
         }

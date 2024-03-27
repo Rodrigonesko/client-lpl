@@ -1,4 +1,4 @@
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, IconButton, Snackbar, TextField, Tooltip } from "@mui/material"
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { UpdateInventario } from "../../../../_services/inventario.service";
@@ -55,7 +55,9 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
 
     return (
         <>
-            <Button onClick={handleClickOpen} ><FaEdit size='30px' /></Button>
+            <Tooltip title='Editar' >
+                <IconButton onClick={handleClickOpen} color='primary' ><FaEdit /></IconButton>
+            </Tooltip>
             <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" fullWidth aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title">{'Insira o item no Inventário'}</DialogTitle>
                 <DialogContent>

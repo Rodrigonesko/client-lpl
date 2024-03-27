@@ -188,7 +188,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                         <TableCell>
                                             <FormControl size='small' margin='none' sx={{ minWidth: 140 }}>
                                                 <InputLabel id='StatusRh'>Status do RH</InputLabel>
-                                                <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)}>
+                                                <Select defaultValue={item.statusRh} labelId="StatusRh" id='StatusRh' label='Status do RH' onChange={(elemento) => handleChangeSelect(item._id, elemento.target.value)} sx={{ borderRadius: '10px' }}>
                                                     <MenuItem value={'solicitado'}>SOLICITADO</MenuItem>
                                                     <MenuItem value={'assinado'}>ASSINADO</MenuItem>
                                                     <MenuItem value={'retirada'}>RETIRADA</MenuItem>
