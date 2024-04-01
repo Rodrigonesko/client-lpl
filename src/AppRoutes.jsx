@@ -152,6 +152,10 @@ import { AuthProvider } from "./context/AuthContext";
 import { ChatProvider } from "./pages/Whatsapp/Chat/ChatContext";
 import Beneficiarios from "./pages/Rsd/Beneficiarios/Beneficiarios";
 
+/* Tele entrevista V2 */
+
+import UploadPropostasEntrevistaV2 from "./pages/TeleEntrevistaV2/Upload/Index";
+
 const AppRoutes = () => {
     return (
         <AuthProvider>
@@ -493,6 +497,10 @@ const AppRoutes = () => {
                     <ChatProvider>
                         <WhatsappChat />
                     </ChatProvider>
+                </ProtectedRoute>} />
+
+                <Route path="/teleEntrevistaV2/upload" element={<ProtectedRoute>
+                    <UploadPropostasEntrevistaV2 />
                 </ProtectedRoute>} />
 
             </Routes>
