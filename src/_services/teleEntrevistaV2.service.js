@@ -76,3 +76,31 @@ export const deleteBeneficiario = async (id) => {
 export const getBeneficiarioByDesc = async (desc, limit, page) => {
     return await new ApiCall(`/tele-entrevista/beneficiario/desc/?desc=${desc}&limit=${limit}&page=${page}`, URL_API).get()
 }
+
+export const createPergunta = async (data) => {
+    return await new ApiCall('/tele-entrevista/pergunta', URL_API).post(data)
+}
+
+export const getPerguntas = async () => {
+    return await new ApiCall('/tele-entrevista/pergunta', URL_API).get()
+}
+
+export const deletePergunta = async (id) => {
+    return await new ApiCall(`/tele-entrevista/pergunta/${id}`, URL_API).delete()
+}
+
+export const updatePergunta = async (data) => {
+    return await new ApiCall(`/tele-entrevista/pergunta/${data._id}`, URL_API).put(data)
+}
+
+export const createQuestionario = async (data) => {
+    return await new ApiCall('/tele-entrevista/questionario', URL_API).post(data)
+}
+
+export const getQuestionarios = async () => {
+    return await new ApiCall('/tele-entrevista/questionario', URL_API).get()
+}
+
+export const getQuestionarioByName = async (nome) => {
+    return await new ApiCall(`/tele-entrevista/questionario/${nome}`, URL_API).get()
+}
