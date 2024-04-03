@@ -40,7 +40,7 @@ export class ApiCall {
             const data = await this.caller().post(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 
@@ -49,7 +49,7 @@ export class ApiCall {
             const data = await this.caller().patch(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 
@@ -58,7 +58,7 @@ export class ApiCall {
             const data = await this.caller().put(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 
@@ -70,7 +70,7 @@ export class ApiCall {
             if (axios.isCancel(err)) {
                 console.log('Request canceled', err.message);
             } else {
-                return err.response?.data;
+                throw err
             }
         }
     }
@@ -80,7 +80,7 @@ export class ApiCall {
             const data = await this.caller().delete(this.currentRoute, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 }
