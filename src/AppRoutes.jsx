@@ -508,7 +508,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
             </Routes>
         </AuthProvider>
-
     )
 }
 
