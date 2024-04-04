@@ -41,11 +41,7 @@ export class ApiCall {
             console.log(data.data);
             return data.data;
         } catch (err) {
-<<<<<<< HEAD
-            throw err;
-=======
             throw err
->>>>>>> main
         }
     }
 
