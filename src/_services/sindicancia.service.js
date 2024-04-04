@@ -147,3 +147,7 @@ export const deleteItemChecklist = async (id) => {
 export const getChecklist = async (id) => {
     return await new ApiCall(`/sindicancia/demanda/checklist/${id}`).get();
 }
+
+export const createDatasBradesco = async (id) => {
+    return await new ApiCall(`/sindicancia/demanda/gerarDatas`).post(id);
+}

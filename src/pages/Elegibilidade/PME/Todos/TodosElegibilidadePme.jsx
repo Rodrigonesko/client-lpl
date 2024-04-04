@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react"
 import Sidebar from "../../../../components/Sidebar/Sidebar"
-import { Box, LinearProgress, Container, Typography, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, FormControl, InputLabel, Select, MenuItem, TextField, Tooltip, Snackbar, Alert, Badge, Chip } from "@mui/material"
+import { Box, LinearProgress, Container, Typography, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, FormControl, InputLabel, Select, MenuItem, TextField, Tooltip, Snackbar, Alert, Badge, Chip, Pagination } from "@mui/material"
 import { atribuirAnalistaPme, getPropostaElegibilidadePmePorStatusEProposta, getPropostasElegibilidadePmePorStatus, getPropostasElegibilidadePmePorStatusEAnalista } from "../../../../_services/elegibilidadePme.service"
 import { getAnalistasElegibilidade } from "../../../../_services/user.service"
 import { BiSearchAlt, BiFilterAlt } from 'react-icons/bi'
@@ -25,6 +25,10 @@ const TodosElegibilidadePme = () => {
     const [error, setError] = useState(false)
     const [status, setStatus] = useState('A iniciar')
 
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [totalPages, setTotalPages] = useState(0)
+
     const handleClose = () => {
         setOpen(false)
     }
@@ -42,18 +46,28 @@ const TodosElegibilidadePme = () => {
     }
 
     const handleFiltroAnalista = async () => {
-        setLoading(true)
-        const result = await getPropostasElegibilidadePmePorStatusEAnalista(status, analistaFiltrado)
-        setPropostas(result)
-        setLoading(false)
-        if (result.length === 0) {
+        try {
+
+            setLoading(true)
+            const result = await getPropostasElegibilidadePmePorStatusEAnalista(status, analistaFiltrado, '', page, rowsPerPage)
+            setPropostas(result.result)
+            setTotalPages(result.total)
+            setLoading(false)
+            if (result.length === 0) {
+                setError(true)
+                setMsg(`Nenhuma proposta encontrada`)
+                setOpen(true)
+            } else {
+                setError(false)
+                setMsg(`${totalPages} no nome do analista ${analistaFiltrado}`)
+                setOpen(true)
+            }
+        } catch (error) {
+            console.log(error)
             setError(true)
             setMsg(`Nenhuma proposta encontrada`)
             setOpen(true)
-        } else {
-            setError(false)
-            setMsg(`${result.length} no nome do analista ${analistaFiltrado}`)
-            setOpen(true)
+
         }
     }
 
@@ -62,18 +76,25 @@ const TodosElegibilidadePme = () => {
     }
 
     const handleMinhasPropostas = async () => {
-        setLoading(true)
-
-        const result = await getPropostasElegibilidadePmePorStatusEAnalista(status, name)
-        setPropostas(result)
-        setLoading(false)
-        if (result.length === 0) {
+        try {
+            setLoading(true)
+            const result = await getPropostasElegibilidadePmePorStatusEAnalista(status, name, '', page, rowsPerPage)
+            setPropostas(result.result)
+            setTotalPages(result.total)
+            setLoading(false)
+            if (result.length === 0) {
+                setError(true)
+                setMsg(`Nenhuma proposta encontrada`)
+                setOpen(true)
+            } else {
+                setError(false)
+                setMsg(`${totalPages} em seu nome`)
+                setOpen(true)
+            }
+        } catch (error) {
+            console.log(error);
             setError(true)
             setMsg(`Nenhuma proposta encontrada`)
-            setOpen(true)
-        } else {
-            setError(false)
-            setMsg(`${result.length} em seu nome`)
             setOpen(true)
         }
 
@@ -112,9 +133,13 @@ const TodosElegibilidadePme = () => {
 
     useEffect(() => {
         setFlushHook(false)
-        fetchData()
+        if (analistaFiltrado === '') {
+            fetchData()
+        } else {
+            handleFiltroAnalista()
+        }
 
-    }, [flushHook])
+    }, [flushHook, page, rowsPerPage])
 
     return (
         <>
@@ -122,7 +147,7 @@ const TodosElegibilidadePme = () => {
                 <Box width='100%' height='100vh' overflow='auto'>
                     <Container>
                         <Typography m={2} variant="h6">
-                            Propostas PME em andamento - {propostas.length}
+                            Propostas PME em andamento - {totalPages}
                         </Typography>
                         <Divider />
                         <Box p={2} display='flex' justifyContent='space-between'>
@@ -194,12 +219,43 @@ const TodosElegibilidadePme = () => {
                                 <ButtonReportElegibilidadePme />
                             </Box>
                         </Box>
+                        <Divider />
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                mt: 2,
+                                mb: 2
+                            }}
+                        >
+                            <FormControl size="small" sx={{ ml: 2 }} disabled={loading}>
+                                <InputLabel>Linhas</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Linhas"
+                                    sx={{ width: '100px', borderRadius: '10px' }}
+                                    value={rowsPerPage}
+                                    onChange={(e) => setRowsPerPage(e.target.value)}
+                                >
+                                    <MenuItem value={10} >10</MenuItem>
+                                    <MenuItem value={20} >20</MenuItem>
+                                    <MenuItem value={30} >30</MenuItem>
+                                    <MenuItem value={40} >40</MenuItem>
+                                    <MenuItem value={50} >50</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Pagination count={
+                                totalPages % rowsPerPage === 0 ?
+                                    Math.floor(totalPages / rowsPerPage) :
+                                    Math.floor(totalPages / rowsPerPage) + 1
+                            } page={page} onChange={(e, value) => setPage(value)} disabled={loading} />
+                        </Box>
                         <TableContainer>
                             <Table className="table">
                                 <TableHead className="table-header">
                                     <TableRow>
                                         <TableCell>Proposta</TableCell>
-                                        <TableCell align="center">Prioridade</TableCell>
                                         <TableCell>Data Recebida</TableCell>
                                         <TableCell>Motor</TableCell>
                                         <TableCell>Analista</TableCell>
@@ -213,7 +269,6 @@ const TodosElegibilidadePme = () => {
                                             return (
                                                 <TableRow key={proposta._id}>
                                                     <TableCell>{proposta.proposta}</TableCell>
-                                                    <TableCell align="center">{proposta.prioridade && <Chip label='Prioridade' color="error" />}</TableCell>
                                                     <TableCell>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{proposta.motor}</TableCell>
                                                     <TableCell>

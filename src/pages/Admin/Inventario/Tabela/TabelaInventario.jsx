@@ -1,4 +1,4 @@
-import { Alert, Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Alert, Box, Button, Chip, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { red, yellow, green, blue } from '@mui/material/colors';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -10,6 +10,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [nomeItem, setNomeItem] = useState('')
     const [ondeEsta, setOndeEsta] = useState('')
     const [etiqueta, setEtiqueta] = useState('')
+    const [status, setStatus] = useState('')
     const [snackSelect, setSnackSelect] = useState(false)
     const [alerta, setAlerta] = useState(false)
 
@@ -66,8 +67,8 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const handleFilter = async (event, page) => {
         event?.preventDefault()
 
-        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2)) {
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}&page=${page}&limit=25`, {
+        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2) || (status.length > 2)) {
+            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}&status=${status}&page=${page}&limit=25`, {
                 withCredentials: true,
             })
             setLoading(true);
@@ -100,16 +101,44 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     return (
         <>
             <form action="" >
-                <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} value={nomeItem} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} value={ondeEsta} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} />
-                <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} value={etiqueta} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} />
-                <Button type="submit" onClick={(e) => handleFilter(e, 1)} variant='contained' >Pesquisar</Button>
+                <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} value={nomeItem} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} InputProps={{
+                    style: {
+                        borderRadius: '10px',
+                    }
+                }} />
+                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} value={ondeEsta} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} InputProps={{
+                    style: {
+                        borderRadius: '10px',
+                    }
+                }} />
+                <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} value={etiqueta} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} InputProps={{
+                    style: {
+                        borderRadius: '10px',
+                    }
+                }} />
+                <FormControl size='small' sx={{ minWidth: 190 }} >
+                    <InputLabel id='Status'>Status</InputLabel>
+                    <Select
+                        value={status}
+                        labelId="Status"
+                        margin='dense'
+                        id='Status'
+                        label='Status'
+                        onChange={(e) => { setStatus(e.target.value) }}
+                        sx={{ borderRadius: '10px', marginRight: '10px' }} >
+                        <MenuItem value={'emEstoque'}>EM ESTOQUE</MenuItem>
+                        <MenuItem value={'emUso'}>EM USO</MenuItem>
+                        <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button type="submit" onClick={(e) => handleFilter(e, 1)} variant='contained' sx={{ borderRadius: '10px' }} >Pesquisar</Button>
                 <Button onClick={() => {
                     setNomeItem('')
                     setOndeEsta('')
                     setEtiqueta('')
+                    setStatus('')
                     setFlushHook(true)
-                }} variant='contained' sx={{ marginLeft: '10px' }}>Limpar Pesquisa</Button>
+                }} variant='contained' sx={{ marginLeft: '10px', borderRadius: '10px' }}>Limpar Pesquisa</Button>
             </form>
             <Snackbar open={alerta} autoHideDuration={6000} onClose={handleCloseInput}>
                 <Alert variant="filled" onClose={handleCloseInput} severity="warning" sx={{ width: '100%' }}>
@@ -119,7 +148,8 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
             <br />
             <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
                 <TableContainer>
-                    <Box display={'flex'} justifyContent={'flex-end'}>
+                    <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
+                        <Chip label={`Quantidade de Itens no inventario: ${totalPages}`} color='secondary' sx={{ fontSize: '15px' }} />
                         <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
                     </Box>
                     {
