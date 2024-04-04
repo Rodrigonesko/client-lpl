@@ -102,8 +102,10 @@ const AndamentoElegibilidadePme = () => {
     const handleMinhasPropostas = async () => {
         setLoading(true)
 
-        const result = await getPropostasElegibilidadePmePorStatusEAnalista('A iniciar', name)
-        setPropostas(result)
+        const result = await getPropostasElegibilidadePmePorStatusEAnalista('A iniciar', name, vidasFiltrado, page, rowsPerPage)
+        console.log(result);
+        setPropostas(result.result)
+        setTotalPages(result.total)
         setLoading(false)
         if (result.length === 0) {
             setError(true)
@@ -111,7 +113,7 @@ const AndamentoElegibilidadePme = () => {
             setOpen(true)
         } else {
             setError(false)
-            setMsg(`${result.length} em seu nome`)
+            setMsg(`${result.total} em seu nome`)
             setOpen(true)
         }
 
