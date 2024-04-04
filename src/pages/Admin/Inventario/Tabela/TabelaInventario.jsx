@@ -119,7 +119,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
             <br />
             <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
                 <TableContainer>
-                    <Box display={'flex'} justifyContent={'flex-end'}>
+                    <Box display={'flex'} justifyContent={'flex-end'} sx={{ mb: 2 }}>
                         <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
                     </Box>
                     {

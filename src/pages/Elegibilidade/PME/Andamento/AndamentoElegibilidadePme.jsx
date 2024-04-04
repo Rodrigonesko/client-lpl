@@ -91,7 +91,7 @@ const AndamentoElegibilidadePme = () => {
     }
 
     const handleLimparFiltro = () => {
-        setAnalistaFiltrado('')
+        setAnalistaFiltrado('Todos')
         setVidasFiltrado('')
         setFlushHook(true)
         setError(false)
@@ -173,26 +173,32 @@ const AndamentoElegibilidadePme = () => {
                 <Box width='100%' height='100vh' overflow='auto'>
                     <Container>
                         <Typography m={2} variant="h6">
-                            Propostas PME em andamento - {propostas.length}
+                            Propostas PME em andamento - {totalPages}
                         </Typography>
                         <Divider />
                         <Box p={2} display='flex' justifyContent='space-between'>
                             <form>
                                 <Box display='flex'>
-                                    <TextField size='small' label='Proposta' value={proposta} onChange={handleChangeProposta} />
+                                    <TextField size='small' label='Proposta' value={proposta} onChange={handleChangeProposta} InputProps={{
+                                        style: {
+                                            borderRadius: '10px',
+                                        }
+                                    }}
+                                    />
                                     <Tooltip title='Buscar'>
-                                        <Button disabled={loading} type='submit' onClick={handleBuscarProposta} style={{ marginLeft: '10px' }} variant="contained" ><BiSearchAlt size='22px' /></Button>
+                                        <Button disabled={loading} type='submit' onClick={handleBuscarProposta} style={{ marginLeft: '10px', borderRadius: '10px' }} variant="contained" ><BiSearchAlt size='22px' /></Button>
                                     </Tooltip>
                                 </Box>
                             </form>
                             <Box display='flex'>
-                                <Button disabled={loading} onClick={handleMinhasPropostas} style={{ marginRight: '10px' }} size="small" startIcon={<MdPersonSearch />} variant="contained" color='info' >Minhas Propostas</Button>
+                                <Button disabled={loading} onClick={handleMinhasPropostas} style={{ marginRight: '10px', alignItems: 'center', borderRadius: '10px' }} size="small" startIcon={<MdPersonSearch />} variant="contained" color='info' >Minhas Propostas</Button>
                                 <FormControl style={{ minWidth: '120px', marginRight: '10px' }} size="small" >
                                     <InputLabel>Analista</InputLabel>
                                     <Select
                                         label='Analista'
                                         value={analistaFiltrado}
                                         onChange={handleChangeFiltroAnalista}
+                                        sx={{ borderRadius: '10px' }}
                                     >
                                         <MenuItem>
                                             <em>Analista</em>
@@ -220,6 +226,7 @@ const AndamentoElegibilidadePme = () => {
                                         label='Vidas'
                                         value={vidasFiltrado}
                                         onChange={handleChangeFiltroVidas}
+                                        sx={{ borderRadius: '10px' }}
                                     >
                                         <MenuItem>
                                             <em>Vidas</em>
@@ -237,13 +244,14 @@ const AndamentoElegibilidadePme = () => {
 
                                 </FormControl>
                                 <Tooltip title='Filtrar'>
-                                    <Button disabled={loading} onClick={handleFiltroAnalista} variant="contained" style={{ marginRight: '10px' }} ><BiFilterAlt /></Button>
+                                    <Button disabled={loading} onClick={handleFiltroAnalista} variant="contained" style={{ marginRight: '10px', borderRadius: '10px' }} ><BiFilterAlt /></Button>
                                 </Tooltip>
                                 <Tooltip title='Limpar filtros'>
-                                    <Button disabled={loading} onClick={handleLimparFiltro} variant="contained" color="warning"><GiBroom /></Button>
+                                    <Button disabled={loading} onClick={handleLimparFiltro} variant="contained" color="warning" sx={{ borderRadius: '10px' }}><GiBroom /></Button>
                                 </Tooltip>
                             </Box>
                         </Box>
+                        <Divider />
                         <Box
                             sx={{
                                 display: 'flex',
