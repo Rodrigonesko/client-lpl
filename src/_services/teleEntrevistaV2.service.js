@@ -98,7 +98,11 @@ export const createQuestionario = async (data) => {
 }
 
 export const getQuestionarios = async () => {
-    return await new ApiCall('/tele-entrevista/questionario', URL_API).get()
+    return await new ApiCall('/tele-entrevista/questionarios', URL_API).get()
+}
+
+export const updateQuestionario = async (data) => {
+    return await new ApiCall(`/tele-entrevista/questionario/${data._id}`, URL_API).put(data)
 }
 
 export const getQuestionarioByName = async (nome) => {

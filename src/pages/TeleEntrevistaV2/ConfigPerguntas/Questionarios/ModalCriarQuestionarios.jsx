@@ -18,7 +18,8 @@ const Pergunta = ({
     const [posicao, setPosicao] = useState(0)
 
     const handleAdicionar = () => {
-        if (posicao === 0) return
+        if (posicao <= 0) return
+        if (perguntasAdicionandas.find(p => p.posicao === posicao)) return
         setPerguntasAdicionadas((prev) => [...prev, { ...pergunta, posicao }])
     }
 
@@ -48,6 +49,7 @@ const Pergunta = ({
                     size="small"
                     label="Posição"
                     type="number"
+                    inputProps={{ min: 1 }}
                     value={posicao}
                     onChange={(e) => setPosicao(e.target.value)}
                 />
@@ -112,6 +114,9 @@ const ModalCriarQuestionarios = () => {
             setMessage('Questionario criado com sucesso')
             setSeverity('success')
 
+            setNome('')
+            setPerguntasAdicionadas([])
+
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -150,7 +155,7 @@ const ModalCriarQuestionarios = () => {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Questionario
                         </Typography>
-                        <Button autoFocus color="inherit" onClick={handleCriar}>
+                        <Button autoFocus color="inherit" onClick={handleCriar} disabled={loading}>
                             Criar
                         </Button>
                     </Toolbar>
@@ -166,7 +171,7 @@ const ModalCriarQuestionarios = () => {
                     {
                         perguntasAdicionadas.map(pergunta => (
                             <Box
-                                key={pergunta.id}
+                                key={pergunta._id}
                                 sx={{
                                     display: 'flex',
                                     gap: '10px',
@@ -202,14 +207,18 @@ const ModalCriarQuestionarios = () => {
                         onChange={(e) => setNome(e.target.value)}
                     />
                     {
-                        perguntas.map(pergunta => (
+                        !loading ? perguntas.filter(pergunta => {
+                            return !perguntasAdicionadas.find(p => p._id === pergunta._id)
+                        }).map(pergunta => (
                             <Pergunta
                                 key={pergunta._id}
                                 pergunta={pergunta}
                                 setPerguntasAdicionadas={setPerguntasAdicionadas}
                                 perguntasAdicionandas={perguntasAdicionadas}
                             />
-                        ))
+                        )) : (
+                            <Typography>Carregando...</Typography>
+                        )
                     }
                 </Box>
             </Dialog>

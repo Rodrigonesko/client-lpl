@@ -72,7 +72,9 @@ const Perguntas = () => {
                 >
                     <TableHead>
                         <TableRow>
-                            <TableCell>Pergunta</TableCell>
+                            <TableCell sx={{
+                                fontWeight: 'bold'
+                            }} >Pergunta</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
