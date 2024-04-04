@@ -3,14 +3,14 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, C
 import { grey } from "@mui/material/colors";
 import { useContext, useState } from "react";
 import { BiCollapse } from "react-icons/bi";
-import { createBeneficiario, createIrregularidade, createPrestador, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
+import { createBeneficiario, createDatasBradesco, createIrregularidade, createPrestador, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
 import Toast from "../../../components/Toast/Toast";
 import Agenda from "./Agenda";
 import ValueInput from "./ValueInput";
-import FinalizacaoDemanda from "./FinalizacaoDemanda";
 import Complementacao from "./Complementacao";
 import AuthContext from "../../../context/AuthContext";
 import DrawerFinalizacao from "./DrawerFinalizacao";
+import moment from "moment";
 
 const DrawerDetails = ({ data, setSelectedDemanda }) => {
 
@@ -36,6 +36,8 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('success');
     const [valor, setValor] = useState('');
+    const [dataPrevia, setDataPrevia] = useState(demanda.data_previa || '');
+    const [dataFinalEntrega, setDataFinalEntrega] = useState(demanda.data_final_entrega || '');
 
     const handleOpen = async () => {
         setSelectedDemanda(demanda.id);
@@ -149,7 +151,27 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
             }
         }
         setLoadingIrregularidade(false);
+    }
 
+    const handleGerarDatas = async () => {
+        try {
+
+            const result = await createDatasBradesco({
+                id: demanda.id
+            })
+            setMsg('Datas geradas com sucesso');
+            setSeverity('success');
+            setOpenToast(true);
+
+            setDataPrevia(result.result.data_previa);
+            setDataFinalEntrega(result.result.data_final_entrega);
+
+
+        } catch (error) {
+            setMsg('Erro ao gerar datas', error);
+            setSeverity('error');
+            setOpenToast(true);
+        }
     }
 
     return (
@@ -199,6 +221,16 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
                 }}>
 
                     Detalhes da Demanda {demanda.codigo}
+                </Typography>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        ml: 2,
+                        mb: 1
+                    }}
+                >
+                    {dataPrevia ? `Data Previa: ${moment(dataPrevia).format('DD/MM/YYYY')}` : null} |
+                    {dataFinalEntrega ? `Data Final Entrega: ${moment(dataFinalEntrega).format('DD/MM/YYYY')}` : null}
                 </Typography>
                 <Accordion
                     disabled={loading}
@@ -473,6 +505,22 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
                     demanda={demanda}
                 /> */}
                 <DrawerFinalizacao demanda={demanda} />
+                {
+                    data.area_empresa_nome === 'Bradesco - Fraudes' && dataPrevia === '' && (
+                        <Box>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                    m: 2
+                                }}
+                                onClick={handleGerarDatas}
+                            >
+                                Gerar Datas Finalização
+                            </Button>
+                        </Box>
+                    )
+                }
             </Drawer>
             <Toast
                 message={msg}
