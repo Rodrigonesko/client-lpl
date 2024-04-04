@@ -69,7 +69,7 @@ const Pergunta = ({
     )
 }
 
-const ModalCriarQuestionarios = () => {
+const ModalCriarQuestionarios = ({ setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [perguntas, setPerguntas] = useState([])
@@ -113,6 +113,7 @@ const ModalCriarQuestionarios = () => {
             setOpenToast(true)
             setMessage('Questionario criado com sucesso')
             setSeverity('success')
+            setFlushHook(prev => !prev)
 
             setNome('')
             setPerguntasAdicionadas([])

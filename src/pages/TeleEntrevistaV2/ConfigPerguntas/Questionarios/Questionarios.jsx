@@ -24,7 +24,7 @@ const Questionarios = () => {
                     m: 2
                 }}
             >
-                <ModalCriarQuestionarios />
+                <ModalCriarQuestionarios setFlushHook={setFlushHook} />
             </Box>
             <TableContainer>
                 <Table
