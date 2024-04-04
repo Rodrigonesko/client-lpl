@@ -9,12 +9,12 @@ export const getPropostasElegibilidadePme = async () => {
     return await new ApiCall('/elegibilidadePme/propostas').get()
 }
 
-export const getPropostasElegibilidadePmePorStatus = async (status) => {
-    return await new ApiCall(`/elegibilidadePme/propostas/${status}`).get()
+export const getPropostasElegibilidadePmePorStatus = async (status, page, limit) => {
+    return await new ApiCall(`/elegibilidadePme/propostas/${status}?page=${page}&limit=${limit}`).get()
 }
 
-export const getPropostasElegibilidadePmePorStatusEAnalista = async (status, analista) => {
-    return await new ApiCall(`/elegibilidadePme/propostas/${status}/${analista}`).get()
+export const getPropostasElegibilidadePmePorStatusEAnalista = async (status, analista, vidas, page, limit) => {
+    return await new ApiCall(`/elegibilidadePme/propostasFilter?status=${status}&analista=${analista}&vidas=${vidas}&page=${page}&limit=${limit}`).get()
 }
 
 export const getPropostaElegibilidadePmePorStatusEProposta = async (status, proposta) => {
