@@ -291,7 +291,6 @@ const AndamentoElegibilidadePme = () => {
                                 <TableHead className="table-header">
                                     <TableRow>
                                         <TableCell>Proposta</TableCell>
-                                        <TableCell align="center">Prioridade</TableCell>
                                         <TableCell>Data Recebida</TableCell>
                                         <TableCell>Vidas</TableCell>
                                         <TableCell>Motor</TableCell>
@@ -306,7 +305,6 @@ const AndamentoElegibilidadePme = () => {
                                             return (
                                                 <TableRow key={proposta._id}>
                                                     <TableCell>{proposta.proposta}</TableCell>
-                                                    <TableCell align="center">{proposta.prioridade && <Chip label='Prioridade' color="error" />}</TableCell>
                                                     <TableCell>{moment(proposta.dataRecebimento).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{proposta.vidas}</TableCell>
                                                     <TableCell>{proposta.motor}</TableCell>

@@ -31,13 +31,14 @@ export class ApiCall {
             const data = await this.blob().post(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err;
+            throw err;
         }
     }
 
     async post(obj = undefined) {
         try {
             const data = await this.caller().post(this.currentRoute, obj, this.currentConfig);
+            console.log(data.data);
             return data.data;
         } catch (err) {
             throw err

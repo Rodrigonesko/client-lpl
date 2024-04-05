@@ -152,6 +152,12 @@ import { AuthProvider } from "./context/AuthContext";
 import { ChatProvider } from "./pages/Whatsapp/Chat/ChatContext";
 import Beneficiarios from "./pages/Rsd/Beneficiarios/Beneficiarios";
 
+/* Tele entrevista V2 */
+
+import UploadPropostasEntrevistaV2 from "./pages/TeleEntrevistaV2/Upload/Index";
+import ConfigPerguntas from "./pages/TeleEntrevistaV2/ConfigPerguntas/Index";
+import  FormularioV2  from "./pages/TeleEntrevistaV2/Formulario/Index";
+
 const AppRoutes = () => {
     return (
         <AuthProvider>
@@ -495,9 +501,17 @@ const AppRoutes = () => {
                     </ChatProvider>
                 </ProtectedRoute>} />
 
+                <Route path="/teleEntrevistaV2/upload" element={<ProtectedRoute>
+                    <UploadPropostasEntrevistaV2 />
+                </ProtectedRoute>} />
+                <Route path="/teleEntrevistaV2/configPerguntas" element={<ProtectedRoute>
+                    <ConfigPerguntas />
+                </ProtectedRoute>} />
+                <Route path="/teleEntrevistaV2/formulario/:id" element={<ProtectedRoute>
+                    <FormularioV2 />
+                </ProtectedRoute>} />
             </Routes>
         </AuthProvider>
-
     )
 }
 
