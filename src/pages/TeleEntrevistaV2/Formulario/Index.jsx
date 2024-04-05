@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useParams } from "react-router-dom"
-import { getPropostaById, getQuestionarioByName } from "../../../_services/teleEntrevistaV2.service"
-import { Box, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material"
+import { getCids, getPropostaById, getQuestionarioByName } from "../../../_services/teleEntrevistaV2.service"
+import { Box, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Checkbox } from "@mui/material"
 import moment from "moment"
 
 const BoxInfo = ({ label, value }) => {
@@ -21,8 +21,8 @@ const BoxInfo = ({ label, value }) => {
 const Pergunta = ({ pergunta, index }) => {
 
     const [resposta, setResposta] = useState('')
-    const [open, setOpen] = useState(false)
-    const [observacao, setObservacao] = useState('')
+    // const [open, setOpen] = useState(false)
+    // const [observacao, setObservacao] = useState('')
 
     return (
         <Box
@@ -108,8 +108,43 @@ const FormularioV2 = () => {
         nome: '',
         perguntas: []
     })
-    const [respostas, setRespostas] = useState([])
-    const [divergencia, setDivergencia] = useState('')
+    // const [respostas, setRespostas] = useState([])
+    // const [divergencia, setDivergencia] = useState('')
+    const [cids, setCids] = useState([])
+    const [cidsSelecionadas, setCidsSelecionadas] = useState([{
+        codigo: '',
+        descricao: '',
+    }])
+
+    const handleSelecionarCids = async (cid) => {
+        try {
+            console.log(cid);
+            let auxSelecionadas = [...cidsSelecionadas]
+            const index = auxSelecionadas.findIndex(item => item._id === cid._id);
+            if (index !== -1) {
+                auxSelecionadas.splice(index, 1);
+            } else {
+                auxSelecionadas.push(cid)
+            }
+            setCidsSelecionadas(auxSelecionadas)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleVerificarCid = async (pesquisa) => {
+        try {
+            if (pesquisa.length > 2) {
+                const cid = await getCids(pesquisa)
+                setCids(cid)
+                console.log(cid);
+            } else {
+                setCids([])
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         const fetch = async () => {
@@ -216,10 +251,34 @@ const FormularioV2 = () => {
                         </Typography>
                         <TextField
                             fullWidth
-                            multiline
                             variant="outlined"
                             size="small"
+                            onChange={(e) => handleVerificarCid(e.target.value)}
                         />
+                        {
+                            cids.map((item) => {
+                                return (
+                                    <FormControl sx={{ display: 'flex', flexDirection: 'column' }} >
+                                        <FormControlLabel value={item} onChange={() => { handleSelecionarCids(item) }} control={<Checkbox />} label={`${item.codigo} - ${item.descricao}`} />
+                                    </FormControl>
+                                )
+                            })}
+                        <Typography>
+                            Cids selecionadas:
+                        </Typography>
+                        {cidsSelecionadas.map((item) => {
+                            if (item && item.codigo && item.descricao) {
+                                return (
+                                    <>
+                                        <Typography>
+                                            {item.codigo} - {item.descricao}
+                                        </Typography>
+                                    </>
+                                )
+                            } else {
+                                return null
+                            }
+                        })}
                     </Box>
                 </Box>
             </Container>
