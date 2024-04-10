@@ -11,6 +11,7 @@ import { blue, green, grey, red } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividualTele from '../../../../../components/ProducaoIndividual/ProduçãoIndividualTele/ProducaoIndividualTele';
 import { getProducaoConcluidasSemAgendar } from '../../../../../_services/teleEntrevistaExterna.service';
+import moment from 'moment';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -33,9 +34,13 @@ const TeleTable = ({ mes }) => {
         const fetchDataAnalistas = async () => {
             setLoadingTabela(true)
             try {
-                let result = await quantidadeAnalistasPorMes(mes)
+
+                const dataInicio = moment(mes).startOf('month').format('YYYY-MM-DD')
+                const dataFim = moment(mes).endOf('month').format('YYYY-MM-DD')
+
+                let result = await quantidadeAnalistasPorMes(dataInicio, dataFim)
                 let resultSemAgendar = await getProducaoConcluidasSemAgendar(mes)
-                console.log(resultSemAgendar);
+
                 result.result = result.result.map((item, index) => {
                     let itemSemAgendar = resultSemAgendar.find(itemSemAgendar => itemSemAgendar._id === item.analista)
                     if (itemSemAgendar) {

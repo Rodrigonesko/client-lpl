@@ -18,7 +18,7 @@ const BoxInfo = ({ label, value }) => {
     )
 }
 
-const Pergunta = ({ pergunta, index }) => {
+const Pergunta = ({ pergunta, index, setRespostas, respostas }) => {
 
     const [resposta, setResposta] = useState('')
     // const [open, setOpen] = useState(false)
@@ -76,15 +76,17 @@ const Pergunta = ({ pergunta, index }) => {
                     ))
                 )
             }
-            <Typography>
-                Observações
-            </Typography>
-            <TextField
-                fullWidth
-                multiline
-                variant="outlined"
-                size="small"
-            />
+            {
+                pergunta.tipo === 'Escolha' && (
+                    <TextField
+                        fullWidth
+                        multiline
+                        variant="outlined"
+                        size="small"
+                        placeholder="Observações"
+                    />
+                )
+            }
             <Divider sx={{ m: 1 }} />
         </Box>
     )
@@ -108,7 +110,18 @@ const FormularioV2 = () => {
         nome: '',
         perguntas: []
     })
-    // const [respostas, setRespostas] = useState([])
+    const [respostas, setRespostas] = useState([
+        {
+            pergunta: '',
+            resposta: '',
+            categoria: '',
+            observacao: '',
+            subRespostas: [{
+                pergunta: '',
+                resposta: '',
+            }]
+        }
+    ])
     // const [divergencia, setDivergencia] = useState('')
     const [cids, setCids] = useState([])
     const [cidsSelecionadas, setCidsSelecionadas] = useState([{
@@ -215,7 +228,13 @@ const FormularioV2 = () => {
                         }).filter(pergunta => {
                             return pergunta.pergunta.categoria === 'Hábitos e Histórico Familiar'
                         }).map((pergunta, index) => (
-                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} />
+                            <Pergunta
+                                key={index}
+                                pergunta={pergunta.pergunta}
+                                index={index}
+                                setRespostas={setRespostas}
+                                respostas={respostas}
+                            />
                         ))
                     }
                 </Box>

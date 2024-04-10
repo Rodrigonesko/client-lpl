@@ -7,6 +7,7 @@ import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividualRsd from '../../../../../components/ProducaoIndividual/ProducaoIndividualRsd/ProducaoIndividual';
 import { producaoIndividualRsd } from '../../../../../_services/rsd.service';
+import moment from 'moment';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -23,9 +24,15 @@ const RsdTable = ({ mes }) => {
     const getAnalistasRsd = async () => {
         try {
             setLoadingTabela(true)
-            const result = await producaoIndividualRsd(mes)
+
+            const dataInicio = moment(mes).startOf('month').format('YYYY-MM-DD')
+            const dataFim = moment(mes).endOf('month').format('YYYY-MM-DD')
+
+            console.log(dataInicio, dataFim);
+
+            const result = await producaoIndividualRsd(dataInicio, dataFim)
+            console.log(result);
             setTableData(result)
-            // console.log(result);
             setLoadingTabela(false)
         } catch (error) {
             console.log(error);
@@ -121,7 +128,7 @@ const RsdTable = ({ mes }) => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    Object.entries(tableData.contagemAnalistasOrdenada || {}).map((item, index) => (
+                                    tableData.map((item, index) => (
                                         <TableRow
                                             key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -132,35 +139,35 @@ const RsdTable = ({ mes }) => {
                                                 }}
                                             >
                                                 <Avatar
-                                                    alt={item[0]}
-                                                    src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${item[0].split(' ').join('%20')}.jpg`}
+                                                    alt={item.analista}
+                                                    src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${item.analista.split(' ').join('%20')}.jpg`}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item[0]}
+                                                    label={item.analista}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item[1]}
+                                                    label={item.total}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={tableData.pedidosIndeferidosIndividual[item[0]]}
+                                                    label={item.indeferidos}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={tableData.pedidosCanceladosIndividual[item[0]]}
+                                                    label={item.cancelados}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Tooltip title="Ver detalhes">
                                                     <IconButton
                                                         onClick={() => {
-                                                            setAnalistaSelecionado(item[0])
+                                                            setAnalistaSelecionado(item.analista)
                                                             setOpenDialog(true)
                                                         }}
                                                     >
