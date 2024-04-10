@@ -26,7 +26,7 @@ const InternMessages = () => {
         const result = await getChats()
         setChats(result.chats)
         setCopyChats(result.chats)
-        document.title = `LPL (${result.naoLidas})`
+        document.title = `LPL (${result.naoLidas || 0})`
     }
 
     useEffect(() => {

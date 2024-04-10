@@ -99,10 +99,6 @@ const Sidebar = ({ children }) => {
                 setChatId(data.chatId)
                 if (location.pathname !== '/internMessages') {
                     setOpenToast(true);
-
-                    // Adicionando som de notificação
-                    const audio = new Audio(notificationSound);
-                    audio.play();
                 }
             }
             fetchData()

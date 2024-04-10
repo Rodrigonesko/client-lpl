@@ -240,8 +240,8 @@ export const getRelatorioProdutividadeAnexosMensal = async (mes) => {
     return await new ApiCall(`/entrevistas/relatorioProdutividadeAnexosMensal/${mes}`).get()
 }
 
-export const quantidadeAnalistasPorMes = async (mes) => {
-    return await new ApiCall(`/entrevistas/quantidadeAnalistasPorMes/${mes}`).get()
+export const quantidadeAnalistasPorMes = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/entrevistas/quantidadeAnalistasPorMes?dataInicio=${dataInicio}&dataFim=${dataFim}`).get()
 }
 
 export const filterEntrevistasRealizadas = async ({ pesquisa, page, limit, entrevistaQualidade }) => {
