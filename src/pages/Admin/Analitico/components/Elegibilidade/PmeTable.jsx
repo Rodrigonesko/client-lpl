@@ -122,6 +122,12 @@ const PmeTable = ({ mes }) => {
                                         Devolvidas
                                     </TableCell>
                                     <TableCell>
+                                        Redistribuída
+                                    </TableCell>
+                                    <TableCell>
+                                        A iniciar
+                                    </TableCell>
+                                    <TableCell>
                                         Produção
                                     </TableCell>
                                     <TableCell>
@@ -163,6 +169,16 @@ const PmeTable = ({ mes }) => {
                                             <TableCell>
                                                 <Chip
                                                     label={item.devolvidas}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.redistribuidas}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.aIniciar}
                                                 />
                                             </TableCell>
                                             <TableCell>
