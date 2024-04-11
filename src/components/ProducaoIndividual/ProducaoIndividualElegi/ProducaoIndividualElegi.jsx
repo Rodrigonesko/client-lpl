@@ -45,20 +45,31 @@ const ProducaoIndividualElegi = ({ mes, analista }) => {
 
     useEffect(() => {
         const fetch = async () => {
-            setLoadingChart(true)
-            const result = await getProducaoIndividualElegibilidade(mes, analista || name)
-            const resultGeral = await getAnalaticoElegibilidadeMensal(mes)
-            setCardData(result)
-            setDataGeral(resultGeral)
-            const comparativoProducao = await getComparativoProducaoElegibilidade(mes, analista || name)
-            setChartData(comparativoProducao)
-            setLoadingChart(false)
+            try {
+
+                setLoadingChart(true)
+                const result = await getProducaoIndividualElegibilidade(mes, analista || name)
+                const resultGeral = await getAnalaticoElegibilidadeMensal(mes)
+                setCardData(result)
+                setDataGeral(resultGeral)
+                const comparativoProducao = await getComparativoProducaoElegibilidade(mes, analista || name)
+                setChartData(comparativoProducao)
+                setLoadingChart(false)
+            } catch (error) {
+                console.log(error);
+                setLoadingChart(false)
+            }
         }
 
         const fetchPme = async () => {
-            const result = await getAnaliticoElegibilidadeMensalPme(mes, analista || name)
-            setPmeData(result)
-            console.log(result);
+            try {
+                const result = await getAnaliticoElegibilidadeMensalPme(mes, analista || name)
+                setPmeData(result)
+                console.log(result);
+
+            } catch (error) {
+                console.log(error);
+            }
         }
         fetch()
         fetchPme()
