@@ -13,7 +13,7 @@ const CardAniversarioEmpresa = () => {
         const fetchUsers = async () => {
             try {
                 const users = await filterUsers({
-                    dataAdmissao: { $regex: moment('2024-04-11').format("MM-DD") },
+                    dataAdmissao: { $regex: moment().format("MM-DD") },
                     inativo: { $ne: true }
                 });
                 console.log(users);
