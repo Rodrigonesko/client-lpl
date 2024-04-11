@@ -5,6 +5,14 @@ import { getCids, getPropostaById, getQuestionarioByName } from "../../../_servi
 import { Box, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Checkbox, Chip, Button, Alert } from "@mui/material"
 import moment from "moment"
 import Toast from "../../../components/Toast/Toast"
+import ModalInfoAdicional from "./ModalInfoAdicional"
+import Pergunta from "./Pergunta"
+
+const perguntaAutismo = 'O(A) Sr(a) está ou já esteve em processo de investigação do espectro do autismo, doença de Parkinson, Alzheimer, demência, esclerose múltipla, lúpus?'
+
+const prcs = [
+    '600', '603', '604', '606', '607', '608', '609', '610'
+]
 
 const BoxInfo = ({ label, value }) => {
     return (
@@ -15,149 +23,6 @@ const BoxInfo = ({ label, value }) => {
             <Typography variant="body1">
                 {value}
             </Typography>
-        </Box>
-    )
-}
-
-const Pergunta = ({ pergunta, index, setRespostas, respostas, setImc }) => {
-
-    let indexResposta = respostas.findIndex(item => item.pergunta === pergunta.texto)
-    if (indexResposta === -1) {
-        indexResposta = respostas.length
-        setRespostas([...respostas, {
-            pergunta: pergunta.texto,
-            resposta: '',
-            categoria: pergunta.categoria,
-            observacao: '',
-            subPerguntas: []
-        }])
-    }
-
-    const handleResponderPegunta = (e) => {
-        const { value } = e.target
-        const newRespostas = [...respostas]
-        newRespostas[indexResposta] = {
-            pergunta: pergunta.texto,
-            resposta: value,
-            categoria: pergunta.categoria,
-            observacao: respostas[indexResposta]?.observacao || '',
-            subPerguntas: respostas[indexResposta]?.subPerguntas || []
-        }
-        if (pergunta.texto === 'Qual é a sua altura?' || pergunta.texto === 'Qual é o seu peso?') {
-            if (pergunta.texto === 'Qual é a sua altura?') {
-                const altura = parseFloat(value)
-                const peso = parseFloat(respostas.find(item => item.pergunta === 'Qual é o seu peso?')?.resposta)
-                if (peso) {
-                    const imc = peso / ((altura) * (altura))
-                    console.log(imc);
-                    setImc(imc)
-                }
-            }
-            if (pergunta.texto === 'Qual é o seu peso?') {
-                const peso = parseFloat(value)
-                const altura = parseFloat(respostas.find(item => item.pergunta === 'Qual é a sua altura?')?.resposta)
-                if (altura) {
-                    const imc = peso / ((altura) * (altura))
-                    console.log(imc);
-                    setImc(imc)
-                }
-            }
-        }
-
-        setRespostas(newRespostas)
-    }
-
-    return (
-        <Box
-            mt={2}
-            key={index}
-        >
-            <Typography variant="body1">
-                {index + 1}. {pergunta.texto}
-            </Typography>
-            {
-                pergunta.tipo === 'Escolha' ? (
-                    <FormControl>
-                        <RadioGroup
-                            row
-                            value={respostas[indexResposta] ? respostas[indexResposta].resposta : ''}
-                            onChange={handleResponderPegunta}
-                        >
-                            <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
-                            <FormControlLabel value="Não" control={<Radio />} label="Não" />
-                        </RadioGroup>
-                    </FormControl>
-                ) : (
-                    <TextField
-                        fullWidth
-                        multiline={pergunta.texto === 'Qual é a sua altura?' || pergunta.texto === 'Qual é o seu peso?' ? false : true}
-                        variant="outlined"
-                        size="small"
-                        value={respostas[indexResposta] ? respostas[indexResposta].resposta : ''}
-                        onChange={handleResponderPegunta}
-                        type={pergunta.texto === 'Qual é a sua altura?' || pergunta.texto === 'Qual é o seu peso?' ? 'number' : 'text'}
-                    />
-                )
-            }
-            {
-                pergunta.subPerguntas.length > 0 && (
-                    pergunta.subPerguntas.filter(pergunta => {
-                        return pergunta.condicao === respostas[indexResposta]?.resposta
-                    }).map((subPergunta, i) => (
-                        <Box key={i}
-                            mt={2}
-                        >
-                            <Typography variant="body1">
-                                {subPergunta.texto}
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                multiline
-                                variant="outlined"
-                                size="small"
-                                value={respostas[indexResposta] ? respostas[indexResposta]?.subPerguntas[i]?.resposta : ''}
-                                onChange={(e) => {
-                                    const newRespostas = [...respostas]
-                                    const newSubPerguntas = [...respostas[indexResposta]?.subPerguntas]
-                                    newSubPerguntas[i] = {
-                                        pergunta: subPergunta.texto,
-                                        resposta: e.target.value
-                                    }
-                                    newRespostas[indexResposta] = {
-                                        ...respostas[indexResposta],
-                                        subPerguntas: [
-                                            ...newSubPerguntas
-                                        ]
-                                    }
-                                    setRespostas(newRespostas)
-                                }}
-                            />
-                        </Box>
-                    ))
-                )
-            }
-            {
-                pergunta.tipo === 'Escolha' && (
-                    <TextField
-                        sx={{ mt: 2 }}
-                        fullWidth
-                        multiline
-                        variant="outlined"
-                        size="small"
-                        placeholder="Observações"
-                        value={respostas[indexResposta] ? respostas[indexResposta].observacao : ''}
-                        onChange={(e) => {
-                            const newRespostas = [...respostas]
-                            newRespostas[indexResposta] = {
-                                ...respostas[indexResposta],
-                                observacao: e.target.value
-                            }
-                            setRespostas(newRespostas)
-                        }}
-                    />
-                )
-            }
-            <Divider sx={{ m: 1 }} />
         </Box>
     )
 }
@@ -189,6 +54,8 @@ const FormularioV2 = () => {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
     const [imc, setImc] = useState(0)
+    const [autismo, setAutismo] = useState(false)
+
 
     const handleSelecionarCids = async (checked, cid) => {
         try {
@@ -220,7 +87,7 @@ const FormularioV2 = () => {
             for (const resposta of respostas) {
                 if (resposta.resposta === '') {
                     console.log(resposta);
-                    setMessage('Responda todas as perguntas')
+                    setMessage(`Responda a pergunta: ${resposta.pergunta}`)
                     setSeverity('warning')
                     setOpenToast(true)
                     return
@@ -240,6 +107,11 @@ const FormularioV2 = () => {
                 setOpenToast(true)
                 return
             }
+
+            setMessage('Enviando questionário')
+            setSeverity('info')
+            setOpenToast(true)
+
 
 
         } catch (error) {
@@ -289,6 +161,9 @@ const FormularioV2 = () => {
                         <BoxInfo label="Data de Nascimento" value={moment(proposta.beneficiario.dataNascimento).format('DD/MM/YYYY')} />
                     </Box>
                 </Box>
+                <ModalInfoAdicional
+                    infoAdicional={proposta.infoAdicional || {}}
+                />
                 <Box>
                     <Typography
                         variant="h5"
@@ -302,7 +177,17 @@ const FormularioV2 = () => {
                         }).filter(pergunta => {
                             return pergunta.pergunta.categoria === 'Questionário Médico'
                         }).map((pergunta, index) => (
-                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} respostas={respostas} setRespostas={setRespostas} setImc={setImc} />
+                            <Pergunta
+                                key={index}
+                                pergunta={pergunta.pergunta}
+                                index={index}
+                                respostas={respostas}
+                                setRespostas={setRespostas}
+                                setImc={setImc}
+                                setAutismo={setAutismo}
+                                autismo={autismo}
+                                grupoCarencia={proposta.infoAdicional.grupoCarencia}
+                            />
                         ))
                     }
                 </Box>
@@ -326,6 +211,8 @@ const FormularioV2 = () => {
                                 setRespostas={setRespostas}
                                 respostas={respostas}
                                 setImc={setImc}
+                                setAutismo={setAutismo}
+                                autismo={autismo}
                             />
                         ))
                     }
@@ -409,7 +296,7 @@ const FormularioV2 = () => {
                             {
                                 cids.map((item) => {
                                     return (
-                                        <FormControl sx={{ display: 'flex', flexDirection: 'column' }} >
+                                        <FormControl key={item._id} sx={{ display: 'flex', flexDirection: 'column' }} >
                                             <FormControlLabel
                                                 value={item}
                                                 onChange={e => { handleSelecionarCids(e.target.checked, item) }}
@@ -435,6 +322,17 @@ const FormularioV2 = () => {
                                     imc < 34.9 ? 'I' : imc < 39.9 ? 'II' : 'III'
                                 } com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.
                             </Typography>
+                        </Alert>
+                    )
+                }
+                {
+                    autismo && (
+                        <Alert
+                            severity="error"
+                            sx={{ mt: 2 }}
+                            variant="filled"
+                        >
+                            Agradecemos pelas informações fornecidas e, apenas para fins de esclarecimento, informamos que o serviço de Acompanhante Terapêutico Escolar não possui cobertura pela Operadora de Saúde, visto o disposto na Lei de nº 14.454/2022 e o parecer da Agência Nacional de Saúde Suplementar 25/2022, que é nosso órgão regulador, que dispõe sobre a não cobertura em razão da falta de eficácia científica e técnica e de recomendação dos órgãos competentes.
                         </Alert>
                     )
                 }
