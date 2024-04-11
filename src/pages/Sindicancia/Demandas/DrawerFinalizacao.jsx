@@ -1,5 +1,5 @@
 import { ArrowDropDown, ArrowDropUp, East, Info, UndoOutlined } from "@mui/icons-material"
-import { Box, Button, Collapse, Drawer, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, Slide, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Collapse, Drawer, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, TextField, Tooltip, Typography, Checkbox } from "@mui/material"
 import { useContext, useEffect, useState } from "react"
 import { finalizarDemanda, getChecklist, getItemChecklist, voltarDemanda } from "../../../_services/sindicancia.service"
 import Toast from "../../../components/Toast/Toast"
@@ -11,7 +11,8 @@ const ItemChecklist = ({
     index,
     respostas,
     setRespostas,
-    finalizado
+    finalizado,
+    naoSeAplica
 }) => {
 
     const [open, setOpen] = useState(false)
@@ -47,13 +48,13 @@ const ItemChecklist = ({
                             value="sim"
                             control={<Radio />}
                             label="Sim"
-                            disabled={finalizado}
+                            disabled={finalizado || naoSeAplica}
                         />
                         <FormControlLabel
                             value="nao"
                             control={<Radio />}
                             label="Não"
-                            disabled={finalizado}
+                            disabled={finalizado || naoSeAplica}
                         />
                     </RadioGroup>
                 </FormControl>
@@ -94,7 +95,7 @@ const ItemChecklist = ({
                         newRespostas[index].justificativa = e.target.value;
                         return newRespostas;
                     })}
-                    disabled={finalizado}
+                    disabled={finalizado || naoSeAplica}
                 />
             </Collapse>
             <Collapse
@@ -118,7 +119,7 @@ const ItemChecklist = ({
                         newRespostas[index].observacao = e.target.value;
                         return newRespostas;
                     })}
-                    disabled={finalizado}
+                    disabled={finalizado || naoSeAplica}
                 />
             </Collapse>
         </Box>
@@ -144,6 +145,7 @@ const DrawerFinalizacao = ({ demanda }) => {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
     const [dataFinalizacao, setDataFinalizacao] = useState('')
+    const [naoSeAplica, setNaoSeAplica] = useState(false)
 
     const handleOpen = () => {
         setOpen(true)
@@ -156,18 +158,20 @@ const DrawerFinalizacao = ({ demanda }) => {
     const handleFinalizar = async () => {
 
 
-        for (const item of respostas) {
-            if (item.resposta === 'nao' && item.justificativa === '') {
-                setOpenToast(true)
-                setMessage('Justifique todos os itens que foram respondidos como "Não"')
-                setSeverity('error')
-                return
-            }
-            if (item.resposta === '') {
-                setOpenToast(true)
-                setMessage('Responda todos os itens')
-                setSeverity('error')
-                return
+        if (!naoSeAplica) {
+            for (const item of respostas) {
+                if (item.resposta === 'nao' && item.justificativa === '') {
+                    setOpenToast(true)
+                    setMessage('Justifique todos os itens que foram respondidos como "Não"')
+                    setSeverity('error')
+                    return
+                }
+                if (item.resposta === '') {
+                    setOpenToast(true)
+                    setMessage('Responda todos os itens')
+                    setSeverity('error')
+                    return
+                }
             }
         }
 
@@ -291,17 +295,28 @@ const DrawerFinalizacao = ({ demanda }) => {
                         m: 2
                     }}
                 >
-                    <Typography
-                        variant="h5"
-                        sx={{
-                            fontWeight: 'bold'
-                        }}
+                    <Box
+                        display={'flex'}
+                        justifyContent={'space-between'}
                     >
-                        Checklist finalização
-                    </Typography>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Checklist finalização
+                        </Typography>
+                        <FormControlLabel control={<Checkbox />} label="Não se aplica" value={naoSeAplica}
+                            onChange={(e) => {
+                                setNaoSeAplica(e.target.checked)
+                            }}
+                        />
+                    </Box>
+
                     {
                         itensChecklist.map((item, index) => (
-                            <ItemChecklist item={item} index={index} respostas={respostas} setRespostas={setRespostas} finalizado={!!data.data_finalizacao} />
+                            <ItemChecklist item={item} index={index} respostas={respostas} setRespostas={setRespostas} finalizado={!!data.data_finalizacao} naoSeAplica={naoSeAplica} />
                         ))
                     }
                 </Box>
