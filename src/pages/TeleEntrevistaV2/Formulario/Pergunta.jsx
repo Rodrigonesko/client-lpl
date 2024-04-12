@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Alert } from "@mui/material";
+import { FormContext } from "./context";
 
 const perguntaAutismo = 'O(A) Sr(a) está ou já esteve em processo de investigação do espectro do autismo, doença de Parkinson, Alzheimer, demência, esclerose múltipla, lúpus?'
 
@@ -17,12 +18,14 @@ const Pergunta = ({
     autismo,
     grupoCarencia
 }) => {
-    const [diagnosticoAutismo, setDiagnosticoAutismo] = useState('')
+
+    const { tea, setTea } = useContext(FormContext)
+
     const [copart, setCopart] = useState(false)
 
     const indexResposta = respostas.findIndex(item => item.pergunta === pergunta.texto)
 
-   useEffect(() => {
+    useEffect(() => {
         if (indexResposta === -1) {
             setRespostas(prevRespostas => [...prevRespostas, {
                 pergunta: pergunta.texto,
@@ -36,14 +39,15 @@ const Pergunta = ({
 
     const handleResponderPegunta = (e) => {
         const { value } = e.target
-        const newRespostas = [...respostas]
-        newRespostas[indexResposta] = {
-            pergunta: pergunta.texto,
-            resposta: value,
-            categoria: pergunta.categoria,
-            observacao: respostas[indexResposta]?.observacao || '',
-            subPerguntas: respostas[indexResposta]?.subPerguntas || []
-        }
+        setRespostas(prevRespostas => {
+            const newRespostas = [...prevRespostas];
+            newRespostas[indexResposta] = {
+                ...newRespostas[indexResposta],
+                resposta: value
+            };
+            return newRespostas;
+        });
+
         if (pergunta.texto === 'Qual é a sua altura?' || pergunta.texto === 'Qual é o seu peso?') {
             if (pergunta.texto === 'Qual é a sua altura?') {
                 const altura = parseFloat(value)
@@ -64,8 +68,6 @@ const Pergunta = ({
                 }
             }
         }
-
-        setRespostas(newRespostas)
     }
 
     return (
@@ -126,15 +128,15 @@ const Pergunta = ({
                                             Já tem o diagnóstico?
                                         </FormLabel>
                                         <RadioGroup
-                                            value={diagnosticoAutismo}
-                                            onChange={(e) => setDiagnosticoAutismo(e.target.value)}
+                                            value={tea}
+                                            onChange={(e) => setTea(e.target.value)}
                                         >
                                             <FormControlLabel value="JÁ TEM O DIAGNOSTICO FECHADO" control={<Radio />} label="JÁ TEM O DIAGNOSTICO FECHADO" />
                                             <FormControlLabel value="EM INVESTIGAÇÃO" control={<Radio />} label="EM INVESTIGAÇÃO" />
                                         </RadioGroup>
                                     </FormControl>
                                     {
-                                        prcs.findIndex(prc => prc === grupoCarencia) !== -1 && !!diagnosticoAutismo && (
+                                        prcs.findIndex(prc => prc === grupoCarencia) !== -1 && !!tea && (
                                             <Alert severity="error" variant="filled">
                                                 Informar sobre a carência de 180 dias para Terapias. {`\n`} <strong>Material de apoio</strong> : Carência é o tempo que você terá que esperar para ser atendido pelo plano de saúde em um determinado procedimento. Essa informação esta claramente disposta no seu contrato e segue o disposto na Lei nº 9.656/98,.
                                             </Alert>
@@ -181,19 +183,19 @@ const Pergunta = ({
                                 size="small"
                                 //value={respostas[indexResposta] ? respostas[indexResposta]?.subPerguntas[i]?.resposta : ''}
                                 onBlur={(e) => {
-                                    const newRespostas = [...respostas]
-                                    const newSubPerguntas = [...respostas[indexResposta]?.subPerguntas]
-                                    newSubPerguntas[i] = {
-                                        pergunta: subPergunta.texto,
-                                        resposta: e.target.value
-                                    }
-                                    newRespostas[indexResposta] = {
-                                        ...respostas[indexResposta],
-                                        subPerguntas: [
-                                            ...newSubPerguntas
-                                        ]
-                                    }
-                                    setRespostas(newRespostas)
+                                    setRespostas(prevRespostas => {
+                                        const newRespostas = [...prevRespostas];
+                                        const newSubPerguntas = [...newRespostas[indexResposta]?.subPerguntas];
+                                        newSubPerguntas[i] = {
+                                            pergunta: subPergunta.texto,
+                                            resposta: e.target.value
+                                        };
+                                        newRespostas[indexResposta] = {
+                                            ...newRespostas[indexResposta],
+                                            subPerguntas: newSubPerguntas
+                                        };
+                                        return newRespostas;
+                                    });
                                 }}
                             />
                         </Box>
@@ -211,12 +213,14 @@ const Pergunta = ({
                         placeholder="Observações"
                         //value={respostas[indexResposta] ? respostas[indexResposta].observacao : ''}
                         onBlur={(e) => {
-                            const newRespostas = [...respostas]
-                            newRespostas[indexResposta] = {
-                                ...respostas[indexResposta],
-                                observacao: e.target.value
-                            }
-                            setRespostas(newRespostas)
+                            setRespostas(prevRespostas => {
+                                const newRespostas = [...prevRespostas];
+                                newRespostas[indexResposta] = {
+                                    ...newRespostas[indexResposta],
+                                    observacao: e.target.value
+                                };
+                                return newRespostas;
+                            });
                         }}
                     />
                 )

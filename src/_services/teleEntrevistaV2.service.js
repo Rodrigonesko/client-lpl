@@ -112,3 +112,7 @@ export const getQuestionarioByName = async (nome) => {
 export const getCids = async (pesquisa) => {
     return await new ApiCall(`/tele-entrevista/cid?pesquisa=${pesquisa}`, URL_API).get()
 }
+
+export const concluirProposta = async ({ id, data }) => {
+    return await new ApiCall(`/tele-entrevista/proposta/concluir/${id}`, URL_API).post(data)
+}

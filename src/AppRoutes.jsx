@@ -156,7 +156,8 @@ import Beneficiarios from "./pages/Rsd/Beneficiarios/Beneficiarios";
 
 import UploadPropostasEntrevistaV2 from "./pages/TeleEntrevistaV2/Upload/Index";
 import ConfigPerguntas from "./pages/TeleEntrevistaV2/ConfigPerguntas/Index";
-import  FormularioV2  from "./pages/TeleEntrevistaV2/Formulario/Index";
+import FormularioV2 from "./pages/TeleEntrevistaV2/Formulario/Index";
+import { FormProvider } from "./pages/TeleEntrevistaV2/Formulario/context";
 
 const AppRoutes = () => {
     return (
@@ -508,7 +509,9 @@ const AppRoutes = () => {
                     <ConfigPerguntas />
                 </ProtectedRoute>} />
                 <Route path="/teleEntrevistaV2/formulario/:id" element={<ProtectedRoute>
-                    <FormularioV2 />
+                    <FormProvider>
+                        <FormularioV2 />
+                    </FormProvider>
                 </ProtectedRoute>} />
             </Routes>
         </AuthProvider>

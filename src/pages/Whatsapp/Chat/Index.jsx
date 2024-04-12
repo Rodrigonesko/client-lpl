@@ -1,8 +1,7 @@
-import { Box, IconButton } from "@mui/material";
+import { Box } from "@mui/material";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { ChatContext } from "./ChatContext";
 import WhatsappSenders from "./WhatsappSenders";
-import { PersonAdd } from "@mui/icons-material";
 import Chat from "./Chat";
 import Contacts from "./Contacts";
 import { useContext } from "react";

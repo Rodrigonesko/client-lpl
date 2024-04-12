@@ -1,46 +1,22 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useParams } from "react-router-dom"
-import { getCids, getPropostaById, getQuestionarioByName } from "../../../_services/teleEntrevistaV2.service"
-import { Box, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Checkbox, Chip, Button, Alert } from "@mui/material"
-import moment from "moment"
+import { getCids, getPropostaById, getQuestionarioByName, concluirProposta } from "../../../_services/teleEntrevistaV2.service"
+import { Box, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Checkbox, Chip, Button, Alert } from "@mui/material"
 import Toast from "../../../components/Toast/Toast"
 import ModalInfoAdicional from "./ModalInfoAdicional"
 import Pergunta from "./Pergunta"
-
-const perguntaAutismo = 'O(A) Sr(a) está ou já esteve em processo de investigação do espectro do autismo, doença de Parkinson, Alzheimer, demência, esclerose múltipla, lúpus?'
-
-const prcs = [
-    '600', '603', '604', '606', '607', '608', '609', '610'
-]
-
-const BoxInfo = ({ label, value }) => {
-    return (
-        <Box>
-            <Typography variant="body2">
-                {label}
-            </Typography>
-            <Typography variant="body1">
-                {value}
-            </Typography>
-        </Box>
-    )
-}
+import { downloadPdf } from "../pdf/downloadPdf"
+import InformacoesPessoais from "./InformacoesPessoais"
+import Apresentacao from "./Apresentacao"
+import { FormContext } from "./context"
 
 const FormularioV2 = () => {
 
     const { id } = useParams()
 
-    const [proposta, setProposta] = useState({
-        beneficiario: {
-            nome: '',
-            sexo: '',
-            cpf: '',
-            telefone: '',
-            dataNascimento: ''
-        },
-        proposta: ''
-    })
+    const { proposta, setProposta, flushHook, tea } = useContext(FormContext)
+
     const [questionario, setQuestionario] = useState({
         nome: '',
         perguntas: []
@@ -55,7 +31,6 @@ const FormularioV2 = () => {
     const [severity, setSeverity] = useState('success')
     const [imc, setImc] = useState(0)
     const [autismo, setAutismo] = useState(false)
-
 
     const handleSelecionarCids = async (checked, cid) => {
         try {
@@ -108,10 +83,29 @@ const FormularioV2 = () => {
                 return
             }
 
+
             setMessage('Enviando questionário')
             setSeverity('info')
             setOpenToast(true)
 
+            console.log(id);
+
+            const result = await concluirProposta({
+                id,
+                data: {
+                    respostas,
+                    divergenciaQuestionario: identificaDivergencia,
+                    justificativaDivergencia,
+                    cids: cidsSelecionadas,
+                    tea
+                }
+            })
+
+            downloadPdf(result.respostas, result.proposta)
+
+            setMessage('Questionário enviado com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
 
 
         } catch (error) {
@@ -127,40 +121,52 @@ const FormularioV2 = () => {
             try {
                 const response = await getPropostaById(id)
                 setProposta(response)
-                if (response.beneficiario.sexo === 'F') {
+                if (response.beneficiario.sexo === 'F' && response.beneficiario.idade > 8) {
                     const questionario = await getQuestionarioByName('Adulto - Feminino')
                     console.log(questionario);
                     setQuestionario(questionario)
                 }
+                if (response.beneficiario.sexo === 'M' && response.beneficiario.idade > 8) {
+                    const questionario = await getQuestionarioByName('Adulto - Masculino')
+                    setQuestionario(questionario || {
+                        nome: '',
+                        perguntas: []
+                    })
+                }
+                if (response.beneficiario.idade <= 8 && response.beneficiario.idade > 2) {
+                    const questionario = await getQuestionarioByName('Criança')
+                    console.log(questionario);
+                    setQuestionario(questionario || {
+                        nome: '',
+                        perguntas: []
+                    })
+                }
+                if (response.beneficiario.idade <= 2) {
+                    const questionario = await getQuestionarioByName('Bebê')
+                    console.log(questionario);
+                    setQuestionario(questionario || {
+                        nome: '',
+                        perguntas: []
+                    })
+                }
             } catch (error) {
                 console.log(error)
+                setMessage('Erro ao buscar proposta')
+                setSeverity('error')
+                setOpenToast(true)
             }
         }
         fetch()
-    }, [id])
+    }, [id, flushHook])
 
     return (
         <Sidebar>
             <Container>
-                <Box>
-                    <Typography variant="h6">
-                        Informações Pessoais
-                    </Typography>
-                    <Box
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        flexWrap="wrap"
-                        gap={2}
-                    >
-                        <BoxInfo label="Nome" value={proposta.beneficiario.nome} />
-                        <BoxInfo label="Sexo" value={proposta.beneficiario.sexo} />
-                        <BoxInfo label="CPF" value={proposta.beneficiario.cpf} />
-                        <BoxInfo label="Proposta" value={proposta.proposta} />
-                        <BoxInfo label="Telefone" value={proposta.beneficiario.telefone} />
-                        <BoxInfo label="Data de Nascimento" value={moment(proposta.beneficiario.dataNascimento).format('DD/MM/YYYY')} />
-                    </Box>
-                </Box>
+                <Apresentacao />
+                <InformacoesPessoais
+                    data={proposta}
+                    key={proposta._id}
+                />
                 <ModalInfoAdicional
                     infoAdicional={proposta.infoAdicional || {}}
                 />
