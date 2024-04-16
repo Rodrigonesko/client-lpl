@@ -116,3 +116,15 @@ export const getCids = async (pesquisa) => {
 export const concluirProposta = async ({ id, data }) => {
     return await new ApiCall(`/tele-entrevista/proposta/concluir/${id}`, URL_API).post(data)
 }
+
+
+// RN
+export const uploadRn = async (data) => {
+    return await new ApiCall('/tele-entrevista/rn/upload', URL_API).post(data)
+}
+
+// UE
+
+export const uploadUe = async (data) => {
+    return await new ApiCall('/tele-entrevista/urgencia-emergencia/upload', URL_API).post(data)
+}
