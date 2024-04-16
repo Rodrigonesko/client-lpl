@@ -14,6 +14,7 @@ import CardMural from "./cards/CardMural";
 import CardToDo from "./cards/CardToDo";
 import { red } from "@mui/material/colors";
 import ModalAnexarArquivoTreinamento from "./modais/ModalAnexarArquivoTreinamento";
+import CardAniversarioEmpresa from "./cards/CardAniversarioEmpresa";
 
 const Home = () => {
 
@@ -231,6 +232,11 @@ const Home = () => {
                             {
                                 dataUser !== null && (
                                     <CardAniversariantes data={userData} flushHook={flushHook} />
+                                )
+                            }
+                            {
+                                dataUser !== null && (
+                                    <CardAniversarioEmpresa />
                                 )
                             }
                             {

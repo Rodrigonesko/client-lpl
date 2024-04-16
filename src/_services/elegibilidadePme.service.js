@@ -64,3 +64,7 @@ export const analiticoPme = async (mes) => {
 export const chartDataPme = async (mes) => {
     return await new ApiCall(`/elegibilidadePme/chartDataPme/${mes}`).get()
 }
+
+export const producaoIndividualElegibilidadePme = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/elegibilidadePme/producaoIndividualElegibilidadePme?dataInicio=${dataInicio}&dataFim=${dataFim}`).get()
+}

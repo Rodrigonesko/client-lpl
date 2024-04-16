@@ -9,6 +9,7 @@ import { green, grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import ProducaoIndividualElegi from '../../../../../components/ProducaoIndividual/ProducaoIndividualElegi/ProducaoIndividualElegi';
 import { getProducaoAnalistasElegi } from '../../../../../_services/elegibilidade.service';
+import { producaoIndividualElegibilidadePme } from '../../../../../_services/elegibilidadePme.service';
 import moment from 'moment';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -16,7 +17,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 
-const ElegibilidadeTable = ({ mes }) => {
+const PmeTable = ({ mes }) => {
 
     const [tableData, setTableData] = useState([])
     const [loadingTabela, setLoadingTabela] = useState(false)
@@ -31,7 +32,7 @@ const ElegibilidadeTable = ({ mes }) => {
             const dataInicio = moment(mes).startOf('month').format('YYYY-MM-DD')
             const dataFim = moment(mes).endOf('month').format('YYYY-MM-DD')
 
-            const result = await getProducaoAnalistasElegi(dataInicio, dataFim)
+            const result = await producaoIndividualElegibilidadePme(dataInicio, dataFim)
             console.log(result);
             setTableData(result)
             setLoadingTabela(false)
@@ -79,7 +80,7 @@ const ElegibilidadeTable = ({ mes }) => {
                                 mt: 2,
                                 mb: 1,
                             }}>
-                                Média Analistas Elegibilidades
+                                Média Analistas Elegibilidades Pme
                             </Typography>
                             {/* <Chip
                                 label={`Média Total: ${media.toFixed(2)}`}
@@ -112,13 +113,10 @@ const ElegibilidadeTable = ({ mes }) => {
                                         Nome
                                     </TableCell>
                                     <TableCell>
-                                        Total
+                                        Quantidade
                                     </TableCell>
                                     <TableCell>
-                                        Implantadas
-                                    </TableCell>
-                                    <TableCell>
-                                        Canceladas
+                                        Concluídas
                                     </TableCell>
                                     <TableCell>
                                         Devolvidas
@@ -159,12 +157,7 @@ const ElegibilidadeTable = ({ mes }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.implantadas}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Chip
-                                                    label={item.canceladas}
+                                                    label={item.concluidas}
                                                 />
                                             </TableCell>
                                             <TableCell>
@@ -232,4 +225,4 @@ const ElegibilidadeTable = ({ mes }) => {
     )
 }
 
-export default ElegibilidadeTable;
+export default PmeTable;
