@@ -158,6 +158,7 @@ import UploadPropostasEntrevistaV2 from "./pages/TeleEntrevistaV2/Upload/Index";
 import ConfigPerguntas from "./pages/TeleEntrevistaV2/ConfigPerguntas/Index";
 import FormularioV2 from "./pages/TeleEntrevistaV2/Formulario/Index";
 import { FormProvider } from "./pages/TeleEntrevistaV2/Formulario/context";
+import Envio from "./pages/TeleEntrevistaV2/Envio/Index";
 
 const AppRoutes = () => {
     return (
@@ -512,6 +513,9 @@ const AppRoutes = () => {
                     <FormProvider>
                         <FormularioV2 />
                     </FormProvider>
+                </ProtectedRoute>} />
+                <Route path="/teleEntrevistaV2/envio" element={<ProtectedRoute>
+                    <Envio />
                 </ProtectedRoute>} />
             </Routes>
         </AuthProvider>

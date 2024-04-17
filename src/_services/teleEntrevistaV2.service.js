@@ -33,6 +33,10 @@ export const getPropostaById = async (id) => {
     return await new ApiCall(`/tele-entrevista/proposta/${id}`, URL_API).get()
 }
 
+export const getPropostaByStatus = async (status, limit, page) => {
+    return await new ApiCall(`/tele-entrevista/propostas/status?status=${status}&limit=${limit}&page=${page}`, URL_API).get()
+}
+
 export const getPropostasAgendar = async (limit, page, responsavel) => {
     return await new ApiCall(`/tele-entrevista/proposta/agendar?limit=${limit}&page=${page}&responsavel=${responsavel}`, URL_API).get()
 }
