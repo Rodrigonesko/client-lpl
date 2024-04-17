@@ -91,7 +91,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
     const handlePageChange = (event, value) => {
         setPage(value);
-        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2)) {
+        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2) || (status.length > 1)) {
             handleFilter(event, value);
         } else {
             fetchData(value)

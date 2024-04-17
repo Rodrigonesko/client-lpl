@@ -12,7 +12,11 @@ const ModalCriarInventario = ({ setFlushHook }) => {
         status: '',
         etiqueta: '',
         ondeEsta: '',
-        descricao: ''
+        descricao: '',
+        serial: '',
+        dataDeCompra: '',
+        dataGarantia: '',
+        nf: '',
     })
     const [open, setOpen] = useState(false);
 

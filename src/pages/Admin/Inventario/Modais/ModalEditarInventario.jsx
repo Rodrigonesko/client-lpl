@@ -71,6 +71,14 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
                             <TextField type='text' focused value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' size='small' label='Com quem/onde está o item?' />
                             <br />
                             <TextField type='text' focused value={descricao} onChange={e => setDescricao(e.target.value)} name='descricao' placeholder='Placeholder' multiline size='small' label='Descreva o que o item possui?' />
+                            <br />
+                            <TextField type='text' focused value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' size='small' label='Serial' />
+                            <br />
+                            <TextField type='text' focused value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' size='small' label='Data de Compra' />
+                            <br />
+                            <TextField type='text' focused value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' size='small' label='Data de Garantia' />
+                            <br />
+                            <TextField type='text' focused value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' size='small' label='NF' />
                         </FormGroup>
                     </DialogContentText>
                 </DialogContent>
