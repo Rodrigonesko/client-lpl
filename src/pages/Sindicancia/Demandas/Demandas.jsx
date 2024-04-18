@@ -71,14 +71,12 @@ const Demandas = () => {
     const fetchData = async () => {
         try {
             setLoading(true)
-
             const auxAreaEmpresa = filtros.areaEmpresa ? filtros.areaEmpresa.id[0] : ''
             const auxStatus = filtros.status ? filtros.status.id : ''
             const auxTipoServico = filtros.tipoServico ? filtros.tipoServico.id : ''
             const auxAnalista = filtros.analista ? filtros.analista.id : ''
             const auxData = filtros.data ? filtros.data : ''
             const auxPesquisa = filtros.pesquisa ? filtros.pesquisa : ''
-
             const result = await getDemandas(
                 rowsPerPage,
                 page,
@@ -89,13 +87,9 @@ const Demandas = () => {
                 auxPesquisa,
                 auxData
             )
-
-            console.log(result.demandas);
-
             setDados(result.demandas)
             setTotalPages(result.count)
             setLoading(false)
-
         } catch (error) {
             console.log(error)
             setLoading(false)
@@ -253,7 +247,7 @@ const Demandas = () => {
                         onChange={(e) => { setFiltros({ ...filtros, data: e.target.value }) }}
                         disabled={loading}
                     />
-                    <ModalRelatorio statusList={status} />
+                    <ModalRelatorio statusList={status} areaEmpresaList={areaEmpresa} />
                     <ModalCriarTipoIrregularidade />
                 </Box>
 

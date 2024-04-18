@@ -1,19 +1,53 @@
-import { Box, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, Button, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useEffect, useState } from "react"
-import { getPropostaByStatus } from "../../../_services/teleEntrevistaV2.service"
+import { getPropostaByStatus, updateBeneficiario, updateProposta } from "../../../_services/teleEntrevistaV2.service"
 import { Block, Check } from "@mui/icons-material"
+import Toast from "../../../components/Toast/Toast"
 
-const Row = ({ data }) => {
+const Row = ({ data, update, setRefresh }) => {
 
     const [proposta, setProposta] = useState(data || {})
+    const [open, setOpen] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
 
     useEffect(() => {
-        setProposta(data)
+        setProposta({
+            ...data,
+            beneficiario: {
+                ...data.beneficiario,
+                cpfTitular: data.beneficiario.cpfTitular === '0' ? '' : data.beneficiario.cpfTitular
+            }
+        })
     }, [data])
 
     useEffect(() => {
-        console.log(proposta.beneficiario.cpfTitular.toString().length)
-    }, [proposta])
+        const ajustar = async () => {
+            try {
+                if (proposta.beneficiario.cpfTitular.toString().length !== 11) return
+                await updateProposta({
+                    _id: proposta._id,
+                    status: 'Não enviado'
+                })
+                await updateBeneficiario({
+                    ...proposta.beneficiario,
+                    cpfTitular: Number(proposta.beneficiario.cpfTitular)
+                })
+                setSeverity('success')
+                setMessage('Proposta ajustada com sucesso')
+                setOpen(true)
+                setRefresh(prev => !prev)
+
+            } catch (error) {
+                console.log(error);
+                setSeverity('error')
+                setMessage('Erro ao ajustar proposta')
+                setOpen(true)
+            }
+        }
+
+        ajustar()
+    }, [update])
 
     return (
         <TableRow
@@ -34,8 +68,9 @@ const Row = ({ data }) => {
             <TableCell>
                 <TextField
                     size="small"
-                    value={proposta.beneficiario.cpfTitular || ''}
+                    value={proposta.beneficiario.cpfTitular}
                     onChange={(e) => {
+                        if (!/^[0-9]*$/.test(e.target.value)) return;
                         if (e.target.value.length > 11) return
                         setProposta({
                             ...proposta,
@@ -45,8 +80,6 @@ const Row = ({ data }) => {
                             }
                         })
                     }}
-                    type="number"
-                    inputProps={{ min: "0", max: "99999999999" }}
                     sx={{
                         minWidth: '150px'
                     }}
@@ -56,7 +89,7 @@ const Row = ({ data }) => {
                 {proposta.infoAdicional.tipoAssociado}
             </TableCell>
             <TableCell>
-                {proposta.infoAdicional.contrato}
+                {proposta.infoAdicional.tipoContrato}
             </TableCell>
             <TableCell>
                 {proposta.beneficiario.idade}
@@ -76,6 +109,12 @@ const Row = ({ data }) => {
                     )
                 }
             </TableCell>
+            <Toast
+                open={open}
+                severity={severity}
+                message={message}
+                onClose={() => setOpen(false)}
+            />
         </TableRow>
     )
 }
@@ -85,6 +124,7 @@ const Ajustar = () => {
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
+    const [update, setUpdate] = useState(false)
 
     useEffect(() => {
         const fetch = async () => {
@@ -97,7 +137,6 @@ const Ajustar = () => {
                 setLoading(false)
             }
         }
-
         fetch()
     }, [refresh])
 
@@ -105,7 +144,21 @@ const Ajustar = () => {
         <Box
             mt={2}
         >
-            <TableContainer>
+            <Button
+                onClick={() => setUpdate(!update)}
+                variant="contained"
+                color="secondary"
+                sx={{
+                    mt: 2
+                }}
+            >
+                Ajustar
+            </Button>
+            <TableContainer
+                sx={{
+                    mt: 2,
+                }}
+            >
                 <Table
                     size="small"
                 >
@@ -153,13 +206,14 @@ const Ajustar = () => {
                                 </TableRow>
                             ) : (
                                 propostas.map((proposta) => (
-                                    <Row data={proposta} key={proposta._id} />
+                                    <Row data={proposta} key={proposta._id} update={update} setRefresh={setRefresh} />
                                 ))
                             )
                         }
                     </TableBody>
                 </Table>
             </TableContainer>
+
         </Box>
     )
 }

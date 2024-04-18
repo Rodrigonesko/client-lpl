@@ -1,12 +1,11 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Alert } from "@mui/material"
 import { useEffect, useState } from "react"
-import { getPropostaByStatus } from "../../../_services/teleEntrevistaV2.service"
+import { getPropostaByStatus, updateProposta } from "../../../_services/teleEntrevistaV2.service"
 
 const ModalEnviarMensagens = ({ propostas, setPropostas }) => {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [progress, setProgress] = useState(0)
-
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -23,6 +22,10 @@ const ModalEnviarMensagens = ({ propostas, setPropostas }) => {
             const total = propostas.length
             let count = 0
             for (let proposta of propostas) {
+                await updateProposta({
+                    _id: proposta._id,
+                    status: 'Enviado'
+                })
                 count++
                 setProgress((count / total) * 100)
                 setPropostas(prevPropostas => prevPropostas.filter(p => p._id !== proposta._id))

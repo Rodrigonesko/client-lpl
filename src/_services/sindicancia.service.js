@@ -151,3 +151,11 @@ export const getChecklist = async (id) => {
 export const createDatasBradesco = async (id) => {
     return await new ApiCall(`/sindicancia/demanda/gerarDatas`).post(id);
 }
+
+export const alterarPreviaEnviadaBradesco = async ({ id, envio_previa }) => {
+    return await new ApiCall(`/sindicancia/demanda/alterarEnvioDePreviaBradesco`).put({ id, envio_previa });
+}
+
+export const createSolicitante = async (data) => {
+    return await new ApiCall('/sindicancia/demanda/solicitante').post(data);
+}
