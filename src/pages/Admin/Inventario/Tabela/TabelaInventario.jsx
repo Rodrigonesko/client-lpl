@@ -3,6 +3,7 @@ import { red, yellow, green, blue } from '@mui/material/colors';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalEditarInventario from "../Modais/ModalEditarInventario";
+import moment from "moment";
 
 const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
@@ -161,6 +162,8 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                         <TableCell sx={{ color: "white" }} >ETIQUETA</TableCell>
                                         <TableCell sx={{ color: "white" }} >COM QUEM ESTÁ</TableCell>
                                         <TableCell sx={{ color: "white" }} >DESCRIÇÃO</TableCell>
+                                        <TableCell sx={{ color: "white" }} >DATA DE COMPRA</TableCell>
+                                        <TableCell sx={{ color: "white" }} >DATA DE GARANTIA</TableCell>
                                         <TableCell sx={{ color: "white" }} >STATUS</TableCell>
                                         <TableCell sx={{ color: "white" }} >BOTÕES</TableCell>
                                     </TableRow>
@@ -181,6 +184,12 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                                 <TableCell>{item.etiqueta}</TableCell>
                                                 <TableCell>{item.ondeEsta}</TableCell>
                                                 <TableCell>{item.descricao}</TableCell>
+                                                <TableCell>{
+                                                    item.dataDeCompra ? moment(item.dataDeCompra).format('DD/MM/YYYY') : ''
+                                                }</TableCell>
+                                                <TableCell>{
+                                                    item.dataGarantia ? moment(item.dataGarantia).format('DD/MM/YYYY') : ''
+                                                }</TableCell>
                                                 <TableCell>
                                                     <FormControl size='small' sx={{ minWidth: 190 }} >
                                                         <InputLabel id='Status'>Status</InputLabel>
@@ -199,7 +208,16 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                                     </FormControl>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <ModalEditarInventario id={item._id} setFlushHook={setFlushHook} trocaNome={item.nome} trocaEtiqueta={item.etiqueta} trocaOndeEsta={item.ondeEsta} trocaDescricao={item.descricao} />
+                                                    <ModalEditarInventario
+                                                        id={item._id}
+                                                        setFlushHook={setFlushHook}
+                                                        trocaNome={item.nome}
+                                                        trocaEtiqueta={item.etiqueta}
+                                                        trocaOndeEsta={item.ondeEsta}
+                                                        trocaDescricao={item.descricao}
+                                                        trocaDataCompra={item.dataDeCompra}
+                                                        trocaDataGarantia={item.dataGarantia}
+                                                    />
                                                 </TableCell>
                                             </TableRow>)
                                     })}
