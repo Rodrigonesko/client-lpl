@@ -217,6 +217,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                                         trocaDescricao={item.descricao}
                                                         trocaDataCompra={item.dataDeCompra}
                                                         trocaDataGarantia={item.dataGarantia}
+                                                        trocaSerial={item.serial}
                                                     />
                                                 </TableCell>
                                             </TableRow>)

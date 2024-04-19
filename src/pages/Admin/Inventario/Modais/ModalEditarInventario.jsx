@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { UpdateInventario } from "../../../../_services/inventario.service";
 
-const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOndeEsta, trocaDescricao, id, trocaDataCompra, trocaDataGarantia }) => {
+const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOndeEsta, trocaDescricao, id, trocaDataCompra, trocaDataGarantia, trocaSerial }) => {
 
     const [openSnack, setOpenSnack] = useState(false)
     const [textoSnack, setTextoSnack] = useState('')
@@ -15,6 +15,7 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
     const [descricao, setDescricao] = useState(trocaDescricao)
     const [dataCompra, setDataCompra] = useState(trocaDataCompra)
     const [dataGarantia, setDataGarantia] = useState(trocaDataGarantia)
+    const [serial, setSerial] = useState(trocaSerial)
 
     const [open, setOpen] = useState(false)
 
@@ -40,6 +41,7 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
                 descricao,
                 dataCompra,
                 dataGarantia,
+                serial
             })
             console.log(result)
             setFlushHook(true)
@@ -67,46 +69,46 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <FormGroup>
-                            <TextField type='text' focused value={nome} onChange={e => setNome(e.target.value)} name='nomeItem' margin='dense' size='small' label='Qual o nome do item?' InputProps={{
+                            <TextField type='text' value={nome} onChange={e => setNome(e.target.value)} name='nomeItem' margin='dense' size='small' label='Qual o nome do item?' InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='text' focused value={etiqueta} onChange={e => setEtiqueta(e.target.value)} name='etiqueta' margin='dense' size='small' label='Qual a etiqueta do item?' InputProps={{
+                            <TextField type='text' value={etiqueta} onChange={e => setEtiqueta(e.target.value)} name='etiqueta' margin='dense' size='small' label='Qual a etiqueta do item?' InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='text' focused value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' margin='dense' size='small' label='Com quem/onde está o item?' InputProps={{
+                            <TextField type='text' value={ondeEsta} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' margin='dense' size='small' label='Com quem/onde está o item?' InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='text' focused value={descricao} onChange={e => setDescricao(e.target.value)} name='descricao' margin='dense' placeholder='Placeholder' multiline size='small' label='Descreva o que o item possui?' InputProps={{
+                            <TextField type='text' value={descricao} onChange={e => setDescricao(e.target.value)} name='descricao' margin='dense' placeholder='Placeholder' multiline size='small' label='Descreva o que o item possui?' InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='text' focused value={''} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' margin='dense' size='small' label='Serial' InputProps={{
+                            <TextField type='text' value={serial} onChange={e => setSerial(e.target.value)} name='ondeItem' margin='dense' size='small' label='Serial' InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='date' focused value={dataCompra} onChange={e => setDataCompra(e.target.value)} name='ondeItem' margin='dense' size='small' label='Data de Compra' InputLabelProps={{
+                            <TextField type='date' value={dataCompra} onChange={e => setDataCompra(e.target.value)} name='ondeItem' margin='dense' size='small' label='Data de Compra' InputLabelProps={{
                                 shrink: true,
                             }} InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='date' focused value={dataGarantia} onChange={e => setDataGarantia(e.target.value)} name='ondeItem' margin='dense' size='small' label='Data de Garantia' InputLabelProps={{
+                            <TextField type='date' value={dataGarantia} onChange={e => setDataGarantia(e.target.value)} name='ondeItem' margin='dense' size='small' label='Data de Garantia' InputLabelProps={{
                                 shrink: true,
                             }} InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='text' focused value={''} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' margin='dense' size='small' label='NF' InputProps={{
+                            <TextField type='text' value={''} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' margin='dense' size='small' label='NF' InputProps={{
                                 style: {
                                     borderRadius: '10px',
                                 }
@@ -115,8 +117,8 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Fechar</Button>
-                    <Button onClick={handleSave} autoFocus>Salvar</Button>
+                    <Button onClick={handleClose} color='error'>Fechar</Button>
+                    <Button onClick={handleSave} color='success' autoFocus>Salvar</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>

@@ -92,7 +92,7 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                 ondeEsta: dados.ondeEsta,
                 descricao: dados.descricao,
                 dataDeCompra: dados.dataDeCompra,
-                tempoGarantia: dados.tempoGarantia,
+                tempoGarantia: dados.tempoGarantia
             }, {
                 withCredentials: true,
                 headers: {
