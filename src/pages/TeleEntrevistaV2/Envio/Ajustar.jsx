@@ -4,7 +4,7 @@ import { getPropostaByStatus, updateBeneficiario, updateProposta } from "../../.
 import { Block, Check } from "@mui/icons-material"
 import Toast from "../../../components/Toast/Toast"
 
-const Row = ({ data, update, setRefresh }) => {
+const Row = ({ data, update, setRefresh, setTotal }) => {
 
     const [proposta, setProposta] = useState(data || {})
     const [open, setOpen] = useState(false)
@@ -37,6 +37,11 @@ const Row = ({ data, update, setRefresh }) => {
                 setMessage('Proposta ajustada com sucesso')
                 setOpen(true)
                 setRefresh(prev => !prev)
+                setTotal(prev => ({
+                    ...prev,
+                    ajustar: prev.ajustar - 1,
+                    naoEnviados: prev.naoEnviados + 1
+                }))
 
             } catch (error) {
                 console.log(error);
@@ -119,7 +124,7 @@ const Row = ({ data, update, setRefresh }) => {
     )
 }
 
-const Ajustar = () => {
+const Ajustar = ({ setTotal }) => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
@@ -130,7 +135,9 @@ const Ajustar = () => {
         const fetch = async () => {
             setLoading(true)
             try {
-                const result = await getPropostaByStatus('Ajustar', 0, 0)
+                const result = await getPropostaByStatus(0, 0, {
+                    status: ['Ajustar']
+                })
                 setPropostas(result.propostas)
                 setLoading(false)
             } catch (error) {
@@ -206,7 +213,7 @@ const Ajustar = () => {
                                 </TableRow>
                             ) : (
                                 propostas.map((proposta) => (
-                                    <Row data={proposta} key={proposta._id} update={update} setRefresh={setRefresh} />
+                                    <Row data={proposta} key={proposta._id} update={update} setRefresh={setRefresh} setTotal={setTotal} />
                                 ))
                             )
                         }

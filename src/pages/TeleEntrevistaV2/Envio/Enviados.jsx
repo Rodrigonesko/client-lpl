@@ -11,7 +11,9 @@ const Enviados = () => {
     useEffect(() => {
         const fetch = async () => {
             setLoading(true)
-            const result = await getPropostaByStatus('Enviado', 0, 0)
+            const result = await getPropostaByStatus(0, 0, {
+                status: ['Enviado']
+            })
             setPropostas(result.propostas)
             setLoading(false)
         }

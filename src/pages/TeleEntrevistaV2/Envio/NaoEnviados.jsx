@@ -1,8 +1,9 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Alert } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, Tooltip } from "@mui/material"
 import { useEffect, useState } from "react"
-import { getPropostaByStatus, updateProposta } from "../../../_services/teleEntrevistaV2.service"
+import { getPropostaByStatus, updateBeneficiario, updateProposta } from "../../../_services/teleEntrevistaV2.service"
+import { Redo } from "@mui/icons-material"
 
-const ModalEnviarMensagens = ({ propostas, setPropostas }) => {
+const ModalEnviarMensagens = ({ propostas, setPropostas, setTotal }) => {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [progress, setProgress] = useState(0)
@@ -29,6 +30,11 @@ const ModalEnviarMensagens = ({ propostas, setPropostas }) => {
                 count++
                 setProgress((count / total) * 100)
                 setPropostas(prevPropostas => prevPropostas.filter(p => p._id !== proposta._id))
+                setTotal(prevTotal => ({
+                    ...prevTotal,
+                    naoEnviados: prevTotal.naoEnviados - 1,
+                    enviados: prevTotal.enviados + 1,
+                }))
             }
             setLoading(false)
         } catch (error) {
@@ -109,21 +115,22 @@ const ModalEnviarMensagens = ({ propostas, setPropostas }) => {
     )
 }
 
-const NaoEnviados = () => {
+const NaoEnviados = ({ setTotal }) => {
 
     const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const result = await getPropostaByStatus('Não enviado', 0, 0)
+            const result = await getPropostaByStatus(0, 0, {
+                status: ['Não enviado']
+            })
             setPropostas(result.propostas)
             setLoading(false)
         }
         fetchData()
-    }, [refresh])
+    }, [])
 
     return (
         <Box
@@ -134,6 +141,7 @@ const NaoEnviados = () => {
             <ModalEnviarMensagens
                 propostas={propostas}
                 setPropostas={setPropostas}
+                setTotal={setTotal}
             />
             <TableContainer
                 sx={{
@@ -158,6 +166,7 @@ const NaoEnviados = () => {
                             <TableCell>Idade</TableCell>
                             <TableCell>DDD</TableCell>
                             <TableCell>Celular</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -165,7 +174,7 @@ const NaoEnviados = () => {
                             loading ? (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={9}
+                                        colSpan={10}
                                     >
                                         <LinearProgress color="inherit" />
                                     </TableCell>
@@ -184,6 +193,38 @@ const NaoEnviados = () => {
                                         <TableCell>{proposta.beneficiario.idade}</TableCell>
                                         <TableCell>{proposta.beneficiario.ddd}</TableCell>
                                         <TableCell>{proposta.beneficiario.celular}</TableCell>
+                                        <TableCell>
+                                            <Tooltip title='Ajustar'>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="small"
+                                                    onClick={async () => {
+                                                        try {
+                                                            await updateProposta({
+                                                                _id: proposta._id,
+                                                                status: 'Ajustar',
+                                                            })
+                                                            await updateBeneficiario({
+                                                                _id: proposta.beneficiario._id,
+                                                                cpfTitular: '0',
+                                                            })
+
+                                                            setPropostas(prevPropostas => prevPropostas.filter(p => p._id !== proposta._id))
+                                                            setTotal(prevTotal => ({
+                                                                ...prevTotal,
+                                                                naoEnviados: prevTotal.naoEnviados - 1,
+                                                                ajustar: prevTotal.ajustar + 1,
+                                                            }))
+                                                        } catch (error) {
+                                                            console.log(error)
+                                                        }
+                                                    }}
+                                                >
+                                                    <Redo />
+                                                </Button>
+                                            </Tooltip>
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             )

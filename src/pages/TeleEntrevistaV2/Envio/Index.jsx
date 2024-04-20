@@ -36,9 +36,9 @@ const Envio = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const result1 = await getPropostaByStatus('Não enviado', 1, 1);
-            const result2 = await getPropostaByStatus('Ajustar', 1, 1);
-            const result3 = await getPropostaByStatus('Enviado', 1, 1);
+            const result1 = await getPropostaByStatus(1, 1, { status: ['Não enviado'] });
+            const result2 = await getPropostaByStatus(1, 1, { status: ['Ajustar'] });
+            const result3 = await getPropostaByStatus(1, 1, { status: ['Enviado'] });
 
             setTotal({
                 naoEnviados: result1.total,
@@ -126,9 +126,9 @@ const Envio = () => {
                         iconPosition='end'
                     />
                 </Tabs>
-                {tab === 0 && <NaoEnviados />}
-                {tab === 1 && <Ajustar />}
-                {tab === 2 && <Enviados />}
+                {tab === 0 && <NaoEnviados setTotal={setTotal} />}
+                {tab === 1 && <Ajustar setTotal={setTotal} />}
+                {tab === 2 && <Enviados setTotal={setTotal} />}
             </Box>
         </Sidebar>
     )
