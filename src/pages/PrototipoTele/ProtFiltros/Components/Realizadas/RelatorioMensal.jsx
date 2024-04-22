@@ -15,6 +15,7 @@ const RelatorioMensal = () => {
 
     const handleClickOpen = () => {
         setOpen(true)
+        
     }
 
     const handleClose = () => {
@@ -23,16 +24,11 @@ const RelatorioMensal = () => {
 
     const handleGenerate = async () => {
         try {
-
-
             if (startDate === '' && endDate === '') {
                 return
             }
-
             setLoading(true)
-
             const result = await getEntrevistasEntreDatas(startDate, endDate)
-
             let xls = '\ufeff'
             xls += "<table border='1'>"
             xls += "<thead><tr>"
@@ -50,6 +46,7 @@ const RelatorioMensal = () => {
             xls += "<th>Data Nascimento</th>"
             xls += "<th>UF</th>"
             xls += "<th>Administradora</th>"
+            xls += "<th>Responsável</th>"
             xls += "<th>Status Final</th>"
             xls += "<th>Divergência DS</th>"
             xls += "<th>Observações</th>"
@@ -73,6 +70,7 @@ const RelatorioMensal = () => {
                 xls += `<td>${e.dataNascimento || ''}</td>`
                 xls += `<td>${e.filial || ''}</td>`
                 xls += `<td>${e.administradora || ''}</td>`
+                xls += `<td>${e.responsavel || ''}</td>`
                 xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
                 xls += `<td>${e.houveDivergencia}</td>`
                 xls += `<td>${e.divergencia || ''}</td>`
