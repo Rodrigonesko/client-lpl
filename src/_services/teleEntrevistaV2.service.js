@@ -33,6 +33,10 @@ export const getPropostaById = async (id) => {
     return await new ApiCall(`/tele-entrevista/proposta/${id}`, URL_API).get()
 }
 
+export const getPropostaByStatus = async (limit, page, data) => {
+    return await new ApiCall(`/tele-entrevista/propostas/status?limit=${limit}&page=${page}`, URL_API).post(data)
+}
+
 export const getPropostasAgendar = async (limit, page, responsavel) => {
     return await new ApiCall(`/tele-entrevista/proposta/agendar?limit=${limit}&page=${page}&responsavel=${responsavel}`, URL_API).get()
 }
@@ -111,4 +115,20 @@ export const getQuestionarioByName = async (nome) => {
 
 export const getCids = async (pesquisa) => {
     return await new ApiCall(`/tele-entrevista/cid?pesquisa=${pesquisa}`, URL_API).get()
+}
+
+export const concluirProposta = async ({ id, data }) => {
+    return await new ApiCall(`/tele-entrevista/proposta/concluir/${id}`, URL_API).post(data)
+}
+
+
+// RN
+export const uploadRn = async (data) => {
+    return await new ApiCall('/tele-entrevista/rn/upload', URL_API).post(data)
+}
+
+// UE
+
+export const uploadUe = async (data) => {
+    return await new ApiCall('/tele-entrevista/urgencia-emergencia/upload', URL_API).post(data)
 }
