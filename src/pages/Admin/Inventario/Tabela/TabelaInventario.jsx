@@ -1,9 +1,10 @@
-import { Alert, Box, Button, Chip, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Chip, CircularProgress, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import { red, yellow, green, blue } from '@mui/material/colors';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalEditarInventario from "../Modais/ModalEditarInventario";
 import moment from "moment";
+import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 
 const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
@@ -219,6 +220,9 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                                                         trocaDataGarantia={item.dataGarantia}
                                                         trocaSerial={item.serial}
                                                     />
+                                                    <Tooltip title='Nota Fiscal'>
+                                                        <IconButton href={`${process.env.REACT_APP_API_KEY}/media/notasFiscais/${item.ondeEsta}-${item._id}.pdf`} target='_blank'>{item.anexado ? <FeedOutlinedIcon color='inherit' /> : []}</IconButton>
+                                                    </Tooltip>
                                                 </TableCell>
                                             </TableRow>)
                                     })}

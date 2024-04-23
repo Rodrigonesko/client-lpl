@@ -2,6 +2,7 @@ import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText,
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { UpdateInventario } from "../../../../_services/inventario.service";
+import ModalInserirNotaFiscal from "./ModalInserirNotaFiscal";
 
 const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOndeEsta, trocaDescricao, id, trocaDataCompra, trocaDataGarantia, trocaSerial }) => {
 
@@ -108,11 +109,10 @@ const ModalEditarInventario = ({ setFlushHook, trocaNome, trocaEtiqueta, trocaOn
                                     borderRadius: '10px',
                                 }
                             }} />
-                            <TextField type='text' value={''} onChange={e => setOndeEsta(e.target.value)} name='ondeItem' margin='dense' size='small' label='NF' InputProps={{
-                                style: {
-                                    borderRadius: '10px',
-                                }
-                            }} />
+                            <ModalInserirNotaFiscal
+                                id={id}
+                                setFlushHook={setFlushHook}
+                            />
                         </FormGroup>
                     </DialogContentText>
                 </DialogContent>
