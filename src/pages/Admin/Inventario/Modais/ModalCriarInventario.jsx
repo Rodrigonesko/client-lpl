@@ -9,10 +9,15 @@ const ModalCriarInventario = ({ setFlushHook }) => {
     const [severitySnack, setSeveritySnack] = useState('')
     const [dados, setDados] = useState({
         nomeItem: '',
-        status: '',
+        status: 'emEstoque',
         etiqueta: '',
         ondeEsta: '',
-        descricao: ''
+        descricao: '',
+        serial: '',
+        dataDeCompra: '',
+        dataGarantia: '',
+        tempoGarantia: '',
+        nf: '',
     })
     const [open, setOpen] = useState(false);
 
@@ -32,6 +37,8 @@ const ModalCriarInventario = ({ setFlushHook }) => {
         objAux.etiqueta = ''
         objAux.ondeEsta = ''
         objAux.descricao = ''
+        objAux.dataDeCompra = ''
+        objAux.tempoGarantia = ''
         setDados(objAux)
     }
 
@@ -53,6 +60,12 @@ const ModalCriarInventario = ({ setFlushHook }) => {
         }
         if (name === 'descricao') {
             objAux.descricao = elemento.target.value
+        }
+        if (name === 'dataDeCompra') {
+            objAux.dataDeCompra = elemento.target.value
+        }
+        if (name === 'tempoGarantia') {
+            objAux.tempoGarantia = elemento.target.value
         }
         setDados(objAux)
     }
@@ -77,7 +90,9 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                 status: dados.status,
                 etiqueta: dados.etiqueta,
                 ondeEsta: dados.ondeEsta,
-                descricao: dados.descricao
+                descricao: dados.descricao,
+                dataDeCompra: dados.dataDeCompra,
+                tempoGarantia: dados.tempoGarantia
             }, {
                 withCredentials: true,
                 headers: {
@@ -93,10 +108,12 @@ const ModalCriarInventario = ({ setFlushHook }) => {
             setOpen(false)
             setDados({
                 nomeItem: '',
-                status: '',
+                status: 'emEstoque',
                 etiqueta: '',
                 ondeEsta: '',
-                descricao: ''
+                descricao: '',
+                dataDeCompra: '',
+                tempoGarantia: '',
             })
             return
         } catch (error) {
@@ -109,26 +126,50 @@ const ModalCriarInventario = ({ setFlushHook }) => {
 
     return (
         <>
-            <Button onClick={handleClickOpen} variant='contained' sx={{ marginRight: '10px' }}>Inserir novo item</Button>
+            <Button onClick={handleClickOpen} variant='contained' sx={{ marginRight: '10px', borderRadius: '10px' }}>Inserir novo item</Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" fullWidth aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title">{'Insira o item no Inventário'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <FormGroup>
-                            <br />
-                            <TextField type='text' onChange={handleChangeDados} name='nomeItem' size='small' label='Qual o nome do item?' />
-                            <br />
-                            <TextField type='text' onChange={handleChangeDados} name='etiqueta' size='small' label='Qual a etiqueta do item?' />
-                            <br />
-                            <TextField type='text' onChange={handleChangeDados} name='ondeItem' size='small' label='Com quem/onde está o item?' />
-                            <br />
-                            <TextField type='text' onChange={handleChangeDados} name='descricao' placeholder='Placeholder' multiline size='small' label='Descreva o que o item possui?' />
+                            <TextField type='text' onChange={handleChangeDados} name='nomeItem' margin='dense' size='small' label='Nome do item' InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }} />
+                            <TextField type='text' onChange={handleChangeDados} name='etiqueta' margin='dense' size='small' label='Etiqueta do item' InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }} />
+                            <TextField type='text' onChange={handleChangeDados} name='ondeItem' margin='dense' size='small' label='Com quem/onde está o item?' InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }} />
+                            <TextField type='text' onChange={handleChangeDados} name='descricao' margin='dense' placeholder='Placeholder' multiline size='small' label='Descreva o que o item possui?' InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }} />
+                            <TextField type='date' onChange={handleChangeDados} name='dataDeCompra' margin='dense' size='small' label='Data de Compra' InputLabelProps={{
+                                shrink: true,
+                            }} InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }} />
+                            <TextField type='number' onChange={handleChangeDados} name='tempoGarantia' margin='dense' size='small' label='Garantia em Meses' InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }} />
                         </FormGroup>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Fechar</Button>
-                    <Button onClick={handleSave} autoFocus>Salvar</Button>
+                    <Button onClick={handleClose} color='error'>Fechar</Button>
+                    <Button onClick={handleSave} color='success' autoFocus>Salvar</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
