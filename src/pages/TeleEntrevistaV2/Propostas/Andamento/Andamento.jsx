@@ -17,8 +17,8 @@ import { Search } from "@mui/icons-material";
 
 const status = [
     'Ajustar',
-    'Enviado',
     'Não enviado',
+    'Enviado',
     'Agendado',
     'Concluído',
     'Cancelado',
@@ -70,7 +70,11 @@ const Andamento = () => {
             }}
             display={'flex'}
         >
-            <Box>
+            <Box
+                sx={{
+                    width: '200px',
+                }}
+            >
                 <Typography
                     variant="h6"
                     sx={{
@@ -94,6 +98,7 @@ const Andamento = () => {
                                 key={index}
                                 control={
                                     <Checkbox
+                                        size="small"
                                         checked={filtros.status.includes(s)}
                                         onChange={(e) => {
                                             if (e.target.checked) {
