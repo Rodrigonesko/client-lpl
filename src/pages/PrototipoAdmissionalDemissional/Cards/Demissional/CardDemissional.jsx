@@ -7,6 +7,8 @@ import { blue, green, grey, red, yellow } from "@mui/material/colors";
 import { filterTableDemi, findAcoesDemissao, setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 import TableObs from "./Components/TableObs";
+import TableData from "./Components/TableData";
+import TableStatus from "./Components/TableStatus";
 
 const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
 
@@ -51,46 +53,10 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
 
     const [openRow, setOpenRow] = useState(false)
 
-    const handleChangeStatus = async (_id, status, id) => {
-        const resultado = await setarStatus({
-            _id: _id, status: status, id: id, tipoExame: 'demissao'
-        })
-        setUser(resultado)
-        setFlushHook(true)
-        console.log(resultado)
-        console.log(_id, status, id)
-    }
-
-    // const ativarObs = async (_id, obs, id) => {
-    //     try {
-    //         const result = await updateObs({
-    //             _id: user._id, obs: obs, id: id, tipoExame: 'demissao'
-    //         });
-    //         setUser(result)
-    //         console.log(_id, obs, id);
-    //     } catch (error) {
-    //         console.error('Erro no Update das Observações:', error);
-    //     }
-    //     setFlushHook(true)
-    // }
-
-    const ativarData = async (_id, data, id) => {
-        try {
-            const result = await updateData({
-                _id: user._id, data: data, id: id, tipoExame: 'demissao'
-            });
-            setUser(result)
-            console.log(_id, data, id);
-        } catch (error) {
-            console.error('Erro no update da Data:', error);
-        }
-        setFlushHook(true)
-    }
-
     return (
         <>
             <TableRow key={user._id}>
-                <TableCell >{user.nomeCompleto ? (user.nomeCompleto): (user.name)}</TableCell>
+                <TableCell >{user.nomeCompleto ? (user.nomeCompleto) : (user.name)}</TableCell>
                 <TableCell >{user.email}</TableCell>
                 <TableCell >{user.dataAdmissao ? (moment(user.dataAdmissao).format('DD/MM/YYYY')) : ('')}</TableCell>
                 <TableCell >{user.atividadePrincipal}</TableCell>
@@ -138,46 +104,13 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 <TableCell>{item.fornecedor}</TableCell>
                                                 <TableCell>{
                                                     <TableObs item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
-                                                    // <TextField defaultValue={item.obs} type='text' label='Obs' onChange={(elemento) => ativarObs(user._id, elemento.target.value, item.id)} />
                                                 }</TableCell>
                                                 <TableCell>
-                                                    <FormControl sx={{ minWidth: 150 }} size='small'>
-                                                        <InputLabel id='Status'>Status</InputLabel>
-                                                        <Select
-                                                            value={item.status}
-                                                            labelId="Status"
-                                                            id='Status'
-                                                            label='Status'
-                                                            onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)}
-                                                            sx={{ borderRadius: '10px' }}
-                                                            InputLabelProps={{
-                                                                shrink: true,
-                                                            }}
-                                                        >
-                                                            <MenuItem value={'naoSeAplica'}>N/A</MenuItem>
-                                                            <MenuItem value={'pendente'}>PENDENTE</MenuItem>
-                                                            <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
-                                                            <MenuItem value={'concluido'}>CONCLUIDO</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
+                                                    <TableStatus item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
                                                 </TableCell>
-                                                <TableCell>{<TextField
-                                                    value={item.data}
-                                                    type='date'
-                                                    label='Data'
-                                                    size='small'
-                                                    onChange={(elemento) => ativarData(user._id, elemento.target.value, item.id)}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    InputProps={{
-                                                        style: {
-                                                            borderRadius: '10px'
-                                                        }
-                                                    }}
-                                                />
-                                                }
-                                                </TableCell>
+                                                <TableCell>{
+                                                    <TableData item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
+                                                }</TableCell>
                                             </TableRow>)
                                     })}
                                 </TableBody>

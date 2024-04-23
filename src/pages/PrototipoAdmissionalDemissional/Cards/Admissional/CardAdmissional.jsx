@@ -53,43 +53,6 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
 
     const [openRow, setOpenRow] = useState(false)
     const [prorrogacao, setProrrogacao] = useState(user.prorrogacao)
-    const [obs, setObs] = useState('')
-
-    // const handleChangeStatus = async (_id, status, id) => {
-    //     const resultado = await setarStatus({
-    //         _id: _id, status: status, id: id, tipoExame: 'admissao'
-    //     })
-    //     setUser(resultado)
-    //     setFlushHook(true)
-    //     console.log(resultado)
-    //     console.log(_id, status, id)
-    // }
-
-    // const ativarObs = async (_id, obs, id) => {
-    //     try {
-    //         const result = await updateObs({
-    //             _id: user._id, obs: obs, id: id, tipoExame: 'admissao'
-    //         });
-    //         setUser(result)
-    //         console.log(_id, obs, id);
-    //     } catch (error) {
-    //         console.error('Erro no Update das Observações:', error);
-    //     }
-    //     setFlushHook(true)
-    // }
-
-    // const ativarData = async (_id, data, id) => {
-    //     try {
-    //         const result = await updateData({
-    //             _id: user._id, data: data, id: id, tipoExame: 'admissao'
-    //         });
-    //         setUser(result)
-    //         console.log(_id, data, id);
-    //     } catch (error) {
-    //         console.error('Erro no update da Data:', error);
-    //     }
-    //     setFlushHook(true)
-    // }
 
     return (
         <>
@@ -153,53 +116,13 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                                 <TableCell>{item.fornecedor}</TableCell>
                                                 <TableCell>{
                                                     <TableObs item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
-                                                    // <TextField value={item.obs} size='small' type='text' label='Obs' onBlur={(e) => ativarObs(user._id, e.target.value, item.id)} 
-                                                    // InputLabelProps={{
-                                                    //     shrink: true,
-                                                    // }}
-                                                    // InputProps={{
-                                                    //     style: {
-                                                    //         borderRadius: '10px'
-                                                    //     }
-                                                    // }} />
                                                 }
                                                 </TableCell>
                                                 <TableCell>
                                                     <TableStatus item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
-                                                    {/* <FormControl sx={{ minWidth: 150 }} size='small'>
-                                                        <InputLabel id='Status'>Status</InputLabel>
-                                                        <Select
-                                                            value={item.status}
-                                                            labelId="Status"
-                                                            id='Status'
-                                                            label='Status'
-                                                            onChange={(elemento) => handleChangeStatus(user._id, elemento.target.value, item.id)}
-                                                            sx={{ borderRadius: '10px' }}
-                                                        >
-                                                            <MenuItem value={'naoSeAplica'}>N/A</MenuItem>
-                                                            <MenuItem value={'pendente'}>PENDENTE</MenuItem>
-                                                            <MenuItem value={'emAndamento'}>EM ANDAMENTO</MenuItem>
-                                                            <MenuItem value={'concluido'}>CONCLUIDO</MenuItem>
-                                                        </Select>
-                                                    </FormControl> */}
                                                 </TableCell>
                                                 <TableCell>{
                                                     <TableData item={item} user={user} setFlushHook={setFlushHook} setUser={setUser} />
-                                                    // <TextField
-                                                    //     value={item.data}
-                                                    //     type='date'
-                                                    //     margin='dense'
-                                                    //     size='small'
-                                                    //     label='Data'
-                                                    //     onChange={(e) => ativarData(user._id, e.target.value, item.id)}
-                                                    //     InputLabelProps={{
-                                                    //         shrink: true,
-                                                    //     }}
-                                                    //     InputProps={{
-                                                    //         style: {
-                                                    //             borderRadius: '10px'
-                                                    //         }
-                                                    //     }} />
                                                 }</TableCell>
                                             </TableRow>)
                                     })}
