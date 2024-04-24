@@ -92,6 +92,7 @@ const RsdTable = ({ mes }) => {
                         <Table
                             sx={{
                                 minWidth: 650,
+                                mb: 2
                             }}
                             size={dense ? 'small' : 'medium'}
                         >
@@ -111,13 +112,28 @@ const RsdTable = ({ mes }) => {
                                         Nome
                                     </TableCell>
                                     <TableCell>
-                                        Quantidade
+                                        Total
                                     </TableCell>
                                     <TableCell>
-                                        Quantidade de Indeferidos
+                                        Indeferidos
                                     </TableCell>
                                     <TableCell>
-                                        Quantidade de Cancelados
+                                        Cancelados
+                                    </TableCell>
+                                    <TableCell>
+                                        Aguardando Comprovante
+                                    </TableCell>
+                                    <TableCell>
+                                        Aguardando Retorno Contato
+                                    </TableCell>
+                                    <TableCell>
+                                        Comprovante Correto
+                                    </TableCell>
+                                    <TableCell>
+                                        Devolvido Amil
+                                    </TableCell>
+                                    <TableCell>
+                                        Pago pela Amil sem Comprovante
                                     </TableCell>
                                     <TableCell>
                                         Produção
@@ -161,6 +177,31 @@ const RsdTable = ({ mes }) => {
                                             <TableCell>
                                                 <Chip
                                                     label={item.cancelados}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.aguardandoComprovante}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.aguardandoRetornoContato}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.comprovanteCorreto}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.devolvidoAmil}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.pagoPelaAmilSemComprovante}
                                                 />
                                             </TableCell>
                                             <TableCell>
