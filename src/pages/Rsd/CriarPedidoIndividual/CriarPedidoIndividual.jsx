@@ -59,10 +59,10 @@ const CriarPedidoIndividual = () => {
     const criarPedido = async e => {
         try {
 
-            if (protocolo.length === 0 || mo.length === 0) {
+            if (protocolo.length === 0 || mo.length === 0 || fila.length === 0) {
 
                 setError(true)
-                setMsg('Marca ótica e Protocolo são obrigatórios')
+                setMsg('Marca ótica, Protocolo e Fila são obrigatórios')
                 setOpen(true)
                 return
             }
