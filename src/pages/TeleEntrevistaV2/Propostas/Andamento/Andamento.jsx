@@ -1,7 +1,12 @@
 import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Pagination, Radio, RadioGroup, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getPropostaByStatus } from "../../../../_services/teleEntrevistaV2.service";
 import { Search } from "@mui/icons-material";
+import TabelaRn from "./TabelaRn";
+import TabelaUrgenciaEmergencia from "./TabelaUrgenciaEmergencia";
+import { PropostasContext } from "../context";
+import FiltrosRn from "./FiltrosRn";
+import FiltrosUrgenciaEmergencia from "./FIltrosUrgenciaEmergencia";
 
 // export type FilterProposta = {
 //     status: string[];
@@ -26,7 +31,9 @@ const status = [
 
 const Andamento = () => {
 
-    const [propostas, setPropostas] = useState([]);
+    const { propostas, setPropostas } = useContext(PropostasContext)
+
+    // const [propostas, setPropostas] = useState([]);
     const [pesquisa, setPesquisa] = useState('');
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
@@ -42,6 +49,7 @@ const Andamento = () => {
         idade: '',
         pesquisa: '',
     });
+    const [frente, setFrente] = useState('Tele Entrevista');
 
     useEffect(() => {
         const fetch = async () => {
@@ -58,7 +66,6 @@ const Andamento = () => {
                 console.log(error);
                 setLoading(false);
             }
-
         }
         fetch();
     }, [page, limit, pesquisa])
@@ -89,37 +96,76 @@ const Andamento = () => {
                         fontWeight: 'bold',
                     }}
                 >
-                    Status
+                    Frente
                 </Typography>
-                <FormGroup>
-                    {
-                        status.map((s, index) => (
-                            <FormControlLabel
-                                key={index}
-                                control={
-                                    <Checkbox
-                                        size="small"
-                                        checked={filtros.status.includes(s)}
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setFiltros({
-                                                    ...filtros,
-                                                    status: [...filtros.status, s]
-                                                })
-                                            } else {
-                                                setFiltros({
-                                                    ...filtros,
-                                                    status: filtros.status.filter(f => f !== s)
-                                                })
+                <RadioGroup
+                    value={frente}
+                    onChange={(e) => setFrente(e.target.value)}
+                >
+                    <FormControlLabel value='Tele Entrevista' control={<Radio size="small" />} label='Tele Entrevista'
+                        sx={{
+                            fontWeight: frente === 'Tele Entrevista' ? 'bold' : 'normal',
+                            color: frente === 'Tele Entrevista' ? 'black' : 'gray',
+                        }}
+                    />
+                    <FormControlLabel value='RN' control={<Radio size="small" />} label='RN'
+                        sx={{
+                            fontWeight: frente === 'RN' ? 'bold' : 'normal',
+                            color: frente === 'RN' ? 'black' : 'gray',
+                        }}
+                    />
+                    <FormControlLabel value='UE' control={<Radio size="small" />} label='UE'
+                        sx={{
+                            fontWeight: frente === 'UE' ? 'bold' : 'normal',
+                            color: frente === 'UE' ? 'black' : 'gray',
+                        }}
+                    />
+                </RadioGroup>
+                {
+                    frente === 'Tele Entrevista' && (
+                        <>
+                            <Typography
+                                variant="subtitle1"
+                                sx={{
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Status
+                            </Typography>
+                            <FormGroup>
+                                {
+                                    status.map((s, index) => (
+                                        <FormControlLabel
+                                            key={index}
+                                            control={
+                                                <Checkbox
+                                                    size="small"
+                                                    checked={filtros.status.includes(s)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setFiltros({
+                                                                ...filtros,
+                                                                status: [...filtros.status, s]
+                                                            })
+                                                        } else {
+                                                            setFiltros({
+                                                                ...filtros,
+                                                                status: filtros.status.filter(f => f !== s)
+                                                            })
+                                                        }
+                                                    }}
+                                                />
                                             }
-                                        }}
-                                    />
+                                            label={s}
+                                        />
+                                    ))
                                 }
-                                label={s}
-                            />
-                        ))
-                    }
-                </FormGroup>
+                            </FormGroup>
+                        </>
+                    )
+                }
+                {frente === 'RN' && <FiltrosRn />}
+                {frente === 'UE' && <FiltrosUrgenciaEmergencia />}
             </Box>
             <Box
                 sx={{
@@ -175,44 +221,50 @@ const Andamento = () => {
                     />
                 </Box>
                 <TableContainer>
-                    <Table
-                        size="small"
-                    >
-                        <TableHead
-                            sx={{
-                                backgroundColor: '#f5f5f5'
-                            }}
-                        >
-                            <TableRow>
-                                <TableCell>
-                                    Proposta
-                                </TableCell>
-                                <TableCell>
-                                    Nome
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                !loading ? propostas.map((proposta, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>
-                                            {proposta.proposta}
-                                        </TableCell>
-                                        <TableCell>
-                                            {proposta.beneficiario.nome}
-                                        </TableCell>
-                                    </TableRow>
-                                )) : (
+                    {
+                        frente === 'Tele Entrevista' && (
+                            <Table
+                                size="small"
+                            >
+                                <TableHead
+                                    sx={{
+                                        backgroundColor: '#f5f5f5'
+                                    }}
+                                >
                                     <TableRow>
-                                        <TableCell colSpan={1}>
-                                            Carregando...
+                                        <TableCell>
+                                            Proposta
+                                        </TableCell>
+                                        <TableCell>
+                                            Nome
                                         </TableCell>
                                     </TableRow>
-                                )
-                            }
-                        </TableBody>
-                    </Table>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        !loading ? propostas.map((proposta, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell>
+                                                    {proposta.proposta}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {proposta.beneficiario.nome}
+                                                </TableCell>
+                                            </TableRow>
+                                        )) : (
+                                            <TableRow>
+                                                <TableCell colSpan={1}>
+                                                    Carregando...
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    }
+                                </TableBody>
+                            </Table>
+                        )
+                    }
+                    {frente === 'RN' && <TabelaRn />}
+                    {frente === 'UE' && <TabelaUrgenciaEmergencia />}
                 </TableContainer>
             </Box>
         </Box>

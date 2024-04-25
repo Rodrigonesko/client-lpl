@@ -127,8 +127,16 @@ export const uploadRn = async (data) => {
     return await new ApiCall('/tele-entrevista/rn/upload', URL_API).post(data)
 }
 
+export const getRnByFilter = async (data) => {
+    return await new ApiCall('/tele-entrevista/rn/filtro', URL_API).post(data)
+}
+
 // UE
 
 export const uploadUe = async (data) => {
     return await new ApiCall('/tele-entrevista/urgencia-emergencia/upload', URL_API).post(data)
+}
+
+export const getUeByFilter = async (data) => {
+    return await new ApiCall('/tele-entrevista/urgencia-emergencia/filtro', URL_API).post(data)
 }
