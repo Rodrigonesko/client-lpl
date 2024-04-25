@@ -1,145 +1,44 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useParams } from "react-router-dom"
-import { getCids, getPropostaById, getQuestionarioByName } from "../../../_services/teleEntrevistaV2.service"
-import { Box, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Checkbox } from "@mui/material"
-import moment from "moment"
-
-const BoxInfo = ({ label, value }) => {
-    return (
-        <Box>
-            <Typography variant="body2">
-                {label}
-            </Typography>
-            <Typography variant="body1">
-                {value}
-            </Typography>
-        </Box>
-    )
-}
-
-const Pergunta = ({ pergunta, index, setRespostas, respostas }) => {
-
-    const [resposta, setResposta] = useState('')
-    // const [open, setOpen] = useState(false)
-    // const [observacao, setObservacao] = useState('')
-
-    return (
-        <Box
-            mt={2}
-            key={index}
-        >
-            <Typography variant="body1">
-                {index + 1}. {pergunta.texto}
-            </Typography>
-            {
-                pergunta.tipo === 'Escolha' ? (
-                    <FormControl>
-                        <RadioGroup
-                            row
-                            value={resposta}
-                            onChange={(e) => setResposta(e.target.value)}
-                        >
-                            <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
-                            <FormControlLabel value="Não" control={<Radio />} label="Não" />
-                        </RadioGroup>
-                    </FormControl>
-                ) : (
-                    <TextField
-                        fullWidth
-                        multiline
-                        variant="outlined"
-                        size="small"
-                        value={resposta}
-                        onChange={(e) => setResposta(e.target.value)}
-                    />
-                )
-            }
-            {
-                pergunta.subPerguntas.length > 0 && (
-                    pergunta.subPerguntas.filter(pergunta => {
-                        return pergunta.condicao === resposta
-                    }).map((subPergunta, index) => (
-                        <Box key={index}
-                            mt={2}
-                        >
-                            <Typography variant="body1">
-                                {subPergunta.texto}
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                multiline
-                                variant="outlined"
-                                size="small"
-                            />
-                        </Box>
-                    ))
-                )
-            }
-            {
-                pergunta.tipo === 'Escolha' && (
-                    <TextField
-                        fullWidth
-                        multiline
-                        variant="outlined"
-                        size="small"
-                        placeholder="Observações"
-                    />
-                )
-            }
-            <Divider sx={{ m: 1 }} />
-        </Box>
-    )
-}
+import { getCids, getPropostaById, getQuestionarioByName, concluirProposta } from "../../../_services/teleEntrevistaV2.service"
+import { Box, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography, Checkbox, Chip, Button, Alert } from "@mui/material"
+import Toast from "../../../components/Toast/Toast"
+import ModalInfoAdicional from "./ModalInfoAdicional"
+import Pergunta from "./Pergunta"
+import { downloadPdf } from "../pdf/downloadPdf"
+import InformacoesPessoais from "./InformacoesPessoais"
+import Apresentacao from "./Apresentacao"
+import { FormContext } from "./context"
 
 const FormularioV2 = () => {
 
     const { id } = useParams()
 
-    const [proposta, setProposta] = useState({
-        beneficiario: {
-            nome: '',
-            sexo: '',
-            cpf: '',
-            telefone: '',
-            dataNascimento: ''
-        },
-        proposta: ''
-    })
+    const { proposta, setProposta, flushHook, tea } = useContext(FormContext)
+
     const [questionario, setQuestionario] = useState({
         nome: '',
         perguntas: []
     })
-    const [respostas, setRespostas] = useState([
-        {
-            pergunta: '',
-            resposta: '',
-            categoria: '',
-            observacao: '',
-            subRespostas: [{
-                pergunta: '',
-                resposta: '',
-            }]
-        }
-    ])
-    // const [divergencia, setDivergencia] = useState('')
+    const [respostas, setRespostas] = useState([])
+    const [identificaDivergencia, setIdentificaDivergencia] = useState(false)
     const [cids, setCids] = useState([])
-    const [cidsSelecionadas, setCidsSelecionadas] = useState([{
-        codigo: '',
-        descricao: '',
-    }])
+    const [cidsSelecionadas, setCidsSelecionadas] = useState([])
+    const [justificativaDivergencia, setJustificativaDivergencia] = useState('')
+    const [openToast, setOpenToast] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('success')
+    const [imc, setImc] = useState(0)
+    const [autismo, setAutismo] = useState(false)
 
-    const handleSelecionarCids = async (cid) => {
+    const handleSelecionarCids = async (checked, cid) => {
         try {
-            console.log(cid);
-            let auxSelecionadas = [...cidsSelecionadas]
-            const index = auxSelecionadas.findIndex(item => item._id === cid._id);
-            if (index !== -1) {
-                auxSelecionadas.splice(index, 1);
+            if (checked) {
+                setCidsSelecionadas([...cidsSelecionadas, cid])
             } else {
-                auxSelecionadas.push(cid)
+                setCidsSelecionadas(cidsSelecionadas.filter(item => item !== cid))
             }
-            setCidsSelecionadas(auxSelecionadas)
         } catch (error) {
             console.log(error);
         }
@@ -150,7 +49,6 @@ const FormularioV2 = () => {
             if (pesquisa.length > 2) {
                 const cid = await getCids(pesquisa)
                 setCids(cid)
-                console.log(cid);
             } else {
                 setCids([])
             }
@@ -159,45 +57,119 @@ const FormularioV2 = () => {
         }
     }
 
+    const handleEnviarQuestionario = async () => {
+        try {
+            for (const resposta of respostas) {
+                if (resposta.resposta === '') {
+                    console.log(resposta);
+                    setMessage(`Responda a pergunta: ${resposta.pergunta}`)
+                    setSeverity('warning')
+                    setOpenToast(true)
+                    return
+                }
+            }
+
+            if (identificaDivergencia && justificativaDivergencia === '') {
+                setMessage('Justifique a divergência')
+                setSeverity('warning')
+                setOpenToast(true)
+                return
+            }
+
+            if (identificaDivergencia && cidsSelecionadas.length === 0) {
+                setMessage('Selecione pelo menos um CID')
+                setSeverity('warning')
+                setOpenToast(true)
+                return
+            }
+
+
+            setMessage('Enviando questionário')
+            setSeverity('info')
+            setOpenToast(true)
+
+            console.log(id);
+
+            const result = await concluirProposta({
+                id,
+                data: {
+                    respostas,
+                    divergenciaQuestionario: identificaDivergencia,
+                    justificativaDivergencia,
+                    cids: cidsSelecionadas,
+                    tea
+                }
+            })
+
+            downloadPdf(result.respostas, result.proposta)
+
+            setMessage('Questionário enviado com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+
+
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao enviar questionário')
+            setSeverity('error')
+            setOpenToast(true)
+        }
+    }
+
     useEffect(() => {
         const fetch = async () => {
             try {
                 const response = await getPropostaById(id)
                 setProposta(response)
-                if (response.beneficiario.sexo === 'F') {
+                if (response.beneficiario.sexo === 'F' && response.beneficiario.idade > 8) {
                     const questionario = await getQuestionarioByName('Adulto - Feminino')
                     console.log(questionario);
                     setQuestionario(questionario)
                 }
+                if (response.beneficiario.sexo === 'M' && response.beneficiario.idade > 8) {
+                    const questionario = await getQuestionarioByName('Adulto - Masculino')
+                    setQuestionario(questionario || {
+                        nome: '',
+                        perguntas: []
+                    })
+                }
+                if (response.beneficiario.idade <= 8 && response.beneficiario.idade > 2) {
+                    const questionario = await getQuestionarioByName('Criança')
+                    console.log(questionario);
+                    setQuestionario(questionario || {
+                        nome: '',
+                        perguntas: []
+                    })
+                }
+                if (response.beneficiario.idade <= 2) {
+                    const questionario = await getQuestionarioByName('Bebê')
+                    console.log(questionario);
+                    setQuestionario(questionario || {
+                        nome: '',
+                        perguntas: []
+                    })
+                }
             } catch (error) {
                 console.log(error)
+                setMessage('Erro ao buscar proposta')
+                setSeverity('error')
+                setOpenToast(true)
             }
         }
         fetch()
-    }, [id])
+    }, [id, flushHook])
 
     return (
         <Sidebar>
             <Container>
-                <Box>
-                    <Typography variant="h6">
-                        Informações Pessoais
-                    </Typography>
-                    <Box
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        flexWrap="wrap"
-                        gap={2}
-                    >
-                        <BoxInfo label="Nome" value={proposta.beneficiario.nome} />
-                        <BoxInfo label="Sexo" value={proposta.beneficiario.sexo} />
-                        <BoxInfo label="CPF" value={proposta.beneficiario.cpf} />
-                        <BoxInfo label="Proposta" value={proposta.proposta} />
-                        <BoxInfo label="Telefone" value={proposta.beneficiario.telefone} />
-                        <BoxInfo label="Data de Nascimento" value={moment(proposta.beneficiario.dataNascimento).format('DD/MM/YYYY')} />
-                    </Box>
-                </Box>
+                <Apresentacao />
+                <InformacoesPessoais
+                    data={proposta}
+                    key={proposta._id}
+                />
+                <ModalInfoAdicional
+                    infoAdicional={proposta.infoAdicional || {}}
+                />
                 <Box>
                     <Typography
                         variant="h5"
@@ -211,7 +183,17 @@ const FormularioV2 = () => {
                         }).filter(pergunta => {
                             return pergunta.pergunta.categoria === 'Questionário Médico'
                         }).map((pergunta, index) => (
-                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} />
+                            <Pergunta
+                                key={index}
+                                pergunta={pergunta.pergunta}
+                                index={index}
+                                respostas={respostas}
+                                setRespostas={setRespostas}
+                                setImc={setImc}
+                                setAutismo={setAutismo}
+                                autismo={autismo}
+                                grupoCarencia={proposta.infoAdicional.grupoCarencia}
+                            />
                         ))
                     }
                 </Box>
@@ -234,6 +216,9 @@ const FormularioV2 = () => {
                                 index={index}
                                 setRespostas={setRespostas}
                                 respostas={respostas}
+                                setImc={setImc}
+                                setAutismo={setAutismo}
+                                autismo={autismo}
                             />
                         ))
                     }
@@ -243,63 +228,138 @@ const FormularioV2 = () => {
                         <FormLabel>
                             Identifica Divergência?
                         </FormLabel>
-                        <RadioGroup>
-                            <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
-                            <FormControlLabel value="Não" control={<Radio />} label="Não" />
+                        <RadioGroup
+                            value={identificaDivergencia}
+                            onChange={(e) => {
+                                setIdentificaDivergencia(e.target.value === 'true' ? true : false)
+                            }}
+                        >
+                            <FormControlLabel value={true} control={<Radio />} label="Sim" />
+                            <FormControlLabel value={false} control={<Radio />} label="Não" />
                         </RadioGroup>
                     </FormControl>
                 </Box>
-                <Box>
-                    <Typography>
-                        Identificação de divergências
-                    </Typography>
-                    <Box>
-                        <Typography>
-                            Por que o beneficiário não informou na Declaração de Saúde essas patologias?
+                {
+                    identificaDivergencia && <Box>
+                        <Typography
+                            variant="h5"
+                            mt={2}
+                        >
+                            Identificação de divergências
                         </Typography>
-                        <TextField
-                            fullWidth
-                            multiline
-                            variant="outlined"
-                            size="small"
-                        />
+                        <Alert
+                            severity="error"
+                            variant="filled"
+                        >
+                            <Typography>
+                                Notamos que houve divergência para as patologias: A, B, C (listar patologias) em relação ao preenchimento da DS. Para estas, iremos imputar CPT para ficar de acordo com as informações concedidas pelo Senhor(a). As demais coberturas permanecem inalteradas, caso haja necessidade de maior esclarecimentos procure seu corretor.
+                            </Typography>
+                            <Typography>
+                                * Cobertura Parcial Temporária (CPT) aquela que admite, por um período ininterrupto de até 24 meses, a partir da data da contratação ou adesão ao plano privado de assistência à saúde, a suspensão da cobertura de Procedimentos de Alta Complexidade (PAC), leitos de alta tecnologia e procedimentos cirúrgicos, desde que relacionados exclusivamente às doenças ou lesões preexistentes declaradas pelo beneficiário ou seu representante legal. (para os CIDs declarados, não para todo tipo de tratamento)
+                            </Typography>
+                        </Alert>
+                        <Box
+                            mt={2}
+                        >
+                            <Typography>
+                                Por que o beneficiário não informou na Declaração de Saúde essas patologias?
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                multiline
+                                variant="outlined"
+                                size="small"
+                                value={justificativaDivergencia}
+                                onChange={(e) => setJustificativaDivergencia(e.target.value)}
+                            />
+                        </Box>
+                        <Box
+                            mt={2}
+                            mb={2}
+                        >
+                            <Box>
+                                {
+                                    cidsSelecionadas.map((item, index) => {
+                                        return (
+                                            <Chip
+                                                key={index}
+                                                label={`${item.codigo} - ${item.descricao}`}
+                                                onDelete={() => handleSelecionarCids(false, item)}
+                                            />
+                                        )
+                                    })
+                                }
+                            </Box>
+                            <Typography>
+                                Cids:
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => handleVerificarCid(e.target.value)}
+                            />
+                            {
+                                cids.map((item) => {
+                                    return (
+                                        <FormControl key={item._id} sx={{ display: 'flex', flexDirection: 'column' }} >
+                                            <FormControlLabel
+                                                value={item}
+                                                onChange={e => { handleSelecionarCids(e.target.checked, item) }}
+                                                control={<Checkbox />}
+                                                label={`${item.codigo} - ${item.descricao}`}
+                                                checked={cidsSelecionadas.includes(item)}
+                                            />
+                                        </FormControl>
+                                    )
+                                })}
+                        </Box>
                     </Box>
-                    <Box>
-                        <Typography>
-                            Cids:
-                        </Typography>
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => handleVerificarCid(e.target.value)}
-                        />
-                        {
-                            cids.map((item) => {
-                                return (
-                                    <FormControl sx={{ display: 'flex', flexDirection: 'column' }} >
-                                        <FormControlLabel value={item} onChange={() => { handleSelecionarCids(item) }} control={<Checkbox />} label={`${item.codigo} - ${item.descricao}`} />
-                                    </FormControl>
-                                )
-                            })}
-                        <Typography>
-                            Cids selecionadas:
-                        </Typography>
-                        {cidsSelecionadas.map((item) => {
-                            if (item && item.codigo && item.descricao) {
-                                return (
-                                    <>
-                                        <Typography>
-                                            {item.codigo} - {item.descricao}
-                                        </Typography>
-                                    </>
-                                )
-                            } else {
-                                return null
-                            }
-                        })}
-                    </Box>
+                }
+                {
+                    !identificaDivergencia && imc > 30 && (
+                        <Alert
+                            severity="error"
+                            sx={{ mt: 2 }}
+                            variant="filled"
+                        >
+                            <Typography>
+                                De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso OBESIDADE {
+                                    imc < 34.9 ? 'I' : imc < 39.9 ? 'II' : 'III'
+                                } com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.
+                            </Typography>
+                        </Alert>
+                    )
+                }
+                {
+                    autismo && (
+                        <Alert
+                            severity="error"
+                            sx={{ mt: 2 }}
+                            variant="filled"
+                        >
+                            Agradecemos pelas informações fornecidas e, apenas para fins de esclarecimento, informamos que o serviço de Acompanhante Terapêutico Escolar não possui cobertura pela Operadora de Saúde, visto o disposto na Lei de nº 14.454/2022 e o parecer da Agência Nacional de Saúde Suplementar 25/2022, que é nosso órgão regulador, que dispõe sobre a não cobertura em razão da falta de eficácia científica e técnica e de recomendação dos órgãos competentes.
+                        </Alert>
+                    )
+                }
+                <Box
+                    mb={4}
+                    mt={2}
+                >
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleEnviarQuestionario}
+                    >
+                        Enviar
+                    </Button>
                 </Box>
+                <Toast
+                    open={openToast}
+                    message={message}
+                    severity={severity}
+                    onClose={() => setOpenToast(false)}
+                />
             </Container>
         </Sidebar>
     )

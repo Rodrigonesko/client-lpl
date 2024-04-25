@@ -4,15 +4,20 @@ import { useState } from "react"
 import { FaFileExcel } from "react-icons/fa"
 import { getRelatorio } from "../../../_services/sindicancia.service"
 import moment from "moment"
+import Toast from "../../../components/Toast/Toast"
 
-const ModalRelatorio = ({ statusList }) => {
+const ModalRelatorio = ({ statusList, areaEmpresaList }) => {
 
     const [open, setOpen] = useState(false)
     const [dataInicio, setDataInicio] = useState('')
     const [dataFim, setDataFim] = useState('')
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState(0)
+    const [areaEmpresa, setAreaEmpresa] = useState(0)
     const [agenda, setAgenda] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('success')
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -25,84 +30,106 @@ const ModalRelatorio = ({ statusList }) => {
     const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault()
-        const result = await getRelatorio({ dataInicio, dataFim, status })
-        let xls = '\ufeff'
-        xls += "<table border='1'>"
-        xls += "<thead><tr>"
-        xls += "<th>Código</th>"
-        xls += "<th>Cliente</th>"
-        xls += "<th>Nome Investigado</th>"
-        xls += "<th>CPF / CNPJ</th>"
-        xls += "<th>Serviço</th>"
-        xls += "<th>QTD Beneficiarios</th>"
-        xls += "<th>QTD Prestadores</th>"
-        xls += "<th>Data Criação Demanda</th>"
-        xls += "<th>Data Iniciou Execução</th>"
-        xls += "<th>Data Finalização Sistema</th>"
-        xls += "<th>Data Finalização</th>"
-        xls += "<th>Justificativa</th>"
-        xls += "<th>Valor</th>"
-        xls += "<th>Período</th>"
-        xls += "<th>Status</th>"
-        xls += "<th>Analista Demandante</th>"
-        xls += "<th>Analista Responsável</th>"
-        xls += "<th>Analista Executor</th>"
-        xls += "<th>Complemento</th>"
-        xls += "<th>Data Complemento</th>"
-        xls += "<th>Motivo</th>"
-        {
-            agenda && (xls += "<th>Agenda</th>")
-        }
-        result[0].irregularidadesObj.forEach((item) => {
-            xls += "<th>" + item.nome + "</th>"
-        })
-        xls += "</tr></thead>"
-        xls += "<tbody>"
-
-        result.forEach((item) => {
-            xls += "<tr>"
-            xls += `<td>${item.codigo || ''}</td>`
-            xls += `<td>${item.area_empresa_nome || ''}</td>`
-            xls += `<td>${item.nome || ''}</td>`
-            xls += `<td>${item.cpf_cnpj || ''}</td>`
-            xls += `<td>${item.tipo_servico_nome || ''}</td>`
-            xls += `<td>${item.num_beneficiarios || ''}</td>`
-            xls += `<td>${item.num_prestadores || ''}</td>`
-            xls += `<td>${moment(item.data_demanda).format('DD/MM/YYYY') || ''}</td>`
-            xls += `<td>${item.data_criacao_pacote ? moment(item.data_criacao_pacote).format('DD/MM/YYYY') : ''}</td>`
-            xls += `<td>${item.data_finalizacao_sistema ? moment(item.data_finalizacao_sistema).format('DD/MM/YYYY') : ''}</td>`
-            xls += `<td>${item.data_finalizacao ? moment(item.data_finalizacao).format('DD/MM/YYYY') : ''}</td>`
-            xls += `<td>${item.justificativa_finalizacao || ''}</td>`
-            xls += `<td>${item.valor || ''}</td>`
-            xls += `<td>${item.periodo || ''}</td>`
-            xls += `<td>${item.status_nome || ''}</td>`
-            xls += `<td>${item.usuario_criador_nome || ''}</td>`
-            xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
-            xls += `<td>${item.usuario_executor_nome || ''}</td>`
-            xls += `<td>${item.complementacao ? 'Sim' : 'Não'}</td>`
-            xls += `<td>${(item.data_complementacao && item.data_complementacao !== 'null') ? moment(item.data_complementacao).format('DD/MM/YYYY') : ''}</td>`
-            xls += `<td>${(item.motivo && item.motivo !== 'null') || ''}</td>`
+        console.log(areaEmpresa);
+        try {
+            const result = await getRelatorio({ dataInicio, dataFim, status, areaEmpresa })
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Código</th>"
+            xls += "<th>Cliente</th>"
+            xls += "<th>Nome Investigado</th>"
+            xls += "<th>CPF / CNPJ</th>"
+            xls += "<th>Serviço</th>"
+            xls += "<th>QTD Beneficiarios</th>"
+            xls += "<th>QTD Prestadores</th>"
+            xls += "<th>Data Criação Demanda</th>"
+            xls += "<th>Data Iniciou Execução</th>"
+            xls += "<th>Data Finalização Sistema</th>"
+            xls += "<th>Data Finalização</th>"
+            xls += "<th>Justificativa</th>"
+            xls += "<th>Valor</th>"
+            xls += "<th>Período</th>"
+            xls += "<th>Status</th>"
+            xls += "<th>Analista Demandante</th>"
+            xls += "<th>Analista Responsável</th>"
+            xls += "<th>Analista Executor</th>"
+            xls += "<th>Complemento</th>"
+            xls += "<th>Data Complemento</th>"
+            xls += "<th>Motivo</th>"
             {
-                agenda && (xls += `<td>${item.observacoes !== 'null' ? item.observacoes.map(observacao => {
-                    return `${observacao} |\n`
-                }) : ''}</td>`)
+                agenda && (xls += "<th>Agenda</th>")
             }
-            item.irregularidadesObj.forEach((irregularidade) => {
-                xls += `<td>${irregularidade.value || ''}</td>`
+            xls += "<th>Data Previa</th>"
+            xls += "<th>Data Final Entrega</th>"
+            xls += "<th>Prévida enviada</th>"
+            xls += "<th>Solicitante</th>"
+            result[0].irregularidadesObj.forEach((item) => {
+                xls += "<th>" + item.nome + "</th>"
             })
-            xls += "</tr>"
-        })
+            xls += "</tr></thead>"
+            xls += "<tbody>"
 
-        xls += "</tbody>"
-        xls += "</table>"
+            result.forEach((item) => {
+                xls += "<tr>"
+                xls += `<td>${item.codigo || ''}</td>`
+                xls += `<td>${item.area_empresa_nome || ''}</td>`
+                xls += `<td>${item.nome || ''}</td>`
+                xls += `<td>${item.cpf_cnpj || ''}</td>`
+                xls += `<td>${item.tipo_servico_nome || ''}</td>`
+                xls += `<td>${item.num_beneficiarios || ''}</td>`
+                xls += `<td>${item.num_prestadores || ''}</td>`
+                xls += `<td>${moment(item.data_demanda).format('DD/MM/YYYY') || ''}</td>`
+                xls += `<td>${item.data_criacao_pacote ? moment(item.data_criacao_pacote).format('DD/MM/YYYY') : ''}</td>`
+                xls += `<td>${item.data_finalizacao_sistema ? moment(item.data_finalizacao_sistema).format('DD/MM/YYYY') : ''}</td>`
+                xls += `<td>${item.data_finalizacao ? moment(item.data_finalizacao).format('DD/MM/YYYY') : ''}</td>`
+                xls += `<td>${item.justificativa_finalizacao || ''}</td>`
+                xls += `<td>${item.valor || ''}</td>`
+                xls += `<td>${item.periodo || ''}</td>`
+                xls += `<td>${item.status_nome || ''}</td>`
+                xls += `<td>${item.usuario_criador_nome || ''}</td>`
+                xls += `<td>${item.usuario_distribuicao_nome || ''}</td>`
+                xls += `<td>${item.usuario_executor_nome || ''}</td>`
+                xls += `<td>${item.complementacao ? 'Sim' : 'Não'}</td>`
+                xls += `<td>${(item.data_complementacao && item.data_complementacao !== 'null') ? moment(item.data_complementacao).format('DD/MM/YYYY') : ''}</td>`
+                xls += `<td>${(item.motivo && item.motivo !== 'null') || ''}</td>`
+                {
+                    agenda && (xls += `<td>${item.observacoes !== 'null' ? item.observacoes.map(observacao => {
+                        return `${observacao} |\n`
+                    }) : ''}</td>`)
+                }
+                xls += `<td>${item.data_previa ? moment(item.data_previa).format('DD/MM/YYYY') : ''}</td>`
+                xls += `<td>${item.data_final_entrega ? moment(item.data_final_entrega).format('DD/MM/YYYY') : ''}</td>`
+                xls += `<td>${item.previa_enviada ? 'Sim' : 'Não'}</td>`
+                xls += `<td>${item.analista_solicitante || ''}</td>`
+                item.irregularidadesObj.forEach((irregularidade) => {
+                    xls += `<td>${irregularidade.value || ''}</td>`
+                })
+                xls += "</tr>"
+            })
 
-        const blob = new Blob([xls], { type: 'application/vnd.ms-excel' })
-        const link = document.createElement('a')
-        link.href = window.URL.createObjectURL(blob)
-        link.download = 'relatorio demandas.xls'
-        link.click()
+            xls += "</tbody>"
+            xls += "</table>"
 
-        setLoading(false)
+            const blob = new Blob([xls], { type: 'application/vnd.ms-excel' })
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = 'relatorio demandas.xls'
+            link.click()
+
+            setSeverity('success')
+            setMessage('Relatório gerado com sucesso')
+            setOpenToast(true)
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setSeverity('error')
+            setMessage('Erro ao gerar relatório')
+            setOpenToast(true)
+            setLoading(false)
+        }
+
     }
 
     return (
@@ -133,7 +160,9 @@ const ModalRelatorio = ({ statusList }) => {
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        padding: '20px'
+                        flexDirection: 'column',
+                        padding: '20px',
+                        gap: '20px'
                     }}
                 >
                     <FormControl
@@ -152,6 +181,26 @@ const ModalRelatorio = ({ statusList }) => {
                             {
                                 statusList.map((item) => (
                                     <MenuItem key={item.id} value={item.id}>{item.nome}</MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
+                    <FormControl
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                    >
+                        <InputLabel>Área Empresa</InputLabel>
+                        <Select
+                            label="Área Empresa"
+                            size="small"
+                            value={areaEmpresa}
+                            onChange={(e) => setAreaEmpresa(e.target.value)}
+                        >
+                            <MenuItem value={0}>Todos</MenuItem>
+                            {
+                                areaEmpresaList.map((item) => (
+                                    <MenuItem key={item.id[0]} value={item.id[0]}>{item.nome}</MenuItem>
                                 ))
                             }
                         </Select>
@@ -255,6 +304,12 @@ const ModalRelatorio = ({ statusList }) => {
                     </Box>
                 </Box>
             </Dialog>
+            <Toast
+                open={openToast}
+                message={message}
+                severity={severity}
+                onClose={() => setOpenToast(false)}
+            />
         </>
     )
 }

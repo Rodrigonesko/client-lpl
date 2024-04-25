@@ -1,9 +1,9 @@
-import { Add, ArrowForward, Close, Delete, Expand, ExpandMoreOutlined } from "@mui/icons-material";
+import { Add, ArrowForward, CheckBox, Close, Delete, Expand, ExpandMoreOutlined, Save } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, CircularProgress, Drawer, FormControlLabel, FormGroup, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useContext, useState } from "react";
 import { BiCollapse } from "react-icons/bi";
-import { createBeneficiario, createDatasBradesco, createIrregularidade, createPrestador, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
+import { alterarPreviaEnviadaBradesco, createBeneficiario, createDatasBradesco, createIrregularidade, createPrestador, createSolicitante, deleteBeneficiario, deleteIrregularidade, deletePrestador, getBeneficiarios, getIrregularidade, getPrestadores, getTipoIrregularidade } from "../../../_services/sindicancia.service";
 import Toast from "../../../components/Toast/Toast";
 import Agenda from "./Agenda";
 import ValueInput from "./ValueInput";
@@ -155,18 +155,14 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
 
     const handleGerarDatas = async () => {
         try {
-
             const result = await createDatasBradesco({
                 id: demanda.id
             })
             setMsg('Datas geradas com sucesso');
             setSeverity('success');
             setOpenToast(true);
-
             setDataPrevia(result.result.data_previa);
             setDataFinalEntrega(result.result.data_final_entrega);
-
-
         } catch (error) {
             setMsg('Erro ao gerar datas', error);
             setSeverity('error');
@@ -222,6 +218,44 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
 
                     Detalhes da Demanda {demanda.codigo}
                 </Typography>
+                <Box
+                    sx={{
+                        m: 2,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: 2
+                    }}
+                >
+                    <TextField
+                        label="Solicitante"
+                        value={demanda.analista_solicitante}
+                        fullWidth
+                        onChange={(e) => setDemanda({ ...demanda, analista_solicitante: e.target.value })}
+                        size="small"
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={async () => {
+                            try {
+                                await createSolicitante({
+                                    id: demanda.id,
+                                    nome: demanda.analista_solicitante
+                                })
+                                setMsg('Analista solicitante alterado com sucesso!');
+                                setSeverity('success');
+                                setOpenToast(true);
+                            } catch (error) {
+                                setMsg('Erro ao alterar solicitante', error);
+                                setSeverity('error');
+                                setOpenToast(true);
+                            }
+                        }}
+                    >
+                        <Save />
+                    </Button>
+                </Box>
                 <Typography
                     variant="body2"
                     sx={{
@@ -231,6 +265,34 @@ const DrawerDetails = ({ data, setSelectedDemanda }) => {
                 >
                     {dataPrevia ? `Data Previa: ${moment(dataPrevia).format('DD/MM/YYYY')}` : null} |
                     {dataFinalEntrega ? `Data Final Entrega: ${moment(dataFinalEntrega).format('DD/MM/YYYY')}` : null}
+                    {
+                        data.area_empresa_nome === 'Bradesco - Fraudes' && (
+                            <Box>
+                                <FormControlLabel
+                                    control={<Checkbox />}
+                                    label='Prévia enviada'
+                                    checked={demanda.previa_enviada}
+                                    onChange={async (e) => {
+                                        setDemanda({ ...demanda, previa_enviada: e.target.checked });
+                                        try {
+                                            await alterarPreviaEnviadaBradesco({
+                                                id: demanda.id,
+                                                envio_previa: e.target.checked ? 1 : 0
+                                            })
+                                            setMsg('Prévia enviada alterada com sucesso');
+                                            setSeverity('success');
+                                            setOpenToast(true);
+                                        } catch (error) {
+                                            setMsg('Erro ao alterar prévia enviada', error);
+                                            setSeverity('error');
+                                            setOpenToast(true);
+                                        }
+                                    }
+                                    }
+                                />
+                            </Box>
+                        )
+                    }
                 </Typography>
                 <Accordion
                     disabled={loading}
