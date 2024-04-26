@@ -1,6 +1,11 @@
-import { Table, TableCell, TableHead, TableRow } from "@mui/material"
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import { useContext } from "react"
+import { PropostasContext } from "../context"
 
-const TabelaTeleEntrevista = () => {
+const TabelaTeleEntrevista = ({ loading }) => {
+
+    const { propostas } = useContext(PropostasContext)
+
     return (
         <Table
             size="small"
