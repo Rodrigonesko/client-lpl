@@ -220,3 +220,7 @@ export const getComparativoProducaoRsd = async (mes, analista) => {
 export const encontrarPessoas = async (pesquisa) => {
     return await new ApiCall(`/rsd/findPessoas/${pesquisa}`).get()
 }
+
+export const findPlanoPf = async (data) => {
+    return await new ApiCall('/rsd/findPlano').post(data)
+}
