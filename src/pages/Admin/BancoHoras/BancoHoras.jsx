@@ -1,94 +1,55 @@
-import { Box, Container, Divider, Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Typography } from "@mui/material"
+import { Box, Container, Tabs, Tab } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import ModalUploadBancoHoras from "./Modais/ModalUpload"
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../_services/user.service"
-import moment from "moment"
-import ModalHorarioPonto from "./Modais/ModalHorarioPonto"
+import HorarioSaida from "./Components/HorarioSaida"
+import Ausencias from "./Components/Ausencias"
+
+const tabStyle = {
+    '&:hover': {
+        color: 'gray',
+        opacity: 1,
+        backgroundColor: '#fff',
+    },
+    '&.Mui-selected': {
+        color: 'black',
+        backgroundColor: '#fff',
+        fontWeight: 'bold',
+    },
+    Indicator: {
+        backgroundColor: 'black',
+    },
+    color: 'gray',
+    mr: 2,
+}
 
 const BancoHoras = () => {
 
-    const [colaboradores, setColaboradores] = useState([])
-    const [flushHook, setFlushHook] = useState(false)
-    const [dataBancoHoras, setDataBancoHoras] = useState('')
-
-    const fetchData = async () => {
-        const result = await getUsers()
-        result.sort((a, b) => {
-            return a.name.localeCompare(b.name)
-        })
-        result.forEach(colaborador => {
-            if (colaborador.dataBancoHoras) {
-                setDataBancoHoras(colaborador.dataBancoHoras)
-                return
-            }
-        })
-        setColaboradores(result)
-    }
-
-    useEffect(() => {
-        setFlushHook(false)
-        fetchData()
-    }, [flushHook])
+    const [tab, setTab] = useState('Horario Saida')
 
     return (
         <>
             <Sidebar>
                 <Box width='100%' height='100vh' overflow='auto' >
                     <Container>
-                        <Box m={2}>
-                            <ModalUploadBancoHoras setFlushHook={setFlushHook} />
-                            <ModalHorarioPonto setFlushHook={setFlushHook} />
-                        </Box>
-                        <Divider />
-                        <Box>
-                            <Typography variant='h5' m={2}>
-                                Banco de Horas
-                            </Typography>
-                            <Typography variant="body2" color='gray' m={2} >
-                                Atualizado dia - {moment(dataBancoHoras).format('DD/MM/YYYY')}
-                            </Typography>
-                            <TableContainer>
-                                <Table className="name">
-                                    <TableHead className="table-header">
-                                        <TableRow>
-                                            <TableCell>
-                                                Colaborador
-                                            </TableCell>
-                                            <TableCell>
-                                                Banco De Horas
-                                            </TableCell>
-                                            <TableCell>
-                                                Horario Saida
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            colaboradores.map(colaborador => {
-                                                if ((colaborador.nomeCompleto) && (colaborador.inativo !== true)) {
-                                                    return (
-                                                        <TableRow key={colaborador.nomeCompleto}>
-                                                            <TableCell>
-                                                                {colaborador.nomeCompleto}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {colaborador.bancoHoras}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {colaborador.horarioSaida && moment(colaborador.horarioSaida).format('DD/MM/YYYY HH:mm')}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                } else {
-                                                    return null
-                                                }
-                                            })
-                                        }
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Box>
+                        <Tabs
+                            value={tab}
+                            onChange={(e, value) => setTab(value)}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            sx={{
+                                mt: 2,
+                                '& .MuiTabs-indicator': {
+                                    backgroundColor: 'black',
+                                    width: '100%',
+                                },
+                            }}
+                        >
+                            <Tab label="Horario Saída" value="Horario Saida" sx={tabStyle} />
+                            <Tab label="Ausências" value="Ausencias" sx={tabStyle} />
+                        </Tabs>
+                        {tab === 'Horario Saida' && <HorarioSaida key={'Horario Saida'} />}
+                        {tab === 'Ausencias' && <Ausencias key={'Ausencias'} />}
                     </Container>
                 </Box>
             </Sidebar>

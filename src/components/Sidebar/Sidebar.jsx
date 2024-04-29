@@ -150,7 +150,7 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/producao/relatorioProdutividade'>Relatorios de Produtividade</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu icon={<FaArchive />} title='RH'>
-                                    <MenuItem><Link to='/admin/rh/bancoHoras'>Banco De Horas</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/rh/controleHoras'>Controle Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/prototipoAdmissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
