@@ -69,6 +69,10 @@ export const getBeneficiarioById = async (id) => {
     return await new ApiCall(`/tele-entrevista/beneficiario/${id}`, URL_API).get()
 }
 
+export const getBeneficiarioByName = async (nome) => {
+    return await new ApiCall(`/tele-entrevista/beneficiario/nome/${nome}`, URL_API).get()
+}
+
 export const getBeneficiarios = async (limit, page) => {
     return await new ApiCall(`/tele-entrevista/beneficiario?limit=${limit}&page=${page}`, URL_API).get()
 }
