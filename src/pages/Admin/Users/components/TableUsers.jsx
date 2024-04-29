@@ -34,6 +34,7 @@ const TableUsers = ({
         <TableContainer
             sx={{
                 mt: 2,
+                mb: 2,
             }}
         >
             {

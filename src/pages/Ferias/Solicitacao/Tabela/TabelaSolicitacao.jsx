@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Alert, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import axios from "axios"
 import moment from "moment"
 import { useState, useEffect } from "react"
@@ -199,7 +199,7 @@ const TabelaSolicitacao = ({ flushHook, setFlushHook }) => {
                                             <FormControlLabel
                                                 value={item.gestorAprovou}
                                                 control={<Checkbox value={item.gestorAprovou} checked={item.gestorAprovou} />}
-                                                label="Aprovado"
+                                                label={item.gestorAprovou ? <Chip label="Aprovado" color='success' /> : <Chip label="Não Aprovado" color='error' />}
                                                 labelPlacement="start"
                                                 onChange={async (e) => {
                                                     await updateGestorAceitou({ _id: item._id, gestorAprovou: !gestorAprovou })

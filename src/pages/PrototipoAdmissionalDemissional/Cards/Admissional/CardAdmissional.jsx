@@ -79,7 +79,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                         <FormControlLabel
                             value={prorrogacao}
                             control={<Checkbox value={prorrogacao} checked={prorrogacao} />}
-                            label="Assinado contrato de prorrogação após 30 dias"
+                            label="Assinado contrato de prorrogação após 45 dias"
                             labelPlacement="start"
                             onChange={async (e) => {
                                 await updateProrrogacao({ name: user.name, prorrogacao: !prorrogacao })
