@@ -82,6 +82,7 @@ const Ausencias = () => {
                             <TableCell>Colaborador</TableCell>
                             <TableCell>Data Ausência</TableCell>
                             <TableCell>Tipo de Ausência</TableCell> 
+                            <TableCell>Setor</TableCell> 
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -94,10 +95,13 @@ const Ausencias = () => {
                                                 {colaborador.nome}
                                             </TableCell>
                                             <TableCell>
-                                                {colaborador.data}
+                                                {moment(colaborador.data).format('DD/MM/YYYY')}
                                             </TableCell>
                                             <TableCell>
                                                 {colaborador.tipoAusencia}
+                                            </TableCell>
+                                            <TableCell>
+                                                {colaborador.setor}
                                             </TableCell>
                                         </TableRow>
                                     )
