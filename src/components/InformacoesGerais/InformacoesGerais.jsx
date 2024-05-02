@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { atualizarInformacoesMo, buscarInformacoesMo } from "../../_services/rsd.service";
+import { atualizarInformacoesMo, buscarInformacoesMo, findPlanoPf } from "../../_services/rsd.service";
 import { Box, Paper, TextField, Button, Alert, Snackbar } from "@mui/material";
 import { ImFloppyDisk } from 'react-icons/im'
 import InputMask from "react-input-mask";
@@ -20,6 +20,10 @@ const InformacoesGerais = ({ mo }) => {
     const [toast, setToast] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
+    const [codigoPlano, setCodigoPlano] = useState('')
+    const [vigencia, setVigencia] = useState('')
+    const [planoPf, setPlanoPf] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
@@ -29,25 +33,7 @@ const InformacoesGerais = ({ mo }) => {
         setFone1(e.target.value)
     }
 
-    const buscarInformacoes = async () => {
-        try {
-            const result = await buscarInformacoesMo(mo)
-            setNome(result.pessoa.nome)
-            setCpf(result.pessoa.cpf)
-            setDataNascimento(result.pessoa.dataNascimento)
-            setEmail(result.pessoa.email)
-            setFone1(result.pessoa.fone1)
-            setFone2(result.pessoa.fone2)
-            setFone3(result.pessoa.fone3)
-            setContratoEmpresa(result.pessoa.contratoEmpresa)
-            let wpp = result.pessoa.whatsapp ? result.pessoa.whatsapp.slice(12) : ''
-            wpp = wpp ? `(${wpp.slice(0, 2)}) ${wpp.slice(2, 7)}-${wpp.slice(7)}` : ''
-            console.log(wpp);
-            setWhatsapp(wpp)
-        } catch (error) {
-            console.log(error);
-        }
-    }
+
 
     const atualizarInformacoes = async () => {
 
@@ -69,16 +55,51 @@ const InformacoesGerais = ({ mo }) => {
             fone3,
             contratoEmpresa,
             mo,
-            whatsapp: wpp
+            whatsapp: wpp,
+            dataVigencia: vigencia?.trim(),
+            codigoPlano: codigoPlano.trim().split(' - ')[0],
+            plano: codigoPlano.trim().split(' - ')[1]
         })
 
         setOpen(true)
-
+        setFlushHook(!flushHook)
     }
 
     useEffect(() => {
+        const buscarInformacoes = async () => {
+            try {
+                const result = await buscarInformacoesMo(mo)
+                setNome(result.pessoa.nome)
+                setCpf(result.pessoa.cpf)
+                setDataNascimento(result.pessoa.dataNascimento)
+                setEmail(result.pessoa.email)
+                setFone1(result.pessoa.fone1)
+                setFone2(result.pessoa.fone2)
+                setFone3(result.pessoa.fone3)
+                setContratoEmpresa(result.pessoa.contratoEmpresa)
+                let wpp = result.pessoa.whatsapp ? result.pessoa.whatsapp.slice(12) : ''
+                wpp = wpp ? `(${wpp.slice(0, 2)}) ${wpp.slice(2, 7)}-${wpp.slice(7)}` : ''
+                console.log(wpp);
+                setWhatsapp(wpp)
+                setVigencia(result.pessoa.dataVigencia)
+                setCodigoPlano(result.pessoa.codigoPlano ? `${result.pessoa.codigoPlano} - ${result.pessoa.plano}` : '')
+                const resultPlano = await findPlanoPf({
+                    dataVigencia: result.pessoa.dataVigencia,
+                    nome: result.pessoa.plano,
+                    codigo: result.pessoa.codigoPlano
+                })
+                if (resultPlano) {
+                    setPlanoPf(true)
+                } else {
+                    setPlanoPf(false)
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         buscarInformacoes()
-    }, [])
+    }, [flushHook])
 
     return (
         <Box p={2} component={Paper} display='flex' flexDirection='column'>
@@ -128,6 +149,8 @@ const InformacoesGerais = ({ mo }) => {
                 >
                     {() => <TextField size="small" label='Whatsapp' style={{ marginRight: '10px', marginBottom: '5px' }} />}
                 </InputMask>
+                <TextField size="small" label='Codigo + Plano' style={{ marginRight: '10px', marginBottom: '5px', minWidth: '350px' }} value={codigoPlano} onChange={e => setCodigoPlano(e.target.value)} />
+                <TextField size="small" label='Vigência' style={{ marginRight: '10px', marginBottom: '5px' }} value={vigencia} onChange={e => setVigencia(e.target.value)} />
             </Box>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert variant='filled' onClose={handleClose} severity="success" sx={{ width: '100%' }}>
@@ -137,6 +160,15 @@ const InformacoesGerais = ({ mo }) => {
             <Box mt={2}>
                 <Button onClick={atualizarInformacoes} startIcon={<ImFloppyDisk />} size="small" variant='contained' >Salvar</Button>
             </Box>
+            {
+                planoPf ? (
+                    <Box mt={2}>
+                        <Alert severity="error" sx={{ width: '100%' }}>
+                        Plano com prazo de vigência reduzido *30 dias*. Analisar a data de atendimento X data da solicitação.
+                        </Alert>
+                    </Box>
+                ) : null
+            }
             <Toast
                 open={toast}
                 message={message}
