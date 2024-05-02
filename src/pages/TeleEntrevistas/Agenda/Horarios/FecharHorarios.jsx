@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Paper, Select, Typography, MenuItem, TextField, List, ListItem, ListItemButton, ListItemIcon, Checkbox, Button, ListItemText } from "@mui/material"
+import { FormControl, InputLabel, Paper, Select, Typography, MenuItem, TextField, List, ListItem, ListItemButton, ListItemIcon, Checkbox, Button, ListItemText, Box } from "@mui/material"
 import Axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import Toast from "../../../../components/Toast/Toast"
@@ -14,6 +14,7 @@ const FecharHorarios = ({ responsaveis }) => {
     const [toastOpen, setToastOpen] = useState(false);
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
+    const [justificativa, setJustificativa] = useState('')
 
     const buscarHorariosDisponiveis = async (data) => {
         try {
@@ -39,6 +40,13 @@ const FecharHorarios = ({ responsaveis }) => {
             return
         }
 
+        if (data === '' || responsavel === '' || justificativa === '') {
+            setMessage('Preencha todos os campos!')
+            setSeverity("error")
+            setToastOpen(true)
+            return
+        }
+
         try {
             let horariosArr = document.getElementsByClassName('horarios-disponiveis')
             let values = Object.values(horariosArr).map(e => {
@@ -47,7 +55,7 @@ const FecharHorarios = ({ responsaveis }) => {
                 }
                 return null
             })
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values }, {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values, justificativa }, {
                 withCredentials: true,
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
@@ -59,6 +67,7 @@ const FecharHorarios = ({ responsaveis }) => {
                 setToastOpen(true)
                 setData('')
                 setResponsavel('')
+                setJustificativa('')
                 setHorarioDisponiveis([])
             }
         } catch (error) {
@@ -131,7 +140,22 @@ const FecharHorarios = ({ responsaveis }) => {
                     })
                 }
             </List >
-            <Button variant="contained" size="small" onClick={handleFecharHorarios} >Fechar Horarios</Button>
+            <Box
+                display='flex'
+                mt={2}
+            >
+                <Button variant="contained" size="small" onClick={handleFecharHorarios} >Fechar Horarios</Button>
+                <TextField
+                    size="small"
+                    label='Justificativa'
+                    value={justificativa}
+                    onChange={e => setJustificativa(e.target.value)}
+                    sx={{
+                        marginLeft: '20px',
+                        width: '300px'
+                    }}
+                />
+            </Box>
             <Toast
                 open={toastOpen}
                 message={message}

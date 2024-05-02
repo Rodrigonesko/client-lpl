@@ -139,25 +139,32 @@ const ReabrirHorarios = ({ responsaveis }) => {
                 setHorariosReabertos([])
                 setHorariosReabrir([])
             }} label='Dia' focused value={data} />
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }} >
                 {
-                    horarios.sort().map(value => {
+                    horarios.map(value => {
                         const labelId = `checkbox-list-label-${value}`;
+                        console.log(value);
                         return (
                             <ListItem
-                                key={value}
+                                key={value.horario}
                                 disablePadding
                             >
                                 <ListItemButton role={undefined} dense>
                                     <ListItemIcon>
                                         <Checkbox
                                             edge="start"
-                                            value={value}
+                                            value={value.horario}
                                             className="horario-reabrir"
                                             onChange={handleCheck}
                                         />
                                     </ListItemIcon>
-                                    <ListItemText id={labelId} primary={`${value}`} />
+                                    <ListItemText id={labelId} primary={`${value.horario}`} />
+                                    {
+                                        value.justificativa && (
+                                            <Alert color="info">{value.justificativa}</Alert>
+                                        )
+                                    }
+
                                 </ListItemButton>
                             </ListItem>
                         )

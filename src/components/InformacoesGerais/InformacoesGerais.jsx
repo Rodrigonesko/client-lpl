@@ -56,9 +56,9 @@ const InformacoesGerais = ({ mo }) => {
             contratoEmpresa,
             mo,
             whatsapp: wpp,
-            dataVigencia: vigencia,
-            codigoPlano: codigoPlano.trim().split(' ')[0],
-            plano: codigoPlano.trim().split(' ').slice(1).join(' ')
+            dataVigencia: vigencia?.trim(),
+            codigoPlano: codigoPlano.trim().split(' - ')[0],
+            plano: codigoPlano.trim().split(' - ')[1]
         })
 
         setOpen(true)
@@ -82,7 +82,7 @@ const InformacoesGerais = ({ mo }) => {
                 console.log(wpp);
                 setWhatsapp(wpp)
                 setVigencia(result.pessoa.dataVigencia)
-                setCodigoPlano(result.pessoa.codigoPlano ? `${result.pessoa.codigoPlano} ${result.pessoa.plano}` : '')
+                setCodigoPlano(result.pessoa.codigoPlano ? `${result.pessoa.codigoPlano} - ${result.pessoa.plano}` : '')
                 const resultPlano = await findPlanoPf({
                     dataVigencia: result.pessoa.dataVigencia,
                     nome: result.pessoa.plano,

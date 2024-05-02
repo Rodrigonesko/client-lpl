@@ -161,6 +161,7 @@ import { FormProvider } from "./pages/TeleEntrevistaV2/Formulario/context";
 import Envio from "./pages/TeleEntrevistaV2/Envio/Index";
 import Propostas from "./pages/TeleEntrevistaV2/Propostas/Index";
 import { PropostasProvider } from "./pages/TeleEntrevistaV2/Propostas/context";
+import AdicionarProposta from "./pages/TeleEntrevistaV2/AdicionarProposta";
 
 /* SulAmerica */
 
@@ -525,6 +526,8 @@ const AppRoutes = () => {
                         <Propostas />
                     </PropostasProvider>
                 </ProtectedRoute>} />
+                <Route path="/teleEntrevistaV2/adicionarProposta" element={<ProtectedRoute>
+                    <AdicionarProposta />
 
                 {/* Sindicancia */}
 
@@ -532,8 +535,9 @@ const AppRoutes = () => {
                     <Demandas />
                 </ProtectedRoute>} />
                 <Route exact path="/sindicancia/itensChecklist" element={<ProtectedRoute>
-                    <ItensChecklist />
+                    <ItensChecklist />                                                       
                 </ProtectedRoute>} />
+                                                       
             </Routes>
         </AuthProvider>
     )
