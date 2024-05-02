@@ -16,6 +16,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import { deepPurple, green } from "@mui/material/colors";
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
+import SouthAmericaOutlinedIcon from '@mui/icons-material/SouthAmericaOutlined';
 
 const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
 
@@ -267,6 +268,13 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/whatsapp/chat'>Chat</Link></MenuItem>
                         <MenuItem><Link to='/whatsapp/templates'>Templates</Link></MenuItem>
                     </SubMenu>
+                    {
+                        acessos?.administrador && (
+                            <SubMenu title={"Sul America"} icon={<SouthAmericaOutlinedIcon />} >
+                                <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
+                            </SubMenu>
+                        )
+                    }
                 </Menu>
             </ProSidebar>
             <Box width={'100%'} >
