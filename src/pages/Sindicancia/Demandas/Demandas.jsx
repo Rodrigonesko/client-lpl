@@ -418,7 +418,7 @@ const Demandas = () => {
                                                     </TableCell>
                                                     <TableCell>{item.area_empresa_nome}</TableCell>
                                                     <TableCell>
-                                                        <DrawerDetails data={item} setSelectedDemanda={setSelectedDemanda} />
+                                                        <DrawerDetails key={item.id} data={item} setSelectedDemanda={setSelectedDemanda} />
                                                     </TableCell>
                                                 </TableRow>
                                             )
