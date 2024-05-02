@@ -69,6 +69,10 @@ export const getBeneficiarioById = async (id) => {
     return await new ApiCall(`/tele-entrevista/beneficiario/${id}`, URL_API).get()
 }
 
+export const getBeneficiarioByName = async (nome) => {
+    return await new ApiCall(`/tele-entrevista/beneficiario/nome/${nome}`, URL_API).get()
+}
+
 export const getBeneficiarios = async (limit, page) => {
     return await new ApiCall(`/tele-entrevista/beneficiario?limit=${limit}&page=${page}`, URL_API).get()
 }
@@ -127,8 +131,16 @@ export const uploadRn = async (data) => {
     return await new ApiCall('/tele-entrevista/rn/upload', URL_API).post(data)
 }
 
+export const getRnByFilter = async (data) => {
+    return await new ApiCall(`/tele-entrevista/rn/filtro?$limit=${data.limit}&page=${data.page}`, URL_API).post({ pesquisa: data.pesquisa, status: data.status })
+}
+
 // UE
 
 export const uploadUe = async (data) => {
     return await new ApiCall('/tele-entrevista/urgencia-emergencia/upload', URL_API).post(data)
+}
+
+export const getUeByFilter = async (data) => {
+    return await new ApiCall(`/tele-entrevista/urgencia-emergencia/filtro?limit=${data.limit}&page=${data.page}`, URL_API).post({ pesquisa: data.pesquisa, status: data.status })
 }
