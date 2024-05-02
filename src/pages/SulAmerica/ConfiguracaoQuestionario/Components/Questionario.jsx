@@ -1,8 +1,10 @@
 import { Box, Divider, Typography } from "@mui/material"
+import ModalCriarQuestionarios from "../Modais/ModalCriarQuestionario"
 
 const Questionario = () => {
     return (
         <>
+            <ModalCriarQuestionarios />
             <Divider />
             <Box
                 sx={{

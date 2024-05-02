@@ -1,8 +1,9 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import Toast from "../../../../components/Toast/Toast"
 import { Delete } from "@mui/icons-material"
 import AdicionarSubPergunta from "./AdicionarSubPergunta"
+import AdicionarOpcoes from "./AdicionarOpções"
 
 const ModalCriarPergunta = () => {
 
@@ -15,6 +16,11 @@ const ModalCriarPergunta = () => {
     const [tipo, setTipo] = useState('')
     const [categoria, setCategoria] = useState('')
     const [subPerguntas, setSubPerguntas] = useState([])
+    const [opcoes, setOpcoes] = useState([])
+
+    const handleAdicionarPergunta = () => {
+
+    }
 
     return (
         <Box sx={{
@@ -88,6 +94,37 @@ const ModalCriarPergunta = () => {
                                 />
                             </RadioGroup>
                         </FormControl>
+                        {tipo === 'Opções' && (
+                            <>
+                                <Divider />
+                                <Typography
+                                    variant="h6"
+                                >
+                                    Opções
+                                </Typography>
+                                {
+                                    opcoes.map((opcao, index) => (
+                                        <Typography
+                                            variant="body2"
+                                            key={index}>
+                                            {opcao.texto}
+                                            <Tooltip title="Remover Opção">
+                                                <IconButton
+                                                    onClick={() => {
+                                                        setOpcoes(opcoes.filter((_, i) => i !== index))
+                                                    }}
+                                                    size="small"
+                                                    color="error"
+                                                >
+                                                    <Delete />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Typography>
+                                    ))
+                                }
+                                <AdicionarOpcoes setOpcoes={setOpcoes} />
+                            </>
+                        )}
                         <FormControl>
                             <FormLabel>Categoria</FormLabel>
                             <RadioGroup
@@ -112,6 +149,7 @@ const ModalCriarPergunta = () => {
                                 />
                             </RadioGroup>
                         </FormControl>
+                        <Divider />
                         <Typography
                             variant="h6"
                         >
@@ -156,7 +194,7 @@ const ModalCriarPergunta = () => {
                         Cancelar
                     </Button>
                     <Button
-                        // onClick={handleAdicionarPergunta}
+                        onClick={handleAdicionarPergunta}
                         color="primary"
                         variant="contained"
                     >

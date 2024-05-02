@@ -7,10 +7,10 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
 
     const [subPergunta, setSubPergunta] = useState('')
     const [condicao, setCondicao] = useState('')
-    const [autismo, setAutismo] = useState(false)
     const [openToast, setOpenToast] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
+    const [tipo, setTipo] = useState('')
 
     const handleAdicionarSubPergunta = () => {
         if (subPergunta === '' || condicao === '') {
@@ -26,7 +26,6 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
                 {
                     texto: subPergunta,
                     condicao,
-                    autismo
                 }
             ]
         })
@@ -61,6 +60,35 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
                     <FormControlLabel control={<Radio />} label="Não" value={"Não"} />
                 </RadioGroup>
             </FormControl>
+            <FormControl>
+                            <FormLabel>Tipo</FormLabel>
+                            <RadioGroup
+                                value={tipo}
+                                onChange={(e) => setTipo(e.target.value)}
+                                row
+                            >
+                                <FormControlLabel
+                                    value="Aberta"
+                                    label="Aberta"
+                                    control={<Radio />}
+                                />
+                                <FormControlLabel
+                                    value="Escolha"
+                                    label="Escolha"
+                                    control={<Radio />}
+                                />
+                                <FormControlLabel
+                                    value="Opções"
+                                    label="Opções"
+                                    control={<Radio />}
+                                />
+                                <FormControlLabel
+                                    value="Endereço"
+                                    label="Endereço"
+                                    control={<Radio />}
+                                />
+                            </RadioGroup>
+                        </FormControl>
             <Button
                 variant="contained"
                 fullWidth

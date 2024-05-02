@@ -45,7 +45,7 @@ const ConfiguracaoQuestionario = () => {
                             }}
                         >
                             <Tab label="Perguntas" value="Perguntas" sx={tabStyle} />
-                            <Tab label="Questionario" value="Questionario" sx={tabStyle} />
+                            <Tab label="Questionário" value="Questionario" sx={tabStyle} />
                         </Tabs>
                         {tab === 'Perguntas' && <PerguntasSulAmerica key={'Perguntas'} />}
                         {tab === 'Questionario' && <Questionario key={'Questionario'} />}
