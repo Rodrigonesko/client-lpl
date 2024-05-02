@@ -528,6 +528,7 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/teleEntrevistaV2/adicionarProposta" element={<ProtectedRoute>
                     <AdicionarProposta />
+                </ProtectedRoute>} />
 
                 {/* Sindicancia */}
 
@@ -536,8 +537,7 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/sindicancia/itensChecklist" element={<ProtectedRoute>
                     <ItensChecklist />                                                       
-                </ProtectedRoute>} />
-                                                       
+                </ProtectedRoute>} />                 
             </Routes>
         </AuthProvider>
     )
