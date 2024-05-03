@@ -57,6 +57,11 @@ export function diasUteisNoMes(ano, mes) {
     return diasUteis;
 }
 
+export function ajustarCpf(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+    return cpf.padStart(11, '0');
+}
+
 const feriados = [
     moment('2022-01-01'),
     moment('2022-04-21'),
