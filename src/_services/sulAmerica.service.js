@@ -28,6 +28,10 @@ export const createQuestionario = async (data) => {
 
 /* Pedido */
 
+export const getPedidos = async () => {
+    return await new ApiCall('/pedido', url).get()
+}
+
 export const createPedidosByPlanilha = async (data) => {
     return await new ApiCall('/pedido/planilha', url).post(data)
 }
