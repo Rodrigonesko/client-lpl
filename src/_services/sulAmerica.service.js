@@ -25,3 +25,9 @@ export const buscarQuestionarios = async () => {
 export const createQuestionario = async (data) => {
     return await new ApiCall('/questionario', url).post(data)
 }
+
+/* Pedido */
+
+export const createPedidosByPlanilha = async (data) => {
+    return await new ApiCall('/pedido/planilha', url).post(data)
+}
