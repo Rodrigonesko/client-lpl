@@ -4,6 +4,7 @@ import Toast from "../../../../components/Toast/Toast"
 import { Delete } from "@mui/icons-material"
 import AdicionarSubPergunta from "./AdicionarSubPergunta"
 import AdicionarOpcoes from "./AdicionarOpções"
+import { criarPergunta } from "../../../../_services/sulAmerica.service"
 
 const ModalCriarPergunta = () => {
 
@@ -18,7 +19,28 @@ const ModalCriarPergunta = () => {
     const [subPerguntas, setSubPerguntas] = useState([])
     const [opcoes, setOpcoes] = useState([])
 
-    const handleAdicionarPergunta = () => {
+    const handleAdicionarPergunta = async () => {
+        try {
+            setLoading(true)
+            await criarPergunta({
+                pergunta,
+                tipo: tipo.toUpperCase(),
+                categoria: categoria.toUpperCase(),
+                subPerguntas,
+                opcoes
+            })
+            setOpen(false)
+            setOpenToast(true)
+            setMessage('Pergunta adicionada com sucesso')
+            setSeverity('success')
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setOpenToast(true)
+            setMessage('Erro ao adicionar pergunta')
+            setSeverity('error')
+            setLoading(false)
+        }
 
     }
 
@@ -107,7 +129,7 @@ const ModalCriarPergunta = () => {
                                         <Typography
                                             variant="body2"
                                             key={index}>
-                                            {opcao.texto}
+                                            {opcao}
                                             <Tooltip title="Remover Opção">
                                                 <IconButton
                                                     onClick={() => {

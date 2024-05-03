@@ -2,8 +2,8 @@ import { Add, Close } from "@mui/icons-material"
 import { AppBar, Box, Button, Dialog, IconButton, Slide, TextField, Toolbar, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors";
 import { forwardRef, useState } from "react"
-import { createQuestionario, getPerguntas } from "../../../../_services/teleEntrevistaV2.service";
 import Toast from "../../../../components/Toast/Toast";
+import { buscarPerguntas, createQuestionario } from "../../../../_services/sulAmerica.service";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -43,7 +43,7 @@ const Pergunta = ({
                 <Typography
                     variant="body1"
                 >
-                    {pergunta.texto}
+                    {pergunta.pergunta}
                 </Typography>
                 <TextField
                     size="small"
@@ -82,7 +82,7 @@ const ModalCriarQuestionarios = ({ setFlushHook }) => {
 
     const handleOpen = async () => {
         setOpen(true)
-        const response = await getPerguntas()
+        const response = await buscarPerguntas()
         setPerguntas(response)
     }
 
@@ -183,7 +183,7 @@ const ModalCriarQuestionarios = ({ setFlushHook }) => {
                                 }}
                             >
                                 <Typography>
-                                    {pergunta.posicao}. {pergunta.texto}
+                                    {pergunta.posicao}. {pergunta.pergunta}
                                 </Typography>
                                 <IconButton
                                     onClick={() => setPerguntasAdicionadas(prev => prev.filter(p => p._id !== pergunta._id))}

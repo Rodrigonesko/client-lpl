@@ -19,12 +19,13 @@ const AdicionarOpcoes = ({ setOpcoes }) => {
         }
 
         setOpcoes((prev) => {
-            return [
-                ...prev,
-                {
-                    texto: opcao,
-                }
-            ]
+            if (prev.includes(opcao)) {
+                setOpenToast(true)
+                setMessage('Opção já adicionada')
+                setSeverity('error')
+                return prev
+            }
+            return [...prev, opcao.trim()]
         })
     }
 

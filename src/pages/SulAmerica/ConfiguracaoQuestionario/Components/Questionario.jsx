@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material"
+import { Box, Divider } from "@mui/material"
 import ModalCriarQuestionarios from "../Modais/ModalCriarQuestionario"
 
 const Questionario = () => {
@@ -15,29 +15,7 @@ const Questionario = () => {
                     mb: 2
                 }}
             >
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: 'bold',
-                        position: 'relative',
-                        '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            width: '30%',
-                            height: '2px',
-                            bottom: 0,
-                            left: '0%',
-                            backgroundColor: 'currentColor',
-                            transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
-                        },
-                        '&:hover::after': {
-                            width: '100%',
-                            left: '0%',
-                        },
-                    }}
-                >
-                    Questionário
-                </Typography>
+
             </Box>
         </>
     )

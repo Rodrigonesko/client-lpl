@@ -21,11 +21,18 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
         }
 
         setSubperguntas((prev) => {
+            if (prev.some((sub) => sub.texto === subPergunta.trim())) {
+                setOpenToast(true)
+                setMessage('Sub Pergunta já adicionada')
+                setSeverity('error')
+                return prev
+            }
             return [
                 ...prev,
                 {
-                    texto: subPergunta,
+                    texto: subPergunta.trim(),
                     condicao,
+                    tipo
                 }
             ]
         })
@@ -61,34 +68,34 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
                 </RadioGroup>
             </FormControl>
             <FormControl>
-                            <FormLabel>Tipo</FormLabel>
-                            <RadioGroup
-                                value={tipo}
-                                onChange={(e) => setTipo(e.target.value)}
-                                row
-                            >
-                                <FormControlLabel
-                                    value="Aberta"
-                                    label="Aberta"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Escolha"
-                                    label="Escolha"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Opções"
-                                    label="Opções"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Endereço"
-                                    label="Endereço"
-                                    control={<Radio />}
-                                />
-                            </RadioGroup>
-                        </FormControl>
+                <FormLabel>Tipo</FormLabel>
+                <RadioGroup
+                    value={tipo}
+                    onChange={(e) => setTipo(e.target.value)}
+                    row
+                >
+                    <FormControlLabel
+                        value="Aberta"
+                        label="Aberta"
+                        control={<Radio />}
+                    />
+                    <FormControlLabel
+                        value="Escolha"
+                        label="Escolha"
+                        control={<Radio />}
+                    />
+                    <FormControlLabel
+                        value="Opções"
+                        label="Opções"
+                        control={<Radio />}
+                    />
+                    <FormControlLabel
+                        value="Endereço"
+                        label="Endereço"
+                        control={<Radio />}
+                    />
+                </RadioGroup>
+            </FormControl>
             <Button
                 variant="contained"
                 fullWidth
