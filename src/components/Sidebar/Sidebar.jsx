@@ -272,6 +272,7 @@ const Sidebar = ({ children }) => {
                         acessos?.administrador && (
                             <SubMenu title={"Sul America"} icon={<SouthAmericaOutlinedIcon />} >
                                 <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
+                                <MenuItem><Link to='/sulAmerica/Pedidos'>Pedidos</Link></MenuItem>
                             </SubMenu>
                         )
                     }

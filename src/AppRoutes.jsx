@@ -166,6 +166,7 @@ import AdicionarProposta from "./pages/TeleEntrevistaV2/AdicionarProposta";
 /* SulAmerica */
 
 import ConfiguracaoQuestionario from "./pages/SulAmerica/ConfiguracaoQuestionario/ConfiguracaoQuestionario";
+import Pedidos from "./pages/SulAmerica/Pedidos/Pedidos";
 
 const AppRoutes = () => {
     return (
@@ -177,6 +178,9 @@ const AppRoutes = () => {
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>
                     <ConfiguracaoQuestionario />
+                </ProtectedRoute>} />
+                <Route exact path="/sulAmerica/Pedidos" element={<ProtectedRoute>
+                    <Pedidos />
                 </ProtectedRoute>} />
 
 
@@ -536,8 +540,8 @@ const AppRoutes = () => {
                     <Demandas />
                 </ProtectedRoute>} />
                 <Route exact path="/sindicancia/itensChecklist" element={<ProtectedRoute>
-                    <ItensChecklist />                                                       
-                </ProtectedRoute>} />                 
+                    <ItensChecklist />
+                </ProtectedRoute>} />
             </Routes>
         </AuthProvider>
     )
