@@ -1,7 +1,8 @@
-import { Add } from "@mui/icons-material"
-import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from "@mui/material"
+import { Add, Delete } from "@mui/icons-material"
+import { Box, Button, Divider, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import Toast from "../../../../components/Toast/Toast";
+import AdicionarSubOpcoes from "./AdicionarSubOpcoes";
 
 const AdicionarSubPergunta = ({ setSubperguntas }) => {
 
@@ -11,6 +12,8 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
     const [tipo, setTipo] = useState('')
+    const [opcoes, setOpcoes] = useState([])
+
 
     const handleAdicionarSubPergunta = () => {
         if (subPergunta === '' || condicao === '') {
@@ -19,7 +22,6 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
             setSeverity('error')
             return
         }
-
         setSubperguntas((prev) => {
             if (prev.some((sub) => sub.texto === subPergunta.trim())) {
                 setOpenToast(true)
@@ -32,6 +34,7 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
                 {
                     texto: subPergunta.trim(),
                     condicao,
+                    opcoes,
                     tipo
                 }
             ]
@@ -96,6 +99,37 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
                     />
                 </RadioGroup>
             </FormControl>
+            {tipo === 'Opções' && (
+                <>
+                    <Divider />
+                    <Typography
+                        variant="h6"
+                    >
+                        Opções
+                    </Typography>
+                    {
+                        opcoes.map((opcao, index) => (
+                            <Typography
+                                variant="body2"
+                                key={index}>
+                                {opcao}
+                                <Tooltip title="Remover Opção">
+                                    <IconButton
+                                        onClick={() => {
+                                            setOpcoes(opcoes.filter((_, i) => i !== index))
+                                        }}
+                                        size="small"
+                                        color="error"
+                                    >
+                                        <Delete />
+                                    </IconButton>
+                                </Tooltip>
+                            </Typography>
+                        ))
+                    }
+                    <AdicionarSubOpcoes setOpcoes={setOpcoes} />
+                </>
+            )}
             <Button
                 variant="contained"
                 fullWidth
