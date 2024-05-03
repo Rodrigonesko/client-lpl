@@ -6,7 +6,7 @@ import AdicionarSubPergunta from "./AdicionarSubPergunta"
 import AdicionarOpcoes from "./AdicionarOpções"
 import { criarPergunta } from "../../../../_services/sulAmerica.service"
 
-const ModalCriarPergunta = () => {
+const ModalCriarPergunta = ({ setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -27,12 +27,14 @@ const ModalCriarPergunta = () => {
                 tipo: tipo.toUpperCase(),
                 categoria: categoria.toUpperCase(),
                 subPerguntas,
-                opcoes
+                opcoes,
+                // opcoesSubPergunta
             })
             setOpen(false)
             setOpenToast(true)
             setMessage('Pergunta adicionada com sucesso')
             setSeverity('success')
+            setFlushHook(true)
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -171,41 +173,48 @@ const ModalCriarPergunta = () => {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        <Divider />
-                        <Typography
-                            variant="h6"
-                        >
-                            Sub Perguntas
-                        </Typography>
                         {
-                            subPerguntas.map((subPergunta, index) => (
-                                <Box>
+                            tipo === 'Escolha' && (
+                                <>
+                                    <Divider />
                                     <Typography
-                                        variant="body2"
-                                        key={index}>
-                                        {subPergunta.texto}
-                                        <Tooltip title="Remover Sub Pergunta">
-                                            <IconButton
-                                                onClick={() => {
-                                                    setSubPerguntas(subPerguntas.filter((_, i) => i !== index))
-                                                }}
-                                                size="small"
-                                                color="error"
-                                            >
-                                                <Delete />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Typography>
-                                    <Typography
-                                        variant="caption"
+                                        variant="h6"
                                     >
-                                        Condição: {subPergunta.condicao}
+                                        Sub Perguntas
                                     </Typography>
-                                </Box>
-                            ))
+                                    {
+                                        subPerguntas.map((subPergunta, index) => (
+                                            <Box>
+                                                <Typography
+                                                    variant="body2"
+                                                    key={index}>
+                                                    {subPergunta.texto}
+                                                    <Tooltip title="Remover Sub Pergunta">
+                                                        <IconButton
+                                                            onClick={() => {
+                                                                setSubPerguntas(subPerguntas.filter((_, i) => i !== index))
+                                                            }}
+                                                            size="small"
+                                                            color="error"
+                                                        >
+                                                            <Delete />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Typography>
+                                                <Typography
+                                                    variant="caption"
+                                                >
+                                                    Condição: {subPergunta.condicao}
+                                                </Typography>
+                                            </Box>
+                                        ))
+                                    }
+                                    <AdicionarSubPergunta setSubperguntas={setSubPerguntas} />
+                                </>
+                            )
                         }
-                        <AdicionarSubPergunta setSubperguntas={setSubPerguntas} />
                     </Box>
+
                 </DialogContent>
                 <DialogActions>
                     <Button
