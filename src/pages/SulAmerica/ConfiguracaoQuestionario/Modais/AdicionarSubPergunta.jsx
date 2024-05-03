@@ -3,6 +3,7 @@ import { Box, Button, Divider, FormControl, FormControlLabel, FormLabel, IconBut
 import { useState } from "react"
 import Toast from "../../../../components/Toast/Toast";
 import AdicionarSubOpcoes from "./AdicionarSubOpcoes";
+import { tiposPergunta } from "../utils/tiposPergunta";
 
 const AdicionarSubPergunta = ({ setSubperguntas }) => {
 
@@ -77,26 +78,16 @@ const AdicionarSubPergunta = ({ setSubperguntas }) => {
                     onChange={(e) => setTipo(e.target.value)}
                     row
                 >
-                    <FormControlLabel
-                        value="Aberta"
-                        label="Aberta"
-                        control={<Radio />}
-                    />
-                    <FormControlLabel
-                        value="Escolha"
-                        label="Escolha"
-                        control={<Radio />}
-                    />
-                    <FormControlLabel
-                        value="Opções"
-                        label="Opções"
-                        control={<Radio />}
-                    />
-                    <FormControlLabel
-                        value="Endereço"
-                        label="Endereço"
-                        control={<Radio />}
-                    />
+                    {
+                        tiposPergunta.map((t, index) => (
+                            <FormControlLabel
+                                key={index}
+                                control={<Radio />}
+                                label={t}
+                                value={t}
+                            />
+                        ))
+                    }
                 </RadioGroup>
             </FormControl>
             {tipo === 'Opções' && (

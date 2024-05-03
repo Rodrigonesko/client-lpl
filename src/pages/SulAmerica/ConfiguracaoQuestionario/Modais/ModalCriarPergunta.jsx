@@ -5,6 +5,8 @@ import { Delete } from "@mui/icons-material"
 import AdicionarSubPergunta from "./AdicionarSubPergunta"
 import AdicionarOpcoes from "./AdicionarOpções"
 import { criarPergunta } from "../../../../_services/sulAmerica.service"
+import { tiposPergunta } from "../utils/tiposPergunta"
+import { categorias } from "../utils/categorias"
 
 const ModalCriarPergunta = ({ setFlushHook }) => {
 
@@ -34,7 +36,7 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
             setOpenToast(true)
             setMessage('Pergunta adicionada com sucesso')
             setSeverity('success')
-            setFlushHook(true)
+            setFlushHook(prev => !prev)
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -90,32 +92,22 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                             onChange={(e) => setPergunta(e.target.value)}
                         />
                         <FormControl>
-                            <FormLabel>Tipo</FormLabel>
+                            <FormLabel>Tipo de Pergunta</FormLabel>
                             <RadioGroup
                                 value={tipo}
                                 onChange={(e) => setTipo(e.target.value)}
                                 row
                             >
-                                <FormControlLabel
-                                    value="Aberta"
-                                    label="Aberta"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Escolha"
-                                    label="Escolha"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Opções"
-                                    label="Opções"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Endereço"
-                                    label="Endereço"
-                                    control={<Radio />}
-                                />
+                                {
+                                    tiposPergunta.map((tipo, index) => (
+                                        <FormControlLabel
+                                            key={index}
+                                            value={tipo}
+                                            control={<Radio />}
+                                            label={tipo}
+                                        />
+                                    ))
+                                }
                             </RadioGroup>
                         </FormControl>
                         {tipo === 'Opções' && (
@@ -156,21 +148,16 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                                 onChange={(e) => setCategoria(e.target.value)}
                                 row
                             >
-                                <FormControlLabel
-                                    value="Perfil e Contratação"
-                                    label="Perfil e Contratação"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Tratamento"
-                                    label="Tratamento"
-                                    control={<Radio />}
-                                />
-                                <FormControlLabel
-                                    value="Acompanhamento Terapêutico e Desfecho"
-                                    label="Acompanhamento Terapêutico e Desfecho"
-                                    control={<Radio />}
-                                />
+                                {
+                                    categorias.map((categoria, index) => (
+                                        <FormControlLabel
+                                            key={index}
+                                            value={categoria}
+                                            control={<Radio />}
+                                            label={categoria}
+                                        />
+                                    ))
+                                }
                             </RadioGroup>
                         </FormControl>
                         {
