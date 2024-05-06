@@ -28,10 +28,16 @@ export const createQuestionario = async (data) => {
 
 /* Pedido */
 
-export const getPedidos = async () => {
-    return await new ApiCall('/pedido', url).get()
+export const getPedidos = async (page = 1, limit = 25) => {
+    return await new ApiCall(`/pedido?page=${page}&limit=${limit}`, url).get()
 }
 
 export const createPedidosByPlanilha = async (data) => {
     return await new ApiCall('/pedido/planilha', url).post(data)
+}
+
+export const filterPedidos = async (prestador, beneficiario, responsavel, status, page = 1, limit = 25) => {
+    console.log(prestador, beneficiario, responsavel, status, page, limit);
+
+    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&page=${page}&limit=${limit}`, url).get()
 }
