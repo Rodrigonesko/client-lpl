@@ -168,6 +168,7 @@ import AdicionarProposta from "./pages/TeleEntrevistaV2/AdicionarProposta";
 import ConfiguracaoQuestionario from "./pages/SulAmerica/ConfiguracaoQuestionario/ConfiguracaoQuestionario";
 import Pedidos from "./pages/SulAmerica/Pedidos/Pedidos";
 import UploadSulAmerica from "./pages/SulAmerica/upload/Index";
+import FormularioSulAmerica from "./pages/SulAmerica/Formulario/Index";
 
 const AppRoutes = () => {
     return (
@@ -180,15 +181,16 @@ const AppRoutes = () => {
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>
                     <ConfiguracaoQuestionario />
                 </ProtectedRoute>} />
-
                 <Route exact path="/sulAmerica/Pedidos" element={<ProtectedRoute>
                     <Pedidos />
                 </ProtectedRoute>} />
-
-
                 <Route exact path="/sulAmerica/upload" element={<ProtectedRoute>
                     <UploadSulAmerica />
                 </ProtectedRoute>} />
+                <Route exact path="/sulAmerica/formulario/:id" element={<ProtectedRoute>
+                    <FormularioSulAmerica />
+                </ProtectedRoute>} />
+
                 <Route exact path="/internMessages" element={<ProtectedRoute>
                     <InternMessages />
                 </ProtectedRoute>} />
