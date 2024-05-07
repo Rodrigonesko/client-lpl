@@ -38,9 +38,9 @@ const TableEnhanced = ({ nomes, setFlushHook, setUser }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody >
-                    {nomes.map((item) => {
+                    {nomes.map((item, index) => {
                         return (
-                            <TableBodyAdmDem setUser={setUser} user={item} setFlushHook={setFlushHook} />
+                            <TableBodyAdmDem key={index} setUser={setUser} user={item} setFlushHook={setFlushHook} />
                         )
                     })}
                 </TableBody>
@@ -110,7 +110,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                             color = green[300]
                                         }
                                         return (
-                                            <TableRow key={item._id} style={{ backgroundColor: color }}>
+                                            <TableRow key={item.id} style={{ backgroundColor: color }}>
                                                 <TableCell>{item.responsavel}</TableCell>
                                                 <TableCell>{item.acao}</TableCell>
                                                 <TableCell>{item.fornecedor}</TableCell>

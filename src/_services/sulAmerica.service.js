@@ -30,6 +30,10 @@ export const createQuestionario = async (data) => {
     return await new ApiCall('/questionario', url).post(data)
 }
 
+export const updateQuestionario = async (id, data) => {
+    return await new ApiCall(`/questionario/${id}`, url).put(data)
+}
+
 /* Pedido */
 
 export const getPedidos = async () => {
