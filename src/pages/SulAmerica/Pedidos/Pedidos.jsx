@@ -1,9 +1,8 @@
-import { Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, orange } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterPedidos, getPedidos } from "../../../_services/sulAmerica.service"
-import { ArrowForward } from "@mui/icons-material"
 import Title from "../../../components/Title/Title"
 import moment from "moment"
 import DrawerDetailsPedidos from "./DrawerDetailsPedidos"
@@ -194,7 +193,7 @@ const Pedidos = () => {
                                                                     <ArrowForward />
                                                                 </IconButton>
                                                             </Tooltip> */}
-                                                            <DrawerDetailsPedidos />
+                                                            <DrawerDetailsPedidos key={pedido._id} data={pedido} />
                                                         </TableCell>
                                                     </TableRow>
                                                 ))

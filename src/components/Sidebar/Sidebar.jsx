@@ -153,7 +153,7 @@ const Sidebar = ({ children }) => {
                                 <SubMenu icon={<FaArchive />} title='RH'>
                                     <MenuItem><Link to='/admin/rh/controleHoras'>Controle Horas</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/controlePoliticas'>Controle de Políticas</Link></MenuItem>
-                                    <MenuItem><Link to='/admin/rh/prototipoAdmissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
+                                    <MenuItem><Link to='/admin/rh/AdmissionalDemissional'>Checklist Admissão Demissão</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/ferias'>Controle Férias</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/treinamentos'>Treinamentos</Link></MenuItem>
                                     <MenuItem><Link to='/admin/rh/agenda'>Agenda</Link></MenuItem>
