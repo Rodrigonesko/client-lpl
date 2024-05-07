@@ -2,11 +2,39 @@ import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import { createRespostas, getPedidoById, getQuestionarioByName } from "../../../_services/sulAmerica.service"
-import { Box, Container, Typography, TextField, RadioGroup, Radio, FormControlLabel, Select, MenuItem, FormControl, Button, IconButton, Divider, Collapse } from "@mui/material"
+import { Box, Container, Typography, TextField, RadioGroup, Radio, FormControlLabel, Select, MenuItem, FormControl, Button, IconButton, Divider, Collapse, createTheme, ThemeProvider } from "@mui/material"
 import { tiposPergunta } from "../ConfiguracaoQuestionario/utils/tiposPergunta"
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material"
 import Title from "../../../components/Title/Title"
 import Toast from "../../../components/Toast/Toast"
+import { blue, deepOrange, grey } from "@mui/material/colors"
+
+const theme = createTheme({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: grey[500],
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: deepOrange[500],
+                    },
+                },
+            },
+        },
+        MuiRadio: {
+            styleOverrides: {
+                root: {
+                    color: grey[500],
+                    '&.Mui-checked': {
+                        color: deepOrange[500],
+                    },
+                },
+            },
+        },
+    },
+});
 
 const questionTypes = tiposPergunta.reduce((obj, tipo) => {
     obj[tipo.toLowerCase()] = tipo.toLowerCase();
@@ -359,80 +387,98 @@ const FormularioSulAmerica = () => {
 
     return (
         <Sidebar>
-            <Container>
-                <Box>
-                    Informações do beneficiario
-                </Box>
-                <Box>
-                    Informações do prestador
-                </Box>
-                <Box>
-                    <Title
-                        size={'small'}
-                    >
-                        PERFIL E CONTRATAÇÃO
-                    </Title>
-                    <Box>
-                        {formulario.perguntas.filter(pergunta => {
-                            return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO'
-                        }).sort((a, b) => {
-                            return a.pergunta.posicao - b.pergunta.posicao
-                        }).map((pergunta, index) => (
-                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
-                        ))}
-                    </Box>
-                </Box>
-                <Box>
-                    <Title
-                        size={'small'}
-                    >
-                        TRATAMENTO
-                    </Title>
-                    <Box>
-                        {formulario.perguntas.filter(pergunta => {
-                            return pergunta.pergunta.categoria === 'TRATAMENTO'
-                        }).sort((a, b) => {
-                            return a.pergunta.posicao - b.pergunta.posicao
-                        }).map((pergunta, index) => (
-                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
-                        ))}
-                    </Box>
-                </Box>
-                <Box>
-                    <Title
-                        size={'small'}
-                    >
-                        ACOMPANHAMENTO TERAPÊUTICO E DESFECHO
-                    </Title>
-                    <Box>
-                        {formulario.perguntas.filter(pergunta => {
-                            return pergunta.pergunta.categoria === 'ACOMPANHAMENTO TERAPÊUTICO E DESFECHO'
-                        }).sort((a, b) => {
-                            return a.pergunta.posicao - b.pergunta.posicao
-                        }).map((pergunta, index) => (
-                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
-                        ))}
-                    </Box>
-                </Box>
+            <ThemeProvider theme={theme}>
                 <Box
-                    m={4}
-                    display="flex"
-                    justifyContent="center"
+                    color={blue[900]}
+                    bgcolor={grey[50]}
                 >
-                    <Button
-                        variant="contained"
-                        onClick={handleSend}
-                    >
-                        Enviar
-                    </Button>
+                    <Container>
+                        <Box>
+                            Informações do beneficiario
+                        </Box>
+                        <Box>
+                            Informações do prestador
+                        </Box>
+                        <Box>
+                            <Title
+                                size={'small'}
+                                lineColor={deepOrange[500]}
+                            >
+                                PERFIL E CONTRATAÇÃO
+                            </Title>
+                            <Box>
+                                {formulario.perguntas.filter(pergunta => {
+                                    return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO'
+                                }).sort((a, b) => {
+                                    return a.pergunta.posicao - b.pergunta.posicao
+                                }).map((pergunta, index) => (
+                                    <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
+                                ))}
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Title
+                                size={'small'}
+                                lineColor={deepOrange[500]}
+
+                            >
+                                TRATAMENTO
+                            </Title>
+                            <Box>
+                                {formulario.perguntas.filter(pergunta => {
+                                    return pergunta.pergunta.categoria === 'TRATAMENTO'
+                                }).sort((a, b) => {
+                                    return a.pergunta.posicao - b.pergunta.posicao
+                                }).map((pergunta, index) => (
+                                    <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
+                                ))}
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Title
+                                size={'small'}
+                                lineColor={deepOrange[500]}
+                            >
+                                ACOMPANHAMENTO TERAPÊUTICO E DESFECHO
+                            </Title>
+                            <Box>
+                                {formulario.perguntas.filter(pergunta => {
+                                    return pergunta.pergunta.categoria === 'ACOMPANHAMENTO TERAPÊUTICO E DESFECHO'
+                                }).sort((a, b) => {
+                                    return a.pergunta.posicao - b.pergunta.posicao
+                                }).map((pergunta, index) => (
+                                    <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
+                                ))}
+                            </Box>
+                        </Box>
+                        <Box
+                            m={4}
+                            display="flex"
+                            justifyContent="center"
+                        >
+                            <Button
+                                variant="contained"
+                                onClick={handleSend}
+                                sx={{
+                                    backgroundColor: deepOrange[500],
+                                    '&:hover': {
+                                        backgroundColor: deepOrange[700]
+                                    }
+                                }}
+                            >
+                                Enviar
+                            </Button>
+                        </Box>
+                        <Toast
+                            open={openToast}
+                            message={message}
+                            severity={severity}
+                            onClose={() => setOpenToast(false)}
+                        />
+                    </Container>
                 </Box>
-                <Toast
-                    open={openToast}
-                    message={message}
-                    severity={severity}
-                    onClose={() => setOpenToast(false)}
-                />
-            </Container>
+            </ThemeProvider>
+
         </Sidebar>
     )
 }
