@@ -8,6 +8,10 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material"
 import Title from "../../../components/Title/Title"
 import Toast from "../../../components/Toast/Toast"
 import { blue, deepOrange, grey } from "@mui/material/colors"
+import InfoPrestador from "./Components/InfoPrestador"
+import InfoBeneficiario from "./Components/InfoBeneficiario"
+import { createPdf } from "../PDF/createPdf"
+import axios from "axios"
 
 const theme = createTheme({
     components: {
@@ -114,15 +118,97 @@ const OptionsComponent = ({ options, handleChange, pergunta }) => {
 }
 
 const AddressComponent = ({ handleChange, pergunta }) => {
+
+    const [cep, setCep] = useState('')
+    const [endereco, setEndereco] = useState({
+        logradouro: '',
+        bairro: '',
+        localidade: '',
+        uf: '',
+        numero: ''
+    })
+
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                if (cep.length !== 8) return
+                const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+                setEndereco({ ...data, numero: '' })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetch()
+    }, [cep])
+
     return (
-        <TextField
-            fullWidth
-            variant="outlined"
-            size="small"
-            label="CEP"
-            onChange={handleChange}
-            name={pergunta}
-        />
+        <Box>
+            <TextField
+                fullWidth
+                variant="outlined"
+                size="small"
+                placeholder="CEP"
+                onChange={(e) => {
+                    handleChange(e)
+                    setCep(e.target.value)
+                }}
+                name={pergunta}
+                type="number"
+            />
+            <Box
+                mt={1}
+                display={'flex'}
+                gap={1}
+                flexWrap={'wrap'}
+            >
+                <TextField
+
+                    variant="outlined"
+                    size="small"
+                    placeholder="Endereço"
+                    onChange={handleChange}
+                    name={pergunta}
+                    value={endereco.logradouro}
+                />
+                <TextField
+
+                    variant="outlined"
+                    size="small"
+                    placeholder="Bairro"
+                    onChange={handleChange}
+                    name={pergunta}
+                    value={endereco.bairro}
+                />
+                <TextField
+
+                    variant="outlined"
+                    size="small"
+                    placeholder="Cidade"
+                    onChange={handleChange}
+                    name={pergunta}
+                    value={endereco.localidade}
+                />
+                <TextField
+
+                    variant="outlined"
+                    size="small"
+                    placeholder="UF"
+                    onChange={handleChange}
+                    name={pergunta}
+                    value={endereco.uf}
+                />
+                <TextField
+
+                    variant="outlined"
+                    size="small"
+                    placeholder="Número"
+                    onChange={handleChange}
+                    name={pergunta}
+                    value={endereco.numero}
+                />
+            </Box>
+        </Box>
     )
 }
 
@@ -221,7 +307,6 @@ const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
     }
 
     useEffect(() => {
-        console.log(catchRespostas);
         setRespostas(prevRespostas => {
             const newRespostas = [...prevRespostas]
             const index = newRespostas.findIndex(r => r.pergunta === pergunta.pergunta)
@@ -301,7 +386,6 @@ const FormularioSulAmerica = () => {
     const [openToast, setOpenToast] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
-    const [refresh, setRefresh] = useState(false)
     const [catchRespostas, setCatchRespostas] = useState(false)
 
     const handleSend = async () => {
@@ -316,6 +400,7 @@ const FormularioSulAmerica = () => {
                 setPedido(response)
                 setPrestador(response.prestador)
                 setBeneficiario(response.beneficiario)
+                console.log(response);
                 setLoading(false)
             } catch (error) {
                 console.log(error)
@@ -329,7 +414,6 @@ const FormularioSulAmerica = () => {
         const fetchFormulario = async () => {
             try {
                 const response = await getQuestionarioByName('Sindicância Script TEA')
-                console.log(response);
                 setFormulario(response)
             } catch (error) {
                 console.log(error)
@@ -341,7 +425,7 @@ const FormularioSulAmerica = () => {
 
         fetchFormulario()
         fetchPedido()
-    }, [refresh, id])
+    }, [id])
 
     useEffect(() => {
         const sendRespostas = async () => {
@@ -362,18 +446,14 @@ const FormularioSulAmerica = () => {
                         }
                     }
                 }
-
-                const response = await createRespostas({
+                await createRespostas({
                     pedido: pedido._id,
                     respostas
                 })
-
-                console.log(response);
-
-
                 setMessage('Formulario enviado com sucesso')
                 setSeverity('success')
                 setOpenToast(true)
+                createPdf()
 
             } catch (error) {
                 console.log(error)
@@ -382,7 +462,10 @@ const FormularioSulAmerica = () => {
                 setSeverity('error')
             }
         }
-        sendRespostas()
+        if (pedido) {
+            sendRespostas()
+        }
+
     }, [respostas])
 
     return (
@@ -393,12 +476,20 @@ const FormularioSulAmerica = () => {
                     bgcolor={grey[50]}
                 >
                     <Container>
-                        <Box>
-                            Informações do beneficiario
-                        </Box>
-                        <Box>
-                            Informações do prestador
-                        </Box>
+                        <InfoBeneficiario beneficiario={beneficiario} pedido={pedido} loading={loading} />
+                        <Divider sx={{
+                            bgcolor: deepOrange[400],
+                            width: '99%',
+                            margin: 'auto',
+                            mt: 1
+                        }} />
+                        <InfoPrestador prestador={prestador} loading={loading} />
+                        <Divider sx={{
+                            bgcolor: deepOrange[400],
+                            width: '99%',
+                            margin: 'auto',
+                            mt: 1
+                        }} />
                         <Box>
                             <Title
                                 size={'small'}

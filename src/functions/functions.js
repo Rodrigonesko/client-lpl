@@ -62,6 +62,10 @@ export function ajustarCpf(cpf) {
     return cpf.padStart(11, '0');
 }
 
+export function valueToBRL(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
 const feriados = [
     moment('2022-01-01'),
     moment('2022-04-21'),
