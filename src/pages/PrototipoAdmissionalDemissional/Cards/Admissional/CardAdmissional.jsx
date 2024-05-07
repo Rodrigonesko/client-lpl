@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../../_services/user.service"
-import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent } from "@mui/material"
+import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox, Card, Button, Divider, Typography, FormGroup, CardContent } from "@mui/material"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
@@ -202,7 +202,7 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                     <strong>Ação</strong>
                 </Typography>
                 <br />
-                <FormControl fullWidth>
+                <FormControl size='small' fullWidth>
                     <InputLabel id="demo-simple-select-label">Ação</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -210,6 +210,7 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                         value={acoes}
                         label='Acao'
                         onChange={(e) => setAcoes(e.target.value)}
+                        sx={{ borderRadius: '10px' }}
                     >
                         {acao.map((acoes) => (
                             <MenuItem

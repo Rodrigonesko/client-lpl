@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { getUsers } from "../../../../_services/user.service"
-import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, TextField, MenuItem, Button, Divider, Typography, FormControlLabel, Checkbox, FormGroup, CardContent, Card } from "@mui/material"
+import { Box, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Collapse, FormControl, InputLabel, Select, MenuItem, Button, Divider, Typography, FormControlLabel, Checkbox, FormGroup, CardContent, Card } from "@mui/material"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
-import { filterTableDemi, findAcoesDemissao, setarStatus, updateData, updateObs } from "../../../../_services/admissaoDemissao.service";
+import { filterTableDemi, findAcoesDemissao } from "../../../../_services/admissaoDemissao.service";
 import moment from "moment";
 import TableObs from "./Components/TableObs";
 import TableData from "./Components/TableData";
@@ -98,7 +98,7 @@ const TableBodyAdmDem = ({ setUser, user, setFlushHook }) => {
                                             color = green[300]
                                         }
                                         return (
-                                            <TableRow key={item._id} style={{ backgroundColor: color }}>
+                                            <TableRow key={item.id} style={{ backgroundColor: color }}>
                                                 <TableCell>{item.responsavel}</TableCell>
                                                 <TableCell>{item.acao}</TableCell>
                                                 <TableCell>{item.fornecedor}</TableCell>
@@ -190,7 +190,7 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                     <strong>Ação</strong>
                 </Typography>
                 <br />
-                <FormControl fullWidth>
+                <FormControl size='small' fullWidth>
                     <InputLabel id="demo-simple-select-label">Ação</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -198,6 +198,7 @@ const Filter = ({ acao, setAcoes, acoes, status, setStatus, responsaveis, setRes
                         value={acoes}
                         label='Acao'
                         onChange={(e) => setAcoes(e.target.value)}
+                        sx={{ borderRadius: '10px' }}
                     >
                         {acao.map((acoes) => (
                             <MenuItem
