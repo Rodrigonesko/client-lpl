@@ -1,16 +1,14 @@
-import { ArrowForward } from "@mui/icons-material";
-import { AccordionDetails, Box, Drawer, IconButton, Tooltip } from "@mui/material";
+import { ArrowForward, Close } from "@mui/icons-material";
+import { AccordionDetails, Box, Drawer, IconButton, Tooltip, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Toast from "../../../components/Toast/Toast";
-import AuthContext from "../../../context/AuthContext";
 
-const DrawerDetailsPedidos = () => {
-
-    const { acessos } = useContext(AuthContext);
+const DrawerDetailsPedidos = ({ data }) => {
 
     const [open, setOpen] = useState(false);
     const [size, setSize] = useState('35%');
+    const [pedido, setPedido] = useState(data);
 
     const [openToast, setOpenToast] = useState(false);
     const [msg, setMsg] = useState('');
@@ -54,7 +52,18 @@ const DrawerDetailsPedidos = () => {
                         p: 1
                     }}
                 >
+                    <Tooltip title='Fechar'>
+                        <IconButton onClick={handleClose}>
+                            <Close />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
+                <Typography variant="h6" sx={{
+                    m: 2,
+                }}>
+
+                    Detalhes do Pedido { }
+                </Typography>
                 <AccordionDetails>
                     <Box
                         sx={{
