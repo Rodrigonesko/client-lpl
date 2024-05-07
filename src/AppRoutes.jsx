@@ -19,7 +19,6 @@ import ControleContigencias from "./pages/ControleContigencias/ControleContigenc
 
 /* Modulo de Admissional e Demissional*/
 
-import AdmissionalDemissional from "./pages/AdmissionalDemissional/AdmissonalDemissional";
 import ProtAdmissionalDemissional from "./pages/PrototipoAdmissionalDemissional/ProtAdmissionalDemissional";
 
 /* Modulo de Chamados*/
@@ -237,10 +236,7 @@ const AppRoutes = () => {
 
                 {/*admin rh*/}
 
-                <Route exact path="/admin/rh/admissionalDemissional" element={<ProtectedRoute>
-                    <AdmissionalDemissional />
-                </ProtectedRoute>} />
-                <Route exact path="/admin/rh/prototipoAdmissionalDemissional" element={<ProtectedRoute>
+                <Route exact path="/admin/rh/AdmissionalDemissional" element={<ProtectedRoute>
                     <ProtAdmissionalDemissional />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/rh/controlePoliticas" element={<ProtectedRoute>
