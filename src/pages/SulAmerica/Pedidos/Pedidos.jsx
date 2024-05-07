@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue } from "@mui/material/colors"
 import { useEffect, useState } from "react"
@@ -74,7 +74,8 @@ const Pedidos = () => {
                             display: 'flex',
                             alignItems: 'center',
                             mt: 2,
-                        }}>
+                        }}
+                    >
                         <TextField type='text' label='Prestador' size='small' value={prestador} onChange={(e) => { setPrestador(e.target.value) }} sx={{ mr: 3, }}
                             InputProps={{
                                 style: {
@@ -97,10 +98,20 @@ const Pedidos = () => {
                                 onChange={(e) => { setResponsavel(e.target.value) }}
                                 value={responsavel}
                             >
-                                <MenuItem value={''} >Todos</MenuItem>
+                                <MenuItem value={'A DEFINIR'} >A DEFINIR</MenuItem>
                                 {
-                                    pedidos.map((item) => (
-                                        <MenuItem value={item} >{item.nome}</MenuItem>
+                                    pedidos.reduce((uniqueResponsaveis, item) => {
+                                        // Verifica se o nome do responsável já existe nos itens anteriores
+                                        const responsavelExistente = uniqueResponsaveis.some(
+                                            (uniqueItem) => uniqueItem.responsavel === item.responsavel
+                                        );
+                                        // Se o nome do responsável não existir nos itens anteriores, adiciona ao array de únicos
+                                        if (!responsavelExistente) {
+                                            uniqueResponsaveis.push(item);
+                                        }
+                                        return uniqueResponsaveis;
+                                    }, []).map((uniqueItem) => (
+                                        <MenuItem key={uniqueItem.id} value={uniqueItem}>{uniqueItem.responsavel}</MenuItem>
                                     ))
                                 }
                             </Select>
