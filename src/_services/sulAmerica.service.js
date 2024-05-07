@@ -51,7 +51,7 @@ export const filterPedidos = async (prestador, beneficiario, responsavel, status
 }
 
 export const getPedidoById = async (id) => {
-    return await new ApiCall(`/pedido/${id}`, url).get()
+    return await new ApiCall(`/pedido/id/${id}`, url).get()
 }
 
 /* Respostas */

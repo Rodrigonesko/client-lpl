@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { blue, deepOrange, grey } from "@mui/material/colors";
-import { ajustarCpf } from "../../../functions/functions";
+import { ajustarCep, ajustarCpf } from "../../../functions/functions";
 import { createPedidosByPlanilha } from "../../../_services/sulAmerica.service";
 
 const UploadSulAmerica = () => {
@@ -33,7 +33,8 @@ const UploadSulAmerica = () => {
                     return {
                         ...row,
                         NUM_CPF: ajustarCpf(row.NUM_CPF),
-                        NUM_CPF_TITULAR: ajustarCpf(row.NUM_CPF_TITULAR)
+                        NUM_CPF_TITULAR: ajustarCpf(row.NUM_CPF_TITULAR),
+                        NUM_CEP_RESIDENCIA: ajustarCep(row.NUM_CEP_RESIDENCIA)
                     }
                 });
                 const result = await createPedidosByPlanilha(rows);

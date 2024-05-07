@@ -163,47 +163,37 @@ const AddressComponent = ({ handleChange, pergunta }) => {
                 flexWrap={'wrap'}
             >
                 <TextField
-
                     variant="outlined"
                     size="small"
                     placeholder="Endereço"
-                    onChange={handleChange}
                     name={pergunta}
                     value={endereco.logradouro}
                 />
                 <TextField
-
                     variant="outlined"
                     size="small"
                     placeholder="Bairro"
-                    onChange={handleChange}
                     name={pergunta}
                     value={endereco.bairro}
                 />
                 <TextField
-
                     variant="outlined"
                     size="small"
                     placeholder="Cidade"
-                    onChange={handleChange}
                     name={pergunta}
                     value={endereco.localidade}
                 />
                 <TextField
-
                     variant="outlined"
                     size="small"
                     placeholder="UF"
-                    onChange={handleChange}
                     name={pergunta}
                     value={endereco.uf}
                 />
                 <TextField
-
                     variant="outlined"
                     size="small"
                     placeholder="Número"
-                    onChange={handleChange}
                     name={pergunta}
                     value={endereco.numero}
                 />
@@ -400,7 +390,6 @@ const FormularioSulAmerica = () => {
                 setPedido(response)
                 setPrestador(response.prestador)
                 setBeneficiario(response.beneficiario)
-                console.log(response);
                 setLoading(false)
             } catch (error) {
                 console.log(error)
@@ -446,14 +435,21 @@ const FormularioSulAmerica = () => {
                         }
                     }
                 }
-                await createRespostas({
+                const resposta = await createRespostas({
                     pedido: pedido._id,
                     respostas
                 })
+                console.log({
+                    ...resposta,
+                    pedido
+                });
                 setMessage('Formulario enviado com sucesso')
                 setSeverity('success')
                 setOpenToast(true)
-                createPdf()
+                createPdf({
+                    ...resposta,
+                    pedido
+                })
 
             } catch (error) {
                 console.log(error)
@@ -511,7 +507,6 @@ const FormularioSulAmerica = () => {
                             <Title
                                 size={'small'}
                                 lineColor={deepOrange[500]}
-
                             >
                                 TRATAMENTO
                             </Title>

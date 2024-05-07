@@ -62,6 +62,11 @@ export function ajustarCpf(cpf) {
     return cpf.padStart(11, '0');
 }
 
+export function ajustarCep(cep) {
+    cep = cep.replace(/\D/g, '');
+    return cep.padStart(8, '0');
+}
+
 export function valueToBRL(value) {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
