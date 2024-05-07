@@ -1,11 +1,12 @@
-import { Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import { blue } from "@mui/material/colors"
+import { blue, orange } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterPedidos, getPedidos } from "../../../_services/sulAmerica.service"
 import { ArrowForward } from "@mui/icons-material"
 import Title from "../../../components/Title/Title"
 import moment from "moment"
+import DrawerDetailsPedidos from "./DrawerDetailsPedidos"
 
 const Pedidos = () => {
 
@@ -46,7 +47,7 @@ const Pedidos = () => {
     useEffect(() => {
         fetch(page)
         setFlushHook(false)
-    }, [flushHook])
+    }, [flushHook, page])
 
     const handleFilter = async (event, valor) => {
         event?.preventDefault()
@@ -68,7 +69,7 @@ const Pedidos = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size={'medium'}>Pedidos</Title>
+                    <Title size={'medium'} fontColor={blue[900]} lineColor={orange[900]}>Pedidos</Title>
                     <Box
                         sx={{
                             display: 'flex',
@@ -145,7 +146,7 @@ const Pedidos = () => {
                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', mt: 4 }} >
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
-                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} color='secondary' sx={{ fontSize: '15px' }} />
+                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} color='warning' sx={{ fontSize: '15px' }} />
                                 <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
                             </Box>
                             {
@@ -153,7 +154,7 @@ const Pedidos = () => {
                                     <Table
                                         size="small"
                                     >
-                                        <TableHead sx={{ backgroundColor: blue[500] }}>
+                                        <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
                                             <TableRow>
                                                 <TableCell sx={{ color: 'white' }}>Menor Data Execução</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Maior Data Execução</TableCell>
@@ -188,9 +189,12 @@ const Pedidos = () => {
                                                         <TableCell>{moment(pedido.dataCriacao).format('DD/MM/YYYY')}</TableCell>
                                                         <TableCell>{pedido.status}</TableCell>
                                                         <TableCell>
-                                                            <IconButton>
-                                                                <ArrowForward />
-                                                            </IconButton>
+                                                            {/* <Tooltip title='Detalhes'>
+                                                                <IconButton>
+                                                                    <ArrowForward />
+                                                                </IconButton>
+                                                            </Tooltip> */}
+                                                            <DrawerDetailsPedidos />
                                                         </TableCell>
                                                     </TableRow>
                                                 ))
