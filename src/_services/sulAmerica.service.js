@@ -22,6 +22,10 @@ export const buscarQuestionarios = async () => {
     return await new ApiCall('/questionario', url).get()
 }
 
+export const getQuestionarioByName = async (name) => {
+    return await new ApiCall(`/questionario/nome/${name}`, url).get()
+}
+
 export const createQuestionario = async (data) => {
     return await new ApiCall('/questionario', url).post(data)
 }
@@ -40,4 +44,14 @@ export const filterPedidos = async (prestador, beneficiario, responsavel, status
     console.log(prestador, beneficiario, responsavel, status, page, limit);
 
     return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&page=${page}&limit=${limit}`, url).get()
+}
+
+export const getPedidoById = async (id) => {
+    return await new ApiCall(`/pedido/${id}`, url).get()
+}
+
+/* Respostas */
+
+export const createRespostas = async (data) => {
+    return await new ApiCall('/resposta', url).post(data)
 }
