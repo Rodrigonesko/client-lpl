@@ -168,6 +168,7 @@ import ConfiguracaoQuestionario from "./pages/SulAmerica/ConfiguracaoQuestionari
 import Pedidos from "./pages/SulAmerica/Pedidos/Pedidos";
 import UploadSulAmerica from "./pages/SulAmerica/upload/Index";
 import FormularioSulAmerica from "./pages/SulAmerica/Formulario/Index";
+import BeneficiariosSulAmerica from "./pages/SulAmerica/Beneficiarios/Beneficiarios";
 
 const AppRoutes = () => {
     return (
@@ -188,6 +189,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/formulario/:id" element={<ProtectedRoute>
                     <FormularioSulAmerica />
+                </ProtectedRoute>} />
+                <Route exact path="/sulAmerica/Beneficiarios" element={<ProtectedRoute>
+                    <BeneficiariosSulAmerica />
                 </ProtectedRoute>} />
 
                 <Route exact path="/internMessages" element={<ProtectedRoute>
@@ -545,6 +549,7 @@ const AppRoutes = () => {
                 <Route exact path="/sindicancia/itensChecklist" element={<ProtectedRoute>
                     <ItensChecklist />
                 </ProtectedRoute>} />
+                
             </Routes>
         </AuthProvider>
     )

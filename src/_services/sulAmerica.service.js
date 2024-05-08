@@ -63,3 +63,9 @@ export const getPrestadoresComPedidosEmAberto = async () => {
 export const createRespostas = async (data) => {
     return await new ApiCall('/resposta', url).post(data)
 }
+
+/* Beneficiários */
+
+export const getBeneficiarios = async (page, limit) => {
+    return await new ApiCall(`/beneficiario?page=${page}&limit=${limit}`, url).get()
+}

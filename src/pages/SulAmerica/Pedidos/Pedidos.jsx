@@ -31,6 +31,16 @@ const Pedidos = () => {
         }
     }
 
+    const findPrestadores = async () => {
+        try {
+            const find = await getPrestadoresComPedidosEmAberto()
+            setPrestadores(find)
+            // console.log(find);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const fetch = async () => {
         try {
             setLoading(true)
@@ -39,12 +49,9 @@ const Pedidos = () => {
                 rowsPerPage,
             )
             setPedidos(set.result)
-            console.log(set.total)
+            // console.log(set.total)
             setTotalPages(set.total)
             setLoading(false)
-            const find = await getPrestadoresComPedidosEmAberto()
-            setPrestadores(find.prestadoresComPedidosEmAberto)
-            console.log(find);
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -52,7 +59,12 @@ const Pedidos = () => {
     }
 
     useEffect(() => {
-        fetch(page)
+        if ((prestador === '') && (beneficiario === '') && (responsavel === '') && (status === '')) {
+            fetch(page)
+        } else {
+            handleFilter()
+        }
+        findPrestadores()
         setFlushHook(false)
     }, [flushHook, page, rowsPerPage])
 
@@ -62,7 +74,7 @@ const Pedidos = () => {
             setLoading(true)
             if ((prestador.length > 2) || (beneficiario.length > 2) || (responsavel.length > 2) || (status.length > 2)) {
                 const filter = await filterPedidos(prestador, beneficiario, responsavel, status, page, rowsPerPage)
-                console.log(filter.result);
+                // console.log(filter.result);
                 setPedidos(filter.result)
                 setTotalPages(filter.total)
                 setLoading(false)
@@ -93,7 +105,11 @@ const Pedidos = () => {
                             onChange={(e, newValue) => {
                                 setPrestador(newValue);
                             }}
-                            sx={{ width: 300, mr: 3, borderRadius: '10px' }}
+                            sx={{
+                                width: 300, mr: 3, borderRadius: '10px', '& .MuiOutlinedInput-root': {
+                                    borderRadius: '10px'
+                                }
+                            }}
                             renderInput={(params) => <TextField {...params} label="Prestador" />}
                         />
                         {/* <TextField type='text' label='Prestador' size='small' value={prestador} onChange={(e) => { setPrestador(e.target.value) }} sx={{ mr: 3, }}
@@ -166,7 +182,7 @@ const Pedidos = () => {
                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', mt: 4 }} >
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
-                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} color='warning' sx={{ fontSize: '15px' }} />
+                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} color={`linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)`} sx={{ fontSize: '15px' }} />
                             </Box>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                                 <FormControl size="small" disabled={loading}>
@@ -238,6 +254,7 @@ const Pedidos = () => {
                                                                     <ArrowForward />
                                                                 </IconButton>
                                                             </Tooltip> */}
+
                                                             <DrawerDetailsPedidos key={pedido._id} data={pedido} />
                                                         </TableCell>
                                                     </TableRow>
