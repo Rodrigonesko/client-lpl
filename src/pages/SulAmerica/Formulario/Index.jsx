@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { createRespostas, getPedidoById, getQuestionarioByName } from "../../../_services/sulAmerica.service"
-import { Box, Container, Typography, TextField, RadioGroup, Radio, FormControlLabel, Select, MenuItem, FormControl, Button, IconButton, Divider, Collapse, createTheme, ThemeProvider } from "@mui/material"
+import { Box, Container, Typography, TextField, Button, IconButton, Divider, Collapse, createTheme, ThemeProvider, Alert } from "@mui/material"
 import { tiposPergunta } from "../ConfiguracaoQuestionario/utils/tiposPergunta"
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material"
 import Title from "../../../components/Title/Title"
@@ -11,7 +11,13 @@ import { blue, deepOrange, grey } from "@mui/material/colors"
 import InfoPrestador from "./Components/InfoPrestador"
 import InfoBeneficiario from "./Components/InfoBeneficiario"
 import { createPdf } from "../PDF/createPdf"
-import axios from "axios"
+import AddressComponent from "./Components/AddressComponent"
+import OptionsComponent from "./Components/OptionsComponent"
+import OpenComponent from "./Components/OpenComponent"
+import ValueComponent from "./Components/ValueComponent"
+import RadioGroupComponent from "./Components/RadioGroupComponent"
+import moment from "moment"
+import AuthContext from "../../../context/AuthContext"
 
 const theme = createTheme({
     components: {
@@ -45,163 +51,6 @@ const questionTypes = tiposPergunta.reduce((obj, tipo) => {
     return obj;
 }, {});
 
-const RadioGroupComponent = ({ handleChange, pergunta }) => {
-    return (
-        <RadioGroup
-            row
-            onChange={handleChange}
-            name={pergunta}
-        >
-            <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
-            <FormControlLabel value="Não" control={<Radio />} label="Não" />
-        </RadioGroup>
-    )
-}
-
-const ValueComponent = ({ pergunta, handleChange }) => {
-    return (
-        <TextField
-            sx={{
-                mt: 1
-            }}
-            fullWidth
-            variant="outlined"
-            size="small"
-            type="number"
-            name={pergunta}
-            onChange={handleChange}
-            placeholder="R$ 0,00"
-        />
-    )
-}
-
-const OpenComponent = ({ pergunta, handleChange }) => {
-    return (
-        <TextField
-            sx={{
-                mt: 1
-            }}
-            fullWidth
-            variant="outlined"
-            size="small"
-            name={pergunta}
-            onChange={handleChange}
-            placeholder="Resposta"
-        />
-    )
-}
-
-const OptionsComponent = ({ options, handleChange, pergunta }) => {
-    return (
-        <FormControl
-            sx={{
-                minWidth: '300px'
-            }}
-        >
-            <Select
-                fullWidth
-                variant="outlined"
-                size="small"
-                onChange={handleChange}
-                name={pergunta}
-                defaultValue={''}
-            >
-                {
-                    options.map((option, index) => (
-                        <MenuItem key={index} value={option}>{option}</MenuItem>
-                    ))
-                }
-                <MenuItem value="Outro">Outro</MenuItem>
-            </Select>
-        </FormControl>
-    )
-}
-
-const AddressComponent = ({ handleChange, pergunta }) => {
-
-    const [cep, setCep] = useState('')
-    const [endereco, setEndereco] = useState({
-        logradouro: '',
-        bairro: '',
-        localidade: '',
-        uf: '',
-        numero: ''
-    })
-
-    useEffect(() => {
-        const fetch = async () => {
-            try {
-                if (cep.length !== 8) return
-                const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-                setEndereco({ ...data, numero: '' })
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        fetch()
-    }, [cep])
-
-    return (
-        <Box>
-            <TextField
-                fullWidth
-                variant="outlined"
-                size="small"
-                placeholder="CEP"
-                onChange={(e) => {
-                    handleChange(e)
-                    setCep(e.target.value)
-                }}
-                name={pergunta}
-                type="number"
-            />
-            <Box
-                mt={1}
-                display={'flex'}
-                gap={1}
-                flexWrap={'wrap'}
-            >
-                <TextField
-                    variant="outlined"
-                    size="small"
-                    placeholder="Endereço"
-                    name={pergunta}
-                    value={endereco.logradouro}
-                />
-                <TextField
-                    variant="outlined"
-                    size="small"
-                    placeholder="Bairro"
-                    name={pergunta}
-                    value={endereco.bairro}
-                />
-                <TextField
-                    variant="outlined"
-                    size="small"
-                    placeholder="Cidade"
-                    name={pergunta}
-                    value={endereco.localidade}
-                />
-                <TextField
-                    variant="outlined"
-                    size="small"
-                    placeholder="UF"
-                    name={pergunta}
-                    value={endereco.uf}
-                />
-                <TextField
-                    variant="outlined"
-                    size="small"
-                    placeholder="Número"
-                    name={pergunta}
-                    value={endereco.numero}
-                />
-            </Box>
-        </Box>
-    )
-}
-
 const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
 
     const [resposta, setResposta] = useState({ pergunta: pergunta.pergunta, resposta: '', categoria: pergunta.categoria, tipo: pergunta.tipo, observacoes: '', subPerguntas: pergunta.subPerguntas })
@@ -228,6 +77,28 @@ const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
                 return subPergunta
             })
         })
+    }
+
+    const handleChangeAddress = (address, subPergunta, texto) => {
+        if (subPergunta) {
+            setResposta({
+                ...resposta,
+                subPerguntas: resposta.subPerguntas.map(subPergunta => {
+                    if (subPergunta.texto === texto) {
+                        return {
+                            ...subPergunta,
+                            resposta: address
+                        }
+                    }
+                    return subPergunta
+                })
+            })
+        } else {
+            setResposta({
+                ...resposta,
+                resposta: address
+            })
+        }
     }
 
     const handleChangeObservacoes = (e) => {
@@ -290,7 +161,7 @@ const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
             case questionTypes['opções']:
                 return <OptionsComponent pergunta={question.pergunta ?? question.texto} options={question.opcoes} handleChange={question.subPergunta ? handleChangeSubPergunta : handleChange} />
             case questionTypes['endereço']:
-                return <AddressComponent pergunta={question.pergunta ?? question.texto} handleChange={question.subPergunta ? handleChangeSubPergunta : handleChange} />
+                return <AddressComponent pergunta={question.pergunta ?? question.texto} handleChange={handleChangeAddress} subPergunta={question.subPergunta} />
             default:
                 return 'Tipo de pergunta não encontrado'
         }
@@ -334,7 +205,6 @@ const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
                         </IconButton>
                     )
                 }
-
                 <Collapse
                     in={openObs}
                     timeout="auto"
@@ -352,8 +222,6 @@ const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
                         placeholder="Observações"
                     />
                 </Collapse>
-
-
             </Box>}
             <Divider sx={{ m: 2 }} />
         </Box>
@@ -363,6 +231,7 @@ const Pergunta = ({ pergunta, index, catchRespostas, setRespostas }) => {
 const FormularioSulAmerica = () => {
 
     const { id } = useParams()
+    const { name } = useContext(AuthContext)
 
     const [pedido, setPedido] = useState()
     const [prestador, setPrestador] = useState()
@@ -380,7 +249,15 @@ const FormularioSulAmerica = () => {
 
     const handleSend = async () => {
         setCatchRespostas(!catchRespostas)
+    }
 
+    const verifyFirstQuestion = (index) => {
+        if (index !== 0) return true
+        const res = (index === 0 &&
+            (pedido?.beneficiario?.carteiraEmpresa !== 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa !== 'PME') &&
+            new Date(pedido?.beneficiario?.dataInicioVigencia).getFullYear() >= 2022)
+
+        return res
     }
 
     useEffect(() => {
@@ -418,6 +295,7 @@ const FormularioSulAmerica = () => {
 
     useEffect(() => {
         const sendRespostas = async () => {
+            console.log(respostas);
             try {
                 for (const resposta of respostas) {
                     if (resposta.resposta === '') {
@@ -427,7 +305,8 @@ const FormularioSulAmerica = () => {
                         return
                     }
                     for (const subResposta of resposta.subPerguntas) {
-                        if (subResposta.resposta === '' && resposta.resposta === subResposta.condicao) {
+                        console.log(subResposta);
+                        if (!subResposta.resposta && resposta.resposta === subResposta.condicao) {
                             setOpenToast(true)
                             setMessage(`Preencha a sub pergunta: ${subResposta.texto} | Categoria: ${resposta.categoria} | Pergunta: ${resposta.pergunta}`)
                             setSeverity('error')
@@ -439,10 +318,6 @@ const FormularioSulAmerica = () => {
                     pedido: pedido._id,
                     respostas
                 })
-                console.log({
-                    ...resposta,
-                    pedido
-                });
                 setMessage('Formulario enviado com sucesso')
                 setSeverity('success')
                 setOpenToast(true)
@@ -450,7 +325,6 @@ const FormularioSulAmerica = () => {
                     ...resposta,
                     pedido
                 })
-
             } catch (error) {
                 console.log(error)
                 setOpenToast(true)
@@ -486,57 +360,80 @@ const FormularioSulAmerica = () => {
                             margin: 'auto',
                             mt: 1
                         }} />
-                        <Box>
-                            <Title
-                                size={'small'}
-                                lineColor={deepOrange[500]}
-                            >
-                                PERFIL E CONTRATAÇÃO
-                            </Title>
-                            <Box>
-                                {formulario.perguntas.filter(pergunta => {
-                                    return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO'
-                                }).sort((a, b) => {
-                                    return a.pergunta.posicao - b.pergunta.posicao
-                                }).map((pergunta, index) => (
-                                    <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
-                                ))}
-                            </Box>
-                        </Box>
-                        <Box>
-                            <Title
-                                size={'small'}
-                                lineColor={deepOrange[500]}
-                            >
-                                TRATAMENTO
-                            </Title>
-                            <Box>
-                                {formulario.perguntas.filter(pergunta => {
-                                    return pergunta.pergunta.categoria === 'TRATAMENTO'
-                                }).sort((a, b) => {
-                                    return a.pergunta.posicao - b.pergunta.posicao
-                                }).map((pergunta, index) => (
-                                    <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
-                                ))}
-                            </Box>
-                        </Box>
-                        <Box>
-                            <Title
-                                size={'small'}
-                                lineColor={deepOrange[500]}
-                            >
-                                ACOMPANHAMENTO TERAPÊUTICO E DESFECHO
-                            </Title>
-                            <Box>
-                                {formulario.perguntas.filter(pergunta => {
-                                    return pergunta.pergunta.categoria === 'ACOMPANHAMENTO TERAPÊUTICO E DESFECHO'
-                                }).sort((a, b) => {
-                                    return a.pergunta.posicao - b.pergunta.posicao
-                                }).map((pergunta, index) => (
-                                    <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} />
-                                ))}
-                            </Box>
-                        </Box>
+                        <Alert
+                            severity="info"
+                            sx={{
+                                mt: 2
+                            }}
+                        >
+                            <Typography>
+                                Bom dia/Tarde, sou a {name.split(' ')[0]} da Equipe de qualidade e Direcionamento de rede Sul América, poderia falar com o(a) responsável pelo(a) {pedido?.beneficiario?.nome}? Sr(a) pode falar no momento?
+                            </Typography>
+                            <Typography>
+                                Se não - verificar melhor horário e agendar
+                            </Typography>
+                            <Typography>
+                                Se sim - continuar
+                            </Typography>
+                            <Typography>
+                                Hoje é dia {moment().format('DD/MM/YYYY')} e {moment().format('HH:mm')} e informamos que esta ligação será gravada e arquivada. Vamos iniciar
+                            </Typography>
+                        </Alert>
+                        {
+
+                            pedido && <>
+                                <Box>
+                                    <Title
+                                        size={'small'}
+                                        lineColor={deepOrange[500]}
+                                    >
+                                        PERFIL E CONTRATAÇÃO
+                                    </Title>
+                                    <Box>
+                                        {formulario.perguntas.filter((pergunta, index) => {
+                                            return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO' && verifyFirstQuestion(index)
+                                        }).sort((a, b) => {
+                                            return a.pergunta.posicao - b.pergunta.posicao
+                                        }).map((pergunta, index) => (
+                                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} pedido={pedido} />
+                                        ))}
+                                    </Box>
+                                </Box>
+                                <Box>
+                                    <Title
+                                        size={'small'}
+                                        lineColor={deepOrange[500]}
+                                    >
+                                        TRATAMENTO
+                                    </Title>
+                                    <Box>
+                                        {formulario.perguntas.filter(pergunta => {
+                                            return pergunta.pergunta.categoria === 'TRATAMENTO'
+                                        }).sort((a, b) => {
+                                            return a.pergunta.posicao - b.pergunta.posicao
+                                        }).map((pergunta, index) => (
+                                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} pedido={pedido} />
+                                        ))}
+                                    </Box>
+                                </Box>
+                                <Box>
+                                    <Title
+                                        size={'small'}
+                                        lineColor={deepOrange[500]}
+                                    >
+                                        ACOMPANHAMENTO TERAPÊUTICO E DESFECHO
+                                    </Title>
+                                    <Box>
+                                        {formulario.perguntas.filter(pergunta => {
+                                            return pergunta.pergunta.categoria === 'ACOMPANHAMENTO TERAPÊUTICO E DESFECHO'
+                                        }).sort((a, b) => {
+                                            return a.pergunta.posicao - b.pergunta.posicao
+                                        }).map((pergunta, index) => (
+                                            <Pergunta key={index} pergunta={pergunta.pergunta} index={index} setRespostas={setRespostas} catchRespostas={catchRespostas} respostas={respostas} pedido={pedido} />
+                                        ))}
+                                    </Box>
+                                </Box>
+                            </>}
                         <Box
                             m={4}
                             display="flex"

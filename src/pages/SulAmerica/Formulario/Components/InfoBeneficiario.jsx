@@ -66,6 +66,9 @@ const InfoBeneficiario = (props) => {
                             <strong>Celulares:</strong> {props?.beneficiario?.celulares.map(celular => celular).join(' - ')}
                         </Typography>
                         <Typography>
+                            <strong>Plano:</strong> {props?.beneficiario?.carteiraEmpresa}
+                        </Typography>
+                        <Typography>
                             <strong>Início Vigência:</strong> {props?.beneficiario?.dataInicioVigencia && moment(props?.beneficiario?.dataInicioVigencia).format('DD/MM/YYYY')}
                         </Typography>
                         <Typography>
