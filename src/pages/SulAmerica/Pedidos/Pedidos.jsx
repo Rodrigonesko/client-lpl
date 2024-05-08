@@ -1,8 +1,8 @@
-import { Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, orange } from "@mui/material/colors"
 import { useEffect, useState } from "react"
-import { filterPedidos, getPedidos } from "../../../_services/sulAmerica.service"
+import { filterPedidos, getPedidos, getPrestadoresComPedidosEmAberto } from "../../../_services/sulAmerica.service"
 import Title from "../../../components/Title/Title"
 import moment from "moment"
 import DrawerDetailsPedidos from "./DrawerDetailsPedidos"
@@ -11,12 +11,14 @@ const Pedidos = () => {
 
     const [pedidos, setPedidos] = useState([])
     const [prestador, setPrestador] = useState('')
+    const [prestadores, setPrestadores] = useState([])
     const [beneficiario, setBeneficiario] = useState('')
     const [responsavel, setResponsavel] = useState('')
     const [status, setStatus] = useState('')
 
     const [flushHook, setFlushHook] = useState(false)
     const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false)
 
@@ -29,14 +31,20 @@ const Pedidos = () => {
         }
     }
 
-    const fetch = async (valor) => {
+    const fetch = async () => {
         try {
             setLoading(true)
-            const set = await getPedidos(valor)
+            const set = await getPedidos(
+                page,
+                rowsPerPage,
+            )
             setPedidos(set.result)
             console.log(set.total)
             setTotalPages(set.total)
             setLoading(false)
+            const find = await getPrestadoresComPedidosEmAberto()
+            setPrestadores(find.prestadoresComPedidosEmAberto)
+            console.log(find);
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -46,14 +54,14 @@ const Pedidos = () => {
     useEffect(() => {
         fetch(page)
         setFlushHook(false)
-    }, [flushHook, page])
+    }, [flushHook, page, rowsPerPage])
 
-    const handleFilter = async (event, valor) => {
+    const handleFilter = async (event) => {
         event?.preventDefault()
         try {
             setLoading(true)
             if ((prestador.length > 2) || (beneficiario.length > 2) || (responsavel.length > 2) || (status.length > 2)) {
-                const filter = await filterPedidos(prestador, beneficiario, responsavel, status, valor)
+                const filter = await filterPedidos(prestador, beneficiario, responsavel, status, page, rowsPerPage)
                 console.log(filter.result);
                 setPedidos(filter.result)
                 setTotalPages(filter.total)
@@ -76,12 +84,25 @@ const Pedidos = () => {
                             mt: 2,
                         }}
                     >
-                        <TextField type='text' label='Prestador' size='small' value={prestador} onChange={(e) => { setPrestador(e.target.value) }} sx={{ mr: 3, }}
+                        <Autocomplete
+                            size='small'
+                            disablePortal
+                            id="combo-box-demo"
+                            value={prestador}
+                            options={prestadores}
+                            onChange={(e, newValue) => {
+                                setPrestador(newValue);
+                            }}
+                            sx={{ width: 300, mr: 3, borderRadius: '10px' }}
+                            renderInput={(params) => <TextField {...params} label="Prestador" />}
+                        />
+                        {/* <TextField type='text' label='Prestador' size='small' value={prestador} onChange={(e) => { setPrestador(e.target.value) }} sx={{ mr: 3, }}
                             InputProps={{
                                 style: {
                                     borderRadius: '10px'
                                 }
-                            }} />
+                            }}
+                        /> */}
                         <TextField type='text' label='Beneficiario' size='small' value={beneficiario} onChange={(e) => { setBeneficiario(e.target.value) }} sx={{ mr: 3, }}
                             InputProps={{
                                 style: {
@@ -146,12 +167,36 @@ const Pedidos = () => {
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
                                 <Chip label={`Quantidade de Pedidos: ${totalPages}`} color='warning' sx={{ fontSize: '15px' }} />
-                                <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
+                            </Box>
+                            <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
+                                <FormControl size="small" disabled={loading}>
+                                    <InputLabel>Linhas</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Linhas"
+                                        sx={{ width: '100px', borderRadius: '10px' }}
+                                        value={rowsPerPage}
+                                        onChange={(e) => setRowsPerPage(e.target.value)}
+                                    >
+                                        <MenuItem value={10} >10</MenuItem>
+                                        <MenuItem value={20} >20</MenuItem>
+                                        <MenuItem value={30} >30</MenuItem>
+                                        <MenuItem value={40} >40</MenuItem>
+                                        <MenuItem value={50} >50</MenuItem>
+                                        <MenuItem value={100} >100</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <Pagination count={
+                                    totalPages % rowsPerPage === 0 ?
+                                        Math.floor(totalPages / rowsPerPage) :
+                                        Math.floor(totalPages / rowsPerPage) + 1
+                                } page={page} onChange={(e, value) => setPage(value)} disabled={loading} />
                             </Box>
                             {
                                 !loading ? (
                                     <Table
-                                        size="small"
+                                        size="small" component={Paper} elevation={7} sx={{ mb: 5, borderRadius: '15px' }}
                                     >
                                         <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
                                             <TableRow>
