@@ -7,6 +7,7 @@ import Title from "../../../components/Title/Title"
 import { blue, orange } from "@mui/material/colors"
 import moment from "moment"
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import AddressComponent from "./Components/AddressComponent"
 
 const FichaBeneficiarioSulAmerica = () => {
 
@@ -175,13 +176,14 @@ const FichaBeneficiarioSulAmerica = () => {
                     <Title size={'small'} fontColor={blue[900]} lineColor={orange[900]}>Endereço Beneficiario</Title>
                 </Box>
                 <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    // display: 'flex',
+                    // alignItems: 'center',
+                    // justifyContent: 'space-between',
                     mt: 3,
                 }}
                 >
-                    <TextField type='text' label='CEP' size='small' value={data?.cep} sx={{ width: '350px' }}
+                    <AddressComponent id={data?.id} />
+                    {/* <TextField type='text' label='CEP' size='small' value={data?.cep} sx={{ width: '350px' }}
                         InputProps={{
                             style: {
                                 borderRadius: '10px'
@@ -220,7 +222,7 @@ const FichaBeneficiarioSulAmerica = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                    />
+                    /> */}
                 </Box>
                 <Box
                     sx={{
