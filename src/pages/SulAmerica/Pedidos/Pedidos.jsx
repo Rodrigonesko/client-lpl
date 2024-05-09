@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, orange } from "@mui/material/colors"
 import { useEffect, useState } from "react"
@@ -6,6 +6,7 @@ import { filterPedidos, getPedidos, getPrestadoresComPedidosEmAberto } from "../
 import Title from "../../../components/Title/Title"
 import moment from "moment"
 import DrawerDetailsPedidos from "./DrawerDetailsPedidos"
+import { ArrowForward } from "@mui/icons-material"
 
 const Pedidos = () => {
 
@@ -182,7 +183,11 @@ const Pedidos = () => {
                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', mt: 4 }} >
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
+<<<<<<< HEAD
                                 <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px', background: `linear-gradient(45deg, ${blue[900]} 10%, ${orange[900]} 65%)`, color: 'white' }} />
+=======
+                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px' }} />
+>>>>>>> main
                             </Box>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                                 <FormControl size="small" disabled={loading}>
@@ -249,13 +254,13 @@ const Pedidos = () => {
                                                         <TableCell>{moment(pedido.dataCriacao).format('DD/MM/YYYY')}</TableCell>
                                                         <TableCell>{pedido.status}</TableCell>
                                                         <TableCell>
-                                                            {/* <Tooltip title='Detalhes'>
-                                                                <IconButton>
+                                                            <Tooltip title='Detalhes'>
+                                                                <IconButton href={`/sulAmerica/beneficiario/${pedido.beneficiario._id}`} >
                                                                     <ArrowForward />
                                                                 </IconButton>
-                                                            </Tooltip> */}
+                                                            </Tooltip>
 
-                                                            <DrawerDetailsPedidos key={pedido._id} data={pedido} />
+                                                            {/* <DrawerDetailsPedidos key={pedido._id} data={pedido} /> */}
                                                         </TableCell>
                                                     </TableRow>
                                                 ))

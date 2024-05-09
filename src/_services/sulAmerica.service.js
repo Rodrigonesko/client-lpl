@@ -69,3 +69,7 @@ export const createRespostas = async (data) => {
 export const getBeneficiarios = async (page, limit) => {
     return await new ApiCall(`/beneficiario?page=${page}&limit=${limit}`, url).get()
 }
+
+export const getBeneficiarioById = async (id) => {
+    return await new ApiCall(`/beneficiario/id/${id}`, url).get()
+}
