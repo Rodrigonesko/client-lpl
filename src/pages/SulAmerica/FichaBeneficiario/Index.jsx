@@ -2,10 +2,11 @@ import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto } from "../../../_services/sulAmerica.service"
-import { Box, Container, Divider, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, Container, Divider, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import Title from "../../../components/Title/Title"
 import { blue, orange } from "@mui/material/colors"
 import moment from "moment"
+import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 
 const FichaBeneficiarioSulAmerica = () => {
 
@@ -249,6 +250,7 @@ const FichaBeneficiarioSulAmerica = () => {
                                 <TableCell sx={{ color: 'white' }}>Data Agendamento</TableCell>
                                 <TableCell sx={{ color: 'white' }}>Data Criação</TableCell>
                                 <TableCell sx={{ color: 'white' }}>Status</TableCell>
+                                <TableCell ></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -270,6 +272,15 @@ const FichaBeneficiarioSulAmerica = () => {
                                         <TableCell>{item.dataAgendamento}</TableCell>
                                         <TableCell>{moment(item.dataCriacao).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{item.status}</TableCell>
+                                        <TableCell>
+                                            {
+                                                <Tooltip title='Formulário' href={`/sulAmerica/formulario/${item._id}`} >
+                                                    <IconButton size='small' color='primary' >
+                                                        <FeedOutlinedIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            }
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             }
