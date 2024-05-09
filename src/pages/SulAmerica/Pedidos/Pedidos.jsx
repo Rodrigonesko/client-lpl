@@ -183,11 +183,7 @@ const Pedidos = () => {
                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', mt: 4 }} >
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
-<<<<<<< HEAD
                                 <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px', background: `linear-gradient(45deg, ${blue[900]} 10%, ${orange[900]} 65%)`, color: 'white' }} />
-=======
-                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px' }} />
->>>>>>> main
                             </Box>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                                 <FormControl size="small" disabled={loading}>

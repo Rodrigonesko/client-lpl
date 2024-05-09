@@ -58,6 +58,10 @@ export const getPrestadoresComPedidosEmAberto = async () => {
     return await new ApiCall(`/pedido/prestadoresComPedidosEmAberto`, url).get()
 }
 
+export const getBeneficiarioComPedidosEmAberto = async (id) => {
+    return await new ApiCall(`/pedido/beneficiarioComPedidosEmAberto/${id}`, url).get()
+}
+
 /* Respostas */
 
 export const createRespostas = async (data) => {
