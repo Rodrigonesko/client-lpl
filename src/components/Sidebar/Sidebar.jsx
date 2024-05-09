@@ -273,6 +273,7 @@ const Sidebar = ({ children }) => {
                             <SubMenu title={"Sul America"} icon={<SouthAmericaOutlinedIcon />} >
                                 <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
                                 <MenuItem><Link to='/sulAmerica/Pedidos'>Pedidos</Link></MenuItem>
+                                <MenuItem><Link to='/sulAmerica/Beneficiarios'>Beneficiarios</Link></MenuItem>
                             </SubMenu>
                         )
                     }

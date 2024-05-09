@@ -36,7 +36,7 @@ export const updateQuestionario = async (id, data) => {
 
 /* Pedido */
 
-export const getPedidos = async (page = 1, limit = 25) => {
+export const getPedidos = async (page, limit) => {
     return await new ApiCall(`/pedido?page=${page}&limit=${limit}`, url).get()
 }
 
@@ -44,7 +44,7 @@ export const createPedidosByPlanilha = async (data) => {
     return await new ApiCall('/pedido/planilha', url).post(data)
 }
 
-export const filterPedidos = async (prestador, beneficiario, responsavel, status, page = 1, limit = 25) => {
+export const filterPedidos = async (prestador, beneficiario, responsavel, status, page, limit) => {
     console.log(prestador, beneficiario, responsavel, status, page, limit);
 
     return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&page=${page}&limit=${limit}`, url).get()
@@ -54,8 +54,18 @@ export const getPedidoById = async (id) => {
     return await new ApiCall(`/pedido/id/${id}`, url).get()
 }
 
+export const getPrestadoresComPedidosEmAberto = async () => {
+    return await new ApiCall(`/pedido/prestadoresComPedidosEmAberto`, url).get()
+}
+
 /* Respostas */
 
 export const createRespostas = async (data) => {
     return await new ApiCall('/resposta', url).post(data)
+}
+
+/* Beneficiários */
+
+export const getBeneficiarios = async (page, limit) => {
+    return await new ApiCall(`/beneficiario?page=${page}&limit=${limit}`, url).get()
 }
