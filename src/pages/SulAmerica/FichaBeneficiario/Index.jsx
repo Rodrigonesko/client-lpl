@@ -272,7 +272,7 @@ const FichaBeneficiarioSulAmerica = () => {
                                 shrink: true,
                             }}
                         />
-                        <TextField type='text' label='Entidade' size='small' {...register('numero')} sx={{ width: '350px' }}
+                        <TextField type='text' label='Número' size='small' {...register('numero')} sx={{ width: '350px' }}
                             InputProps={{
                                 style: {
                                     borderRadius: '10px'
