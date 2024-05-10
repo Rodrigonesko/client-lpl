@@ -24,6 +24,7 @@
     "react-dropzone": "^14.2.3",
     "react-emoji-picker": "^1.0.13",
     "react-google-charts": "^4.0.1",
+    "react-hook-form": "^7.51.4",
     "react-icons": "^4.4.0",
     "react-imask": "^6.4.3",
     "react-input-mask": "^2.0.4",
