@@ -4,6 +4,7 @@ import { getContacts, getFilterContactsRsd } from '../../../_services/whatsapp.s
 import { ChatContext } from './ChatContext'
 import moment from 'moment'
 import { Close, Search } from '@mui/icons-material'
+import { getBeneficiarios } from '../../../_services/sulAmerica.service'
 
 const Contacts = () => {
 
@@ -15,12 +16,21 @@ const Contacts = () => {
     useEffect(() => {
         const fetch = async () => {
             try {
-                console.log(whatsappSender, responsavel);
-                const response = await getContacts(whatsappSender, responsavel)
-                if (response.error) {
-                    return
+                if (whatsappSender === 'whatsapp:+551150264875') {
+                    const response = await getContacts(whatsappSender, responsavel)
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response)
                 }
-                setContacts(response)
+                if (whatsappSender === 'whatsapp:+551150268027') {
+                    const response = await getBeneficiarios()
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response)
+                }
+
             } catch (error) {
                 console.log(error);
                 setContacts([])

@@ -10,6 +10,7 @@ import moment from "moment";
 import { io } from "socket.io-client";
 import AuthContext from "../../../context/AuthContext";
 import ModalEnviarArquivo from "./ModalEnviarArquivo";
+import { getBeneficiarioByWhatsapp } from "../../../_services/sulAmerica.service";
 
 const socket = io(process.env.REACT_APP_WHATSAPP_SERVICE)
 
@@ -50,14 +51,27 @@ const Chat = () => {
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const response = await getMessagesRsd(whatsappReceiver.whatsapp)
-            await readMessagesRsd(whatsappReceiver.whatsapp)
-            setFlushHook((prev) => !prev)
-            if (response.error) {
-                setMessages([])
-                return console.log(response.error)
+            if (whatsappSender === 'whatsapp:+551150264875') {
+                const response = await getMessagesRsd(whatsappReceiver.whatsapp)
+                await readMessagesRsd(whatsappReceiver.whatsapp)
+                setFlushHook((prev) => !prev)
+                if (response.error) {
+                    setMessages([])
+                    return console.log(response.error)
+                }
+                setMessages(response?.mensagens)
             }
-            setMessages(response?.mensagens)
+            if (whatsappSender === 'whatsapp:+551150268027') {
+                const response = await getBeneficiarioByWhatsapp(whatsappReceiver.whatsapp)
+                //await readMessagesRsd(whatsappReceiver.whatsapp)
+                setFlushHook((prev) => !prev)
+                if (response.error) {
+                    setMessages([])
+                    return console.log(response.error)
+                }
+                setMessages(response?.mensagens)
+            }
+
         }
 
         fetchMessages()

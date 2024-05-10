@@ -58,7 +58,8 @@ export function diasUteisNoMes(ano, mes) {
 }
 
 export function ajustarCpf(cpf) {
-    cpf = cpf.replace(/\D/g, '');
+
+    cpf = typeof cpf === 'number' ? toString(cpf).replace(/\D/g, '') : cpf.replace(/\D/g, '');
     return cpf.padStart(11, '0');
 }
 
