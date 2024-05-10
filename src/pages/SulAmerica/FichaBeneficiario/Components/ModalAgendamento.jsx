@@ -5,6 +5,8 @@ import { fecharHorarios, getAnalistasDisponiveis, getDiasDisponiveis, getDiasDis
 import { filterUsers } from "../../../../_services/user.service"
 import { invertDate } from "../../../../functions/functions"
 import Toast from "../../../../components/Toast/Toast"
+import { updateBeneficiario, updatePedido } from "../../../../_services/sulAmerica.service"
+import moment from "moment"
 
 const ModalAgendamento = ({ pedido }) => {
 
@@ -113,6 +115,11 @@ const ModalAgendamento = ({ pedido }) => {
                 data: invertDate(data),
                 horarios: [horario],
                 justiticativa: 'Agendado para Entrevista SulAmérica'
+            })
+            await updatePedido(pedido, {
+                status: 'AGENDADO',
+                dataEntrevista: `${moment(data, 'DD/MM/YYYY').format('YYYY-MM-DD')} ${horario}`,
+                responsavel: analista
             })
             setLoading(false)
             setMessage('Agendado com sucesso')
@@ -230,9 +237,7 @@ const ModalAgendamento = ({ pedido }) => {
                         Fechar
                     </Button>
                     <Button
-                        onClick={() => {
-                            console.log(analista, data, horario)
-                        }}
+                        onClick={handleAgendar}
                         variant="contained"
                         color="success"
                     >

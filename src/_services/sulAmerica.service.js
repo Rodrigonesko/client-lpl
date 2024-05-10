@@ -44,6 +44,10 @@ export const createPedidosByPlanilha = async (data) => {
     return await new ApiCall('/pedido/planilha', url).post(data)
 }
 
+export const updatePedido = async (id, data) => {
+    return await new ApiCall(`/pedido/${id}`, url).put(data)
+}
+
 export const filterPedidos = async (prestador, beneficiario, responsavel, status, page, limit) => {
     console.log(prestador, beneficiario, responsavel, status, page, limit);
 

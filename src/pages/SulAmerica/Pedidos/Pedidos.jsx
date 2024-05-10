@@ -7,6 +7,7 @@ import Title from "../../../components/Title/Title"
 import moment from "moment"
 import { ArrowForward } from "@mui/icons-material"
 import { valueToBRL } from "../../../functions/functions"
+import { filterUsers } from "../../../_services/user.service"
 
 const Pedidos = () => {
 
@@ -16,6 +17,7 @@ const Pedidos = () => {
     const [beneficiario, setBeneficiario] = useState('')
     const [responsavel, setResponsavel] = useState('')
     const [status, setStatus] = useState('')
+    const [responsaveis, setResponsaveis] = useState([])
 
     const [flushHook, setFlushHook] = useState(false)
     const [page, setPage] = useState(1);
@@ -39,6 +41,11 @@ const Pedidos = () => {
                 page,
                 rowsPerPage,
             )
+            const response = await filterUsers({
+                atividadePrincipal: 'Tele Entrevista',
+                inativo: { $ne: true }
+            })
+            setResponsaveis(response.map(analista => analista.name))
             setPedidos(set.result)
             setTotalPages(set.total)
             setLoading(false)
@@ -122,18 +129,8 @@ const Pedidos = () => {
                             >
                                 <MenuItem value={'A DEFINIR'} >A DEFINIR</MenuItem>
                                 {
-                                    pedidos.reduce((uniqueResponsaveis, item) => {
-                                        // Verifica se o nome do responsável já existe nos itens anteriores
-                                        const responsavelExistente = uniqueResponsaveis.some(
-                                            (uniqueItem) => uniqueItem.responsavel === item.responsavel
-                                        );
-                                        // Se o nome do responsável não existir nos itens anteriores, adiciona ao array de únicos
-                                        if (!responsavelExistente) {
-                                            uniqueResponsaveis.push(item);
-                                        }
-                                        return uniqueResponsaveis;
-                                    }, []).map((uniqueItem) => (
-                                        <MenuItem key={uniqueItem.id} value={uniqueItem}>{uniqueItem.responsavel}</MenuItem>
+                                    responsaveis.map((analista, index) => (
+                                        <MenuItem key={index} value={analista}>{analista}</MenuItem>
                                     ))
                                 }
                             </Select>

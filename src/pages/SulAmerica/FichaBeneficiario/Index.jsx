@@ -7,8 +7,31 @@ import Title from "../../../components/Title/Title"
 import { blue, orange } from "@mui/material/colors"
 import moment from "moment"
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import AddressComponent from "./Components/AddressComponent"
 import { useForm } from "react-hook-form"
+import ModalAgendamento from "./Components/ModalAgendamento"
+import { BsFilePdf } from "react-icons/bs"
+import { Cancel, Edit } from "@mui/icons-material"
+import { RiArrowGoBackFill } from "react-icons/ri"
+import { FaRegArrowAltCircleLeft } from "react-icons/fa"
+
+const Input = ({ label, register }) => {
+    return (
+        <TextField
+            type='text'
+            label={label}
+            size='small'
+            {...register}
+            sx={{
+                width: '350px',
+                borderRadius: '10px'
+            }}
+            InputLabelProps={{
+                shrink: true,
+            }}
+            placeholder={label}
+        />
+    )
+}
 
 const FichaBeneficiarioSulAmerica = () => {
 
@@ -71,10 +94,14 @@ const FichaBeneficiarioSulAmerica = () => {
             setValue('plano', data.plano);
             setValue('empresa', data.empresa);
             setValue('entidade', data.entidade);
+            setValue('cep', data.cep);
+            setValue('logradouro', data.logradouro);
+            setValue('bairro', data.bairro);
+            setValue('municipio', data.municipio);
             setValue('numero', data.numero);
         }
         setFlushHook(false)
-    }, [data, setValue, flushHook]);
+    }, [data, setValue]);
 
     return (
         <Sidebar>
@@ -113,41 +140,10 @@ const FichaBeneficiarioSulAmerica = () => {
                             mt: 3,
                         }}
                     >
-                        <TextField type='text' label='Nome' size='small' {...register('nome')} sx={{ width: '350px' }} InputProps={{
-                            style: {
-                                borderRadius: '10px'
-                            }
-                        }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }} />
-                        <TextField type='text' label='CPF' size='small' {...register('cpf')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }} />
-                        <TextField type='text' label='Celular' size='small' {...register('melhorCelular')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }} />
-                        <TextField type='text' label='Código Sistemico Beneficiario' size='small' {...register('codSistemicoBeneficiario')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }} />
+                        <Input label='Nome' register={register('nome')} />
+                        <Input label='CPF' register={register('cpf')} />
+                        <Input label='Melhor Celular' register={register('melhorCelular')} />
+                        <Input label='Cod Sistemico Beneficiario' register={register('codSistemicoBeneficiario')} />
                     </Box>
                     <Box
                         sx={{
@@ -170,46 +166,10 @@ const FichaBeneficiarioSulAmerica = () => {
                         mt: 3,
                     }}
                     >
-                        <TextField type='text' label='Carteira Empresa' size='small' {...register('carteiraEmpresa')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Plano' size='small' {...register('plano')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Empresa' size='small' {...register('empresa')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Entidade' size='small' {...register('entidade')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+                        <Input label='Carteira Empresa' register={register('carteiraEmpresa')} />
+                        <Input label='Plano' register={register('plano')} />
+                        <Input label='Empresa' register={register('empresa')} />
+                        <Input label='Entidade' register={register('entidade')} />
                     </Box>
                     <Box
                         sx={{
@@ -232,56 +192,11 @@ const FichaBeneficiarioSulAmerica = () => {
                         mt: 3,
                     }}
                     >
-                        <TextField type='text' label='CEP' size='small' value={data?.cep} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Logradouro' size='small' value={data?.logradouro} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Bairro' size='small' value={data?.bairro} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Município' size='small' value={data?.municipio} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField type='text' label='Número' size='small' {...register('numero')} sx={{ width: '350px' }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+                        <Input label='CEP' register={register('cep')} />
+                        <Input label='Logradouro' register={register('logradouro')} />
+                        <Input label='Bairro' register={register('bairro')} />
+                        <Input label='Município' register={register('municipio')} />
+                        <Input label='Número' register={register('numero')} />
                     </Box>
                     <Box
                         sx={{
@@ -301,8 +216,6 @@ const FichaBeneficiarioSulAmerica = () => {
                         <Table size="small" component={Paper} elevation={7} sx={{ mb: 5, borderRadius: '15px', mt: 3 }}>
                             <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
                                 <TableRow>
-                                    <TableCell sx={{ color: 'white' }}>Menor Data Execução</TableCell>
-                                    <TableCell sx={{ color: 'white' }}>Maior Data Execução</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Quantidade Serviços Pagos</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Valor Pago</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
@@ -318,8 +231,6 @@ const FichaBeneficiarioSulAmerica = () => {
                                 {
                                     pedido.map((item) => (
                                         <TableRow>
-                                            <TableCell>{moment(item.menorDataExecucao).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{moment(item.maiorDataExecucao).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{item.qtdServicosPagos}</TableCell>
                                             <TableCell>{
                                                 new Intl.NumberFormat('pt-BR', {
@@ -335,9 +246,47 @@ const FichaBeneficiarioSulAmerica = () => {
                                             <TableCell>{item.status}</TableCell>
                                             <TableCell>
                                                 {
-                                                    <Tooltip title='Formulário' href={`/sulAmerica/formulario/${item._id}`} >
-                                                        <IconButton size='small' color='primary' >
+                                                    <ModalAgendamento pedido={item._id} />
+                                                }
+                                                {
+                                                    <Tooltip title='Reagendar'>
+                                                        <IconButton size='small' color='warning' >
+                                                            <FaRegArrowAltCircleLeft />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+                                                {
+                                                    <Tooltip title='Formulário'>
+                                                        <IconButton size='small' color='primary' href={`/sulAmerica/formulario/${item._id}`} >
                                                             <FeedOutlinedIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+                                                {
+                                                    <Tooltip title='PDF'>
+                                                        <IconButton sie='small' color='error' >
+                                                            <BsFilePdf />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+                                                {
+                                                    <Tooltip title='Editar'>
+                                                        <IconButton size='small' color='primary' >
+                                                            <Edit />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+                                                {
+                                                    <Tooltip title='Cancelar'>
+                                                        <IconButton size='small' color='error' >
+                                                            <Cancel />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                }
+                                                {
+                                                    <Tooltip title='Retroceder'>
+                                                        <IconButton size='small' color='primary' >
+                                                            <RiArrowGoBackFill />
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
