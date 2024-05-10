@@ -319,3 +319,7 @@ export const divergenciaAnexo = async (data) => {
 export const alterarRetrabalhoEntrevista = async (data) => {
     return await new ApiCall('/entrevistas/retrabalho').put(data)
 }
+
+export const fecharHorarios = async ({ data, responsavel, horarios, justiticativa }) => {
+    return await new ApiCall('/entrevistas/fecharHorarios').put({ data, responsavel, horarios, justiticativa })
+}

@@ -18,7 +18,6 @@ const Agendamento = ({ onAgendar, obj }) => {
 
     const ajustarDia = (data) => {
         const arr = data.split('/')
-
         return `${arr[2]}-${arr[1]}-${arr[0]}`
     }
 
@@ -167,7 +166,6 @@ const Agendamento = ({ onAgendar, obj }) => {
                             <CleaningServicesIcon />
                         </IconButton>
                     </Tooltip>
-
                 </Box>
             </Box>
             <Divider />

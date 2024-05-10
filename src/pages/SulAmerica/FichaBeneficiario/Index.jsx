@@ -8,6 +8,7 @@ import { blue, orange } from "@mui/material/colors"
 import moment from "moment"
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import AddressComponent from "./Components/AddressComponent"
+import ModalAgendamento from "./Components/ModalAgendamento"
 
 const FichaBeneficiarioSulAmerica = () => {
 
@@ -275,6 +276,9 @@ const FichaBeneficiarioSulAmerica = () => {
                                         <TableCell>{moment(item.dataCriacao).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{item.status}</TableCell>
                                         <TableCell>
+                                            {
+                                                <ModalAgendamento pedido={item._id} />
+                                            }
                                             {
                                                 <Tooltip title='Formulário' href={`/sulAmerica/formulario/${item._id}`} >
                                                     <IconButton size='small' color='primary' >
