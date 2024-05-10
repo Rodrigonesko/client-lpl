@@ -1,9 +1,8 @@
-import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, orange } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import Title from "../../../components/Title/Title"
-import moment from "moment"
 import { ArrowForward } from "@mui/icons-material"
 import { getBeneficiarios } from "../../../_services/sulAmerica.service"
 
@@ -50,10 +49,30 @@ const Beneficiarios = () => {
                             mt: 3,
                         }}
                     >
-                        <TextField type='text' size='small' label='Nome do Beneficiário' sx={{ mr: 3 }} />
-                        <TextField type='text' size='small' label='Plano' sx={{ mr: 3 }} />
-                        <TextField type='text' size='small' label='Empresa' sx={{ mr: 3 }} />
-                        <TextField type='text' size='small' label='CPF' sx={{ mr: 3 }} />
+                        <TextField type='text' size='small' label='Nome do Beneficiário' sx={{ mr: 3 }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px'
+                                }
+                            }} />
+                        <TextField type='text' size='small' label='Plano' sx={{ mr: 3 }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px'
+                                }
+                            }} />
+                        <TextField type='text' size='small' label='Empresa' sx={{ mr: 3 }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px'
+                                }
+                            }} />
+                        <TextField type='text' size='small' label='CPF' sx={{ mr: 3 }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px'
+                                }
+                            }} />
                         <Button type='submit' variant='contained' sx={{ mr: 1 }}>Buscar</Button>
                         <Button type='submit' variant='contained' >Limpar Pesquisa</Button>
                     </Box>
