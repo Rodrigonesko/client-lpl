@@ -55,7 +55,7 @@ export const createPdf = (respostas) => {
 
 
 
-    axios.get('http://localhost:3001/media/imgs/logo_sulamerica.jpg', { responseType: 'arraybuffer' }).then(response => {
+    axios.get(`${process.env.REACT_APP_API_KEY}/media/imgs/logo_sulamerica.jpg`, { responseType: 'arraybuffer' }).then(response => {
         const base64 = Base64.fromUint8Array(new Uint8Array(response.data))
         const img = 'data:image/jpeg;base64,' + base64
 

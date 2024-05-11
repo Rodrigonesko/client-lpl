@@ -5,6 +5,7 @@ import { Delete } from "@mui/icons-material"
 import { useEffect, useState } from "react"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
 import { red } from "@mui/material/colors"
+import ModalEditarPergunta from "../Modais/ModalEditarPegunta"
 
 const PerguntasSulAmerica = () => {
 
@@ -17,7 +18,6 @@ const PerguntasSulAmerica = () => {
             setLoading(true)
             try {
                 const response = await buscarPerguntas()
-                console.log(response);
                 setPerguntas(response)
                 setLoading(false)
             } catch (error) {
@@ -86,6 +86,7 @@ const PerguntasSulAmerica = () => {
                                         >
                                             Deseja deletar a pergunta?
                                         </ModalComponent>
+                                        <ModalEditarPergunta pergunta={pergunta} />
                                     </TableCell>
                                 </TableRow>
                             )) : (

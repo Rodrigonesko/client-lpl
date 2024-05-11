@@ -1,80 +1,67 @@
+import { Delete, Edit } from "@mui/icons-material"
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
-import Toast from "../../../../components/Toast/Toast"
-import { Delete } from "@mui/icons-material"
-import AdicionarSubPergunta from "./AdicionarSubPergunta"
-import AdicionarOpcoes from "./AdicionarOpções"
-import { criarPergunta } from "../../../../_services/sulAmerica.service"
 import { tiposPergunta } from "../utils/tiposPergunta"
 import { categorias } from "../utils/categorias"
+import Toast from "../../../../components/Toast/Toast"
+import AdicionarOpcoes from "./AdicionarOpções"
+import AdicionarSubPergunta from "./AdicionarSubPergunta"
+import { atualizarPergunta } from "../../../../_services/sulAmerica.service"
 
-const ModalCriarPergunta = ({ setFlushHook }) => {
+const ModalEditarPergunta = ({ pergunta }) => {
 
     const [open, setOpen] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [data, setData] = useState(pergunta)
+    const [opcoes, setOpcoes] = useState(data.opcoes)
+    const [subPerguntas, setSubPerguntas] = useState(data.subPerguntas)
     const [openToast, setOpenToast] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
-    const [pergunta, setPergunta] = useState('')
-    const [tipo, setTipo] = useState('')
-    const [categoria, setCategoria] = useState('')
-    const [subPerguntas, setSubPerguntas] = useState([])
-    const [opcoes, setOpcoes] = useState([])
 
-    const handleAdicionarPergunta = async () => {
+    const handleAtualizarPergunta = async () => {
         try {
-
-            if (pergunta === '' || tipo === '' || categoria === '') {
+            if (data.pergunta === '') {
                 setOpenToast(true)
                 setMessage('Preencha todos os campos')
                 setSeverity('error')
                 return
             }
 
-            if (tipo === 'Opções' && opcoes.length === 0) {
+            if (data.tipo === 'OPÇÕES' && opcoes.length === 0) {
                 setOpenToast(true)
                 setMessage('Adicione pelo menos uma opção')
                 setSeverity('error')
                 return
             }
 
-            setLoading(true)
-            await criarPergunta({
-                pergunta,
-                tipo: tipo.toUpperCase(),
-                categoria: categoria.toUpperCase(),
-                subPerguntas,
+            await atualizarPergunta(data._id, {
+                ...data,
                 opcoes,
-                // opcoesSubPergunta
+                subPerguntas
             })
+
             setOpen(false)
             setOpenToast(true)
             setMessage('Pergunta adicionada com sucesso')
             setSeverity('success')
-            setFlushHook(prev => !prev)
-            setLoading(false)
+
         } catch (error) {
             console.log(error);
             setOpenToast(true)
-            setMessage('Erro ao adicionar pergunta')
+            setMessage('Erro ao atualizar pergunta')
             setSeverity('error')
-            setLoading(false)
         }
-
     }
 
     return (
-        <Box sx={{
-            mt: 2,
-            mb: 2
-        }}>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setOpen(true)}
-            >
-                Adicionar Pergunta
-            </Button>
+        <>
+            <Tooltip title="Editar pergunta">
+                <IconButton
+                    onClick={() => setOpen(true)}
+                >
+                    <Edit />
+                </IconButton>
+            </Tooltip>
 
             <Dialog
                 open={open}
@@ -82,15 +69,13 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                 fullWidth={true}
                 maxWidth="lg"
             >
-                <DialogTitle>
-                    Adicionar Pergunta
-                </DialogTitle>
+                <DialogTitle>Editar Pergunta</DialogTitle>
                 <DialogContent>
                     <Box
                         sx={{
                             display: 'flex',
-                            gap: 2,
                             flexDirection: 'column',
+                            gap: 2,
                             m: 2
                         }}
                     >
@@ -101,23 +86,22 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                             size="small"
                             variant="outlined"
                             multiline
-                            disabled={loading}
                             rows={2}
-                            value={pergunta}
-                            onChange={(e) => setPergunta(e.target.value)}
+                            value={data.pergunta}
+                            onChange={(e) => setData({ ...data, pergunta: e.target.value })}
                         />
                         <FormControl>
                             <FormLabel>Tipo de Pergunta</FormLabel>
                             <RadioGroup
-                                value={tipo}
-                                onChange={(e) => setTipo(e.target.value)}
+                                value={data.tipo}
+                                onChange={(e) => setData({ ...data, tipo: e.target.value })}
                                 row
                             >
                                 {
                                     tiposPergunta.map((tipo, index) => (
                                         <FormControlLabel
                                             key={index}
-                                            value={tipo}
+                                            value={tipo.toUpperCase()}
                                             control={<Radio />}
                                             label={tipo}
                                         />
@@ -125,49 +109,52 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                                 }
                             </RadioGroup>
                         </FormControl>
-                        {tipo === 'Opções' && (
-                            <>
-                                <Divider />
-                                <Typography
-                                    variant="h6"
-                                >
-                                    Opções
-                                </Typography>
-                                {
-                                    opcoes.map((opcao, index) => (
-                                        <Typography
-                                            variant="body2"
-                                            key={index}>
-                                            {opcao}
-                                            <Tooltip title="Remover Opção">
-                                                <IconButton
-                                                    onClick={() => {
-                                                        setOpcoes(opcoes.filter((_, i) => i !== index))
-                                                    }}
-                                                    size="small"
-                                                    color="error"
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Typography>
-                                    ))
-                                }
-                                <AdicionarOpcoes setOpcoes={setOpcoes} />
-                            </>
-                        )}
+                        {
+                            data.tipo === 'OPÇÕES' && (
+                                <>
+                                    <Divider />
+                                    <Typography
+                                        variant="h6"
+                                    >
+                                        Opções
+                                    </Typography>
+                                    {
+                                        opcoes.map((opcao, index) => (
+                                            <Typography
+                                                key={index}
+                                                variant="body1"
+                                            >
+                                                {opcao}
+                                                <Tooltip title="Remover opção">
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            setOpcoes((prev) => prev.filter((item) => item !== opcao))
+                                                        }}
+                                                        size="small"
+                                                        color="error"
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Typography>
+                                        ))
+                                    }
+                                    <AdicionarOpcoes setOpcoes={setOpcoes} />
+                                </>
+                            )
+                        }
                         <FormControl>
                             <FormLabel>Categoria</FormLabel>
                             <RadioGroup
-                                value={categoria}
-                                onChange={(e) => setCategoria(e.target.value)}
+                                value={data.categoria}
+                                onChange={(e) => setData({ ...data, categoria: e.target.value })}
                                 row
                             >
                                 {
                                     categorias.map((categoria, index) => (
                                         <FormControlLabel
-                                            key={index}
-                                            value={categoria}
+                                            key={`${categoria}-${index}`}
+                                            value={categoria.toUpperCase()}
                                             control={<Radio />}
                                             label={categoria}
                                         />
@@ -176,7 +163,7 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                             </RadioGroup>
                         </FormControl>
                         {
-                            tipo === 'Escolha' && (
+                            data.tipo === 'ESCOLHA' && (
                                 <>
                                     <Divider />
                                     <Typography
@@ -216,34 +203,37 @@ const ModalCriarPergunta = ({ setFlushHook }) => {
                             )
                         }
                     </Box>
-
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={() => setOpen(false)}
                         color="inherit"
                         variant="contained"
+                        onClick={() => setOpen(false)}
                     >
                         Cancelar
                     </Button>
                     <Button
-                        onClick={handleAdicionarPergunta}
-                        color="primary"
                         variant="contained"
+                        onClick={handleAtualizarPergunta}
+                        sx={{
+                            backgroundColor: 'primary.main',
+                            '&:hover': {
+                                backgroundColor: 'primary.dark'
+                            }
+                        }}
                     >
-                        Adicionar
+                        Salvar
                     </Button>
                 </DialogActions>
             </Dialog>
             <Toast
                 open={openToast}
+                onClose={() => setOpenToast(false)}
                 message={message}
                 severity={severity}
-                onClose={() => setOpenToast(false)}
             />
-
-        </Box>
+        </>
     )
 }
 
-export default ModalCriarPergunta
+export default ModalEditarPergunta

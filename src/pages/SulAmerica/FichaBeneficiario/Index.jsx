@@ -1,18 +1,21 @@
 import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, updateBeneficiario } from "../../../_services/sulAmerica.service"
-import { Alert, Box, Button, Container, Divider, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, updateBeneficiario, updatePedido } from "../../../_services/sulAmerica.service"
+import { Alert, Box, Button, Container, Divider, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Title from "../../../components/Title/Title"
 import { blue, orange } from "@mui/material/colors"
 import moment from "moment"
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import { useForm } from "react-hook-form"
+import { set, useForm } from "react-hook-form"
 import ModalAgendamento from "./Components/ModalAgendamento"
 import { BsFilePdf } from "react-icons/bs"
 import { Cancel, Edit } from "@mui/icons-material"
 import { RiArrowGoBackFill } from "react-icons/ri"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
+import Toast from "../../../components/Toast/Toast"
+import ModalComponent from "../../../components/ModalComponent/ModalComponent"
+import { red } from "@mui/material/colors"
 
 const Input = ({ label, register }) => {
     return (
@@ -36,15 +39,16 @@ const Input = ({ label, register }) => {
 const FichaBeneficiarioSulAmerica = () => {
 
     const { id } = useParams()
+    const { register, handleSubmit, setValue } = useForm();
+
     const [flushHook, setFlushHook] = useState(false)
     const [severitySnack, setSeveritySnack] = useState('')
     const [msg, setMsg] = useState('')
     const [openSnack, setOpenSnack] = useState(false)
 
-    const { register, handleSubmit, setValue } = useForm();
-
     const [data, setData] = useState()
     const [pedido, setPedido] = useState([])
+    const [justificativa, setJustificativa] = useState('')
 
     useEffect(() => {
         const fetch = async () => {
@@ -246,45 +250,73 @@ const FichaBeneficiarioSulAmerica = () => {
                                             <TableCell>{item.status}</TableCell>
                                             <TableCell>
                                                 {
-                                                    <ModalAgendamento pedido={item._id} />
+                                                    item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
                                                 }
                                                 {
-                                                    <Tooltip title='Reagendar'>
+                                                    item.status === 'AGENDADO' && <Tooltip title='Reagendar'>
                                                         <IconButton size='small' color='warning' >
                                                             <FaRegArrowAltCircleLeft />
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
                                                 {
-                                                    <Tooltip title='Formulário'>
+                                                    (item.status === 'A INICIAR' || item.status === 'AGENDADO') && <Tooltip title='Formulário'>
                                                         <IconButton size='small' color='primary' href={`/sulAmerica/formulario/${item._id}`} >
                                                             <FeedOutlinedIcon />
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
                                                 {
-                                                    <Tooltip title='PDF'>
+                                                    item.status === 'CONCLUÍDO' && <Tooltip title='PDF'>
                                                         <IconButton sie='small' color='error' >
                                                             <BsFilePdf />
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
                                                 {
-                                                    <Tooltip title='Editar'>
+                                                    item.status === 'CONCLUÍDO' && <Tooltip title='Editar'>
                                                         <IconButton size='small' color='primary' >
                                                             <Edit />
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
                                                 {
-                                                    <Tooltip title='Cancelar'>
-                                                        <IconButton size='small' color='error' >
-                                                            <Cancel />
-                                                        </IconButton>
-                                                    </Tooltip>
+                                                    (item.status === 'A INICIAR' || item.status === 'AGENDADO') && (
+                                                        <ModalComponent
+                                                            buttonIcon={<Cancel />}
+                                                            buttonText='Cancelar'
+                                                            buttonColorScheme='error'
+                                                            headerText='Cancelar Pedido'
+                                                            onAction={async () => {
+                                                                try {
+                                                                    await updatePedido(item._id, { justificativa, status: 'CANCELADO' })
+                                                                } catch (error) {
+                                                                    console.log(error);
+                                                                    setOpenSnack(true)
+                                                                    setSeveritySnack('error')
+                                                                    setMsg(`Erro! ${error}`)
+                                                                }
+                                                            }}
+                                                            size={'sm'}
+                                                            saveButtonColorScheme={red[900]}
+                                                        >
+                                                            <Typography>
+                                                                Tem certeza que deseja cancelar o pedido do prestador {item.prestador.nome}?
+                                                            </Typography>
+                                                            <TextField
+                                                                placeholder='Justificativa'
+                                                                fullWidth
+                                                                multiline
+                                                                rows={2}
+                                                                sx={{ mt: 2 }}
+                                                                value={justificativa}
+                                                                onChange={(e) => setJustificativa(e.target.value)}
+                                                            />
+                                                        </ModalComponent>
+                                                    )
                                                 }
                                                 {
-                                                    <Tooltip title='Retroceder'>
+                                                    (item.status === 'CONCLUÍDO' || item.status === 'CANCELADO') && <Tooltip title='Retroceder'>
                                                         <IconButton size='small' color='primary' >
                                                             <RiArrowGoBackFill />
                                                         </IconButton>
@@ -298,11 +330,12 @@ const FichaBeneficiarioSulAmerica = () => {
                         </Table>
                     </Box>
                 </form>
-                <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleCloseSnack}>
-                    <Alert variant="filled" onClose={handleCloseSnack} severity={severitySnack} sx={{ width: '100%' }}>
-                        {msg}
-                    </Alert>
-                </Snackbar>
+                <Toast
+                    open={openSnack}
+                    onClose={handleCloseSnack}
+                    severity={severitySnack}
+                    message={msg}
+                />
             </Container>
         </Sidebar >
     )

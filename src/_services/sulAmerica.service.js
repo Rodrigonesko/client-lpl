@@ -16,6 +16,10 @@ export const deletarPergunta = async (id) => {
     return await new ApiCall(`/pergunta/${id}`, url).delete()
 }
 
+export const atualizarPergunta = async (id, data) => {
+    return await new ApiCall(`/pergunta/${id}`, url).put(data)
+}
+
 /* Questionario */
 
 export const buscarQuestionarios = async () => {

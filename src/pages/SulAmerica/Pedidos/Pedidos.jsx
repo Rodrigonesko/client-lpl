@@ -174,7 +174,7 @@ const Pedidos = () => {
                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', mt: 4 }} >
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
-                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px', background: `linear-gradient(45deg, ${blue[900]} 10%, ${orange[900]} 65%)`, color: 'white' }} />
+                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px', background: blue[900], color: 'white' }} />
                             </Box>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                                 <FormControl size="small" disabled={loading}>
@@ -206,7 +206,7 @@ const Pedidos = () => {
                                     <Table
                                         size="small" elevation={7} sx={{ mb: 5, borderRadius: '15px' }}
                                     >
-                                        <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
+                                        <TableHead sx={{ background: blue[900] }}>
                                             <TableRow>
                                                 <TableCell sx={{ color: 'white' }}>Beneficiario</TableCell>
 
