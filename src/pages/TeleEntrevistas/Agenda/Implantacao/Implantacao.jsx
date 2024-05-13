@@ -119,8 +119,12 @@ const Implantacao = () => {
 
     useEffect(() => {
         setFlushHook(false)
-        buscarPropostas(page)
-    }, [flushHook, page, limit])
+        if (situacaoAmil === 'Todos' && tipoContrato === 'Todos') {
+            buscarPropostas(page)
+        } else {
+            filtrarPorSituacao(page)
+        }
+    }, [flushHook, page, limit, situacaoAmil, tipoContrato])
 
     return (
         <>
