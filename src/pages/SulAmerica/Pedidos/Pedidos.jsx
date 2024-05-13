@@ -1,12 +1,13 @@
-import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { Autocomplete, Box, Button, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, orange } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterPedidos, getPedidos, getPrestadoresComPedidosEmAberto } from "../../../_services/sulAmerica.service"
 import Title from "../../../components/Title/Title"
 import moment from "moment"
-import DrawerDetailsPedidos from "./DrawerDetailsPedidos"
 import { ArrowForward } from "@mui/icons-material"
+import { valueToBRL } from "../../../functions/functions"
+import { filterUsers } from "../../../_services/user.service"
 
 const Pedidos = () => {
 
@@ -16,6 +17,7 @@ const Pedidos = () => {
     const [beneficiario, setBeneficiario] = useState('')
     const [responsavel, setResponsavel] = useState('')
     const [status, setStatus] = useState('')
+    const [responsaveis, setResponsaveis] = useState([])
 
     const [flushHook, setFlushHook] = useState(false)
     const [page, setPage] = useState(1);
@@ -23,20 +25,10 @@ const Pedidos = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false)
 
-    // const handlePageChange = (event, value) => {
-    //     setPage(value);
-    //     if ((prestador.length > 2) || (beneficiario.length > 2) || (responsavel.length > 2) || (status.length > 2)) {
-    //         handleFilter(event, value);
-    //     } else {
-    //         fetch(value)
-    //     }
-    // }
-
     const findPrestadores = async () => {
         try {
             const find = await getPrestadoresComPedidosEmAberto()
             setPrestadores(find)
-            // console.log(find);
         } catch (error) {
             console.log(error);
         }
@@ -49,8 +41,12 @@ const Pedidos = () => {
                 page,
                 rowsPerPage,
             )
+            const response = await filterUsers({
+                atividadePrincipal: 'Tele Entrevista',
+                inativo: { $ne: true }
+            })
+            setResponsaveis(response.map(analista => analista.name))
             setPedidos(set.result)
-            // console.log(set.total)
             setTotalPages(set.total)
             setLoading(false)
         } catch (error) {
@@ -67,19 +63,21 @@ const Pedidos = () => {
         }
         findPrestadores()
         setFlushHook(false)
-    }, [flushHook, page, rowsPerPage])
+    }, [flushHook, page, rowsPerPage, prestador, beneficiario, responsavel, status])
 
     const handleFilter = async (event) => {
         event?.preventDefault()
         try {
             setLoading(true)
-            if ((prestador.length > 2) || (beneficiario.length > 2) || (responsavel.length > 2) || (status.length > 2)) {
+            if ((prestador?.length > 2) || (beneficiario.length > 2) || (responsavel.length > 2) || (status.length > 2)) {
                 const filter = await filterPedidos(prestador, beneficiario, responsavel, status, page, rowsPerPage)
-                // console.log(filter.result);
                 setPedidos(filter.result)
                 setTotalPages(filter.total)
                 setLoading(false)
+                return
             }
+            fetch(page)
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -113,13 +111,6 @@ const Pedidos = () => {
                             }}
                             renderInput={(params) => <TextField {...params} label="Prestador" />}
                         />
-                        {/* <TextField type='text' label='Prestador' size='small' value={prestador} onChange={(e) => { setPrestador(e.target.value) }} sx={{ mr: 3, }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                        /> */}
                         <TextField type='text' label='Beneficiario' size='small' value={beneficiario} onChange={(e) => { setBeneficiario(e.target.value) }} sx={{ mr: 3, }}
                             InputProps={{
                                 style: {
@@ -138,18 +129,8 @@ const Pedidos = () => {
                             >
                                 <MenuItem value={'A DEFINIR'} >A DEFINIR</MenuItem>
                                 {
-                                    pedidos.reduce((uniqueResponsaveis, item) => {
-                                        // Verifica se o nome do responsável já existe nos itens anteriores
-                                        const responsavelExistente = uniqueResponsaveis.some(
-                                            (uniqueItem) => uniqueItem.responsavel === item.responsavel
-                                        );
-                                        // Se o nome do responsável não existir nos itens anteriores, adiciona ao array de únicos
-                                        if (!responsavelExistente) {
-                                            uniqueResponsaveis.push(item);
-                                        }
-                                        return uniqueResponsaveis;
-                                    }, []).map((uniqueItem) => (
-                                        <MenuItem key={uniqueItem.id} value={uniqueItem}>{uniqueItem.responsavel}</MenuItem>
+                                    responsaveis.map((analista, index) => (
+                                        <MenuItem key={index} value={analista}>{analista}</MenuItem>
                                     ))
                                 }
                             </Select>
@@ -170,7 +151,11 @@ const Pedidos = () => {
                                 <MenuItem value={'CANCELADO'}>CANCELADO</MenuItem>
                             </Select>
                         </FormControl>
-                        <Button type='submit' variant='contained' onClick={handleFilter} sx={{ borderRadius: '10px', mr: 1 }}>BUSCAR</Button>
+                        {/* <Button type='submit' variant='contained' onClick={handleFilter} sx={{
+                            borderRadius: '10px', mr: 1, bgcolor: blue[900], ':hover': {
+                                bgcolor: blue[800]
+                            }
+                        }}>BUSCAR</Button> */}
                         <Button type='submit' variant='contained'
                             onClick={() => {
                                 setPrestador('')
@@ -178,12 +163,18 @@ const Pedidos = () => {
                                 setResponsavel('')
                                 setStatus('')
                                 setFlushHook(true)
-                            }} sx={{ borderRadius: '10px' }}>LIMPAR PESQUISA</Button>
+                            }} sx={{
+                                borderRadius: '10px',
+                                bgcolor: blue[900],
+                                ':hover': {
+                                    bgcolor: blue[800]
+                                }
+                            }}>LIMPAR PESQUISA</Button>
                     </Box>
                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', mt: 4 }} >
                         <TableContainer>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
-                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px', background: `linear-gradient(45deg, ${blue[900]} 10%, ${orange[900]} 65%)`, color: 'white' }} />
+                                <Chip label={`Quantidade de Pedidos: ${totalPages}`} sx={{ fontSize: '15px', background: blue[900], color: 'white' }} />
                             </Box>
                             <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                                 <FormControl size="small" disabled={loading}>
@@ -213,16 +204,14 @@ const Pedidos = () => {
                             {
                                 !loading ? (
                                     <Table
-                                        size="small" component={Paper} elevation={7} sx={{ mb: 5, borderRadius: '15px' }}
+                                        size="small" elevation={7} sx={{ mb: 5, borderRadius: '15px' }}
                                     >
-                                        <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
+                                        <TableHead sx={{ background: blue[900] }}>
                                             <TableRow>
-                                                <TableCell sx={{ color: 'white' }}>Menor Data Execução</TableCell>
-                                                <TableCell sx={{ color: 'white' }}>Maior Data Execução</TableCell>
-                                                <TableCell sx={{ color: 'white' }}>Quantidade Serviços Pagos</TableCell>
+                                                <TableCell sx={{ color: 'white' }}>Beneficiario</TableCell>
+
                                                 <TableCell sx={{ color: 'white' }}>Valor Pago</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
-                                                <TableCell sx={{ color: 'white' }}>Beneficiario</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Responsável</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Data Agendamento</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Data Criação</TableCell>
@@ -234,17 +223,25 @@ const Pedidos = () => {
                                             {
                                                 pedidos.map((pedido) => (
                                                     <TableRow key={pedido.id}>
-                                                        <TableCell>{moment(pedido.menorDataExecucao).format('DD/MM/YYYY')}</TableCell>
-                                                        <TableCell>{moment(pedido.maiorDataExecucao).format('DD/MM/YYYY')}</TableCell>
-                                                        <TableCell>{pedido.qtdServicosPagos}</TableCell>
-                                                        <TableCell>{
-                                                            new Intl.NumberFormat('pt-BR', {
-                                                                style: 'currency',
-                                                                currency: 'BRL'
-                                                            }).format(pedido.valorPago)
-                                                        }</TableCell>
+                                                        <TableCell>
+                                                            {pedido.beneficiario.nome}
+                                                            <Typography
+                                                                variant='body2'
+                                                                color='textSecondary'
+                                                            >
+                                                                {pedido.beneficiario.cpf}
+                                                            </Typography>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {valueToBRL(pedido.valorPago)}
+                                                            <Typography
+                                                                variant='body2'
+                                                                color='textSecondary'
+                                                            >
+                                                                Qtd serviços: {pedido.qtdServicosPagos}
+                                                            </Typography>
+                                                        </TableCell>
                                                         <TableCell>{pedido.prestador.nome}</TableCell>
-                                                        <TableCell>{pedido.beneficiario.nome}</TableCell>
                                                         <TableCell>{pedido.responsavel}</TableCell>
                                                         <TableCell>{pedido.dataAgendamento}</TableCell>
                                                         <TableCell>{moment(pedido.dataCriacao).format('DD/MM/YYYY')}</TableCell>

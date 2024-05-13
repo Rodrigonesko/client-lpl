@@ -72,6 +72,10 @@ export function valueToBRL(value) {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+export function invertDate(date) {
+    return date.split('/').reverse().join('-');
+}
+
 const feriados = [
     moment('2022-01-01'),
     moment('2022-04-21'),

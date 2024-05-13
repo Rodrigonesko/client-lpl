@@ -191,7 +191,6 @@ const FormularioSulAmerica = () => {
                             </Typography>
                         </Alert>
                         {
-
                             pedido && <>
                                 <Box>
                                     <Title

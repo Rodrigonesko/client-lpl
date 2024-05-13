@@ -55,7 +55,7 @@ const FecharHorarios = ({ responsaveis }) => {
                 }
                 return null
             })
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data: data, responsavel: responsavel, horarios: values, justificativa }, {
+            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/fecharHorarios`, { data, responsavel, horarios: values, justificativa }, {
                 withCredentials: true,
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`

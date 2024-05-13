@@ -10,7 +10,8 @@ const ModalComponent = ({
     headerText,
     saveButtonColorScheme,
     onAction,
-    size
+    size,
+    textButton
 }) => {
 
     const [open, setOpen] = useState(false)
@@ -30,7 +31,7 @@ const ModalComponent = ({
                     : (
                         <IconButton
                             onClick={() => setOpen(true)}
-                            sx={{ margin: '10px' }}
+                            color={buttonColorScheme ?? 'primary'}
                         >
                             {buttonIcon}
                         </IconButton>
@@ -62,7 +63,7 @@ const ModalComponent = ({
                             }
 
                         }}
-                    >Salvar</Button>
+                    >{textButton ?? 'Salvar'}</Button>
                 </DialogActions>
             </Dialog>
         </>

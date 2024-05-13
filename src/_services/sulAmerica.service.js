@@ -1,6 +1,6 @@
 import { ApiCall } from "./api";
-const token = localStorage.getItem('token')
-const url = `http://localhost:5001` // const url = process.env.REACT_APP_SUL_AMERICA_SERVICE
+//onst token = localStorage.getItem('token')
+const url = 'http://localhost:5001' //process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 
@@ -14,6 +14,10 @@ export const criarPergunta = async (data) => {
 
 export const deletarPergunta = async (id) => {
     return await new ApiCall(`/pergunta/${id}`, url).delete()
+}
+
+export const atualizarPergunta = async (id, data) => {
+    return await new ApiCall(`/pergunta/${id}`, url).put(data)
 }
 
 /* Questionario */
@@ -44,6 +48,10 @@ export const createPedidosByPlanilha = async (data) => {
     return await new ApiCall('/pedido/planilha', url).post(data)
 }
 
+export const updatePedido = async (id, data) => {
+    return await new ApiCall(`/pedido/${id}`, url).put(data)
+}
+
 export const filterPedidos = async (prestador, beneficiario, responsavel, status, page, limit) => {
     console.log(prestador, beneficiario, responsavel, status, page, limit);
 
@@ -66,6 +74,10 @@ export const getBeneficiarioComPedidosEmAberto = async (id) => {
 
 export const createRespostas = async (data) => {
     return await new ApiCall('/resposta', url).post(data)
+}
+
+export const getRespostasByPedidoId = async (id) => {
+    return await new ApiCall(`/resposta/pedido/${id}`, url).get()
 }
 
 /* Beneficiários */
