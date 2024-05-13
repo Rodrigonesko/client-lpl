@@ -320,6 +320,22 @@ export const alterarRetrabalhoEntrevista = async (data) => {
     return await new ApiCall('/entrevistas/retrabalho').put(data)
 }
 
+
+export const getSituacoesAmil = async () => {
+    return await new ApiCall('/entrevistas/situacoesAmil').get()
+}
+
+export const getTiposContrato = async () => {
+    return await new ApiCall('/entrevistas/tiposContrato').get()
+}
+
+export const naoImplantadas = async (page, limit) => {
+    return await new ApiCall(`/entrevistas/naoImplantadas?page=${page}&limit=${limit}`).get()
+}
+
+export const filtrarImplantadas = async (page, limit, situacaoAmil, tipoContrato) => {
+    return await new ApiCall(`/entrevistas/filtrarImplantadas?page=${page}&limit=${limit}&situacaoAmil=${situacaoAmil}&tipoContrato=${tipoContrato}`).get()
+
 export const fecharHorarios = async ({ data, responsavel, horarios, justiticativa }) => {
     return await new ApiCall('/entrevistas/fecharHorarios').put({ data, responsavel, horarios, justiticativa })
 }

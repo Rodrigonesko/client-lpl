@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
 import moment from 'moment/moment'
-import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal, FormControl, Select, MenuItem, InputLabel } from '@mui/material'
+import { Box, CircularProgress, TableContainer, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal, FormControl, Select, MenuItem, InputLabel, Chip, Pagination, Container } from '@mui/material'
 import RelatorioPadraoTele from '../../../../components/RelatorioPadraoTele/RelatorioPadraoTele'
 import ModalUploadImplantacao from './Modais/ModalUploadImplantacao'
+import { filtrarImplantadas, getSituacoesAmil, getTiposContrato, naoImplantadas } from '../../../../_services/teleEntrevista.service'
+import Title from '../../../../components/Title/Title'
 
 const style = {
     position: 'absolute',
@@ -33,6 +35,10 @@ const Implantacao = () => {
     const [nome, setNome] = useState('')
     const [id, setId] = useState('')
 
+    const [page, setPage] = useState(1)
+    const [limit, setLimit] = useState(10)
+    const [totalPages, setTotalPages] = useState(1)
+
     const implantar = async (id) => {
         try {
 
@@ -60,30 +66,23 @@ const Implantacao = () => {
 
     const buscarPropostas = async () => {
         try {
-
             setLoading(true)
+            const result = await naoImplantadas(
+                page,
+                limit,
+            )
+            setPropostas(result.result)
+            setTotalPages(result.total)
 
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, {
-                withCredentials: true,
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const getSituacaoAmil = await getSituacoesAmil()
+            setSituacoesAmil(getSituacaoAmil)
 
-            if (tipoContrato === 'Todos') {
-                setPropostas(result.data)
-            } else {
-                const arrAux = result.data.filter(proposta => {
-                    return proposta.tipoContrato === tipoContrato
-                })
-                setPropostas(arrAux)
-            }
+            const getTipoContrato = await getTiposContrato()
+            setTiposContrato(getTipoContrato)
 
-            const arrAuxTiposContrato = [...new Set(result.data.map(obj => obj.tipoContrato))]
-            const arrAuxSituacoesAmil = [...new Set(result.data.map(obj => obj.situacaoAmil))]
+            // const arrAuxTiposContrato = [...new Set(result.data.map(obj => obj.tipoContrato))]
+            // const arrAuxSituacoesAmil = [...new Set(result.data.map(obj => obj.situacaoAmil))]
 
-            setTiposContrato(arrAuxTiposContrato)
-            setSituacoesAmil(arrAuxSituacoesAmil)
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -100,51 +99,45 @@ const Implantacao = () => {
     }
 
     const filtrarPorSituacao = async () => {
-
-        setLoading(true)
-
-        const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/naoImplantadas`, {
-            withCredentials: true,
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-
-        if (situacaoAmil === 'Todos') {
-            setPropostas(result.data)
-        } else {
-            const arrAux = result.data.filter(proposta => {
-                return proposta.situacaoAmil === situacaoAmil
-            })
-            setPropostas(arrAux)
+        try {
+            setLoading(true)
+            const result = await filtrarImplantadas(
+                page,
+                limit,
+                situacaoAmil,
+                tipoContrato
+            )
+            setPropostas(result.filter)
+            setTotalPages(result.total)
+            setLoading(false)
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
         }
-
-        setLoading(false)
     }
 
     useEffect(() => {
         setFlushHook(false)
-        buscarPropostas()
-    }, [flushHook])
+        buscarPropostas(page)
+    }, [flushHook, page, limit])
 
     return (
         <>
             <Sidebar>
-                <Box>
-                    <Typography m={2} variant='h5'>
-                        Implantação: {propostas.length}
-                    </Typography>
+                <Container maxWidth>
+                    <Title size={'medium'}>Implantação</Title>
                     {
                         loading ? (
                             <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
                         ) : null
                     }
-                    <Box m={2} >
+                    <Box mt={2} >
                         <Box>
                             <Button onClick={relatorio} variant='contained'>Relatório</Button>
                             <ModalUploadImplantacao setFlushHook={setFlushHook} />
                         </Box>
-                        <Box m={2} display='flex'>
+                        <Box mt={2} display='flex'>
                             <FormControl style={{ width: '150px' }} size='small'>
                                 <InputLabel>Contrato</InputLabel>
                                 <Select
@@ -201,8 +194,35 @@ const Implantacao = () => {
                             <Button style={{ marginLeft: '15px' }} variant='contained' onClick={filtrarPorSituacao}>Filtrar</Button>
                         </Box>
                     </Box>
-
                     <TableContainer>
+                        <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
+                            <Chip label={`Quantidade de Pedidos: ${totalPages}`} color='warning' sx={{ fontSize: '15px' }} />
+                        </Box>
+                        <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
+                            <FormControl size="small" disabled={loading}>
+                                <InputLabel>Linhas</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Linhas"
+                                    sx={{ width: '100px', borderRadius: '10px' }}
+                                    value={limit}
+                                    onChange={(e) => setLimit(e.target.value)}
+                                >
+                                    <MenuItem value={10} >10</MenuItem>
+                                    <MenuItem value={20} >20</MenuItem>
+                                    <MenuItem value={30} >30</MenuItem>
+                                    <MenuItem value={40} >40</MenuItem>
+                                    <MenuItem value={50} >50</MenuItem>
+                                    <MenuItem value={100} >100</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Pagination count={
+                                totalPages % limit === 0 ?
+                                    Math.floor(totalPages / limit) :
+                                    Math.floor(totalPages / limit) + 1
+                            } page={page} onChange={(e, value) => setPage(value)} disabled={loading} />
+                        </Box>
                         <Table className='table'>
                             <TableHead className='table-header'>
                                 <TableRow>
@@ -264,7 +284,7 @@ const Implantacao = () => {
                             </Box>
                         </Box>
                     </Modal>
-                </Box>
+                </Container>
             </Sidebar>
         </>
     )
