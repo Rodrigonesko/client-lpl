@@ -1,22 +1,13 @@
 import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, getRespostasByPedidoId, updateBeneficiario, updatePedido } from "../../../_services/sulAmerica.service"
-import { Box, Button, Container, Divider, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, updateBeneficiario } from "../../../_services/sulAmerica.service"
+import { Box, Button, Container, Divider, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material"
 import Title from "../../../components/Title/Title"
-import { blue, deepOrange, orange } from "@mui/material/colors"
-import moment from "moment"
-import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import { blue, orange } from "@mui/material/colors"
 import { useForm } from "react-hook-form"
-import ModalAgendamento from "./Components/ModalAgendamento"
-import { BsFilePdf } from "react-icons/bs"
-import { Cancel, Edit } from "@mui/icons-material"
-import { RiArrowGoBackFill } from "react-icons/ri"
-import { FaRegArrowAltCircleLeft } from "react-icons/fa"
 import Toast from "../../../components/Toast/Toast"
-import ModalComponent from "../../../components/ModalComponent/ModalComponent"
-import { red } from "@mui/material/colors"
-import { createPdf } from "../PDF/createPdf"
+import Row from "./Components/Row"
 
 const Input = ({ label, register }) => {
     return (
@@ -46,6 +37,7 @@ const FichaBeneficiarioSulAmerica = () => {
     const [severitySnack, setSeveritySnack] = useState('')
     const [msg, setMsg] = useState('')
     const [openSnack, setOpenSnack] = useState(false)
+
 
     const [data, setData] = useState()
     const [pedido, setPedido] = useState([])
@@ -219,6 +211,7 @@ const FichaBeneficiarioSulAmerica = () => {
                         <Table size="small" component={Paper} elevation={7} sx={{ mb: 5, borderRadius: '15px', mt: 3 }}>
                             <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
                                 <TableRow>
+                                    <TableCell ></TableCell>
                                     <TableCell sx={{ color: 'white' }}>Quantidade Serviços Pagos</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Valor Pago</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
@@ -233,132 +226,17 @@ const FichaBeneficiarioSulAmerica = () => {
                             <TableBody>
                                 {
                                     pedido.map((item) => (
-                                        <TableRow>
-                                            <TableCell>{item.qtdServicosPagos}</TableCell>
-                                            <TableCell>{
-                                                new Intl.NumberFormat('pt-BR', {
-                                                    style: 'currency',
-                                                    currency: 'BRL'
-                                                }).format(item.valorPago)
-                                            }</TableCell>
-                                            <TableCell>{item.prestador.nome}</TableCell>
-                                            <TableCell>{item.beneficiario.nome}</TableCell>
-                                            <TableCell>{item.responsavel}</TableCell>
-                                            <TableCell>{item.dataAgendamento}</TableCell>
-                                            <TableCell>{moment(item.dataCriacao).format('DD/MM/YYYY')}</TableCell>
-                                            <TableCell>{item.status}</TableCell>
-                                            <TableCell>
-                                                {
-                                                    item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
-                                                }
-                                                {
-                                                    item.status === 'AGENDADO' && <Tooltip title='Reagendar'>
-                                                        <IconButton size='small' color='warning' >
-                                                            <FaRegArrowAltCircleLeft />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                }
-                                                {
-                                                    (item.status === 'A INICIAR' || item.status === 'AGENDADO') && <Tooltip title='Formulário'>
-                                                        <IconButton size='small' color='primary' href={`/sulAmerica/formulario/${item._id}`} >
-                                                            <FeedOutlinedIcon />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                }
-                                                {
-                                                    item.status === 'CONCLUÍDO' && <Tooltip title='PDF'>
-                                                        <IconButton sie='small' color='error' onClick={async () => {
-                                                            try {
-                                                                const response = await getRespostasByPedidoId(item._id)
-                                                                console.log(response);
-                                                                createPdf(response)
-                                                            } catch (error) {
-                                                                console.log(error);
-                                                                setOpenSnack(true)
-                                                                setSeveritySnack('error')
-                                                                setMsg(`Erro! ${error}`)
-                                                            }
-                                                        }} >
-                                                            <BsFilePdf />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                }
-                                                {
-                                                    item.status === 'CONCLUÍDO' && <Tooltip title='Editar Formulário'>
-                                                        <IconButton size='small' color='primary' href={`/sulAmerica/editarFormulario/${item._id}`} >
-                                                            <Edit />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                }
-                                                {
-                                                    (item.status === 'A INICIAR' || item.status === 'AGENDADO') && (
-                                                        <ModalComponent
-                                                            buttonIcon={<Cancel />}
-                                                            buttonText='Cancelar'
-                                                            buttonColorScheme='error'
-                                                            headerText='Cancelar Pedido'
-                                                            onAction={async () => {
-                                                                try {
-                                                                    await updatePedido(item._id, { justificativa, status: 'CANCELADO' })
-                                                                } catch (error) {
-                                                                    console.log(error);
-                                                                    setOpenSnack(true)
-                                                                    setSeveritySnack('error')
-                                                                    setMsg(`Erro! ${error}`)
-                                                                }
-                                                            }}
-                                                            size={'sm'}
-                                                            saveButtonColorScheme={red[900]}
-                                                        >
-                                                            <Typography>
-                                                                Tem certeza que deseja cancelar o pedido do prestador {item.prestador.nome}?
-                                                            </Typography>
-                                                            <TextField
-                                                                placeholder='Justificativa'
-                                                                fullWidth
-                                                                multiline
-                                                                rows={2}
-                                                                sx={{ mt: 2 }}
-                                                                value={justificativa}
-                                                                onChange={(e) => setJustificativa(e.target.value)}
-                                                            />
-                                                        </ModalComponent>
-                                                    )
-                                                }
-                                                {
-                                                    (item.status === 'CONCLUÍDO' || item.status === 'CANCELADO') && (
-                                                        <ModalComponent
-                                                            buttonIcon={<Tooltip title='Reabrir' >
-                                                                <IconButton size='small' color='warning' >
-                                                                    <RiArrowGoBackFill />
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                            }
-                                                            buttonText='Reabrir'
-                                                            headerText='Reabrir Pedido'
-                                                            onAction={async () => {
-                                                                try {
-                                                                    await updatePedido(item._id, { status: 'A INICIAR' })
-                                                                    setFlushHook(!flushHook)
-                                                                } catch (error) {
-                                                                    console.log(error);
-                                                                    setOpenSnack(true)
-                                                                    setSeveritySnack('error')
-                                                                    setMsg(`Erro! ${error}`)
-                                                                }
-                                                            }}
-                                                            size={'sm'}
-                                                            saveButtonColorScheme={deepOrange[900]}
-                                                            textButton={'Reabrir'}
-                                                        >
-                                                            <Typography>
-                                                                Tem certeza que deseja reabrir o pedido do prestador {item.prestador.nome}?
-                                                            </Typography>
-                                                        </ModalComponent>
-                                                    )
-                                                }
-                                            </TableCell>
-                                        </TableRow>
+                                        <Row
+                                            key={item}
+                                            item={item}
+                                            flushHook={flushHook}
+                                            openSnack={openSnack}
+                                            setOpenSnack={setOpenSnack}
+                                            setFlushHook={setFlushHook}
+                                            setMsg={setMsg}
+                                            setSeveritySnack={setSeveritySnack}
+
+                                        />
                                     ))
                                 }
                             </TableBody>
@@ -371,7 +249,7 @@ const FichaBeneficiarioSulAmerica = () => {
                     severity={severitySnack}
                     message={msg}
                 />
-            </Container>
+            </Container >
         </Sidebar >
     )
 }
