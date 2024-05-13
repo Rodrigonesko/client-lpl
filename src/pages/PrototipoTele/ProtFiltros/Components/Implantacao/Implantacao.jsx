@@ -87,24 +87,28 @@ const Implantacao = () => {
         setLoading(false)
     }
 
+    // useEffect(() => {
+    //     if (pesquisa === '' && contrato === 'Todos' && situacaoAmil === 'Todos') {
+    //         fetchData()
+    //     } else {
+    //         fetchPesquisa(page)
+    //     }
+    // }, [pesquisa, contrato, situacaoAmil, page])
+
+    // useEffect(() => {
+    //     fetchPesquisa(page)
+    // }, [page])
+
     useEffect(() => {
         if (pesquisa === '' && contrato === 'Todos' && situacaoAmil === 'Todos') {
             fetchData()
         } else {
-            fetchPesquisa()
+            fetchPesquisa(page)
         }
-    }, [pesquisa, contrato, situacaoAmil])
-
-    useEffect(() => {
-        fetchPesquisa(page)
-    }, [page])
-
-    useEffect(() => {
-        fetchData()
         fetchContratos()
         fetchSituacoesAmil()
         setFlushHook(false)
-    }, [flushHook])
+    }, [flushHook, pesquisa, contrato, situacaoAmil, page])
 
     return (
         <Box>
