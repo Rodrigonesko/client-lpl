@@ -323,3 +323,7 @@ export const alterarRetrabalhoEntrevista = async (data) => {
 export const fecharHorarios = async ({ data, responsavel, horarios, justiticativa }) => {
     return await new ApiCall('/entrevistas/fecharHorarios').put({ data, responsavel, horarios, justiticativa })
 }
+
+export const reabrirHorarios = async ({ data, responsavel, horarios }) => {
+    return await new ApiCall('/entrevistas/reabrirHorarios').put({ data, responsavel, horarios})
+}

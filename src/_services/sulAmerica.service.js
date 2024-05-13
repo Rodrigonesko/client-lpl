@@ -1,6 +1,6 @@
 import { ApiCall } from "./api";
 //onst token = localStorage.getItem('token')
-const url = 'http://localhost:5001' //process.env.REACT_APP_SUL_AMERICA_SERVICE
+const url = process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 

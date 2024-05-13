@@ -17,6 +17,7 @@ import Toast from "../../../components/Toast/Toast"
 import ModalComponent from "../../../components/ModalComponent/ModalComponent"
 import { red } from "@mui/material/colors"
 import { createPdf } from "../PDF/createPdf"
+import { reabrirHorarios } from "../../../_services/teleEntrevista.service"
 
 const Input = ({ label, register }) => {
     return (
@@ -244,17 +245,54 @@ const FichaBeneficiarioSulAmerica = () => {
                                             <TableCell>{item.prestador.nome}</TableCell>
                                             <TableCell>{item.beneficiario.nome}</TableCell>
                                             <TableCell>{item.responsavel}</TableCell>
-                                            <TableCell>{item.dataAgendamento}</TableCell>
+                                            <TableCell>{item.dataAgendamento && moment(item.dataAgendamento).format('DD/MM/YYYY HH:mm')}</TableCell>
                                             <TableCell>{moment(item.dataCriacao).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{item.status}</TableCell>
                                             <TableCell>
                                                 {
-                                                    item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
+                                                    item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} setFlushHook={setFlushHook} />
                                                 }
                                                 {
                                                     item.status === 'AGENDADO' && <Tooltip title='Reagendar'>
                                                         <IconButton size='small' color='warning' >
-                                                            <FaRegArrowAltCircleLeft />
+                                                            <ModalComponent
+                                                                buttonIcon={<FaRegArrowAltCircleLeft size={'20px'} />}
+                                                                buttonText='Reagendar'
+                                                                headerText='Reagendar Pedido'
+                                                                buttonColorScheme={'warning'}
+                                                                onAction={async () => {
+                                                                    try {
+                                                                        console.log({
+                                                                            data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
+                                                                            responsavel: item.responsavel,
+                                                                            horarios: [moment(item.dataAgendamento).format('HH:mm')]
+                                                                        });
+                                                                        await updatePedido(item._id, { status: 'A INICIAR', dataAgendamento: '', responsavel: '' })
+                                                                        await reabrirHorarios({
+                                                                            data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
+                                                                            responsavel: item.responsavel,
+                                                                            horarios: [moment(item.dataAgendamento).format('HH:mm')]
+                                                                        })
+                                                                        setFlushHook(!flushHook)
+                                                                        setOpenSnack(true)
+                                                                        setSeveritySnack('success')
+                                                                        setMsg(`Alterado status com sucesso`)
+                                                                    }
+                                                                    catch (error) {
+                                                                        console.log(error);
+                                                                        setOpenSnack(true)
+                                                                        setSeveritySnack('error')
+                                                                        setMsg(`Erro! ${error}`)
+                                                                    }
+                                                                }}
+                                                                size={'sm'}
+                                                                saveButtonColorScheme={orange[900]}
+                                                                textButton={'Reagendar'}
+                                                            >
+                                                                <Typography>
+                                                                    Tem certeza que deseja reagendar o pedido do prestador {item.prestador.nome}?
+                                                                </Typography>
+                                                            </ModalComponent>
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
@@ -299,7 +337,17 @@ const FichaBeneficiarioSulAmerica = () => {
                                                             headerText='Cancelar Pedido'
                                                             onAction={async () => {
                                                                 try {
-                                                                    await updatePedido(item._id, { justificativa, status: 'CANCELADO' })
+                                                                    if (!justificativa) {
+                                                                        setOpenSnack(true)
+                                                                        setSeveritySnack('error')
+                                                                        setMsg(`Justificativa é obrigatória!`)
+                                                                        return
+                                                                    }
+                                                                    await updatePedido(item._id, { justificativa, status: 'CANCELADO', responsavel: 'CANCELADO' })
+                                                                    setOpenSnack(true)
+                                                                    setSeveritySnack('success')
+                                                                    setMsg(`Pedido cancelado com sucesso!`)
+                                                                    setFlushHook(!flushHook)
                                                                 } catch (error) {
                                                                     console.log(error);
                                                                     setOpenSnack(true)

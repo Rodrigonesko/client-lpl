@@ -5,10 +5,10 @@ import { fecharHorarios, getAnalistasDisponiveis, getDiasDisponiveis, getDiasDis
 import { filterUsers } from "../../../../_services/user.service"
 import { invertDate } from "../../../../functions/functions"
 import Toast from "../../../../components/Toast/Toast"
-import { updateBeneficiario, updatePedido } from "../../../../_services/sulAmerica.service"
+import { updatePedido } from "../../../../_services/sulAmerica.service"
 import moment from "moment"
 
-const ModalAgendamento = ({ pedido }) => {
+const ModalAgendamento = ({ pedido, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [analistas, setAnalistas] = useState([])
@@ -118,13 +118,16 @@ const ModalAgendamento = ({ pedido }) => {
             })
             await updatePedido(pedido, {
                 status: 'AGENDADO',
-                dataEntrevista: `${moment(data, 'DD/MM/YYYY').format('YYYY-MM-DD')} ${horario}`,
+                dataAgendamento: `${moment(data, 'DD/MM/YYYY').format('YYYY-MM-DD')} ${horario}`,
                 responsavel: analista
             })
             setLoading(false)
             setMessage('Agendado com sucesso')
             setSeverity('success')
             setOpenToast(true)
+            setOpen(false)
+            handleClear()
+            setFlushHook(prev => !prev)
         } catch (error) {
             console.log(error);
             setMessage('Erro ao agendar')
