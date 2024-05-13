@@ -336,6 +336,8 @@ export const naoImplantadas = async (page, limit) => {
 export const filtrarImplantadas = async (page, limit, situacaoAmil, tipoContrato) => {
     return await new ApiCall(`/entrevistas/filtrarImplantadas?page=${page}&limit=${limit}&situacaoAmil=${situacaoAmil}&tipoContrato=${tipoContrato}`).get()
 
+}
+
 export const fecharHorarios = async ({ data, responsavel, horarios, justiticativa }) => {
     return await new ApiCall('/entrevistas/fecharHorarios').put({ data, responsavel, horarios, justiticativa })
 }
