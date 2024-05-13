@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, updateBeneficiario, updatePedido } from "../../../_services/sulAmerica.service"
-import { Alert, Box, Button, Container, Divider, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, getRespostasByPedidoId, updateBeneficiario, updatePedido } from "../../../_services/sulAmerica.service"
+import { Box, Button, Container, Divider, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Title from "../../../components/Title/Title"
-import { blue, orange } from "@mui/material/colors"
+import { blue, deepOrange, orange } from "@mui/material/colors"
 import moment from "moment"
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import { set, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import ModalAgendamento from "./Components/ModalAgendamento"
 import { BsFilePdf } from "react-icons/bs"
 import { Cancel, Edit } from "@mui/icons-material"
@@ -16,6 +16,7 @@ import { FaRegArrowAltCircleLeft } from "react-icons/fa"
 import Toast from "../../../components/Toast/Toast"
 import ModalComponent from "../../../components/ModalComponent/ModalComponent"
 import { red } from "@mui/material/colors"
+import { createPdf } from "../PDF/createPdf"
 
 const Input = ({ label, register }) => {
     return (
@@ -57,14 +58,13 @@ const FichaBeneficiarioSulAmerica = () => {
                 setData(result)
                 const findPedidos = await getBeneficiarioComPedidosEmAberto(id)
                 setPedido(findPedidos)
-                console.log(findPedidos);
             } catch (error) {
                 console.log(error);
             }
         }
 
         fetch()
-    }, [id])
+    }, [id, flushHook])
 
     const onSubmit = async (formData) => {
         try {
@@ -73,8 +73,7 @@ const FichaBeneficiarioSulAmerica = () => {
             setOpenSnack(true)
             setSeveritySnack('success')
             setMsg('Dados Atualizados com sucesso!')
-            setFlushHook(true)
-            console.log(update);
+            setFlushHook(!flushHook)
         } catch (error) {
             console.log(error);
             setOpenSnack(true)
@@ -268,14 +267,25 @@ const FichaBeneficiarioSulAmerica = () => {
                                                 }
                                                 {
                                                     item.status === 'CONCLUÍDO' && <Tooltip title='PDF'>
-                                                        <IconButton sie='small' color='error' >
+                                                        <IconButton sie='small' color='error' onClick={async () => {
+                                                            try {
+                                                                const response = await getRespostasByPedidoId(item._id)
+                                                                console.log(response);
+                                                                createPdf(response)
+                                                            } catch (error) {
+                                                                console.log(error);
+                                                                setOpenSnack(true)
+                                                                setSeveritySnack('error')
+                                                                setMsg(`Erro! ${error}`)
+                                                            }
+                                                        }} >
                                                             <BsFilePdf />
                                                         </IconButton>
                                                     </Tooltip>
                                                 }
                                                 {
-                                                    item.status === 'CONCLUÍDO' && <Tooltip title='Editar'>
-                                                        <IconButton size='small' color='primary' >
+                                                    item.status === 'CONCLUÍDO' && <Tooltip title='Editar Formulário'>
+                                                        <IconButton size='small' color='primary' href={`/sulAmerica/editarFormulario/${item._id}`} >
                                                             <Edit />
                                                         </IconButton>
                                                     </Tooltip>
@@ -316,11 +326,36 @@ const FichaBeneficiarioSulAmerica = () => {
                                                     )
                                                 }
                                                 {
-                                                    (item.status === 'CONCLUÍDO' || item.status === 'CANCELADO') && <Tooltip title='Retroceder'>
-                                                        <IconButton size='small' color='primary' >
-                                                            <RiArrowGoBackFill />
-                                                        </IconButton>
-                                                    </Tooltip>
+                                                    (item.status === 'CONCLUÍDO' || item.status === 'CANCELADO') && (
+                                                        <ModalComponent
+                                                            buttonIcon={<Tooltip title='Reabrir' >
+                                                                <IconButton size='small' color='warning' >
+                                                                    <RiArrowGoBackFill />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            }
+                                                            buttonText='Reabrir'
+                                                            headerText='Reabrir Pedido'
+                                                            onAction={async () => {
+                                                                try {
+                                                                    await updatePedido(item._id, { status: 'A INICIAR' })
+                                                                    setFlushHook(!flushHook)
+                                                                } catch (error) {
+                                                                    console.log(error);
+                                                                    setOpenSnack(true)
+                                                                    setSeveritySnack('error')
+                                                                    setMsg(`Erro! ${error}`)
+                                                                }
+                                                            }}
+                                                            size={'sm'}
+                                                            saveButtonColorScheme={deepOrange[900]}
+                                                            textButton={'Reabrir'}
+                                                        >
+                                                            <Typography>
+                                                                Tem certeza que deseja reabrir o pedido do prestador {item.prestador.nome}?
+                                                            </Typography>
+                                                        </ModalComponent>
+                                                    )
                                                 }
                                             </TableCell>
                                         </TableRow>

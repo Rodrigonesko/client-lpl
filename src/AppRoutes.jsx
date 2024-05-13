@@ -168,6 +168,7 @@ import ConfiguracaoQuestionario from "./pages/SulAmerica/ConfiguracaoQuestionari
 import Pedidos from "./pages/SulAmerica/Pedidos/Pedidos";
 import UploadSulAmerica from "./pages/SulAmerica/upload/Index";
 import FormularioSulAmerica from "./pages/SulAmerica/Formulario/Index";
+import EditFormulario from "./pages/SulAmerica/EditarFormulario/Index";
 import BeneficiariosSulAmerica from "./pages/SulAmerica/Beneficiarios/Beneficiarios";
 import FichaBeneficiarioSulAmerica from "./pages/SulAmerica/FichaBeneficiario/Index";
 
@@ -196,6 +197,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/beneficiario/:id" element={<ProtectedRoute>
                     <FichaBeneficiarioSulAmerica />
+                </ProtectedRoute>} />
+                <Route exact path="/sulAmerica/editarFormulario/:id" element={<ProtectedRoute>
+                    <EditFormulario />
                 </ProtectedRoute>} />
 
                 <Route exact path="/internMessages" element={<ProtectedRoute>
