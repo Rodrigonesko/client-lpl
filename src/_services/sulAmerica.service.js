@@ -94,6 +94,10 @@ export const getBeneficiarioByWhatsapp = async (whatsapp) => {
     return await new ApiCall(`/beneficiario/whatsapp/${whatsapp}`, url).get()
 }
 
+export const getBeneficiarioByNameAndSortByLastMessage = async (name) => {
+    return await new ApiCall(`/beneficiario/nome/ultimaMensagem?nome=${name}`, url).get()
+}
+
 export const updateBeneficiario = async (id, data) => {
     return await new ApiCall(`/beneficiario/${id}`, url).put(data)
 }
