@@ -10,7 +10,7 @@ import moment from "moment";
 import { io } from "socket.io-client";
 import AuthContext from "../../../context/AuthContext";
 import ModalEnviarArquivo from "./ModalEnviarArquivo";
-import { getBeneficiarioByWhatsapp } from "../../../_services/sulAmerica.service";
+import { getBeneficiarioByWhatsapp, updateBeneficiario } from "../../../_services/sulAmerica.service";
 
 const socket = io(process.env.REACT_APP_WHATSAPP_SERVICE)
 
@@ -63,7 +63,7 @@ const Chat = () => {
             }
             if (whatsappSender === 'whatsapp:+551150268027') {
                 const response = await getBeneficiarioByWhatsapp(whatsappReceiver.whatsapp)
-                //await readMessagesRsd(whatsappReceiver.whatsapp)
+                await updateBeneficiario(response._id, { quantidadeMensagens: 0 })
                 setFlushHook((prev) => !prev)
                 if (response.error) {
                     setMessages([])

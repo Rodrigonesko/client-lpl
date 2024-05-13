@@ -4,7 +4,7 @@ import { getContacts, getFilterContactsRsd } from '../../../_services/whatsapp.s
 import { ChatContext } from './ChatContext'
 import moment from 'moment'
 import { Close, Search } from '@mui/icons-material'
-import { getBeneficiarios } from '../../../_services/sulAmerica.service'
+import { getBeneficiarioByNameAndSortByLastMessage, getBeneficiarios } from '../../../_services/sulAmerica.service'
 
 const Contacts = () => {
 
@@ -24,7 +24,8 @@ const Contacts = () => {
                     setContacts(response)
                 }
                 if (whatsappSender === 'whatsapp:+551150268027') {
-                    const response = await getBeneficiarios()
+                    const response = await getBeneficiarioByNameAndSortByLastMessage('')
+                    console.log(response);
                     if (response.error) {
                         return
                     }
@@ -43,11 +44,20 @@ const Contacts = () => {
 
         const fetch = async () => {
             try {
-                const response = await getFilterContactsRsd(whatsappSender, search, responsavel)
-                if (response.error) {
-                    return
+                if (whatsappSender === 'whatsapp:+551150264875') {
+                    const response = await getFilterContactsRsd(whatsappSender, search, responsavel)
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response)
                 }
-                setContacts(response)
+                if (whatsappSender === 'whatsapp:+551150268027') {
+                    const response = await getBeneficiarioByNameAndSortByLastMessage(search)
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response)
+                }
             } catch (error) {
                 console.log(error);
                 setContacts([])
