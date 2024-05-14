@@ -66,7 +66,7 @@ const FormularioSulAmerica = () => {
     const verifyFirstQuestion = (index) => {
         if (index !== 0) return true
         const res = (index === 0 &&
-            (pedido?.beneficiario?.carteiraEmpresa !== 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa !== 'PME') &&
+            (pedido?.beneficiario?.carteiraEmpresa === 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa === 'PME') &&
             new Date(pedido?.beneficiario?.dataInicioVigencia).getFullYear() >= 2022)
 
         return res

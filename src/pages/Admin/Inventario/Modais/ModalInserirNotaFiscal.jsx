@@ -23,9 +23,6 @@ const ModalInserirNotaFiscal = ({ id, setFlushHook }) => {
     const handleUpload = async (_id) => {
         const formData = new FormData()
         formData.append('file', file, file.name)
-
-        console.log(_id);
-
         const result = await uploadNotasFiscais(
             formData,
             _id,

@@ -1,6 +1,6 @@
 import { ApiCall } from "./api";
-//onst token = localStorage.getItem('token')
-const url = process.env.REACT_APP_SUL_AMERICA_SERVICE
+const token = localStorage.getItem('token')
+const url = 'http://localhost:5001'//process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 
@@ -53,8 +53,6 @@ export const updatePedido = async (id, data) => {
 }
 
 export const filterPedidos = async (prestador, beneficiario, responsavel, status, page, limit) => {
-    console.log(prestador, beneficiario, responsavel, status, page, limit);
-
     return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&page=${page}&limit=${limit}`, url).get()
 }
 
@@ -68,6 +66,14 @@ export const getPrestadoresComPedidosEmAberto = async () => {
 
 export const getBeneficiarioComPedidosEmAberto = async (id) => {
     return await new ApiCall(`/pedido/beneficiarioComPedidosEmAberto/${id}`, url).get()
+}
+
+export const uploadArquivoPedido = async (id, data) => {
+    return await new ApiCall(`/pedido/upload/${id}`, url, token, {
+        headers: {
+            "Content-Type": `multipart/form-data; boundary=${data._boundary}`
+        }
+    }).post(data)
 }
 
 /* Respostas */

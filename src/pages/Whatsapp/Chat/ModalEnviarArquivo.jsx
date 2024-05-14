@@ -41,7 +41,6 @@ const ModalEnviarArquivo = () => {
     const [severity, setSeverity] = useState('success')
 
     const onDrop = useCallback((acceptedFiles) => {
-        console.log(acceptedFiles);
         setUploadedFiles(acceptedFiles);
     }, []);
 

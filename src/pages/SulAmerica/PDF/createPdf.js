@@ -37,7 +37,7 @@ export const createPdf = (respostas) => {
                     { text: `${subPergunta.resposta}`, bold: true, margin: [20, 0, 20, 0], italics: true, color: blue[900] }
                 ]
             }),
-            { text: resposta.observacao, bold: true, margin: [20, 0, 20, 0], italics: true, color: blue[900] },
+            { text: resposta.observacoes, bold: true, margin: [20, 0, 20, 0], italics: true, color: blue[900] },
         ]
     }
 

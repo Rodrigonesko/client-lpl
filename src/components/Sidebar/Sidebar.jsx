@@ -268,15 +268,13 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/whatsapp/chat'>Chat</Link></MenuItem>
                         <MenuItem><Link to='/whatsapp/templates'>Templates</Link></MenuItem>
                     </SubMenu>
-                    {
-                        acessos?.administrador && (
-                            <SubMenu title={"Sul America"} icon={<SouthAmericaOutlinedIcon />} >
-                                <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
-                                <MenuItem><Link to='/sulAmerica/Pedidos'>Pedidos</Link></MenuItem>
-                                <MenuItem><Link to='/sulAmerica/Beneficiarios'>Beneficiarios</Link></MenuItem>
-                            </SubMenu>
-                        )
-                    }
+
+                    <SubMenu title={"Sul America"} icon={<SouthAmericaOutlinedIcon />} >
+                        <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
+                        <MenuItem><Link to='/sulAmerica/Pedidos'>Pedidos</Link></MenuItem>
+                        <MenuItem><Link to='/sulAmerica/Beneficiarios'>Beneficiarios</Link></MenuItem>
+                    </SubMenu>
+
                 </Menu>
             </ProSidebar>
             <Box width={'100%'} >
