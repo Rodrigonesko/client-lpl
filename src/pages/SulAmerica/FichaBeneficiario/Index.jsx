@@ -7,12 +7,7 @@ import Title from "../../../components/Title/Title"
 import { blue, orange } from "@mui/material/colors"
 import { useForm } from "react-hook-form"
 import Toast from "../../../components/Toast/Toast"
-
 import Row from "./Components/Row"
-import ModalComponent from "../../../components/ModalComponent/ModalComponent"
-import { red } from "@mui/material/colors"
-import { createPdf } from "../PDF/createPdf"
-import { reabrirHorarios } from "../../../_services/teleEntrevista.service"
 
 const Input = ({ label, register }) => {
     return (
@@ -43,10 +38,9 @@ const FichaBeneficiarioSulAmerica = () => {
     const [msg, setMsg] = useState('')
     const [openSnack, setOpenSnack] = useState(false)
 
-
     const [data, setData] = useState()
     const [pedido, setPedido] = useState([])
-    const [justificativa, setJustificativa] = useState('')
+
 
     useEffect(() => {
         const fetch = async () => {

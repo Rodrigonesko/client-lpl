@@ -87,6 +87,14 @@ export const createPdf = (respostas) => {
                             [
                                 { text: 'CPF:', bold: true },
                                 { text: respostas.pedido.beneficiario.cpf, bold: true }
+                            ],
+                            [
+                                { text: 'Prestador:', bold: true },
+                                { text: respostas.pedido.prestador.nome, bold: true }
+                            ],
+                            [
+                                { text: 'Responsável:', bold: true },
+                                { text: `${respostas.pedido.beneficiario.responsavelLegal} | ${respostas.pedido.beneficiario.vinculoResponsavel}`, bold: true }
                             ]
                         ]
                     }
