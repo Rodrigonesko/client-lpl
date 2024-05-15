@@ -164,7 +164,7 @@ const InformacoesGerais = ({ mo }) => {
                 planoPf ? (
                     <Box mt={2}>
                         <Alert severity="error" sx={{ width: '100%' }}>
-                        Plano com prazo de vigência reduzido *30 dias*. Analisar a data de atendimento X data da solicitação.
+                            Plano com prazo de vigência reduzido *30 dias*. Analisar a data de atendimento X data da solicitação.
                         </Alert>
                     </Box>
                 ) : null

@@ -103,7 +103,7 @@ const ModalRelatorio = ({ statusList, areaEmpresaList }) => {
                 xls += `<td>${item.previa_enviada ? 'Sim' : 'Não'}</td>`
                 xls += `<td>${item.analista_solicitante || ''}</td>`
                 item.irregularidadesObj.forEach((irregularidade) => {
-                    xls += `<td>${irregularidade.value || ''}</td>`
+                    xls += `<td>${irregularidade.value || '0'}</td>`
                 })
                 xls += "</tr>"
             })
