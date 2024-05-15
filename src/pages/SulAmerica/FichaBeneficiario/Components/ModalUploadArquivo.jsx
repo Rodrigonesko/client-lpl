@@ -6,7 +6,7 @@ import { CloudUpload } from "@mui/icons-material"
 import { blue } from "@mui/material/colors"
 import { uploadArquivoPedido } from "../../../../_services/sulAmerica.service"
 
-const ModalUploadArquivo = ({ item }) => {
+const ModalUploadArquivo = ({ item, setArquivos }) => {
 
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
@@ -26,8 +26,13 @@ const ModalUploadArquivo = ({ item }) => {
         const formData = new FormData()
         formData.append('file', file, file.name)
         try {
-            const result = await uploadArquivoPedido(item._id, formData)
-            console.log(result);
+            const response = await uploadArquivoPedido(item._id, formData)
+            setOpenToast(true)
+            setMessage('Upload feito com sucesso')
+            setSeverity('success')
+            handleClose()
+            setFile(null)
+            setArquivos(prevState => [...prevState, response])
         } catch (error) {
             console.error(error);
             setOpenToast(true)
@@ -42,9 +47,11 @@ const ModalUploadArquivo = ({ item }) => {
                 variant='contained'
                 onClick={handleClickOpen}
                 sx={{
-                    backgroundColor: blue[900],
+                    mt: 2,
+                    bgcolor: blue[900],
+                    color: 'white',
                     ':hover': {
-                        backgroundColor: blue[800]
+                        bgcolor: blue[800]
                     }
                 }}
                 endIcon={<CloudUpload />}

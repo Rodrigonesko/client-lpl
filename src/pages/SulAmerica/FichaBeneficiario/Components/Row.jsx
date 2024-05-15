@@ -12,10 +12,10 @@ import { createPdf } from "../../PDF/createPdf"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
 import { deepOrange, red } from "@mui/material/colors"
 
-const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
+const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
 
     const [openRow, setOpenRow] = useState(false)
-    const [justificativa, setJustificativa] = useState(false)
+    const [justificativa, setJustificativa] = useState('')
 
     return (
         <>
@@ -32,13 +32,6 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                         </Tooltip>
                     </IconButton>
                 </TableCell>
-                <TableCell>{item.qtdServicosPagos}</TableCell>
-                <TableCell>{
-                    new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                    }).format(item.valorPago)
-                }</TableCell>
                 <TableCell>{item.prestador.nome}</TableCell>
                 <TableCell>{item.beneficiario.nome}</TableCell>
                 <TableCell>{item.responsavel}</TableCell>
@@ -68,7 +61,6 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                             <IconButton sie='small' color='error' onClick={async () => {
                                 try {
                                     const response = await getRespostasByPedidoId(item._id)
-                                    console.log(response);
                                     createPdf(response)
                                 } catch (error) {
                                     console.log(error);
@@ -98,6 +90,11 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                                 onAction={async () => {
                                     try {
                                         await updatePedido(item._id, { justificativa, status: 'CANCELADO' })
+                                        setFlushHook(!flushHook)
+                                        setJustificativa('')
+                                        setOpenSnack(true)
+                                        setSeveritySnack('success')
+                                        setMsg('Pedido cancelado com sucesso')
                                     } catch (error) {
                                         console.log(error);
                                         setOpenSnack(true)

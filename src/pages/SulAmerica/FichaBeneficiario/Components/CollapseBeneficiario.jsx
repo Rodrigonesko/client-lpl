@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Button, Collapse, Divider, Grid, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import moment from "moment"
 import { valueToBRL } from "../../../../functions/functions"
 import { blue } from "@mui/material/colors"
@@ -7,6 +7,7 @@ import Toast from "../../../../components/Toast/Toast"
 import { updatePedido } from "../../../../_services/sulAmerica.service"
 import AuthContext from "../../../../context/AuthContext"
 import ModalUploadArquivo from "./ModalUploadArquivo"
+import { CloudDownload } from "@mui/icons-material"
 
 const CollapseBeneficiario = ({ item, openRow }) => {
 
@@ -17,6 +18,7 @@ const CollapseBeneficiario = ({ item, openRow }) => {
     const [msg, setMsg] = useState('')
 
     const [tentativasDeContato, setTentativasDeContato] = useState(item.tentativasDeContato || [])
+    const [arquivos, setArquivos] = useState(item.arquivos || [])
 
     const handleAdicionarTentaivaDeContato = async () => {
         try {
@@ -39,7 +41,7 @@ const CollapseBeneficiario = ({ item, openRow }) => {
     return (
         <>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={15}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
                     <Collapse in={openRow} timeout="auto" unmountOnExit>
                         <Box
                             p={2}
@@ -180,27 +182,40 @@ const CollapseBeneficiario = ({ item, openRow }) => {
                                 spacing={2}
                             >
                                 <Grid item xs={12} sm={6}>
+                                    <TableContainer>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>
+                                                        N° Tentativa
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        Responsável
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        Data
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
                                     {
                                         tentativasDeContato.map((tentativa, index) => (
-                                            <Box
-                                                key={index}
-                                                display={'flex'}
-                                                alignItems={'center'}
-                                                gap={2}
-                                                m={2}
-                                            >
-                                                <Typography>
-                                                    Tentativa {index + 1}
-                                                </Typography>
-                                                <Typography>
-                                                    Data: {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
-                                                </Typography>
-                                                <Typography>
-                                                    Responsvel: {tentativa.responsavel}
-                                                </Typography>
-                                            </Box>
+                                            <TableRow key={index}>
+                                                <TableCell>
+                                                    {index + 1}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {tentativa.responsavel}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
+                                                </TableCell>
+                                            </TableRow>
                                         ))
                                     }
+                                </TableBody>
+                                    </Table>
+                                    </TableContainer>
                                     <Button
                                         variant="contained"
                                         sx={{
@@ -218,8 +233,51 @@ const CollapseBeneficiario = ({ item, openRow }) => {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <Box>
-                                        <ModalUploadArquivo item={item} />
+                                        <TableContainer>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            Nome
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            Link
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {
+                                                        arquivos.map((arquivo, index) => (
+                                                            <TableRow key={index}>
+                                                                <TableCell>
+                                                                    {arquivo}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Button
+                                                                        sx={{
+                                                                            bgcolor: blue[900],
+                                                                            color: 'white',
+                                                                            ':hover': {
+                                                                                bgcolor: blue[800]
+                                                                            }
+                                                                        }}
+                                                                        href={`${process.env.REACT_APP_SUL_AMERICA_SERVICE}/pedido/download/${arquivo}`}
+                                                                        endIcon={<CloudDownload />}
+                                                                        size="small"
+                                                                        variant='text'
+                                                                        target="_blank"
+                                                                    >
+                                                                        Download
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))
+                                                    }
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
                                     </Box>
+                                    <ModalUploadArquivo item={item} setArquivos={setArquivos} />
                                 </Grid>
                             </Grid>
                         </Box>
