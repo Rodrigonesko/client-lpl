@@ -165,12 +165,11 @@ import AdicionarProposta from "./pages/TeleEntrevistaV2/AdicionarProposta";
 /* SulAmerica */
 
 import ConfiguracaoQuestionario from "./pages/SulAmerica/ConfiguracaoQuestionario/ConfiguracaoQuestionario";
-import Pedidos from "./pages/SulAmerica/Pedidos/Pedidos";
 import UploadSulAmerica from "./pages/SulAmerica/upload/Index";
 import FormularioSulAmerica from "./pages/SulAmerica/Formulario/Index";
 import EditFormulario from "./pages/SulAmerica/EditarFormulario/Index";
-import BeneficiariosSulAmerica from "./pages/SulAmerica/Beneficiarios/Beneficiarios";
 import FichaBeneficiarioSulAmerica from "./pages/SulAmerica/FichaBeneficiario/Index";
+import PedidosSulAmerica from "./pages/SulAmerica/Pedidos/Index";
 
 const AppRoutes = () => {
     return (
@@ -184,16 +183,13 @@ const AppRoutes = () => {
                     <ConfiguracaoQuestionario />
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/Pedidos" element={<ProtectedRoute>
-                    <Pedidos />
+                    <PedidosSulAmerica />
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/upload" element={<ProtectedRoute>
                     <UploadSulAmerica />
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/formulario/:id" element={<ProtectedRoute>
                     <FormularioSulAmerica />
-                </ProtectedRoute>} />
-                <Route exact path="/sulAmerica/Beneficiarios" element={<ProtectedRoute>
-                    <BeneficiariosSulAmerica />
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/beneficiario/:id" element={<ProtectedRoute>
                     <FichaBeneficiarioSulAmerica />

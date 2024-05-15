@@ -10,7 +10,8 @@ import moment from "moment"
 import { getRespostasByPedidoId, updatePedido } from "../../../../_services/sulAmerica.service"
 import { createPdf } from "../../PDF/createPdf"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
-import { deepOrange, red } from "@mui/material/colors"
+import { deepOrange, orange, red } from "@mui/material/colors"
+import { reabrirHorarios } from "../../../../_services/teleEntrevista.service"
 
 const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
 
@@ -43,11 +44,50 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
                     }
                     {
-                        item.status === 'AGENDADO' && <Tooltip title='Reagendar'>
-                            <IconButton size='small' color='warning' >
-                                <FaRegArrowAltCircleLeft />
-                            </IconButton>
-                        </Tooltip>
+                        item.status === 'AGENDADO' && (
+                            <>
+                                <IconButton size='small' color='warning' >
+                                    <ModalComponent
+                                        buttonIcon={<FaRegArrowAltCircleLeft size={'20px'} />}
+                                        buttonText='Reagendar'
+                                        headerText='Reagendar Pedido'
+                                        buttonColorScheme={'warning'}
+                                        onAction={async () => {
+                                            try {
+                                                console.log({
+                                                    data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
+                                                    responsavel: item.responsavel,
+                                                    horarios: [moment(item.dataAgendamento).format('HH:mm')]
+                                                });
+                                                await updatePedido(item._id, { status: 'A INICIAR', dataAgendamento: '', responsavel: '' })
+                                                await reabrirHorarios({
+                                                    data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
+                                                    responsavel: item.responsavel,
+                                                    horarios: [moment(item.dataAgendamento).format('HH:mm')]
+                                                })
+                                                setFlushHook(!flushHook)
+                                                setOpenSnack(true)
+                                                setSeveritySnack('success')
+                                                setMsg(`Alterado status com sucesso`)
+                                            }
+                                            catch (error) {
+                                                console.log(error);
+                                                setOpenSnack(true)
+                                                setSeveritySnack('error')
+                                                setMsg(`Erro! ${error}`)
+                                            }
+                                        }}
+                                        size={'sm'}
+                                        saveButtonColorScheme={orange[900]}
+                                        textButton={'Reagendar'}
+                                    >
+                                        <Typography>
+                                            Tem certeza que deseja reagendar o pedido do prestador {item.prestador.nome}?
+                                        </Typography>
+                                    </ModalComponent>
+                                </IconButton>
+                            </>
+                        )
                     }
                     {
                         (item.status === 'A INICIAR' || item.status === 'AGENDADO') && <Tooltip title='Formulário'>
@@ -152,8 +192,8 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                             </ModalComponent>
                         )
                     }
-                </TableCell>
-            </TableRow>
+                </TableCell >
+            </TableRow >
             <CollapseBeneficiario item={item} openRow={openRow} />
         </>
     )

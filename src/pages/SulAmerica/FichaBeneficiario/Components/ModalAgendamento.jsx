@@ -26,6 +26,7 @@ const ModalAgendamento = ({ pedido, setFlushHook }) => {
         setLoading(true)
         let result = await filterUsers({
             atividadePrincipal: 'Tele Entrevista',
+            'acessos.sulAmerica': true,
             inativo: { $ne: true }
         })
         result = result?.map(analista => {

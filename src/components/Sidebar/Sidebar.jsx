@@ -18,8 +18,6 @@ import { deepPurple, green } from "@mui/material/colors";
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
 import SouthAmericaOutlinedIcon from '@mui/icons-material/SouthAmericaOutlined';
 
-const notificationSound = '/sounds/notification-sound.mp3'; // Caminho para o arquivo de som
-
 let socket
 let socketTele
 
@@ -268,13 +266,14 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/whatsapp/chat'>Chat</Link></MenuItem>
                         <MenuItem><Link to='/whatsapp/templates'>Templates</Link></MenuItem>
                     </SubMenu>
-
                     <SubMenu title={"Sul America"} icon={<SouthAmericaOutlinedIcon />} >
-                        <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
+                        {
+                            acessos?.administrador && (
+                                <MenuItem><Link to='/sulAmerica/configuracaoQuestionario'>Configuração Questionario</Link></MenuItem>
+                            )
+                        }
                         <MenuItem><Link to='/sulAmerica/Pedidos'>Pedidos</Link></MenuItem>
-                        <MenuItem><Link to='/sulAmerica/Beneficiarios'>Beneficiarios</Link></MenuItem>
                     </SubMenu>
-
                 </Menu>
             </ProSidebar>
             <Box width={'100%'} >

@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Divider, Grid, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Button, Collapse, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import moment from "moment"
 import { valueToBRL } from "../../../../functions/functions"
 import { blue } from "@mui/material/colors"

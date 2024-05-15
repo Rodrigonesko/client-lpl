@@ -134,7 +134,11 @@ const FormularioSulAmerica = () => {
                 setOpenToast(true)
                 createPdf({
                     ...resposta,
-                    pedido
+                    pedido: {
+                        ...pedido,
+                        beneficiario,
+                        prestador
+                    }
                 })
             } catch (error) {
                 console.log(error)
