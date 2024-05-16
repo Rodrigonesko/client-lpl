@@ -263,6 +263,20 @@ const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) =>
                                     )}
                                 />
                                 <FormControlLabel
+                                    label="Sul America"
+                                    control={<Checkbox
+                                        checked={userData?.acessos?.sulAmerica}
+                                    />}
+                                    onChange={() => setUserData({
+                                        ...userData,
+                                        acessos: {
+                                            ...userData?.acessos,
+                                            sulAmerica: !userData?.acessos?.sulAmerica
+                                        }
+                                    }
+                                    )}
+                                />
+                                <FormControlLabel
                                     control={<Checkbox
                                         checked={userData?.acessos?.agendamento}
                                     />}

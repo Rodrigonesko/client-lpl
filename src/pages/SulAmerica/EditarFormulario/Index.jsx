@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Box, Container, ThemeProvider, createTheme } from "@mui/material";
-import { blue, deepOrange, grey } from "@mui/material/colors";
+import { Box, Button, Container, ThemeProvider, createTheme } from "@mui/material";
+import { blue, deepOrange, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
-import { getPedidoById, getQuestionarioByName } from "../../../_services/sulAmerica.service";
+import { getPedidoById, getQuestionarioByName, updateRespostas } from "../../../_services/sulAmerica.service";
 import Toast from "../../../components/Toast/Toast";
 import Pergunta from "./Components/Pergunta";
 import Title from "../../../components/Title/Title";
+import { createPdf } from "../PDF/createPdf";
+import { Download, PictureAsPdf } from "@mui/icons-material";
 
 const theme = createTheme({
     components: {
@@ -48,10 +50,55 @@ const EditFormulario = () => {
     const [respostas, setRespostas] = useState([])
     const [catchRespostas, setCatchRespostas] = useState(false)
 
+    const handleSend = () => {
+        setCatchRespostas(!catchRespostas)
+    }
+
+    useEffect(() => {
+        const sendRespostas = async () => {
+            try {
+                for (const resposta of respostas) {
+                    if (resposta.resposta === '') {
+                        setOpenToast(true)
+                        setMessage(`Preencha a pergunta: ${resposta.pergunta} | Categoria: ${resposta.categoria}`)
+                        setSeverity('error')
+                        return
+                    }
+                    for (const subResposta of resposta.subPerguntas) {
+                        if (!subResposta.resposta && resposta.resposta === subResposta.condicao) {
+                            setOpenToast(true)
+                            setMessage(`Preencha a sub pergunta: ${subResposta.texto} | Categoria: ${resposta.categoria} | Pergunta: ${resposta.pergunta}`)
+                            setSeverity('error')
+                            return
+                        }
+                    }
+                }
+                await updateRespostas(pedido.resposta._id, { respostas })
+                setMessage('Formulario enviado com sucesso')
+                setSeverity('success')
+                setOpenToast(true)
+                // createPdf({
+                //     ...resposta,
+                //     pedido: {
+                //         ...pedido
+                //     }
+                // })
+            } catch (error) {
+                console.log(error)
+                setOpenToast(true)
+                setMessage('Erro ao enviar formulario')
+                setSeverity('error')
+            }
+        }
+        if(pedido){
+            sendRespostas()
+        }
+    }, [respostas])
+
     const verifyFirstQuestion = (index) => {
         if (index !== 0) return true
         const res = (index === 0 &&
-            (pedido?.beneficiario?.carteiraEmpresa !== 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa !== 'PME') &&
+            (pedido?.beneficiario?.carteiraEmpresa === 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa === 'PME') &&
             new Date(pedido?.beneficiario?.dataInicioVigencia).getFullYear() >= 2022)
 
         return res
@@ -102,7 +149,7 @@ const EditFormulario = () => {
                             loading ? <h1>Carregando...</h1> : (
                                 <>
                                     {
-                                        pedido && <>
+                                        (pedido && formulario) && <>
                                             <Box>
                                                 <Title
                                                     size={'small'}
@@ -111,16 +158,19 @@ const EditFormulario = () => {
                                                     PERFIL E CONTRATAÇÃO
                                                 </Title>
                                                 <Box>
-                                                    {formulario.perguntas.filter((pergunta, index) => {
+                                                    {formulario?.perguntas.filter((pergunta, index) => {
                                                         return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO' && verifyFirstQuestion(index)
                                                     }).sort((a, b) => {
                                                         return a.pergunta.posicao - b.pergunta.posicao
                                                     }).map((pergunta, index) => (
-                                                        <Pergunta key={pergunta._id} pergunta={pergunta.pergunta} resposta={
+                                                        <Pergunta key={pergunta._id} pergunta={pergunta.pergunta} res={
                                                             respostas.find(resposta => {
                                                                 return resposta.pergunta === pergunta.pergunta.pergunta
                                                             })}
                                                             index={index}
+                                                            catchRespostas={catchRespostas}
+                                                            setCatchRespostas={setCatchRespostas}
+                                                            setAllRespostas={setRespostas}
                                                         />))}
                                                 </Box>
                                             </Box>
@@ -137,11 +187,14 @@ const EditFormulario = () => {
                                                     }).sort((a, b) => {
                                                         return a.pergunta.posicao - b.pergunta.posicao
                                                     }).map((pergunta, index) => (
-                                                        <Pergunta key={pergunta._id} pergunta={pergunta.pergunta} resposta={
+                                                        <Pergunta key={pergunta._id} pergunta={pergunta.pergunta} res={
                                                             respostas.find(resposta => {
                                                                 return resposta.pergunta === pergunta.pergunta.pergunta
                                                             })}
                                                             index={index}
+                                                            catchRespostas={catchRespostas}
+                                                            setCatchRespostas={setCatchRespostas}
+                                                            setAllRespostas={setRespostas}
                                                         />
                                                     ))}
                                                 </Box>
@@ -159,11 +212,14 @@ const EditFormulario = () => {
                                                     }).sort((a, b) => {
                                                         return a.pergunta.posicao - b.pergunta.posicao
                                                     }).map((pergunta, index) => (
-                                                        <Pergunta key={pergunta._id} pergunta={pergunta.pergunta} resposta={
+                                                        <Pergunta key={pergunta._id} pergunta={pergunta.pergunta} res={
                                                             respostas.find(resposta => {
                                                                 return resposta.pergunta === pergunta.pergunta.pergunta
                                                             })}
                                                             index={index}
+                                                            catchRespostas={catchRespostas}
+                                                            setCatchRespostas={setCatchRespostas}
+                                                            setAllRespostas={setRespostas}
                                                         />))}
                                                 </Box>
                                             </Box>
@@ -171,6 +227,44 @@ const EditFormulario = () => {
                                 </>
                             )
                         }
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            m={2}
+                        >
+                            <Button
+                                onClick={handleSend}
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: deepOrange[500],
+                                    color: grey[50],
+                                    '&:hover': {
+                                        backgroundColor: deepOrange[700]
+                                    }
+                                }}
+
+                            >
+                                Salvar
+                            </Button>
+                            <Button
+                                onClick={() => createPdf({
+                                    respostas,
+                                    pedido
+                                })}
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: red[500],
+                                    color: grey[50],
+                                    '&:hover': {
+                                        backgroundColor: red[700]
+                                    },
+                                    ml: 2
+                                }}
+                                endIcon={<Download />}
+                            >
+                                PDF
+                            </Button>
+                        </Box>
                     </Container>
                 </Box>
             </ThemeProvider>

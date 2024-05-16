@@ -37,7 +37,7 @@ export const createPdf = (respostas) => {
                     { text: `${subPergunta.resposta}`, bold: true, margin: [20, 0, 20, 0], italics: true, color: blue[900] }
                 ]
             }),
-            { text: resposta.observacao, bold: true, margin: [20, 0, 20, 0], italics: true, color: blue[900] },
+            { text: resposta.observacoes, bold: true, margin: [20, 0, 20, 0], italics: true, color: blue[900] },
         ]
     }
 
@@ -87,6 +87,14 @@ export const createPdf = (respostas) => {
                             [
                                 { text: 'CPF:', bold: true },
                                 { text: respostas.pedido.beneficiario.cpf, bold: true }
+                            ],
+                            [
+                                { text: 'Prestador:', bold: true },
+                                { text: respostas.pedido.prestador.nome, bold: true }
+                            ],
+                            [
+                                { text: 'Responsável:', bold: true },
+                                { text: `${respostas.pedido.beneficiario.responsavelLegal} | ${respostas.pedido.beneficiario.vinculoResponsavel}`, bold: true }
                             ]
                         ]
                     }

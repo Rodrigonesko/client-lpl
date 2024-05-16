@@ -10,12 +10,13 @@ import moment from "moment"
 import { getRespostasByPedidoId, updatePedido } from "../../../../_services/sulAmerica.service"
 import { createPdf } from "../../PDF/createPdf"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
-import { deepOrange, red } from "@mui/material/colors"
+import { deepOrange, orange, red } from "@mui/material/colors"
+import { reabrirHorarios } from "../../../../_services/teleEntrevista.service"
 
-const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
+const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
 
     const [openRow, setOpenRow] = useState(false)
-    const [justificativa, setJustificativa] = useState(false)
+    const [justificativa, setJustificativa] = useState('')
 
     return (
         <>
@@ -32,13 +33,6 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                         </Tooltip>
                     </IconButton>
                 </TableCell>
-                <TableCell>{item.qtdServicosPagos}</TableCell>
-                <TableCell>{
-                    new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                    }).format(item.valorPago)
-                }</TableCell>
                 <TableCell>{item.prestador.nome}</TableCell>
                 <TableCell>{item.beneficiario.nome}</TableCell>
                 <TableCell>{item.responsavel}</TableCell>
@@ -50,11 +44,50 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                         item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
                     }
                     {
-                        item.status === 'AGENDADO' && <Tooltip title='Reagendar'>
-                            <IconButton size='small' color='warning' >
-                                <FaRegArrowAltCircleLeft />
-                            </IconButton>
-                        </Tooltip>
+                        item.status === 'AGENDADO' && (
+                            <>
+                                <IconButton size='small' color='warning' >
+                                    <ModalComponent
+                                        buttonIcon={<FaRegArrowAltCircleLeft size={'20px'} />}
+                                        buttonText='Reagendar'
+                                        headerText='Reagendar Pedido'
+                                        buttonColorScheme={'warning'}
+                                        onAction={async () => {
+                                            try {
+                                                console.log({
+                                                    data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
+                                                    responsavel: item.responsavel,
+                                                    horarios: [moment(item.dataAgendamento).format('HH:mm')]
+                                                });
+                                                await updatePedido(item._id, { status: 'A INICIAR', dataAgendamento: '', responsavel: '' })
+                                                await reabrirHorarios({
+                                                    data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
+                                                    responsavel: item.responsavel,
+                                                    horarios: [moment(item.dataAgendamento).format('HH:mm')]
+                                                })
+                                                setFlushHook(!flushHook)
+                                                setOpenSnack(true)
+                                                setSeveritySnack('success')
+                                                setMsg(`Alterado status com sucesso`)
+                                            }
+                                            catch (error) {
+                                                console.log(error);
+                                                setOpenSnack(true)
+                                                setSeveritySnack('error')
+                                                setMsg(`Erro! ${error}`)
+                                            }
+                                        }}
+                                        size={'sm'}
+                                        saveButtonColorScheme={orange[900]}
+                                        textButton={'Reagendar'}
+                                    >
+                                        <Typography>
+                                            Tem certeza que deseja reagendar o pedido do prestador {item.prestador.nome}?
+                                        </Typography>
+                                    </ModalComponent>
+                                </IconButton>
+                            </>
+                        )
                     }
                     {
                         (item.status === 'A INICIAR' || item.status === 'AGENDADO') && <Tooltip title='Formulário'>
@@ -68,7 +101,6 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                             <IconButton sie='small' color='error' onClick={async () => {
                                 try {
                                     const response = await getRespostasByPedidoId(item._id)
-                                    console.log(response);
                                     createPdf(response)
                                 } catch (error) {
                                     console.log(error);
@@ -98,6 +130,11 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                                 onAction={async () => {
                                     try {
                                         await updatePedido(item._id, { justificativa, status: 'CANCELADO' })
+                                        setFlushHook(!flushHook)
+                                        setJustificativa('')
+                                        setOpenSnack(true)
+                                        setSeveritySnack('success')
+                                        setMsg('Pedido cancelado com sucesso')
                                     } catch (error) {
                                         console.log(error);
                                         setOpenSnack(true)
@@ -155,8 +192,8 @@ const Row = ({ item, flushHook, openSnack, setOpenSnack, setFlushHook, setMsg, s
                             </ModalComponent>
                         )
                     }
-                </TableCell>
-            </TableRow>
+                </TableCell >
+            </TableRow >
             <CollapseBeneficiario item={item} openRow={openRow} />
         </>
     )

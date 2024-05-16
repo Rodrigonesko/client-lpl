@@ -38,10 +38,9 @@ const FichaBeneficiarioSulAmerica = () => {
     const [msg, setMsg] = useState('')
     const [openSnack, setOpenSnack] = useState(false)
 
-
     const [data, setData] = useState()
     const [pedido, setPedido] = useState([])
-    const [justificativa, setJustificativa] = useState('')
+
 
     useEffect(() => {
         const fetch = async () => {
@@ -94,6 +93,8 @@ const FichaBeneficiarioSulAmerica = () => {
             setValue('bairro', data.bairro);
             setValue('municipio', data.municipio);
             setValue('numero', data.numero);
+            setValue('responsavelLegal', data.responsavelLegal);
+            setValue('vinculoResponsavel', data.vinculoResponsavel);
         }
         setFlushHook(false)
     }, [data, setValue]);
@@ -131,34 +132,34 @@ const FichaBeneficiarioSulAmerica = () => {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'space-between',
                             mt: 3,
+                            gap: '10px',
+                            flexWrap: 'wrap'
                         }}
                     >
                         <Input label='Nome' register={register('nome')} />
                         <Input label='CPF' register={register('cpf')} />
                         <Input label='Melhor Celular' register={register('melhorCelular')} />
                         <Input label='Cod Sistemico Beneficiario' register={register('codSistemicoBeneficiario')} />
+                        <Input label='Responsável' register={register('responsavelLegal')} />
+                        <Input label='Vínculo Responsável' register={register('vinculoResponsavel')} />
                     </Box>
                     <Box
                         sx={{
-                            mt: 3,
+                            mt: 3
                         }}
                     >
                         <Divider />
                     </Box>
-                    <Box
-                        sx={{
-                            mt: 1,
-                        }}
-                    >
+                    <Box sx={{mt: 1}}>
                         <Title size={'small'} fontColor={blue[900]} lineColor={orange[900]}>Dados Empresa</Title>
                     </Box>
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
                         mt: 3,
+                        gap: '10px',
+                        flexWrap: 'wrap'
                     }}
                     >
                         <Input label='Carteira Empresa' register={register('carteiraEmpresa')} />
@@ -181,10 +182,11 @@ const FichaBeneficiarioSulAmerica = () => {
                         <Title size={'small'} fontColor={blue[900]} lineColor={orange[900]}>Endereço Beneficiario</Title>
                     </Box>
                     <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        mt: 3,
+                          display: 'flex',
+                          alignItems: 'center',
+                          mt: 3,
+                          gap: '10px',
+                          flexWrap: 'wrap'
                     }}
                     >
                         <Input label='CEP' register={register('cep')} />
@@ -212,8 +214,6 @@ const FichaBeneficiarioSulAmerica = () => {
                             <TableHead sx={{ background: `linear-gradient(45deg, ${blue[900]} 30%, ${orange[900]} 75%)` }}>
                                 <TableRow>
                                     <TableCell ></TableCell>
-                                    <TableCell sx={{ color: 'white' }}>Quantidade Serviços Pagos</TableCell>
-                                    <TableCell sx={{ color: 'white' }}>Valor Pago</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Beneficiario</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Responsável</TableCell>

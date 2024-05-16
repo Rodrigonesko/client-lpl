@@ -59,14 +59,14 @@ const FormularioSulAmerica = () => {
     const [severity, setSeverity] = useState('success')
     const [catchRespostas, setCatchRespostas] = useState(false)
 
-    const handleSend = async () => {
+    const handleSend = () => {
         setCatchRespostas(!catchRespostas)
     }
 
     const verifyFirstQuestion = (index) => {
         if (index !== 0) return true
         const res = (index === 0 &&
-            (pedido?.beneficiario?.carteiraEmpresa !== 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa !== 'PME') &&
+            (pedido?.beneficiario?.carteiraEmpresa === 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa === 'PME') &&
             new Date(pedido?.beneficiario?.dataInicioVigencia).getFullYear() >= 2022)
 
         return res
@@ -134,7 +134,11 @@ const FormularioSulAmerica = () => {
                 setOpenToast(true)
                 createPdf({
                     ...resposta,
-                    pedido
+                    pedido: {
+                        ...pedido,
+                        beneficiario,
+                        prestador
+                    }
                 })
             } catch (error) {
                 console.log(error)
@@ -271,7 +275,6 @@ const FormularioSulAmerica = () => {
                     </Container>
                 </Box>
             </ThemeProvider>
-
         </Sidebar>
     )
 }
