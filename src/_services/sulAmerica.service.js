@@ -1,6 +1,6 @@
 import { ApiCall } from "./api";
 const token = localStorage.getItem('token')
-const url = 'http://localhost:5001'//process.env.REACT_APP_SUL_AMERICA_SERVICE
+const url = process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 
@@ -80,6 +80,10 @@ export const uploadArquivoPedido = async (id, data) => {
 
 export const createRespostas = async (data) => {
     return await new ApiCall('/resposta', url).post(data)
+}
+
+export const updateRespostas = async (id, data) => {
+    return await new ApiCall(`/resposta/${id}`, url).put(data)
 }
 
 export const getRespostasByPedidoId = async (id) => {

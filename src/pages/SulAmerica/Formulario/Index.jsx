@@ -59,7 +59,7 @@ const FormularioSulAmerica = () => {
     const [severity, setSeverity] = useState('success')
     const [catchRespostas, setCatchRespostas] = useState(false)
 
-    const handleSend = async () => {
+    const handleSend = () => {
         setCatchRespostas(!catchRespostas)
     }
 
@@ -275,7 +275,6 @@ const FormularioSulAmerica = () => {
                     </Container>
                 </Box>
             </ThemeProvider>
-
         </Sidebar>
     )
 }
