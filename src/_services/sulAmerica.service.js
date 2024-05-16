@@ -60,12 +60,16 @@ export const getPedidoById = async (id) => {
     return await new ApiCall(`/pedido/id/${id}`, url).get()
 }
 
-export const getPrestadoresComPedidosEmAberto = async () => {
-    return await new ApiCall(`/pedido/prestadoresComPedidosEmAberto`, url).get()
+export const getPrestadoresByStatus = async (status) => {
+    return await new ApiCall(`/pedido/prestadores?status=${status}`, url).get()
 }
 
-export const getBeneficiarioComPedidosEmAberto = async (id) => {
-    return await new ApiCall(`/pedido/beneficiarioComPedidosEmAberto/${id}`, url).get()
+export const getPedidosByBeneficiario = async (id) => {
+    return await new ApiCall(`/pedido/beneficiario/${id}`, url).get()
+}
+
+export const getPedidosByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/data?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
 }
 
 export const uploadArquivoPedido = async (id, data) => {

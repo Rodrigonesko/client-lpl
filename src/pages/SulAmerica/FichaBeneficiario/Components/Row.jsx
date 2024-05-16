@@ -1,5 +1,5 @@
 import { Cancel, Edit, FeedOutlined, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
-import { IconButton, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Chip, IconButton, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import ModalAgendamento from "./ModalAgendamento"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
@@ -10,8 +10,15 @@ import moment from "moment"
 import { getRespostasByPedidoId, updatePedido } from "../../../../_services/sulAmerica.service"
 import { createPdf } from "../../PDF/createPdf"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
-import { deepOrange, orange, red } from "@mui/material/colors"
+import { blue, deepOrange, green, orange, red } from "@mui/material/colors"
 import { reabrirHorarios } from "../../../../_services/teleEntrevista.service"
+
+const colorStatus = {
+    'A INICIAR': blue[900],
+    'AGENDADO': orange[900],
+    'CONCLUÍDO': green[900],
+    'CANCELADO': red[900]
+}
 
 const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
 
@@ -38,7 +45,29 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                 <TableCell>{item.responsavel}</TableCell>
                 <TableCell>{item.dataAgendamento}</TableCell>
                 <TableCell>{moment(item.dataCriacao).format('DD/MM/YYYY')}</TableCell>
-                <TableCell>{item.status}</TableCell>
+                <TableCell
+                    align="center"
+                >
+                    <Chip
+                        label={item.status}
+                        sx={{
+                            backgroundColor: colorStatus[item.status],
+                            color: 'white'
+                        }}
+                        size="small"
+                    />
+                </TableCell>
+                <TableCell
+                    align="center"
+                >
+                    {
+                        item.divergencia && <Chip
+                            label='Divergência'
+                            color='error'
+                            size='small'
+                        />
+                    }
+                </TableCell>
                 <TableCell>
                     {
                         item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
@@ -59,7 +88,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                                     responsavel: item.responsavel,
                                                     horarios: [moment(item.dataAgendamento).format('HH:mm')]
                                                 });
-                                                await updatePedido(item._id, { status: 'A INICIAR', dataAgendamento: '', responsavel: '' })
+                                                await updatePedido(item._id, { status: 'A INICIAR', dataAgendamento: '', responsavel: 'A DEFINIR' })
                                                 await reabrirHorarios({
                                                     data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
                                                     responsavel: item.responsavel,
@@ -129,7 +158,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                 headerText='Cancelar Pedido'
                                 onAction={async () => {
                                     try {
-                                        await updatePedido(item._id, { justificativa, status: 'CANCELADO' })
+                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: 'CANCELADO' })
                                         setFlushHook(!flushHook)
                                         setJustificativa('')
                                         setOpenSnack(true)

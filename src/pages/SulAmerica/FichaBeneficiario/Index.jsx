@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
-import { getBeneficiarioById, getBeneficiarioComPedidosEmAberto, updateBeneficiario } from "../../../_services/sulAmerica.service"
+import { getBeneficiarioById, getPedidosByBeneficiario, updateBeneficiario } from "../../../_services/sulAmerica.service"
 import { Box, Button, Container, Divider, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material"
 import Title from "../../../components/Title/Title"
 import { blue, orange } from "@mui/material/colors"
@@ -47,7 +47,7 @@ const FichaBeneficiarioSulAmerica = () => {
             try {
                 const result = await getBeneficiarioById(id)
                 setData(result)
-                const findPedidos = await getBeneficiarioComPedidosEmAberto(id)
+                const findPedidos = await getPedidosByBeneficiario(id)
                 setPedido(findPedidos)
             } catch (error) {
                 console.log(error);
@@ -151,7 +151,7 @@ const FichaBeneficiarioSulAmerica = () => {
                     >
                         <Divider />
                     </Box>
-                    <Box sx={{mt: 1}}>
+                    <Box sx={{ mt: 1 }}>
                         <Title size={'small'} fontColor={blue[900]} lineColor={orange[900]}>Dados Empresa</Title>
                     </Box>
                     <Box sx={{
@@ -182,11 +182,11 @@ const FichaBeneficiarioSulAmerica = () => {
                         <Title size={'small'} fontColor={blue[900]} lineColor={orange[900]}>Endereço Beneficiario</Title>
                     </Box>
                     <Box sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          mt: 3,
-                          gap: '10px',
-                          flexWrap: 'wrap'
+                        display: 'flex',
+                        alignItems: 'center',
+                        mt: 3,
+                        gap: '10px',
+                        flexWrap: 'wrap'
                     }}
                     >
                         <Input label='CEP' register={register('cep')} />
@@ -219,7 +219,8 @@ const FichaBeneficiarioSulAmerica = () => {
                                     <TableCell sx={{ color: 'white' }}>Responsável</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Data Agendamento</TableCell>
                                     <TableCell sx={{ color: 'white' }}>Data Criação</TableCell>
-                                    <TableCell sx={{ color: 'white' }}>Status</TableCell>
+                                    <TableCell align="center" sx={{ color: 'white' }}>Status</TableCell>
+                                    <TableCell align="center" sx={{ color: 'white' }}>Divergência</TableCell>
                                     <TableCell ></TableCell>
                                 </TableRow>
                             </TableHead>

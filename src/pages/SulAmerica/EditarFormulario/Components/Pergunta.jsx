@@ -126,13 +126,13 @@ const Pergunta = ({ pergunta, index, res, catchRespostas, setCatchRespostas, set
             case questionTypes['opções']:
                 return <OptionsComponent pergunta={question.pergunta ?? question.texto} options={question.opcoes} handleChange={question.subPergunta ? handleChangeSubPergunta : handleChange} resposta={question.resposta} />
             case questionTypes['endereço']:
-                return <AddressComponent pergunta={question.pergunta ?? question.texto} handleChange={handleChangeAddress} subPergunta={question.subPergunta} resposta={JSON.parse(question.resposta)} />
+                return <AddressComponent pergunta={question.pergunta ?? question.texto} handleChange={handleChangeAddress} subPergunta={question.subPergunta} resposta={question.resposta ? JSON.parse(question.resposta) : {}} />
             default:
                 return 'Tipo de pergunta não encontrado'
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setAllRespostas(prevRespostas => {
             const newRespostas = [...prevRespostas]
             const index = newRespostas.findIndex(r => r.pergunta === pergunta.pergunta)

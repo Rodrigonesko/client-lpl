@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { useContext, useEffect, useState } from "react"
-import { createRespostas, getPedidoById, getQuestionarioByName } from "../../../_services/sulAmerica.service"
-import { Box, Container, Typography, Button, Divider, createTheme, ThemeProvider, Alert } from "@mui/material"
+import { createRespostas, getPedidoById, getQuestionarioByName, updatePedido } from "../../../_services/sulAmerica.service"
+import { Box, Container, Typography, Button, Divider, createTheme, ThemeProvider, Alert, RadioGroup, FormControl, FormControlLabel, Radio, FormLabel } from "@mui/material"
 import Title from "../../../components/Title/Title"
 import Toast from "../../../components/Toast/Toast"
 import { blue, deepOrange, grey } from "@mui/material/colors"
@@ -58,6 +58,7 @@ const FormularioSulAmerica = () => {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
     const [catchRespostas, setCatchRespostas] = useState(false)
+    const [divergencia, setDivergencia] = useState(false)
 
     const handleSend = () => {
         setCatchRespostas(!catchRespostas)
@@ -116,7 +117,6 @@ const FormularioSulAmerica = () => {
                         return
                     }
                     for (const subResposta of resposta.subPerguntas) {
-                        console.log(subResposta);
                         if (!subResposta.resposta && resposta.resposta === subResposta.condicao) {
                             setOpenToast(true)
                             setMessage(`Preencha a sub pergunta: ${subResposta.texto} | Categoria: ${resposta.categoria} | Pergunta: ${resposta.pergunta}`)
@@ -129,6 +129,7 @@ const FormularioSulAmerica = () => {
                     pedido: pedido._id,
                     respostas
                 })
+                const newPedido = await updatePedido(pedido._id, { divergencia })
                 setMessage('Formulario enviado com sucesso')
                 setSeverity('success')
                 setOpenToast(true)
@@ -136,7 +137,7 @@ const FormularioSulAmerica = () => {
                     ...resposta,
                     pedido: {
                         ...pedido,
-                        beneficiario,
+                        beneficiario: newPedido.beneficiario,
                         prestador
                     }
                 })
@@ -248,6 +249,16 @@ const FormularioSulAmerica = () => {
                                     </Box>
                                 </Box>
                             </>}
+                        <FormControl>
+                            <FormLabel>Houve divergência</FormLabel>
+                            <RadioGroup
+                                value={divergencia}
+                                onChange={e => setDivergencia(e.target.value === 'true' ? true : false)}
+                            >
+                                <FormControlLabel value={true} control={<Radio />} label="Sim" />
+                                <FormControlLabel value={false} control={<Radio />} label="Não" />
+                            </RadioGroup>
+                        </FormControl>
                         <Box
                             m={4}
                             display="flex"

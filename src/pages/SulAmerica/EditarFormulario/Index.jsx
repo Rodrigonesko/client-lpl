@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Box, Button, Container, ThemeProvider, createTheme } from "@mui/material";
+import { Box, Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, ThemeProvider, createTheme } from "@mui/material";
 import { blue, deepOrange, grey, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
-import { getPedidoById, getQuestionarioByName, updateRespostas } from "../../../_services/sulAmerica.service";
+import { getPedidoById, getQuestionarioByName, updatePedido, updateRespostas } from "../../../_services/sulAmerica.service";
 import Toast from "../../../components/Toast/Toast";
 import Pergunta from "./Components/Pergunta";
 import Title from "../../../components/Title/Title";
 import { createPdf } from "../PDF/createPdf";
-import { Download, PictureAsPdf } from "@mui/icons-material";
+import { Download } from "@mui/icons-material";
 
 const theme = createTheme({
     components: {
@@ -49,6 +49,7 @@ const EditFormulario = () => {
     const [severity, setSeverity] = useState('success')
     const [respostas, setRespostas] = useState([])
     const [catchRespostas, setCatchRespostas] = useState(false)
+    const [divergencia, setDivergencia] = useState(false)
 
     const handleSend = () => {
         setCatchRespostas(!catchRespostas)
@@ -74,6 +75,7 @@ const EditFormulario = () => {
                     }
                 }
                 await updateRespostas(pedido.resposta._id, { respostas })
+                await updatePedido(id, { divergencia })
                 setMessage('Formulario enviado com sucesso')
                 setSeverity('success')
                 setOpenToast(true)
@@ -90,7 +92,7 @@ const EditFormulario = () => {
                 setSeverity('error')
             }
         }
-        if(pedido){
+        if (pedido) {
             sendRespostas()
         }
     }, [respostas])
@@ -110,6 +112,7 @@ const EditFormulario = () => {
                 const response = await getPedidoById(id)
                 setPedido(response)
                 setRespostas(response.resposta.respostas)
+                setDivergencia(response.divergencia)
                 setLoading(false)
             } catch (error) {
                 console.log(error)
@@ -227,6 +230,16 @@ const EditFormulario = () => {
                                 </>
                             )
                         }
+                        <FormControl>
+                            <FormLabel>Houve divergência</FormLabel>
+                            <RadioGroup
+                                value={divergencia}
+                                onChange={e => setDivergencia(e.target.value === 'true' ? true : false)}
+                            >
+                                <FormControlLabel value={true} control={<Radio />} label="Sim" />
+                                <FormControlLabel value={false} control={<Radio />} label="Não" />
+                            </RadioGroup>
+                        </FormControl>
                         <Box
                             display="flex"
                             justifyContent="center"
