@@ -101,7 +101,8 @@ const TableUsers = ({
                                             >
                                                 <EditIcon />
                                             </IconButton>
-                                        </Tooltip>                                    </TableCell>
+                                        </Tooltip>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
