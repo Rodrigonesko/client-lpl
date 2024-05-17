@@ -50,6 +50,9 @@ const ModalGerarRelatorio = () => {
                     { header: 'Data Conclusão', key: 'dataConclusao', width: 15 },
                     { header: 'Status', key: 'status', width: 10 },
                     { header: 'Divergência', key: 'divergencia', width: 10 },
+                    // { header: 'Tentativa 1', key: 'tentativa1', width: 15},
+                    // { header: 'Tentativa 2', key: 'tentativa2', width: 15},
+                    // { header: 'Tentativa 3+', key: 'tentativa3', width: 15},
                     ...formulario.perguntas.map((pergunta) => {
                         return {
                             header: pergunta.pergunta.pergunta,
@@ -68,6 +71,9 @@ const ModalGerarRelatorio = () => {
                         dataConclusao: pedido.dataConclusao ? new Date(pedido.dataConclusao) : '',
                         status: pedido.status,
                         divergencia: pedido.divergencia && 'Sim',
+                        // tentativa1: pedido.tentativasDeContato?.length >= 1 ? new Date(pedido.tentativasDeContato[0].data) : '',
+                        // tentativa2: pedido.tentativasDeContato?.length >= 2 ? new Date(pedido.tentativasDeContato[1].data) : '',
+                        // tentativa3: pedido.tentativasDeContato?.length >= 3 ? new Date(pedido.tentativasDeContato[2].data) : '',
                         ...pedido.resposta?.respostas.reduce((acc, resposta) => {
                             acc[resposta.pergunta] = resposta.resposta
                             return acc

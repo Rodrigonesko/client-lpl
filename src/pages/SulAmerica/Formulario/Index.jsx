@@ -73,6 +73,12 @@ const FormularioSulAmerica = () => {
         return res
     }
 
+    const verifyFifthQuestion = (index) => {
+        if (index !== 4) return true
+        return (index === 4 && (pedido?.beneficiario?.carteiraEmpresa === 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa === 'PME'))
+    }
+
+
     useEffect(() => {
         const fetchPedido = async () => {
             try {
@@ -206,7 +212,7 @@ const FormularioSulAmerica = () => {
                                     </Title>
                                     <Box>
                                         {formulario.perguntas.filter((pergunta, index) => {
-                                            return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO' && verifyFirstQuestion(index)
+                                            return pergunta.pergunta.categoria === 'PERFIL E CONTRATAÇÃO' && verifyFirstQuestion(index) && verifyFifthQuestion(index)
                                         }).sort((a, b) => {
                                             return a.pergunta.posicao - b.pergunta.posicao
                                         }).map((pergunta, index) => (
