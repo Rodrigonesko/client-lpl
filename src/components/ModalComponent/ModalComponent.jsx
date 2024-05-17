@@ -22,9 +22,15 @@ const ModalComponent = ({
                 isButton ?
                     <Button
                         onClick={() => setOpen(true)}
-                        color={buttonColorScheme}
                         startIcon={buttonIcon}
                         variant="contained"
+                        sx={{
+                            backgroundColor: buttonColorScheme || 'primary.main',
+                            '&:hover': {
+                                backgroundColor: buttonColorScheme || 'primary.dark',
+                                opacity: 0.8
+                            }
+                        }}
                     >
                         {buttonText}
                     </Button>

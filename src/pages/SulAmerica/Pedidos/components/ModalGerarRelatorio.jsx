@@ -1,0 +1,124 @@
+import { blue } from "@mui/material/colors";
+import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
+import { Download } from "@mui/icons-material";
+import { getPedidosByDate, getQuestionarioByName } from "../../../../_services/sulAmerica.service";
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import { Box, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+
+const ModalGerarRelatorio = () => {
+
+    const [dataInicio, setDataInicio] = useState('')
+    const [dataFim, setDataFim] = useState('')
+
+    return (
+        <ModalComponent
+            isButton={true}
+            buttonColorScheme={blue[900]}
+            headerText={'Relatório de Pedidos'}
+            textButton={'Gerar Relatório'}
+            buttonText={'Gerar Relatório'}
+            size={'lg'}
+            saveButtonColorScheme={blue[900]}
+            buttonIcon={<Download />}
+            onAction={async () => {
+                const response = await getPedidosByDate(dataInicio, dataFim);
+                const formulario = await getQuestionarioByName('Sindicância Script TEA');
+
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Pedidos');
+
+                response.forEach((pedido) => {
+                    if (pedido.status === 'CONCLUÍDO') {
+                        pedido.resposta.respostas = pedido.resposta.respostas.map((resposta) => {
+                            const subRespostas = resposta.subPerguntas
+                                .filter((subPergunta) => subPergunta.resposta)
+                                .map((subPergunta) => ` - ${subPergunta.texto}: ${subPergunta.resposta}`)
+                                .join('');
+                            resposta.resposta += subRespostas;
+                            return resposta;
+                        });
+                    }
+                });
+
+                worksheet.columns = [
+                    { header: 'Beneficiario', key: 'beneficiario', width: 15 },
+                    { header: 'Responsável', key: 'responsavel', width: 15 },
+                    { header: 'Valor Pago', key: 'valorPago', width: 15 },
+                    { header: 'Prestador', key: 'prestador', width: 15 },
+                    { header: 'Data Conclusão', key: 'dataConclusao', width: 15 },
+                    { header: 'Status', key: 'status', width: 10 },
+                    { header: 'Divergência', key: 'divergencia', width: 10 },
+                    ...formulario.perguntas.map((pergunta) => {
+                        return {
+                            header: pergunta.pergunta.pergunta,
+                            key: pergunta.pergunta.pergunta,
+                            width: 15
+                        }
+                    })
+                ];
+
+                response.forEach(pedido => {
+                    worksheet.addRow({
+                        beneficiario: pedido.beneficiario.nome,
+                        responsavel: pedido.beneficiario?.responsavelLegal,
+                        valorPago: pedido.valorPago,
+                        prestador: pedido.prestador.nome,
+                        dataConclusao: pedido.dataConclusao ? new Date(pedido.dataConclusao) : '',
+                        status: pedido.status,
+                        divergencia: pedido.divergencia && 'Sim',
+                        ...pedido.resposta?.respostas.reduce((acc, resposta) => {
+                            acc[resposta.pergunta] = resposta.resposta
+                            return acc
+                        }, {})
+                    });
+                });
+
+                worksheet.eachRow((row, rowNumber) => {
+                    row.eachCell((cell) => {
+                        cell.border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        };
+                        if (rowNumber === 1) {
+                            cell.fill = {
+                                type: 'pattern',
+                                pattern: 'solid',
+                                fgColor: { argb: 'FF6100' },
+                            };
+                            cell.font = {
+                                bold: true,
+                                color: { argb: 'FFFFFF' },
+                            }
+                        }
+                    });
+                });
+
+                workbook.xlsx.writeBuffer().then((buffer) => {
+                    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    saveAs(blob, 'Pedidos.xlsx');
+                });
+            }}
+        >
+            <Box
+                display='flex'
+                gap={2}
+                flexDirection={'column'}
+            >
+                <Box>
+                    <Typography>Data Início</Typography>
+                    <TextField type='date' fullWidth size="small" value={dataInicio} onChange={e => setDataInicio(e.target.value)} />
+                </Box>
+                <Box>
+                    <Typography>Data Fim</Typography>
+                    <TextField type='date' fullWidth size="small" value={dataFim} onChange={e => setDataFim(e.target.value)} />
+                </Box>
+            </Box>
+        </ModalComponent>
+    )
+}
+
+export default ModalGerarRelatorio;

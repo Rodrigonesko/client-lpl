@@ -3,11 +3,12 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, green, orange, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import Title from "../../../components/Title/Title"
-import { filterPedidos, getPrestadoresComPedidosEmAberto } from "../../../_services/sulAmerica.service"
+import { filterPedidos, getPrestadoresByStatus } from "../../../_services/sulAmerica.service"
 import { ArrowForward, Clear } from "@mui/icons-material"
 import { filterUsers } from "../../../_services/user.service"
 import { valueToBRL } from "../../../functions/functions"
 import moment from "moment"
+import ModalGerarRelatorio from "./components/ModalGerarRelatorio"
 
 const tabStyle = {
     '&:hover': {
@@ -60,13 +61,15 @@ const PedidosAjuste = () => {
         total: 0,
         totalAIniciar: 0,
         totalAgendado: 0,
-        totalConcluido: 0
+        totalConcluido: 0,
+        totalCancelado: 0
     })
     const [prestadores, setPrestadores] = useState([''])
     const [prestador, setPrestador] = useState('')
     const [beneficiario, setBeneficiario] = useState('')
     const [responsaveis, setResponsaveis] = useState([])
     const [responsavel, setResponsavel] = useState('')
+
 
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -79,25 +82,20 @@ const PedidosAjuste = () => {
                 const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', 1, 1)
                 const Agendado = await filterPedidos('', '', '', 'AGENDADO', 1, 1)
                 const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', 1, 1)
+                const Cancelado = await filterPedidos('', '', '', 'CANCELADO', 1, 1)
                 const response = await filterPedidos('', '', '', '', 1, 1)
                 setTotais({
                     total: response.total,
                     totalAIniciar: Ainiciar.total,
                     totalAgendado: Agendado.total,
-                    totalConcluido: Concluido.total
+                    totalConcluido: Concluido.total,
+                    totalCancelado: Cancelado.total
                 })
             } catch (error) {
                 console.error(error);
             }
         }
-        const fetchPrestadores = async () => {
-            try {
-                const response = await getPrestadoresComPedidosEmAberto()
-                setPrestadores(['', ...response])
-            } catch (error) {
-                console.error(error);
-            }
-        }
+
         const fetchResponsaveis = async () => {
             try {
                 const response = await filterUsers({
@@ -111,7 +109,6 @@ const PedidosAjuste = () => {
             }
         }
         fetchTotais()
-        fetchPrestadores()
         fetchResponsaveis()
     }, [])
 
@@ -129,7 +126,18 @@ const PedidosAjuste = () => {
             }
             setLoading(false)
         }
+
+        const fetchPrestadores = async () => {
+            try {
+                const response = await getPrestadoresByStatus(status)
+                setPrestadores(['', ...response])
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         fetchPedidos()
+        fetchPrestadores()
     }, [prestador, beneficiario, responsavel, status, page, rowsPerPage])
 
     return (
@@ -139,7 +147,16 @@ const PedidosAjuste = () => {
                     m: 2
                 }}
             >
-                <Title size={'medium'} fontColor={blue[900]} lineColor={'white'}>Pedidos</Title>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }}
+                >
+                    <Title size={'medium'} fontColor={blue[900]} lineColor={'white'}>Pedidos</Title>
+                    <ModalGerarRelatorio />
+                </Box>
                 <Tabs
                     value={status}
                     onChange={(e, newValue) => setStatus(newValue)}
@@ -155,6 +172,7 @@ const PedidosAjuste = () => {
                     <Tab value={'A INICIAR'} label="A iniciar" icon={<TabIcon status={status} value={'A INICIAR'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'AGENDADO'} label="Agendado" icon={<TabIcon status={status} value={'AGENDADO'}>{totais.totalAgendado}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'CONCLUÍDO'} label="Concluído" icon={<TabIcon status={status} value={'CONCLUÍDO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                    <Tab value={'CANCELADO'} label="Cancelado" icon={<TabIcon status={status} value={'CANCELADO'}>{totais.totalCancelado}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />
                 </Tabs>
                 <Box>
