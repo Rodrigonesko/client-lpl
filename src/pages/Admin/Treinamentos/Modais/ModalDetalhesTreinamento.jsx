@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip, TextField, Snackbar, Alert, Tooltip } from "@mui/material"
 import { useState } from "react"
-import { getAllTreinamentos, getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
+import { deleteColaboradorDoTreinamento, getAllTreinamentos, getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
 import { AiOutlineCheck, AiFillFileExcel } from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
 import { useEffect } from "react";
@@ -9,13 +9,17 @@ import InsightsIcon from '@mui/icons-material/InsightsOutlined';
 import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import { DeleteOutline } from "@mui/icons-material";
 
 const ModalDetalhesTreinamento = ({ nome, id }) => {
 
     const [open, setOpen] = useState(false)
     const [realizados, setRealizados] = useState([])
     const [flushHook, setFlushHook] = useState(false)
+
     const [openSnack, setOpenSnack] = useState(false)
+    const [severity, setSeverity] = useState('')
+    const [msg, setMsg] = useState('')
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -44,6 +48,8 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
         })
         setFlushHook(true)
         setOpenSnack(true)
+        setSeverity('success')
+        setMsg('Treinamento finalizado com sucesso!')
 
     }
 
@@ -72,6 +78,26 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
         })
         setFlushHook(true)
         setOpenSnack(true)
+        setSeverity('success')
+        setMsg('Data de Treinamento alterado com sucesso!')
+    }
+
+    const handleDeleteColaborador = async (_id) => {
+        try {
+            await deleteColaboradorDoTreinamento(
+                id,
+                _id,
+            )
+            setFlushHook(true)
+            setOpenSnack(true)
+            setSeverity('success')
+            setMsg('Colaborador deletado com sucesso!')
+        } catch (error) {
+            console.log(error);
+            setOpenSnack(true)
+            setSeverity('error')
+            setMsg('Colaborador não deletado!')
+        }
     }
 
 
@@ -108,7 +134,7 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
     return (
         <>
             <Tooltip title={`Detalhes`}>
-                <IconButton sx={{ m: 1 }} variant="contained" color="primary" onClick={handleClickOpen}>
+                <IconButton sx={{ m: 1 }} variant="contained" color="primary" size='small' onClick={handleClickOpen}>
                     <InsightsIcon />
                 </IconButton>
             </Tooltip>
@@ -138,6 +164,10 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                 <TableCell>
                                     Data
                                 </TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -181,6 +211,11 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                                                 {user.anexado ? (<FeedOutlinedIcon color="inherit" />) : (<FeedOutlinedIcon color="error" />)}
                                                             </IconButton>
                                                         </TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="secondary" onClick={() => { handleDeleteColaborador(user.id) }}>
+                                                                <DeleteOutline />
+                                                            </IconButton>
+                                                        </TableCell>
                                                     </>
                                                 ) : (
                                                     <>
@@ -203,6 +238,11 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                                                                 {user.anexado ? (<FeedOutlinedIcon color="inherit" />) : (<FeedOutlinedIcon color="error" />)}
                                                             </IconButton>
                                                         </TableCell>
+                                                        <TableCell>
+                                                            <IconButton color="secondary" onClick={() => { handleDeleteColaborador(user.id) }}>
+                                                                <DeleteOutline />
+                                                            </IconButton>
+                                                        </TableCell>
                                                     </>
                                                 )
                                             }
@@ -218,11 +258,10 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnack} autoHideDuration={6000} onClose={() => setOpenSnack(false)}>
-                <Alert variant="filled" onClose={() => setOpenSnack(false)} severity="success" sx={{ width: '100%' }}>
-                    Data de Treinamento alterada com sucesso!
+                <Alert variant="filled" onClose={() => setOpenSnack(false)} severity={severity} sx={{ width: '100%' }}>
+                    {msg}
                 </Alert>
             </Snackbar>
-
         </>
     )
 }

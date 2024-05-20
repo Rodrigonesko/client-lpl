@@ -51,11 +51,24 @@ const CardAniversarioEmpresa = () => {
                     color="text.secondary"
                     gutterBottom
                 >
-                    {users.map(user => (
-                        <Typography key={user.id}>
-                            {user.name} - {moment(user.dataAdmissao).format("DD/MM")} - {moment().year() - moment(user.dataAdmissao).year()} anos
-                        </Typography>
-                    ))}
+                    {users.map(user => {
+                        const years = moment().year() - moment(user.dataAdmissao).year();
+                        if (years === 0) {
+                            return null;
+                        }
+                        if (years === 1) {
+                            return (
+                                <Typography key={user.id}>
+                                    {user.name} - {moment(user.dataAdmissao).format("DD/MM")} - {years} ano
+                                </Typography>
+                            );
+                        }
+                        return (
+                            <Typography key={user.id}>
+                                {user.name} - {moment(user.dataAdmissao).format("DD/MM")} - {years} anos
+                            </Typography>
+                        );
+                    })}
                 </Typography>
             </CardContent>
         </Card>
