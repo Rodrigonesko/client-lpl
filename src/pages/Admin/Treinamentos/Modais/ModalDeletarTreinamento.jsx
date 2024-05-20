@@ -28,7 +28,7 @@ const ModalDeletarTreinamento = ({ id, nome, setFlushHook }) => {
     return (
         <>
             <Tooltip title={`Deletar Treinamento`}>
-                <IconButton sx={{m: 1}} variant="contained" color="error" onClick={handleClickOpen}>
+                <IconButton sx={{m: 1}} variant="contained" color="error" size='small' onClick={handleClickOpen}>
                     <DeleteIcon />
                 </IconButton>
             </Tooltip>

@@ -52,7 +52,7 @@ const ModalEditarTreinamento = ({ setFlushHook, id, nomeDoCurso, nomePlataforma,
     return (
         <>
             <Tooltip title={`Editar Treinamento`}>
-                <IconButton sx={{ m: 1 }} variant="contained" color="success" onClick={handleClickOpen}>
+                <IconButton sx={{ m: 1 }} variant="contained" color="success" size='small' onClick={handleClickOpen}>
                     <EditIcon />
                 </IconButton>
             </Tooltip>

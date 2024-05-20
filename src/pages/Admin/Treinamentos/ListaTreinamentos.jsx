@@ -6,6 +6,7 @@ import ModalDetalhesTreinamento from "./Modais/ModalDetalhesTreinamento"
 import ModalDeletarTreinamento from "./Modais/ModalDeletarTreinamento"
 import moment from "moment"
 import ModalEditarTreinamento from "./Modais/ModalEditarTreinamentos"
+import { blue } from "@mui/material/colors"
 
 const ListaTreinamentos = () => {
 
@@ -26,15 +27,15 @@ const ListaTreinamentos = () => {
         <Box>
             <ModalAdicionarTreinamento setFlushHook={setFlushHook} />
             <TableContainer sx={{ mt: '20px' }}>
-                <Table>
-                    <TableHead>
+                <Table size='small' >
+                    <TableHead sx={{ bgcolor: blue[600] }} >
                         <TableRow>
-                            <TableCell>Nome</TableCell>
-                            <TableCell>Plataforma</TableCell>
-                            <TableCell>Link</TableCell>
-                            <TableCell>Prazo</TableCell>
+                            <TableCell sx={{ color: 'white' }} >Nome</TableCell>
+                            <TableCell sx={{ color: 'white' }} >Plataforma</TableCell>
+                            <TableCell sx={{ color: 'white' }} >Link</TableCell>
+                            <TableCell sx={{ color: 'white' }} >Prazo</TableCell>
                             <TableCell></TableCell>
-                       </TableRow>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {

@@ -33,6 +33,10 @@ export const naoPrecisaTreinamento = async (data) => {
     return await new ApiCall(`/treinamento/naoPrecisaTreinamento`).put(data)
 }
 
+export const deleteColaboradorDoTreinamento = async (idTreinamento, _id) => {
+    return await new ApiCall(`/treinamento/deleteColaboradores/${idTreinamento}/${_id}`).patch()
+}
+
 export const uploadCertificados = async (formData, _id) => {
     return await new ApiCall(`/treinamento/${_id}`, process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` } }).post(formData)
 }
