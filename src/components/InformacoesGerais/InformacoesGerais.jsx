@@ -22,7 +22,7 @@ const InformacoesGerais = ({ mo }) => {
     const [severity, setSeverity] = useState('')
     const [codigoPlano, setCodigoPlano] = useState('')
     const [vigencia, setVigencia] = useState('')
-    const [planoPf, setPlanoPf] = useState(false)
+    const [planoPf, setPlanoPf] = useState(null)
     const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
@@ -58,9 +58,8 @@ const InformacoesGerais = ({ mo }) => {
             whatsapp: wpp,
             dataVigencia: vigencia?.trim(),
             codigoPlano: codigoPlano.trim().split(' - ')[0],
-            plano: codigoPlano.trim().split(' - ')[1]
+            plano: codigoPlano.trim().split(' - ').slice(1).join(' - ')
         })
-
         setOpen(true)
         setFlushHook(!flushHook)
     }
@@ -89,7 +88,7 @@ const InformacoesGerais = ({ mo }) => {
                     codigo: result.pessoa.codigoPlano
                 })
                 if (resultPlano) {
-                    setPlanoPf(true)
+                    setPlanoPf(resultPlano)
                 } else {
                     setPlanoPf(false)
                 }
@@ -164,7 +163,7 @@ const InformacoesGerais = ({ mo }) => {
                 planoPf ? (
                     <Box mt={2}>
                         <Alert severity="error" sx={{ width: '100%' }}>
-                            Plano com prazo de vigência reduzido *30 dias*. Analisar a data de atendimento X data da solicitação.
+                            Plano com prazo de vigência reduzido *{planoPf.prazo}*. Analisar a data de atendimento X data da solicitação.
                         </Alert>
                     </Box>
                 ) : null
