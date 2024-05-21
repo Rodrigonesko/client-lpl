@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, green, orange, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import Title from "../../../components/Title/Title"
-import { filterPedidos, getPrestadoresByStatus } from "../../../_services/sulAmerica.service"
+import { filterPedidos, getDatasCriacoaPedido, getPrestadoresByStatus } from "../../../_services/sulAmerica.service"
 import { ArrowForward, Clear } from "@mui/icons-material"
 import { filterUsers } from "../../../_services/user.service"
 import { valueToBRL } from "../../../functions/functions"
@@ -69,6 +69,8 @@ const PedidosAjuste = () => {
     const [beneficiario, setBeneficiario] = useState('')
     const [responsaveis, setResponsaveis] = useState([])
     const [responsavel, setResponsavel] = useState('')
+    const [lotes, setLotes] = useState([''])
+    const [lote, setLote] = useState('')
 
 
     const [page, setPage] = useState(1)
@@ -79,11 +81,11 @@ const PedidosAjuste = () => {
     useEffect(() => {
         const fetchTotais = async () => {
             try {
-                const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', 1, 1)
-                const Agendado = await filterPedidos('', '', '', 'AGENDADO', 1, 1)
-                const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', 1, 1)
-                const Cancelado = await filterPedidos('', '', '', 'CANCELADO', 1, 1)
-                const response = await filterPedidos('', '', '', '', 1, 1)
+                const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', 1, 1)
+                const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', 1, 1)
+                const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', '', 1, 1)
+                const Cancelado = await filterPedidos('', '', '', 'CANCELADO', '', 1, 1)
+                const response = await filterPedidos('', '', '', '', '', 1, 1)
                 setTotais({
                     total: response.total,
                     totalAIniciar: Ainiciar.total,
@@ -108,8 +110,15 @@ const PedidosAjuste = () => {
                 console.error(error);
             }
         }
+
+        const fetchLotes = async () => {
+            const responseLotes = await getDatasCriacoaPedido()
+            setLotes(['', ...responseLotes])
+        }
+
         fetchTotais()
         fetchResponsaveis()
+        fetchLotes()
     }, [])
 
     useEffect(() => {
@@ -117,8 +126,7 @@ const PedidosAjuste = () => {
             setLoading(true)
             try {
 
-                console.log(beneficiario);
-                const response = await filterPedidos(prestador, beneficiario, responsavel, status, page, rowsPerPage)
+                const response = await filterPedidos(prestador, beneficiario, responsavel, status, lote ? moment(lote, 'DD/MM/YYYY').format('YYYY-MM-DD') : '', page, rowsPerPage)
                 setPedidos(response.result)
                 setTotalPages(response.total)
             } catch (error) {
@@ -131,6 +139,7 @@ const PedidosAjuste = () => {
             try {
                 const response = await getPrestadoresByStatus(status)
                 setPrestadores(['', ...response])
+
             } catch (error) {
                 console.error(error);
             }
@@ -138,7 +147,7 @@ const PedidosAjuste = () => {
 
         fetchPedidos()
         fetchPrestadores()
-    }, [prestador, beneficiario, responsavel, status, page, rowsPerPage])
+    }, [prestador, beneficiario, responsavel, status, page, rowsPerPage, lote])
 
     return (
         <Sidebar>
@@ -224,6 +233,21 @@ const PedidosAjuste = () => {
                                 }
                             </Select>
                         </FormControl>
+                        <Autocomplete
+                            size='small'
+                            disablePortal
+                            value={lote}
+                            options={lotes.map(lote => lote && moment(lote).format('DD/MM/YYYY'))}
+                            onChange={(e, newValue) => {
+                                setLote(newValue);
+                            }}
+                            sx={{
+                                width: 300, borderRadius: '10px', '& .MuiOutlinedInput-root': {
+                                    borderRadius: '10px'
+                                }
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Lote" />}
+                        />
                         <Button
                             variant="contained"
                             sx={{
@@ -238,6 +262,7 @@ const PedidosAjuste = () => {
                                 setPrestador('')
                                 setBeneficiario('')
                                 setResponsavel('')
+                                setLotes('')
                             }}
                         >
                             <Clear />
@@ -321,6 +346,17 @@ const PedidosAjuste = () => {
                                     variant="filled"
                                     sx={{ bgcolor: blue[900], color: 'white' }}
                                     onDelete={() => setResponsavel('')}
+                                />
+                            )
+                        }
+                        {
+                            lote && (
+                                <Chip
+                                    label={lote}
+                                    color="primary"
+                                    variant="filled"
+                                    sx={{ bgcolor: blue[900], color: 'white' }}
+                                    onDelete={() => setLote('')}
                                 />
                             )
                         }

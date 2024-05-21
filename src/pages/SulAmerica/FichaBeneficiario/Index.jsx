@@ -8,11 +8,13 @@ import { blue, orange } from "@mui/material/colors"
 import { useForm } from "react-hook-form"
 import Toast from "../../../components/Toast/Toast"
 import Row from "./Components/Row"
+import { calcularIdade } from "../../../functions/functions"
+import InputMask from "react-input-mask";
 
-const Input = ({ label, register }) => {
+const Input = ({ label, register, type = 'text', disabled = false }) => {
     return (
         <TextField
-            type='text'
+            type={type}
             label={label}
             size='small'
             {...register}
@@ -24,7 +26,28 @@ const Input = ({ label, register }) => {
                 shrink: true,
             }}
             placeholder={label}
+            disabled={disabled}
         />
+    )
+}
+
+const InputCelular = ({ label, register }) => {
+    return (
+        <InputMask mask="(99) 99999-9999" {...register}>
+            {() => <TextField
+                label={label}
+                size='small'
+                sx={{
+                    width: '350px',
+                    borderRadius: '10px'
+                }}
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                placeholder={label}
+                {...register}
+            />}
+        </InputMask>
     )
 }
 
@@ -95,7 +118,23 @@ const FichaBeneficiarioSulAmerica = () => {
             setValue('numero', data.numero);
             setValue('responsavelLegal', data.responsavelLegal);
             setValue('vinculoResponsavel', data.vinculoResponsavel);
+            setValue('dataNascimento', data.dataNascimento);
+            setValue('idade', data.idade);
+            setValue('whatsapp', data.whatsapp);
         }
+
+        // Calculate the age
+        if (data?.dataNascimento) {
+            const idade = calcularIdade(data?.dataNascimento)
+            setValue('idade', idade)
+        }
+
+        if(data?.melhorCelular){
+            const celular = data?.melhorCelular.replace(/\D/g, '');
+            let wpp = celular ? `whatsapp:+55${celular}` : ''
+            setValue('whatsapp', wpp)
+        }
+
         setFlushHook(false)
     }, [data, setValue]);
 
@@ -139,10 +178,13 @@ const FichaBeneficiarioSulAmerica = () => {
                     >
                         <Input label='Nome' register={register('nome')} />
                         <Input label='CPF' register={register('cpf')} />
-                        <Input label='Melhor Celular' register={register('melhorCelular')} />
+                        <InputCelular label='Melhor Celular' register={register('melhorCelular')} />
                         <Input label='Cod Sistemico Beneficiario' register={register('codSistemicoBeneficiario')} />
                         <Input label='Responsável' register={register('responsavelLegal')} />
                         <Input label='Vínculo Responsável' register={register('vinculoResponsavel')} />
+                        <Input label='Data Nascimento' type="date" register={register('dataNascimento')} />
+                        <Input label='Idade' disabled type="number" register={register('idade')} />
+                        <Input label='Whatsapp' register={register('whatsapp')} disabled />
                     </Box>
                     <Box
                         sx={{

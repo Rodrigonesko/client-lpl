@@ -52,8 +52,8 @@ export const updatePedido = async (id, data) => {
     return await new ApiCall(`/pedido/${id}`, url).put(data)
 }
 
-export const filterPedidos = async (prestador, beneficiario, responsavel, status, page, limit) => {
-    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&page=${page}&limit=${limit}`, url).get()
+export const filterPedidos = async (prestador, beneficiario, responsavel, status, dataCriacao ,page, limit = 10) => {
+    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}`, url).get()
 }
 
 export const getPedidoById = async (id) => {
@@ -78,6 +78,10 @@ export const uploadArquivoPedido = async (id, data) => {
             "Content-Type": `multipart/form-data; boundary=${data._boundary}`
         }
     }).post(data)
+}
+
+export const getDatasCriacoaPedido = async () => {
+    return await new ApiCall(`/pedido/dataCriacao`, url).get()
 }
 
 /* Respostas */
