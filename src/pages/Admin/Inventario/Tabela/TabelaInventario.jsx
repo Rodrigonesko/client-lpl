@@ -1,10 +1,11 @@
-import { Alert, Box, Button, Chip, CircularProgress, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Alert, Box, Button, Chip, CircularProgress, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import { red, yellow, green, blue } from '@mui/material/colors';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalEditarInventario from "../Modais/ModalEditarInventario";
 import moment from "moment";
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import { filterInventario } from "../../../../_services/inventario.service";
 
 const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
@@ -14,10 +15,10 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const [etiqueta, setEtiqueta] = useState('')
     const [status, setStatus] = useState('')
     const [snackSelect, setSnackSelect] = useState(false)
-    const [alerta, setAlerta] = useState(false)
 
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(1);
 
     const handleChangeStatus = async (id, status) => {
@@ -35,68 +36,33 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         console.log(id, status)
     }
 
-    const fetchData = async (valor) => {
-        try {
-            const resultado = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/findAll?page=${valor}&limit=25`, {
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            const solicitacoesData = resultado.data.result;
-            const sortedSolicitacoes = solicitacoesData.sort((a, b) => a.etiqueta.localeCompare(b.etiqueta));
-
-            setLoading(false);
-            setTotalPages(resultado.data.total)
-            setSolicitacoes(sortedSolicitacoes);
-        } catch (error) {
-            console.error(error);
-            setLoading(false);
-            setAlerta(true)
-        }
-    }
-
     useEffect(() => {
-        fetchData(page)
+        handleFilter()
         setFlushHook(false)
-    }, [flushHook, setFlushHook])
+    }, [flushHook, setFlushHook, nomeItem, ondeEsta, etiqueta, status, page, rowsPerPage])
 
     const handleCloseSelect = () => {
         setSnackSelect(false)
     }
 
-    const handleFilter = async (event, page) => {
-        event?.preventDefault()
-
-        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2) || (status.length > 2)) {
-            const result = await axios.get(`${process.env.REACT_APP_API_KEY}/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}&status=${status}&page=${page}&limit=25`, {
-                withCredentials: true,
-            })
+    const handleFilter = async () => {
+        try {
             setLoading(true);
+            const result = await filterInventario(
+                nomeItem,
+                ondeEsta,
+                etiqueta,
+                status,
+                page,
+                rowsPerPage,
+            )
+            setSolicitacoes(result.resultOrdenado)
 
-            const sortedSolicitacoes = result.data.result.sort((a, b) => -a.etiqueta.localeCompare(-b.etiqueta))
-            setSolicitacoes(sortedSolicitacoes)
-
-            setTotalPages(result.data.total)
-            console.log(result.data.total);
+            setTotalPages(result.total)
+            console.log(result.total);
             setLoading(false)
-        } else {
-            setAlerta(true)
-            return
-        }
-    }
-
-    const handleCloseInput = () => {
-        setAlerta(false)
-    }
-
-    const handlePageChange = (event, value) => {
-        setPage(value);
-        if ((nomeItem.length > 2) || (ondeEsta.length > 1) || (etiqueta.length > 2) || (status.length > 1)) {
-            handleFilter(event, value);
-        } else {
-            fetchData(value)
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -133,7 +99,6 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                         <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
                     </Select>
                 </FormControl>
-                <Button type="submit" onClick={(e) => handleFilter(e, 1)} variant='contained' sx={{ borderRadius: '10px' }} >Pesquisar</Button>
                 <Button onClick={() => {
                     setNomeItem('')
                     setOndeEsta('')
@@ -142,17 +107,34 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                     setFlushHook(true)
                 }} variant='contained' sx={{ marginLeft: '10px', borderRadius: '10px' }}>Limpar Pesquisa</Button>
             </form>
-            <Snackbar open={alerta} autoHideDuration={6000} onClose={handleCloseInput}>
-                <Alert variant="filled" onClose={handleCloseInput} severity="warning" sx={{ width: '100%' }}>
-                    Digite no minimo 2 caracteres!
-                </Alert>
-            </Snackbar>
             <br />
             <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
                 <TableContainer>
-                    <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2 }}>
-                        <Chip label={`Quantidade de Itens no inventario: ${totalPages}`} color='secondary' sx={{ fontSize: '15px' }} />
-                        <Pagination count={Math.ceil(totalPages / 25)} page={page} onChange={handlePageChange} />
+                    <Chip label={`Quantidade de Itens no inventario: ${totalPages}`} color='secondary' sx={{ fontSize: '15px' }} />
+                    <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
+                        <FormControl size="small" disabled={loading}>
+                            <InputLabel>Linhas</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Linhas"
+                                sx={{ width: '100px', borderRadius: '10px' }}
+                                value={rowsPerPage}
+                                onChange={(e) => setRowsPerPage(e.target.value)}
+                            >
+                                <MenuItem value={10} >10</MenuItem>
+                                <MenuItem value={20} >20</MenuItem>
+                                <MenuItem value={30} >30</MenuItem>
+                                <MenuItem value={40} >40</MenuItem>
+                                <MenuItem value={50} >50</MenuItem>
+                                <MenuItem value={100} >100</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Pagination count={
+                            totalPages % rowsPerPage === 0 ?
+                                Math.floor(totalPages / rowsPerPage) :
+                                Math.floor(totalPages / rowsPerPage) + 1
+                        } page={page} onChange={(e, value) => setPage(value)} disabled={loading} />
                     </Box>
                     {
                         !loading ? (
