@@ -40,3 +40,7 @@ export const deleteColaboradorDoTreinamento = async (idTreinamento, _id) => {
 export const uploadCertificados = async (formData, _id) => {
     return await new ApiCall(`/treinamento/${_id}`, process.env.REACT_APP_API_KEY, token, { headers: { "Content-Type": `multipart/form-data; boundary=${formData._boundary}` } }).post(formData)
 }
+
+export const addColaboradoresManual = async (data, id) => {
+    return await new ApiCall(`/treinamento/addColaboradoresManual/${id}`).post(data)
+}

@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip, TextField, Snackbar, Alert, Tooltip } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogTitle, DialogContent, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Chip, TextField, Snackbar, Alert, Tooltip, Box } from "@mui/material"
 import { useState } from "react"
-import { deleteColaboradorDoTreinamento, getAllTreinamentos, getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
+import { deleteColaboradorDoTreinamento, getByIdTreinamentos, naoPrecisaTreinamento, treinamentoRealizado } from "../../../../_services/treinamento.service";
 import { AiOutlineCheck, AiFillFileExcel } from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
 import { useEffect } from "react";
@@ -10,6 +10,7 @@ import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import { DeleteOutline } from "@mui/icons-material";
+import ModalAddUserTreinamentos from "./ModalAddUserTreinamentos";
 
 const ModalDetalhesTreinamento = ({ nome, id }) => {
 
@@ -62,14 +63,6 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
         setFlushHook(true)
     }
 
-    const handleVerificarCertificado = async () => {
-        await getAllTreinamentos({
-            idTreinamento: id,
-            nome: nome,
-        })
-        setFlushHook(true)
-    }
-
     const handleAlterarDataTreinamento = async (nome, data) => {
         await treinamentoRealizado({
             idTreinamento: id,
@@ -99,7 +92,6 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
             setMsg('Colaborador não deletado!')
         }
     }
-
 
     const handleReport = () => {
 
@@ -149,11 +141,14 @@ const ModalDetalhesTreinamento = ({ nome, id }) => {
                     {`Treinamento: ${nome}`}
                 </DialogTitle>
                 <DialogContent>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }} >
+                        <Tooltip title='Report'>
+                            <Button onClick={handleReport} variant='outlined' color="success" ><AiFillFileExcel /></Button>
+                        </Tooltip>
+                        <ModalAddUserTreinamentos nome={nome} nomeUsuarios={realizados} id={id} setFlushHook={setFlushHook} flushHook={flushHook} />
+                    </Box>
                     <Table>
                         <TableHead>
-                            <Tooltip title='Report'>
-                                <Button onClick={handleReport} variant='outlined' color="success" ><AiFillFileExcel /></Button>
-                            </Tooltip>
                             <TableRow>
                                 <TableCell>
                                     Colaborador
