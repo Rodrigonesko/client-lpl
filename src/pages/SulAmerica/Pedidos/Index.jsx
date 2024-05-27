@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Button, Chip, CircularProgress, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import { blue, green, orange, red } from "@mui/material/colors"
+import { blue, deepOrange, green, orange, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import Title from "../../../components/Title/Title"
 import { filterPedidos, getDatasCriacoaPedido, getPrestadoresByStatus } from "../../../_services/sulAmerica.service"
@@ -31,6 +31,7 @@ const tabStyle = {
 const colorStatus = {
     'A INICIAR': blue[900],
     'AGENDADO': orange[900],
+    'EM ANDAMENTO': deepOrange[900],
     'CONCLUÍDO': green[900],
     'CANCELADO': red[900]
 }
@@ -61,6 +62,7 @@ const PedidosAjuste = () => {
         total: 0,
         totalAIniciar: 0,
         totalAgendado: 0,
+        totalEmAndamento: 0,
         totalConcluido: 0,
         totalCancelado: 0
     })
@@ -83,6 +85,7 @@ const PedidosAjuste = () => {
             try {
                 const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', 1, 1)
                 const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', 1, 1)
+                const EmAndamento = await filterPedidos('', '', '', 'EM ANDAMENTO', '', 1, 1)
                 const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', '', 1, 1)
                 const Cancelado = await filterPedidos('', '', '', 'CANCELADO', '', 1, 1)
                 const response = await filterPedidos('', '', '', '', '', 1, 1)
@@ -90,6 +93,7 @@ const PedidosAjuste = () => {
                     total: response.total,
                     totalAIniciar: Ainiciar.total,
                     totalAgendado: Agendado.total,
+                    totalEmAndamento: EmAndamento.total,
                     totalConcluido: Concluido.total,
                     totalCancelado: Cancelado.total
                 })
@@ -180,6 +184,7 @@ const PedidosAjuste = () => {
                 >
                     <Tab value={'A INICIAR'} label="A iniciar" icon={<TabIcon status={status} value={'A INICIAR'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'AGENDADO'} label="Agendado" icon={<TabIcon status={status} value={'AGENDADO'}>{totais.totalAgendado}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                    <Tab value={'EM ANDAMENTO'} label="Em andamento" icon={<TabIcon status={status} value={'EM ANDAMENTO'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'CONCLUÍDO'} label="Concluído" icon={<TabIcon status={status} value={'CONCLUÍDO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'CANCELADO'} label="Cancelado" icon={<TabIcon status={status} value={'CANCELADO'}>{totais.totalCancelado}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />

@@ -16,6 +16,7 @@ import { reabrirHorarios } from "../../../../_services/teleEntrevista.service"
 const colorStatus = {
     'A INICIAR': blue[900],
     'AGENDADO': orange[900],
+    'EM ANDAMENTO': deepOrange[900],
     'CONCLUÍDO': green[900],
     'CANCELADO': red[900]
 }
@@ -70,7 +71,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                 </TableCell>
                 <TableCell>
                     {
-                        item.status === 'A INICIAR' && <ModalAgendamento pedido={item._id} />
+                        (item.status === 'A INICIAR' || item.status === 'EM ANDAMENTO') && <ModalAgendamento pedido={item._id} />
                     }
                     {
                         item.status === 'AGENDADO' && (
@@ -119,7 +120,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         )
                     }
                     {
-                        (item.status === 'A INICIAR' || item.status === 'AGENDADO') && <Tooltip title='Formulário'>
+                        (item.status === 'A INICIAR' || item.status === 'AGENDADO' || item.status === 'EM ANDAMENTO') && <Tooltip title='Formulário'>
                             <IconButton size='small' color='primary' href={`/sulAmerica/formulario/${item._id}`} >
                                 <FeedOutlined />
                             </IconButton>
@@ -150,7 +151,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         </Tooltip>
                     }
                     {
-                        (item.status === 'A INICIAR' || item.status === 'AGENDADO') && (
+                        (item.status === 'A INICIAR' || item.status === 'AGENDADO' || item.status === 'EM ANDAMENTO') && (
                             <ModalComponent
                                 buttonIcon={<Cancel />}
                                 buttonText='Cancelar'
@@ -158,7 +159,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                 headerText='Cancelar Pedido'
                                 onAction={async () => {
                                     try {
-                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: 'CANCELADO' })
+                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: 'CANCELADO', dataConclusao: moment().format('YYYY-MM-DD') })
                                         setFlushHook(!flushHook)
                                         setJustificativa('')
                                         setOpenSnack(true)
@@ -202,7 +203,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                 headerText='Reabrir Pedido'
                                 onAction={async () => {
                                     try {
-                                        await updatePedido(item._id, { status: 'A INICIAR' })
+                                        await updatePedido(item._id, { status: 'EM ANDAMENTO' })
                                         setFlushHook(!flushHook)
                                     } catch (error) {
                                         console.log(error);

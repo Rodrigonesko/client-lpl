@@ -26,7 +26,7 @@ const CollapseBeneficiario = ({ item, openRow }) => {
                 responsavel: name,
                 data: moment().format('YYYY-MM-DD HH:mm:ss')
             }
-            await updatePedido(item._id, { tentativasDeContato: [...tentativasDeContato, data] })
+            await updatePedido(item._id, { tentativasDeContato: [...tentativasDeContato, data], status: item.status === 'A INICIAR' ? 'EM ANDAMENTO' : item.status })
             setTentativasDeContato([...tentativasDeContato, data])
             setSeverity('success')
             setMsg('Tentativa de contato adicionada com sucesso')
@@ -198,23 +198,23 @@ const CollapseBeneficiario = ({ item, openRow }) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                    {
-                                        tentativasDeContato.map((tentativa, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell>
-                                                    {index + 1}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {tentativa.responsavel}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    }
-                                </TableBody>
-                                    </Table>
+                                                {
+                                                    tentativasDeContato.map((tentativa, index) => (
+                                                        <TableRow key={index}>
+                                                            <TableCell>
+                                                                {index + 1}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {tentativa.responsavel}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
+                                            </TableBody>
+                                        </Table>
                                     </TableContainer>
                                     <Button
                                         variant="contained"

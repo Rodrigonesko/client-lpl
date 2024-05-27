@@ -50,9 +50,10 @@ const ModalGerarRelatorio = () => {
                     { header: 'Data Conclusão', key: 'dataConclusao', width: 15 },
                     { header: 'Status', key: 'status', width: 10 },
                     { header: 'Divergência', key: 'divergencia', width: 10 },
-                    // { header: 'Tentativa 1', key: 'tentativa1', width: 15},
-                    // { header: 'Tentativa 2', key: 'tentativa2', width: 15},
-                    // { header: 'Tentativa 3+', key: 'tentativa3', width: 15},
+                    { header: 'Responsável', key: 'responsavel', width: 15 },
+                    { header: 'Tentativa 1', key: 'tentativa1', width: 15 },
+                    { header: 'Tentativa 2', key: 'tentativa2', width: 15 },
+                    { header: 'Tentativa 3+', key: 'tentativa3', width: 15 },
                     ...formulario.perguntas.map((pergunta) => {
                         return {
                             header: pergunta.pergunta.pergunta,
@@ -64,16 +65,17 @@ const ModalGerarRelatorio = () => {
 
                 response.forEach(pedido => {
                     worksheet.addRow({
-                        beneficiario: pedido.beneficiario.nome,
-                        responsavel: pedido.beneficiario?.responsavelLegal,
-                        valorPago: pedido.valorPago,
-                        prestador: pedido.prestador.nome,
+                        beneficiario: pedido.beneficiario.nome || '',
+                        responsavel: pedido.beneficiario?.responsavelLegal || '',
+                        valorPago: pedido.valorPago || 0,
+                        prestador: pedido.prestador.nome || '',
                         dataConclusao: pedido.dataConclusao ? new Date(pedido.dataConclusao) : '',
-                        status: pedido.status,
+                        status: pedido.status || '',
                         divergencia: pedido.divergencia && 'Sim',
-                        // tentativa1: pedido.tentativasDeContato?.length >= 1 ? new Date(pedido.tentativasDeContato[0].data) : '',
-                        // tentativa2: pedido.tentativasDeContato?.length >= 2 ? new Date(pedido.tentativasDeContato[1].data) : '',
-                        // tentativa3: pedido.tentativasDeContato?.length >= 3 ? new Date(pedido.tentativasDeContato[2].data) : '',
+                        responsavel: pedido.responsavel || '',
+                        tentativa1: pedido.tentativasDeContato?.length >= 1 ? new Date(pedido.tentativasDeContato[0].data) : '',
+                        tentativa2: pedido.tentativasDeContato?.length >= 2 ? new Date(pedido.tentativasDeContato[1].data) : '',
+                        tentativa3: pedido.tentativasDeContato?.length >= 3 ? new Date(pedido.tentativasDeContato[2].data) : '',
                         ...pedido.resposta?.respostas.reduce((acc, resposta) => {
                             acc[resposta.pergunta] = resposta.resposta
                             return acc
@@ -83,12 +85,6 @@ const ModalGerarRelatorio = () => {
 
                 worksheet.eachRow((row, rowNumber) => {
                     row.eachCell((cell) => {
-                        cell.border = {
-                            top: { style: 'thin' },
-                            left: { style: 'thin' },
-                            bottom: { style: 'thin' },
-                            right: { style: 'thin' },
-                        };
                         if (rowNumber === 1) {
                             cell.fill = {
                                 type: 'pattern',
@@ -98,6 +94,12 @@ const ModalGerarRelatorio = () => {
                             cell.font = {
                                 bold: true,
                                 color: { argb: 'FFFFFF' },
+                            }
+                            cell.border = {
+                                top: { style: 'thin' },
+                                left: { style: 'thin' },
+                                bottom: { style: 'thin' },
+                                right: { style: 'thin' },
                             }
                         }
                     });
