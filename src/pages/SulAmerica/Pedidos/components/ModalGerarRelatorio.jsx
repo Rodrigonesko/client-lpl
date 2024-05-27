@@ -6,6 +6,7 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { Box, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import moment from "moment";
 
 const ModalGerarRelatorio = () => {
 
@@ -23,7 +24,7 @@ const ModalGerarRelatorio = () => {
             saveButtonColorScheme={blue[900]}
             buttonIcon={<Download />}
             onAction={async () => {
-                const response = await getPedidosByDate(dataInicio, dataFim);
+                const response = await getPedidosByDate(dataInicio ? dataInicio : '2024-05-01', dataFim ? dataFim : moment().format('YYYY-MM-DD'));
                 const formulario = await getQuestionarioByName('Sindicância Script TEA');
 
                 const workbook = new ExcelJS.Workbook();
@@ -49,6 +50,7 @@ const ModalGerarRelatorio = () => {
                     { header: 'Prestador', key: 'prestador', width: 15 },
                     { header: 'Data Conclusão', key: 'dataConclusao', width: 15 },
                     { header: 'Status', key: 'status', width: 10 },
+                    { header: 'Justificativa', key: 'justificativa', width: 15 },
                     { header: 'Divergência', key: 'divergencia', width: 10 },
                     { header: 'Responsável', key: 'responsavel', width: 15 },
                     { header: 'Tentativa 1', key: 'tentativa1', width: 15 },
@@ -71,6 +73,7 @@ const ModalGerarRelatorio = () => {
                         prestador: pedido.prestador.nome || '',
                         dataConclusao: pedido.dataConclusao ? new Date(pedido.dataConclusao) : '',
                         status: pedido.status || '',
+                        justificativa: pedido.justificativaCancelamento || '',
                         divergencia: pedido.divergencia && 'Sim',
                         responsavel: pedido.responsavel || '',
                         tentativa1: pedido.tentativasDeContato?.length >= 1 ? new Date(pedido.tentativasDeContato[0].data) : '',
