@@ -73,6 +73,7 @@ const PedidosAjuste = () => {
     const [responsavel, setResponsavel] = useState('')
     const [lotes, setLotes] = useState([''])
     const [lote, setLote] = useState('')
+    const [tentativasDeContato, setTentativasDeContato] = useState('')
 
 
     const [page, setPage] = useState(1)
@@ -83,12 +84,12 @@ const PedidosAjuste = () => {
     useEffect(() => {
         const fetchTotais = async () => {
             try {
-                const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', 1, 1)
-                const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', 1, 1)
-                const EmAndamento = await filterPedidos('', '', '', 'EM ANDAMENTO', '', 1, 1)
-                const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', '', 1, 1)
-                const Cancelado = await filterPedidos('', '', '', 'CANCELADO', '', 1, 1)
-                const response = await filterPedidos('', '', '', '', '', 1, 1)
+                const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', '', 1, 1)
+                const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', '', 1, 1)
+                const EmAndamento = await filterPedidos('', '', '', 'EM ANDAMENTO', '', '', 1, 1)
+                const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', '', '', 1, 1)
+                const Cancelado = await filterPedidos('', '', '', 'CANCELADO', '', '', 1, 1)
+                const response = await filterPedidos('', '', '', '', '', '', 1, 1)
                 setTotais({
                     total: response.total,
                     totalAIniciar: Ainiciar.total,
@@ -130,7 +131,7 @@ const PedidosAjuste = () => {
             setLoading(true)
             try {
 
-                const response = await filterPedidos(prestador, beneficiario, responsavel, status, lote ? moment(lote, 'DD/MM/YYYY').format('YYYY-MM-DD') : '', page, rowsPerPage)
+                const response = await filterPedidos(prestador, beneficiario, responsavel, status, tentativasDeContato, lote ? moment(lote, 'DD/MM/YYYY').format('YYYY-MM-DD') : '', page, rowsPerPage)
                 setPedidos(response.result)
                 setTotalPages(response.total)
             } catch (error) {
@@ -151,7 +152,7 @@ const PedidosAjuste = () => {
 
         fetchPedidos()
         fetchPrestadores()
-    }, [prestador, beneficiario, responsavel, status, page, rowsPerPage, lote])
+    }, [prestador, beneficiario, responsavel, status, tentativasDeContato, page, rowsPerPage, lote])
 
     return (
         <Sidebar>
@@ -194,6 +195,7 @@ const PedidosAjuste = () => {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
+                            flexWrap: 'wrap',
                             mt: 2,
                             gap: 2
                         }}
@@ -247,12 +249,29 @@ const PedidosAjuste = () => {
                                 setLote(newValue);
                             }}
                             sx={{
-                                width: 300, borderRadius: '10px', '& .MuiOutlinedInput-root': {
+                                width: 200, borderRadius: '10px', '& .MuiOutlinedInput-root': {
                                     borderRadius: '10px'
                                 }
                             }}
                             renderInput={(params) => <TextField {...params} label="Lote" />}
                         />
+                        <FormControl size="small" disabled={loading}>
+                            <InputLabel>Tentativas de Contato</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Tentativas de Contato"
+                                sx={{ width: 250, borderRadius: '10px' }}
+                                onChange={(e) => { setTentativasDeContato(e.target.value) }}
+                                value={tentativasDeContato}
+                            >
+                                <MenuItem value={''} >Todos</MenuItem>
+                                <MenuItem value={'0'} >0</MenuItem>
+                                <MenuItem value={'1'} >1</MenuItem>
+                                <MenuItem value={'2'} >2</MenuItem>
+                                <MenuItem value={'3'} >3+</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Button
                             variant="contained"
                             sx={{
@@ -267,7 +286,8 @@ const PedidosAjuste = () => {
                                 setPrestador('')
                                 setBeneficiario('')
                                 setResponsavel('')
-                                setLotes('')
+                                setLote('')
+                                setTentativasDeContato('')
                             }}
                         >
                             <Clear />
