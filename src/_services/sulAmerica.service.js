@@ -120,3 +120,15 @@ export const getBeneficiarioByNameAndSortByLastMessage = async (name) => {
 export const updateBeneficiario = async (id, data) => {
     return await new ApiCall(`/beneficiario/${id}`, url).put(data)
 }
+
+export const getQtdPedidoByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/quantidadePedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getPedidosPorDiaByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosPorDia?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getPedidosPorResponsavel = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosPorResponsavel?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
