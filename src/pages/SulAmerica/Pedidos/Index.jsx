@@ -9,6 +9,7 @@ import { filterUsers } from "../../../_services/user.service"
 import { valueToBRL } from "../../../functions/functions"
 import moment from "moment"
 import ModalGerarRelatorio from "./components/ModalGerarRelatorio"
+import { colorStatus, colorSubStatus } from "./utils/types"
 
 const tabStyle = {
     '&:hover': {
@@ -26,14 +27,6 @@ const tabStyle = {
     },
     color: 'gray',
     mr: 2,
-}
-
-const colorStatus = {
-    'A INICIAR': blue[900],
-    'AGENDADO': orange[900],
-    'EM ANDAMENTO': deepOrange[900],
-    'CONCLUÍDO': green[900],
-    'CANCELADO': red[900]
 }
 
 const TabIcon = ({ children, value, status }) => {
@@ -87,8 +80,8 @@ const PedidosAjuste = () => {
                 const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', '', 1, 1)
                 const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', '', 1, 1)
                 const EmAndamento = await filterPedidos('', '', '', 'EM ANDAMENTO', '', '', 1, 1)
-                const Concluido = await filterPedidos('', '', '', 'CONCLUÍDO', '', '', 1, 1)
-                const Cancelado = await filterPedidos('', '', '', 'CANCELADO', '', '', 1, 1)
+                const Concluido = await filterPedidos('', '', '', 'SUCESSO CONTATO', '', '', 1, 1)
+                const Cancelado = await filterPedidos('', '', '', 'INSUCESSO CONTATO', '', '', 1, 1)
                 const response = await filterPedidos('', '', '', '', '', '', 1, 1)
                 setTotais({
                     total: response.total,
@@ -186,8 +179,8 @@ const PedidosAjuste = () => {
                     <Tab value={'A INICIAR'} label="A iniciar" icon={<TabIcon status={status} value={'A INICIAR'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'AGENDADO'} label="Agendado" icon={<TabIcon status={status} value={'AGENDADO'}>{totais.totalAgendado}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={'EM ANDAMENTO'} label="Em andamento" icon={<TabIcon status={status} value={'EM ANDAMENTO'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                    <Tab value={'CONCLUÍDO'} label="Concluído" icon={<TabIcon status={status} value={'CONCLUÍDO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                    <Tab value={'CANCELADO'} label="Cancelado" icon={<TabIcon status={status} value={'CANCELADO'}>{totais.totalCancelado}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                    <Tab value={'SUCESSO CONTATO'} label="Sucesso" icon={<TabIcon status={status} value={'SUCESSO CONTATO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                    <Tab value={'INSUCESSO CONTATO'} label="Insucesso" icon={<TabIcon status={status} value={'INSUCESSO CONTATO'}>{totais.totalCancelado}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />
                 </Tabs>
                 <Box>
@@ -272,6 +265,71 @@ const PedidosAjuste = () => {
                                 <MenuItem value={'3'} >3+</MenuItem>
                             </Select>
                         </FormControl>
+                        {
+                            status === 'INSUCESSO CONTATO' && (
+                                <FormControl size="small" disabled={loading}>
+                                    <InputLabel>Sub Status</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Sub Status"
+                                        sx={{ width: 250, borderRadius: '10px' }}
+                                    // onChange={(e) => { setTentativasDeContato(e.target.value) }}
+                                    // value={tentativasDeContato}
+                                    >
+                                        <MenuItem value={''} >Todos</MenuItem>
+                                        <MenuItem value={'TRÊS TENTATIVAS'} >TRÊS TENTATIVAS</MenuItem>
+                                        <MenuItem value={'TRÊS TENTATIVAS WHATSAPP'} >TRÊS TENTATIVAS WHATSAPP</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            )
+                        }
+                        {
+                            status === 'SUCESSO CONTATO' && (
+                                <FormControl size="small" disabled={loading}>
+                                    <InputLabel>Sub Status</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Sub Status"
+                                        sx={{ width: 250, borderRadius: '10px' }}
+                                    // onChange={(e) => { setTentativasDeContato(e.target.value) }}
+                                    // value={tentativasDeContato}
+                                    >
+                                        <MenuItem value={''} >Todos</MenuItem>
+                                        <MenuItem value={'REALIZADO'} >REALIZADO</MenuItem>
+                                        <MenuItem value={'FALECIDO'} >FALECIDO</MenuItem>
+                                        <MenuItem value={'RECUSADO'} >RECUSADO</MenuItem>
+                                        <MenuItem value={'PRESTADOR DIVERGENTE'} >PRESTADOR DIVERGENTE</MenuItem>
+                                        <MenuItem value={'PARCIAL'} >PARCIAL</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            )
+                        }
+                        {
+                            status === '' && (
+                                <FormControl size="small" disabled={loading}>
+                                    <InputLabel>Sub Status</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Sub Status"
+                                        sx={{ width: 250, borderRadius: '10px' }}
+                                    // onChange={(e) => { setTentativasDeContato(e.target.value) }}
+                                    // value={tentativasDeContato}
+                                    >
+                                        <MenuItem value={''} >Todos</MenuItem>
+                                        <MenuItem value={'REALIZADO'} >REALIZADO</MenuItem>
+                                        <MenuItem value={'FALECIDO'} >FALECIDO</MenuItem>
+                                        <MenuItem value={'RECUSADO'} >RECUSADO</MenuItem>
+                                        <MenuItem value={'PRESTADOR DIVERGENTE'} >PRESTADOR DIVERGENTE</MenuItem>
+                                        <MenuItem value={'PARCIAL'} >PARCIAL</MenuItem>
+                                        <MenuItem value={'TRÊS TENTATIVAS'} >TRÊS TENTATIVAS</MenuItem>
+                                        <MenuItem value={'TRÊS TENTATIVAS WHATSAPP'} >TRÊS TENTATIVAS WHATSAPP</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            )
+                        }
                         <Button
                             variant="contained"
                             sx={{
@@ -430,14 +488,34 @@ const PedidosAjuste = () => {
                                                     <TableCell>{pedido.responsavel}</TableCell>
                                                     <TableCell>{pedido.dataAgendamento && moment(pedido.dataAgendamento).format('DD/MM/YYYY HH:mm')}</TableCell>
                                                     <TableCell>{moment(pedido.dataCriacao).format('DD/MM/YYYY')}</TableCell>
-                                                    <TableCell>
-                                                        <Chip
-                                                            label={pedido.status}
-                                                            color="primary"
-                                                            variant="filled"
-                                                            sx={{ bgcolor: colorStatus[pedido.status], color: 'white' }}
-                                                            size="small"
-                                                        />
+                                                    <TableCell
+                                                        align="center"
+                                                    >
+                                                        <Box
+                                                            display={'flex'}
+                                                            flexDirection={'column'}
+                                                            justifyContent={'center'}
+                                                        >
+                                                            <Chip
+                                                                label={pedido.status}
+                                                                color="primary"
+                                                                variant="filled"
+                                                                sx={{ bgcolor: colorStatus[pedido.status], color: 'white' }}
+                                                                size="small"
+                                                            />
+                                                            <Typography
+                                                                sx={{
+                                                                    bgcolor: colorSubStatus[pedido.subStatus]?.backgroundColor,
+                                                                    color: colorSubStatus[pedido.subStatus]?.color,
+                                                                    borderRadius: 2,
+                                                                    mt: 1
+                                                                }}
+                                                                variant='caption'
+                                                            >
+                                                                {pedido.subStatus}
+                                                            </Typography>
+                                                        </Box>
+
                                                     </TableCell>
                                                     <TableCell>
                                                         <Tooltip title='Detalhes'>

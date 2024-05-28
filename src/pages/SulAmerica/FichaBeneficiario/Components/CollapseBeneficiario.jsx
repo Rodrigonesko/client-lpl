@@ -26,7 +26,7 @@ const CollapseBeneficiario = ({ item, openRow }) => {
                 responsavel: name,
                 data: moment().format('YYYY-MM-DD HH:mm:ss')
             }
-            await updatePedido(item._id, { tentativasDeContato: [...tentativasDeContato, data], status: item.status === 'A INICIAR' ? 'EM ANDAMENTO' : item.status })
+            await updatePedido(item._id, { tentativasDeContato: [...tentativasDeContato, data], status: item.status === 'A INICIAR' ? 'EM ANDAMENTO' : item.status, responsavel: name })
             setTentativasDeContato([...tentativasDeContato, data])
             setSeverity('success')
             setMsg('Tentativa de contato adicionada com sucesso')

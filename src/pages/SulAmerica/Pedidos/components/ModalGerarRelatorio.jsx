@@ -31,7 +31,7 @@ const ModalGerarRelatorio = () => {
                 const worksheet = workbook.addWorksheet('Pedidos');
 
                 response.forEach((pedido) => {
-                    if (pedido.status === 'CONCLUÍDO') {
+                    if (pedido.subStatus === 'REALIZADO') {
                         pedido.resposta.respostas = pedido.resposta.respostas.map((resposta) => {
                             const subRespostas = resposta.subPerguntas
                                 .filter((subPergunta) => subPergunta.resposta)

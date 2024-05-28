@@ -48,6 +48,7 @@ const ModalComponent = ({
                 open={open}
                 onClose={() => setOpen(false)}
                 maxWidth={size || 'md'}
+                fullWidth
             >
                 <DialogTitle>{headerText}</DialogTitle>
                 <DialogContent>

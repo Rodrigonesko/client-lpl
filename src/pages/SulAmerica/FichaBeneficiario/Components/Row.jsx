@@ -1,5 +1,5 @@
 import { Cancel, Edit, FeedOutlined, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
-import { Chip, IconButton, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Chip, Collapse, FormControl, FormControlLabel, IconButton, InputLabel, Menu, MenuItem, Radio, RadioGroup, Select, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import ModalAgendamento from "./ModalAgendamento"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
@@ -10,20 +10,15 @@ import moment from "moment"
 import { getRespostasByPedidoId, updatePedido } from "../../../../_services/sulAmerica.service"
 import { createPdf } from "../../PDF/createPdf"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
-import { blue, deepOrange, green, orange, red } from "@mui/material/colors"
+import { blue, deepOrange, orange } from "@mui/material/colors"
 import { reabrirHorarios } from "../../../../_services/teleEntrevista.service"
-
-const colorStatus = {
-    'A INICIAR': blue[900],
-    'AGENDADO': orange[900],
-    'EM ANDAMENTO': deepOrange[900],
-    'CONCLUÍDO': green[900],
-    'CANCELADO': red[900]
-}
+import { colorStatus, colorSubStatus, subStatusInsucessoContato, subStatusSucessoContato } from "../../Pedidos/utils/types"
 
 const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
 
     const [openRow, setOpenRow] = useState(false)
+    const [status, setStatus] = useState('')
+    const [subStatus, setSubStatus] = useState('')
     const [justificativa, setJustificativa] = useState('')
 
     return (
@@ -49,14 +44,33 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                 <TableCell
                     align="center"
                 >
-                    <Chip
-                        label={item.status}
+                    <Box
                         sx={{
-                            backgroundColor: colorStatus[item.status],
-                            color: 'white'
+                            display: 'flex',
+                            flexDirection: 'column',
                         }}
-                        size="small"
-                    />
+                    >
+                        <Chip
+                            label={item.status}
+                            sx={{
+                                backgroundColor: colorStatus[item.status],
+                                color: 'white'
+                            }}
+                            size="small"
+                        />
+                        <Typography
+                            variant='caption'
+                            sx={{
+                                mt: 1,
+                                backgroundColor: colorSubStatus[item.subStatus]?.backgroundColor,
+                                color: colorSubStatus[item.subStatus]?.color,
+                                borderRadius: 2
+                            }}
+
+                        >
+                            {item.subStatus}
+                        </Typography>
+                    </Box>
                 </TableCell>
                 <TableCell
                     align="center"
@@ -89,7 +103,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                                     responsavel: item.responsavel,
                                                     horarios: [moment(item.dataAgendamento).format('HH:mm')]
                                                 });
-                                                await updatePedido(item._id, { status: 'A INICIAR', dataAgendamento: '', responsavel: 'A DEFINIR' })
+                                                await updatePedido(item._id, { status: 'EM ANDAMENTO', subStatus: '', dataAgendamento: '', responsavel: 'A DEFINIR' })
                                                 await reabrirHorarios({
                                                     data: moment(item.dataAgendamento).format('YYYY-MM-DD'),
                                                     responsavel: item.responsavel,
@@ -127,7 +141,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         </Tooltip>
                     }
                     {
-                        item.status === 'CONCLUÍDO' && <Tooltip title='PDF'>
+                        item.subStatus === 'REALIZADO' && <Tooltip title='PDF'>
                             <IconButton sie='small' color='error' onClick={async () => {
                                 try {
                                     const response = await getRespostasByPedidoId(item._id)
@@ -144,7 +158,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         </Tooltip>
                     }
                     {
-                        item.status === 'CONCLUÍDO' && <Tooltip title='Editar Formulário'>
+                        item.subStatus === 'REALIZADO' && <Tooltip title='Editar Formulário'>
                             <IconButton size='small' color='primary' href={`/sulAmerica/editarFormulario/${item._id}`} >
                                 <Edit />
                             </IconButton>
@@ -156,12 +170,20 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                 buttonIcon={<Cancel />}
                                 buttonText='Cancelar'
                                 buttonColorScheme='error'
-                                headerText='Cancelar Pedido'
+                                headerText='Incidência'
                                 onAction={async () => {
+                                    if (status === '' || subStatus === '') {
+                                        setOpenSnack(true)
+                                        setSeveritySnack('error')
+                                        setMsg('Preencha todos os campos')
+                                        return
+                                    }
                                     try {
-                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: 'CANCELADO', dataConclusao: moment().format('YYYY-MM-DD') })
+                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: status, subStatus: subStatus, dataConclusao: moment().format('YYYY-MM-DD') })
                                         setFlushHook(!flushHook)
                                         setJustificativa('')
+                                        setStatus('')
+                                        setSubStatus('')
                                         setOpenSnack(true)
                                         setSeveritySnack('success')
                                         setMsg('Pedido cancelado com sucesso')
@@ -173,11 +195,58 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                     }
                                 }}
                                 size={'sm'}
-                                saveButtonColorScheme={red[900]}
+                                saveButtonColorScheme={blue[900]}
                             >
-                                <Typography>
-                                    Tem certeza que deseja cancelar o pedido do prestador {item.prestador.nome}?
-                                </Typography>
+                                <RadioGroup
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    sx={{
+                                        mb: 2
+                                    }}
+                                >
+                                    <FormControlLabel value='SUCESSO CONTATO' control={<Radio />} label='Sucesso Contato' />
+                                    <FormControlLabel value='INSUCESSO CONTATO' control={<Radio />} label='Insucesso Contato' />
+                                </RadioGroup>
+                                <Collapse in={status === 'INSUCESSO CONTATO'}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Sub Status</InputLabel>
+                                        <Select
+                                            value={subStatus}
+                                            onChange={(e) => setSubStatus(e.target.value)}
+                                            label='Sub Status'
+                                            defaultValue=""
+                                        >
+                                            <MenuItem value=''>
+                                                <em>Selecione</em>
+                                            </MenuItem>
+                                            {
+                                                subStatusInsucessoContato.map((subStatus) => (
+                                                    <MenuItem key={subStatus} value={subStatus}>{subStatus}</MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </Collapse>
+                                <Collapse in={status === 'SUCESSO CONTATO'}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Sub Status</InputLabel>
+                                        <Select
+                                            value={subStatus}
+                                            onChange={(e) => setSubStatus(e.target.value)}
+                                            label='Sub Status'
+                                            defaultValue=""
+                                        >
+                                            <MenuItem value=''>
+                                                <em>Selecione</em>
+                                            </MenuItem>
+                                            {
+                                                subStatusSucessoContato.map((subStatus) => (
+                                                    <MenuItem key={subStatus} value={subStatus}>{subStatus}</MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </Collapse>
                                 <TextField
                                     placeholder='Justificativa'
                                     fullWidth
@@ -191,7 +260,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         )
                     }
                     {
-                        (item.status === 'CONCLUÍDO' || item.status === 'CANCELADO') && (
+                        (item.status === 'SUCESSO CONTATO' || item.status === 'INSUCESSO CONTATO') && (
                             <ModalComponent
                                 buttonIcon={<Tooltip title='Reabrir' >
                                     <IconButton size='small' color='warning' >
@@ -203,7 +272,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                 headerText='Reabrir Pedido'
                                 onAction={async () => {
                                     try {
-                                        await updatePedido(item._id, { status: 'EM ANDAMENTO' })
+                                        await updatePedido(item._id, { status: 'EM ANDAMENTO', subStatus: '' })
                                         setFlushHook(!flushHook)
                                     } catch (error) {
                                         console.log(error);
