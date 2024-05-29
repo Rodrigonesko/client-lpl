@@ -10,6 +10,7 @@ import AnaliticoAgendamento from "./components/Agendamento/AnaliticoAgendamento"
 import AnaliticoElegibilidade from "./components/Elegibilidade/AnaliticoElegibilidade";
 import AnaliticoRsd from "./components/RSD/AnaliticoRsd";
 import AnaliticoSindicancia from "./components/Sindicancia/AnaliticoSindicancia";
+import AnaliticoSulAmerica from "./components/SulAmerica/AnaliticoSulAmerica";
 
 const tabStyle = {
     '&:hover': {
@@ -98,6 +99,7 @@ const Analitico = () => {
                     <Tab label="RSD" value="RSD" sx={tabStyle} />
                     <Tab label="Elegibilidade" value="Elegibilidade" sx={tabStyle} />
                     <Tab label="Sindicância" value={'Sindicancia'} sx={tabStyle} />
+                    <Tab label="Sul América" value={'SulAmerica'} sx={tabStyle} />
 
                 </Tabs>
                 {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />}
@@ -105,6 +107,7 @@ const Analitico = () => {
                 {tab === 'Agendamento' && <AnaliticoAgendamento key={'Agendamento'} />}
                 {tab === 'Elegibilidade' && <AnaliticoElegibilidade key={'Elegibilidade'} />}
                 {tab === 'Sindicancia' && <AnaliticoSindicancia key={'Sindicancia'} />}
+                {tab === 'SulAmerica' && <AnaliticoSulAmerica key={'SulAmerica'} />}
 
             </Container>
         </Sidebar>
