@@ -149,12 +149,12 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.concluidos}
+                                                    label={item.sucessoContato}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.cancelados}
+                                                    label={item.insucessoContato}
                                                 />
                                             </TableCell>
                                             <TableCell>
