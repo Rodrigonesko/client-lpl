@@ -170,6 +170,7 @@ import FormularioSulAmerica from "./pages/SulAmerica/Formulario/Index";
 import EditFormulario from "./pages/SulAmerica/EditarFormulario/Index";
 import FichaBeneficiarioSulAmerica from "./pages/SulAmerica/FichaBeneficiario/Index";
 import PedidosSulAmerica from "./pages/SulAmerica/Pedidos/Index";
+import RendimentoSulAmerica from "./pages/SulAmerica/RendimentoSulAmerica/RendimentoSulAmerica";
 
 const AppRoutes = () => {
     return (
@@ -196,6 +197,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/sulAmerica/editarFormulario/:id" element={<ProtectedRoute>
                     <EditFormulario />
+                </ProtectedRoute>} />
+                <Route exact path="/sulAmerica/rendimentoSulAmerica" element={<ProtectedRoute>
+                    <RendimentoSulAmerica />
                 </ProtectedRoute>} />
 
                 <Route exact path="/internMessages" element={<ProtectedRoute>
