@@ -1,7 +1,6 @@
 import { ApiCall } from "./api";
 const token = localStorage.getItem('token')
-const url = 'http://localhost:5001'
-// =process.env.REACT_APP_SUL_AMERICA_SERVICE
+const url = process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 
@@ -53,8 +52,8 @@ export const updatePedido = async (id, data) => {
     return await new ApiCall(`/pedido/${id}`, url).put(data)
 }
 
-export const filterPedidos = async (prestador, beneficiario, responsavel, status, tentativasDeContato, dataCriacao, page, limit = 10) => {
-    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&tentativasDeContato=${tentativasDeContato}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}`, url).get()
+export const filterPedidos = async (prestador, beneficiario, responsavel, status, subStatus , tentativasDeContato, dataCriacao, page, limit = 10) => {
+    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&subStatus=${subStatus}&tentativasDeContato=${tentativasDeContato}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}`, url).get()
 }
 
 export const getPedidoById = async (id) => {

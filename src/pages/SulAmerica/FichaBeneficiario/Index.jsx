@@ -151,7 +151,7 @@ const FichaBeneficiarioSulAmerica = () => {
                         }}
                     >
                         <Title size={'medium'} fontColor={blue[900]} lineColor={orange[900]}>Ficha Beneficiario - {data?.nome}</Title>
-                        <Button variant='contained' type='submit' sx={{ borderRadius: '10px' }} >Atualizar</Button>
+                        <Button variant='contained' type='submit' sx={{ borderRadius: '10px', bgcolor: blue[900] }} >Atualizar</Button>
                     </Box>
                     <Box
                         sx={{

@@ -9,7 +9,7 @@ import { filterUsers } from "../../../_services/user.service"
 import { valueToBRL } from "../../../functions/functions"
 import moment from "moment"
 import ModalGerarRelatorio from "./components/ModalGerarRelatorio"
-import { colorStatus, colorSubStatus } from "./utils/types"
+import { colorStatus, colorSubStatus, subStatusInsucessoContato, subStatusSucessoContato } from "./utils/types"
 
 const tabStyle = {
     '&:hover': {
@@ -47,9 +47,32 @@ const TabIcon = ({ children, value, status }) => {
     )
 }
 
+const SelectComponent = ({ label, value, onChange, options, loading }) => {
+    return (
+        <FormControl size="small" disabled={loading}>
+            <InputLabel>{label}</InputLabel>
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label={label}
+                sx={{ width: 200, borderRadius: '10px' }}
+                onChange={onChange}
+                value={value}
+            >
+                {
+                    options.map((option, index) => (
+                        <MenuItem key={index} value={option}>{option}</MenuItem>
+                    ))
+                }
+            </Select>
+        </FormControl>
+    )
+}
+
 const PedidosAjuste = () => {
 
     const [status, setStatus] = useState('A INICIAR')
+    const [subStatus, setSubStatus] = useState('')
     const [pedidos, setPedidos] = useState([])
     const [totais, setTotais] = useState({
         total: 0,
@@ -77,12 +100,12 @@ const PedidosAjuste = () => {
     useEffect(() => {
         const fetchTotais = async () => {
             try {
-                const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', '', 1, 1)
-                const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', '', 1, 1)
-                const EmAndamento = await filterPedidos('', '', '', 'EM ANDAMENTO', '', '', 1, 1)
-                const Concluido = await filterPedidos('', '', '', 'SUCESSO CONTATO', '', '', 1, 1)
-                const Cancelado = await filterPedidos('', '', '', 'INSUCESSO CONTATO', '', '', 1, 1)
-                const response = await filterPedidos('', '', '', '', '', '', 1, 1)
+                const Ainiciar = await filterPedidos('', '', '', 'A INICIAR', '', '', '', 1, 1)
+                const Agendado = await filterPedidos('', '', '', 'AGENDADO', '', '', '', 1, 1)
+                const EmAndamento = await filterPedidos('', '', '', 'EM ANDAMENTO', '', '', '', 1, 1)
+                const Concluido = await filterPedidos('', '', '', 'SUCESSO CONTATO', '', '', '', 1, 1)
+                const Cancelado = await filterPedidos('', '', '', 'INSUCESSO CONTATO', '', '', '', 1, 1)
+                const response = await filterPedidos('', '', '', '', '', '', '', 1, 1)
                 setTotais({
                     total: response.total,
                     totalAIniciar: Ainiciar.total,
@@ -103,7 +126,7 @@ const PedidosAjuste = () => {
                     'acessos.sulAmerica': true,
                     inativo: { $ne: true }
                 })
-                setResponsaveis(response.map(analista => analista.name))
+                setResponsaveis(['A DEFINIR', ...response.map(analista => analista.name)])
             } catch (error) {
                 console.error(error);
             }
@@ -124,7 +147,7 @@ const PedidosAjuste = () => {
             setLoading(true)
             try {
 
-                const response = await filterPedidos(prestador, beneficiario, responsavel, status, tentativasDeContato, lote ? moment(lote, 'DD/MM/YYYY').format('YYYY-MM-DD') : '', page, rowsPerPage)
+                const response = await filterPedidos(prestador, beneficiario, responsavel, status, subStatus, tentativasDeContato, lote ? moment(lote, 'DD/MM/YYYY').format('YYYY-MM-DD') : '', page, rowsPerPage)
                 setPedidos(response.result)
                 setTotalPages(response.total)
             } catch (error) {
@@ -145,7 +168,7 @@ const PedidosAjuste = () => {
 
         fetchPedidos()
         fetchPrestadores()
-    }, [prestador, beneficiario, responsavel, status, tentativasDeContato, page, rowsPerPage, lote])
+    }, [prestador, beneficiario, responsavel, status, subStatus, tentativasDeContato, page, rowsPerPage, lote])
 
     return (
         <Sidebar>
@@ -215,24 +238,7 @@ const PedidosAjuste = () => {
                                     borderRadius: '10px'
                                 }
                             }} />
-                        <FormControl size="small" disabled={loading}>
-                            <InputLabel>Responsável</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="Responsável"
-                                sx={{ width: '200px', borderRadius: '10px' }}
-                                onChange={(e) => { setResponsavel(e.target.value) }}
-                                value={responsavel}
-                            >
-                                <MenuItem value={'A DEFINIR'} >A DEFINIR</MenuItem>
-                                {
-                                    responsaveis.map((analista, index) => (
-                                        <MenuItem key={index} value={analista}>{analista}</MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
+                        <SelectComponent label={'Responsável'} value={responsavel} onChange={(e) => setResponsavel(e.target.value)} options={responsaveis} loading={loading} />
                         <Autocomplete
                             size='small'
                             disablePortal
@@ -267,67 +273,17 @@ const PedidosAjuste = () => {
                         </FormControl>
                         {
                             status === 'INSUCESSO CONTATO' && (
-                                <FormControl size="small" disabled={loading}>
-                                    <InputLabel>Sub Status</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="Sub Status"
-                                        sx={{ width: 250, borderRadius: '10px' }}
-                                    // onChange={(e) => { setTentativasDeContato(e.target.value) }}
-                                    // value={tentativasDeContato}
-                                    >
-                                        <MenuItem value={''} >Todos</MenuItem>
-                                        <MenuItem value={'TRÊS TENTATIVAS'} >TRÊS TENTATIVAS</MenuItem>
-                                        <MenuItem value={'TRÊS TENTATIVAS WHATSAPP'} >TRÊS TENTATIVAS WHATSAPP</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <SelectComponent label={'Sub Status'} value={subStatus} onChange={(e) => setSubStatus(e.target.value)} options={['', ...subStatusInsucessoContato]} loading={loading} />
                             )
                         }
                         {
                             status === 'SUCESSO CONTATO' && (
-                                <FormControl size="small" disabled={loading}>
-                                    <InputLabel>Sub Status</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="Sub Status"
-                                        sx={{ width: 250, borderRadius: '10px' }}
-                                    // onChange={(e) => { setTentativasDeContato(e.target.value) }}
-                                    // value={tentativasDeContato}
-                                    >
-                                        <MenuItem value={''} >Todos</MenuItem>
-                                        <MenuItem value={'REALIZADO'} >REALIZADO</MenuItem>
-                                        <MenuItem value={'FALECIDO'} >FALECIDO</MenuItem>
-                                        <MenuItem value={'RECUSADO'} >RECUSADO</MenuItem>
-                                        <MenuItem value={'PRESTADOR DIVERGENTE'} >PRESTADOR DIVERGENTE</MenuItem>
-                                        <MenuItem value={'PARCIAL'} >PARCIAL</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <SelectComponent label={'Sub Status'} value={subStatus} onChange={(e) => setSubStatus(e.target.value)} options={['', ...subStatusSucessoContato]} loading={loading} />
                             )
                         }
                         {
                             status === '' && (
-                                <FormControl size="small" disabled={loading}>
-                                    <InputLabel>Sub Status</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="Sub Status"
-                                        sx={{ width: 250, borderRadius: '10px' }}
-                                    // onChange={(e) => { setTentativasDeContato(e.target.value) }}
-                                    // value={tentativasDeContato}
-                                    >
-                                        <MenuItem value={''} >Todos</MenuItem>
-                                        <MenuItem value={'REALIZADO'} >REALIZADO</MenuItem>
-                                        <MenuItem value={'FALECIDO'} >FALECIDO</MenuItem>
-                                        <MenuItem value={'RECUSADO'} >RECUSADO</MenuItem>
-                                        <MenuItem value={'PRESTADOR DIVERGENTE'} >PRESTADOR DIVERGENTE</MenuItem>
-                                        <MenuItem value={'PARCIAL'} >PARCIAL</MenuItem>
-                                        <MenuItem value={'TRÊS TENTATIVAS'} >TRÊS TENTATIVAS</MenuItem>
-                                        <MenuItem value={'TRÊS TENTATIVAS WHATSAPP'} >TRÊS TENTATIVAS WHATSAPP</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <SelectComponent label={'Sub Status'} value={subStatus} onChange={(e) => setSubStatus(e.target.value)} options={['', ...subStatusInsucessoContato, ...subStatusSucessoContato]} loading={loading} />
                             )
                         }
                         <Button
@@ -346,6 +302,7 @@ const PedidosAjuste = () => {
                                 setResponsavel('')
                                 setLote('')
                                 setTentativasDeContato('')
+                                setStatus('')
                             }}
                         >
                             <Clear />
@@ -396,6 +353,17 @@ const PedidosAjuste = () => {
                                     variant="filled"
                                     sx={{ bgcolor: blue[900], color: 'white' }}
                                     onDelete={() => setStatus('')}
+                                />
+                            )
+                        }
+                        {
+                            subStatus && (
+                                <Chip
+                                    label={subStatus}
+                                    color="primary"
+                                    variant="filled"
+                                    sx={{ bgcolor: blue[900], color: 'white' }}
+                                    onDelete={() => setSubStatus('')}
                                 />
                             )
                         }

@@ -1,6 +1,6 @@
 import { Cancel, Edit, FeedOutlined, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
 import { Box, Chip, Collapse, FormControl, FormControlLabel, IconButton, InputLabel, Menu, MenuItem, Radio, RadioGroup, Select, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import ModalAgendamento from "./ModalAgendamento"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
 import { BsFilePdf } from "react-icons/bs"
@@ -13,8 +13,11 @@ import ModalComponent from "../../../../components/ModalComponent/ModalComponent
 import { blue, deepOrange, orange } from "@mui/material/colors"
 import { reabrirHorarios } from "../../../../_services/teleEntrevista.service"
 import { colorStatus, colorSubStatus, subStatusInsucessoContato, subStatusSucessoContato } from "../../Pedidos/utils/types"
+import AuthContext from "../../../../context/AuthContext"
 
 const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
+
+    const {name} = useContext(AuthContext)
 
     const [openRow, setOpenRow] = useState(false)
     const [status, setStatus] = useState('')
@@ -179,7 +182,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                         return
                                     }
                                     try {
-                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: status, subStatus: subStatus, dataConclusao: moment().format('YYYY-MM-DD') })
+                                        await updatePedido(item._id, { justificativaCancelamento: justificativa, status: status, subStatus: subStatus, dataConclusao: moment().format('YYYY-MM-DD'), responsavel: name })
                                         setFlushHook(!flushHook)
                                         setJustificativa('')
                                         setStatus('')
