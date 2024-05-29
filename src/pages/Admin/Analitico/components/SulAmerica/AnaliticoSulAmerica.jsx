@@ -128,7 +128,7 @@ const AnaliticoSulAmerica = () => {
                 </Box>
             </Grid>
             <SulAmericaTable dataInicio={dataInicio} dataFim={dataFim} />
-        </Box >
+        </Box>
     )
 }
 
