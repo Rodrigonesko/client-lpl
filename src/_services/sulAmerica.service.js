@@ -84,6 +84,18 @@ export const getDatasCriacoaPedido = async () => {
     return await new ApiCall(`/pedido/dataCriacao`, url).get()
 }
 
+export const getQtdPedidoByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/quantidadePedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getPedidosPorDiaByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosPorDia?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getPedidosPorResponsavel = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosPorResponsavel?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
 /* Respostas */
 
 export const createRespostas = async (data) => {
@@ -133,3 +145,4 @@ export const updateFaturamento = async (id, data) => {
 export const deleteFaturamento = async (id) => {
     return await new ApiCall(`/faturamento/${id}`, url).delete()
 }
+
