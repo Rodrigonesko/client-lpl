@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import ModalAdicionar from "./Modais/ModalAdicionar"
 import { getContingencias } from "../../_services/contingencias.service"
 import { FaRegFilePdf } from "react-icons/fa"
+import Title from "../../components/Title/Title"
 
 const ControleContigencias = () => {
 
@@ -26,9 +27,7 @@ const ControleContigencias = () => {
             <Sidebar>
                 <Box>
                     <Container maxWidth >
-                        <Typography m={2} variant='h6'>
-                            Controle e Gestão de Contingências e Incidentes!
-                        </Typography>
+                        <Title size={'medium'}>Controle e Gestão de Contingências e Incidentes</Title>
                         <Box mt={1} mb={1}>
                             <ModalAdicionar setFlushHook={setFlushHook} contingencias={contingencias} />
                         </Box>
@@ -50,7 +49,7 @@ const ControleContigencias = () => {
                                                 </Typography>
                                             </CardContent>
                                             <CardActions>
-                                            <Button variant='contained' target='_blank' color='error' href={`${process.env.REACT_APP_API_KEY}/media${contingencia.arquivo}`} ><FaRegFilePdf /></Button>
+                                                <Button variant='contained' target='_blank' color='error' href={`${process.env.REACT_APP_API_KEY}/media${contingencia.arquivo}`} ><FaRegFilePdf /></Button>
                                             </CardActions>
                                         </Card>
                                     )

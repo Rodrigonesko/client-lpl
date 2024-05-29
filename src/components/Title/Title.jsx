@@ -8,6 +8,7 @@ const Title = ({ children, lineColor, fontColor, size }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 mt: 2,
+                mb: 2
             }}
         >
             <Typography

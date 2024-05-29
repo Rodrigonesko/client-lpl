@@ -1,15 +1,14 @@
 import Sidebar from '../../../components/Sidebar/Sidebar'
-import { Container, Typography } from '@mui/material'
+import { Container } from '@mui/material'
 import ListaTreinamentos from './ListaTreinamentos';
+import Title from '../../../components/Title/Title';
 
 const Treinamentos = () => {
     return (
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Typography mt={2} variant='h5' mb={2}>
-                        Controle de Treinamentos
-                    </Typography>
+                    <Title size={'medium'} >Controle de Treinamentos</Title>
                     <ListaTreinamentos />
                 </Container>
             </Sidebar>

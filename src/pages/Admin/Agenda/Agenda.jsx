@@ -10,6 +10,7 @@ import { createAgenda, filterAgenda, getAgenda } from "../../../_services/agenda
 import moment from "moment";
 import ModalExcluir from "./Components/ModalExcluir";
 import ModalVisualizarDatas from "./Components/ModalVisualizarDatas";
+import Title from "../../../components/Title/Title";
 
 const Agenda = () => {
 
@@ -104,32 +105,9 @@ const Agenda = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        mt: 2,
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: 'bold',
-                            position: 'relative',
-                            '&::after': {
-                                content: '""',
-                                position: 'absolute',
-                                width: '30%',
-                                height: '2px',
-                                bottom: 0,
-                                left: '0%',
-                                backgroundColor: 'currentColor',
-                                transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
-                            },
-                            '&:hover::after': {
-                                width: '100%',
-                                left: '0%',
-                            },
-                        }}
-                    >
-                        Agenda
-                    </Typography>
+                    <Title size={'medium'}>Agenda</Title>
                     <AdicionarAgenda
                         user={user}
                         setNome={setNome}

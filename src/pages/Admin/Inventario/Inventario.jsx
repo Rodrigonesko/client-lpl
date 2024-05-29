@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ModalCriarInventario from "./Modais/ModalCriarInventario";
 import TabelaInventario from "./Tabela/TabelaInventario";
+import Title from "../../../components/Title/Title";
 
 const Inventario = () => {
 
@@ -31,10 +32,7 @@ const Inventario = () => {
                 <Container maxWidth>
                     <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
                         <Box>
-                            <div className="title">
-                                <h2>Inventário LPL</h2>
-                            </div>
-                            <br />
+                            <Title size={'medium'}>Inventário LPL</Title>
                             <ModalCriarInventario setFlushHook={setFlushHook} />
                             <br />
                         </Box>
