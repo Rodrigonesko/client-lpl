@@ -1,6 +1,6 @@
 import { ApiCall } from "./api";
 const token = localStorage.getItem('token')
-const url = process.env.REACT_APP_SUL_AMERICA_SERVICE
+const url = 'http://localhost:5001'  //process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 
@@ -52,7 +52,7 @@ export const updatePedido = async (id, data) => {
     return await new ApiCall(`/pedido/${id}`, url).put(data)
 }
 
-export const filterPedidos = async (prestador, beneficiario, responsavel, status, subStatus , tentativasDeContato, dataCriacao, page, limit = 10) => {
+export const filterPedidos = async (prestador, beneficiario, responsavel, status, subStatus, tentativasDeContato, dataCriacao, page, limit = 10) => {
     return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&subStatus=${subStatus}&tentativasDeContato=${tentativasDeContato}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}`, url).get()
 }
 
@@ -118,4 +118,18 @@ export const getBeneficiarioByNameAndSortByLastMessage = async (name) => {
 
 export const updateBeneficiario = async (id, data) => {
     return await new ApiCall(`/beneficiario/${id}`, url).put(data)
+}
+
+/* Faturamento */
+
+export const getFaturamento = async (page, limit) => {
+    return await new ApiCall(`/faturamento?page=${page}&limit=${limit}`, url).get()
+}
+
+export const updateFaturamento = async (id, data) => {
+    return await new ApiCall(`/faturamento/${id}`, url).put(data)
+}
+
+export const deleteFaturamento = async (id) => {
+    return await new ApiCall(`/faturamento/${id}`, url).delete()
 }

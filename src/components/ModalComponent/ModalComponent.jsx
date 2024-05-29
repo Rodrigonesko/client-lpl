@@ -58,9 +58,13 @@ const ModalComponent = ({
                     <Button color="inherit" variant="contained" onClick={() => setOpen(false)}>Cancelar</Button>
                     <Button
                         variant="contained"
-                        onClick={() => {
-                            onAction()
-                            setOpen(false)
+                        onClick={async () => {
+                            try {
+                                await onAction()
+                                setOpen(false)
+                            } catch (error) {
+                                console.error(error)
+                            }
                         }}
                         sx={{
                             backgroundColor: saveButtonColorScheme || 'primary.main',
