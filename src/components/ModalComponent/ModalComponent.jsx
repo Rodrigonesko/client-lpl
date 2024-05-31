@@ -37,7 +37,9 @@ const ModalComponent = ({
                     : (
                         <IconButton
                             onClick={() => setOpen(true)}
-                            color={buttonColorScheme ?? 'primary'}
+                            sx={{
+                                color: buttonColorScheme || 'primary.main',
+                            }}
                         >
                             {buttonIcon}
                         </IconButton>
@@ -59,12 +61,8 @@ const ModalComponent = ({
                     <Button
                         variant="contained"
                         onClick={async () => {
-                            try {
-                                await onAction()
-                                setOpen(false)
-                            } catch (error) {
-                                console.error(error)
-                            }
+                            await onAction();
+                            setOpen(false);
                         }}
                         sx={{
                             backgroundColor: saveButtonColorScheme || 'primary.main',

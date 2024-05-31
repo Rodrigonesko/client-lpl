@@ -138,6 +138,10 @@ export const getFaturamento = async (page, limit) => {
     return await new ApiCall(`/faturamento?page=${page}&limit=${limit}`, url).get()
 }
 
+export const filterFaturamento = async (page, limit, lote, status, beneficiario) => {
+    return await new ApiCall(`/faturamento/filter?page=${page}&limit=${limit}&lote=${lote}&status=${status}&beneficiario=${beneficiario}`, url).get()
+}
+
 export const updateFaturamento = async (id, data) => {
     return await new ApiCall(`/faturamento/${id}`, url).put(data)
 }
