@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [accessLevel, setAccessLevel] = useState()
     const [enfermeiro, setEnfermeiro] = useState()
     const [elegibilidade, setElegibilidade] = useState()
-    const [acessos, setAcessos] = useState({})
+    const [acessos, setAcessos] = useState()
 
     return (
         <AuthContext.Provider value={{ authToken, setAuthToken, accessLevel, setAccessLevel, name, setName, enfermeiro, setEnfermeiro, elegibilidade, setElegibilidade, acessos, setAcessos }}>

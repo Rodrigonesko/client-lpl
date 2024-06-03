@@ -1,7 +1,6 @@
 import { ApiCall } from "./api";
 const token = localStorage.getItem('token')
-const url = 'http://localhost:5001'
-// process.env.REACT_APP_SUL_AMERICA_SERVICE
+const url = 'http://localhost:5001'  //process.env.REACT_APP_SUL_AMERICA_SERVICE
 
 /* Perguntas */
 
@@ -53,7 +52,7 @@ export const updatePedido = async (id, data) => {
     return await new ApiCall(`/pedido/${id}`, url).put(data)
 }
 
-export const filterPedidos = async (prestador, beneficiario, responsavel, status, subStatus , tentativasDeContato, dataCriacao, page, limit = 10) => {
+export const filterPedidos = async (prestador, beneficiario, responsavel, status, subStatus, tentativasDeContato, dataCriacao, page, limit = 10) => {
     return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&subStatus=${subStatus}&tentativasDeContato=${tentativasDeContato}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}`, url).get()
 }
 
@@ -83,6 +82,18 @@ export const uploadArquivoPedido = async (id, data) => {
 
 export const getDatasCriacoaPedido = async () => {
     return await new ApiCall(`/pedido/dataCriacao`, url).get()
+}
+
+export const getQtdPedidoByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/quantidadePedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getPedidosPorDiaByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosPorDia?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getPedidosPorResponsavel = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosPorResponsavel?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
 }
 
 /* Respostas */
@@ -121,14 +132,21 @@ export const updateBeneficiario = async (id, data) => {
     return await new ApiCall(`/beneficiario/${id}`, url).put(data)
 }
 
-export const getQtdPedidoByDate = async (dataInicio, dataFim) => {
-    return await new ApiCall(`/pedido/quantidadePedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+/* Faturamento */
+
+export const getFaturamento = async (page, limit) => {
+    return await new ApiCall(`/faturamento?page=${page}&limit=${limit}`, url).get()
 }
 
-export const getPedidosPorDiaByDate = async (dataInicio, dataFim) => {
-    return await new ApiCall(`/pedido/pedidosPorDia?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+export const filterFaturamento = async (page, limit, lote, status, beneficiario) => {
+    return await new ApiCall(`/faturamento/filter?page=${page}&limit=${limit}&lote=${lote}&status=${status}&beneficiario=${beneficiario}`, url).get()
 }
 
-export const getPedidosPorResponsavel = async (dataInicio, dataFim) => {
-    return await new ApiCall(`/pedido/pedidosPorResponsavel?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+export const updateFaturamento = async (id, data) => {
+    return await new ApiCall(`/faturamento/${id}`, url).put(data)
 }
+
+export const deleteFaturamento = async (id) => {
+    return await new ApiCall(`/faturamento/${id}`, url).delete()
+}
+

@@ -17,7 +17,7 @@ import AuthContext from "../../../../context/AuthContext"
 
 const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeveritySnack }) => {
 
-    const {name} = useContext(AuthContext)
+    const { name, acessos } = useContext(AuthContext)
 
     const [openRow, setOpenRow] = useState(false)
     const [status, setStatus] = useState('')
@@ -194,7 +194,8 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                                         console.log(error);
                                         setOpenSnack(true)
                                         setSeveritySnack('error')
-                                        setMsg(`Erro! ${error}`)
+                                        setMsg(`Erro! ${error.response.data.message}`)
+                                        throw error
                                     }
                                 }}
                                 size={'sm'}
@@ -263,7 +264,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         )
                     }
                     {
-                        (item.status === 'SUCESSO CONTATO' || item.status === 'INSUCESSO CONTATO') && (
+                        ((item.status === 'SUCESSO CONTATO' || item.status === 'INSUCESSO CONTATO') && acessos.administrador) && (
                             <ModalComponent
                                 buttonIcon={<Tooltip title='Reabrir' >
                                     <IconButton size='small' color='warning' >
