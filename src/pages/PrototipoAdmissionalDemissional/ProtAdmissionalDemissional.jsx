@@ -1,4 +1,4 @@
-import { Box, Container, Tab, Tabs, Typography } from "@mui/material"
+import { Box, Container, Tab, Tabs } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import CardAdmissional from "./Cards/Admissional/CardAdmissional"

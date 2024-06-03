@@ -117,15 +117,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                         Agendada
                                     </TableCell>
                                     <TableCell>
-                                        1° tentativa
-                                    </TableCell>
-                                    <TableCell>
-                                        2° tentativa
-                                    </TableCell>
-                                    <TableCell>
-                                        3° tentativa
-                                    </TableCell>
-                                    <TableCell>
+                                        Tentativas
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -173,20 +165,8 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.tentativa1}
+                                                    label={item.tentativas}
                                                 />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Chip
-                                                    label={item.tentativa2}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Chip
-                                                    label={item.tentativa3ouMais}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
                                             </TableCell>
                                         </TableRow>
                                     ))
