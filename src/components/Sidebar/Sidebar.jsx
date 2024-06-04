@@ -276,7 +276,6 @@ const Sidebar = ({ children }) => {
                                 </>
                             )
                         }
-                        <MenuItem><Link to='/sulAmerica/Pedidos'>Pedidos</Link></MenuItem>
                         <MenuItem><Link to='/sulAmerica/rendimentoSulAmerica' >Rendimento Sul América</Link></MenuItem>
                     </SubMenu>
                 </Menu>
