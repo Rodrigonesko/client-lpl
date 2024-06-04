@@ -29,10 +29,12 @@ const SindicanciaCards = ({ mes }) => {
 
     return (
         <Box
-            display={"flex"}
-            width={"100%"}
-            mt={2}
-            justifyContent={"space-between"}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mt: 2,
+            }}
             flexWrap={"wrap"}
             gap={2}
         >

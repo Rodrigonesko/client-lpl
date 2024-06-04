@@ -34,6 +34,7 @@ import moment from "moment";
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import { Delete } from "@mui/icons-material";
 import { colorStatus, colorSubStatus } from "../Pedidos/utils/types";
+import ModalGerarRelatorio from "./Components/ModalGerarRelatorio";
 
 // Utilizando React.memo para memorizar o componente Row
 const Row = React.memo(({ pedido, control, index, remove, handleFaturar }) => {
@@ -295,6 +296,7 @@ const Faturamento = () => {
                     <Title fontColor={blue[900]} lineColor={orange[900]} size={"small"}>
                         Faturamento Sul America
                     </Title>
+                    <ModalGerarRelatorio lotes={lotes} />
                 </Box>
                 <Box>
                     <Box
