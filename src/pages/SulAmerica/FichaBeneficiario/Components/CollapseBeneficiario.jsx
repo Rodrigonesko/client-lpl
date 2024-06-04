@@ -2,16 +2,13 @@ import { Box, Button, Collapse, Divider, Grid, Table, TableBody, TableCell, Tabl
 import moment from "moment"
 import { valueToBRL } from "../../../../functions/functions"
 import { blue } from "@mui/material/colors"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import Toast from "../../../../components/Toast/Toast"
-import { updatePedido } from "../../../../_services/sulAmerica.service"
-import AuthContext from "../../../../context/AuthContext"
+import { adicionarTentativaDeContato } from "../../../../_services/sulAmerica.service"
 import ModalUploadArquivo from "./ModalUploadArquivo"
 import { CloudDownload } from "@mui/icons-material"
 
 const CollapseBeneficiario = ({ item, openRow }) => {
-
-    const { name } = useContext(AuthContext)
 
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState('')
@@ -22,12 +19,8 @@ const CollapseBeneficiario = ({ item, openRow }) => {
 
     const handleAdicionarTentaivaDeContato = async () => {
         try {
-            const data = {
-                responsavel: name,
-                data: moment().format('YYYY-MM-DD HH:mm:ss')
-            }
-            await updatePedido(item._id, { tentativasDeContato: [...tentativasDeContato, data], status: item.status === 'A INICIAR' ? 'EM ANDAMENTO' : item.status, responsavel: name })
-            setTentativasDeContato([...tentativasDeContato, data])
+            const response = await adicionarTentativaDeContato(item._id)
+            setTentativasDeContato(response.tentativasDeContato)
             setSeverity('success')
             setMsg('Tentativa de contato adicionada com sucesso')
             setOpen(true)

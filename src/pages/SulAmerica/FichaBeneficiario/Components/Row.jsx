@@ -264,7 +264,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                         )
                     }
                     {
-                        ((item.status === 'SUCESSO CONTATO' || item.status === 'INSUCESSO CONTATO') && acessos.administrador) && (
+                        ((item.status === 'SUCESSO CONTATO' || item.status === 'INSUCESSO CONTATO') && acessos?.administrador) && (
                             <ModalComponent
                                 buttonIcon={<Tooltip title='Reabrir' >
                                     <IconButton size='small' color='warning' >
