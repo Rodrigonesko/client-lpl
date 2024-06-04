@@ -4,6 +4,7 @@ import moment from "moment"
 import { getUsers } from "../../../../_services/user.service"
 import ModalUploadBancoHoras from "../Modais/ModalUpload"
 import ModalHorarioPonto from "../Modais/ModalHorarioPonto"
+import Title from "../../../../components/Title/Title"
 
 const HorarioSaida = () => {
 
@@ -44,34 +45,11 @@ const HorarioSaida = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    mt: 2,
                     mb: 2
                 }}
             >
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: 'bold',
-                        position: 'relative',
-                        '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            width: '30%',
-                            height: '2px',
-                            bottom: 0,
-                            left: '0%',
-                            backgroundColor: 'currentColor',
-                            transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
-                        },
-                        '&:hover::after': {
-                            width: '100%',
-                            left: '0%',
-                        },
-                    }}
-                >
-                    Controle Saída
-                </Typography>
-                <Typography variant="body2" color='gray' m={2} >
+                <Title size={'medium'} >Controle Saída</Title>
+                <Typography variant="body2" color='gray' >
                     Atualizado dia - {dataBancoHoras ? moment(dataBancoHoras).format('DD/MM/YYYY') : ''}
                 </Typography>
             </Box>

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { getPoliticas, updatePoliticas } from '../../../_services/politicas.service'
 import { FaRegFilePdf, FaRegEyeSlash } from 'react-icons/fa'
 import ModalFaltouAssinar from './Modals/ModalFaltouAssinar'
+import Title from '../../../components/Title/Title'
 
 const ControlePoliticas = () => {
 
@@ -37,9 +38,7 @@ const ControlePoliticas = () => {
         <Sidebar>
             <Box width='100%' height='100vh' overflow='auto'>
                 <Container>
-                    <Typography m={2} variant='h6'>
-                        Controle e Gestão de Políticas
-                    </Typography>
+                    <Title size={'medium'} >Controle e Gestão de Políticas</Title>
                     <Divider />
                     <Box mt={1} mb={1}>
                         <ModalAdicionarPolitica setFlushHook={setFlushHook} politicas={politicas} />

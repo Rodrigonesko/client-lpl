@@ -115,10 +115,10 @@ const RsdTable = ({ mes }) => {
                                         Total
                                     </TableCell>
                                     <TableCell>
-                                        Indeferidos
+                                        Cancelados
                                     </TableCell>
                                     <TableCell>
-                                        Cancelados
+                                        Indeferidos
                                     </TableCell>
                                     <TableCell>
                                         Aguardando Comprovante
@@ -171,12 +171,12 @@ const RsdTable = ({ mes }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.indeferidos}
+                                                    label={item.cancelados}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.cancelados}
+                                                    label={item.indeferidos}
                                                 />
                                             </TableCell>
                                             <TableCell>

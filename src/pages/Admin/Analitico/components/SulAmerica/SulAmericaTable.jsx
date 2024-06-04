@@ -117,6 +117,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                         Agendada
                                     </TableCell>
                                     <TableCell>
+                                        Tentativas
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -149,12 +150,12 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.concluidos}
+                                                    label={item.sucessoContato}
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={item.cancelados}
+                                                    label={item.insucessoContato}
                                                 />
                                             </TableCell>
                                             <TableCell>
@@ -163,6 +164,9 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                                 />
                                             </TableCell>
                                             <TableCell>
+                                                <Chip
+                                                    label={item.tentativas}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     ))

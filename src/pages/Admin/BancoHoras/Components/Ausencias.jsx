@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import ModalImportarAusencias from "../Modais/ModalImportarAusencias"
 import { getFaltas, getUsers } from "../../../../_services/user.service"
 import { data } from "jquery"
+import Title from "../../../../components/Title/Title"
 
 const Ausencias = () => {
 
@@ -44,34 +45,11 @@ const Ausencias = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    mt: 2,
                     mb: 2
                 }}
             >
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: 'bold',
-                        position: 'relative',
-                        '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            width: '30%',
-                            height: '2px',
-                            bottom: 0,
-                            left: '0%',
-                            backgroundColor: 'currentColor',
-                            transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
-                        },
-                        '&:hover::after': {
-                            width: '100%',
-                            left: '0%',
-                        },
-                    }}
-                >
-                    Ausências
-                </Typography>
-                <Typography variant="body2" color='gray' m={2} >
+                <Title size={'medium'} >Ausências</Title>
+                <Typography variant="body2" color='gray'  >
                     Atualizado dia - {dataBancoHoras ? moment(dataBancoHoras).format('DD/MM/YYYY') : ''}
                 </Typography>
             </Box>
@@ -81,8 +59,8 @@ const Ausencias = () => {
                         <TableRow>
                             <TableCell>Colaborador</TableCell>
                             <TableCell>Data Ausência</TableCell>
-                            <TableCell>Tipo de Ausência</TableCell> 
-                            <TableCell>Setor</TableCell> 
+                            <TableCell>Tipo de Ausência</TableCell>
+                            <TableCell>Setor</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

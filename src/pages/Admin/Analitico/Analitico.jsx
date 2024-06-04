@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { Box, Container } from "@mui/system"
-import { IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material"
+import { IconButton, Tab, Tabs, Tooltip } from "@mui/material"
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { red } from "@mui/material/colors";
 import AnaliticoTele from "./components/Tele/AnaliticoTele";
@@ -11,6 +11,7 @@ import AnaliticoElegibilidade from "./components/Elegibilidade/AnaliticoElegibil
 import AnaliticoRsd from "./components/RSD/AnaliticoRsd";
 import AnaliticoSindicancia from "./components/Sindicancia/AnaliticoSindicancia";
 import AnaliticoSulAmerica from "./components/SulAmerica/AnaliticoSulAmerica";
+import Title from "../../../components/Title/Title";
 
 const tabStyle = {
     '&:hover': {
@@ -42,32 +43,9 @@ const Analitico = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        mt: 2,
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: 'bold',
-                            position: 'relative',
-                            '&::after': {
-                                content: '""',
-                                position: 'absolute',
-                                width: '30%',
-                                height: '2px',
-                                bottom: 0,
-                                left: '0%',
-                                backgroundColor: 'currentColor',
-                                transition: 'width 0.3s ease-in-out, left 0.3s ease-in-out',
-                            },
-                            '&:hover::after': {
-                                width: '100%',
-                                left: '0%',
-                            },
-                        }}
-                    >
-                        Analítico
-                    </Typography>
+                    <Title size={'medium'}>Analítico</Title>
                     <Tooltip title={fullWidth ? 'Minimizar' : 'Maximizar'}>
                         <IconButton onClick={() => setFullWidth(!fullWidth)}>
                             <ExpandIcon sx={{

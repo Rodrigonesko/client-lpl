@@ -3,7 +3,7 @@ import moment from "moment"
 import { useEffect, useState } from "react"
 import SulAmericaCards from "./SulAmericaCards"
 import { Search } from "@mui/icons-material"
-import { getPedidosPorDiaByDate, getPedidosPorResponsavel, getQtdPedidoByDate } from "../../../../../_services/sulAmerica.service"
+import { getPedidosPorDiaByDate, getQtdPedidoByDate } from "../../../../../_services/sulAmerica.service"
 import Chart from 'react-apexcharts';
 import { blue, grey, red } from "@mui/material/colors"
 import SulAmericaTable from "./SulAmericaTable"
@@ -20,7 +20,6 @@ const AnaliticoSulAmerica = () => {
         total: 0
     })
     const [pedidosPorDia, setPedidosPorDia] = useState([])
-    const [pedidosPorResponsavel, setPedidosPorResponsavel] = useState([])
 
     const handleFilter = async () => {
 
@@ -41,8 +40,7 @@ const AnaliticoSulAmerica = () => {
             setData(result)
             const resultPedidosPorDia = await getPedidosPorDiaByDate(dataInicio, dataFim)
             setPedidosPorDia(resultPedidosPorDia)
-            const resultPorColaborador = await getPedidosPorResponsavel(dataInicio, dataFim)
-            setPedidosPorResponsavel(resultPorColaborador)
+            console.log(resultPedidosPorDia);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -110,11 +108,11 @@ const AnaliticoSulAmerica = () => {
                         height='300px'
                         series={[
                             {
-                                name: 'Concluídos',
+                                name: 'Sucesso Contato',
                                 data: pedidosPorDia.map((pedido) => pedido.concluidos)
                             },
                             {
-                                name: 'Cancelados',
+                                name: 'Insucesso Contato',
                                 data: pedidosPorDia.map((pedido) => pedido.cancelados)
                             }
                         ]}
