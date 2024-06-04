@@ -158,3 +158,7 @@ export const deleteFaturamento = async (id) => {
     return await new ApiCall(`/faturamento/${id}`, url).delete()
 }
 
+export const findByDate = async (lote) => {
+    return await new ApiCall(`/faturamento/date/${lote}`, url).get()
+}
+
