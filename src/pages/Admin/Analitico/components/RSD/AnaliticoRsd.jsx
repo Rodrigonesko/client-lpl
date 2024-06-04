@@ -18,15 +18,16 @@ const AnaliticoRsd = () => {
                 justifyContent: 'space-between',
                 mt: 2,
             }}>
-
                 <TextField
                     label='Mês'
-                    focused
                     type='month'
                     variant='standard'
                     size='small'
                     value={mes}
                     onChange={(e) => { setMes(e.target.value) }}
+                    InputLabelProps={{
+                        shrink: true
+                    }}
                 />
             </Box>
             <RsdCards mes={mes} key={`card-${mes}`} />

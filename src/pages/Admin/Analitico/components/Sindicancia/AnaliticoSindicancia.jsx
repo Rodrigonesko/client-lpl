@@ -10,24 +10,22 @@ const AnaliticoSindicancia = () => {
     const [mes, setMes] = useState(moment().format('YYYY-MM'))
 
     return (
-        <Box
-            sx={{
-                width: '100%',
-            }}
-        >
+        <Box>
             <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 mt: 2,
             }}>
-
                 <TextField
                     label='Mês'
                     type='month'
                     size='small'
                     value={mes}
                     onChange={(e) => { setMes(e.target.value) }}
+                    InputLabelProps={{
+                        shrink: true
+                    }}
                 />
             </Box>
             <SindicanciaCards mes={mes} key={`card-${mes}`} />

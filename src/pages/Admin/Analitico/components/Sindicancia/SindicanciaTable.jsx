@@ -209,7 +209,6 @@ const SindicanciaTable = ({ mes }) => {
                     />
                 </Container>
             </Dialog>
-
         </Box>
 
     )
