@@ -121,7 +121,7 @@ const Row = React.memo(({ pedido, control, index, remove, handleFaturar }) => {
                     saveButtonColorScheme={red[900]}
                     onAction={async () => {
                         try {
-                            // await deleteFaturamento(pedido._id);
+                            await deleteFaturamento(pedido._id);
                             remove(index);
                         } catch (error) {
                             console.error(error);
