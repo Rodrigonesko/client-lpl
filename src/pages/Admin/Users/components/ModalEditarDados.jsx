@@ -135,6 +135,19 @@ const ModalEditarDados = ({ user, open, handleClose, celulas, setFlushHook }) =>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                label="Data de Demissão"
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                name="dataDemissao"
+                                value={userData.dataDemissao}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
                                 label="Matricula"
                                 value={userData.matricula}
                                 onChange={handleInputChange}
