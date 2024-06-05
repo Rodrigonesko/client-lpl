@@ -51,3 +51,7 @@ export const subStatusInsucessoContato = [
     'TRÊS TENTATIVAS',
     'TRÊS TENTATIVAS WHATSAPP'
 ]
+
+export function valueToBRL(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}

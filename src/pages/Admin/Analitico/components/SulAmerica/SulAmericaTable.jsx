@@ -1,11 +1,7 @@
 import React, { forwardRef, useEffect } from 'react';
-import { AppBar, Box, Chip, CircularProgress, Container, Dialog, FormControlLabel, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@mui/material';
-import { Avatar, IconButton, Tooltip } from '@mui/material';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
+import { Box, Chip, CircularProgress, Dialog, FormControlLabel, Slide, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Avatar } from '@mui/material';
 import { useState } from 'react';
-import { green, grey } from '@mui/material/colors';
-import CloseIcon from '@mui/icons-material/Close';
-import ProducaoIndividualSindi from '../../../../../components/ProducaoIndividual/ProducaoIndividualSindi/ProducaoIndividualSindi';
 import { getPedidosPorResponsavel } from '../../../../../_services/sulAmerica.service';
 
 
@@ -19,7 +15,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
     const [loadingTabela, setLoadingTabela] = useState(false)
     const [dense, setDense] = useState(true)
     const [openDialog, setOpenDialog] = useState(false)
-    const [analistaSelecionado, setAnalistaSelecionado] = useState('')
+    // const [analistaSelecionado, setAnalistaSelecionado] = useState('')
 
     const getAnalistasSulAmerica = async () => {
         try {
@@ -70,7 +66,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                                 mt: 2,
                                 mb: 1,
                             }}>
-                                Média Analistas Sindicância
+                                Média Analistas Sul América
                             </Typography>
                             {/* <Chip
                                 label={`Média Total: ${media.toFixed(2)}`}
@@ -182,7 +178,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                 onClose={() => setOpenDialog(false)}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: 'relative' }}>
+                {/* <AppBar sx={{ position: 'relative' }}>
                     <Toolbar
                         sx={{
                             bgcolor: grey[500]
@@ -200,7 +196,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
                             Produção - {analistaSelecionado}
                         </Typography>
                     </Toolbar>
-                </AppBar>
+                </AppBar> */}
             </Dialog>
 
         </Box>

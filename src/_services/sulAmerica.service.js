@@ -100,6 +100,15 @@ export const adicionarTentativaDeContato = async (id) => {
     return await new ApiCall(`/pedido/tentativaContato/${id}`, url).patch()
 }
 
+export const getPedidosComMaiorValor = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/pedidosComMaiorValor?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getTentaivasDeContato = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/tentativasDeContato?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+
+}
+
 /* Respostas */
 
 export const createRespostas = async (data) => {
@@ -112,6 +121,10 @@ export const updateRespostas = async (id, data) => {
 
 export const getRespostasByPedidoId = async (id) => {
     return await new ApiCall(`/resposta/pedido/${id}`, url).get()
+}
+
+export const getEstatisticasRespostasByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/resposta/estatisticas/estatisticasByDate?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
 }
 
 /* Beneficiários */
@@ -134,6 +147,10 @@ export const getBeneficiarioByNameAndSortByLastMessage = async (name) => {
 
 export const updateBeneficiario = async (id, data) => {
     return await new ApiCall(`/beneficiario/${id}`, url).put(data)
+}
+
+export const getBeneficiariosComMensagem = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/beneficiario/beneficiariosComMensagens?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
 }
 
 /* Faturamento */
@@ -162,3 +179,12 @@ export const findByDate = async (lote) => {
     return await new ApiCall(`/faturamento/date/${lote}`, url).get()
 }
 
+/* Prestadores */
+
+export const getQtdPrestadoresByUf = async () => {
+    return await new ApiCall(`/prestador/uf/uf`, url).get()
+}
+
+export const getSomaPrestadoresByDate = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/findPrestadoresConcluidoseCancelados?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}

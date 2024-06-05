@@ -170,7 +170,7 @@ import FormularioSulAmerica from "./pages/SulAmerica/Formulario/Index";
 import EditFormulario from "./pages/SulAmerica/EditarFormulario/Index";
 import FichaBeneficiarioSulAmerica from "./pages/SulAmerica/FichaBeneficiario/Index";
 import PedidosSulAmerica from "./pages/SulAmerica/Pedidos/Index";
-import RendimentoSulAmerica from "./pages/SulAmerica/RendimentoSulAmerica/RendimentoSulAmerica";
+import RendimentoSulAmerica from "./pages/SulAmerica/RendimentoSulAmerica/Index";
 import FaturamentoSulamerica from "./pages/SulAmerica/Faturamento/Index";
 
 const AppRoutes = () => {
