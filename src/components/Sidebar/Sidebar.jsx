@@ -17,6 +17,7 @@ import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import { deepPurple, green } from "@mui/material/colors";
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
 import SouthAmericaOutlinedIcon from '@mui/icons-material/SouthAmericaOutlined';
+import { PriceCheckOutlined } from "@mui/icons-material";
 
 let socket
 let socketTele
@@ -278,6 +279,13 @@ const Sidebar = ({ children }) => {
                         }
                         <MenuItem><Link to='/sulAmerica/rendimentoSulAmerica' >Rendimento Sul América</Link></MenuItem>
                     </SubMenu>
+                    {acessos?.administrador && (
+                        <SubMenu title={"RSD Bradesco"} icon={<PriceCheckOutlined />} >
+                            <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
+                            <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
+                        </SubMenu>
+
+                    )}
                 </Menu>
             </ProSidebar>
             <Box width={'100%'} >

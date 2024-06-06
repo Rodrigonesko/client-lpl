@@ -1,5 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField, Grid, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup, FormControlLabel, Checkbox, Fade } from "@mui/material"
-import EditIcon from "@mui/icons-material/Edit"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Grid, FormControl, InputLabel, Select, MenuItem, FormLabel, FormGroup, FormControlLabel, Checkbox, Fade } from "@mui/material"
 import { useEffect, useState } from "react";
 import { green, grey } from "@mui/material/colors";
 import { updateInfoUser } from "../../../../_services/user.service";
