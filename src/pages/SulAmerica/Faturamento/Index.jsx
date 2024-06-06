@@ -174,6 +174,7 @@ const Faturamento = () => {
     const [severity, setSeverity] = useState("success");
     const [lote, setLote] = useState("");
     const [status, setStatus] = useState("A FATURAR");
+    const [beneficiario, setBeneficiario] = useState("");
 
     useEffect(() => {
         if (acessos) {
@@ -201,9 +202,9 @@ const Faturamento = () => {
     const fetch = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await filterFaturamento(page, limit, lote, status, "");
+            const response = await filterFaturamento(page, limit, lote, status, beneficiario);
             setTotal(response.total);
-            replace(response.result); // Use replace instead of append to replace all the fields at once
+            replace(response.result);
             setLoading(false);
         } catch (error) {
             console.error(error);
@@ -211,7 +212,7 @@ const Faturamento = () => {
             setMessage("Erro ao buscar pedidos");
             setSeverity("error");
         }
-    }, [page, limit, replace, lote, status]);
+    }, [page, limit, replace, lote, status, beneficiario]);
 
     useEffect(() => {
         fetch();
@@ -234,7 +235,7 @@ const Faturamento = () => {
             setOpenToast(true);
             setMessage('Pedido faturado com sucesso');
             setSeverity("success");
-            // Update the specific field in the table
+
             const updatedFields = [...getValues("pedidos")];
             updatedFields[index].status = "FATURADO";
             updatedFields[index].nf = data.nf;
@@ -380,6 +381,23 @@ const Faturamento = () => {
                                 </Box>
                             </ModalComponent>
                         </Box>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: 2,
+                        }}
+                    >
+                        <TextField
+                            size="small"
+                            label="Beneficiário"
+                            variant="outlined"
+                            value={beneficiario}
+                            onChange={(e) => setBeneficiario(e.target.value)}
+                            fullWidth
+                        />
                     </Box>
                     <Box
                         sx={{
