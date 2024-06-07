@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { AlignHorizontalLeft, Cancel, Done, Search } from "@mui/icons-material";
+import { AlignHorizontalLeft, AutorenewOutlined, Cancel, Done, Search } from "@mui/icons-material";
 import { blue, deepOrange, deepPurple, green, grey, red } from "@mui/material/colors";
 import Chart from 'react-apexcharts';
 import { useEffect, useState } from "react";
@@ -22,6 +22,9 @@ const Dashboard = () => {
         concluidos: 0,
         cancelados: 0,
         total: 0,
+        aIniciar: 0,
+        emAndamento: 0,
+        agendados: 0,
         realizados: 0,
         falecidos: 0,
         recusados: 0,
@@ -30,6 +33,7 @@ const Dashboard = () => {
         tresTentativas: 0,
         tresTentativasWhatsapp: 0,
     })
+    const [totalEmAndamentoAiniciarAgendado, setTotalEmAndamentoAiniciarAgendado] = useState([])
     const [estatisticasRespostas, setEstatisticasRespostas] = useState([])
     const [prestadores, setPrestadores] = useState([{}])
     const [clinicas, setClinicas] = useState([])
@@ -58,6 +62,7 @@ const Dashboard = () => {
             setPrestadores(resultPrestadores)
             const result = await getQtdPedidoByDate(dataInicio, dataFim)
             setData(result)
+            setTotalEmAndamentoAiniciarAgendado(data.emAndamento + data.aIniciar + data.agendados)
             const resultClinicas = await getSomaPrestadoresByDate(dataInicio, dataFim)
             setClinicas(resultClinicas)
             const resultPedidosPorDia = await getPedidosPorDiaByDate(dataInicio, dataFim)
@@ -78,7 +83,7 @@ const Dashboard = () => {
         if (dataInicio && dataFim) {
             handleFilter()
         }
-    }, [])
+    }, [totalEmAndamentoAiniciarAgendado])
 
     return (
         <Box m={1} mt={4}>
@@ -115,6 +120,7 @@ const Dashboard = () => {
             <Grid container spacing={2} mt={1}>
                 <CardDashboardSulAmerica title='Sucesso Contato' value={data.concluidos} icon={<Done color="success" />} />
                 <CardDashboardSulAmerica title='Insucesso Contato' value={data.cancelados} icon={<Cancel color="error" />} />
+                <CardDashboardSulAmerica title='Em Andamento' value={totalEmAndamentoAiniciarAgendado} icon={<AutorenewOutlined color="primary" />} />
                 <CardDashboardSulAmerica title='Total' value={data.total} icon={<AlignHorizontalLeft color="warning" />} />
                 <Grid item xs={12} sm={12} lg={4}
                 >
@@ -132,24 +138,26 @@ const Dashboard = () => {
                             series={[
                                 data.concluidos,
                                 data.cancelados,
-                                data.aIniciar,
-                                data.emAndamento,
-                                data.agendados,
+                                // data.aIniciar,
+                                // data.emAndamento,
+                                // data.agendados,
+                                totalEmAndamentoAiniciarAgendado
                             ]}
                             options={{
                                 labels: [
                                     'Sucesso Contato',
                                     'Insucesso Contato',
-                                    'A Iniciar',
+                                    // 'A Iniciar',
+                                    // 'Em Andamento',
+                                    // 'Agendados',
                                     'Em Andamento',
-                                    'Agendados',
                                 ],
                                 colors: [
                                     green[900],
                                     red[900],
-                                    deepPurple[500],
+                                    // deepPurple[500],
                                     deepOrange[300],
-                                    blue[200],
+                                    // blue[200],
                                 ]
                             }}
                         />
