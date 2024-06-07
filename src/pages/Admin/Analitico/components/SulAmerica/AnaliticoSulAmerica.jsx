@@ -17,8 +17,12 @@ const AnaliticoSulAmerica = () => {
     const [data, setData] = useState({
         concluidos: 0,
         cancelados: 0,
-        total: 0
+        total: 0,
+        aIniciar: 0,
+        emAndamento: 0,
+        agendados: 0,
     })
+    const [totalEmAndamentoAiniciarAgendado, setTotalEmAndamentoAiniciarAgendado] = useState([])
     const [pedidosPorDia, setPedidosPorDia] = useState([])
 
     const handleFilter = async () => {
@@ -38,6 +42,7 @@ const AnaliticoSulAmerica = () => {
         try {
             const result = await getQtdPedidoByDate(dataInicio, dataFim)
             setData(result)
+            setTotalEmAndamentoAiniciarAgendado(data.emAndamento + data.aIniciar + data.agendados)
             const resultPedidosPorDia = await getPedidosPorDiaByDate(dataInicio, dataFim)
             setPedidosPorDia(resultPedidosPorDia)
             console.log(resultPedidosPorDia);
@@ -52,7 +57,7 @@ const AnaliticoSulAmerica = () => {
         if (dataInicio && dataFim) {
             handleFilter()
         }
-    }, [])
+    }, [totalEmAndamentoAiniciarAgendado])
 
     return (
         <Box m={1} mt={4}>
@@ -89,7 +94,7 @@ const AnaliticoSulAmerica = () => {
                 </Button>
             </Box>
             <Grid container spacing={2} mt={1}>
-                <SulAmericaCards data={data} dataInicio={dataInicio} dataFim={dataFim} key={`card-${dataInicio}+${dataFim}`} />
+                <SulAmericaCards data={data} dataInicio={dataInicio} dataFim={dataFim} totalEmAndamentoAiniciarAgendado={totalEmAndamentoAiniciarAgendado} key={`card-${dataInicio}+${dataFim}`} />
             </Grid>
             <Grid
                 item xs={12} sm={12} lg={8} mt={2}
