@@ -173,6 +173,11 @@ import PedidosSulAmerica from "./pages/SulAmerica/Pedidos/Index";
 import RendimentoSulAmerica from "./pages/SulAmerica/RendimentoSulAmerica/Index";
 import FaturamentoSulamerica from "./pages/SulAmerica/Faturamento/Index";
 
+/* RsdBradesco */
+
+import RsdBradesco from "./pages/RsdBradesco/PaginaPrincipal/Index";
+import UploadBradesco from "./pages/RsdBradesco/Upload/Index";
+
 const AppRoutes = () => {
     return (
         <AuthProvider>
@@ -180,6 +185,14 @@ const AppRoutes = () => {
                 <Route exact path="/login" element={<Login />} />
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
+
+                <Route exact path="/bradesco/rsdBradesco" element={<ProtectedRoute>
+                    <RsdBradesco />
+                </ProtectedRoute>} />
+                <Route exact path="/bradesco/uploadBradesco" element={<ProtectedRoute>
+                    <UploadBradesco />
+                </ProtectedRoute>} />
+
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>
                     <ConfiguracaoQuestionario />
