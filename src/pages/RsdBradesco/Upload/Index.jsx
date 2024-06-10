@@ -4,7 +4,7 @@ import { blue, grey, red } from "@mui/material/colors"
 import { useState } from "react"
 import { ajustarCpf } from "../../../functions/functions"
 import * as XLSX from 'xlsx';
-import { createPedidosByPlanilha } from "../../../_services/sulAmerica.service"
+import { uploadPedidos } from "../../../_services/rsdBradesco.service"
 
 import bradesco from "../../../imgs/bradesco.png"
 
@@ -31,16 +31,16 @@ const RsdBradesco = () => {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 let rows = XLSX.utils.sheet_to_json(sheet);
-                rows = rows.map(row => {
-                    return {
-                        ...row,
-                        cpfSegurado: ajustarCpf(row.NUM_CPF),
-                    }
-                });
-                const result = await createPedidosByPlanilha(rows); // Modificar esse create
+                const result = await uploadPedidos(rows); // Modificar esse create
                 console.log(result);
                 setMessage({
-                    text: 'Arquivo enviado com sucesso - ' + result + ' propostas criadas',
+                    text: <Box>
+                        <Typography>{result.countPedido} pedidos criados</Typography>
+                        <Typography>{result.countProtocolo} protocolos criados</Typography>
+                        <Typography>{result.countPacote} pacotes criados</Typography>
+                        <Typography>{result.countSegurado} novos beneficiários</Typography>
+                        <Typography>{result.countPrestador} novos prestadores</Typography>
+                    </Box>,
                     severity: 'success'
                 });
             } catch (error) {
