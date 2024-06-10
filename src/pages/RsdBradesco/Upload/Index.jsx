@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Input, Paper, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import { blue, grey, red } from "@mui/material/colors"
+import { blue, grey } from "@mui/material/colors"
 import { useState } from "react"
 import { ajustarCpf } from "../../../functions/functions"
 import * as XLSX from 'xlsx';
@@ -31,6 +31,11 @@ const RsdBradesco = () => {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 let rows = XLSX.utils.sheet_to_json(sheet);
+                // rows = rows.map(row => {
+                //     return {
+                //         ...row,
+                //         "CPF Segurado": ajustarCpf(row["CPF Segurado"]),
+                //     }});
                 const result = await uploadPedidos(rows); // Modificar esse create
                 console.log(result);
                 setMessage({
