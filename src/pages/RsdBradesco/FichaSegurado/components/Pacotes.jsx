@@ -1,5 +1,5 @@
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
-import { Box, Chip, IconButton, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@mui/material"
+import { ArrowForward, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
+import { Box, Button, Chip, IconButton, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import { colorStatusRsdBradesco } from "../utils/types"
 import CollapseProtocolos from "./CollapseProtocolos"
@@ -11,7 +11,7 @@ const Pacotes = ({ pacote, setPacotes }) => {
     return (
         <>
             <TableRow>
-                <TableCell>
+                <TableCell align="left" >
                     <IconButton
                         size="small"
                         onClick={() => {
@@ -23,28 +23,27 @@ const Pacotes = ({ pacote, setPacotes }) => {
                         </Tooltip>
                     </IconButton>
                 </TableCell>
-                <TableCell>{pacote.codigo}</TableCell>
-                <TableCell>{pacote.responsavel}</TableCell>
+                <TableCell align="center">{pacote.codigo}</TableCell>
+                <TableCell align="center">{pacote.responsavel}</TableCell>
                 <TableCell
                     align="center"
                 >
-                    <Box
+                    <Chip
+                        label={pacote.status}
                         sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
+                            color: 'white',
+                            backgroundColor: colorStatusRsdBradesco[pacote.status],
                         }}
-                    >
-                        <Chip
-                            label={pacote.status}
-                            sx={{
-                                color: 'white',
-                                backgroundColor: colorStatusRsdBradesco[pacote.status],
-                            }}
-                            size="small"
-                        />
-                    </Box>
+                        size="small"
+                    />
                 </TableCell>
-                <TableCell></TableCell>
+                <TableCell
+                    align="right"
+                >
+                    <Button>
+                        <ArrowForward />
+                    </Button>
+                </TableCell>
             </TableRow>
             <CollapseProtocolos protocolo={pacote.protocolos} openRow={openRow} />
         </>

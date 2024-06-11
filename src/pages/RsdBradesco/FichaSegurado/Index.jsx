@@ -1,7 +1,7 @@
 import { Box, Divider, TextField, Grid, Table, TableHead, TableCell, TableBody, TableRow, Paper, IconButton, Tooltip, Button } from "@mui/material";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Title from "../../../components/Title/Title";
-import { indigo, red } from "@mui/material/colors";
+import { deepPurple, indigo, red } from "@mui/material/colors";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPacotesBySegurado, getSeguradoById, getSeguradoByNome, updateSegurado } from "../../../_services/rsdBradesco.service";
@@ -185,7 +185,7 @@ const FichaSegurado = () => {
                 </Title>
                 <Divider />
                 <form onSubmit={handleSubmit(onSubmit)} >
-                  <Grid
+                    <Grid
                         container
                         spacing={2}
                         mt={2}
@@ -230,8 +230,8 @@ const FichaSegurado = () => {
                         </Grid>
                     </Grid>
                 </form>
-                <Table size="small" component={Paper} elevation={7} sx={{ mb: 5, borderRadius: '15px', mt: 3 }}>
-                    <TableHead sx={{ background: `linear-gradient(45deg, ${indigo[800]} 30%, ${red[700]} 75%)` }}>
+                <Table size="small" sx={{ mb: 5, mt: 3 }}>
+                    <TableHead sx={{ background: `linear-gradient(45deg, ${red[800]} 80%, ${deepPurple[700]} 95%)` }}>
                         <TableRow>
                             <TableCell ></TableCell>
                             <TableCell sx={{ color: 'white' }}>Código</TableCell>

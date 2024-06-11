@@ -1,6 +1,6 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Box, Chip, Collapse, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from "@mui/material"
-import { indigo, red } from "@mui/material/colors";
+import { deepPurple, indigo, red } from "@mui/material/colors";
 import { useState } from "react";
 import { colorStatusRsdBradesco } from "../utils/types";
 import SubCollapsePedidos from "./SubCollapsePedidos";
@@ -18,17 +18,16 @@ const CollapseProtocolos = ({ protocolo, openRow }) => {
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
                         <Collapse in={openRow} timeout="auto" unmountOnExit>
                             <Table size="small" >
-                                <TableHead sx={{ background: `linear-gradient(45deg, ${indigo[800]} 30%, ${red[700]} 75%)` }}>
+                                <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
                                     <TableRow>
                                         <TableCell></TableCell>
-                                        <TableCell sx={{ color: 'white' }} >Protocolo</TableCell>
+                                        <TableCell align="center" sx={{ color: 'white' }} >Protocolo</TableCell>
                                         <TableCell align="center" sx={{ color: 'white' }} >Status</TableCell>
-                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     <TableRow key={index._id}>
-                                        <TableCell><IconButton
+                                        <TableCell align="left"><IconButton
                                             size="small"
                                             onClick={() => {
                                                 setOpenSubRow(!openSubRow)
@@ -39,35 +38,27 @@ const CollapseProtocolos = ({ protocolo, openRow }) => {
                                             </Tooltip>
                                         </IconButton>
                                         </TableCell>
-                                        <TableCell>{protocolo.codigo}</TableCell>
+                                        <TableCell align="center">{protocolo.codigo}</TableCell>
                                         <TableCell
                                             align="center"
                                         >
-                                            <Box
+                                            <Chip
+                                                label={protocolo.status}
                                                 sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
+                                                    color: 'white',
+                                                    backgroundColor: colorStatusRsdBradesco[protocolo.status],
                                                 }}
-                                            >
-                                                <Chip
-                                                    label={protocolo.status}
-                                                    sx={{
-                                                        color: 'white',
-                                                        backgroundColor: colorStatusRsdBradesco[protocolo.status],
-                                                    }}
-                                                    size="small"
-                                                />
-                                            </Box>
+                                                size="small"
+                                            />
                                         </TableCell>
-                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableBody >
                             </Table>
+                            < SubCollapsePedidos
+                                pedido={protocolo.pedidos}
+                                openSubRow={openSubRow}
+                            />
                         </Collapse>
-                        < SubCollapsePedidos
-                            pedido={protocolo.pedidos}
-                            openSubRow={openSubRow}
-                        />
                     </TableCell>
                 ))}
         </>

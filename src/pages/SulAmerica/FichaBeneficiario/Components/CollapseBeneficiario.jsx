@@ -7,6 +7,7 @@ import Toast from "../../../../components/Toast/Toast"
 import { adicionarTentativaDeContato } from "../../../../_services/sulAmerica.service"
 import ModalUploadArquivo from "./ModalUploadArquivo"
 import { CloudDownload } from "@mui/icons-material"
+import axios from "axios"
 
 const CollapseBeneficiario = ({ item, openRow }) => {
 
@@ -28,6 +29,29 @@ const CollapseBeneficiario = ({ item, openRow }) => {
             setSeverity('error')
             setMsg('Erro ao adicionar tentativa de contato')
             setOpen(true)
+        }
+    }
+
+    const fileDownload = async (arquivo) => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_SUL_AMERICA_SERVICE}/pedido/download/${arquivo}`, {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            const url = window.URL.createObjectURL(new Blob([res.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', arquivo)
+            document.body.appendChild(link)
+            link.click()
+        } catch (error) {
+            console.log(error);
+            setOpen(true)
+            setSeverity('error')
+            setMsg(`Erro! ${error}`)
         }
     }
 
@@ -254,11 +278,10 @@ const CollapseBeneficiario = ({ item, openRow }) => {
                                                                                 bgcolor: blue[800]
                                                                             }
                                                                         }}
-                                                                        href={`${process.env.REACT_APP_SUL_AMERICA_SERVICE}/pedido/download/${arquivo}`}
                                                                         endIcon={<CloudDownload />}
                                                                         size="small"
                                                                         variant='text'
-                                                                        target="_blank"
+                                                                        onClick={() => fileDownload(arquivo)}
                                                                     >
                                                                         Download
                                                                     </Button>
