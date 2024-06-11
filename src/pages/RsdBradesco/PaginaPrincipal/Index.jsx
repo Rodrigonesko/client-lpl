@@ -1,9 +1,10 @@
-import { Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Tab, Table, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField, Typography } from "@mui/material"
+import { Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
-import { blue, red } from "@mui/material/colors"
+import { blue, indigo, red } from "@mui/material/colors"
 import { CleaningServicesOutlined } from "@mui/icons-material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getPacotes } from "../../../_services/rsdBradesco.service"
 
 const tabStyle = {
     '&:hover': {
@@ -59,11 +60,28 @@ const RsdBradesco = () => {
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
 
+    const [pacotes, setPacotes] = useState([])
+
+    const fetchData = async () => {
+        setLoading(true)
+        try {
+            const get = await getPacotes()
+            setPacotes(get)
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
     return (
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size={'medium'} fontColor={red[700]} lineColor={'black'} >Rsd Bradesco</Title>
+                    <Title size={'medium'} fontColor={indigo[800]} lineColor={red[600]} >Rsd Bradesco</Title>
                     <Tabs
                         value={status}
                         onChange={(e, newValue) => setStatus(newValue)}
@@ -238,7 +256,7 @@ const RsdBradesco = () => {
                                 <Table
                                     size="small" elevation={7} sx={{ mb: 5, borderRadius: '15px' }}
                                 >
-                                    <TableHead sx={{ background: red[700] }}>
+                                    <TableHead sx={{ background: indigo[800] }}>
                                         <TableRow>
                                             <TableCell sx={{ color: 'white' }}>Segurado</TableCell>
                                             <TableCell sx={{ color: 'white' }}>Valor Solicitado</TableCell>
@@ -250,6 +268,15 @@ const RsdBradesco = () => {
                                             <TableCell></TableCell>
                                         </TableRow>
                                     </TableHead>
+                                    <TableBody>
+                                        {
+                                            pacotes.map((pacote) => (
+                                                <TableRow>
+                                                    <TableCell>{pacote.codigo}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        }
+                                    </TableBody>
                                 </Table>
                             ) : (
                                 <Box width={'100%'} display={'flex'} justifyContent={"center"}>

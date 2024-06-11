@@ -1,9 +1,9 @@
-import { Box, Button, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Table, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
-import { red } from "@mui/material/colors"
-import { CleaningServicesOutlined } from "@mui/icons-material"
-import { useState } from "react"
+import { indigo, red } from "@mui/material/colors"
+import { useEffect, useState } from "react"
+import { getSegurados } from "../../../_services/rsdBradesco.service"
 
 const Segurados = () => {
 
@@ -12,11 +12,28 @@ const Segurados = () => {
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
 
+    const [segurados, setSegurados] = useState([])
+
+    const fetchData = async () => {
+        setLoading(true)
+        try {
+            const get = await getSegurados()
+            setSegurados(get)
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
     return (
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size={'medium'} fontColor={red[700]} lineColor={'black'} >Segurados</Title>
+                    <Title size={'medium'} fontColor={indigo[900]} lineColor={red[700]} >Segurados</Title>
                     <Box
                         sx={{
                             display: 'flex',
@@ -77,18 +94,30 @@ const Segurados = () => {
                                 <Table
                                     size="small" elevation={7} sx={{ mb: 5, borderRadius: '15px' }}
                                 >
-                                    <TableHead sx={{ background: red[700] }}>
+                                    <TableHead sx={{ background: indigo[800] }}>
                                         <TableRow>
+                                            <TableCell sx={{ color: 'white' }}>CPF</TableCell>
                                             <TableCell sx={{ color: 'white' }}>Segurado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Valor Solicitado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
                                             <TableCell sx={{ color: 'white' }}>Titular do Segurado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Data Solicitação</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Data Criação</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Status</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>E-mail</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>Celular</TableCell>
                                             <TableCell></TableCell>
                                         </TableRow>
                                     </TableHead>
+                                    <TableBody>
+                                        {
+                                            segurados.map((segurado) => (
+                                                <TableRow>
+                                                    <TableCell>{segurado.cpf}</TableCell>
+                                                    <TableCell>{segurado.nome}</TableCell>
+                                                    <TableCell>{segurado.nomeTitular}</TableCell>
+                                                    <TableCell>{segurado.email}</TableCell>
+                                                    <TableCell>{segurado.celular}</TableCell>
+                                                    <TableCell></TableCell>
+                                                </TableRow>
+                                            ))
+                                        }
+                                    </TableBody>
                                 </Table>
                             ) : (
                                 <Box width={'100%'} display={'flex'} justifyContent={"center"}>
