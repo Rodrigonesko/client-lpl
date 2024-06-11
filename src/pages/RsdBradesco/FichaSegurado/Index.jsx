@@ -3,8 +3,9 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Title from "../../../components/Title/Title";
 import { indigo, red } from "@mui/material/colors";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getPacotesBySegurado, getSeguradoById } from "../../../_services/rsdBradesco.service";
+import Pacotes from "./components/Pacotes";
 
 const arrProps = [
     {
@@ -97,6 +98,7 @@ const InfoInput = ({ label, value, type }) => {
 const FichaSegurado = () => {
 
     const { id } = useParams();
+    const [pacotes, setPacotes] = useState([]);
 
     useEffect(() => {
         const fetch = async () => {
@@ -104,6 +106,7 @@ const FichaSegurado = () => {
             try {
                 const data = await getSeguradoById(id);
                 const dataPacotes = await getPacotesBySegurado(id);
+                setPacotes(dataPacotes);
                 console.log(dataPacotes, data);
             } catch (error) {
                 console.log(error);
@@ -141,6 +144,7 @@ const FichaSegurado = () => {
                         ))
                     }
                 </Grid>
+                <Pacotes pacotes={pacotes} setPacotes={setPacotes} />
             </Box>
 
         </Sidebar>
