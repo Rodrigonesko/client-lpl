@@ -1,4 +1,4 @@
-import { Box, Divider, TextField, Grid, IconButton, Tooltip, Button } from "@mui/material";
+import { Box, Divider, TextField, Grid, Table, TableHead, TableCell, TableBody, TableRow, Paper, IconButton, Tooltip, Button } from "@mui/material";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Title from "../../../components/Title/Title";
 import { indigo, red } from "@mui/material/colors";
@@ -185,7 +185,7 @@ const FichaSegurado = () => {
                 </Title>
                 <Divider />
                 <form onSubmit={handleSubmit(onSubmit)} >
-                    <Grid
+                  <Grid
                         container
                         spacing={2}
                         mt={2}
@@ -230,7 +230,29 @@ const FichaSegurado = () => {
                         </Grid>
                     </Grid>
                 </form>
-                <Pacotes pacotes={pacotes} setPacotes={setPacotes} />
+                <Table size="small" component={Paper} elevation={7} sx={{ mb: 5, borderRadius: '15px', mt: 3 }}>
+                    <TableHead sx={{ background: `linear-gradient(45deg, ${indigo[800]} 30%, ${red[700]} 75%)` }}>
+                        <TableRow>
+                            <TableCell ></TableCell>
+                            <TableCell sx={{ color: 'white' }}>Código</TableCell>
+                            <TableCell sx={{ color: 'white' }}>Responsável</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>Status</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            pacotes.map((pacote) => (
+                                <Pacotes
+                                    key={pacote}
+                                    pacote={pacote}
+                                    setPacotes={setPacotes}
+                                />
+                            ))
+                        }
+
+                    </TableBody>
+                </Table>
             </Box>
             <Toast
                 open={openToast}
