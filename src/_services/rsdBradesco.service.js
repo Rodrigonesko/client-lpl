@@ -18,6 +18,10 @@ export const getSeguradoById = async (id) => {
     return await new ApiCall(`/segurado/id/${id}`, url).get()
 }
 
+export const getSeguradoByNome = async (nome) => {
+    return await new ApiCall(`/segurado/nome/${nome}`, url).get()
+}
+
 export const getSeguradoByFilter = async (pesquisa, page, limit) => {
     return await new ApiCall(`/segurado/filter?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
 }

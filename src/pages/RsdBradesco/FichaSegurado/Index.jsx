@@ -1,66 +1,31 @@
-import { Box, Divider, TextField, Grid } from "@mui/material";
+import { Box, Divider, TextField, Grid, IconButton, Tooltip, Button } from "@mui/material";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Title from "../../../components/Title/Title";
 import { indigo, red } from "@mui/material/colors";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getPacotesBySegurado, getSeguradoById } from "../../../_services/rsdBradesco.service";
+import { getPacotesBySegurado, getSeguradoById, getSeguradoByNome, updateSegurado } from "../../../_services/rsdBradesco.service";
 import Pacotes from "./components/Pacotes";
+import { useForm } from "react-hook-form";
+import { ArrowForward, Save } from "@mui/icons-material";
+import InputMask from "react-input-mask";
+import { calcularIdade } from "../../../functions/functions";
+import Toast from "../../../components/Toast/Toast";
+import { arrProps } from "./components/arrProps";
 
-const arrProps = [
-    {
-        label: 'CPF',
-        value: '123.456.789-00',
-        type: 'text'
-    },
-    {
-        label: 'Telefone',
-        value: '1234-5678',
-        type: 'text'
-    },
-    {
-        label: 'Email',
-        value: '',
-        type: 'email'
-    },
-    {
-        label: 'Codigo Carteirinha',
-        value: '',
-        type: 'text'
-    },
-    {
-        label: 'Nome',
-        value: '',
-        type: 'text'
-    },
-    {
-        label: 'Codigo Titular',
-        value: '',
-        type: 'text'
-    },
-    {
-        label: 'Nome Titular',
-        value: '',
-        type: 'text'
-    },
-    {
-        label: 'Data Nascimento',
-        value: '01/01/2000',
-        type: 'date'
-    },
-    {
-        label: 'Idade',
-        value: '21',
-        type: 'number'
-    },
-    {
-        label: 'Whatsapp',
-        value: '',
-        type: 'text'
+
+const InfoInput = ({ label, value, type, register, disabled }) => {
+
+    const handleClick = async () => {
+        try {
+            const data = await getSeguradoByNome(value);
+            if (!data) return;
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
-]
 
-const InfoInput = ({ label, value, type }) => {
     return (
         <Grid
             item
@@ -69,15 +34,55 @@ const InfoInput = ({ label, value, type }) => {
             md={4}
             lg={3}
         >
-            <TextField
+            {label !== 'Celular' ? <TextField
+                disabled={disabled}
                 size={'small'}
                 label={label}
                 type={type}
+                {...register}
                 fullWidth
                 InputLabelProps={{
-                    shrink: type === 'date' ? true : undefined,
+                    shrink: true,
                     sx: {
-                        color: 'grey.800',
+                        '&.Mui-focused': {
+                            color: indigo[900],
+                        },
+                    },
+                }}
+                InputProps={{
+                    sx: {
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: indigo[900],
+                        },
+                    },
+                    endAdornment: label === 'Nome Titular' &&
+                        <Tooltip title={'Ver Titular'} arrow>
+                            <IconButton onClick={handleClick} >
+                                <ArrowForward />
+                            </IconButton>
+                        </Tooltip>
+                }}
+            /> : (
+                <CelularInput
+                    label={label}
+                    register={register}
+                />
+            )}
+        </Grid>
+    );
+}
+
+const CelularInput = ({ label, register }) => {
+    return (
+        <InputMask mask="(99) 99999-9999" {...register}>
+            {() => <TextField
+                {...register}
+                label={label}
+                size={'small'}
+                fullWidth
+                InputLabelProps={{
+                    shrink: true,
+                    sx: {
                         '&.Mui-focused': {
                             color: indigo[900],
                         },
@@ -90,15 +95,59 @@ const InfoInput = ({ label, value, type }) => {
                         },
                     },
                 }}
-            />
-        </Grid>
-    );
+            />}
+        </InputMask>
+    )
 }
 
 const FichaSegurado = () => {
 
     const { id } = useParams();
+    const { register, handleSubmit, setValue, getValues } = useForm();
+
     const [pacotes, setPacotes] = useState([]);
+    const [segurado, setSegurado] = useState();
+    const [openToast, setOpenToast] = useState(false);
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
+
+    const onSubmit = async (data) => {
+        try {
+            if (data.celular) {
+                const celular = data?.celular.replace(/\D/g, '');
+                if (celular.length < 11 && celular.length > 0) {
+                    setMessage('Celular inválido')
+                    setSeverity('error')
+                    setOpenToast(true)
+                    return;
+                }
+                let wpp = celular ? `whatsapp:+55${celular}` : ''
+                setValue('whatsapp', wpp)
+            }
+            if (data?.dataNascimento) {
+                const idade = calcularIdade(data?.dataNascimento)
+                setValue('idade', idade)
+            }
+            await updateSegurado(id, {
+                ...data,
+                whatsapp: getValues('whatsapp'),
+                idade: getValues('idade')
+            });
+            setMessage('Dados salvos com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao salvar dados')
+            setSeverity('error')
+            setOpenToast(true)
+        }
+    }
+
+    const isDisabled = (key) => {
+        if (key === 'whatsapp' || key === 'idade') return true;
+        return false;
+    }
 
     useEffect(() => {
         const fetch = async () => {
@@ -107,9 +156,16 @@ const FichaSegurado = () => {
                 const data = await getSeguradoById(id);
                 const dataPacotes = await getPacotesBySegurado(id);
                 setPacotes(dataPacotes);
-                console.log(dataPacotes, data);
+                arrProps.forEach(prop => {
+                    setValue(prop.key, data[prop.key]);
+                });
+                setValue('celular', data.celular);
+                setSegurado(data);
             } catch (error) {
                 console.log(error);
+                setMessage('Erro ao buscar dados')
+                setSeverity('error')
+                setOpenToast(true)
             }
         }
         fetch();
@@ -128,25 +184,60 @@ const FichaSegurado = () => {
                     Ficha do Segurado
                 </Title>
                 <Divider />
-                <Grid
-                    container
-                    spacing={2}
-                    mt={2}
-                >
-                    {
-                        arrProps.map((prop, index) => (
-                            <InfoInput
-                                key={index}
-                                label={prop.label}
-                                value={prop.value}
-                                type={prop.type}
-                            />
-                        ))
-                    }
-                </Grid>
+                <form onSubmit={handleSubmit(onSubmit)} >
+                    <Grid
+                        container
+                        spacing={2}
+                        mt={2}
+                    >
+                        {
+                            segurado && arrProps.map((prop, index) => (
+                                <InfoInput
+                                    key={index}
+                                    label={prop.label}
+                                    value={segurado[prop.key]}
+                                    type={prop.type}
+                                    register={register(prop.key)}
+                                    disabled={isDisabled(prop.key)}
+                                />
+                            ))
+                        }
+                        <InfoInput
+                            label={'Celular'}
+                            register={register('celular')}
+                        />
+                        <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            lg={3}
+                        >
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                sx={{
+                                    bgcolor: red[900],
+                                    color: 'white',
+                                    '&:hover': {
+                                        bgcolor: red[800]
+                                    }
+                                }}
+                                endIcon={<Save />}
+                            >
+                                Salvar
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </form>
                 <Pacotes pacotes={pacotes} setPacotes={setPacotes} />
             </Box>
-
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                message={message}
+                severity={severity}
+            />
         </Sidebar>
     );
 }
