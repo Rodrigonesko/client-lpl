@@ -1,9 +1,10 @@
-import { Box, Chip, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Box, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { indigo, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
-import { getSegurados } from "../../../_services/rsdBradesco.service"
+import { getSeguradoByFilter, getSegurados } from "../../../_services/rsdBradesco.service"
+import { ArrowForwardIos } from "@mui/icons-material"
 
 const Segurados = () => {
 
@@ -13,21 +14,24 @@ const Segurados = () => {
     const [loading, setLoading] = useState(false)
 
     const [segurados, setSegurados] = useState([])
+    const [pesquisa, setPesquisa] = useState('')
 
     const fetchData = async () => {
         setLoading(true)
         try {
-            const get = await getSegurados()
-            setSegurados(get)
+            const get = await getSeguradoByFilter(pesquisa, page, rowsPerPage)
+            setSegurados(get.segurados)
+            setTotalPages(get.total)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
         setLoading(false)
     }
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [page, rowsPerPage, pesquisa])
 
     return (
         <>
@@ -42,12 +46,14 @@ const Segurados = () => {
                             mt: 2
                         }}
                     >
-                        <TextField type='text' size='small' name='Segurado' label='Segurado' fullWidth
+                        <TextField type='text' size='small' name='pesquisa' label='Nome, cpf ou carteirinha' fullWidth
                             InputProps={{
                                 style: {
                                     borderRadius: '10px'
                                 }
                             }}
+                            value={pesquisa}
+                            onChange={(e) => setPesquisa(e.target.value)}
                         />
                     </Box>
                     <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
@@ -109,11 +115,25 @@ const Segurados = () => {
                                             segurados.map((segurado) => (
                                                 <TableRow>
                                                     <TableCell>{segurado.cpf}</TableCell>
-                                                    <TableCell>{segurado.nome}</TableCell>
+                                                    <TableCell>
+                                                        {
+                                                            segurado.nome === segurado.nomeTitular ? (
+                                                                <Chip label={segurado.nome} variant="outlined" color="error" sx={{ fontWeight: 'bold' }} />
+                                                            ) : (
+                                                                segurado.nome
+                                                            )
+                                                        }
+                                                    </TableCell>
                                                     <TableCell>{segurado.nomeTitular}</TableCell>
                                                     <TableCell>{segurado.email}</TableCell>
                                                     <TableCell>{segurado.celular}</TableCell>
-                                                    <TableCell></TableCell>
+                                                    <TableCell>
+                                                        <Tooltip title={'Ficha Segurado'}>
+                                                            <IconButton size="small" href={`/bradesco/fichaSegurado/${segurado._id}`} >
+                                                                <ArrowForwardIos fontSize="10px" />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </TableCell>
                                                 </TableRow>
                                             ))
                                         }

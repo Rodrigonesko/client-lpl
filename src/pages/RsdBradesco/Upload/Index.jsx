@@ -31,11 +31,13 @@ const RsdBradesco = () => {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 let rows = XLSX.utils.sheet_to_json(sheet);
-                // rows = rows.map(row => {
-                //     return {
-                //         ...row,
-                //         "CPF Segurado": ajustarCpf(row["CPF Segurado"]),
-                //     }});
+                rows = rows.map(row => {
+                    return {
+                        ...row,
+                        "CPF Segurado": ajustarCpf(row["CPF Segurado"]),
+                    }
+                });
+                console.log(rows[0]["CPF Segurado"]);
                 const result = await uploadPedidos(rows); // Modificar esse create
                 console.log(result);
                 setMessage({

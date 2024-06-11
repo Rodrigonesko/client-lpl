@@ -178,6 +178,7 @@ import FaturamentoSulamerica from "./pages/SulAmerica/Faturamento/Index";
 import RsdBradesco from "./pages/RsdBradesco/PaginaPrincipal/Index";
 import UploadBradesco from "./pages/RsdBradesco/Upload/Index";
 import Segurados from "./pages/RsdBradesco/Segurados/Index";
+import FichaSegurado from "./pages/RsdBradesco/FichaSegurado/Index";
 
 const AppRoutes = () => {
     return (
@@ -196,7 +197,9 @@ const AppRoutes = () => {
                 <Route exact path="/bradesco/segurados" element={<ProtectedRoute>
                     <Segurados />
                 </ProtectedRoute>} />
-
+                <Route exact path="/bradesco/fichaSegurado/:id" element={<ProtectedRoute>
+                    <FichaSegurado />
+                </ProtectedRoute>} />
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>
                     <ConfiguracaoQuestionario />
