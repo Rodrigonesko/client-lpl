@@ -1,5 +1,10 @@
 export const arrProps = [
     {
+        label: 'Nome',
+        key: 'nome',
+        type: 'text'
+    },
+    {
         label: 'CPF',
         key: 'cpf',
         type: 'text'
@@ -17,21 +22,6 @@ export const arrProps = [
     {
         label: 'Codigo Carteirinha',
         key: 'codigo',
-        type: 'text'
-    },
-    {
-        label: 'Nome',
-        key: 'nome',
-        type: 'text'
-    },
-    {
-        label: 'Codigo Titular',
-        key: 'codigoTitular',
-        type: 'text'
-    },
-    {
-        label: 'Nome Titular',
-        key: 'nomeTitular',
         type: 'text'
     },
     {

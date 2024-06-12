@@ -117,19 +117,19 @@ const Segurados = () => {
                                                     <TableCell>{segurado.cpf}</TableCell>
                                                     <TableCell>
                                                         {
-                                                            segurado.nome === segurado.nomeTitular ? (
+                                                            segurado.nome === segurado.titular.nome ? (
                                                                 <Chip label={segurado.nome} variant="outlined" color="error" sx={{ fontWeight: 'bold' }} />
                                                             ) : (
                                                                 segurado.nome
                                                             )
                                                         }
                                                     </TableCell>
-                                                    <TableCell>{segurado.nomeTitular}</TableCell>
+                                                    <TableCell>{segurado.titular.nome}</TableCell>
                                                     <TableCell>{segurado.email}</TableCell>
                                                     <TableCell>{segurado.celular}</TableCell>
                                                     <TableCell>
                                                         <Tooltip title={'Ficha Segurado'}>
-                                                            <IconButton size="small" href={`/bradesco/fichaSegurado/${segurado._id}`} >
+                                                            <IconButton size="small" href={`/bradesco/fichaSegurado/${segurado.titular._id}`} >
                                                                 <ArrowForwardIos fontSize="10px" />
                                                             </IconButton>
                                                         </Tooltip>
