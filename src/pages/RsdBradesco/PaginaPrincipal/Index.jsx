@@ -4,7 +4,7 @@ import Title from "../../../components/Title/Title"
 import { blue, indigo, red } from "@mui/material/colors"
 import { CleaningServicesOutlined } from "@mui/icons-material"
 import { useEffect, useState } from "react"
-import { getPacotes } from "../../../_services/rsdBradesco.service"
+import { getPacotesByFilter } from "../../../_services/rsdBradesco.service"
 
 const tabStyle = {
     '&:hover': {
@@ -45,6 +45,7 @@ const TabIcon = ({ children, value, status }) => {
 const RsdBradesco = () => {
 
     const [status, setStatus] = useState('A INICIAR')
+    const [pesquisa, setPesquisa] = useState('')
 
     const [totais, setTotais] = useState({
         total: 0,
@@ -65,7 +66,7 @@ const RsdBradesco = () => {
     const fetchData = async () => {
         setLoading(true)
         try {
-            const get = await getPacotes()
+            const get = await getPacotesByFilter(status, pesquisa, page, rowsPerPage)
             setPacotes(get)
         } catch (error) {
             console.log(error);
@@ -75,7 +76,7 @@ const RsdBradesco = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [status, pesquisa, page, rowsPerPage])
 
     return (
         <>
@@ -109,15 +110,9 @@ const RsdBradesco = () => {
                             mt: 2
                         }}
                     >
-                        <TextField type='text' size='small' name='Prestador' label='Prestador'
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px'
-                                }
-                            }}
-                            sx={{ mr: 2, minWidth: 250 }}
-                        />
-                        <TextField type='text' size='small' name='Nome Segurado' label='Nome Segurado'
+                        <TextField type='text' size='small' name='Nome Segurado' placeholder="Pesquisa" label='Pesquisa'
+                            value={pesquisa}
+                            onChange={(e) => setPesquisa(e.target.value)}
                             InputProps={{
                                 style: {
                                     borderRadius: '10px'
@@ -183,72 +178,6 @@ const RsdBradesco = () => {
                             variant="filled"
                             sx={{ bgcolor: red[700], color: 'white' }}
                         />
-                        {/* {
-                            status && (
-                                <Chip
-                                    label={status}
-                                    color="primary"
-                                    variant="filled"
-                                    sx={{ bgcolor: blue[900], color: 'white' }}
-                                    onDelete={() => setStatus('')}
-                                />
-                            )
-                        }
-                        {
-                            subStatus && (
-                                <Chip
-                                    label={subStatus}
-                                    color="primary"
-                                    variant="filled"
-                                    sx={{ bgcolor: blue[900], color: 'white' }}
-                                    onDelete={() => setSubStatus('')}
-                                />
-                            )
-                        }
-                        {
-                            prestador && (
-                                <Chip
-                                    label={prestador}
-                                    color="primary"
-                                    variant="filled"
-                                    sx={{ bgcolor: blue[900], color: 'white' }}
-                                    onDelete={() => setPrestador('')}
-                                />
-                            )
-                        }
-                        {
-                            beneficiario && (
-                                <Chip
-                                    label={beneficiario}
-                                    color="primary"
-                                    variant="filled"
-                                    sx={{ bgcolor: blue[900], color: 'white' }}
-                                    onDelete={() => setBeneficiario('')}
-                                />
-                            )
-                        }
-                        {
-                            responsavel && (
-                                <Chip
-                                    label={responsavel}
-                                    color="primary"
-                                    variant="filled"
-                                    sx={{ bgcolor: blue[900], color: 'white' }}
-                                    onDelete={() => setResponsavel('')}
-                                />
-                            )
-                        }
-                        {
-                            lote && (
-                                <Chip
-                                    label={lote}
-                                    color="primary"
-                                    variant="filled"
-                                    sx={{ bgcolor: blue[900], color: 'white' }}
-                                    onDelete={() => setLote('')}
-                                />
-                            )
-                        } */}
                     </Box>
                     <TableContainer>
                         {
@@ -258,14 +187,11 @@ const RsdBradesco = () => {
                                 >
                                     <TableHead sx={{ background: indigo[800] }}>
                                         <TableRow>
-                                            <TableCell sx={{ color: 'white' }}>Segurado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Valor Solicitado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Titular do Segurado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Data Solicitação</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Data Criação</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>Codigo</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>Titular</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>Codigo</TableCell>
                                             <TableCell sx={{ color: 'white' }}>Status</TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell sx={{ color: 'white' }}></TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -273,6 +199,19 @@ const RsdBradesco = () => {
                                             pacotes.map((pacote) => (
                                                 <TableRow>
                                                     <TableCell>{pacote.codigo}</TableCell>
+                                                    <TableCell>{pacote.titular.nome}</TableCell>
+                                                    <TableCell>{pacote.titular.codigo}</TableCell>
+                                                    <TableCell>
+                                                        <Chip
+                                                            label={pacote.status}
+                                                            sx={{
+                                                                color: 'white',
+                                                                backgroundColor: red[700],
+                                                            }}
+                                                            size="small"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell></TableCell>
                                                 </TableRow>
                                             ))
                                         }

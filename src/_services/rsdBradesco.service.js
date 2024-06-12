@@ -117,3 +117,7 @@ export const getPacotesByTitular = async (titular) => {
 export const getPacotesBySegurado = async (segurado) => {
     return await new ApiCall(`/pacote/segurado/${segurado}`, url).get()
 }
+
+export const getPacotesByFilter = async (status, pesquisa, page, limit) => {
+    return await new ApiCall(`/pacote/filter?status=${status}&pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
+}

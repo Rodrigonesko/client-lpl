@@ -79,10 +79,13 @@ const Ficha = ({
             <Box>
                 {
                     segurados.map((segurado) => (
-                        <SeguradoComponent
-                            key={segurado._id}
-                            segurado={segurado}
-                        />
+                        <Box>
+                            <SeguradoComponent
+                                key={segurado._id}
+                                segurado={segurado}
+                            />
+                            <Divider sx={{ m: 1 }} />
+                        </Box>
                     ))
                 }
             </Box>
