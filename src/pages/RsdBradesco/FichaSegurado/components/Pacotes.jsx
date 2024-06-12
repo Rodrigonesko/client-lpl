@@ -1,5 +1,5 @@
 import { ArrowForward, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
-import { Box, Button, Chip, IconButton, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@mui/material"
+import { Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material"
 import { useState } from "react"
 import { colorStatusRsdBradesco } from "../utils/types"
 import CollapseProtocolos from "./CollapseProtocolos"
@@ -40,9 +40,11 @@ const Pacotes = ({ pacote, setPacotes }) => {
                 <TableCell
                     align="right"
                 >
-                    <Button>
-                        <ArrowForward />
-                    </Button>
+                    <Tooltip title='Detalhes'>
+                        <IconButton size='small' href={`/bradesco/protocolos/${pacote._id}`} >
+                            <ArrowForward color="primary" />
+                        </IconButton>
+                    </Tooltip>
                 </TableCell>
             </TableRow>
             <CollapseProtocolos protocolo={pacote.protocolos} openRow={openRow} />
