@@ -1,6 +1,6 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { Box, Chip, Collapse, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from "@mui/material"
-import { deepPurple, indigo, red } from "@mui/material/colors";
+import { Chip, Collapse, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from "@mui/material"
+import { deepPurple, red } from "@mui/material/colors";
 import { useState } from "react";
 import { colorStatusRsdBradesco } from "../utils/types";
 import SubCollapsePedidos from "./SubCollapsePedidos";
@@ -23,6 +23,7 @@ const CollapseProtocolos = ({ protocolo, openRow }) => {
                                         <TableCell></TableCell>
                                         <TableCell align="center" sx={{ color: 'white' }} >Protocolo</TableCell>
                                         <TableCell align="center" sx={{ color: 'white' }} >Status</TableCell>
+                                        <TableCell align="center" sx={{ color: 'white' }} >Quantidade de Pedidos</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -51,6 +52,7 @@ const CollapseProtocolos = ({ protocolo, openRow }) => {
                                                 size="small"
                                             />
                                         </TableCell>
+                                        <TableCell align="center">{protocolo.pedidos.length}</TableCell>
                                     </TableRow>
                                 </TableBody >
                             </Table>
