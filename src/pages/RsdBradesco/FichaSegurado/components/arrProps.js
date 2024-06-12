@@ -35,6 +35,11 @@ export const arrProps = [
         type: 'number'
     },
     {
+        label: 'Celular',
+        key: 'celular',
+        type: 'text'
+    },
+    {
         label: 'Whatsapp',
         key: 'whatsapp',
         type: 'text'

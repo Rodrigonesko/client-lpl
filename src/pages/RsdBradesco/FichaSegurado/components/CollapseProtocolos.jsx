@@ -15,7 +15,7 @@ const CollapseProtocolos = ({ protocolo, openRow }) => {
         <>
             {
                 protocolos.map((protocolo, index) => (
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8} key={index}>
                         <Collapse in={openRow} timeout="auto" unmountOnExit>
                             <Table size="small" >
                                 <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { calcularIdade } from "../../../functions/functions";
 import Toast from "../../../components/Toast/Toast";
 
-const InfoInput = ({ label, type, register, disabled }) => {
+const InfoInput = ({ label, type, register, disabled, value, getValues, setValue }) => {
     return (
         <Grid
             item
@@ -42,38 +42,52 @@ const InfoInput = ({ label, type, register, disabled }) => {
             /> : (
                 <CelularInput
                     label={label}
-                    register={register}
+                    value={value}
+                    setValue={setValue}
+                    getValues={getValues}
                 />
             )}
         </Grid>
     );
 }
 
-const CelularInput = ({ label, register }) => {
+const CelularInput = ({ label, setValue, getValues, value }) => {
+
+    const [celular, setCelular] = useState(value)
+
+    useEffect(() => {
+        setValue('celular', celular)
+    }, [celular])
+
     return (
-        <InputMask mask="(99) 99999-9999" {...register}>
-            {() => <TextField
-                {...register}
-                label={label}
-                size={'small'}
-                fullWidth
-                InputLabelProps={{
-                    shrink: true,
-                    sx: {
-                        '&.Mui-focused': {
-                            color: indigo[900],
+        <div>
+            <InputMask
+                mask="(99) 99999-9999"
+                value={celular}
+                onChange={(e) => setCelular(e.target.value)}
+            >
+                {() => <TextField
+                    label={label}
+                    size={'small'}
+                    fullWidth
+                    InputLabelProps={{
+                        shrink: true,
+                        sx: {
+                            '&.Mui-focused': {
+                                color: indigo[900],
+                            },
                         },
-                    },
-                }}
-                InputProps={{
-                    sx: {
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: indigo[900],
-                        },
-                    },
-                }}
-            />}
-        </InputMask>
+                    }}
+                    InputProps={{
+                        sx: {
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: indigo[900],
+                            },
+                        }
+                    }}
+                />}
+            </InputMask>
+        </div>
     )
 }
 
@@ -128,7 +142,6 @@ const InfosBeneficiario = ({ info, updateInfo }) => {
             arrProps.forEach(prop => {
                 setValue(prop.key, info[prop.key])
             })
-            setValue('celular', info.celular)
         }
     }, [info])
 
@@ -147,13 +160,12 @@ const InfosBeneficiario = ({ info, updateInfo }) => {
                             type={prop.type}
                             register={register(prop.key)}
                             disabled={isDisabled(prop.key)}
+                            value={info[prop.key]}
+                            getValues={getValues}
+                            setValue={setValue}
                         />
                     ))
                 }
-                <InfoInput
-                    label={'Celular'}
-                    register={register('celular')}
-                />
                 <Grid
                     item
                     xs={12}
