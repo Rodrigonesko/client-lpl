@@ -184,6 +184,13 @@ const FichaSegurado = () => {
                     Ficha do Segurado
                 </Title>
                 <Divider />
+                <Title
+                    size={'small'}
+                    fontColor={indigo[900]}
+                    lineColor={red[700]}
+                >
+                    Ficha do Titular
+                </Title>
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <Grid
                         container
@@ -230,12 +237,20 @@ const FichaSegurado = () => {
                         </Grid>
                     </Grid>
                 </form>
+                <Divider sx={{ mt: 2 }} />
+                <Title
+                    size={'small'}
+                    fontColor={indigo[900]}
+                    lineColor={red[700]}
+                >
+                    Ficha do Dependente
+                </Title>
                 <Table size="small" sx={{ mb: 5, mt: 3 }}>
                     <TableHead sx={{ background: `linear-gradient(45deg, ${red[800]} 80%, ${deepPurple[700]} 95%)` }}>
                         <TableRow>
                             <TableCell ></TableCell>
-                            <TableCell sx={{ color: 'white' }}>Código</TableCell>
-                            <TableCell sx={{ color: 'white' }}>Responsável</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>Código</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>Responsável</TableCell>
                             <TableCell align="center" sx={{ color: 'white' }}>Status</TableCell>
                             <TableCell></TableCell>
                         </TableRow>

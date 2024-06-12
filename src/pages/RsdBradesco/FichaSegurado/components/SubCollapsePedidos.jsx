@@ -1,5 +1,5 @@
-import { Box, Chip, Collapse, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
-import { deepPurple, indigo, red } from "@mui/material/colors";
+import { Box, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { deepPurple, red } from "@mui/material/colors";
 import { useState } from "react";
 import { colorStatusRsdBradesco } from "../utils/types";
 import moment from "moment";
@@ -12,22 +12,22 @@ const SubCollapsePedidos = ({ pedido, openSubRow }) => {
 
     return (
         <>
-            <Table size="small" >
-                <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[700]} 95%)` }}>
-                    <TableRow>
-                        <TableCell align="center" sx={{ color: 'white' }}>Sinistro</TableCell>
-                        <TableCell align="center" sx={{ color: 'white' }} >Data Solicitação</TableCell>
-                        <TableCell align="center" sx={{ color: 'white' }} >Tipo Documento</TableCell>
-                        <TableCell align="center" sx={{ color: 'white' }} >Conselho Profissional de Saúde</TableCell>
-                        <TableCell align="center" sx={{ color: 'white' }} >Especialidade</TableCell>
-                        <TableCell align="center" sx={{ color: 'white' }} >Status</TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
-                </TableHead>
+            <Collapse in={openSubRow} timeout="auto" unmountOnExit>
+                <Table size="small" >
+                    <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[700]} 95%)` }}>
+                        <TableRow>
+                            <TableCell align="center" sx={{ color: 'white' }} >Sinistro</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }} >Data Solicitação</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }} >Tipo Documento</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }} >Conselho Profissional de Saúde</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }} >Especialidade</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }} >Status</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
 
-                {
-                    pedidos.map((pedido, index) => (
-                        <Collapse in={openSubRow} timeout="auto" unmountOnExit>
+                    {
+                        pedidos.map((pedido, index) => (
                             <TableBody>
                                 <TableRow key={index._id}>
                                     <TableCell align="center" >{pedido.sinistro}</TableCell>
@@ -51,9 +51,31 @@ const SubCollapsePedidos = ({ pedido, openSubRow }) => {
                                 </TableRow>
                             </TableBody >
 
-                        </Collapse >
-                    ))}
-            </Table>
+                        ))
+                    }
+                </Table>
+                <Box
+                    p={2}
+                >
+                    <Grid container spacing={2}>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={2}
+                        >
+                            <Typography>
+                                Valor Solicitado
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                value={pedido?.valorSolicitado}
+                                size="small"
+                                disabled
+                            />
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Collapse >
         </>
     )
 }
