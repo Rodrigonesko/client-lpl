@@ -1,4 +1,4 @@
-import { Box, Chip, Collapse, Container, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Chip, Collapse, Container, Divider, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { deepPurple, indigo, red } from "@mui/material/colors"
@@ -6,18 +6,20 @@ import CollapseProtocolos from "../FichaSegurado/components/CollapseProtocolos"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
-import { getPacoteById, getPacotesBySegurado, getSeguradoById } from "../../../_services/rsdBradesco.service"
+import { getPacoteById, getPacotesBySegurado, getSeguradoById, getSeguradosByTitular, getTitularById } from "../../../_services/rsdBradesco.service"
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
 import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
 import SubCollapsePedidos from "../FichaSegurado/components/SubCollapsePedidos"
 import moment from "moment"
+import Ficha from "../components/Ficha"
 
 const Protocolos = () => {
 
     const { id } = useParams();
 
     const [pacotes, setPacotes] = useState([]);
-    // const [segurado, setSegurado] = useState();
+    const [segurados, setSegurados] = useState([]);
+    const [titular, setTitular] = useState();
 
     const [openToast, setOpenToast] = useState(false);
     const [message, setMessage] = useState('')
@@ -29,10 +31,12 @@ const Protocolos = () => {
         const fetch = async () => {
             if (!id) return;
             try {
-                // const data = await getSeguradoById(id);
                 const dataPacotes = await getPacoteById(id);
                 setPacotes(dataPacotes);
-                // setSegurado(data);
+                const data = await getTitularById(dataPacotes.titular);
+                setTitular(data);
+                const dataSegurados = await getSeguradosByTitular(dataPacotes.titular);
+                setSegurados(dataSegurados);
             } catch (error) {
                 console.log(error);
                 setMessage('Erro ao buscar dados')
@@ -50,7 +54,13 @@ const Protocolos = () => {
             <Sidebar>
                 <Container maxWidth>
                     <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>Protocolos</Title>
-                    <Table size="small" >
+                    <Divider />
+                    <Ficha
+                        titular={titular}
+                        segurados={segurados}
+                    />
+                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    <Table size="small">
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
                             <TableRow>
                                 <TableCell></TableCell>
@@ -105,24 +115,29 @@ const Protocolos = () => {
                                                             </TableHead>
                                                             <TableBody>
                                                                 {protocolo.pedidos.map((pedido, idx) => (
-                                                                    <TableRow key={pedido._id}>
-                                                                        <TableCell align="center">{pedido.sinistro}</TableCell>
-                                                                        <TableCell align="center">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
-                                                                        <TableCell align="center">{pedido.tipoDocumento}</TableCell>
-                                                                        <TableCell align="center">{pedido.conselhoProfissionalSaude}</TableCell>
-                                                                        <TableCell align="center">{pedido.especialidade}</TableCell>
-                                                                        <TableCell align="center">
-                                                                            <Chip
-                                                                                label={pedido.status}
-                                                                                sx={{
-                                                                                    color: 'white',
-                                                                                    backgroundColor: colorStatusRsdBradesco[pedido.status],
-                                                                                }}
-                                                                                size="small"
-                                                                            />
-                                                                        </TableCell>
-                                                                        <TableCell></TableCell>
-                                                                    </TableRow>
+                                                                    <>
+                                                                        <TableRow key={pedido._id}>
+                                                                            <TableCell align="center">{pedido.sinistro}</TableCell>
+                                                                            <TableCell align="center">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
+                                                                            <TableCell align="center">{pedido.tipoDocumento}</TableCell>
+                                                                            <TableCell align="center">{pedido.conselhoProfissionalSaude}</TableCell>
+                                                                            <TableCell align="center">{pedido.especialidade}</TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Chip
+                                                                                    label={pedido.status}
+                                                                                    sx={{
+                                                                                        color: 'white',
+                                                                                        backgroundColor: colorStatusRsdBradesco[pedido.status],
+                                                                                    }}
+                                                                                    size="small"
+                                                                                />
+                                                                            </TableCell>
+                                                                            <TableCell></TableCell>
+                                                                        </TableRow>
+                                                                        <Box>
+
+                                                                        </Box>
+                                                                    </>
                                                                 ))}
                                                             </TableBody>
                                                         </Table>
