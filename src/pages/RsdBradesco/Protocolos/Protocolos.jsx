@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Collapse, Container, Divider, Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
-import { blue, deepPurple, indigo, red } from "@mui/material/colors"
+import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
@@ -11,6 +11,7 @@ import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
 import { valueToBRL } from "../../../functions/functions"
+import Roteiro from "./components/Roteiro"
 
 const Protocolos = () => {
 
@@ -52,7 +53,9 @@ const Protocolos = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>Protocolos</Title>
+                    <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>
+                        Processamento do pacote - {pacotes?.codigo}
+                    </Title>
                     <Divider />
                     <Ficha
                         titular={titular}
@@ -100,30 +103,28 @@ const Protocolos = () => {
                                             <TableCell colSpan={4} style={{ paddingBottom: 0, paddingTop: 0 }}>
                                                 <Collapse in={openSubRow[index]} timeout="auto" unmountOnExit>
                                                     <Box margin={1}>
-                                                        {protocolo.pedidos.map((pedido, idx) => (
-                                                            <>
-                                                                <Table size="small" >
-                                                                    <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[700]} 95%)` }}>
-                                                                        <TableRow>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Sinistro</TableCell>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Data Solicitação</TableCell>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Tipo Documento</TableCell>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Numero Nota</TableCell>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Cidade</TableCell>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Especialidade</TableCell>
-                                                                            <TableCell align="center" sx={{ color: 'white' }}>Status</TableCell>
-                                                                            <TableCell></TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        <TableRow key={pedido._id}>
-                                                                            <TableCell align="center">{pedido.sinistro}</TableCell>
-                                                                            <TableCell align="center">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
-                                                                            <TableCell align="center">{pedido.tipoDocumento}</TableCell>
-                                                                            <TableCell align="center">{pedido.nf.numero}</TableCell>
-                                                                            <TableCell align="center">{pedido.nf.cidade}</TableCell>
-                                                                            <TableCell align="center">{pedido.especialidade}</TableCell>
-                                                                            <TableCell align="center">
+                                                        <Table size="small" >
+                                                            <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[700]} 95%)` }}>
+                                                                <TableRow>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Sinistro</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Data Solicitação</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Segurado</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>cod carteirinha</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>CPF</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Status</TableCell>
+                                                                    <TableCell></TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {protocolo.pedidos.map((pedido) => (
+                                                                    <>
+                                                                        <TableRow >
+                                                                            <TableCell align="left">{pedido.sinistro}</TableCell>
+                                                                            <TableCell align="left">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
+                                                                            <TableCell align="left">{pedido.segurado.nome}</TableCell>
+                                                                            <TableCell align="left">{pedido.segurado.codigo}</TableCell>
+                                                                            <TableCell align="left">{pedido.segurado.cpf}</TableCell>
+                                                                            <TableCell align="left">
                                                                                 <Chip
                                                                                     label={pedido.status}
                                                                                     sx={{
@@ -135,117 +136,121 @@ const Protocolos = () => {
                                                                             </TableCell>
                                                                             <TableCell></TableCell>
                                                                         </TableRow>
-                                                                    </TableBody>
-                                                                </Table >
-                                                                <Box>
-                                                                    <Grid container spacing={2} mt={1}>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                Valor Solicitado
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                type='text'
-                                                                                fullWidth
-                                                                                size='small'
-                                                                                value={valueToBRL(pedido?.valorSolicitado)}
-                                                                            />
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                Maior data Execução
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                fullWidth
-                                                                                value={moment(pedido?.dataCriacao).format('DD/MM/YYYY')}
-                                                                                size="small"
-                                                                            />
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                Tipo Evento
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                fullWidth
-                                                                                value={pedido?.evento?.tipo}
-                                                                                size="small"
-                                                                            />
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                Data Evento Sinistro
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                fullWidth
-                                                                                value={moment(pedido?.evento?.data).format('DD/MM/YYYY')}
-                                                                                size="small"
-                                                                            />
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                CPF/CNPJ do Prestador
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                fullWidth
-                                                                                value={pedido?.prestador.cpfCnpj}
-                                                                                size="small"
-                                                                            />
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                Prestador Serviço
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                type='text'
-                                                                                fullWidth
-                                                                                size='small'
-                                                                                value={valueToBRL(pedido?.prestador?.nome)}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                    <Grid container spacing={2}>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={12}
-                                                                            sm={2}
-                                                                        >
-                                                                            <Typography>
-                                                                                UF
-                                                                            </Typography>
-                                                                            <TextField
-                                                                                fullWidth
-                                                                                value={pedido?.prestador?.uf}
-                                                                                size="small"
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                    <Divider sx={{ mt: 2, mb: 2 }} />
-                                                                </Box>
-                                                            </>
-                                                        ))}
+                                                                        <TableRow>
+                                                                            <TableCell colSpan={7}>
+                                                                                <Box>
+                                                                                    <Grid container spacing={2} mt={1}>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                Valor Solicitado
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                type='text'
+                                                                                                fullWidth
+                                                                                                size='small'
+                                                                                                value={valueToBRL(pedido?.valorSolicitado)}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                Maior data Execução
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                value={moment(pedido?.dataCriacao).format('DD/MM/YYYY')}
+                                                                                                size="small"
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                Tipo Evento
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                value={pedido?.evento?.tipo}
+                                                                                                size="small"
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                Data Evento Sinistro
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                value={moment(pedido?.evento?.data).format('DD/MM/YYYY')}
+                                                                                                size="small"
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                CPF/CNPJ do Prestador
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                value={pedido?.prestador.cpfCnpj}
+                                                                                                size="small"
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                Prestador Serviço
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                type='text'
+                                                                                                fullWidth
+                                                                                                size='small'
+                                                                                                value={valueToBRL(pedido?.prestador?.nome)}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                    </Grid>
+                                                                                    <Grid container spacing={2}>
+                                                                                        <Grid
+                                                                                            item
+                                                                                            xs={12}
+                                                                                            sm={2}
+                                                                                        >
+                                                                                            <Typography>
+                                                                                                UF
+                                                                                            </Typography>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                value={pedido?.prestador?.uf}
+                                                                                                size="small"
+                                                                                            />
+                                                                                        </Grid>
+                                                                                    </Grid>
+                                                                                    <Divider sx={{ mt: 2, mb: 2 }} />
+                                                                                </Box>
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </>
+                                                                ))}
+                                                            </TableBody >
+                                                        </Table >
                                                     </Box>
                                                 </Collapse>
                                                 <Grid
@@ -357,6 +362,30 @@ const Protocolos = () => {
                             }
                         </TableBody>
                     </Table>
+                    <Title
+                        size={'small'}
+                        fontColor={indigo[800]}
+                        lineColor={red[700]}
+                        sx={{ mt: 2 }}
+                    >
+                        Script
+                    </Title>
+                    <Box
+                        mt={2}
+                        mb={2}
+                        sx={{
+                            bgcolor: indigo[100],
+                            p: 2,
+                            borderRadius: '15px'
+                        }}
+                    >
+                        <Roteiro
+                            key={pacotes._id}
+                            pacote={pacotes}
+                            titular={titular}
+                            segurado={segurados[0]}
+                        />
+                    </Box>
                 </Container>
                 <Toast
                     open={openToast}
@@ -364,7 +393,7 @@ const Protocolos = () => {
                     message={message}
                     severity={severity}
                 />
-            </Sidebar>
+            </Sidebar >
         </>
     )
 }

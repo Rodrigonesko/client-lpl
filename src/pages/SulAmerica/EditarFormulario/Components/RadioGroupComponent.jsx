@@ -10,6 +10,7 @@ const RadioGroupComponent = ({ handleChange, pergunta, resposta }) => {
         >
             <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
             <FormControlLabel value="Não" control={<Radio />} label="Não" />
+            <FormControlLabel value="Não se aplica" control={<Radio />} label="Não se aplica" />
         </RadioGroup>
     )
 }

@@ -107,10 +107,9 @@ const EditFormulario = () => {
     }
 
     const verifyFifthQuestion = (index) => {
-        if (index !== 4) return true
-        return (index === 4 && (pedido?.beneficiario?.carteiraEmpresa === 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa === 'PME'))
+        if (index !== 6) return true
+        return (index === 6 && (pedido?.beneficiario?.carteiraEmpresa === 'ADESAO' || pedido?.beneficiario?.carteiraEmpresa === 'PME'))
     }
-
 
     useEffect(() => {
         const fetchPedido = async () => {
