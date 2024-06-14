@@ -118,6 +118,14 @@ export const getPacotesBySegurado = async (segurado) => {
     return await new ApiCall(`/pacote/segurado/${segurado}`, url).get()
 }
 
-export const getPacotesByFilter = async (status, pesquisa, pacote, sinistro, data,page, limit) => {
+export const getPacotesByFilter = async (status, pesquisa, pacote, sinistro, data, page, limit) => {
     return await new ApiCall(`/pacote/filter?status=${status}&pesquisa=${pesquisa}&pacote=${pacote}&sinistro=${sinistro}&data=${data}&page=${page}&limit=${limit}`, url).get()
+}
+
+export const tentativaDeContato = async (id) => {
+    return await new ApiCall(`/pacote/tentativa/${id}`, url).post()
+}
+
+export const removerTentativa = async (id, idTentativa) => {
+    return await new ApiCall(`/pacote/tentativa/${id}/${idTentativa}`, url).delete()
 }

@@ -4,7 +4,7 @@ import InfosBeneficiario from "./InfosBeneficiario"
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { useState } from "react";
 import { updateSegurado, updateTitular } from "../../../_services/rsdBradesco.service";
-import { indigo, red } from "@mui/material/colors";
+import { grey, indigo, red } from "@mui/material/colors";
 
 const SeguradoComponent = ({ segurado }) => {
 
@@ -20,14 +20,12 @@ const SeguradoComponent = ({ segurado }) => {
                 justifyContent={'space-between'}
             >
                 <Typography
-                    variant={'body1'}
+                    variant={'h6'}
                     sx={{
                         color: indigo[900],
-                        fontWeight: 'bold',
-                        bgcolor: indigo[100],
-                        p: 1,
-                        borderRadius: '5px'
+                        fontWeight: 'bold'
                     }}
+                    
                 >
                     {segurado?.nome}
                 </Typography>
@@ -46,6 +44,7 @@ const SeguradoComponent = ({ segurado }) => {
                     key={segurado?._id}
                 />
             </Collapse>
+            <Divider sx={{ mr: 1, ml: 1 }} />
         </Box>
     )
 }
@@ -78,13 +77,12 @@ const Ficha = ({
             </Title>
             <Box>
                 {
-                    segurados.map((segurado) => (
-                        <Box>
+                    segurados.map((segurado, index) => (
+                        <Box key={index}>
                             <SeguradoComponent
                                 key={segurado._id}
                                 segurado={segurado}
                             />
-                            <Divider sx={{ m: 1 }} />
                         </Box>
                     ))
                 }

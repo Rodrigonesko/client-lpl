@@ -5,13 +5,39 @@ import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
-import { getPacoteById, getSeguradosByTitular, getTitularById } from "../../../_services/rsdBradesco.service"
-import { CloudDownload, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
+import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato } from "../../../_services/rsdBradesco.service"
+import { CloudDownload, KeyboardArrowDown, KeyboardArrowUp, SaveAs } from "@mui/icons-material"
 import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
 import { valueToBRL } from "../../../functions/functions"
 import Roteiro from "./components/Roteiro"
+
+const Info = ({ label, value }) => (
+    <Grid item
+        xs={12}
+        sm={2}
+    >
+        <Typography
+            variant='subtitle2'
+            sx={{
+                color: grey[700],
+                fontWeight: 'bold'
+            }}
+        >
+            {label}
+        </Typography>
+        <Typography
+            variant='body2'
+            sx={{
+                color: grey[900],
+                fontWeight: 'bold'
+            }}
+        >
+            {value}
+        </Typography>
+    </Grid>
+)
 
 const Protocolos = () => {
 
@@ -26,6 +52,26 @@ const Protocolos = () => {
     const [severity, setSeverity] = useState('')
 
     const [openSubRow, setOpenSubRow] = useState(false)
+
+    const handleTentativaContato = async () => {
+        try {
+            const data = {
+                responsavel: 'Teste',
+                data: new Date()
+            }
+            const result = await tentativaDeContato(id)
+            console.log(result);
+            setMessage('Tentativa de contato registrada com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao registrar tentativa de contato')
+            setSeverity('error')
+            setOpenToast(true)
+        }
+
+    }
 
     useEffect(() => {
         const fetch = async () => {
@@ -47,8 +93,6 @@ const Protocolos = () => {
         fetch();
     }, [id])
 
-    console.log(pacotes);
-
     return (
         <>
             <Sidebar>
@@ -61,14 +105,21 @@ const Protocolos = () => {
                         titular={titular}
                         segurados={segurados}
                     />
-                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    <Title
+                        size={'small'}
+                        fontColor={indigo[800]}
+                        lineColor={red[500]}
+                        sx={{ mt: 2 }}
+                    >
+                        Sub Pacotes
+                    </Title>
                     <Table size="small">
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
                             <TableRow>
-                                <TableCell></TableCell>
-                                <TableCell align="center" sx={{ color: 'white' }} >Protocolo</TableCell>
-                                <TableCell align="center" sx={{ color: 'white' }} >Status</TableCell>
-                                <TableCell align="center" sx={{ color: 'white' }} >Quantidade de Pedidos</TableCell>
+                                <TableCell width={'20px'} align="left"></TableCell>
+                                <TableCell align="left" sx={{ color: 'white' }} >Sub Pacote</TableCell>
+                                <TableCell align="left" sx={{ color: 'white' }} >Quantidade de Pedidos</TableCell>
+                                <TableCell align="left" sx={{ color: 'white' }} >Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -86,8 +137,9 @@ const Protocolos = () => {
                                                     </Tooltip>
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell align="center">{protocolo.codigo}</TableCell>
-                                            <TableCell align="center">
+                                            <TableCell align="left">{protocolo.codigo}</TableCell>
+                                            <TableCell align="left">{protocolo.pedidos.length}</TableCell>
+                                            <TableCell align="left">
                                                 <Chip
                                                     label={protocolo.status}
                                                     sx={{
@@ -97,7 +149,6 @@ const Protocolos = () => {
                                                     size="small"
                                                 />
                                             </TableCell>
-                                            <TableCell align="center">{protocolo.pedidos.length}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell colSpan={4} style={{ paddingBottom: 0, paddingTop: 0 }}>
@@ -109,15 +160,15 @@ const Protocolos = () => {
                                                                     <TableCell align="left" sx={{ color: 'white' }}>Sinistro</TableCell>
                                                                     <TableCell align="left" sx={{ color: 'white' }}>Data Solicitação</TableCell>
                                                                     <TableCell align="left" sx={{ color: 'white' }}>Segurado</TableCell>
-                                                                    <TableCell align="left" sx={{ color: 'white' }}>cod carteirinha</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Cod Carteirinha</TableCell>
                                                                     <TableCell align="left" sx={{ color: 'white' }}>CPF</TableCell>
                                                                     <TableCell align="left" sx={{ color: 'white' }}>Status</TableCell>
                                                                     <TableCell></TableCell>
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
-                                                                {protocolo.pedidos.map((pedido) => (
-                                                                    <>
+                                                                {protocolo.pedidos.map((pedido, index) => (
+                                                                    <React.Fragment key={index} >
                                                                         <TableRow >
                                                                             <TableCell align="left">{pedido.sinistro}</TableCell>
                                                                             <TableCell align="left">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
@@ -138,223 +189,46 @@ const Protocolos = () => {
                                                                         </TableRow>
                                                                         <TableRow>
                                                                             <TableCell colSpan={7}>
-                                                                                <Box>
-                                                                                    <Grid container spacing={2} mt={1}>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
+                                                                                <Grid container spacing={2} mt={1}>
+                                                                                    <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
+                                                                                    <Info label={'Especialidade'} value={pedido?.especialidade} />
+                                                                                    <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
+                                                                                    <Info label={'Maior Data Execução'} value={moment(pedido.dataCriacao).format('DD/MM/YYYY')} />
+                                                                                    <Info label={'Tipo Evento'} value={pedido?.evento?.tipo} />
+                                                                                    <Info label={'Data Evento'} value={moment(pedido?.evento?.data).format('DD/MM/YYYY')} />
+                                                                                    <Info label={'CPF/CNPJ do Prestador'} value={pedido?.prestador.cpfCnpj} />
+                                                                                    <Info label={'Nome do Prestador'} value={pedido?.prestador.nome} />
+                                                                                    <Info label={'UF Prestador'} value={pedido?.prestador?.uf} />
+                                                                                    <Info label={'N° NF'} value={pedido?.nf?.numero} />
+                                                                                    <Info label={'Codigo NF'} value={pedido?.nf?.cofigo} />
+                                                                                    <Info label={'Cidade NF'} value={pedido?.nf?.cidade} />
+                                                                                    <Info label={'Estado NF'} value={pedido?.nf?.estado} />
+                                                                                    <Info label={'Uf NF'} value={pedido?.nf?.uf} />
+                                                                                    <Grid item xs={12} sm={2}>
+                                                                                        <Button
+                                                                                            variant="contained"
+                                                                                            sx={{
+                                                                                                bgcolor: indigo[800],
+                                                                                                color: 'white',
+                                                                                                ':hover': {
+                                                                                                    bgcolor: indigo[900]
+                                                                                                }
+                                                                                            }}
+                                                                                            endIcon={<SaveAs />}
                                                                                         >
-                                                                                            <Typography>
-                                                                                                Valor Solicitado
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                type='text'
-                                                                                                fullWidth
-                                                                                                size='small'
-                                                                                                value={valueToBRL(pedido?.valorSolicitado)}
-                                                                                            />
-                                                                                        </Grid>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
-                                                                                        >
-                                                                                            <Typography>
-                                                                                                Maior data Execução
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                fullWidth
-                                                                                                value={moment(pedido?.dataCriacao).format('DD/MM/YYYY')}
-                                                                                                size="small"
-                                                                                            />
-                                                                                        </Grid>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
-                                                                                        >
-                                                                                            <Typography>
-                                                                                                Tipo Evento
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                fullWidth
-                                                                                                value={pedido?.evento?.tipo}
-                                                                                                size="small"
-                                                                                            />
-                                                                                        </Grid>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
-                                                                                        >
-                                                                                            <Typography>
-                                                                                                Data Evento Sinistro
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                fullWidth
-                                                                                                value={moment(pedido?.evento?.data).format('DD/MM/YYYY')}
-                                                                                                size="small"
-                                                                                            />
-                                                                                        </Grid>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
-                                                                                        >
-                                                                                            <Typography>
-                                                                                                CPF/CNPJ do Prestador
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                fullWidth
-                                                                                                value={pedido?.prestador.cpfCnpj}
-                                                                                                size="small"
-                                                                                            />
-                                                                                        </Grid>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
-                                                                                        >
-                                                                                            <Typography>
-                                                                                                Prestador Serviço
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                type='text'
-                                                                                                fullWidth
-                                                                                                size='small'
-                                                                                                value={valueToBRL(pedido?.prestador?.nome)}
-                                                                                            />
-                                                                                        </Grid>
+                                                                                            Parecer
+                                                                                        </Button>
                                                                                     </Grid>
-                                                                                    <Grid container spacing={2}>
-                                                                                        <Grid
-                                                                                            item
-                                                                                            xs={12}
-                                                                                            sm={2}
-                                                                                        >
-                                                                                            <Typography>
-                                                                                                UF
-                                                                                            </Typography>
-                                                                                            <TextField
-                                                                                                fullWidth
-                                                                                                value={pedido?.prestador?.uf}
-                                                                                                size="small"
-                                                                                            />
-                                                                                        </Grid>
-                                                                                    </Grid>
-                                                                                    <Divider sx={{ mt: 2, mb: 2 }} />
-                                                                                </Box>
+                                                                                </Grid>
                                                                             </TableCell>
                                                                         </TableRow>
-                                                                    </>
+                                                                    </React.Fragment>
                                                                 ))}
                                                             </TableBody >
                                                         </Table >
                                                     </Box>
                                                 </Collapse>
-                                                <Grid
-                                                    container
-                                                    spacing={2}
-                                                >
-                                                    <Grid item xs={12} sm={6}>
-                                                        <TableContainer>
-                                                            <Table>
-                                                                <TableHead>
-                                                                    <TableRow>
-                                                                        <TableCell>
-                                                                            N° Tentativa
-                                                                        </TableCell>
-                                                                        <TableCell>
-                                                                            Responsável
-                                                                        </TableCell>
-                                                                        <TableCell>
-                                                                            Data
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                </TableHead>
-                                                                <TableBody>
-                                                                    {
-                                                                        protocolo?.pedido?.tentativasDeContato.map((tentativa, index) => (
-                                                                            <TableRow key={index}>
-                                                                                <TableCell>
-                                                                                    {index + 1}
-                                                                                </TableCell>
-                                                                                <TableCell>
-                                                                                    {tentativa.responsavel}
-                                                                                </TableCell>
-                                                                                <TableCell>
-                                                                                    {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
-                                                                                </TableCell>
-                                                                            </TableRow>
-                                                                        ))
-                                                                    }
-                                                                </TableBody>
-                                                            </Table>
-                                                        </TableContainer>
-                                                        <Button
-                                                            variant="contained"
-                                                            sx={{
-                                                                mt: 2,
-                                                                bgcolor: blue[900],
-                                                                color: 'white',
-                                                                ':hover': {
-                                                                    bgcolor: blue[800]
-                                                                }
-                                                            }}
 
-                                                        >
-                                                            Tentativa de Contato
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={6}>
-                                                        <Box>
-                                                            <TableContainer>
-                                                                <Table>
-                                                                    <TableHead>
-                                                                        <TableRow>
-                                                                            <TableCell>
-                                                                                Nome
-                                                                            </TableCell>
-                                                                            <TableCell>
-                                                                                Link
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {/* {
-                                                                                                        arquivos.map((arquivo, index) => ( */}
-                                                                        <TableRow key={index}>
-                                                                            <TableCell>
-                                                                                {/* {arquivo} */}
-                                                                            </TableCell>
-                                                                            <TableCell>
-                                                                                <Button
-                                                                                    sx={{
-                                                                                        bgcolor: blue[900],
-                                                                                        color: 'white',
-                                                                                        ':hover': {
-                                                                                            bgcolor: blue[800]
-                                                                                        }
-                                                                                    }}
-                                                                                    endIcon={<CloudDownload />}
-                                                                                    size="small"
-                                                                                    variant='text'
-                                                                                // onClick={() => fileDownload(arquivo)}
-                                                                                >
-                                                                                    Download
-                                                                                </Button>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        {/* ))
-                                                                                                    } */}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                        </Box>
-                                                        {/* <ModalUploadArquivo item={item} setArquivos={setArquivos} /> */}
-                                                    </Grid>
-                                                </Grid>
                                             </TableCell>
                                         </TableRow>
                                     </React.Fragment>
@@ -362,6 +236,108 @@ const Protocolos = () => {
                             }
                         </TableBody>
                     </Table>
+                    <Grid
+                        container
+                        spacing={2}
+                    >
+                        <Grid item xs={12} sm={6}>
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>
+                                                N° Tentativa
+                                            </TableCell>
+                                            <TableCell>
+                                                Responsável
+                                            </TableCell>
+                                            <TableCell>
+                                                Data
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {/* {
+                                            protocolo?.pedido?.tentativasDeContato.map((tentativa, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell>
+                                                        {index + 1}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {tentativa.responsavel}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        } */}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    mt: 2,
+                                    bgcolor: blue[900],
+                                    color: 'white',
+                                    ':hover': {
+                                        bgcolor: blue[800]
+                                    }
+                                }}
+                                onClick={handleTentativaContato}
+                            >
+                                Tentativa de Contato
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Box>
+                                <TableContainer>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>
+                                                    Nome
+                                                </TableCell>
+                                                <TableCell>
+                                                    Link
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {/* {
+                                                                                                        arquivos.map((arquivo, index) => ( */}
+                                            <TableRow>
+                                                <TableCell>
+                                                    {/* {arquivo} */}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Button
+                                                        sx={{
+                                                            bgcolor: blue[900],
+                                                            color: 'white',
+                                                            ':hover': {
+                                                                bgcolor: blue[800]
+                                                            }
+                                                        }}
+                                                        endIcon={<CloudDownload />}
+                                                        size="small"
+                                                        variant='text'
+                                                    // onClick={() => fileDownload(arquivo)}
+                                                    >
+                                                        Download
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                            {/* ))
+                                                                                                    } */}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Box>
+                            {/* <ModalUploadArquivo item={item} setArquivos={setArquivos} /> */}
+                        </Grid>
+                    </Grid>
                     <Title
                         size={'small'}
                         fontColor={indigo[800]}
