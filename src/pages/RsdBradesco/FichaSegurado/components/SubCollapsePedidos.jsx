@@ -6,8 +6,6 @@ import moment from "moment";
 
 const SubCollapsePedidos = ({ pedido, openSubRow }) => {
 
-    console.log(pedido);
-
     const [pedidos, setPedidos] = useState(pedido)
 
     return (

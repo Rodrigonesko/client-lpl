@@ -3,8 +3,9 @@ import { Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material"
 import { useState } from "react"
 import { colorStatusRsdBradesco } from "../utils/types"
 import CollapseProtocolos from "./CollapseProtocolos"
+import SubCollapsePedidos from "./SubCollapsePedidos"
 
-const Pacotes = ({ pacote, setPacotes }) => {
+const Pacotes = ({ pacote }) => {
 
     const [openRow, setOpenRow] = useState(false)
 
@@ -47,7 +48,11 @@ const Pacotes = ({ pacote, setPacotes }) => {
                     </Tooltip>
                 </TableCell>
             </TableRow>
-            <CollapseProtocolos protocolo={pacote.protocolos} openRow={openRow} />
+            <TableRow>
+                <TableCell colSpan={5}>
+                    <SubCollapsePedidos pedido={pacote.pedidos} openSubRow={openRow} />
+                </TableCell>
+            </TableRow>
         </>
     )
 }

@@ -273,13 +273,13 @@ const RsdBradesco = () => {
                                                         <TableCell>{pacote.titular.codigo}</TableCell>
                                                         <TableCell>
                                                             {
-                                                                pacote.protocolos.map((protocolo) => {
+                                                                pacote.pedidos.map((pedido) => {
                                                                     return <Typography
-                                                                        key={protocolo._id}
+                                                                        key={pedido._id}
                                                                         variant={'body2'}
                                                                     >
                                                                         {
-                                                                            protocolo.pedidos[0].segurado.nome
+                                                                            pedido.segurado.nome
                                                                         }
                                                                     </Typography>
                                                                 })
