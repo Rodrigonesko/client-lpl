@@ -1,17 +1,19 @@
-import { Box, Button, Chip, Collapse, Container, Divider, Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Collapse, Container, Divider, FormControlLabel, Grid, IconButton, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
-import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato } from "../../../_services/rsdBradesco.service"
+import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato, updatePacote } from "../../../_services/rsdBradesco.service"
 import { CloudDownload, KeyboardArrowDown, KeyboardArrowUp, SaveAs } from "@mui/icons-material"
 import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
 import { valueToBRL } from "../../../functions/functions"
 import Roteiro from "./components/Roteiro"
+import ModalParecer from "./components/ModalParecer"
+import ModalUploadArquivo from "./components/ModalUploadArquivo"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -53,6 +55,8 @@ const Protocolos = () => {
 
     const [openSubRow, setOpenSubRow] = useState(false)
 
+    const [dossie, setDossie] = useState(false)
+
     const handleTentativaContato = async () => {
         try {
             const data = {
@@ -71,6 +75,25 @@ const Protocolos = () => {
             setOpenToast(true)
         }
 
+    }
+
+    const handleUpdateDossie = async (e) => {
+        try {
+            setDossie(e.target.value)
+            const upd = await updatePacote(
+                id,
+                dossie
+            )
+            console.log(upd);
+            setMessage('Dossiê solicitado com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao Atualizar Dossiê')
+            setSeverity('error')
+            setOpenToast(true)
+        }
     }
 
     useEffect(() => {
@@ -105,14 +128,22 @@ const Protocolos = () => {
                         titular={titular}
                         segurados={segurados}
                     />
-                    <Title
-                        size={'small'}
-                        fontColor={indigo[800]}
-                        lineColor={red[500]}
-                        sx={{ mt: 2 }}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
                     >
-                        Sub Pacotes
-                    </Title>
+                        <Title
+                            size={'small'}
+                            fontColor={indigo[800]}
+                            lineColor={red[500]}
+                            sx={{ mt: 2 }}
+                        >
+                            Sub Pacotes
+                        </Title>
+                        <FormControlLabel control={<Switch color='success' value={dossie} onChange={handleUpdateDossie} />} label='Realizar Dossiê' />
+                    </Box>
                     <Table size="small">
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
                             <TableRow>
@@ -205,19 +236,7 @@ const Protocolos = () => {
                                                                                     <Info label={'Estado NF'} value={pedido?.nf?.estado} />
                                                                                     <Info label={'Uf NF'} value={pedido?.nf?.uf} />
                                                                                     <Grid item xs={12} sm={2}>
-                                                                                        <Button
-                                                                                            variant="contained"
-                                                                                            sx={{
-                                                                                                bgcolor: indigo[800],
-                                                                                                color: 'white',
-                                                                                                ':hover': {
-                                                                                                    bgcolor: indigo[900]
-                                                                                                }
-                                                                                            }}
-                                                                                            endIcon={<SaveAs />}
-                                                                                        >
-                                                                                            Parecer
-                                                                                        </Button>
+                                                                                        <ModalParecer id={pedido?._id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
                                                                                     </Grid>
                                                                                 </Grid>
                                                                             </TableCell>
@@ -272,6 +291,7 @@ const Protocolos = () => {
                                                 </TableRow>
                                             ))
                                         } */}
+
                                     </TableBody>
                                 </Table>
                             </TableContainer>
@@ -306,7 +326,7 @@ const Protocolos = () => {
                                         </TableHead>
                                         <TableBody>
                                             {/* {
-                                                                                                        arquivos.map((arquivo, index) => ( */}
+                                                    arquivos.map((arquivo, index) => ( */}
                                             <TableRow>
                                                 <TableCell>
                                                     {/* {arquivo} */}
@@ -335,7 +355,7 @@ const Protocolos = () => {
                                     </Table>
                                 </TableContainer>
                             </Box>
-                            {/* <ModalUploadArquivo item={item} setArquivos={setArquivos} /> */}
+                            <ModalUploadArquivo />
                         </Grid>
                     </Grid>
                     <Title
