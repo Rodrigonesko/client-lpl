@@ -1,8 +1,7 @@
 import { ArrowForward, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
 import { Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material"
 import { useState } from "react"
-import { colorStatusRsdBradesco } from "../utils/types"
-import CollapseProtocolos from "./CollapseProtocolos"
+import { colorStatusRsdBradesco } from "../../utils/types"
 import SubCollapsePedidos from "./SubCollapsePedidos"
 
 const Pacotes = ({ pacote }) => {

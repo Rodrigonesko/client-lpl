@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { getPacotesByFilter } from "../../../_services/rsdBradesco.service"
 import { ThemeProvider } from "@emotion/react"
 import { themeBradesco } from "../components/theme"
-import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
+import { colorStatusRsdBradesco } from "../utils/types"
 
 const tabStyle = {
     '&:hover': {
@@ -85,12 +85,11 @@ const RsdBradesco = () => {
             const get = await getPacotesByFilter(status, pesquisa, pacote, sinistro, data, page, rowsPerPage)
             setPacotes(get.pacotes)
             setTotalPages(get.total)
-            const [totalAIniciar, totalAgendado, totalEmAndamento, totalConcluido, totalCancelado, todos] = await Promise.all([
+            const [totalAIniciar, totalAgendado, totalEmAndamento, totalConcluido, todos] = await Promise.all([
                 getPacotesByFilter('A INICIAR', '', '', '', '', 1, 1),
                 getPacotesByFilter('AGENDADO', '', '', '', '', 1, 1),
                 getPacotesByFilter('EM ANDAMENTO', '', '', '', '', 1, 1),
-                getPacotesByFilter('SUCESSO CONTATO', '', '', '', '', 1, 1),
-                getPacotesByFilter('INSUCESSO CONTATO', '', '', '', '', 1, 1),
+                getPacotesByFilter('FINALIZADO', '', '', '', '', 1, 1),
                 getPacotesByFilter('', '', '', '', '', 1, 1)
             ].map((promise) => promise.then((res) => res.total)))
             setTotais({
@@ -98,8 +97,7 @@ const RsdBradesco = () => {
                 totalAIniciar,
                 totalAgendado,
                 totalEmAndamento,
-                totalConcluido,
-                totalCancelado
+                totalConcluido
             })
         } catch (error) {
             console.log(error);
@@ -132,8 +130,7 @@ const RsdBradesco = () => {
                             <Tab value={'A INICIAR'} label="A iniciar" icon={<TabIcon status={status} value={'A INICIAR'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
                             <Tab value={'AGENDADO'} label="Agendado" icon={<TabIcon status={status} value={'AGENDADO'}>{totais.totalAgendado}</TabIcon>} iconPosition="end" sx={tabStyle} />
                             <Tab value={'EM ANDAMENTO'} label="Em andamento" icon={<TabIcon status={status} value={'EM ANDAMENTO'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                            <Tab value={'SUCESSO CONTATO'} label="Sucesso" icon={<TabIcon status={status} value={'SUCESSO CONTATO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                            <Tab value={'INSUCESSO CONTATO'} label="Insucesso" icon={<TabIcon status={status} value={'INSUCESSO CONTATO'}>{totais.totalCancelado}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                            <Tab value={'FINALIZADO'} label="Finalizado" icon={<TabIcon status={status} value={'SUCESSO CONTATO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
                             <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />
                         </Tabs>
                         <Box

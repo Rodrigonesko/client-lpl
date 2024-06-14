@@ -90,6 +90,10 @@ export const updatePedido = async (id, data) => {
     return await new ApiCall(`/pedido/${id}`, url).put(data)
 }
 
+export const finalizarSinistro = async (id, data) => {
+    return await new ApiCall(`/pedido/finalizar/${id}`, url).put(data)
+}
+
 export const deletePedido = async (id) => {
     return await new ApiCall(`/pedido/${id}`, url).delete()
 }
@@ -130,6 +134,6 @@ export const removerTentativa = async (id, idTentativa) => {
     return await new ApiCall(`/pacote/tentativa/${id}/${idTentativa}`, url).delete()
 }
 
-export const updatePacote = async (id) => {
-    return await new ApiCall(`/pacote/${id}`, url).put()
+export const updatePacote = async (id, data) => {
+    return await new ApiCall(`/pacote/${id}`, url).put(data)
 }

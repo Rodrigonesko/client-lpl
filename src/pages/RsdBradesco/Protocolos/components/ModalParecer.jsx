@@ -2,7 +2,7 @@ import { SaveAs } from "@mui/icons-material"
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { indigo } from "@mui/material/colors"
 import { useState } from "react"
-import { set } from "react-hook-form"
+import { finalizarSinistro } from "../../../../_services/rsdBradesco.service"
 
 const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity }) => {
 
@@ -21,7 +21,7 @@ const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity }) => {
         setStatusParecer('')
     }
 
-    const handleSendParecer = () => {
+    const handleSendParecer = async () => {
         try {
             if (messageParecer.length <= 4 || statusParecer === '') {
                 setOpenToast(true)
@@ -29,6 +29,17 @@ const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity }) => {
                 setSeverity('warning')
                 return
             }
+            let status = 'SUCESSO'
+            if (statusParecer === 'NÃO FOI POSSÍVEL CONFIRMAR O ATENDIMENTO POR FALHA NA TENTATIVA DE CONTATO') {
+                status = 'INSUCESSO'
+            }
+
+            await finalizarSinistro(id, {
+                status,
+                parecer: statusParecer,
+                observacaoFinal: messageParecer
+            })
+
             setMessageParecer('')
             setStatusParecer('')
             setOpenToast(true)

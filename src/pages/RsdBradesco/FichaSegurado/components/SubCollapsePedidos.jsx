@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { deepPurple, grey, indigo, red } from "@mui/material/colors";
 import { useState } from "react";
-import { colorStatusRsdBradesco } from "../utils/types";
+import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../../utils/types";
 import moment from "moment";
 import { SaveAs } from "@mui/icons-material";
 import { valueToBRL } from "../../../../functions/functions";
@@ -64,14 +64,29 @@ const SubCollapsePedidos = ({ pedido, openSubRow }) => {
                                     <TableCell
                                         align="center"
                                     >
-                                        <Chip
-                                            label={pedido.status}
-                                            sx={{
-                                                color: 'white',
-                                                backgroundColor: colorStatusRsdBradesco[pedido.status],
-                                            }}
-                                            size="small"
-                                        />
+                                        <Box
+                                            display={'flex'}
+                                            alignItems={'center'}
+                                            sx={{ gap: 1 }}
+                                            flexDirection={'column'}
+                                        >
+                                            <Chip
+                                                label={pedido.status}
+                                                sx={{
+                                                    backgroundColor: colorStatusPedido[pedido.status],
+                                                    fontWeight: 'bold'
+                                                }}
+                                                size="small"
+                                            />
+                                            {pedido.parecer && <Chip
+                                                label={pedido.parecer}
+                                                sx={{
+                                                    backgroundColor: colorParecer[pedido.parecer],
+                                                    fontWeight: 'bold'
+                                                }}
+                                                size="small"
+                                            />}
+                                        </Box>
                                     </TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
