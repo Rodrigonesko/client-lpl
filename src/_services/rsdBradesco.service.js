@@ -129,3 +129,7 @@ export const tentativaDeContato = async (id) => {
 export const removerTentativa = async (id, idTentativa) => {
     return await new ApiCall(`/pacote/tentativa/${id}/${idTentativa}`, url).delete()
 }
+
+export const updatePacote = async (id) => {
+    return await new ApiCall(`/pacote/${id}`, url).put()
+}
