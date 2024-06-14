@@ -1,8 +1,36 @@
-import { Box, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
-import { deepPurple, red } from "@mui/material/colors";
+import { Box, Button, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { deepPurple, grey, indigo, red } from "@mui/material/colors";
 import { useState } from "react";
 import { colorStatusRsdBradesco } from "../utils/types";
 import moment from "moment";
+import { SaveAs } from "@mui/icons-material";
+import { valueToBRL } from "../../../../functions/functions";
+
+const Info = ({ label, value }) => (
+    <Grid item
+        xs={12}
+        sm={2}
+    >
+        <Typography
+            variant='subtitle2'
+            sx={{
+                color: grey[700],
+                fontWeight: 'bold'
+            }}
+        >
+            {label}
+        </Typography>
+        <Typography
+            variant='body2'
+            sx={{
+                color: grey[900],
+                fontWeight: 'bold'
+            }}
+        >
+            {value}
+        </Typography>
+    </Grid>
+)
 
 const SubCollapsePedidos = ({ pedido, openSubRow }) => {
 
@@ -47,32 +75,30 @@ const SubCollapsePedidos = ({ pedido, openSubRow }) => {
                                     </TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan={7}>
+                                        <Grid container spacing={2} mt={1}>
+                                            <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
+                                            <Info label={'Especialidade'} value={pedido?.especialidade} />
+                                            <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
+                                            <Info label={'Maior Data Execução'} value={moment(pedido.dataCriacao).format('DD/MM/YYYY')} />
+                                            <Info label={'Tipo Evento'} value={pedido?.evento?.tipo} />
+                                            <Info label={'Data Evento'} value={moment(pedido?.evento?.data).format('DD/MM/YYYY')} />
+                                            <Info label={'CPF/CNPJ do Prestador'} value={pedido?.prestador.cpfCnpj} />
+                                            <Info label={'Nome do Prestador'} value={pedido?.prestador.nome} />
+                                            <Info label={'UF Prestador'} value={pedido?.prestador?.uf} />
+                                            <Info label={'N° NF'} value={pedido?.nf?.numero} />
+                                            <Info label={'Codigo NF'} value={pedido?.nf?.cofigo} />
+                                            <Info label={'Cidade NF'} value={pedido?.nf?.cidade} />
+                                            <Info label={'Estado NF'} value={pedido?.nf?.estado} />
+                                            <Info label={'Uf NF'} value={pedido?.nf?.uf} />
+                                        </Grid>
+                                    </TableCell>
+                                </TableRow>
                             </TableBody >
-
                         ))
                     }
                 </Table>
-                <Box
-                    p={2}
-                >
-                    <Grid container spacing={2}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={2}
-                        >
-                            <Typography>
-                                Valor Solicitado
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                value={pedido?.valorSolicitado}
-                                size="small"
-                                disabled
-                            />
-                        </Grid>
-                    </Grid>
-                </Box>
             </Collapse >
         </>
     )

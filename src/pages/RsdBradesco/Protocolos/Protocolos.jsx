@@ -1,17 +1,19 @@
-import { Box, Button, Chip, Collapse, Container, Divider, Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Collapse, Container, Divider, FormControlLabel, Grid, IconButton, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
-import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato } from "../../../_services/rsdBradesco.service"
+import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato, updatePacote } from "../../../_services/rsdBradesco.service"
 import { CloudDownload, KeyboardArrowDown, KeyboardArrowUp, SaveAs } from "@mui/icons-material"
 import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
 import { valueToBRL } from "../../../functions/functions"
 import Roteiro from "./components/Roteiro"
+import ModalParecer from "./components/ModalParecer"
+import ModalUploadArquivo from "./components/ModalUploadArquivo"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -53,6 +55,8 @@ const Protocolos = () => {
 
     const [openSubRow, setOpenSubRow] = useState(false)
 
+    const [dossie, setDossie] = useState(false)
+
     const handleTentativaContato = async () => {
         try {
             const data = {
@@ -71,6 +75,25 @@ const Protocolos = () => {
             setOpenToast(true)
         }
 
+    }
+
+    const handleUpdateDossie = async (e) => {
+        try {
+            setDossie(e.target.value)
+            const upd = await updatePacote(
+                id,
+                dossie
+            )
+            console.log(upd);
+            setMessage('Dossiê solicitado com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao Atualizar Dossiê')
+            setSeverity('error')
+            setOpenToast(true)
+        }
     }
 
     useEffect(() => {
@@ -105,14 +128,22 @@ const Protocolos = () => {
                         titular={titular}
                         segurados={segurados}
                     />
-                    <Title
-                        size={'small'}
-                        fontColor={indigo[800]}
-                        lineColor={red[500]}
-                        sx={{ mt: 2 }}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
                     >
-                        Sub Pacotes
-                    </Title>
+                        <Title
+                            size={'small'}
+                            fontColor={indigo[800]}
+                            lineColor={red[500]}
+                            sx={{ mt: 2 }}
+                        >
+                            Sub Pacotes
+                        </Title>
+                        <FormControlLabel control={<Switch color='success' value={dossie} onChange={handleUpdateDossie} />} label='Realizar Dossiê' />
+                    </Box>
                     <Table size="small">
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
                             <TableRow>
@@ -123,65 +154,105 @@ const Protocolos = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {pacotes.pedidos.map((pedido, index) => (
-                                <React.Fragment key={index} >
-                                    <TableRow >
-                                        <TableCell align="left">{pedido.sinistro}</TableCell>
-                                        <TableCell align="left">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
-                                        <TableCell align="left">{pedido.segurado.nome}</TableCell>
-                                        <TableCell align="left">{pedido.segurado.codigo}</TableCell>
-                                        <TableCell align="left">{pedido.segurado.cpf}</TableCell>
-                                        <TableCell align="left">
-                                            <Chip
-                                                label={pedido.status}
-                                                sx={{
-                                                    color: 'white',
-                                                    backgroundColor: colorStatusRsdBradesco[pedido.status],
-                                                }}
-                                                size="small"
-                                            />
-                                        </TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell colSpan={7}>
-                                            <Grid container spacing={2} mt={1}>
-                                                <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
-                                                <Info label={'Especialidade'} value={pedido?.especialidade} />
-                                                <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
-                                                <Info label={'Maior Data Execução'} value={moment(pedido.dataCriacao).format('DD/MM/YYYY')} />
-                                                <Info label={'Tipo Evento'} value={pedido?.evento?.tipo} />
-                                                <Info label={'Data Evento'} value={moment(pedido?.evento?.data).format('DD/MM/YYYY')} />
-                                                <Info label={'CPF/CNPJ do Prestador'} value={pedido?.prestador.cpfCnpj} />
-                                                <Info label={'Nome do Prestador'} value={pedido?.prestador.nome} />
-                                                <Info label={'UF Prestador'} value={pedido?.prestador?.uf} />
-                                                <Info label={'N° NF'} value={pedido?.nf?.numero} />
-                                                <Info label={'Codigo NF'} value={pedido?.nf?.cofigo} />
-                                                <Info label={'Cidade NF'} value={pedido?.nf?.cidade} />
-                                                <Info label={'Estado NF'} value={pedido?.nf?.estado} />
-                                                <Info label={'Uf NF'} value={pedido?.nf?.uf} />
-                                                <Info label={'Comprovante de Pagamento'} value={pedido?.comprovantePagamento} />
-                                                <Info label={'Tipo de Comprovante'} value={pedido?.tipoComprovante} />
-                                                <Grid item xs={12} sm={2}>
-                                                    <Button
-                                                        variant="contained"
-                                                        sx={{
-                                                            bgcolor: indigo[800],
-                                                            color: 'white',
-                                                            ':hover': {
-                                                                bgcolor: indigo[900]
-                                                            }
-                                                        }}
-                                                        endIcon={<SaveAs />}
-                                                    >
-                                                        Parecer
-                                                    </Button>
-                                                </Grid>
-                                            </Grid>
-                                        </TableCell>
-                                    </TableRow>
-                                </React.Fragment>
-                            ))}
+                            {
+                                pacotes?.protocolos?.map((protocolo, index) => (
+                                    <React.Fragment key={protocolo._id}>
+                                        <TableRow>
+                                            <TableCell align="left">
+                                                <IconButton
+                                                    size="small"
+                                                    onClick={() => setOpenSubRow(prev => ({ ...prev, [index]: !prev[index] }))}
+                                                >
+                                                    <Tooltip title='Detalhes'>
+                                                        {openSubRow[index] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                                                    </Tooltip>
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell align="left">{protocolo.codigo}</TableCell>
+                                            <TableCell align="left">{protocolo.pedidos.length}</TableCell>
+                                            <TableCell align="left">
+                                                <Chip
+                                                    label={protocolo.status}
+                                                    sx={{
+                                                        color: 'white',
+                                                        backgroundColor: colorStatusRsdBradesco[protocolo.status],
+                                                    }}
+                                                    size="small"
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell colSpan={4} style={{ paddingBottom: 0, paddingTop: 0 }}>
+                                                <Collapse in={openSubRow[index]} timeout="auto" unmountOnExit>
+                                                    <Box margin={1}>
+                                                        <Table size="small" >
+                                                            <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[700]} 95%)` }}>
+                                                                <TableRow>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Sinistro</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Data Solicitação</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Segurado</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Cod Carteirinha</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>CPF</TableCell>
+                                                                    <TableCell align="left" sx={{ color: 'white' }}>Status</TableCell>
+                                                                    <TableCell></TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {protocolo.pedidos.map((pedido, index) => (
+                                                                    <React.Fragment key={index} >
+                                                                        <TableRow >
+                                                                            <TableCell align="left">{pedido.sinistro}</TableCell>
+                                                                            <TableCell align="left">{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
+                                                                            <TableCell align="left">{pedido.segurado.nome}</TableCell>
+                                                                            <TableCell align="left">{pedido.segurado.codigo}</TableCell>
+                                                                            <TableCell align="left">{pedido.segurado.cpf}</TableCell>
+                                                                            <TableCell align="left">
+                                                                                <Chip
+                                                                                    label={pedido.status}
+                                                                                    sx={{
+                                                                                        color: 'white',
+                                                                                        backgroundColor: colorStatusRsdBradesco[pedido.status],
+                                                                                    }}
+                                                                                    size="small"
+                                                                                />
+                                                                            </TableCell>
+                                                                            <TableCell></TableCell>
+                                                                        </TableRow>
+                                                                        <TableRow>
+                                                                            <TableCell colSpan={7}>
+                                                                                <Grid container spacing={2} mt={1}>
+                                                                                    <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
+                                                                                    <Info label={'Especialidade'} value={pedido?.especialidade} />
+                                                                                    <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
+                                                                                    <Info label={'Maior Data Execução'} value={moment(pedido.dataCriacao).format('DD/MM/YYYY')} />
+                                                                                    <Info label={'Tipo Evento'} value={pedido?.evento?.tipo} />
+                                                                                    <Info label={'Data Evento'} value={moment(pedido?.evento?.data).format('DD/MM/YYYY')} />
+                                                                                    <Info label={'CPF/CNPJ do Prestador'} value={pedido?.prestador.cpfCnpj} />
+                                                                                    <Info label={'Nome do Prestador'} value={pedido?.prestador.nome} />
+                                                                                    <Info label={'UF Prestador'} value={pedido?.prestador?.uf} />
+                                                                                    <Info label={'N° NF'} value={pedido?.nf?.numero} />
+                                                                                    <Info label={'Codigo NF'} value={pedido?.nf?.cofigo} />
+                                                                                    <Info label={'Cidade NF'} value={pedido?.nf?.cidade} />
+                                                                                    <Info label={'Estado NF'} value={pedido?.nf?.estado} />
+                                                                                    <Info label={'Uf NF'} value={pedido?.nf?.uf} />
+                                                                                    <Grid item xs={12} sm={2}>
+                                                                                        <ModalParecer id={pedido?._id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
+                                                                                    </Grid>
+                                                                                </Grid>
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </React.Fragment>
+                                                                ))}
+                                                            </TableBody >
+                                                        </Table >
+                                                    </Box>
+                                                </Collapse>
+
+                                            </TableCell>
+                                        </TableRow>
+                                    </React.Fragment>
+                                ))
+                            }
                         </TableBody>
                     </Table>
                     <Grid
@@ -220,6 +291,7 @@ const Protocolos = () => {
                                                 </TableRow>
                                             ))
                                         } */}
+
                                     </TableBody>
                                 </Table>
                             </TableContainer>
@@ -254,7 +326,7 @@ const Protocolos = () => {
                                         </TableHead>
                                         <TableBody>
                                             {/* {
-                                                                                                        arquivos.map((arquivo, index) => ( */}
+                                                    arquivos.map((arquivo, index) => ( */}
                                             <TableRow>
                                                 <TableCell>
                                                     {/* {arquivo} */}
@@ -283,7 +355,7 @@ const Protocolos = () => {
                                     </Table>
                                 </TableContainer>
                             </Box>
-                            {/* <ModalUploadArquivo item={item} setArquivos={setArquivos} /> */}
+                            <ModalUploadArquivo />
                         </Grid>
                     </Grid>
                     <Title
