@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Collapse, Container, Divider, FormControlLabel, Grid, IconButton, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
 import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato, updatePacote } from "../../../_services/rsdBradesco.service"
-import { CloudDownload, KeyboardArrowDown, KeyboardArrowUp, SaveAs } from "@mui/icons-material"
+import { CloudDownload } from "@mui/icons-material"
 import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
@@ -137,7 +137,7 @@ const Protocolos = () => {
                     >
                         {pacote?.status}
                     </Typography>
-                    <Divider />
+                    <Divider sx={{ mt: 2 }} />
                     <Ficha
                         titular={titular}
                         segurados={segurados}

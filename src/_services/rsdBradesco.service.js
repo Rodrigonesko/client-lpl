@@ -38,6 +38,10 @@ export const deleteSegurado = async (id) => {
     return await new ApiCall(`/segurado/${id}`, url).delete()
 }
 
+export const findByCodigoSegurado = async (codigo) => {
+    return await new ApiCall(`/segurado/codigo/${codigo}`, url).get()
+}
+
 /* Titular */
 
 export const createTitular = async (data) => {
@@ -66,6 +70,10 @@ export const updateTitular = async (id, data) => {
 
 export const deleteTitular = async (id) => {
     return await new ApiCall(`/titular/${id}`, url).delete()
+}
+
+export const findByCodigoTitular = async (codigo) => {
+    return await new ApiCall(`/titular/findByCodigo/${codigo}`, url).get()
 }
 
 /* Pedidos */
@@ -136,4 +144,8 @@ export const removerTentativa = async (id, idTentativa) => {
 
 export const updatePacote = async (id, data) => {
     return await new ApiCall(`/pacote/${id}`, url).put(data)
+}
+
+export const criarPacote = async () => {
+    return await new ApiCall(`/pacote/createManual`, url).post()
 }

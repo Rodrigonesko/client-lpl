@@ -2,6 +2,7 @@ import { Box, Button, Container, Table, TableCell, TableHead, TableRow } from "@
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { deepPurple, indigo, red } from "@mui/material/colors"
+import ModalCriarManual from "./components/ModalCriarManual"
 
 const CriarPacoteManual = () => {
     return (
@@ -12,7 +13,7 @@ const CriarPacoteManual = () => {
                         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                     >
                         <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>Criar Pacote Manual</Title>
-                        <Button variant='contained' sx={{ borderRadius: '10px' }} >Criar Pacote</Button>
+                        <ModalCriarManual />
                     </Box>
                     <Box
                         sx={{ mt: 10 }}
