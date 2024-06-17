@@ -270,16 +270,15 @@ const RsdBradesco = () => {
                                                         <TableCell>{pacote.titular.codigo}</TableCell>
                                                         <TableCell>
                                                             {
-                                                                pacote.pedidos.map((pedido) => {
-                                                                    return <Typography
-                                                                        key={pedido._id}
-                                                                        variant={'body2'}
-                                                                    >
-                                                                        {
-                                                                            pedido.segurado.nome
-                                                                        }
-                                                                    </Typography>
-                                                                })
+                                                                Array.from(new Set(pacote.pedidos.map(pedido => pedido.segurado.nome)))
+                                                                    .map((nomeUnico, index) => (
+                                                                        <Typography
+                                                                            key={index} // Usando index como chave porque nomes são únicos agora
+                                                                            variant={'body2'}
+                                                                        >
+                                                                            {nomeUnico}
+                                                                        </Typography>
+                                                                    ))
                                                             }
                                                         </TableCell>
                                                         <TableCell>

@@ -4,9 +4,9 @@ import Toast from "../../../../components/Toast/Toast"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
 import { CloudUpload } from "@mui/icons-material"
 import { blue } from "@mui/material/colors"
-import { uploadArquivoPedido } from "../../../../_services/sulAmerica.service"
+import { uploadArquivo } from "../../../../_services/rsdBradesco.service"
 
-const ModalUploadArquivo = ({ item, setArquivos }) => {
+const ModalUploadArquivo = ({ item, setItem }) => {
 
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
@@ -23,16 +23,17 @@ const ModalUploadArquivo = ({ item, setArquivos }) => {
     }
 
     const handleUpload = async () => {
+        console.log(item);
         const formData = new FormData()
         formData.append('file', file, file.name)
         try {
-            const response = await uploadArquivoPedido(item._id, formData)
+            const response = await uploadArquivo(item._id, formData)
             setOpenToast(true)
             setMessage('Upload feito com sucesso')
             setSeverity('success')
             handleClose()
             setFile(null)
-            setArquivos(prevState => [...prevState, response])
+            setItem(response)
         } catch (error) {
             console.error(error);
             setOpenToast(true)
@@ -47,12 +48,7 @@ const ModalUploadArquivo = ({ item, setArquivos }) => {
                 variant='contained'
                 onClick={handleClickOpen}
                 sx={{
-                    mt: 2,
-                    bgcolor: blue[900],
-                    color: 'white',
-                    ':hover': {
-                        bgcolor: blue[800]
-                    }
+                    mt: 2
                 }}
                 endIcon={<CloudUpload />}
             >
