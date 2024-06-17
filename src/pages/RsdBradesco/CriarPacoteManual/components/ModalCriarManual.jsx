@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { criarPacote, findByCodigoSegurado, findByCodigoTitular, getTitularById } from "../../../../_services/rsdBradesco.service";
 
@@ -64,11 +64,12 @@ const ModalCriarManual = () => {
                 fullWidth
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Adicionar Pacote Manual"}
+                    {"Adicionar Pacote"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }} >
+                            <Divider ><Chip label='Dados Segurado' /></Divider>
                             <TextField type='text' label='Carteirinha Segurado' value={carteirinhaSegurado} size='small' onChange={(e) => setCarteirinhaSegurado(e.target.value)}
                                 InputProps={{
                                     style: {
@@ -85,6 +86,7 @@ const ModalCriarManual = () => {
                                 }}
                                 margin="normal"
                             />
+                            <Divider ><Chip label='Dados Titular' /></Divider>
                             <TextField type='text' label='Carteirinha Titular' value={carteirinhaTitular} size='small' onChange={(e) => setCarteirinhaTitular(e.target.value)}
                                 InputProps={{
                                     style: {
