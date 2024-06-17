@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
 import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato, updatePacote } from "../../../_services/rsdBradesco.service"
 import { CloudDownload, KeyboardArrowDown, KeyboardArrowUp, SaveAs } from "@mui/icons-material"
-import { colorStatusRsdBradesco } from "../FichaSegurado/utils/types"
+import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
 import { valueToBRL } from "../../../functions/functions"
@@ -45,7 +45,7 @@ const Protocolos = () => {
 
     const { id } = useParams();
 
-    const [pacotes, setPacotes] = useState([]);
+    const [pacote, setPacote] = useState({});
     const [segurados, setSegurados] = useState([]);
     const [titular, setTitular] = useState();
 
@@ -76,12 +76,14 @@ const Protocolos = () => {
 
     const handleUpdateDossie = async (e) => {
         try {
-            setDossie(e.target.value)
+            const value = e.target.value === 'on' ? true : false
+
+            console.log(e.target.value);
             const upd = await updatePacote(
                 id,
-                dossie
+                { dossie: value }
             )
-            console.log(upd);
+            setDossie(value)
             setMessage('Dossiê solicitado com sucesso')
             setSeverity('success')
             setOpenToast(true)
@@ -97,11 +99,13 @@ const Protocolos = () => {
         const fetch = async () => {
             if (!id) return;
             try {
-                const dataPacotes = await getPacoteById(id);
-                setPacotes(dataPacotes);
-                const data = await getTitularById(dataPacotes.titular);
+                const dataPacote = await getPacoteById(id);
+                setPacote(dataPacote);
+                setDossie(dataPacote.dossie)
+                console.log(dataPacote.dossie);
+                const data = await getTitularById(dataPacote.titular);
                 setTitular(data);
-                const dataSegurados = await getSeguradosByTitular(dataPacotes.titular);
+                const dataSegurados = await getSeguradosByTitular(dataPacote.titular);
                 setSegurados(dataSegurados);
             } catch (error) {
                 console.log(error);
@@ -118,8 +122,21 @@ const Protocolos = () => {
             <Sidebar>
                 <Container maxWidth>
                     <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>
-                        Processamento do pacote - {pacotes?.codigo}
+                        Processamento do pacote - {pacote?.codigo}
                     </Title>
+                    <Typography
+                        variant='subtitle2'
+                        sx={{
+                            color: 'white',
+                            bgcolor: colorStatusRsdBradesco[pacote?.status],
+                            fontWeight: 'bold',
+                            width: '100%',
+                            p: 1,
+                            borderRadius: '10px'
+                        }}
+                    >
+                        {pacote?.status}
+                    </Typography>
                     <Divider />
                     <Ficha
                         titular={titular}
@@ -135,11 +152,10 @@ const Protocolos = () => {
                             size={'small'}
                             fontColor={indigo[800]}
                             lineColor={red[500]}
-                            sx={{ mt: 2 }}
                         >
-                            Sub Pacotes
+                            Sinistros
                         </Title>
-                        <FormControlLabel control={<Switch color='success' value={dossie} onChange={handleUpdateDossie} />} label='Realizar Dossiê' />
+                        <FormControlLabel onChange={handleUpdateDossie} control={<Switch color='success' checked={dossie} />} label='Realizar Dossiê' />
                     </Box>
                     <Table size="small">
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
@@ -154,7 +170,7 @@ const Protocolos = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {pacotes?.pedidos?.map((pedido, index) => (
+                            {pacote?.pedidos?.map((pedido, index) => (
                                 <React.Fragment key={index} >
                                     <TableRow >
                                         <TableCell align="left">{pedido.sinistro}</TableCell>
@@ -163,14 +179,37 @@ const Protocolos = () => {
                                         <TableCell align="left">{pedido.segurado.codigo}</TableCell>
                                         <TableCell align="left">{pedido.segurado.cpf}</TableCell>
                                         <TableCell align="left">
-                                            <Chip
-                                                label={pedido.status}
+                                            <Box
                                                 sx={{
-                                                    color: 'white',
-                                                    backgroundColor: colorStatusRsdBradesco[pedido.status],
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    flexDirection: 'column',
+                                                    gap: '2px'
                                                 }}
-                                                size="small"
-                                            />
+                                            >
+                                                <Chip
+                                                    label={pedido.status}
+                                                    sx={{
+                                                        color: 'white',
+                                                        backgroundColor: colorStatusPedido[pedido.status],
+                                                        fontWeight: 'bold'
+                                                    }}
+                                                    size="small"
+                                                />
+                                                {
+                                                    pedido.parecer && <Chip
+                                                        label={pedido.parecer}
+                                                        sx={{
+                                                            color: 'white',
+                                                            backgroundColor: colorParecer[pedido.parecer],
+                                                            fontWeight: 'bold'
+                                                        }}
+                                                        size="small"
+                                                    />
+                                                }
+                                            </Box>
+
                                         </TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
@@ -191,9 +230,12 @@ const Protocolos = () => {
                                                 <Info label={'Cidade NF'} value={pedido?.nf?.cidade} />
                                                 <Info label={'Estado NF'} value={pedido?.nf?.estado} />
                                                 <Info label={'Uf NF'} value={pedido?.nf?.uf} />
-                                                <Grid item xs={12} sm={2}>
-                                                    <ModalParecer id={pedido?._id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
-                                                </Grid>
+                                                {
+                                                    (pedido.status !== 'SUCESSO' && pedido.status !== 'INSUCESSO') && <Grid item xs={12} sm={2}>
+                                                        <ModalParecer id={pedido._id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
+                                                    </Grid>
+                                                }
+
                                             </Grid>
                                         </TableCell>
                                     </TableRow>
@@ -321,12 +363,7 @@ const Protocolos = () => {
                             borderRadius: '15px'
                         }}
                     >
-                        <Roteiro
-                            key={pacotes._id}
-                            pacote={pacotes}
-                            titular={titular}
-                            segurado={segurados[0]}
-                        />
+                        <Roteiro />
                     </Box>
                 </Container>
                 <Toast
