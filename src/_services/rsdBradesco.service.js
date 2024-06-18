@@ -149,3 +149,11 @@ export const updatePacote = async (id, data) => {
 export const criarPacote = async () => {
     return await new ApiCall(`/pacote/createManual`, url).post()
 }
+
+export const createPacoteAPartiDoPedido = async (id) => {
+    return await new ApiCall(`/pacote/criarPacoteAPartirDoPedido/${id}`, url).post()
+}
+
+export const uploadArquivo = async (id, data) => {
+    return await new ApiCall(`/pacote/upload/${id}`, url).post(data)
+}

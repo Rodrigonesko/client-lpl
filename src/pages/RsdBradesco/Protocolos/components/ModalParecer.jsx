@@ -4,7 +4,7 @@ import { indigo } from "@mui/material/colors"
 import { useState } from "react"
 import { finalizarSinistro } from "../../../../_services/rsdBradesco.service"
 
-const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity }) => {
+const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity, setPacote }) => {
 
     const [openModal, setOpenModal] = useState(false)
 
@@ -34,12 +34,12 @@ const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity }) => {
                 status = 'INSUCESSO'
             }
 
-            await finalizarSinistro(id, {
+            const result = await finalizarSinistro(id, {
                 status,
                 parecer: statusParecer,
                 observacaoFinal: messageParecer
             })
-
+            setPacote(result) 
             setMessageParecer('')
             setStatusParecer('')
             setOpenToast(true)
