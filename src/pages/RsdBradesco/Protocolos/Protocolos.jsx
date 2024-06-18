@@ -75,13 +75,7 @@ const Protocolos = () => {
 
     const handleUpdateDossie = async (e) => {
         try {
-<<<<<<< HEAD
-            const value = e.target.value === 'on' ? true : false
-
-            console.log(e.target.value);
-=======
             const value = e.target.checked
->>>>>>> main
             await updatePacote(
                 id,
                 { dossie: value }
