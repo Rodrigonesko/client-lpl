@@ -8,6 +8,7 @@ import { getPacotesByTitular, getSeguradosByTitular, getTitularById } from "../.
 import Pacotes from "./components/Pacotes";
 import Toast from "../../../components/Toast/Toast";
 import Ficha from "../components/Ficha";
+import ModalCriarSegurado from "./components/ModalCriarSegurado";
 
 const FichaSegurado = () => {
 
@@ -59,6 +60,9 @@ const FichaSegurado = () => {
                     titular={titular}
                     segurados={segurados}
                 />
+                <Box sx={{ mt: 2 }}>
+                    <ModalCriarSegurado />
+                </Box>
                 <Table size="small" sx={{ mb: 5, mt: 3 }}>
                     <TableHead sx={{ background: `linear-gradient(45deg, ${red[800]} 80%, ${deepPurple[700]} 95%)` }}>
                         <TableRow>

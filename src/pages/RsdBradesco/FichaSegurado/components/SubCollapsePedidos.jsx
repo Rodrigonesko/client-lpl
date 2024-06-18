@@ -1,9 +1,8 @@
-import { Box, Button, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
-import { deepPurple, grey, indigo, red } from "@mui/material/colors";
+import { Box, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material"
+import { deepPurple, grey, red } from "@mui/material/colors";
 import { useState } from "react";
-import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../../utils/types";
+import { colorParecer, colorStatusPedido } from "../../utils/types";
 import moment from "moment";
-import { SaveAs } from "@mui/icons-material";
 import { valueToBRL } from "../../../../functions/functions";
 
 const Info = ({ label, value }) => (

@@ -3,8 +3,9 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { indigo, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
-import { getSeguradoByFilter, getSegurados } from "../../../_services/rsdBradesco.service"
+import { getSeguradoByFilter } from "../../../_services/rsdBradesco.service"
 import { ArrowForwardIos } from "@mui/icons-material"
+import ModalCriarTitular from "./components/ModalCriarTitular"
 
 const Segurados = () => {
 
@@ -37,7 +38,12 @@ const Segurados = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size={'medium'} fontColor={indigo[900]} lineColor={red[700]} >Segurados</Title>
+                    <Box
+                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    >
+                        <Title size={'medium'} fontColor={indigo[900]} lineColor={red[700]} >Segurados</Title>
+                        <ModalCriarTitular />
+                    </Box>
                     <Box
                         sx={{
                             display: 'flex',

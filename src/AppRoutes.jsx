@@ -180,7 +180,6 @@ import UploadBradesco from "./pages/RsdBradesco/Upload/Index";
 import Segurados from "./pages/RsdBradesco/Segurados/Index";
 import FichaSegurado from "./pages/RsdBradesco/FichaSegurado/Index";
 import Protocolos from "./pages/RsdBradesco/Protocolos/Protocolos";
-import CriarPacoteManual from "./pages/RsdBradesco/CriarPacoteManual/CriarPacoteManual";
 
 const AppRoutes = () => {
     return (
@@ -204,9 +203,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/bradesco/protocolos/:id" element={<ProtectedRoute>
                     <Protocolos />
-                </ProtectedRoute>} />
-                <Route exact path="/bradesco/criarPacoteManual" element={<ProtectedRoute>
-                    <CriarPacoteManual />
                 </ProtectedRoute>} />
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>

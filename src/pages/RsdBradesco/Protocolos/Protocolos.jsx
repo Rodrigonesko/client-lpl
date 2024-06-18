@@ -79,7 +79,7 @@ const Protocolos = () => {
             const value = e.target.value === 'on' ? true : false
 
             console.log(e.target.value);
-            const upd = await updatePacote(
+            await updatePacote(
                 id,
                 { dossie: value }
             )
