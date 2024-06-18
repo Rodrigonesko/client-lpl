@@ -1,12 +1,37 @@
-import { ArrowForward, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
+import { ArrowForward, Delete, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
 import { Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material"
 import { useState } from "react"
 import { colorStatusRsdBradesco } from "../../utils/types"
 import SubCollapsePedidos from "./SubCollapsePedidos"
+import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
+import { red } from "@mui/material/colors"
+import { deletePacote } from "../../../../_services/rsdBradesco.service"
 
-const Pacotes = ({ pacote }) => {
+const Pacotes = ({ pacote,
+    setPacotes,
+    setOpenToast,
+    setMessage,
+    setSeverity,
+    segurados
+}) => {
 
     const [openRow, setOpenRow] = useState(false)
+
+
+    const handleDelete = async () => {
+        try {
+            await deletePacote(pacote._id)
+            setMessage('Pacote deletado com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+            setPacotes(prev => prev.filter(item => item._id !== pacote._id))
+        } catch (error) {
+            console.log(error)
+            setMessage('Erro ao deletar pacote')
+            setSeverity('error')
+            setOpenToast(true)
+        }
+    }
 
     return (
         <>
@@ -40,6 +65,20 @@ const Pacotes = ({ pacote }) => {
                 <TableCell
                     align="right"
                 >
+                    {pacote.pedidos.length === 0 &&
+                        <ModalComponent
+                            buttonIcon={<Delete />}
+                            buttonText="Deletar"
+                            buttonColorScheme={red[800]}
+                            headerText="Deletar Pacote"
+                            size="sm"
+                            saveButtonColorScheme={red[800]}
+                            textButton={'Deletar'}
+                            onAction={handleDelete}
+                        >
+                            Deseja Deletar o Pacote {pacote.codigo}?
+                        </ModalComponent>
+                    }
                     <Tooltip title='Detalhes'>
                         <IconButton size='small' href={`/bradesco/protocolos/${pacote._id}`} >
                             <ArrowForward color="primary" />
@@ -49,7 +88,7 @@ const Pacotes = ({ pacote }) => {
             </TableRow>
             <TableRow>
                 <TableCell colSpan={5}>
-                    <SubCollapsePedidos pedido={pacote.pedidos} openSubRow={openRow} />
+                    <SubCollapsePedidos openSubRow={openRow} pacote={pacote} segurados={segurados} />
                 </TableCell>
             </TableRow>
         </>

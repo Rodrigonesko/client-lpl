@@ -4,6 +4,14 @@ const url = 'http://localhost:5002'
 
 /* Prestadores */
 
+export const getPrestadorByCpfCnpj = async (cpfCnpj) => {
+    return await new ApiCall(`/prestador/cpfCnpj/${cpfCnpj}`, url).get()
+}
+
+export const createPrestador = async (data) => {
+    return await new ApiCall('/prestador', url).post(data)
+}
+
 /* Segurado */
 
 export const createSegurado = async (data) => {
@@ -160,4 +168,12 @@ export const createPacoteAPartiDoPedido = async (id) => {
 
 export const uploadArquivo = async (id, data) => {
     return await new ApiCall(`/pacote/upload/${id}`, url).post(data)
+}
+
+export const deletePacote = async (id) => {
+    return await new ApiCall(`/pacote/id/${id}`, url).delete()
+}
+
+export const adicionarPedido = async (id, data) => {
+    return await new ApiCall(`/pacote/pedido/${id}`, url).post(data)
 }
