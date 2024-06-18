@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { criarPacote, findByCodigoTitular } from "../../../../_services/rsdBradesco.service";
+import { createTitular, findByCodigoTitular } from "../../../../_services/rsdBradesco.service";
 import Toast from "../../../../components/Toast/Toast";
 
 const ModalCriarTitular = () => {
@@ -49,14 +49,14 @@ const ModalCriarTitular = () => {
                 return
             }
 
-            // const create = await criarPacote(
-            //     carteirinhaTitular,
-            //     nomeTitular,
-            //     cpfTitular,
-            //     celularTitular,
-            //     emailTitular
-            // )
-            // console.log(create);
+            const create = await createTitular({
+                codigo: carteirinhaTitular,
+                nome: nomeTitular,
+                cpf: cpfTitular,
+                celular: celularTitular,
+                email: emailTitular
+            })
+            console.log(create);
             setOpenSnack(true)
             setSeverity('success')
             setMessage('Titular adicionado com sucesso!')

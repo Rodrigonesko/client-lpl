@@ -157,7 +157,7 @@ const Protocolos = () => {
                         >
                             {pacote?.status}
                         </Typography>
-                        <Divider />
+                        <Divider sx={{ mt: 2 }} />
                         <Ficha
                             titular={titular}
                             segurados={segurados}
@@ -188,7 +188,7 @@ const Protocolos = () => {
                                     <TableCell align="left" sx={{ color: 'white' }}>Segurado</TableCell>
                                     <TableCell align="left" sx={{ color: 'white' }}>Cod Carteirinha</TableCell>
                                     <TableCell align="left" sx={{ color: 'white' }}>CPF</TableCell>
-                                    <TableCell align="left" sx={{ color: 'white' }}>Status</TableCell>
+                                    <TableCell align="center" sx={{ color: 'white' }}>Status</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>

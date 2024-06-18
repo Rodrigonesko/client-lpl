@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { indigo, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
-import { getSeguradoByFilter } from "../../../_services/rsdBradesco.service"
+import { getTitularByFilter, getTitularesByFilter } from "../../../_services/rsdBradesco.service"
 import { ArrowForwardIos } from "@mui/icons-material"
 import ModalCriarTitular from "./components/ModalCriarTitular"
 
@@ -14,14 +14,14 @@ const Segurados = () => {
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
 
-    const [segurados, setSegurados] = useState([])
+    const [titulares, setTitulares] = useState([])
     const [pesquisa, setPesquisa] = useState('')
 
     const fetchData = async () => {
         setLoading(true)
         try {
-            const get = await getSeguradoByFilter(pesquisa, page, rowsPerPage)
-            setSegurados(get.segurados)
+            const get = await getTitularesByFilter(pesquisa, page, rowsPerPage)
+            setTitulares(get.titulares)
             setTotalPages(get.total)
         } catch (error) {
             console.log(error);
@@ -41,7 +41,7 @@ const Segurados = () => {
                     <Box
                         sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                     >
-                        <Title size={'medium'} fontColor={indigo[900]} lineColor={red[700]} >Segurados</Title>
+                        <Title size={'medium'} fontColor={indigo[900]} lineColor={red[700]} >Titulares</Title>
                         <ModalCriarTitular />
                     </Box>
                     <Box
@@ -108,9 +108,8 @@ const Segurados = () => {
                                 >
                                     <TableHead sx={{ background: indigo[800] }}>
                                         <TableRow>
-                                            <TableCell sx={{ color: 'white' }}>CPF</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Segurado</TableCell>
-                                            <TableCell sx={{ color: 'white' }}>Titular do Segurado</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>Carteirinha</TableCell>
+                                            <TableCell sx={{ color: 'white' }}>Titular</TableCell>
                                             <TableCell sx={{ color: 'white' }}>E-mail</TableCell>
                                             <TableCell sx={{ color: 'white' }}>Celular</TableCell>
                                             <TableCell></TableCell>
@@ -118,24 +117,15 @@ const Segurados = () => {
                                     </TableHead>
                                     <TableBody>
                                         {
-                                            segurados.map((segurado) => (
+                                            titulares.map((titular) => (
                                                 <TableRow>
-                                                    <TableCell>{segurado.cpf}</TableCell>
+                                                    <TableCell>{titular.codigo}</TableCell>
+                                                    <TableCell>{titular.nome}</TableCell>
+                                                    <TableCell>{titular.email}</TableCell>
+                                                    <TableCell>{titular.celular}</TableCell>
                                                     <TableCell>
-                                                        {
-                                                            segurado.nome === segurado.titular.nome ? (
-                                                                <Chip label={segurado.nome} variant="outlined" color="error" sx={{ fontWeight: 'bold' }} />
-                                                            ) : (
-                                                                segurado.nome
-                                                            )
-                                                        }
-                                                    </TableCell>
-                                                    <TableCell>{segurado.titular.nome}</TableCell>
-                                                    <TableCell>{segurado.email}</TableCell>
-                                                    <TableCell>{segurado.celular}</TableCell>
-                                                    <TableCell>
-                                                        <Tooltip title={'Ficha Segurado'}>
-                                                            <IconButton size="small" href={`/bradesco/fichaSegurado/${segurado.titular._id}`} >
+                                                        <Tooltip title={'Ficha Titular'}>
+                                                            <IconButton size="small" href={`/bradesco/fichaSegurado/${titular._id}`} >
                                                                 <ArrowForwardIos fontSize="10px" />
                                                             </IconButton>
                                                         </Tooltip>

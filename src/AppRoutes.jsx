@@ -195,7 +195,7 @@ const AppRoutes = () => {
                 <Route exact path="/bradesco/uploadBradesco" element={<ProtectedRoute>
                     <UploadBradesco />
                 </ProtectedRoute>} />
-                <Route exact path="/bradesco/segurados" element={<ProtectedRoute>
+                <Route exact path="/bradesco/titulares" element={<ProtectedRoute>
                     <Segurados />
                 </ProtectedRoute>} />
                 <Route exact path="/bradesco/fichaSegurado/:id" element={<ProtectedRoute>
