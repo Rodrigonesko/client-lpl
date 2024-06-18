@@ -1,10 +1,10 @@
-import { Box, Button, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
-import { deepPurple, grey, indigo, red } from "@mui/material/colors";
+import { Box, Chip, Collapse, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material"
+import { deepPurple, grey, red } from "@mui/material/colors";
 import { useState } from "react";
-import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../../utils/types";
+import { colorParecer, colorStatusPedido } from "../../utils/types";
 import moment from "moment";
-import { SaveAs } from "@mui/icons-material";
 import { valueToBRL } from "../../../../functions/functions";
+import ModalCriarPedido from "./ModalCriarPedido";
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -32,9 +32,9 @@ const Info = ({ label, value }) => (
     </Grid>
 )
 
-const SubCollapsePedidos = ({ pedido, openSubRow }) => {
+const SubCollapsePedidos = ({ pacote, openSubRow, segurados }) => {
 
-    const [pedidos, setPedidos] = useState(pedido)
+    const [pedidos, setPedidos] = useState(pacote.pedidos)
 
     return (
         <>
@@ -53,9 +53,9 @@ const SubCollapsePedidos = ({ pedido, openSubRow }) => {
                     </TableHead>
 
                     {
-                        pedidos.map((pedido, index) => (
-                            <TableBody>
-                                <TableRow key={index._id}>
+                        pedidos.map((pedido) => (
+                            <TableBody key={pedido._id}>
+                                <TableRow>
                                     <TableCell align="center" >{pedido.sinistro}</TableCell>
                                     <TableCell align="center" >{moment(pedido.dataSolicitacao).format('DD/MM/YYYY')}</TableCell>
                                     <TableCell align="center" >{pedido.tipoDocumento}</TableCell>
@@ -113,6 +113,11 @@ const SubCollapsePedidos = ({ pedido, openSubRow }) => {
                             </TableBody >
                         ))
                     }
+                    <Box
+                        m={1}
+                    >
+                        <ModalCriarPedido segurados={segurados} pacote={pacote} />
+                    </Box>
                 </Table>
             </Collapse >
         </>
