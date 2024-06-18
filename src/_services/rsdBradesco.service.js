@@ -72,6 +72,10 @@ export const getTitularByFilter = async (pesquisa, page, limit) => {
     return await new ApiCall(`/titular/filter?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
 }
 
+export const getTitularesByFilter = async (pesquisa, page, limit) => {
+    return await new ApiCall(`/titular/filterTitulares?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
+}
+
 export const updateTitular = async (id, data) => {
     return await new ApiCall(`/titular/${id}`, url).put(data)
 }

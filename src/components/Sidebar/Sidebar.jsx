@@ -283,8 +283,7 @@ const Sidebar = ({ children }) => {
                         <SubMenu title={"RSD Bradesco"} icon={<PriceCheckOutlined />} >
                             <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
                             <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
-                            <MenuItem><Link to='/bradesco/segurados'>Segurados</Link></MenuItem>
-                            <MenuItem><Link to='/bradesco/criarPacoteManual'>Criar Pacote Manual</Link></MenuItem>
+                            <MenuItem><Link to='/bradesco/titulares'>Titulares</Link></MenuItem>
                         </SubMenu>
 
                     )}

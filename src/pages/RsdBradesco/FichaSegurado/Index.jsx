@@ -8,8 +8,10 @@ import { getPacotesByTitular, getSeguradosByTitular, getTitularById } from "../.
 import Pacotes from "./components/Pacotes";
 import Toast from "../../../components/Toast/Toast";
 import Ficha from "../components/Ficha";
+import ModalCriarSegurado from "./components/ModalCriarSegurado";
 import ModalCriarPacote from "./components/ModalCriarPacote";
 import { themeBradesco } from "../components/theme";
+
 
 const FichaSegurado = () => {
 
@@ -51,6 +53,7 @@ const FichaSegurado = () => {
                 <Box
                     m={2}
                 >
+
                     <Title
                         size={'medium'}
                         fontColor={indigo[900]}
@@ -58,6 +61,9 @@ const FichaSegurado = () => {
                     >
                         {titular?.nome}
                     </Title>
+ <Box sx={{ mt: 2 }}>
+                    <ModalCriarSegurado />
+                </Box>
                     <Divider />
                     <Ficha
                         titular={titular}
@@ -68,7 +74,6 @@ const FichaSegurado = () => {
                     >
                         <ModalCriarPacote titular={titular} setFlushHook={setFlushHook} />
                     </Box>
-
                     <Table size="small" sx={{ mb: 5, mt: 3 }}>
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[800]} 80%, ${deepPurple[700]} 95%)` }}>
                             <TableRow>
@@ -93,7 +98,6 @@ const FichaSegurado = () => {
                                     />
                                 ))
                             }
-
                         </TableBody>
                     </Table>
                 </Box>
