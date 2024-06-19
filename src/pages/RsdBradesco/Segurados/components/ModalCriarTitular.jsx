@@ -1,10 +1,11 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { createTitular, findByCodigoTitular } from "../../../../_services/rsdBradesco.service";
 import Toast from "../../../../components/Toast/Toast";
-import InputMask from "react-input-mask";
+import InputMask from 'react-input-mask';
+import { numberToWhatsapp } from "../../../../functions/functions";
 
-const ModalCriarTitular = () => {
+const ModalCriarTitular = ({ setFlushHook }) => {
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -18,6 +19,7 @@ const ModalCriarTitular = () => {
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
+    const [loading, setLoading] = useState(false)
 
 
     const handleClose = () => {
@@ -34,6 +36,7 @@ const ModalCriarTitular = () => {
     }
 
     const handleCreate = async () => {
+        setLoading(true)
         try {
             const getTitular = await findByCodigoTitular(carteirinhaTitular)
             if (getTitular) {
@@ -43,45 +46,52 @@ const ModalCriarTitular = () => {
                 return
             }
 
-            if ((!carteirinhaTitular) || (!nomeTitular)) {
+            if ((!carteirinhaTitular) || (!nomeTitular) || (carteirinhaTitular.trim().length < 13)) {
                 setOpenSnack(true)
                 setSeverity('warning')
-                setMessage('Insira o Código da Carteirinha e o nome do Titular!')
+                setMessage('Insira o Código da Carteirinha e o nome do Titular corretamente!')
                 return
             }
 
             const create = await createTitular({
-                codigo: carteirinhaTitular,
-                nome: nomeTitular,
-                cpf: cpfTitular,
-                celular: celularTitular,
-                email: emailTitular
+                codigo: carteirinhaTitular.trim(),
+                nome: nomeTitular.trim(),
+                cpf: cpfTitular.trim(),
+                celular: celularTitular.trim(),
+                email: emailTitular.trim(),
+                whatsapp: numberToWhatsapp(celularTitular.trim())
             })
             console.log(create);
             setOpenSnack(true)
             setSeverity('success')
             setMessage('Titular adicionado com sucesso!')
             handleClose()
+            setFlushHook(true)
+            setLoading(false)
         } catch (error) {
             console.log(error);
+            setOpenSnack(true)
+            setSeverity('error')
+            setMessage('Erro ao adicionar Titular!')
+            setLoading(false)
         }
     }
 
     const handleFilter = async () => {
         try {
             if (carteirinhaTitular.length > 13) {
-                const getTitular = await findByCodigoTitular(carteirinhaTitular)
-                setNomeTitular(getTitular.nome)
-                setCelularTitular(getTitular.celular)
-                setEmailTitular(getTitular.email)
-            } else {
-                setNomeTitular('')
-                setCpfTitular('')
-                setCelularTitular('')
-                setEmailTitular('')
+                const getTitular = await findByCodigoTitular(carteirinhaTitular.trim())
+                if (!getTitular) return
+                setNomeTitular(getTitular.nome || '')
+                setCelularTitular(getTitular.celular || '')
+                setEmailTitular(getTitular.email || '')
+                setCpfTitular(getTitular.cpf || '')
             }
         } catch (error) {
             console.log(error);
+            setOpenSnack(true)
+            setSeverity('error')
+            setMessage('Erro ao buscar titular')
         }
     }
 
@@ -144,26 +154,23 @@ const ModalCriarTitular = () => {
                                 }}
                                 margin="normal"
                             />
-                            <div>
-                                <InputMask
-                                    mask="(99) 99999-9999"
-                                    value={celularTitular}
-                                    onChange={(e) => setCelularTitular(e.target.value)}
-                                >
-                                    {() => <TextField
-                                        type='text'
-                                        label='Celular Titular'
-                                        size='small'
-                                        fullWidth
-                                        InputProps={{
-                                            style: {
-                                                borderRadius: '10px'
-                                            }
-                                        }}
-                                        margin="normal"
-                                    />}
-                                </InputMask>
-                            </div>
+                            <InputMask
+                                mask="(99) 99999-9999"
+                                value={celularTitular}
+                                onChange={(e) => setCelularTitular(e.target.value)}
+                            >
+                                {() => <TextField
+                                    type='text'
+                                    label='Celular Titular'
+                                    size='small'
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: '10px'
+                                        }
+                                    }}
+                                    margin="normal"
+                                />}
+                            </InputMask>
                             <TextField
                                 type='text'
                                 label='E-mail Titular'
@@ -180,8 +187,8 @@ const ModalCriarTitular = () => {
                         </Grid>
                     </DialogContentText>
                     <DialogActions>
-                        <Button onClick={handleClose} color='error'>Fechar</Button>
-                        <Button onClick={handleCreate} color='success' autoFocus>Criar</Button>
+                        <Button onClick={handleClose} disabled={loading} color='error'>Fechar</Button>
+                        <Button disabled={loading} endIcon={loading && <CircularProgress size={20} />} onClick={handleCreate} color='success' autoFocus>Criar</Button>
                     </DialogActions>
                 </DialogContent>
             </Dialog >

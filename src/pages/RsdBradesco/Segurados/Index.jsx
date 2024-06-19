@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { Box, Chip, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Tooltip } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { indigo, red } from "@mui/material/colors"
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { getTitularesByFilter } from "../../../_services/rsdBradesco.service"
 import { ArrowForwardIos } from "@mui/icons-material"
 import ModalCriarTitular from "./components/ModalCriarTitular"
+import { themeBradesco } from "../components/theme"
 
 const Segurados = () => {
 
@@ -13,6 +14,7 @@ const Segurados = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
 
     const [titulares, setTitulares] = useState([])
     const [pesquisa, setPesquisa] = useState('')
@@ -32,17 +34,17 @@ const Segurados = () => {
 
     useEffect(() => {
         fetchData()
-    }, [page, rowsPerPage, pesquisa])
+    }, [page, rowsPerPage, pesquisa, flushHook])
 
     return (
-        <>
-            <Sidebar>
+        <Sidebar>
+            <ThemeProvider theme={themeBradesco}>
                 <Container maxWidth>
                     <Box
                         sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                     >
                         <Title size={'medium'} fontColor={indigo[900]} lineColor={red[700]} >Titulares</Title>
-                        <ModalCriarTitular />
+                        <ModalCriarTitular setFlushHook={setFlushHook} />
                     </Box>
                     <Box
                         sx={{
@@ -142,8 +144,8 @@ const Segurados = () => {
                             )}
                     </TableContainer>
                 </Container>
-            </Sidebar>
-        </>
+            </ThemeProvider>
+        </Sidebar>
     )
 }
 
