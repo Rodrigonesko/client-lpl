@@ -171,7 +171,6 @@ const ModalCriarTitular = ({ setFlushHook }) => {
                                     margin="normal"
                                 />}
                             </InputMask>
-
                             <TextField
                                 type='text'
                                 label='E-mail Titular'

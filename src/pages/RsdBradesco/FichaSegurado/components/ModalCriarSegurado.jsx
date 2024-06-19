@@ -1,9 +1,10 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { findByCodigoSegurado } from "../../../../_services/rsdBradesco.service";
+import { createSegurado, findByCodigoSegurado } from "../../../../_services/rsdBradesco.service";
 import Toast from "../../../../components/Toast/Toast";
+import InputMask from "react-input-mask";
 
-const ModalCriarSegurado = () => {
+const ModalCriarSegurado = ({ id, setFlushHook }) => {
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -17,7 +18,6 @@ const ModalCriarSegurado = () => {
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
-
 
     const handleClose = () => {
         setOpenModal(false);
@@ -49,14 +49,22 @@ const ModalCriarSegurado = () => {
                 return
             }
 
-            // const create = await criarPacote(
-            //     carteirinhaSegurado,
-            //     nomeSegurado
-            // )
-            // console.log(create);
+            const celular = celularSegurado.replace(/\D/g, '');
+
+            const create = await createSegurado({
+                codigo: carteirinhaSegurado,
+                nome: nomeSegurado,
+                cpf: cpfSegurado,
+                celular: celularSegurado,
+                email: emailSegurado,
+                titular: id,
+                whatsapp: celularSegurado ? `whatsapp:+55${celular}` : ''
+            })
+            console.log(create);
             setOpenSnack(true)
             setSeverity('success')
             setMessage('Segurado adicionado com sucesso!')
+            setFlushHook(true)
             handleClose()
         } catch (error) {
             console.log(error);
@@ -66,16 +74,12 @@ const ModalCriarSegurado = () => {
     const handleFilter = async () => {
         try {
             if (carteirinhaSegurado.length > 14) {
-                const getSegurado = await findByCodigoSegurado(carteirinhaSegurado)
-                setNomeSegurado(getSegurado.nome)
-                setCpfSegurado(getSegurado.cpf)
-                setCelularSegurado(getSegurado.celular)
-                setEmailSegurado(getSegurado.email)
-            } else {
-                setNomeSegurado('')
-                setCpfSegurado('')
-                setCelularSegurado('')
-                setEmailSegurado('')
+                const getSegurado = await findByCodigoSegurado(carteirinhaSegurado.trim())
+                if (!getSegurado) return
+                setNomeSegurado(getSegurado.nome || '')
+                setCpfSegurado(getSegurado.cpf || '')
+                setCelularSegurado(getSegurado.celular || '')
+                setEmailSegurado(getSegurado.email || '')
             }
         } catch (error) {
             console.log(error);
@@ -95,7 +99,7 @@ const ModalCriarSegurado = () => {
                 fullWidth
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Adicionar Titular"}
+                    {"Adicionar Segurado"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -142,20 +146,27 @@ const ModalCriarSegurado = () => {
                                 }}
                                 margin="normal"
                             />
-                            <TextField
-                                type='text'
-                                required
-                                label='Celular Segurado'
-                                value={celularSegurado}
-                                size='small'
-                                onChange={(e) => setCelularSegurado(e.target.value)}
-                                InputProps={{
-                                    style: {
-                                        borderRadius: '10px'
-                                    }
-                                }}
-                                margin="normal"
-                            />
+                            <div>
+                                <InputMask
+                                    mask="(99) 99999-9999"
+                                    value={celularSegurado}
+                                    onChange={(e) => setCelularSegurado(e.target.value)}
+                                >
+                                    {() => <TextField
+                                        type='text'
+                                        required
+                                        label='Celular Segurado'
+                                        fullWidth
+                                        size='small'
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px'
+                                            }
+                                        }}
+                                        margin="normal"
+                                    />}
+                                </InputMask>
+                            </div>
                             <TextField
                                 type='text'
                                 required

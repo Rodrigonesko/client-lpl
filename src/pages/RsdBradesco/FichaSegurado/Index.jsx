@@ -61,14 +61,15 @@ const FichaSegurado = () => {
                     >
                         {titular?.nome}
                     </Title>
-                    <Box sx={{ mt: 2 }}>
-                        <ModalCriarSegurado />
-                    </Box>
                     <Divider />
                     <Ficha
                         titular={titular}
                         segurados={segurados}
                     />
+                    <Box sx={{ mt: 2, mb: 2 }}>
+                        <ModalCriarSegurado id={id} setFlushHook={setFlushHook} />
+                    </Box>
+                    <Divider />
                     <Box
                         mt={2}
                     >
@@ -95,6 +96,7 @@ const FichaSegurado = () => {
                                         setMessage={setMessage}
                                         setSeverity={setSeverity}
                                         segurados={segurados}
+                                        setFlushHook={setFlushHook}
                                     />
                                 ))
                             }

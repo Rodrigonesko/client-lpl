@@ -58,9 +58,10 @@ const ModalComponent = ({
                 </DialogContent>
                 <DialogActions>
                     <Button color="inherit" variant="contained" onClick={() => setOpen(false)}>Cancelar</Button>
+                    {!onAction ? '' : 
                     <Button
-                        variant="contained"
-                        onClick={async () => {
+                    variant="contained"
+                    onClick={async () => {
                             await onAction();
                             setOpen(false);
                         }}
@@ -70,9 +71,10 @@ const ModalComponent = ({
                                 backgroundColor: saveButtonColorScheme || 'primary.dark',
                                 opacity: 0.8
                             }
-
+                            
                         }}
-                    >{textButton ?? 'Salvar'}</Button>
+                        >{textButton ?? 'Salvar'}</Button>
+                    }
                 </DialogActions>
             </Dialog>
         </>
