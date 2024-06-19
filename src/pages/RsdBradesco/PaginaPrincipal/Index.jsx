@@ -8,6 +8,7 @@ import { getPacotesByFilter } from "../../../_services/rsdBradesco.service"
 import { ThemeProvider } from "@emotion/react"
 import { themeBradesco } from "../components/theme"
 import { colorStatusRsdBradesco } from "../utils/types"
+import ModalGerarRelatorios from "./components/ModalGerarRelatorios"
 
 const tabStyle = {
     '&:hover': {
@@ -114,7 +115,12 @@ const RsdBradesco = () => {
             <Sidebar>
                 <ThemeProvider theme={themeBradesco}>
                     <Container maxWidth>
-                        <Title size={'medium'} fontColor={indigo[800]} lineColor={red[600]} >Rsd Bradesco</Title>
+                        <Box
+                            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                        >
+                            <Title size={'medium'} fontColor={indigo[800]} lineColor={red[600]} >Rsd Bradesco</Title>
+                            <ModalGerarRelatorios />
+                        </Box>
                         <Tabs
                             value={status}
                             onChange={(e, newValue) => setStatus(newValue)}

@@ -61,9 +61,9 @@ const FichaSegurado = () => {
                     >
                         {titular?.nome}
                     </Title>
- <Box sx={{ mt: 2 }}>
-                    <ModalCriarSegurado />
-                </Box>
+                    <Box sx={{ mt: 2 }}>
+                        <ModalCriarSegurado />
+                    </Box>
                     <Divider />
                     <Ficha
                         titular={titular}
@@ -77,9 +77,9 @@ const FichaSegurado = () => {
                     <Table size="small" sx={{ mb: 5, mt: 3 }}>
                         <TableHead sx={{ background: `linear-gradient(45deg, ${red[800]} 80%, ${deepPurple[700]} 95%)` }}>
                             <TableRow>
-                                <TableCell ></TableCell>
-                                <TableCell align="center" sx={{ color: 'white' }}>Código</TableCell>
-                                <TableCell align="center" sx={{ color: 'white' }}>Responsável</TableCell>
+                                <TableCell align="left" sx={{ width: '20px' }} ></TableCell>
+                                <TableCell align="left" sx={{ color: 'white' }}>Código</TableCell>
+                                <TableCell align="left" sx={{ color: 'white' }}>Responsável</TableCell>
                                 <TableCell align="center" sx={{ color: 'white' }}>Status</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>

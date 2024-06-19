@@ -35,7 +35,7 @@ const Pacotes = ({ pacote,
 
     return (
         <>
-            <TableRow>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell align="left" >
                     <IconButton
                         size="small"
@@ -48,8 +48,8 @@ const Pacotes = ({ pacote,
                         </Tooltip>
                     </IconButton>
                 </TableCell>
-                <TableCell align="center">{pacote.codigo}</TableCell>
-                <TableCell align="center">{pacote.responsavel}</TableCell>
+                <TableCell align="left">{pacote.codigo}</TableCell>
+                <TableCell align="left">{pacote.responsavel}</TableCell>
                 <TableCell
                     align="center"
                 >

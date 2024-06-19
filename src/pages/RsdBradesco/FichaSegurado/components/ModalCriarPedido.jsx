@@ -8,10 +8,11 @@ import { adicionarPedido, createPedido, createPrestador, getPrestadorByCpfCnpj }
 
 const ModalCriarPedido = ({
     segurados,
-    pacote
+    pacote,
+    setPedidos
 }) => {
 
-    const { register, handleSubmit, setValue, control, watch } = useForm()
+    const { register, handleSubmit, setValue, watch } = useForm()
     const cpfCnpj = watch('prestador.cpfCnpj')
 
     const [open, setOpen] = useState(false)
@@ -36,6 +37,7 @@ const ModalCriarPedido = ({
             await adicionarPedido(pacote._id, {
                 pedido: pedido._id
             })
+            setPedidos([...pacote.pedidos, pedido])
             setMessage('Pedido criado com sucesso')
             setSeverity('success')
             setOpenToast(true)

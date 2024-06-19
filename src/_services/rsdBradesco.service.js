@@ -106,6 +106,10 @@ export const getPedidoById = async (id) => {
     return await new ApiCall(`/pedido/id/${id}`, url).get()
 }
 
+export const getRelatorioPedidos = async (dataInicio, dataFim, tipoRelatorio, status) => {
+    return await new ApiCall(`/pedido/relatorio?dataInicio=${dataInicio}&dataFim=${dataFim}&tipoRelatorio=${tipoRelatorio}&status=${status}`, url).get()
+}
+
 export const updatePedido = async (id, data) => {
     return await new ApiCall(`/pedido/${id}`, url).put(data)
 }
