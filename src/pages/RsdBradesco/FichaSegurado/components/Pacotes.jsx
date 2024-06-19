@@ -1,22 +1,25 @@
-import { ArrowForward, Delete, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
+import { ArrowForward, AssignmentReturnOutlined, Delete, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
 import { Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { colorStatusRsdBradesco } from "../../utils/types"
 import SubCollapsePedidos from "./SubCollapsePedidos"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
 import { red } from "@mui/material/colors"
-import { deletePacote } from "../../../../_services/rsdBradesco.service"
+import { deletePacote, updatePacote } from "../../../../_services/rsdBradesco.service"
+import AuthContext from "../../../../context/AuthContext"
 
 const Pacotes = ({ pacote,
     setPacotes,
     setOpenToast,
     setMessage,
     setSeverity,
-    segurados
+    segurados,
+    setFlushHook
 }) => {
 
     const [openRow, setOpenRow] = useState(false)
 
+    const { name } = useContext(AuthContext)
 
     const handleDelete = async () => {
         try {
@@ -28,6 +31,24 @@ const Pacotes = ({ pacote,
         } catch (error) {
             console.log(error)
             setMessage('Erro ao deletar pacote')
+            setSeverity('error')
+            setOpenToast(true)
+        }
+    }
+
+    const handleAssume = async () => {
+        try {
+            await updatePacote(
+                pacote._id,
+                { responsavel: name }
+            )
+            setMessage('Pacote assumido com sucesso')
+            setSeverity('success')
+            setOpenToast(true)
+            setFlushHook(true)
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao assumir pacote')
             setSeverity('error')
             setOpenToast(true)
         }
@@ -65,6 +86,20 @@ const Pacotes = ({ pacote,
                 <TableCell
                     align="right"
                 >
+                    {pacote.status === 'A INICIAR' &&
+                        <Tooltip title='Assumir Pacote'>
+                            <ModalComponent
+                                buttonIcon={<AssignmentReturnOutlined />}
+                                buttonText={'Assumir'}
+                                headerText={'Assumir Pacote'}
+                                size='sm'
+                                textButton={'Assumir'}
+                                onAction={handleAssume}
+                            >
+                                Deseja assumir o Pacote {pacote.codigo}?
+                            </ModalComponent>
+                        </Tooltip>
+                    }
                     {pacote.pedidos.length === 0 &&
                         <ModalComponent
                             buttonIcon={<Delete />}

@@ -96,6 +96,7 @@ const FichaSegurado = () => {
                                         setMessage={setMessage}
                                         setSeverity={setSeverity}
                                         segurados={segurados}
+                                        setFlushHook={setFlushHook}
                                     />
                                 ))
                             }

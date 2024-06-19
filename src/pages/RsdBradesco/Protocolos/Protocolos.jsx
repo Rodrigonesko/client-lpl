@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Typography } from "@mui/material"
+import { Box, Button, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
 import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato, updatePacote } from "../../../_services/rsdBradesco.service"
-import { CloudDownload, Phone } from "@mui/icons-material"
+import { CloudDownload, InfoOutlined, Phone } from "@mui/icons-material"
 import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
@@ -17,6 +17,7 @@ import ModalUploadArquivo from "./components/ModalUploadArquivo"
 import ModalNovoPacote from "./components/ModalNovoPacote"
 import { themeBradesco } from "../components/theme"
 import axios from "axios"
+import ModalComponent from "../../../components/ModalComponent/ModalComponent"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -141,9 +142,39 @@ const Protocolos = () => {
             <Sidebar>
                 <ThemeProvider theme={themeBradesco}>
                     <Container maxWidth>
-                        <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>
-                            Processamento do pacote - {pacote?.codigo}
-                        </Title>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>
+                                Processamento do pacote - {pacote?.codigo}
+                            </Title>
+                            <Tooltip title='Informações'>
+                                <ModalComponent
+                                    buttonIcon={<InfoOutlined fontSize='large' />}
+                                    buttonText={'Informações'}
+                                    headerText={'Informações'}
+                                    size='md'
+                                    textButton={'Fechar'}
+                                >
+                                    <Typography sx={{ mt: 2 }}>
+                                        <strong>Descrição</strong>: Crítica que identifica mais de 03 consultas solicitadas no período de 62 dias, no mesmo prestador para o grupo familiar (é gerada a crítica a partir da 4ª consulta).
+                                    </Typography>
+                                    <Typography fontSize={'14px'}>
+                                        <strong>Análise deverá avaliar a prática de partição de recibo ou consultas subsequentes sem justificativa para envio à LPL.</strong>
+                                    </Typography>
+
+                                    <Typography sx={{ mt: 2 }}>
+                                        <strong>Ação</strong>: O Analista deverá considerar em sua análise se a cobrança faz parte de algum cenário excludente que não configura fracionamento de recibo, ex: Grupo familiar com mais de um dependente menor em idade em consulta pediátrica, que justifique o atendimento subsequente, gestante em consulta obstétrica com alguma condição que justifique mais de um atendimento ao mês, paciente oncológico.
+                                    </Typography>
+                                    <Typography fontSize={'14px'}>
+                                        <strong>Importante que o analista avalie e confirme se realmente há mais de 3 consultas já reembolsadas no período (existem cenários em que o sistema considera eventos cancelados para retornar crítica, neste caso poderemos proceder com a análise técnica).</strong>
+                                    </Typography>
+
+                                    <Typography fontSize={'14px'} sx={{ mt: 2, mb: 2 }}>
+                                        No processo inicial é solicitado que o segurado inclua o comprovante de desembolso, para os eventos acima de <strong>R$ 500,00</strong>, apenas para o produto <strong>Bradesco Saúde</strong>. Esta regra não se aplica para Bradesco Saúde Operadora de Planos.
+                                    </Typography>
+
+                                </ModalComponent>
+                            </Tooltip>
+                        </Box>
                         <Typography
                             variant='subtitle2'
                             sx={{
