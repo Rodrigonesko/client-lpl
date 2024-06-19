@@ -3,7 +3,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { indigo, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
-import { getTitularByFilter, getTitularesByFilter } from "../../../_services/rsdBradesco.service"
+import { getTitularesByFilter } from "../../../_services/rsdBradesco.service"
 import { ArrowForwardIos } from "@mui/icons-material"
 import ModalCriarTitular from "./components/ModalCriarTitular"
 

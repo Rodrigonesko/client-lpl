@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { useEffect, useState } from "react";
 import { createTitular, findByCodigoTitular } from "../../../../_services/rsdBradesco.service";
 import Toast from "../../../../components/Toast/Toast";
+import InputMask from "react-input-mask";
 
 const ModalCriarTitular = () => {
 
@@ -143,19 +144,26 @@ const ModalCriarTitular = () => {
                                 }}
                                 margin="normal"
                             />
-                            <TextField
-                                type='text'
-                                label='Celular Titular'
-                                value={celularTitular}
-                                size='small'
-                                onChange={(e) => setCelularTitular(e.target.value)}
-                                InputProps={{
-                                    style: {
-                                        borderRadius: '10px'
-                                    }
-                                }}
-                                margin="normal"
-                            />
+                            <div>
+                                <InputMask
+                                    mask="(99) 99999-9999"
+                                    value={celularTitular}
+                                    onChange={(e) => setCelularTitular(e.target.value)}
+                                >
+                                    {() => <TextField
+                                        type='text'
+                                        label='Celular Titular'
+                                        size='small'
+                                        fullWidth
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px'
+                                            }
+                                        }}
+                                        margin="normal"
+                                    />}
+                                </InputMask>
+                            </div>
                             <TextField
                                 type='text'
                                 label='E-mail Titular'
