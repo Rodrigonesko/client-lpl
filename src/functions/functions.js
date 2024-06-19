@@ -102,3 +102,8 @@ const feriados = [
 export function calcularIdade(dataNascimento) {
     return moment().diff(dataNascimento, 'years');
 }
+
+export function numberToWhatsapp(number) {
+    number = number.replace(/\D/g, '');
+    return `whatsapp:+55${number}`;
+}
