@@ -49,8 +49,8 @@ const TemplateMenu = () => {
                 }}
             >
                 {
-                    templates.map(template => (
-                        <ModalInsertVariables template={template} />
+                    templates.map((template, index) => (
+                        <ModalInsertVariables key={index} template={template} />
                     ))
                 }
             </Menu>

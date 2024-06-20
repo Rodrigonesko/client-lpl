@@ -5,6 +5,7 @@ import { ChatContext } from './ChatContext'
 import moment from 'moment'
 import { Close, Search } from '@mui/icons-material'
 import { getBeneficiarioByNameAndSortByLastMessage, getBeneficiarios } from '../../../_services/sulAmerica.service'
+import { getSeguradoByFilter } from '../../../_services/rsdBradesco.service'
 
 const Contacts = () => {
 
@@ -25,11 +26,17 @@ const Contacts = () => {
                 }
                 if (whatsappSender === 'whatsapp:+551150268027') {
                     const response = await getBeneficiarioByNameAndSortByLastMessage('')
-                    console.log(response);
                     if (response.error) {
                         return
                     }
                     setContacts(response)
+                }
+                if(whatsappSender === 'whatsapp:+551150397403'){
+                    const response = await getSeguradoByFilter('', 1, 100)
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response.segurados)
                 }
 
             } catch (error) {
@@ -57,6 +64,14 @@ const Contacts = () => {
                         return
                     }
                     setContacts(response)
+                }
+                if(whatsappSender === 'whatsapp:+551150397403'){
+                    const response = await getSeguradoByFilter(search, 1, 100)
+                    console.log(response);
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response.segurados)
                 }
             } catch (error) {
                 console.log(error);

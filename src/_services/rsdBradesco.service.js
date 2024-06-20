@@ -1,6 +1,5 @@
 import { ApiCall } from "./api";
-//const token = localStorage.getItem('token')
-const url = 'http://localhost:5002'
+const url = process.env.REACT_APP_RSD_BRADESCO_SERVICE
 
 /* Prestadores */
 

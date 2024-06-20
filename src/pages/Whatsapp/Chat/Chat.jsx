@@ -11,6 +11,7 @@ import { io } from "socket.io-client";
 import AuthContext from "../../../context/AuthContext";
 import ModalEnviarArquivo from "./ModalEnviarArquivo";
 import { getBeneficiarioByWhatsapp, updateBeneficiario } from "../../../_services/sulAmerica.service";
+import { getSeguradoById, updateSegurado } from "../../../_services/rsdBradesco.service";
 
 const socket = io(process.env.REACT_APP_WHATSAPP_SERVICE)
 
@@ -71,10 +72,22 @@ const Chat = () => {
                 }
                 setMessages(response?.mensagens)
             }
+            if (whatsappSender === 'whatsapp:+551150397403') {
+                const response = await getSeguradoById(whatsappReceiver._id)
+                await updateSegurado(response._id, { quantidadeMensagens: 0 })
+                setFlushHook((prev) => !prev)
+                if (response.error) {
+                    setMessages([])
+                    return console.log(response.error)
+                }
+                setMessages(response?.mensagens)
+                console.log(response);
+            }
 
         }
-
-        fetchMessages()
+        if (whatsappReceiver._id) {
+            fetchMessages()
+        }
     }, [whatsappReceiver])
 
     useEffect(() => {
