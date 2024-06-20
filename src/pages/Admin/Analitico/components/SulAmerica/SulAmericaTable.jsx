@@ -32,7 +32,7 @@ const SulAmericaTable = ({ dataInicio, dataFim }) => {
 
     useEffect(() => {
         getAnalistasSulAmerica()
-    }, [])
+    }, [dataInicio, dataFim])
 
     return (
         <Box>
