@@ -30,7 +30,21 @@ export const arrPedidoProps = [
         label: 'Ramo',
         type: 'string',
     },
-
+    {
+        name: 'estipulante',
+        label: 'Estipulante',
+        type: 'string',
+    },
+    {
+        name: 'tipo',
+        label: 'Tipo',
+        type: 'string',
+    },
+    {
+        name: 'crm',
+        label: 'CRM',
+        type: 'string',
+    },
     {
         name: 'valorSolicitado',
         label: 'Valor Solicitado',
@@ -41,6 +55,16 @@ export const arrPedidoProps = [
         label: 'Valor Liberado',
         type: 'number',
     },
+    {
+        name: 'comprovantePagamento',
+        label: 'Comprovante de Pagamento?',
+        type: 'string',
+    },
+    {
+        name: 'tipoComprovante',
+        label: 'Tipo de Comprovante',
+        type: 'string',
+    }
 ]
 
 export const arrNfProps = [

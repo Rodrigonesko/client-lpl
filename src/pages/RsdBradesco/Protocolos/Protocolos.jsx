@@ -266,6 +266,7 @@ const Protocolos = () => {
                                         <TableRow>
                                             <TableCell colSpan={7}>
                                                 <Grid container spacing={2} mt={1}>
+                                                    <Info label={'Comprovante de Pagamento?'} value={pedido?.comprovantePagamento} />
                                                     <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
                                                     <Info label={'Especialidade'} value={pedido?.especialidade} />
                                                     <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
