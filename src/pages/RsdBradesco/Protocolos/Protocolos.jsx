@@ -19,6 +19,7 @@ import { themeBradesco } from "../components/theme"
 import axios from "axios"
 import ModalComponent from "../../../components/ModalComponent/ModalComponent"
 import ModalAdicionarObs from "./components/ModalAdicionarObs"
+import DrawerMaisInfos from "./components/DrawerMaisInfos"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -59,22 +60,6 @@ const Protocolos = () => {
     const [severity, setSeverity] = useState('')
     const [dossie, setDossie] = useState(false)
 
-    const handleTentativaContato = async () => {
-        try {
-            const result = await tentativaDeContato(id)
-            setPacote(result)
-            setMessage('Tentativa de contato registrada com sucesso')
-            setSeverity('success')
-            setOpenToast(true)
-        } catch (error) {
-            console.log(error);
-            setMessage('Erro ao registrar tentativa de contato')
-            setSeverity('error')
-            setOpenToast(true)
-        }
-
-    }
-
     const handleUpdateDossie = async (e) => {
         try {
             const value = e.target.checked
@@ -90,30 +75,6 @@ const Protocolos = () => {
             setMessage('Erro ao Atualizar Dossiê')
             setSeverity('error')
             setOpenToast(true)
-        }
-    }
-
-    const fileDownload = async (arquivo) => {
-        console.log(arquivo);
-        try {
-            const res = await axios.get(`http://localhost:5002/download/${arquivo}`, {
-                responseType: 'blob',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            const url = window.URL.createObjectURL(new Blob([res.data]))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', arquivo)
-            document.body.appendChild(link)
-            link.click()
-        } catch (error) {
-            console.log(error);
-            setOpenToast(true)
-            setSeverity('error')
-            setMessage(`Erro! ${error}`)
         }
     }
 
@@ -147,29 +108,32 @@ const Protocolos = () => {
                             <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]}>
                                 Processamento do pacote - {pacote?.codigo}
                             </Title>
-                            <ModalComponent
-                                buttonIcon={<InfoOutlined fontSize='large' />}
-                                buttonText={'Informações'}
-                                headerText={'Informações'}
-                                size='md'
-                                textButton={'Fechar'}
-                            >
-                                <Typography sx={{ mt: 2 }}>
-                                    <strong>Descrição</strong>: Crítica que identifica mais de 03 consultas solicitadas no período de 62 dias, no mesmo prestador para o grupo familiar (é gerada a crítica a partir da 4ª consulta).
-                                </Typography>
-                                <Typography fontSize={'14px'}>
-                                    <strong>Análise deverá avaliar a prática de partição de recibo ou consultas subsequentes sem justificativa para envio à LPL.</strong>
-                                </Typography>
-                                <Typography sx={{ mt: 2 }}>
-                                    <strong>Ação</strong>: O Analista deverá considerar em sua análise se a cobrança faz parte de algum cenário excludente que não configura fracionamento de recibo, ex: Grupo familiar com mais de um dependente menor em idade em consulta pediátrica, que justifique o atendimento subsequente, gestante em consulta obstétrica com alguma condição que justifique mais de um atendimento ao mês, paciente oncológico.
-                                </Typography>
-                                <Typography fontSize={'14px'}>
-                                    <strong>Importante que o analista avalie e confirme se realmente há mais de 3 consultas já reembolsadas no período (existem cenários em que o sistema considera eventos cancelados para retornar crítica, neste caso poderemos proceder com a análise técnica).</strong>
-                                </Typography>
-                                <Typography fontSize={'14px'} sx={{ mt: 2, mb: 2 }}>
-                                    No processo inicial é solicitado que o segurado inclua o comprovante de desembolso, para os eventos acima de <strong>R$ 500,00</strong>, apenas para o produto <strong>Bradesco Saúde</strong>. Esta regra não se aplica para Bradesco Saúde Operadora de Planos.
-                                </Typography>
-                            </ModalComponent>
+                            <Box>
+                                <ModalComponent
+                                    buttonIcon={<InfoOutlined fontSize='large' />}
+                                    buttonText={'Informações'}
+                                    headerText={'Informações'}
+                                    size='md'
+                                    textButton={'Fechar'}
+                                >
+                                    <Typography sx={{ mt: 2 }}>
+                                        <strong>Descrição</strong>: Crítica que identifica mais de 03 consultas solicitadas no período de 62 dias, no mesmo prestador para o grupo familiar (é gerada a crítica a partir da 4ª consulta).
+                                    </Typography>
+                                    <Typography fontSize={'14px'}>
+                                        <strong>Análise deverá avaliar a prática de partição de recibo ou consultas subsequentes sem justificativa para envio à LPL.</strong>
+                                    </Typography>
+                                    <Typography sx={{ mt: 2 }}>
+                                        <strong>Ação</strong>: O Analista deverá considerar em sua análise se a cobrança faz parte de algum cenário excludente que não configura fracionamento de recibo, ex: Grupo familiar com mais de um dependente menor em idade em consulta pediátrica, que justifique o atendimento subsequente, gestante em consulta obstétrica com alguma condição que justifique mais de um atendimento ao mês, paciente oncológico.
+                                    </Typography>
+                                    <Typography fontSize={'14px'}>
+                                        <strong>Importante que o analista avalie e confirme se realmente há mais de 3 consultas já reembolsadas no período (existem cenários em que o sistema considera eventos cancelados para retornar crítica, neste caso poderemos proceder com a análise técnica).</strong>
+                                    </Typography>
+                                    <Typography fontSize={'14px'} sx={{ mt: 2, mb: 2 }}>
+                                        No processo inicial é solicitado que o segurado inclua o comprovante de desembolso, para os eventos acima de <strong>R$ 500,00</strong>, apenas para o produto <strong>Bradesco Saúde</strong>. Esta regra não se aplica para Bradesco Saúde Operadora de Planos.
+                                    </Typography>
+                                </ModalComponent>
+                                <DrawerMaisInfos pacote={pacote} setPacote={setPacote} id={id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
+                            </Box>
                         </Box>
                         <Typography
                             variant='subtitle2'
@@ -298,134 +262,6 @@ const Protocolos = () => {
                                 ))}
                             </TableBody>
                         </Table>
-                        <Grid
-                            container
-                            spacing={2}
-                        >
-                            <Grid item xs={12} sm={6}>
-                                <TableContainer>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>
-                                                    N° Tentativa
-                                                </TableCell>
-                                                <TableCell>
-                                                    Responsável
-                                                </TableCell>
-                                                <TableCell>
-                                                    Data
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                pacote?.tentativasDeContato?.map((tentativa, index) => (
-                                                    <TableRow key={index}>
-                                                        <TableCell>
-                                                            {index + 1}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {tentativa.responsavel}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {moment(tentativa.data).format('DD/MM/YYYY HH:mm')}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
-                                            }
-
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        mt: 2
-                                    }}
-                                    onClick={handleTentativaContato}
-                                    endIcon={<Phone />}
-                                >
-                                    Tentativa de Contato
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Box>
-                                    <TableContainer>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>
-                                                        Nome
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        Link
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-
-                                                {
-                                                    pacote?.arquivos?.map((arquivo, index) => (
-                                                        <TableRow key={index}>
-                                                            <TableCell>
-                                                                {arquivo}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Button
-                                                                    sx={{
-                                                                        bgcolor: blue[900],
-                                                                        color: 'white',
-                                                                        ':hover': {
-                                                                            bgcolor: blue[800]
-                                                                        }
-                                                                    }}
-                                                                    endIcon={<CloudDownload />}
-                                                                    size="small"
-                                                                    variant='text'
-                                                                    onClick={() => fileDownload(arquivo)}
-                                                                >
-                                                                    Download
-                                                                </Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Box>
-                                <ModalUploadArquivo item={pacote} setItem={setPacote} />
-                            </Grid>
-                        </Grid>
-                        <Divider sx={{ mt: 2 }} />
-                        <ModalAdicionarObs id={id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            Responsável
-                                        </TableCell>
-                                        <TableCell>
-                                            Observação
-                                        </TableCell>
-                                        <TableCell>
-                                            Data/Hora
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                {pacote?.observacoes?.map((observacao, index) => (
-                                    <TableBody>
-                                        <TableRow key={index}>
-                                            <TableCell>{observacao.responsavel}</TableCell>
-                                            <TableCell>{observacao.observacao}</TableCell>
-                                            <TableCell>{moment(observacao.data).format('DD/MM/YYYY HH:mm')}</TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                ))}
-                            </Table>
-                        </TableContainer>
                         <Title
                             size={'small'}
                             fontColor={indigo[800]}
