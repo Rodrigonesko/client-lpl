@@ -284,6 +284,7 @@ const Sidebar = ({ children }) => {
                             <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
                             <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
                             <MenuItem><Link to='/bradesco/titulares'>Titulares</Link></MenuItem>
+                            <MenuItem><Link to='/bradesco/analiticoRsdBradesco'>Analitico</Link></MenuItem>
                         </SubMenu>
 
                     )}

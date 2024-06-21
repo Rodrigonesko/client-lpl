@@ -1,4 +1,4 @@
-import { blue, deepOrange, green, orange, red } from "@mui/material/colors";
+import { blue, deepOrange, green, indigo, orange, red, yellow } from "@mui/material/colors";
 
 export const colorStatusRsdBradesco = {
     'A INICIAR': blue[900],
@@ -42,5 +42,13 @@ export const colorParecer = {
     'NÃO FOI POSSÍVEL CONFIRMAR O ATENDIMENTO POR FALHA NA TENTATIVA DE CONTATO': {
         backgroundColor: red[100],
         color: red[900]
+    },
+    'REEMBOLSO SEM DESEMBOLSO': {
+        backgroundColor: yellow[100],
+        color: yellow[900]
+    },
+    'COMPROVANTE DIVERGENTE': {
+        backgroundColor: indigo[100],
+        color: indigo[900]
     }
 }

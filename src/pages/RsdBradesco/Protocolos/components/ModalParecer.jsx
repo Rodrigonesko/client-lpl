@@ -39,7 +39,7 @@ const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity, setPacote }) 
                 parecer: statusParecer,
                 observacaoFinal: messageParecer
             })
-            setPacote(result) 
+            setPacote(result)
             setMessageParecer('')
             setStatusParecer('')
             setOpenToast(true)
@@ -92,6 +92,8 @@ const ModalParecer = ({ id, setOpenToast, setMessage, setSeverity, setPacote }) 
                                 <MenuItem value={'CONFIRMADO O FRACIONAMENTO - NEGAR O SINISTRO'} >CONFIRMADO O FRACIONAMENTO - NEGAR O SINISTRO</MenuItem>
                                 <MenuItem value={'NÃO EVIDENCIADA A IRREGULARIDADE - PROCEDER COM A ANÁLISE E PAGAMENTO'} >NÃO EVIDENCIADA A IRREGULARIDADE - PROCEDER COM A ANÁLISE E PAGAMENTO</MenuItem>
                                 <MenuItem value={'NÃO FOI POSSÍVEL CONFIRMAR O ATENDIMENTO POR FALHA NA TENTATIVA DE CONTATO'} >NÃO FOI POSSÍVEL CONFIRMAR O ATENDIMENTO POR FALHA NA TENTATIVA DE CONTATO</MenuItem>
+                                <MenuItem value={'REEMBOLSO SEM DESEMBOLSO'} >REEMBOLSO SEM DESEMBOLSO</MenuItem>
+                                <MenuItem value={'COMPROVANTE DIVERGENTE'} >COMPROVANTE DIVERGENTE</MenuItem>
                             </Select>
                         </FormControl>
                         <TextField type='text' placeholder="Parecer" size='small' multiline value={messageParecer} onChange={(e) => { setMessageParecer(e.target.value) }}

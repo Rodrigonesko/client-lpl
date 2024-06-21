@@ -12,6 +12,7 @@ import AnaliticoRsd from "./components/RSD/AnaliticoRsd";
 import AnaliticoSindicancia from "./components/Sindicancia/AnaliticoSindicancia";
 import AnaliticoSulAmerica from "./components/SulAmerica/AnaliticoSulAmerica";
 import Title from "../../../components/Title/Title";
+import AnaliticoRsdBradesco from "./components/RSDBradesco/AnaliticoRsdBradesco";
 
 const tabStyle = {
     '&:hover': {
@@ -78,6 +79,7 @@ const Analitico = () => {
                     <Tab label="Elegibilidade" value="Elegibilidade" sx={tabStyle} />
                     <Tab label="Sindicância" value={'Sindicancia'} sx={tabStyle} />
                     <Tab label="Sul América" value={'SulAmerica'} sx={tabStyle} />
+                    <Tab label="RSD Bradesco" value={'RSDBradesco'} sx={tabStyle} />
 
                 </Tabs>
                 {tab === 'Tele Entrevista' && <AnaliticoTele key={'Tele Entrevista'} />}
@@ -86,6 +88,7 @@ const Analitico = () => {
                 {tab === 'Elegibilidade' && <AnaliticoElegibilidade key={'Elegibilidade'} />}
                 {tab === 'Sindicancia' && <AnaliticoSindicancia key={'Sindicancia'} />}
                 {tab === 'SulAmerica' && <AnaliticoSulAmerica key={'SulAmerica'} />}
+                {tab === 'RSDBradesco' && <AnaliticoRsdBradesco key={'RSDBradesco'} />}
 
             </Container>
         </Sidebar>
