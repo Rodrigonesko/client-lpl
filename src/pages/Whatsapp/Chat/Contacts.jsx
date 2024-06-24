@@ -32,7 +32,7 @@ const Contacts = () => {
                     setContacts(response)
                 }
                 if(whatsappSender === 'whatsapp:+551150397403'){
-                    const response = await getSeguradoByFilter('', 1, 100)
+                    const response = await getSeguradoByFilter('', 1, 100, 'horarioUltimaMensagem')
                     if (response.error) {
                         return
                     }

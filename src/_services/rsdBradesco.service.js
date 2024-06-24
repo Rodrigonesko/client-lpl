@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const url = process.env.REACT_APP_RSD_BRADESCO_SERVICE
+const url = 'http://localhost:5002'  //process.env.REACT_APP_RSD_BRADESCO_SERVICE
 
 /* Prestadores */
 
@@ -33,8 +33,8 @@ export const getSeguradosByTitular = async (titular) => {
     return await new ApiCall(`/segurado/titular/${titular}`, url).get()
 }
 
-export const getSeguradoByFilter = async (pesquisa, page, limit) => {
-    return await new ApiCall(`/segurado/filter?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
+export const getSeguradoByFilter = async (pesquisa, page, limit, sort) => {
+    return await new ApiCall(`/segurado/filter?pesquisa=${pesquisa}&sort=${sort}&page=${page}&limit=${limit}`, url).get()
 }
 
 export const updateSegurado = async (id, data) => {
