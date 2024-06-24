@@ -1,25 +1,23 @@
-import { Box, Button, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from "@mui/material"
+import { Box, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
-import { blue, deepPurple, grey, indigo, red } from "@mui/material/colors"
+import { deepPurple, grey, indigo, red } from "@mui/material/colors"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Toast from "../../../components/Toast/Toast"
-import { getPacoteById, getSeguradosByTitular, getTitularById, tentativaDeContato, updatePacote } from "../../../_services/rsdBradesco.service"
-import { ChatBubbleOutline, CloudDownload, InfoOutlined, Phone } from "@mui/icons-material"
+import { getPacoteById, getSeguradosByTitular, getTitularById, updatePacote } from "../../../_services/rsdBradesco.service"
+import { InfoOutlined } from "@mui/icons-material"
 import { colorParecer, colorStatusPedido, colorStatusRsdBradesco } from "../utils/types"
 import moment from "moment"
 import Ficha from "../components/Ficha"
 import { valueToBRL } from "../../../functions/functions"
 import Roteiro from "./components/Roteiro"
 import ModalParecer from "./components/ModalParecer"
-import ModalUploadArquivo from "./components/ModalUploadArquivo"
 import ModalNovoPacote from "./components/ModalNovoPacote"
 import { themeBradesco } from "../components/theme"
-import axios from "axios"
 import ModalComponent from "../../../components/ModalComponent/ModalComponent"
-import ModalAdicionarObs from "./components/ModalAdicionarObs"
 import DrawerMaisInfos from "./components/DrawerMaisInfos"
+import SwitchNotorios from "./components/SwitchNotorios"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -231,6 +229,7 @@ const Protocolos = () => {
                                             <TableCell colSpan={7}>
                                                 <Grid container spacing={2} mt={1}>
                                                     <Info label={'Comprovante de Pagamento?'} value={pedido?.comprovantePagamento} />
+                                                    <Info label={'Tipo de Comprovante'} value={pedido?.tipoComprovante} />
                                                     <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
                                                     <Info label={'Especialidade'} value={pedido?.especialidade} />
                                                     <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
@@ -255,6 +254,9 @@ const Protocolos = () => {
                                                             <ModalNovoPacote pedido={pedido} />
                                                         </Grid>
                                                     }
+                                                    <Grid item xs={12} sm={2}>
+                                                        <SwitchNotorios pedido={pedido} />
+                                                    </Grid>
                                                 </Grid>
                                             </TableCell>
                                         </TableRow>

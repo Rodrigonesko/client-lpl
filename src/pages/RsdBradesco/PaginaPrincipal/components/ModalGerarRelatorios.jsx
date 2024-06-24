@@ -7,44 +7,6 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import moment from "moment"
 
-// export class SpreadsheetPedidoDto {
-//     'Numero Sinistro (Completo)': string;
-//     'Mês Ano Solicitação Reembolso': string;
-//     'Data Solicitação': number;
-//     'Tipo Documento Reembolso': string;
-//     'Número Nota Fiscal Eletrônica': string;
-//     'Código Verificação Nota Fiscal Eletrônica': string;
-//     'Nome Cidade/Estado da Nota Fiscal (Descritivo)': string;
-//     'Estado Nota Fiscal Eletrônica': string;
-//     'UF': string;
-//     'Conselho Profisional Saúde': string;
-//     'classificação CRM': string;
-//     'tipo': string;
-//     'Especialidade Médica': string;
-//     'Tipo Evento': string;
-//     'Data Evento Sinistro': number;
-//     'Empresa': number;
-//     'nome empresa': string;
-//     'Ramo': string;
-//     'Apólice': string;
-//     'nome da Apólice': string;
-//     'data início apólice': string;
-//     'Prestador (CPF/CNPJ)': string;
-//     'Prestador Serviço': string;
-//     'UF - Prestador Serviço': string;
-//     'CPF Segurado': string;
-//     'Telefone Segurado': string;
-//     'Celular Segurado': string;
-//     'Email Segurado': string;
-//     'Segurado': string;
-//     'nome segurado': string;
-//     'Segurado Titular': string;
-//     'nome segurado titular': string;
-//     'Situação Série Sinistro': string;
-//     'Vlr. Solicitado do Documento na Série': string;
-//     'Vlr. Liberado Pagamento Documento': string;
-// }
-
 const ModalGerarRelatorios = () => {
 
     const statusList = [
@@ -55,6 +17,7 @@ const ModalGerarRelatorios = () => {
 
     const [open, setOpen] = useState(false)
     const [tipoRelatorio, setTipoRelatorio] = useState('DATA DE CRIAÇÃO')
+    const [base, setBase] = useState('LPL')
     const [dataInicial, setDataInicial] = useState('')
     const [dataFinal, setDataFinal] = useState('')
     const [status, setStatus] = useState('')
@@ -71,7 +34,7 @@ const ModalGerarRelatorios = () => {
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Sinistros');
 
-            worksheet.columns = [
+            const columns = [
                 { header: 'Numero Sinistro (Completo)', key: 'sinistro', width: 20 },
                 { header: 'Mês Ano Solicitação Reembolso', key: 'mesAno', width: 20 },
                 { header: 'Data Solicitação', key: 'dataSolicitacao', width: 20 },
@@ -112,13 +75,23 @@ const ModalGerarRelatorios = () => {
                 { header: 'tipo de comprovante', key: 'tipoComprovante', width: 20 },
                 { header: 'data envio LPL', key: 'dataCriacao', width: 20 },
                 { header: 'parecer LPL', key: 'parecer', width: 20 },
-                { header: 'data retorno LPL', key: 'dataRetorno', width: 20 },
+                { header: 'data retorno LPL', key: 'dataRetorno', width: 20 }
             ]
+
+
+
+            if (base === 'LPL') {
+                columns.unshift({ header: 'Pacote', key: 'pacote', width: 20 })
+                columns.push({ header: 'Parecer', key: 'parecer', width: 20 })
+            }
+
+            worksheet.columns = columns
 
             console.log(response);
 
             response.forEach(pedido => {
                 worksheet.addRow({
+                    pacote: pedido.pacote.codigo,
                     sinistro: pedido.sinistro,
                     mesAno: moment(pedido.dataSolicitacao).format('MM/YYYY'),
                     dataSolicitacao: new Date(pedido.dataSolicitacao),
@@ -160,6 +133,7 @@ const ModalGerarRelatorios = () => {
                     dataCriacao: new Date(pedido.dataCriacao),
                     parecer: pedido.parecer,
                     dataRetorno: pedido.dataRetorno,
+                    parecer: pedido.parecer
                 })
             });
 
@@ -209,7 +183,17 @@ const ModalGerarRelatorios = () => {
                 </DialogTitle>
                 <DialogContent>
                     <FormControl>
-                        <FormLabel>Tipo formulário</FormLabel>
+                        <FormLabel>Tipo Relatório</FormLabel>
+                        <RadioGroup
+                            value={base}
+                            onChange={(e) => setBase(e.target.value)}
+                        >
+                            <FormControlLabel value='LPL' control={<Radio />} label='LPL' />
+                            <FormControlLabel value='Bradesco' control={<Radio />} label='Bradesco' />
+                        </RadioGroup>
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Relatório a partir de:</FormLabel>
                         <RadioGroup
                             value={tipoRelatorio}
                             onChange={(e) => setTipoRelatorio(e.target.value)}

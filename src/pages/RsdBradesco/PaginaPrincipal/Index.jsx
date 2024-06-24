@@ -9,6 +9,7 @@ import { ThemeProvider } from "@emotion/react"
 import { themeBradesco } from "../components/theme"
 import { colorStatusRsdBradesco } from "../utils/types"
 import ModalGerarRelatorios from "./components/ModalGerarRelatorios"
+import moment from "moment"
 
 const tabStyle = {
     '&:hover': {
@@ -257,6 +258,7 @@ const RsdBradesco = () => {
                                     >
                                         <TableHead sx={{ background: indigo[800] }}>
                                             <TableRow>
+                                                <TableCell sx={{ color: 'white' }}>Data</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Pacote</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Titular</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Codigo</TableCell>
@@ -269,6 +271,7 @@ const RsdBradesco = () => {
                                             {
                                                 pacotes.map((pacote, index) => (
                                                     <TableRow key={index} >
+                                                        <TableCell>{moment(pacote.createdAt).format('DD/MM/YYYY')}</TableCell>
                                                         <TableCell>{pacote.codigo}</TableCell>
                                                         <TableCell>
                                                             {pacote.titular.nome}

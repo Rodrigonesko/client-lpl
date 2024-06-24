@@ -47,6 +47,9 @@ const Roteiro = () => {
                 - Caso o comprovante apresentado e que está em sistema esteja divergente do relato do segurado, questionar se o entrevistado reconhece o documento enviado e que diverge com a afirmação da pergunta anterior.
                 A Bradesco Saúde Agradece sua atenção, tenha um bom dia.
             </Typography>
+            <Typography>
+            No processo inicial é solicitado que o segurado inclua o comprovante de desembolso, para os eventos acima de <strong>R$ 500,00</strong>, apenas para o produto <strong>Bradesco Saúde</strong>. Esta regra não se aplica para Bradesco Saúde Operadora de Planos.
+            </Typography>
         </Box>
     )
 }
