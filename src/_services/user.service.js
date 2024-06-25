@@ -81,7 +81,3 @@ export const updateProfilePic = async (data) => {
 export const filterUsers = async (data) => {
     return await new ApiCall('/users/filter').post(data)
 }
-
-export const loginUser = async (data) => {
-    return 
-}

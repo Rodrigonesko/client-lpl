@@ -1,13 +1,13 @@
 import { Cancel, Edit, FeedOutlined, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
-import { Box, Chip, Collapse, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
-import { useContext, useState } from "react"
+import { Box, Chip, Collapse, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material"
+import { useContext, useEffect, useState } from "react"
 import ModalAgendamento from "./ModalAgendamento"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
 import { BsFilePdf } from "react-icons/bs"
 import { RiArrowGoBackFill } from "react-icons/ri"
 import CollapseBeneficiario from "./CollapseBeneficiario"
 import moment from "moment"
-import { getRespostasByPedidoId, updatePedido } from "../../../../_services/sulAmerica.service"
+import { getPedidoById, getRespostasByPedidoId, updatePedido } from "../../../../_services/sulAmerica.service"
 import { createPdf } from "../../PDF/createPdf"
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent"
 import { blue, deepOrange, orange } from "@mui/material/colors"
@@ -23,6 +23,43 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
     const [status, setStatus] = useState('')
     const [subStatus, setSubStatus] = useState('')
     const [justificativa, setJustificativa] = useState('')
+    const [ocultarSulAmerica, setOcultarSulAmerica] = useState(false)
+    const [pedido, setPedido] = useState({})
+
+    const handleUpdateSulAmerica = async (e) => {
+        try {
+            const value = e.target.checked
+            await updatePedido(
+                item._id,
+                { ocultarSulAmerica: value }
+            )
+            setMsg('Ocultado com sucesso')
+            setSeveritySnack('success')
+            setOpenSnack(true)
+        } catch (error) {
+            console.log(error);
+            setMsg('Erro ao ocultar')
+            setSeveritySnack('error')
+            setOpenSnack(true)
+        }
+    }
+
+    // useEffect(() => {
+    //     const fetch = async () => {
+    //         if (!item._id) return;
+    //         try {
+    //             const dataPedido = await getPedidoById(item._id);
+    //             setPedido(dataPedido);
+    //         } catch (error) {
+    //             console.log(error);
+    //             setMsg('Erro ao buscar dados')
+    //             setSeveritySnack('error')
+    //             setOpenSnack(true)
+    //         }
+    //     }
+    //     fetch();
+    // }, [item._id])
+
 
     return (
         <>
@@ -87,6 +124,14 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
                     }
                 </TableCell>
                 <TableCell>
+                    {
+                        <FormControlLabel
+                            onChange={(e) => {
+                                setOcultarSulAmerica(!ocultarSulAmerica)
+                                handleUpdateSulAmerica(e)
+                            }} control={<Switch color='success' checked={ocultarSulAmerica} />} label='Ocultar'
+                        />
+                    }
                     {
                         (item.status === 'A INICIAR' || item.status === 'EM ANDAMENTO') && <ModalAgendamento pedido={item._id} />
                     }
