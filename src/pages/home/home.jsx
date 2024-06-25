@@ -46,15 +46,24 @@ const Home = () => {
         setUserData(user)
     }
 
+    const passouTrocaSenha = () => {
+        console.log(userData.dataAtualizacaoPassword);
+        const dataTrocarSenha = userData.dataAtualizacaoPassword <= moment().format('YYYY-MM-DD') 
+        return dataTrocarSenha
+    }
+
     useEffect(() => {
         fetchData()
     }, [name])
 
     const handlerUpdatePassword = async () => {
         try {
+            const futureDate = moment().add(3, 'months').format('YYYY-MM-DD');
+
             await updatePassword({
                 password,
-                confirmPassword
+                confirmPassword,
+                dataAtualizacaoPassword: futureDate
             })
             window.location.reload()
         } catch (error) {
@@ -105,7 +114,7 @@ const Home = () => {
                             Bem vindo {name}!
                         </Typography>
                         {
-                            firstAccess && (
+                            (firstAccess || passouTrocaSenha()) && (
                                 <div className="first-access">
                                     <div className="title">
                                         <h2>É sua primeira vez acessando o sistema</h2>
