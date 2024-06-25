@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const url = 'http://localhost:5002'  //process.env.REACT_APP_RSD_BRADESCO_SERVICE
+const url = process.env.REACT_APP_RSD_BRADESCO_SERVICE
 
 /* Prestadores */
 

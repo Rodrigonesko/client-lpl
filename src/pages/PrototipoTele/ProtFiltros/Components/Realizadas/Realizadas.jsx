@@ -12,6 +12,7 @@ import RelatorioMensal from "./RelatorioMensal";
 import RelatorioGeral from "./RelatorioGeral";
 import AuthContext from "../../../../../context/AuthContext";
 import Toast from "../../../../../components/Toast/Toast";
+import RelatorioAdesao from "./RelatorioAdesão";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -187,6 +188,9 @@ const Realizadas = () => {
                 </Grid>
                 <Grid item>
                     <RelatorioGeral />
+                </Grid>
+                <Grid item>
+                    <RelatorioAdesao />
                 </Grid>
             </Grid>
             <Box>

@@ -1,4 +1,4 @@
-import { Box, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableHead, TableRow, ThemeProvider, Typography } from "@mui/material"
+import { Box, Chip, Container, Divider, FormControlLabel, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { deepPurple, grey, indigo, red } from "@mui/material/colors"
@@ -17,6 +17,7 @@ import ModalNovoPacote from "./components/ModalNovoPacote"
 import { themeBradesco } from "../components/theme"
 import ModalComponent from "../../../components/ModalComponent/ModalComponent"
 import DrawerMaisInfos from "./components/DrawerMaisInfos"
+import SwitchNotorios from "./components/SwitchNotorios"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -228,6 +229,7 @@ const Protocolos = () => {
                                             <TableCell colSpan={7}>
                                                 <Grid container spacing={2} mt={1}>
                                                     <Info label={'Comprovante de Pagamento?'} value={pedido?.comprovantePagamento} />
+                                                    <Info label={'Tipo de Comprovante'} value={pedido?.tipoComprovante} />
                                                     <Info label={'Tipo Documento'} value={pedido?.tipoDocumento} />
                                                     <Info label={'Especialidade'} value={pedido?.especialidade} />
                                                     <Info label={'Valor Solicitado'} value={valueToBRL(pedido.valorSolicitado)} />
@@ -252,6 +254,9 @@ const Protocolos = () => {
                                                             <ModalNovoPacote pedido={pedido} />
                                                         </Grid>
                                                     }
+                                                    <Grid item xs={12} sm={2}>
+                                                        <SwitchNotorios pedido={pedido} />
+                                                    </Grid>
                                                 </Grid>
                                             </TableCell>
                                         </TableRow>

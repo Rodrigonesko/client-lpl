@@ -83,20 +83,8 @@ export const tentativaContatoEntrevista = async (data) => {
     return await new ApiCall('/tentativaContato', URL_API).put(data)
 }
 
-export const preencherFormulario = async (respostas,
-    subRespostas,
-    pessoa,
-    simOuNao,
-    cids,
-    divergencia,
-    entrevistaQualidade) => {
-    return await new ApiCall('/entrevistas/formulario').post(respostas,
-        subRespostas,
-        pessoa,
-        simOuNao,
-        cids,
-        divergencia,
-        entrevistaQualidade)
+export const preencherFormulario = async (respostas, subRespostas, pessoa, simOuNao, cids, divergencia, entrevistaQualidade) => {
+    return await new ApiCall('/entrevistas/formulario').post(respostas, subRespostas, pessoa, simOuNao, cids, divergencia, entrevistaQualidade)
 }
 
 export const getPropostasADevolver = async () => {
@@ -190,6 +178,11 @@ export const getPropostasEntreDatas = async (startDate, endDate, tipoRelatorio) 
 export const getEntrevistasEntreDatas = async (startDate, endDate) => {
     return await new ApiCall(`/entrevistas/entrevistasEntreDatas?startDate=${startDate}&endDate=${endDate}`).get()
 }
+
+export const getEntrevistasEntreDatasAdesao = async (startDate, endDate) => {
+    return await new ApiCall(`/entrevistas/entrevistasEntreDatasAdesao?startDate=${startDate}&endDate=${endDate}`).get()
+}
+
 
 export const getProducaoAnexos = async (analista, mes) => {
     return await new ApiCall(`/entrevistas/producao/anexos/${analista}/${mes}`).get()
@@ -343,5 +336,5 @@ export const fecharHorarios = async ({ data, responsavel, horarios, justiticativ
 }
 
 export const reabrirHorarios = async ({ data, responsavel, horarios }) => {
-    return await new ApiCall('/entrevistas/reabrirHorarios').put({ data, responsavel, horarios})
+    return await new ApiCall('/entrevistas/reabrirHorarios').put({ data, responsavel, horarios })
 }

@@ -22,7 +22,7 @@ const DrawerMaisInfos = ({ pacote, setPacote, id, setOpenToast, setMessage, setS
     const fileDownload = async (arquivo) => {
         console.log(arquivo);
         try {
-            const res = await axios.get(`http://localhost:5002/download/${arquivo}`, {
+            const res = await axios.get(`${process.env.REACT_APP_RSD_BRADESCO_SERVICE}/download/${arquivo}`, {
                 responseType: 'blob',
                 headers: {
                     'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ const DrawerMaisInfos = ({ pacote, setPacote, id, setOpenToast, setMessage, setS
                         </Table>
                     </TableContainer>
                     <Box>
-                        <ModalAdicionarObs id={id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} />
+                        <ModalAdicionarObs id={id} setOpenToast={setOpenToast} setMessage={setMessage} setSeverity={setSeverity} setPacote={setPacote} />
                     </Box>
                 </Box>
             </Drawer>

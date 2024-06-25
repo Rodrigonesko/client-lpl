@@ -35,6 +35,14 @@ export const colorParecer = {
         backgroundColor: orange[100],
         color: orange[900]
     },
+    'REEMBOLSO SEM DESEMBOLSO': {
+        backgroundColor: orange[100],
+        color: orange[900]
+    },
+    'COMPROVANTE DIVERGENTE': {
+        backgroundColor: red[100],
+        color: red[900]
+    },
     'NÃO EVIDENCIADA A IRREGULARIDADE - PROCEDER COM A ANÁLISE E PAGAMENTO': {
         backgroundColor: green[100],
         color: green[900]

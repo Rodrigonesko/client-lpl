@@ -4,7 +4,7 @@ import { updatePacote } from "../../../../_services/rsdBradesco.service"
 import AuthContext from "../../../../context/AuthContext"
 import moment from "moment"
 
-const ModalAdicionarObs = ({ id, setOpenToast, setMessage, setSeverity }) => {
+const ModalAdicionarObs = ({ id, setOpenToast, setMessage, setSeverity, setPacote }) => {
 
     const [openModal, setOpenModal] = useState(false)
     const [observacao, setObservacao] = useState('')
@@ -17,7 +17,7 @@ const ModalAdicionarObs = ({ id, setOpenToast, setMessage, setSeverity }) => {
 
     const handlePutObservacao = async () => {
         try {
-            await updatePacote(
+            const pacote = await updatePacote(
                 id,
                 {
                     $push: {
@@ -32,6 +32,9 @@ const ModalAdicionarObs = ({ id, setOpenToast, setMessage, setSeverity }) => {
             setOpenToast(true)
             setMessage('Observação adicionada com sucesso')
             setSeverity('success')
+            setPacote(pacote)
+            setObservacao('')
+            handleClose()
         } catch (error) {
             console.log(error);
             setOpenToast(true)
