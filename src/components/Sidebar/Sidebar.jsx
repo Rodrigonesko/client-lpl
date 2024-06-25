@@ -279,14 +279,11 @@ const Sidebar = ({ children }) => {
                         }
                         <MenuItem><Link to='/sulAmerica/rendimentoSulAmerica' >Rendimento Sul América</Link></MenuItem>
                     </SubMenu>
-                    {acessos?.administrador && (
-                        <SubMenu title={"RSD Bradesco"} icon={<PriceCheckOutlined />} >
-                            <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
-                            <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
-                            <MenuItem><Link to='/bradesco/titulares'>Titulares</Link></MenuItem>
-                        </SubMenu>
-
-                    )}
+                    <SubMenu title={"RSD Bradesco"} icon={<PriceCheckOutlined />} >
+                        <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
+                        <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
+                        <MenuItem><Link to='/bradesco/titulares'>Titulares</Link></MenuItem>
+                    </SubMenu>
                 </Menu>
             </ProSidebar>
             <Box width={'100%'} >
