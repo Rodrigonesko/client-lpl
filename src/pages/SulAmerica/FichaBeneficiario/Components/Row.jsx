@@ -23,8 +23,7 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
     const [status, setStatus] = useState('')
     const [subStatus, setSubStatus] = useState('')
     const [justificativa, setJustificativa] = useState('')
-    const [ocultarSulAmerica, setOcultarSulAmerica] = useState(false)
-    const [pedido, setPedido] = useState({})
+    const [ocultarSulAmerica, setOcultarSulAmerica] = useState(item.ocultarSulAmerica)
 
     const handleUpdateSulAmerica = async (e) => {
         try {
@@ -43,23 +42,6 @@ const Row = ({ item, flushHook, setOpenSnack, setFlushHook, setMsg, setSeverityS
             setOpenSnack(true)
         }
     }
-
-    // useEffect(() => {
-    //     const fetch = async () => {
-    //         if (!item._id) return;
-    //         try {
-    //             const dataPedido = await getPedidoById(item._id);
-    //             setPedido(dataPedido);
-    //         } catch (error) {
-    //             console.log(error);
-    //             setMsg('Erro ao buscar dados')
-    //             setSeveritySnack('error')
-    //             setOpenSnack(true)
-    //         }
-    //     }
-    //     fetch();
-    // }, [item._id])
-
 
     return (
         <>

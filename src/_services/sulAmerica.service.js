@@ -53,7 +53,7 @@ export const updatePedido = async (id, data) => {
 }
 
 export const filterPedidos = async (prestador, beneficiario, responsavel, status, subStatus, tentativasDeContato, dataCriacao, page, limit = 10) => {
-    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&subStatus=${subStatus}&tentativasDeContato=${tentativasDeContato}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}`, url).get()
+    return await new ApiCall(`/pedido/filter?prestador=${prestador}&beneficiario=${beneficiario}&responsavel=${responsavel}&status=${status}&subStatus=${subStatus}&tentativasDeContato=${tentativasDeContato}&page=${page}&limit=${limit}&dataCriacao=${dataCriacao}&mostrarOcultos=${true}`, url).get()
 }
 
 export const getPedidoById = async (id) => {
