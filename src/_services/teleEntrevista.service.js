@@ -83,20 +83,8 @@ export const tentativaContatoEntrevista = async (data) => {
     return await new ApiCall('/tentativaContato', URL_API).put(data)
 }
 
-export const preencherFormulario = async (respostas,
-    subRespostas,
-    pessoa,
-    simOuNao,
-    cids,
-    divergencia,
-    entrevistaQualidade) => {
-    return await new ApiCall('/entrevistas/formulario').post(respostas,
-        subRespostas,
-        pessoa,
-        simOuNao,
-        cids,
-        divergencia,
-        entrevistaQualidade)
+export const preencherFormulario = async (respostas, subRespostas, pessoa, simOuNao, cids, divergencia, entrevistaQualidade) => {
+    return await new ApiCall('/entrevistas/formulario').post(respostas, subRespostas, pessoa, simOuNao, cids, divergencia, entrevistaQualidade)
 }
 
 export const getPropostasADevolver = async () => {
@@ -348,5 +336,5 @@ export const fecharHorarios = async ({ data, responsavel, horarios, justiticativ
 }
 
 export const reabrirHorarios = async ({ data, responsavel, horarios }) => {
-    return await new ApiCall('/entrevistas/reabrirHorarios').put({ data, responsavel, horarios})
+    return await new ApiCall('/entrevistas/reabrirHorarios').put({ data, responsavel, horarios })
 }

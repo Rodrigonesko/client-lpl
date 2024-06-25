@@ -121,6 +121,14 @@ export const deletePedido = async (id) => {
     return await new ApiCall(`/pedido/${id}`, url).delete()
 }
 
+export const getQuantidadePedidos = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/getQuantidadePedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
+export const getQuantidadePareceres = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pedido/getQuantidadePareceres?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
+}
+
 /* Protocolos */
 
 /* Pacotes */
@@ -179,4 +187,8 @@ export const deletePacote = async (id) => {
 
 export const adicionarPedido = async (id, data) => {
     return await new ApiCall(`/pacote/pedido/${id}`, url).post(data)
+}
+
+export const getQuantidadePacotes = async (dataInicio, dataFim) => {
+    return await new ApiCall(`/pacote/getQuantidadePacotes?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
 }

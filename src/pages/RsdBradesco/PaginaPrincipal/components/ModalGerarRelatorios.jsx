@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Print } from "@mui/icons-material"
-import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Menu, CircularProgress } from "@mui/material"
+import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Select, MenuItem, CircularProgress } from "@mui/material"
 import Toast from "../../../../components/Toast/Toast"
 import { getRelatorioPedidos } from "../../../../_services/rsdBradesco.service"
 import ExcelJS from 'exceljs';
@@ -133,7 +133,7 @@ const ModalGerarRelatorios = () => {
                     dataCriacao: new Date(pedido.dataCriacao),
                     parecer: pedido.parecer,
                     dataRetorno: pedido.dataRetorno,
-                    parecer: pedido.parecer
+                    // parecer: pedido.parecer
                 })
             });
 
