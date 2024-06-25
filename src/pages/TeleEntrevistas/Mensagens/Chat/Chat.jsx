@@ -11,6 +11,7 @@ import MensagemDiaAnterior from './mensagensPadrao/MensagemDiaAnterior';
 import { io } from "socket.io-client";
 import MensagemAdiantarTele from './mensagensPadrao/MensagemAdiantarTele';
 import MensagemDependentesFaltantes from './mensagensPadrao/MensagemDependentesFaltantes';
+import MensagemPadraoAdesao from './mensagensPadrao/MensagemPadraoAdesao';
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
@@ -26,6 +27,7 @@ const Chat = () => {
     const [loading, setLoading] = useState(false)
     const [aux, setAux] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [beneficiario, setBeneficiario] = useState()
 
     const isSmallScreen = useMediaQuery('(max-width:800px)');
 
@@ -36,7 +38,6 @@ const Chat = () => {
             if (mensagem.trim() === '') {
                 return
             }
-
             const result = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/sendMessage`, {
                 whatsapp,
                 mensagem
@@ -44,16 +45,11 @@ const Chat = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
-
-            console.log(result);
-
             if (result.status === 200) {
                 buscarMensagens()
                 setError(false)
                 setLoading(false)
             }
-
-            console.log(mensagem);
             setMensagem('')
             inputRef.current.value = '';
         } catch (error) {
@@ -73,27 +69,26 @@ const Chat = () => {
     const buscarMensagens = async () => {
 
         try {
-
             if (whatsapp === 'whatsapp:+55undefinedundefined' || whatsapp === 'whatsapp:+55') {
                 return
             }
-
             const result = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/chat/${whatsapp}`, {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
-
             setChat(result.data)
-
             setAux(true)
-
             await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
                 whatsapp
             }, {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
-
+            const response = await Axios.get(`https://sistema.lplseguros.com.br/apiTele/newProposta/whatsapp/${whatsapp}`, {
+                withCredentials: true,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
+            })
+            setBeneficiario(response.data)
         } catch (error) {
             console.log(error);
         }
@@ -208,11 +203,21 @@ const Chat = () => {
                             <MensagemAdiantarTele setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemDependentesFaltantes setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemSemSucessoContato hookMsg={setMensagem} />
-                            <PrimeiroContato hookMsg={setMensagem} />
+                            {
+                                beneficiario?.tipoContrato === 'ADESÃO' ? (
+                                    <>
+                                        <MensagemPadraoAdesao para={whatsapp}/>
+                                    </>
+                                ) : (
+                                    <>
+                                        <PrimeiroContato hookMsg={setMensagem} />
+                                    </>
+                                )
+                            }
                         </Box>
                     </Box>
                 </Container>
-            </Sidebar>
+            </Sidebar >
         </>
     )
 }

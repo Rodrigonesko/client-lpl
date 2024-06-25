@@ -248,12 +248,25 @@ const TabelaAgendarTele = ({ propostas, atualizarTabela }) => {
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell align="left">
-                                        {row.proposta}
-                                        {
-                                            row.retrocedido && (
-                                                <Chip sx={{ ml: '2px' }} variant="outlined" label='ret' color="secondary" />
-                                            )
-                                        }
+                                        <Box
+                                            display='flex'
+                                            flexDirection='column'
+                                        >
+                                            <Typography>
+                                                {row.proposta}
+                                                {
+                                                    row.retrocedido && (
+                                                        <Chip sx={{ ml: '2px' }} variant="outlined" label='ret' color="secondary" />
+                                                    )
+                                                }
+                                            </Typography>
+                                            <Typography
+                                                variant='caption'
+                                            >
+                                                {row.tipoContrato}
+                                            </Typography>
+                                        </Box>
+
                                     </TableCell>
                                     <TableCell align="left">
                                         {row.nome}
