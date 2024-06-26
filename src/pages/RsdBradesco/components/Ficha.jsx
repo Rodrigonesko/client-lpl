@@ -25,9 +25,14 @@ const SeguradoComponent = ({ segurado }) => {
                         color: indigo[900],
                         fontWeight: 'bold'
                     }}
-                    
+
                 >
-                    {segurado?.nome}
+                    {segurado?.nome} {segurado?.menorIdade && <><span style={{
+                        fontWeight: 'normal',
+                        backgroundColor: indigo[100],
+                        padding: '2px',
+                        borderRadius: '4px'
+                    }} >MENOR DE IDADE</span></>}
                 </Typography>
                 <Box>
                     <IconButton

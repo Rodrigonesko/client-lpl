@@ -3,12 +3,20 @@ const url = process.env.REACT_APP_RSD_BRADESCO_SERVICE
 
 /* Prestadores */
 
+export const getPrestadorById = async (id) => {
+    return await new ApiCall(`/prestador/id/${id}`, url).get()
+}
+
 export const getPrestadorByCpfCnpj = async (cpfCnpj) => {
     return await new ApiCall(`/prestador/cpfCnpj/${cpfCnpj}`, url).get()
 }
 
 export const createPrestador = async (data) => {
     return await new ApiCall('/prestador', url).post(data)
+}
+
+export const updatePrestador = async (id, data) => {
+    return await new ApiCall(`/prestador/${id}`, url).put(data)
 }
 
 /* Segurado */

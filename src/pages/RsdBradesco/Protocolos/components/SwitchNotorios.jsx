@@ -21,7 +21,7 @@ const SwitchNotorios = ({ pedido }) => {
                     color="primary"
                 />
             }
-            label="Notórios"
+            label="Notório"
         />
     );
 }

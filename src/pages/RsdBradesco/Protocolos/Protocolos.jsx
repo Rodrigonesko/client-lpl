@@ -18,6 +18,8 @@ import { themeBradesco } from "../components/theme"
 import ModalComponent from "../../../components/ModalComponent/ModalComponent"
 import DrawerMaisInfos from "./components/DrawerMaisInfos"
 import SwitchNotorios from "./components/SwitchNotorios"
+import ExpandMaisInfos from "./components/ExpandMainInfos"
+import EditPrestador from "./components/EditPrestador"
 
 const Info = ({ label, value }) => (
     <Grid item
@@ -57,6 +59,7 @@ const Protocolos = () => {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
     const [dossie, setDossie] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleUpdateDossie = async (e) => {
         try {
@@ -95,7 +98,7 @@ const Protocolos = () => {
             }
         }
         fetch();
-    }, [id])
+    }, [id, flushHook])
 
     return (
         <>
@@ -167,7 +170,7 @@ const Protocolos = () => {
                             <FormControlLabel onChange={(e) => {
                                 setDossie(!dossie)
                                 handleUpdateDossie(e)
-                            }} control={<Switch color='success' checked={dossie} />} label='Realizar Dossiê' />
+                            }} control={<Switch color='primary' checked={dossie} />} label='Dossiê' />
                         </Box>
                         <Table size="small">
                             <TableHead sx={{ background: `linear-gradient(45deg, ${red[700]} 80%, ${deepPurple[800]} 95%)` }}>
@@ -221,7 +224,6 @@ const Protocolos = () => {
                                                         />
                                                     }
                                                 </Box>
-
                                             </TableCell>
                                             <TableCell></TableCell>
                                         </TableRow>
@@ -237,7 +239,10 @@ const Protocolos = () => {
                                                     <Info label={'Tipo Evento'} value={pedido?.evento?.tipo} />
                                                     <Info label={'Data Evento'} value={moment(pedido?.evento?.data).format('DD/MM/YYYY')} />
                                                     <Info label={'CPF/CNPJ do Prestador'} value={pedido?.prestador.cpfCnpj} />
-                                                    <Info label={'Nome do Prestador'} value={pedido?.prestador.nome} />
+                                                    <Info label={'Nome do Prestador'} value={<>
+                                                        {pedido?.prestador.nome}
+                                                        <EditPrestador prestador={pedido?.prestador._id} setFlushHook={setFlushHook} />
+                                                    </>} />
                                                     <Info label={'UF Prestador'} value={pedido?.prestador?.uf} />
                                                     <Info label={'N° NF'} value={pedido?.nf?.numero} />
                                                     <Info label={'Codigo NF'} value={pedido?.nf?.cofigo} />
@@ -258,6 +263,7 @@ const Protocolos = () => {
                                                         <SwitchNotorios pedido={pedido} />
                                                     </Grid>
                                                 </Grid>
+                                                <ExpandMaisInfos pedido={pedido} />
                                             </TableCell>
                                         </TableRow>
                                     </React.Fragment>

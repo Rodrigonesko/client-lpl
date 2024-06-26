@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { createSegurado, findByCodigoSegurado } from "../../../../_services/rsdBradesco.service";
 import Toast from "../../../../components/Toast/Toast";
 import InputMask from "react-input-mask";
+import { Add } from "@mui/icons-material";
 
 const ModalCriarSegurado = ({ id, setFlushHook }) => {
 
@@ -92,7 +93,7 @@ const ModalCriarSegurado = ({ id, setFlushHook }) => {
 
     return (
         <>
-            <Button variant='contained' onClick={() => setOpenModal(true)} sx={{ borderRadius: '10px' }}>Criar Segurado</Button>
+            <Button variant='contained' onClick={() => setOpenModal(true)} endIcon={<Add />} >Criar Segurado</Button>
             <Dialog
                 open={openModal}
                 onClose={handleClose}

@@ -6,7 +6,7 @@ import { Send } from "@mui/icons-material"
 import Axios from 'axios'
 import { getCookie } from "react-use-cookie"
 
-const MensagemPadraoAdesao = ({ para }) => {
+const MensagemPadraoAdesao = ({ para, setFlushHook }) => {
 
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
@@ -19,28 +19,14 @@ const MensagemPadraoAdesao = ({ para }) => {
     const [data2, setData2] = useState()
     const opcoesJanela = [
         [
-            `1. Das 12:00 às 14:00
-2. Das 14:00 às 16:00
-3. Das 16:00 às 18:00`,
-            `4. Das 08:00 às 10:00
-5. Das 10:00 às 12:00
-6. Das 12:00 às 14:00
-7. Das 14:00 às 16:00
-8. Das 16:00 às 18:00`,
-            'HX3c9a18252c883797e30c43b3789eae4b'
+            `1. Das 12:00 às 14:00 2. Das 14:00 às 16:00 3. Das 16:00 às 18:00`,
+            `4. Das 08:00 às 10:00 5. Das 10:00 às 12:00 6. Das 12:00 às 14:00 7. Das 14:00 às 16:00 8. Das 16:00 às 18:00`,
+            'HX6014b8da5c14a917f9c7c9e2fde0f3ba'
         ],
         [
-            `1. Das 08:00 às 10:00
-2. Das 10:00 às 12:00
-3. Das 12:00 às 14:00
-4. Das 14:00 às 16:00
-5. Das 16:00 às 18:00`,
-            `6. Das 08:00 às 10:00
-7. Das 10:00 às 12:00
-8. Das 12:00 às 14:00
-9. Das 14:00 às 16:00
-10. Das 16:00 às 18:00`,
-            'HX2a7ab3d608a2d6fbb674ec9ac29086f9'
+            `1. Das 08:00 às 10:00 2. Das 10:00 às 12:00 3. Das 12:00 às 14:00 4. Das 14:00 às 16:00 5. Das 16:00 às 18:00`,
+            `6. Das 08:00 às 10:00 7. Das 10:00 às 12:00 8. Das 12:00 às 14:00 9. Das 14:00 às 16:00 10. Das 16:00 às 18:00`,
+            'HX6014b8da5c14a917f9c7c9e2fde0f3ba'
         ]
     ]
     const numero = '(11) 4240-1232'
@@ -56,13 +42,22 @@ const MensagemPadraoAdesao = ({ para }) => {
         try {
             setLoading(true)
 
-            const response = await Axios.post('https://sistema.lplseguros.com.br/apiTele/newWhatsapp/sendTemplateMessage', {
+            console.log(nome,
+                moment(data1).format('DD/MM/YYYY'),
+                opcoesJanela[opcaoJanelas][0],
+                moment(data2).format('DD/MM/YYYY'),
+                opcoesJanela[opcaoJanelas][1],
+                numero);
+
+            const response = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/newWhatsapp/sendTemplateMessage`, {
                 de: 'whatsapp:+551150394280',
                 para,
                 template: opcaoJanelas === 0 ? opcoesJanela[0][2] : opcoesJanela[1][2],
                 variaveis: [
                     nome,
+                    opcoesJanela[opcaoJanelas][0],
                     moment(data1).format('DD/MM/YYYY'),
+                    opcoesJanela[opcaoJanelas][1],
                     moment(data2).format('DD/MM/YYYY'),
                     numero
                 ]
@@ -73,12 +68,12 @@ const MensagemPadraoAdesao = ({ para }) => {
 
             })
 
-            console.log(response.data);
-
             setOpenToast(true)
             setMessage('Mensagem enviada com sucesso')
             setSeverity('success')
             setLoading(false)
+            setOpen(false)
+            setFlushHook((prev) => (!prev))
         } catch (error) {
             setOpenToast(true)
             setMessage('Erro ao enviar mensagem')

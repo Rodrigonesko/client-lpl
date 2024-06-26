@@ -51,6 +51,7 @@ const Chat = () => {
                 setLoading(false)
             }
             setMensagem('')
+            setAux(!aux)
             inputRef.current.value = '';
         } catch (error) {
             console.log(error);
@@ -77,22 +78,21 @@ const Chat = () => {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
             setChat(result.data)
-            setAux(true)
             await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
                 whatsapp
             }, {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
-            const response = await Axios.get(`https://sistema.lplseguros.com.br/apiTele/newProposta/whatsapp/${whatsapp}`, {
+            const response = await Axios.get(`${process.env.REACT_APP_API_TELE_KEY}/newProposta/whatsapp/${whatsapp}`, {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
             setBeneficiario(response.data)
+            setAux(true)
         } catch (error) {
             console.log(error);
         }
-
     }
 
     useEffect(() => {
@@ -101,8 +101,6 @@ const Chat = () => {
         if (component) {
             component.scrollTop = component.scrollHeight;
         }
-
-
     }, [whatsapp, aux])
 
     useEffect(() => {
@@ -136,14 +134,14 @@ const Chat = () => {
                                 {
                                     chat.map(e => {
                                         return (
-                                            <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
+                                            <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' || e.de === 'whatsapp:+551150394280' ? 'right' : 'left' }}>
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>
                                                 <Typography
                                                     style={{
                                                         display: 'inline-block',
-                                                        backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' ? '#0066FF' : 'gray',
+                                                        backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' || e.de === 'whatsapp:+551150394280' ? '#0066FF' : 'gray',
                                                         color: 'white',
                                                         padding: '10px',
                                                         borderRadius: '10px',
@@ -206,7 +204,7 @@ const Chat = () => {
                             {
                                 beneficiario?.tipoContrato === 'ADESÃO' ? (
                                     <>
-                                        <MensagemPadraoAdesao para={whatsapp}/>
+                                        <MensagemPadraoAdesao para={whatsapp} setFlushHook={setAux} />
                                     </>
                                 ) : (
                                     <>
