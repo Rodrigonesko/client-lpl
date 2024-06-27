@@ -137,6 +137,14 @@ export const getQuantidadePareceres = async (dataInicio, dataFim) => {
     return await new ApiCall(`/pedido/getQuantidadePareceres?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
 }
 
+export const getPedidosByFilter = async (pesquisa, page, limit) => {
+    return await new ApiCall(`/pedido/filterPedidos?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
+}
+
+export const getPedidosByPrestador = async (id) => {
+    return await new ApiCall(`/pedido/prestador/${id}`, url).get()
+}
+
 /* Protocolos */
 
 /* Pacotes */
