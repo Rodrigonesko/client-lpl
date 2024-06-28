@@ -183,6 +183,7 @@ import Protocolos from "./pages/RsdBradesco/Protocolos/Protocolos";
 import AnaliticoBradescoRsd from "./pages/RsdBradesco/Analitico/Analitico"
 import Prestadores from "./pages/RsdBradesco/Prestadores/Prestadores";
 import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
+import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
 
 const AppRoutes = () => {
     return (
@@ -205,7 +206,7 @@ const AppRoutes = () => {
                 <Route exact path="/bradesco/fichaSegurado/:id" element={<ProtectedRoute>
                     <FichaSegurado />
                 </ProtectedRoute>} />
-                <Route exact path="/bradesco/fichaPrestador/:id" element={<ProtectedRoute>  
+                <Route exact path="/bradesco/fichaPrestador/:id" element={<ProtectedRoute>
                     <FichaPrestador />
                 </ProtectedRoute>} />
                 <Route exact path="/bradesco/protocolos/:id" element={<ProtectedRoute>
@@ -216,6 +217,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/bradesco/prestadores" element={<ProtectedRoute>
                     <Prestadores />
+                </ProtectedRoute>} />
+                <Route exact path="/bradesco/rendimento" element={<ProtectedRoute>
+                    <AnaliticoRsdBradesco />
                 </ProtectedRoute>} />
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>

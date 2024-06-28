@@ -1,13 +1,13 @@
 import { ThemeProvider } from "@emotion/react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { themeBradesco } from "../components/theme"
-import { Box, Button, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Button, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, IconButton, Tooltip, Link } from "@mui/material"
 import Title from "../../../components/Title/Title"
 import { useParams } from "react-router-dom"
 import { indigo, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { getPedidosByPrestador, getPrestadorById, updatePrestador } from "../../../_services/rsdBradesco.service"
-import { Save } from "@mui/icons-material"
+import { ArrowForward, Save } from "@mui/icons-material"
 import { useForm } from "react-hook-form"
 import Toast from "../../../components/Toast/Toast"
 
@@ -163,7 +163,10 @@ const FichaPrestador = () => {
                                                             {pedido.segurado.codigo}
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell>{pedido.segurado.titular.nome}
+                                                    <TableCell>
+                                                        <Link underline="hover" href={`/bradesco/fichaSegurado/${pedido.segurado.titular._id}`}>
+                                                            {pedido.segurado.titular.nome}
+                                                        </Link>
                                                         <Typography
                                                             variant='body2'
                                                             color='textSecondary'
@@ -172,7 +175,13 @@ const FichaPrestador = () => {
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>{pedido.status}</TableCell>
-                                                    <TableCell></TableCell>
+                                                    <TableCell>
+                                                        <Tooltip title='Pedido'>
+                                                            <IconButton size='small' href={`/bradesco/protocolos/${pedido.pacote._id}`} >
+                                                                <ArrowForward color="primary" />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </TableCell>
                                                 </TableRow>
                                             ))
                                         }
