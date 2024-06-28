@@ -19,6 +19,10 @@ export const updatePrestador = async (id, data) => {
     return await new ApiCall(`/prestador/${id}`, url).put(data)
 }
 
+export const getPrestadoresByFilter = async (pesquisa, page, limit) => {
+    return await new ApiCall(`/prestador/filterPedidos?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
+}
+
 /* Segurado */
 
 export const createSegurado = async (data) => {
@@ -135,10 +139,6 @@ export const getQuantidadePedidos = async (dataInicio, dataFim) => {
 
 export const getQuantidadePareceres = async (dataInicio, dataFim) => {
     return await new ApiCall(`/pedido/getQuantidadePareceres?dataInicio=${dataInicio}&dataFim=${dataFim}`, url).get()
-}
-
-export const getPedidosByFilter = async (pesquisa, page, limit) => {
-    return await new ApiCall(`/pedido/filterPedidos?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, url).get()
 }
 
 export const getPedidosByPrestador = async (id) => {

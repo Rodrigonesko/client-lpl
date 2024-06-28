@@ -5,8 +5,8 @@ import { indigo, red } from "@mui/material/colors"
 import ModalCriarPrestador from "./components/ModalCriarPrestador"
 import { useEffect, useState } from "react"
 import { themeBradesco } from "../components/theme"
-import { getPedidosByFilter } from "../../../_services/rsdBradesco.service"
 import { ArrowForwardIos } from "@mui/icons-material"
+import { getPrestadoresByFilter } from "../../../_services/rsdBradesco.service"
 
 const Prestadores = () => {
 
@@ -22,7 +22,7 @@ const Prestadores = () => {
     const fetch = async () => {
         setLoading(true)
         try {
-            const get = await getPedidosByFilter(pesquisa, page, rowsPerPage)
+            const get = await getPrestadoresByFilter(pesquisa, page, rowsPerPage)
             setPedidos(get.pedidos)
             setTotalPages(get.total)
         } catch (error) {
@@ -101,7 +101,6 @@ const Prestadores = () => {
                                     >
                                         <TableHead sx={{ background: indigo[800] }}>
                                             <TableRow>
-                                                <TableCell sx={{ color: 'white' }}>Sinistro</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>Prestador</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>UF</TableCell>
                                                 <TableCell align='center' sx={{ color: 'white' }}>Status</TableCell>
@@ -110,26 +109,25 @@ const Prestadores = () => {
                                         </TableHead>
                                         <TableBody>
                                             {
-                                                pedidos.map((pedido) => (
+                                                pedidos.map((prestador) => (
                                                     <TableRow>
-                                                        <TableCell>{pedido.sinistro}</TableCell>
                                                         <TableCell>
-                                                            {pedido.prestador.nome}
+                                                            {prestador.nome}
                                                             <Typography
                                                                 variant='body2'
                                                                 color='textSecondary'
                                                             >
-                                                                {pedido.prestador.cpfCnpj}
+                                                                {prestador.cpfCnpj}
                                                             </Typography>
                                                         </TableCell>
-                                                        <TableCell>{pedido.prestador.uf}</TableCell>
+                                                        <TableCell>{prestador.uf}</TableCell>
                                                         <TableCell align="center" >{
-                                                            pedido.prestador.status === 'Ativo' ? <Chip color="success" label='Ativo' /> : <Chip color="error" label='Inativo' />
+                                                            prestador.status === 'Ativo' ? <Chip color="success" label='Ativo' /> : <Chip color="error" label='Inativo' />
                                                         }</TableCell>
                                                         <TableCell>
                                                             <Tooltip title={'Ficha Prestador'}>
                                                                 <IconButton size="small"
-                                                                    href={`/bradesco/fichaPrestador/${pedido.prestador._id}`}
+                                                                    href={`/bradesco/fichaPrestador/${prestador._id}`}
                                                                 >
                                                                     <ArrowForwardIos fontSize="10px" />
                                                                 </IconButton>
