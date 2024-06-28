@@ -6,19 +6,21 @@ import Title from "../../../components/Title/Title"
 import { useParams } from "react-router-dom"
 import { indigo, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
-import { getPedidosByPrestador, getPrestadorById } from "../../../_services/rsdBradesco.service"
+import { getPedidosByPrestador, getPrestadorById, updatePrestador } from "../../../_services/rsdBradesco.service"
 import { Save } from "@mui/icons-material"
+import { useForm } from "react-hook-form"
+import Toast from "../../../components/Toast/Toast"
 
-const LabelChangeDadosPrestador = ({ label, type, value, onChange }) => {
+const Input = ({ label, type = 'text', register, multiline }) => {
     return (
         <TextField
             type={type}
             label={label}
-            value={value}
-            onChange={onChange}
+            {...register}
             fullWidth
             margin="normal"
             size="small"
+            multiline={multiline}
             InputProps={{
                 style: {
                     borderRadius: '10px'
@@ -34,60 +36,81 @@ const LabelChangeDadosPrestador = ({ label, type, value, onChange }) => {
 const FichaPrestador = () => {
 
     const { id } = useParams();
+    const { register, handleSubmit, setValue } = useForm();
 
     const [pedidos, setPedidos] = useState([])
-    const [prestadores, setPrestadores] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
 
-    const [nome, setNome] = useState('')
-    const [cnpj, setCnpj] = useState('')
-    const [uf, setUf] = useState('')
-    const [situacao, setSituacao] = useState('')
+    const [data, setData] = useState()
 
+    const [openToast, setOpenToast] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
 
-    const fetch = async () => {
-        setLoading(true)
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                const getPedidos = await getPedidosByPrestador(id)
+                setPedidos(getPedidos)
+                const getPrestadores = await getPrestadorById(id)
+                setData(getPrestadores)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetch()
+    }, [id, flushHook])
+
+    const onSubmit = async (formData) => {
         try {
-            const getPedidos = await getPedidosByPrestador(id)
-            setPedidos(getPedidos)
-            const getPrestadores = await getPrestadorById(id)
-            setPrestadores(getPrestadores)
-            setNome(prestadores?.nome)
-            setUf(prestadores?.uf)
-            setCnpj(prestadores?.cpfCnpj)
-            setSituacao(prestadores?.status)
+            const update = await updatePrestador(id, formData)
+            setData(update)
+            setOpenToast(true)
+            setMessage('Dados do Prestador atualizados com sucesso!')
+            setSeverity('success')
         } catch (error) {
             console.log(error);
+            setOpenToast(true)
+            setMessage('Erro ao atualizar Dados do Prestador')
+            setSeverity('error')
         }
-        setLoading(false)
     }
 
     useEffect(() => {
-        fetch()
-    }, [id])
+        if (data) {
+            setValue('nome', data.nome)
+            setValue('cpfCnpj', data.cpfCnpj)
+            setValue('uf', data.uf)
+            setValue('observacao', data.observacao)
+        }
+        setFlushHook(false)
+    }, [data, setValue])
 
     return (
         <>
             <Sidebar>
                 <ThemeProvider theme={themeBradesco}>
                     <Container maxWidth>
-                        <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]} >Dados do Prestador - {prestadores.nome}</Title>
+                        <Title size={'medium'} fontColor={indigo[800]} lineColor={red[700]} >Dados do Prestador - {data?.nome}</Title>
                         <Divider sx={{ mt: 2, mb: 2 }} />
-                        <form>
-                            <Grid container spacing={2}>
-
-                                <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <LabelChangeDadosPrestador label={'Nome'} type={'text'} value={nome} onChange={(e) => { setNome(e.target.value) }} />
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    mt: 3,
+                                    gap: '10px',
+                                    flexWrap: 'wrap'
+                                }}
+                            >
+                                <Grid
+                                    container
+                                >
+                                    <Input label='Nome' register={register('nome')} />
+                                    <Input label='CNPJ' register={register('cpfCnpj')} />
+                                    <Input label='UF' register={register('uf')} />
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <LabelChangeDadosPrestador label={'UF'} type={'text'} value={uf} onChange={(e) => { setUf(e.target.value) }} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <LabelChangeDadosPrestador label={'CNPJ'} type={'text'} value={cnpj} onChange={(e) => { setCnpj(e.target.value) }} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <LabelChangeDadosPrestador label={'Situação'} type={'text'} value={situacao} onChange={(e) => { setSituacao(e.target.value) }} />
-                                </Grid>
+                                <Input label='Observações' multiline={true} register={register('observacao')} />
                                 <Grid
                                     item
                                     xs={12}
@@ -106,12 +129,12 @@ const FichaPrestador = () => {
                                             }
                                         }}
                                         endIcon={<Save />}
-                                    // onClick={handleSubmit(onSubmit)}
+                                        onClick={handleSubmit(onSubmit)}
                                     >
                                         Salvar
                                     </Button>
                                 </Grid>
-                            </Grid>
+                            </Box>
                         </form>
                         <Divider sx={{ mt: 2, mb: 2 }} />
                         <Title size={'small'} fontColor={indigo[800]} lineColor={red[600]} >Pedidos</Title>
@@ -157,9 +180,15 @@ const FichaPrestador = () => {
                                 </Table>
                             </TableContainer>
                         </Box>
+                        <Toast
+                            message={message}
+                            severity={severity}
+                            onClose={() => { setOpenToast(false) }}
+                            open={openToast}
+                        />
                     </Container>
                 </ThemeProvider>
-            </Sidebar>
+            </Sidebar >
         </>
     )
 }
