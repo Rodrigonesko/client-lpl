@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const URL_API = 'http://localhost:5000'
+const URL_API = 'http://localhost:3001'
 
 export const createPropostasEntrevistas = async (data) => {
     return await new ApiCall('/tele-entrevista/propostas', URL_API).post(data)
@@ -123,6 +123,10 @@ export const getCids = async (pesquisa) => {
 
 export const concluirProposta = async ({ id, data }) => {
     return await new ApiCall(`/tele-entrevista/proposta/concluir/${id}`, URL_API).post(data)
+}
+
+export const finalizarEntrevista = async (data) => {
+    return await new ApiCall('/newTeleEntrevista/finalizarEntrevista', URL_API).post(data)
 }
 
 

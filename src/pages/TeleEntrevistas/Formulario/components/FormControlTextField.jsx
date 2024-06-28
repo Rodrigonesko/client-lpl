@@ -1,12 +1,13 @@
 import { FormControlLabel, TextField } from "@mui/material"
 
-const FormControlTextField = ({ label, placeholder, value, onChange, style }) => {
+const FormControlTextField = ({ label, placeholder, value, onChange, style, onBlur }) => {
     return (
         <FormControlLabel
             labelPlacement="top"
             label={label}
             value={value}
             onChange={onChange}
+            onBlur={onBlur}
             control={
                 <TextField
                     placeholder={placeholder}

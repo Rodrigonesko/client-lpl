@@ -4,7 +4,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
-import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography, Container, Collapse, RadioGroup, FormControlLabel, Radio } from '@mui/material'
+import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography, Container, Collapse, RadioGroup, FormControlLabel, Radio, Divider, Chip, Dialog, DialogContent } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import './Formulario.css'
 import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
@@ -13,6 +13,87 @@ import Cids from "./components/Cids";
 import FormControlTextField from "./components/FormControlTextField";
 import { Save } from "@mui/icons-material";
 import Title from "../../../components/Title/Title";
+import PerguntaAutismo from "./components/PerguntaAutismo";
+import Toast from "../../../components/Toast/Toast";
+import { finalizarEntrevista } from "../../../_services/teleEntrevistaV2.service";
+
+const RadioQuestion = ({ pergunta, respostasFormulario, setRespostasFormulario, pessoa, setTea, tea }) => {
+
+    const [resposta, setResposta] = useState('')
+
+    return (
+        <Box
+            ml={2}
+        >
+            <Typography
+                sx={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    pl: 1
+                }}
+            >
+                {pergunta.pergunta}
+            </Typography>
+            <RadioGroup
+                row
+                name={pergunta.name}
+                onChange={e => {
+                    setResposta(e.target.value)
+                    setRespostasFormulario({ ...respostasFormulario, [pergunta.name]: { resposta: e.target.value } })
+                }}
+                value={respostasFormulario[pergunta.name]?.resposta || ''}
+            >
+                <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
+                <FormControlLabel value='Não' control={<Radio />} label='Não' />
+            </RadioGroup>
+            <Collapse in={resposta === 'Sim'} mountOnEnter unmountOnExit>
+                <Box>
+                    {pergunta.name === 'espectro' && (
+                        <PerguntaAutismo pessoa={pessoa} tea={tea} setTea={setTea} />
+                    )}
+                    {
+                        pergunta.subPerguntasSim.map((subPergunta, index) => (
+                            <FormControlTextField
+                                key={index}
+                                label={subPergunta}
+                                placeholder={'Resposta'}
+                                onBlur={e => {
+                                    setRespostasFormulario({
+                                        ...respostasFormulario,
+                                        [pergunta.name]: {
+                                            ...respostasFormulario[pergunta.name],
+                                            [subPergunta]: e.target.value
+                                        }
+                                    })
+                                }}
+                            />
+                        ))
+                    }
+                </Box>
+            </Collapse>
+            <Collapse in={resposta === 'Não'} mountOnEnter unmountOnExit>
+                {
+                    pergunta.subPerguntasNao.map((subPergunta, index) => (
+                        <FormControlTextField
+                            key={index}
+                            label={subPergunta}
+                            placeholder={'Resposta'}
+                            onBlur={e => {
+                                setRespostasFormulario({
+                                    ...respostasFormulario,
+                                    [pergunta.name]: {
+                                        ...respostasFormulario[pergunta.name],
+                                        [subPergunta]: e.target.value
+                                    }
+                                })
+                            }}
+                        />
+                    ))
+                }
+            </Collapse>
+        </Box>
+    )
+}
 
 const Formulario = () => {
 
@@ -25,6 +106,7 @@ const Formulario = () => {
     const [motivoBeneficiario, setMotivoBeneficiario] = useState('')
     const [habitos, setHabitos] = useState(true)
     const [autismo, setAutismo] = useState(false)
+    const [tea, setTea] = useState('')
     const [infoAdicional, setInfoAdicional] = useState({})
     const [entrevistaQualidade, setEntrevistaQualidade] = useState(false)
     const [novoFormulario, setNovoFormulario] = useState('')
@@ -34,6 +116,11 @@ const Formulario = () => {
     const [respostasFormulario, setRespostasFormulario] = useState({})
     const [imc, setImc] = useState(0)
     const [indicadorImc, setIndicadorImc] = useState('')
+    const [openDialog, setOpenDialog] = useState(false)
+    const [loadingEnviando, setLoadingEnviando] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [messageToast, setMessageToast] = useState('')
+    const [severityToast, setSeverityToast] = useState('success')
 
     const alterarFormulario = async () => {
         try {
@@ -98,6 +185,18 @@ const Formulario = () => {
         }
     }, [respostasFormulario?.peso, respostasFormulario?.altura])
 
+    useEffect(() => {
+        if (respostasFormulario?.espectro?.resposta === 'Sim') {
+            setAutismo(true)
+        } else {
+            setAutismo(false)
+        }
+    }, [respostasFormulario?.espectro?.resposta])
+
+    useEffect(() => {
+        console.log(tea);
+    }, [tea])
+
     return (
         <>
             <Sidebar>
@@ -141,14 +240,16 @@ const Formulario = () => {
                             <InfoAdicionais data={infoAdicional} />
                         </Box>
                         <RoteiroTeleEntrevista />
-                        <div className="info-pessoa-entrevista-container">
-                            <InfoPessoaEntrevista pessoa={pessoa} />
-                        </div>
-                        <div className="observacoes-entrevista">
-                            <div className="title">
-                                <h4>IMC: {imc}</h4>
-                            </div>
-                        </div>
+                        <InfoPessoaEntrevista pessoa={pessoa} />
+                        <Divider />
+                        <Chip
+                            label={`IMC: ${imc.toFixed(2)} ${indicadorImc}`}
+                            color={indicadorImc ? 'error' : 'primary'}
+                            variant='filled'
+                            sx={{
+                                mt: 2
+                            }}
+                        />
                         <Title
                             size={'small'}
                         >
@@ -167,76 +268,22 @@ const Formulario = () => {
                                                 key={pergunta._id}
                                                 label={pergunta.pergunta}
                                                 placeholder={'Resposta'}
-                                                onChange={e => {
-                                                    setRespostasFormulario({ ...respostasFormulario, [pergunta.name]: e.target.value })
+                                                onBlur={e => {
+                                                    setRespostasFormulario({
+                                                        ...respostasFormulario, [pergunta.name]: {
+                                                            resposta: e.target.value
+                                                        }
+                                                    })
                                                 }}
-                                                value={respostasFormulario[pergunta.name]}
                                             /> : (
-                                                <Box
-                                                    ml={2}
-                                                >
-                                                    <Typography
-                                                        sx={{
-                                                            color: 'black',
-                                                            fontWeight: 'bold',
-                                                            pl: 1
-                                                        }}
-                                                    >
-                                                        {pergunta.pergunta}
-                                                    </Typography>
-                                                    <RadioGroup
-                                                        row
-                                                        name={pergunta.name}
-                                                        onChange={e => {
-                                                            setRespostasFormulario({ ...respostasFormulario, [pergunta.name]: { resposta: e.target.value } })
-                                                        }}
-                                                        value={respostasFormulario[pergunta.name]?.resposta}
-                                                    >
-                                                        <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
-                                                        <FormControlLabel value='Não' control={<Radio />} label='Não' />
-                                                    </RadioGroup>
-                                                    <Collapse in={true}>
-                                                        {
-                                                            pergunta.subPerguntasSim.map((subPergunta, index) => (
-                                                                <FormControlTextField
-                                                                    key={index}
-                                                                    label={subPergunta}
-                                                                    placeholder={'Resposta'}
-                                                                    onChange={e => {
-                                                                        setRespostasFormulario({
-                                                                            ...respostasFormulario,
-                                                                            [pergunta.name]: {
-                                                                                ...respostasFormulario[pergunta.name],
-                                                                                [subPergunta]: e.target.value
-                                                                            }
-                                                                        })
-                                                                    }}
-                                                                    value={respostasFormulario[pergunta.name]?.[subPergunta]}
-                                                                />
-                                                            ))
-                                                        }
-                                                    </Collapse>
-                                                    <Collapse in={true}>
-                                                        {
-                                                            pergunta.subPerguntasNao.map((subPergunta, index) => (
-                                                                <FormControlTextField
-                                                                    key={index}
-                                                                    label={subPergunta}
-                                                                    placeholder={'Resposta'}
-                                                                    onChange={e => {
-                                                                        setRespostasFormulario({
-                                                                            ...respostasFormulario,
-                                                                            [pergunta.name]: {
-                                                                                ...respostasFormulario[pergunta.name],
-                                                                                [subPergunta]: e.target.value
-                                                                            }
-                                                                        })
-                                                                    }}
-                                                                />
-                                                            ))
-                                                        }
-                                                    </Collapse>
-                                                </Box>
+                                                <RadioQuestion
+                                                    tea={tea}
+                                                    setTea={setTea}
+                                                    pessoa={pessoa}
+                                                    pergunta={pergunta}
+                                                    respostasFormulario={respostasFormulario}
+                                                    setRespostasFormulario={setRespostasFormulario}
+                                                />
                                             )}
 
                                         </React.Fragment>
@@ -264,10 +311,8 @@ const Formulario = () => {
                                                         key={pergunta._id}
                                                         label={pergunta.pergunta}
                                                         placeholder={'Resposta'}
-                                                        onChange={e => {
-                                                            console.log(e.target.value);
+                                                        onBlur={e => {
                                                             setRespostasFormulario({ ...respostasFormulario, [pergunta.name]: { resposta: e.target.value } })
-                                                            console.log(respostasFormulario);
                                                         }}
                                                     />
                                                 )
@@ -359,25 +404,71 @@ const Formulario = () => {
                             size="large"
                             variant='contained'
                             onClick={async () => {
-                                console.log(respostasFormulario);
-                                await preencherFormulario(
-                                    {
-                                        id,
-                                        respostas: respostasFormulario,
-                                        pessoa,
-                                        divergencia,
-                                        qualDivergencia,
-                                        motivoBeneficiario,
-                                        cids: cidsSelecionados,
-                                        cidsDs
+                                try {
+                                    setLoadingEnviando(true)
+                                    setOpenDialog(true)
+
+                                    for (const pergunta of perguntas) {
+                                        if (!respostasFormulario[pergunta.name]?.resposta) {
+                                            console.log(pergunta);
+                                            setOpenDialog(false)
+                                            setOpenToast(true)
+                                            setMessageToast('Preencha todas as perguntas!' + pergunta.pergunta)
+                                            setSeverityToast('error')
+                                            return
+                                        }
                                     }
-                                )
+
+                                    await finalizarEntrevista(
+                                        {
+                                            id,
+                                            respostas: respostasFormulario,
+                                            pessoa,
+                                            divergencia,
+                                            qualDivergencia,
+                                            motivoBeneficiario,
+                                            cids: cidsSelecionados,
+                                            cidsDs,
+                                            tea
+                                        }
+                                    )
+                                    setLoadingEnviando(false)
+                                } catch (error) {
+                                    console.log(error);
+                                    setLoadingEnviando(false)
+                                    setOpenDialog(false)
+                                    setOpenToast(true)
+                                    setMessageToast('Erro ao enviar formulário!')
+                                    setSeverityToast('error')
+                                }
                             }}
                             endIcon={<Save />}
                         >
                             Enviar Formulário
                         </Button>
                     </Box>
+                    <Dialog
+                        open={openDialog}
+                        onClose={() => setOpenDialog(false)}
+                    >
+                        <DialogContent>
+                            {
+                                loadingEnviando ? (
+                                    <CircularProgress />
+                                ) : (
+                                    <Alert severity='success'>
+                                        Formulário enviado com sucesso!
+                                    </Alert>
+                                )
+                            }
+                        </DialogContent>
+                    </Dialog>
+                    <Toast
+                        open={openToast}
+                        onClose={() => setOpenToast(false)}
+                        message={messageToast}
+                        severity={severityToast}
+                    />
                 </Container>
             </Sidebar>
         </>
