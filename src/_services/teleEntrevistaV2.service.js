@@ -1,6 +1,32 @@
 import { ApiCall } from "./api";
 const URL_API = 'http://localhost:3001'
 
+/* Propostas */
+
+export const getPropostasByStatus = async (status) => {
+    return await new ApiCall(`/newPropostaEntrevista/status/${status}`, URL_API).get()
+}
+
+export const getPropostasByAgendamento = async (agendamento, sort, pesquisa, responsavel, limit, page) => {
+    return await new ApiCall(`/newPropostaEntrevista/agendamento?agendamento=${agendamento}&sort=${sort}&pesquisa=${pesquisa}&responsavel=${responsavel}&limit=${limit}&page=${page}`, URL_API).get()
+}
+
+export const updatePropostaEntrevista = async (data) => {
+    return await new ApiCall(`/newPropostaEntrevista/${data._id}`, URL_API).put(data)
+}
+
+/* Dados Entrevista  */
+
+export const finalizarEntrevista = async (data) => {
+    return await new ApiCall('/newTeleEntrevista/finalizarEntrevista', URL_API).post(data)
+}
+
+export const getDadosEntrevistaById = async (id) => {
+    return await new ApiCall(`/newTeleEntrevista/id/${id}`, URL_API).get()
+}
+
+/* --------------------------------------------------------------- */
+
 export const createPropostasEntrevistas = async (data) => {
     return await new ApiCall('/tele-entrevista/propostas', URL_API).post(data)
 }
@@ -125,9 +151,7 @@ export const concluirProposta = async ({ id, data }) => {
     return await new ApiCall(`/tele-entrevista/proposta/concluir/${id}`, URL_API).post(data)
 }
 
-export const finalizarEntrevista = async (data) => {
-    return await new ApiCall('/newTeleEntrevista/finalizarEntrevista', URL_API).post(data)
-}
+
 
 
 // RN

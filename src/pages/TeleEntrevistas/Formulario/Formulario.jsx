@@ -8,7 +8,7 @@ import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, Circular
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import './Formulario.css'
 import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
-import { getPerguntas, preencherFormulario } from "../../../_services/teleEntrevista.service";
+import { getPerguntas } from "../../../_services/teleEntrevista.service";
 import Cids from "./components/Cids";
 import FormControlTextField from "./components/FormControlTextField";
 import { Save } from "@mui/icons-material";
@@ -16,6 +16,7 @@ import Title from "../../../components/Title/Title";
 import PerguntaAutismo from "./components/PerguntaAutismo";
 import Toast from "../../../components/Toast/Toast";
 import { finalizarEntrevista } from "../../../_services/teleEntrevistaV2.service";
+import gerarPdf from "../Pdf/Pdf";
 
 const RadioQuestion = ({ pergunta, respostasFormulario, setRespostasFormulario, pessoa, setTea, tea }) => {
 
@@ -170,8 +171,12 @@ const Formulario = () => {
     }, [pessoa])
 
     useEffect(() => {
-        if (respostasFormulario?.peso && respostasFormulario?.altura) {
-            const imc = respostasFormulario.peso / (respostasFormulario.altura * respostasFormulario.altura)
+        if (respostasFormulario?.peso?.resposta && respostasFormulario?.altura?.resposta) {
+            const peso = parseFloat(respostasFormulario.peso.resposta)
+            const altura = parseFloat(respostasFormulario.altura.resposta)
+            console.log(peso, altura);
+            const imc = peso / (altura * altura)
+            console.log(imc);
             setImc(imc)
             if (imc >= 40) {
                 setIndicadorImc('OBESIDADE III')
@@ -183,7 +188,7 @@ const Formulario = () => {
                 setIndicadorImc('OBESIDADE I')
             }
         }
-    }, [respostasFormulario?.peso, respostasFormulario?.altura])
+    }, [respostasFormulario?.peso?.resposta, respostasFormulario?.altura?.resposta])
 
     useEffect(() => {
         if (respostasFormulario?.espectro?.resposta === 'Sim') {
@@ -410,7 +415,6 @@ const Formulario = () => {
 
                                     for (const pergunta of perguntas) {
                                         if (!respostasFormulario[pergunta.name]?.resposta) {
-                                            console.log(pergunta);
                                             setOpenDialog(false)
                                             setOpenToast(true)
                                             setMessageToast('Preencha todas as perguntas!' + pergunta.pergunta)
@@ -418,21 +422,28 @@ const Formulario = () => {
                                             return
                                         }
                                     }
+                                    console.log(divergencia);
 
-                                    await finalizarEntrevista(
+                                    const data = await finalizarEntrevista(
                                         {
                                             id,
                                             respostas: respostasFormulario,
                                             pessoa,
-                                            divergencia,
+                                            divergencia: divergencia ? 'Sim' : 'Não',
                                             qualDivergencia,
                                             motivoBeneficiario,
-                                            cids: cidsSelecionados,
+                                            cids: cidsSelecionados.map(cid => {
+                                                return {
+                                                    ...cid,
+                                                    codigo: cid.subCategoria
+                                                }
+                                            }),
                                             cidsDs,
                                             tea
                                         }
                                     )
                                     setLoadingEnviando(false)
+                                    await gerarPdf(data._id)
                                 } catch (error) {
                                     console.log(error);
                                     setLoadingEnviando(false)

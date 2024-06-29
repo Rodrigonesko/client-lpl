@@ -13,8 +13,10 @@ const FormControlTextField = ({ label, placeholder, value, onChange, style, onBl
                     placeholder={placeholder}
                     fullWidth
                     size="small"
+                    multiline
                 />
             }
+            name={label}
             sx={{
                 ...style,
                 alignItems: 'flex-start',
