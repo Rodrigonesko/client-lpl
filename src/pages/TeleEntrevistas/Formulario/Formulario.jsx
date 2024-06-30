@@ -6,7 +6,6 @@ import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoP
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography, Container, Collapse, RadioGroup, FormControlLabel, Radio, Divider, Chip, Dialog, DialogContent } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
-import './Formulario.css'
 import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
 import { getPerguntas } from "../../../_services/teleEntrevista.service";
 import Cids from "./components/Cids";

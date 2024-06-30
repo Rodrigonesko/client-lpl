@@ -37,25 +37,25 @@ import SolicitacaoFerias from "./pages/Ferias/Solicitacao/SolicitacaoFerias";
 
 /* Elegibilidade */
 
-import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
-import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
-import SemDocumentos from "./pages/Elegibilidade/SemDocumentos/SemDocumentos";
-import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
-import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
-import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
-import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
-import ProducaoElegibilidade from "./pages/Elegibilidade/ProducaoElegibilidade/ProducaoElegibilidade";
-import DevolvidasElegibilidade from "./pages/Elegibilidade/Devolvidas/Devolvidas";
-import PropostasAmil from "./pages/Elegibilidade/PropostasAmil/PropostasAmil";
-import Divergencias from "./pages/Elegibilidade/Divergencias/Divergencias";
-import PlanosBlacklist from "./pages/Elegibilidade/PlanosBlacklist/PlanosBlacklist";
+// import UploadElegibilidade from "./pages/Elegibilidade/Upload/UploadElegibilidade";
+// import AnaliseDocumentos from "./pages/Elegibilidade/AnaliseDocumentos/AnaliseDocumentos";
+// import SemDocumentos from "./pages/Elegibilidade/SemDocumentos/SemDocumentos";
+// import AnaliseElegibilidade from "./pages/Elegibilidade/Analise/AnaliseElegibilidade";
+// import CancelarElegibilidade from "./pages/Elegibilidade/Cancelar/CancelarElegibilidade";
+// import AnaliseElegibilidadeDetalhes from "./pages/Elegibilidade/AnaliseDetalhes/AnaliseElegibilidadeDetalhes";
+// import TodosElegibilidade from "./pages/Elegibilidade/Todos/TodosElegibilidade";
+// import ProducaoElegibilidade from "./pages/Elegibilidade/ProducaoElegibilidade/ProducaoElegibilidade";
+// import DevolvidasElegibilidade from "./pages/Elegibilidade/Devolvidas/Devolvidas";
+// import PropostasAmil from "./pages/Elegibilidade/PropostasAmil/PropostasAmil";
+// import Divergencias from "./pages/Elegibilidade/Divergencias/Divergencias";
+// import PlanosBlacklist from "./pages/Elegibilidade/PlanosBlacklist/PlanosBlacklist";
 
-/* ELegibilidade PME */
+// /* ELegibilidade PME */
 
-import UploadElegibilidadePme from "./pages/Elegibilidade/PME/upload/UploadElegibilidadePme";
-import TodosElegibilidadePme from "./pages/Elegibilidade/PME/Todos/TodosElegibilidadePme";
-import DetalhesElegibilidadePme from "./pages/Elegibilidade/PME/Detalhes/DetalhesElegibilidadePme";
-import AndamentoElegibilidadePme from "./pages/Elegibilidade/PME/Andamento/AndamentoElegibilidadePme";
+// import UploadElegibilidadePme from "./pages/Elegibilidade/PME/upload/UploadElegibilidadePme";
+// import TodosElegibilidadePme from "./pages/Elegibilidade/PME/Todos/TodosElegibilidadePme";
+// import DetalhesElegibilidadePme from "./pages/Elegibilidade/PME/Detalhes/DetalhesElegibilidadePme";
+// import AndamentoElegibilidadePme from "./pages/Elegibilidade/PME/Andamento/AndamentoElegibilidadePme";
 
 /* RSD */
 
@@ -153,14 +153,14 @@ import Beneficiarios from "./pages/Rsd/Beneficiarios/Beneficiarios";
 
 /* Tele entrevista V2 */
 
-import UploadPropostasEntrevistaV2 from "./pages/TeleEntrevistaV2/Upload/Index";
-import ConfigPerguntas from "./pages/TeleEntrevistaV2/ConfigPerguntas/Index";
-import FormularioV2 from "./pages/TeleEntrevistaV2/Formulario/Index";
-import { FormProvider } from "./pages/TeleEntrevistaV2/Formulario/context";
-import Envio from "./pages/TeleEntrevistaV2/Envio/Index";
-import Propostas from "./pages/TeleEntrevistaV2/Propostas/Index";
-import { PropostasProvider } from "./pages/TeleEntrevistaV2/Propostas/context";
-import AdicionarProposta from "./pages/TeleEntrevistaV2/AdicionarProposta";
+// import UploadPropostasEntrevistaV2 from "./pages/TeleEntrevistaV2/Upload/Index";
+// import ConfigPerguntas from "./pages/TeleEntrevistaV2/ConfigPerguntas/Index";
+// import FormularioV2 from "./pages/TeleEntrevistaV2/Formulario/Index";
+// import { FormProvider } from "./pages/TeleEntrevistaV2/Formulario/context";
+// import Envio from "./pages/TeleEntrevistaV2/Envio/Index";
+// import Propostas from "./pages/TeleEntrevistaV2/Propostas/Index";
+// import { PropostasProvider } from "./pages/TeleEntrevistaV2/Propostas/context";
+// import AdicionarProposta from "./pages/TeleEntrevistaV2/AdicionarProposta";
 
 /* SulAmerica */
 
@@ -468,7 +468,7 @@ const AppRoutes = () => {
 
                 {/*Elegibilidade*/}
 
-                <Route path="/elegibilidade/upload" element={<ProtectedRoute>
+                {/* <Route path="/elegibilidade/upload" element={<ProtectedRoute>
                     <UploadElegibilidade />
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/analiseDocumentos" element={<ProtectedRoute>
@@ -503,11 +503,11 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidade/planosBlacklist" element={<ProtectedRoute>
                     <PlanosBlacklist />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/*Elegibilidade PME*/}
 
-                <Route path="/elegibilidadePme/upload" element={<ProtectedRoute>
+                {/* <Route path="/elegibilidadePme/upload" element={<ProtectedRoute>
                     <UploadElegibilidadePme />
                 </ProtectedRoute>} />
                 <Route path="/elegibilidadePme/todos" element={<ProtectedRoute>
@@ -518,7 +518,7 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/elegibilidadePme/andamento" element={<ProtectedRoute>
                     <AndamentoElegibilidadePme />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/* Urgência Emergência*/}
 
@@ -558,7 +558,7 @@ const AppRoutes = () => {
                     </ChatProvider>
                 </ProtectedRoute>} />
 
-                <Route path="/teleEntrevistaV2/upload" element={<ProtectedRoute>
+                {/* <Route path="/teleEntrevistaV2/upload" element={<ProtectedRoute>
                     <UploadPropostasEntrevistaV2 />
                 </ProtectedRoute>} />
                 <Route path="/teleEntrevistaV2/configPerguntas" element={<ProtectedRoute>
@@ -579,7 +579,7 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route path="/teleEntrevistaV2/adicionarProposta" element={<ProtectedRoute>
                     <AdicionarProposta />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/* Sindicancia */}
 

@@ -12,10 +12,9 @@ const gerarPdf = async (id) => {
     const result = await getDadosEntrevistaById(id)
 
     const resultPerguntas = await getPerguntas()
-
-
+    
     let coren = await filterUsers({
-        name: result.idProposta.enfermeiro
+        name: result.responsavel
     })
 
     coren = coren[0].coren

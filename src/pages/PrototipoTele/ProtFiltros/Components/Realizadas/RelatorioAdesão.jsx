@@ -49,6 +49,7 @@ const RelatorioAdesao = () => {
             xls += "<th>Observações</th>"
             xls += "<th>TEA</th>"
             xls += "<th>Cids</th>"
+            xls += "<th>Cids Adesão</th>"
             xls += "</tr></thead><tbody>"
 
             result.forEach(e => {
@@ -72,7 +73,8 @@ const RelatorioAdesao = () => {
                 xls += `<td>${e.houveDivergencia}</td>`
                 xls += `<td>${e.divergencia || ''}</td>`
                 xls += `<td>${e.tea || ''}</td>`
-                xls += `<td>${e.cids}</td>`
+                xls += `<td>${e.cidsAjustados.map(cid => `${cid.codigo} (${cid.descricao}) : ${cid.ano},`)}</td>`
+                xls += `<td>${e?.cidsDs?.map(cid => `${cid.codigo} (${cid.descricao}) : ${cid.ano},`)}</td>`
                 // if (e.cids) {
                 //     const arrCids = e.codigosCids.split('-')
                 //     arrCids.forEach(cid => {
@@ -113,7 +115,7 @@ const RelatorioAdesao = () => {
                 }}
                 onClick={handleClickOpen}
             >
-                Relatorio Mensal
+                Relatorio Adesão
             </Button>
 
             <Dialog

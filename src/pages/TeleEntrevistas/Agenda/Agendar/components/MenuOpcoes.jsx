@@ -1,12 +1,14 @@
 import { IconButton, Tooltip, Menu, MenuItem, Box } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useContext, useState } from "react";
-import { ArrowForward, Block, Delete } from "@mui/icons-material";
+import { ArrowForward } from "@mui/icons-material";
 import moment from "moment";
 import AuthContext from "../../../../../context/AuthContext";
 import { updatePropostaEntrevista } from "../../../../../_services/teleEntrevistaV2.service";
+import ModalExcluir from "./ModalExcluir";
+import ModalCancelar from "./ModalCancelar";
 
-const MenuOpcoes = ({ proposta, setProposta, setOpenToast, setSeverity, setMessage }) => {
+const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeverity, setMessage }) => {
 
     const { name } = useContext(AuthContext)
 
@@ -97,7 +99,6 @@ const MenuOpcoes = ({ proposta, setProposta, setOpenToast, setSeverity, setMessa
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -152,28 +153,20 @@ const MenuOpcoes = ({ proposta, setProposta, setOpenToast, setSeverity, setMessa
                         </MenuItem>
                     )
                 }
-                <MenuItem onClick={() => console.log('Cancelar')}>
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={"space-between"}
-                        gap={1}
-                        width={'100%'}
-                    >
-                        Cancelar <Block />
-                    </Box>
-                </MenuItem>
-                <MenuItem onClick={() => console.log('Excluir')}>
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={"space-between"}
-                        gap={1}
-                        width={'100%'}
-                    >
-                        Excluir <Delete />
-                    </Box>
-                </MenuItem>
+                <ModalCancelar
+                    proposta={proposta}
+                    setRefresh={setRefresh}
+                    setOpenToast={setOpenToast}
+                    setSeverity={setSeverity}
+                    setMessage={setMessage}
+                />
+                <ModalExcluir
+                    proposta={proposta}
+                    setRefresh={setRefresh}
+                    setOpenToast={setOpenToast}
+                    setSeverity={setSeverity}
+                    setMessage={setMessage}
+                />
                 <MenuItem
                     onClick={() => {
                         window.open(`/entrevistas/formulario/${proposta._id}`, '_blank');

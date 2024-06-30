@@ -1,5 +1,4 @@
-import { Menu } from "@mui/icons-material"
-import { Chip, FormControl, IconButton, InputLabel, MenuItem, Select, TableCell, TableRow, Tooltip, Typography } from "@mui/material"
+import { Chip, FormControl, InputLabel, MenuItem, Select, TableCell, TableRow, Typography } from "@mui/material"
 import moment from "moment"
 import { useEffect, useState } from "react"
 import PopoverTelefone from "./PopoverTelefone"
@@ -7,7 +6,7 @@ import Toast from "../../../../../components/Toast/Toast"
 import { updatePropostaEntrevista } from "../../../../../_services/teleEntrevistaV2.service"
 import MenuOpcoes from "./MenuOpcoes"
 
-const LinhaTele = ({ proposta }) => {
+const LinhaTele = ({ proposta, setRefresh }) => {
 
     const [data, setData] = useState(proposta || {})
     const [openToast, setOpenToast] = useState(false)
@@ -15,15 +14,16 @@ const LinhaTele = ({ proposta }) => {
     const [severity, setSeverity] = useState('success')
     const [tentativas, setTentativas] = useState(0)
 
-    const countTentativas = () => {
-        let count = 0
-        if (data.contato1) count++
-        if (data.contato2) count++
-        if (data.contato3) count++
-        return count
-    }
+
 
     useEffect(() => {
+        const countTentativas = () => {
+            let count = 0
+            if (data.contato1) count++
+            if (data.contato2) count++
+            if (data.contato3) count++
+            return count
+        }
         setTentativas(countTentativas())
     }, [data])
 
@@ -120,6 +120,7 @@ const LinhaTele = ({ proposta }) => {
                     setMessage={setMessage}
                     setOpenToast={setOpenToast}
                     setSeverity={setSeverity}
+                    setRefresh={setRefresh}
                 />
             </TableCell>
             <Toast

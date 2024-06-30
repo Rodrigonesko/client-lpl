@@ -7,12 +7,16 @@ export const getPropostasByStatus = async (status) => {
     return await new ApiCall(`/newPropostaEntrevista/status/${status}`, URL_API).get()
 }
 
-export const getPropostasByAgendamento = async (agendamento, sort, pesquisa, responsavel, limit, page) => {
-    return await new ApiCall(`/newPropostaEntrevista/agendamento?agendamento=${agendamento}&sort=${sort}&pesquisa=${pesquisa}&responsavel=${responsavel}&limit=${limit}&page=${page}`, URL_API).get()
+export const getPropostasByAgendamento = async (agendamento, sort, pesquisa, responsavel, tipoContrato, limit, page) => {
+    return await new ApiCall(`/newPropostaEntrevista/agendamento?agendamento=${agendamento}&sort=${sort}&pesquisa=${pesquisa}&responsavel=${responsavel}&tipoContrato=${tipoContrato}&limit=${limit}&page=${page}`, URL_API).get()
 }
 
 export const updatePropostaEntrevista = async (data) => {
     return await new ApiCall(`/newPropostaEntrevista/${data._id}`, URL_API).put(data)
+}
+
+export const deletePropostaEntrevista = async (id) => {
+    return await new ApiCall(`/newPropostaEntrevista/${id}`, URL_API).delete()
 }
 
 /* Dados Entrevista  */
@@ -21,8 +25,28 @@ export const finalizarEntrevista = async (data) => {
     return await new ApiCall('/newTeleEntrevista/finalizarEntrevista', URL_API).post(data)
 }
 
+export const cancelarEntrevista = async (data) => {
+    return await new ApiCall('/newTeleEntrevista/cancelar', URL_API).post(data)
+}
+
+export const voltarEntrevista = async (id) => {
+    return await new ApiCall(`/newTeleEntrevista/voltarEntrevista/${id}`, URL_API).patch()
+}
+
 export const getDadosEntrevistaById = async (id) => {
     return await new ApiCall(`/newTeleEntrevista/id/${id}`, URL_API).get()
+}
+
+export const getDadosEntrevistaByPropostaId = async (id) => {
+    return await new ApiCall(`/newTeleEntrevista/proposta/${id}`, URL_API).get()
+}
+
+export const getDadosEntrevistaByDetails = async (detalhes) => {
+    return await new ApiCall(`/newTeleEntrevista/details/${detalhes}`, URL_API).get()
+}
+
+export const updateDadosEntrevista = async (data) => {
+    return await new ApiCall(`/newTeleEntrevista/update/${data._id}`, URL_API).put(data)
 }
 
 /* --------------------------------------------------------------- */

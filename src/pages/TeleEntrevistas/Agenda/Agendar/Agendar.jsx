@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Typography, Box, Container } from "@mui/material";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
 import TabelaAgendarRn from "../../../../components/TabelaAgendar/TabelaAgendarRn";
-import TabelaAgendarTele from "../../../../components/TabelaAgendar/TabelaAgendarTele";
 import BotoesRelatorios from "../../../../components/TabelaAgendar/BotoesRelatorio";
 import Agendamento from "../../../../components/TabelaAgendar/Agendamento";
 import GerarHorarios from "../../../../components/TabelaAgendar/GerarHorarios";
@@ -88,14 +87,7 @@ const Agendar = () => {
                     <Agendamento propostas={0} dias={datasEntrevista} />
                     <BotoesRelatorios />
                     <TabelaTele />
-                    {/* <Box component={Paper} p={2} m={2} width='100%'>
-                        <form action="">
-                            <TextField label='Pessoa ou proposta' size="small" onChange={e => setPesquisa(e.target.value)} />
-                            <Button type="submit" variant="contained" style={{ marginLeft: '10px' }} onClick={buscarPessoa}>Buscar</Button>
-                        </form>
-                    </Box> */}
-                    {/* <TabelaAgendarTele atualizarTabela={searchPropostas} propostas={propostas} /> */}
-                    {/* <TabelaAgendarRn propostas={rns} /> */}
+                    <TabelaAgendarRn propostas={rns} />
                     {
                         (Object.keys(horarios).length !== 0 && Object.keys(analistasDisponiveis) !== 0) && (
                             <HorariosDisponiveis horarios={horarios} analistasDisponiveis={analistasDisponiveis} />

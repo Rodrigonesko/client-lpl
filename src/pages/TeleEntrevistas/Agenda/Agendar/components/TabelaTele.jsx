@@ -1,4 +1,4 @@
-import { Box, Chip, FormControl, InputLabel, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Chip, FormControl, InputLabel, LinearProgress, MenuItem, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useState, useEffect } from "react"
 import { getPropostasByAgendamento } from "../../../../../_services/teleEntrevistaV2.service"
 import { Search } from "@mui/icons-material"
@@ -7,24 +7,27 @@ import LinhaTele from "./LinhaTele"
 const TabelaTele = () => {
 
     const [propostas, setPropostas] = useState([])
+    const [tiposContrato, setTiposContrato] = useState([])
     const [total, setTotal] = useState(0)
     const [pesquisa, setPesquisa] = useState('')
+    const [tipoContrato, setTipoContrato] = useState('')
     const [sort, setSort] = useState('vigencia')
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
+    const [refresh, setRefresh] = useState(false)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetch = async () => {
             setLoading(true)
-            const result = await getPropostasByAgendamento('', sort, pesquisa.trim(), '', limit, page)
-            console.log(result);
+            const result = await getPropostasByAgendamento('', sort, pesquisa.trim(), '', tipoContrato, limit, page)
             setPropostas(result.propostas)
             setTotal(result.total)
+            setTiposContrato(result.tiposContrato)
             setLoading(false)
         }
         fetch()
-    }, [pesquisa, sort, limit, page])
+    }, [pesquisa, sort, limit, page, refresh, tipoContrato])
 
     return (
         <Box
@@ -51,19 +54,40 @@ const TabelaTele = () => {
                 alignItems="center"
                 mt={2}
             >
-                <FormControl size="small">
-                    <InputLabel>Linhas</InputLabel>
-                    <Select
-                        value={limit}
-                        onChange={(e) => setLimit(e.target.value)}
-                        label="Linhas"
-                    >
-                        <MenuItem value={10}>10</MenuItem>
-                        <MenuItem value={20}>20</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
-                        <MenuItem value={100}>100</MenuItem>
-                    </Select>
-                </FormControl>
+                <Box
+                    display="flex"
+                    gap={2}
+                >
+                    <FormControl size="small" sx={{width: '120px'}}>
+                        <InputLabel>Linhas</InputLabel>
+                        <Select
+                            value={limit}
+                            onChange={(e) => setLimit(e.target.value)}
+                            label="Linhas"
+                        >
+                            <MenuItem value={10}>10</MenuItem>
+                            <MenuItem value={20}>20</MenuItem>
+                            <MenuItem value={50}>50</MenuItem>
+                            <MenuItem value={100}>100</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl size="small" sx={{width: '300px'}}>
+                        <InputLabel>Tipo Contrato</InputLabel>
+                        <Select
+                            value={tipoContrato}
+                            onChange={(e) => setTipoContrato(e.target.value)}
+                            label="Tipo Contrato"
+                        >
+                            <MenuItem value="">Todos</MenuItem>
+                            {
+                                tiposContrato.map(tipo => (
+                                    <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
+                </Box>
+
                 <Pagination
                     count={Math.ceil(total / limit)}
                     page={page}
@@ -98,6 +122,7 @@ const TabelaTele = () => {
                         <MenuItem value="beneficiario">Beneficiário</MenuItem>
                         <MenuItem value="dataNascimento">Data Nascimento</MenuItem>
                         <MenuItem value="telefone">Telefone</MenuItem>
+                        <MenuItem value="tipoContrato">Tipo Contrato</MenuItem>
                     </Select>
                 </FormControl>
             </Box>
@@ -142,9 +167,16 @@ const TabelaTele = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
+                        {loading && <TableRow>
+                            <TableCell
+                                colSpan={8}
+                            >
+                                <LinearProgress />
+                            </TableCell>
+                        </TableRow>}
                         {
                             propostas.map(proposta => (
-                                <LinhaTele key={proposta._id} proposta={proposta} />
+                                <LinhaTele setRefresh={setRefresh} key={proposta._id} proposta={proposta} />
                             ))
                         }
                     </TableBody>

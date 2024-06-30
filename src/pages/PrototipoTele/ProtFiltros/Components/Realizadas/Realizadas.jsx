@@ -55,7 +55,7 @@ const Realizadas = () => {
         if (!proposta.idProposta) {
             result = await getPropostaPorNomeEProposta(proposta.nome, proposta.proposta)
         } else {
-            result = await getPropostaById(proposta.idProposta)
+            result = await getPropostaById(proposta.idProposta._id)
         }
         setCpfTitular(result.cpfTitular)
         setOpenDialog(true)
