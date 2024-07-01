@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, TextField, Autocomplete, Select, FormControl, MenuItem, InputLabel, Button, CircularProgress } from "@mui/material";
-import { agendarEntrevista, getAnalistasDisponiveis, getHorariosDisponiveisPorDia } from "../../_services/teleEntrevista.service";
+import { agendarEntrevista, getAnalistasDisponiveis, getHorariosDisponiveisPorDia, getProposasNaoAgendadas, getRnsNaoAgendadas } from "../../_services/teleEntrevista.service";
 
-const Agendamento = ({ propostas, dias }) => {
+const Agendamento = ({ dias }) => {
 
     const [idProposta, setIdProposta] = useState('')
     const [responsavel, setResponsavel] = useState('')
@@ -10,7 +10,37 @@ const Agendamento = ({ propostas, dias }) => {
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([])
     const [dataEntrevista, setDataEntrevista] = useState('')
     const [horarioEntrevista, setHorarioEntrevista] = useState('')
+    const [propostas, setPropostas] = useState([])
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        const fetch = async () => {
+            const resultRns = await getRnsNaoAgendadas()
+            const result = await getProposasNaoAgendadas()
+            let arrRn = []
+            let arrTele = []
+            for (const proposta of result.propostas) {
+                arrTele.push({
+                    proposta: proposta.proposta,
+                    nome: `${proposta.nome} - TELE`,
+                    id: proposta._id,
+                    celula: 'tele'
+                })
+            }
+            for (const proposta of resultRns.result) {
+                arrRn.push({
+                    proposta: proposta.proposta,
+                    nome: `${proposta.beneficiario} - RN`,
+                    id: proposta._id,
+                    celula: 'rn'
+                })
+            }
+            setPropostas([...arrRn, ...arrTele])
+        }
+
+        fetch()
+
+    }, [dias])
 
     const ajustarDia = (data) => {
         const arr = data.split('/')

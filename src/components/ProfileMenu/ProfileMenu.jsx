@@ -2,7 +2,6 @@ import { Avatar, IconButton, Menu, Tooltip, MenuItem, ListItemIcon } from "@mui/
 import { useContext } from "react";
 import { useState } from "react";
 import AuthContext from "../../context/AuthContext";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
 import Axios from 'axios'
@@ -99,22 +98,6 @@ const ProfileMenu = () => {
                 >
                     <Avatar /> Perfil
                 </MenuItem>
-                {/* <MenuItem onClick={handleClose}>
-                    <Avatar /> My account
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Add another account
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
-                </MenuItem> */}
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
                         <Logout

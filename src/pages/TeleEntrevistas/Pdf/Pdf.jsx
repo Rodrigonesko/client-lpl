@@ -1,115 +1,75 @@
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
-import Axios from 'axios'
 import moment from 'moment'
 import { filterUsers } from '../../../_services/user.service'
+import { getDadosEntrevistaById } from '../../../_services/teleEntrevistaV2.service'
+import { getPerguntas } from '../../../_services/teleEntrevista.service'
 
-const gerarPdf = async (proposta, nome) => {
+const gerarPdf = async (id) => {
 
     pdfMake.vfs = pdfFonts.pdfMake.vfs
 
-    const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/dadosEntrevista/${proposta}/${nome}`, {
-        withCredentials: true,
-        headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-    })
+    const result = await getDadosEntrevistaById(id)
 
-    const resultPerguntas = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, {
-        withCredentials: true,
-        headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-    })
-
-    const enfermeiras = [
-        { nome: "Marcia Rocha", coren: "COREN PR-000.233.985" },
-        { nome: "Allana Silva", coren: "COREN PR-001.257.825" },
-        { nome: "Giovana Santana", coren: "COREN PR-001.786.031" },
-        { nome: "Daniele Silva", coren: "COREN PR-001.801.022" },
-        { nome: "Roberta Alexandre", coren: "COREN SC-000.199.674" },
-        { nome: "Gislaine Alberton Almeida", coren: "COREN PR-000.774.407" },
-        { nome: "Isabelle Silva", coren: "COREN PR-001.816.536" },
-        { nome: "Sandra Santos", coren: "COREN PR-001.812.442" },
-        { nome: "Eduarda Mayworm", coren: "COREN PR-001.866.786" },
-        { nome: "Cristiane Antonioli", coren: "COREN PR-000.356.705" },
-        { nome: "Liliane Antunes Laureano", coren: "COREN PR-001.794.387" },
-        { nome: "Michelle Jonsson", coren: "COREN PR-000.552.516" },
-        { nome: 'Camila Tomczak', coren: 'COREN PR-001.919.048' }
-    ];
-
+    const resultPerguntas = await getPerguntas()
+    
     let coren = await filterUsers({
-        name: result.data.result[0].responsavel
+        name: result.responsavel
     })
 
     coren = coren[0].coren
-    //let coren = enfermeiras.find(enfermeira => enfermeira.nome === result.data.result[0].responsavel)?.coren;
 
     let tituloHabitos
 
-    if (result.data.result[0].tipoFormulario === 'adulto') {
+    if (result.idProposta.tipoFormulario === 'adulto') {
         tituloHabitos = [
             { text: 'HÁBITOS E HISTÓRICO FAMILIAR', fontSize: 20, margin: 20 },
         ]
     }
 
-    const perguntas = resultPerguntas.data.perguntas.map(e => {
-
-        if (e.formulario === result.data.result[0].tipoFormulario && e.categoria === 'questionario') {
-            if (e.sexo !== 'M' && e.sexo !== 'F') {
-                return [
-                    { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }
-                ]
-            }
-            if (e.sexo === 'M' && result.data.result[0].sexo === 'M') {
-                return [
-                    { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }
-                ]
-            }
-
-            if (e.sexo === 'F' && result.data.result[0].sexo === 'F') {
-                return [
-                    { text: e.pergunta, margin: [20, 0, 20, 0] },
-                    { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }
-                ]
-            }
-
-        }
-
-        return null
-
+    const perguntas = resultPerguntas.perguntas.filter(pergunta => {
+        return pergunta.categoria === 'questionario' && pergunta.formulario === result.idProposta.formulario
+    }).map(pergunta => {
+        return [
+            { text: pergunta.pergunta, margin: [20, 0, 20, 0] },
+            { text: result[pergunta.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' },
+            '\n'
+        ]
     })
 
-    const habitos = resultPerguntas.data.perguntas.map(e => {
-
-        if (e.formulario === result.data.result[0].tipoFormulario && e.categoria === 'habitos') {
-            return [
-                { text: e.pergunta, margin: [20, 0, 20, 0] },
-                { text: result.data.result[0][e.name], bold: true, margin: [20, 0, 20, 0], italics: true, border: [true, true, true, true], color: '#0070c0' }
-            ]
-        }
-
-        return null
-
+    const habitos = resultPerguntas.perguntas.filter(pergunta => {
+        return pergunta.categoria === 'habitos' && pergunta.formulario === result.idProposta.formulario
+    }).map(pergunta => {
+        return [
+            { text: pergunta.pergunta, margin: [20, 0, 20, 0] },
+            { text: result[pergunta.name], bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' },
+            '\n'
+        ]
     })
 
     let divergencias
 
-    if (result.data.result[0].houveDivergencia === 'Sim') {
+    if (result.houveDivergencia === 'Sim') {
         divergencias = [
             {
-                text: [{ text: 'Identifica divergência? ' }, { text: 'Sim', color: '#0070c0', bold: true, italics: true }], margin: [20, 0, 20, 0]
+                text: [{ text: 'Identifica divergência? ' }, { text: 'Sim', color: '#0070c0', bold: true, italics: true }], margin: [20, 0, 20, 0],
             },
+            '\n',
             {
-                text: [{ text: '\nQual? ' }, { text: result.data.result[0].divergencia, bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0]
+                text: [{ text: 'Qual? ' }, { text: result.divergencia, bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0],
+
             },
+            '\n',
             {
-                text: [{ text: 'Por que o beneficiário não informou na Declaração de Saúde essas patologias: ' }, { text: result.data.result[0].patologias, bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0]
+                text: [{ text: 'Por que o beneficiário não informou na Declaração de Saúde essas patologias: ' }, { text: result.patologias || result.motivoBeneficiario, bold: true, margin: [20, 0, 20, 0], italics: true, color: '#0070c0' }], margin: [20, 0, 20, 0]
             },
+            '\n',
             {
-                text: [{ text: 'Cids: ' }, { text: result.data.result[0].cids, margin: [20, 0, 20, 0], italics: true, color: '#0070c0', bold: true }], margin: [20, 0, 20, 0]
+                text: [{ text: 'Cids: \n' }, {
+                    text: result.cidsAjustados.map(cid => {
+                        return `${cid.codigo} - ${cid.descricao} - ${cid.ano}\n`
+                    }), margin: [20, 0, 20, 0], italics: true, color: '#0070c0', bold: true
+                }], margin: [20, 0, 20, 0]
             },
         ]
     } else {
@@ -120,7 +80,7 @@ const gerarPdf = async (proposta, nome) => {
         ]
     }
 
-    let responsavel = result.data.result[0].responsavel
+    let responsavel = result.idProposta.enfermeiro
 
     const details = [
         {
@@ -138,23 +98,23 @@ const gerarPdf = async (proposta, nome) => {
                 body: [
                     [
                         { text: 'Data Tele Entrevista:', bold: true },
-                        { text: moment(result.data.result[0].createdAt).format('DD/MM/YYYY'), bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: moment(result.createdAt).format('DD/MM/YYYY'), bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'Nome:', bold: true },
-                        { text: `${nome}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.idProposta.nome}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'CPF:', bold: true },
-                        { text: `${result.data.result[0].cpf}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.idProposta.cpf}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'Proposta:', bold: true },
-                        { text: `${proposta}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.idProposta.proposta}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'Data Nascimento:', bold: true },
-                        { text: `${result.data.result[0].dataNascimento}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.idProposta.dataNascimento}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ]
                 ]
             }
@@ -198,7 +158,7 @@ const gerarPdf = async (proposta, nome) => {
         footer: rodape,
     }
 
-    pdfMake.createPdf(docDefinitions).download(`${nome}.pdf`)
+    pdfMake.createPdf(docDefinitions).download(`${result.idProposta.nome}.pdf`)
 
 }
 

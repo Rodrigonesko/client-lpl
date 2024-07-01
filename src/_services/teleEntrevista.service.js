@@ -83,8 +83,8 @@ export const tentativaContatoEntrevista = async (data) => {
     return await new ApiCall('/tentativaContato', URL_API).put(data)
 }
 
-export const preencherFormulario = async (respostas, subRespostas, pessoa, simOuNao, cids, divergencia, entrevistaQualidade) => {
-    return await new ApiCall('/entrevistas/formulario').post(respostas, subRespostas, pessoa, simOuNao, cids, divergencia, entrevistaQualidade)
+export const preencherFormulario = async (data) => {
+    return await new ApiCall('/entrevistas/formulario').post(data)
 }
 
 export const getPropostasADevolver = async () => {

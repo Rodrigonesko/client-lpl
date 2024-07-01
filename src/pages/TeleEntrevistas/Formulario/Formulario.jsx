@@ -3,159 +3,124 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
-import Pergunta from "../../../components/Pergunta/Pergunta";
 import InfoAdicionais from "./InfoAdicional/InfoAdicional";
-import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography } from '@mui/material'
+import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography, Container, Collapse, RadioGroup, FormControlLabel, Radio, Divider, Chip, Dialog, DialogContent } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
-import ModalFormulario from "../../../components/ModalFormulario/ModalFormulario";
-import ModalPatologias from "../../../components/ModalPatologias/ModalPatologias";
-import './Formulario.css'
 import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
-import { getCids, getPerguntas } from "../../../_services/teleEntrevista.service";
+import { getPerguntas } from "../../../_services/teleEntrevista.service";
+import Cids from "./components/Cids";
+import FormControlTextField from "./components/FormControlTextField";
+import { Save } from "@mui/icons-material";
+import Title from "../../../components/Title/Title";
+import PerguntaAutismo from "./components/PerguntaAutismo";
+import Toast from "../../../components/Toast/Toast";
+import { finalizarEntrevista } from "../../../_services/teleEntrevistaV2.service";
+import gerarPdf from "../Pdf/Pdf";
 
-let arrCids = []
+const RadioQuestion = ({ pergunta, respostasFormulario, setRespostasFormulario, pessoa, setTea, tea }) => {
 
-let respostas = {}
+    const [resposta, setResposta] = useState('')
 
-let subRespostas = {}
-
-let simOuNao = {}
+    return (
+        <Box
+            ml={2}
+        >
+            <Typography
+                sx={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    pl: 1
+                }}
+            >
+                {pergunta.pergunta}
+            </Typography>
+            <RadioGroup
+                row
+                name={pergunta.name}
+                onChange={e => {
+                    setResposta(e.target.value)
+                    setRespostasFormulario({ ...respostasFormulario, [pergunta.name]: { resposta: e.target.value } })
+                }}
+                value={respostasFormulario[pergunta.name]?.resposta || ''}
+            >
+                <FormControlLabel value='Sim' control={<Radio />} label='Sim' />
+                <FormControlLabel value='Não' control={<Radio />} label='Não' />
+            </RadioGroup>
+            <Collapse in={resposta === 'Sim'} mountOnEnter unmountOnExit>
+                <Box>
+                    {pergunta.name === 'espectro' && (
+                        <PerguntaAutismo pessoa={pessoa} tea={tea} setTea={setTea} />
+                    )}
+                    {
+                        pergunta.subPerguntasSim.map((subPergunta, index) => (
+                            <FormControlTextField
+                                key={index}
+                                label={subPergunta}
+                                placeholder={'Resposta'}
+                                onBlur={e => {
+                                    setRespostasFormulario({
+                                        ...respostasFormulario,
+                                        [pergunta.name]: {
+                                            ...respostasFormulario[pergunta.name],
+                                            [subPergunta]: e.target.value
+                                        }
+                                    })
+                                }}
+                            />
+                        ))
+                    }
+                </Box>
+            </Collapse>
+            <Collapse in={resposta === 'Não'} mountOnEnter unmountOnExit>
+                {
+                    pergunta.subPerguntasNao.map((subPergunta, index) => (
+                        <FormControlTextField
+                            key={index}
+                            label={subPergunta}
+                            placeholder={'Resposta'}
+                            onBlur={e => {
+                                setRespostasFormulario({
+                                    ...respostasFormulario,
+                                    [pergunta.name]: {
+                                        ...respostasFormulario[pergunta.name],
+                                        [subPergunta]: e.target.value
+                                    }
+                                })
+                            }}
+                        />
+                    ))
+                }
+            </Collapse>
+        </Box>
+    )
+}
 
 const Formulario = () => {
 
     const { id } = useParams()
 
     const [perguntas, setPerguntas] = useState([])
-    const [pessoa, setPessoa] = useState({})
-    const [formulario, setFormulario] = useState('')
-    const [sexo, setSexo] = useState('')
+    const [pessoa, setPessoa] = useState()
     const [divergencia, setDivergencia] = useState(false)
-    const [cids, setCids] = useState([])
+    const [qualDivergencia, setQualDivergencia] = useState('')
+    const [motivoBeneficiario, setMotivoBeneficiario] = useState('')
     const [habitos, setHabitos] = useState(true)
     const [autismo, setAutismo] = useState(false)
+    const [tea, setTea] = useState('')
     const [infoAdicional, setInfoAdicional] = useState({})
     const [entrevistaQualidade, setEntrevistaQualidade] = useState(false)
     const [novoFormulario, setNovoFormulario] = useState('')
     const [loading, setLoading] = useState(false)
-
-    let alturaInput, pesoInput
-
-    const buscarPerguntas = async () => {
-        try {
-            const result = await getPerguntas()
-            setPerguntas(result.perguntas)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const handleChange = (item) => {
-        respostas[`${item.id}`] = item.value
-        let imc
-        if (item.id === 'peso') {
-            pesoInput = (item.value)
-            imc = pesoInput / (alturaInput * alturaInput)
-            let indicadorImc
-            if (imc >= 40) {
-                indicadorImc = 'OBESIDADE III'
-            }
-            if (imc >= 35 && imc <= 39.99) {
-                indicadorImc = 'OBESIDADE II'
-            }
-            if (imc >= 30 && imc <= 34.99) {
-                indicadorImc = 'OBESIDADE I'
-            }
-            document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
-            if (imc >= 30) {
-                let span = document.createElement('span')
-                span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
-                document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
-            }
-            if (imc < 30) {
-                let divIndicadorObesidade = document.getElementById('indicador-obesidade')
-                divIndicadorObesidade.removeChild(divIndicadorObesidade.firstChild)
-            }
-        }
-        if (item.id === 'altura') {
-            alturaInput = (item.value)
-            imc = pesoInput / (alturaInput * alturaInput)
-            let indicadorImc
-            if (imc >= 40) {
-                indicadorImc = 'OBESIDADE III'
-            }
-            if (imc >= 35 && imc <= 39.99) {
-                indicadorImc = 'OBESIDADE II'
-            }
-            if (imc >= 30 && imc <= 34.99) {
-                indicadorImc = 'OBESIDADE I'
-            }
-            document.getElementById('imc').innerHTML = `${imc} - ${indicadorImc}`
-            if (imc >= 30) {
-                let span = document.createElement('span')
-                span.textContent = `De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.`
-                document.getElementById('indicador-obesidade').innerHTML = `<div class='indicador-imc'>De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso ${indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.</div>`
-            }
-        }
-    }
-
-    const handleChangeSub = async (item) => {
-        subRespostas[`${item.name}`] = item.value
-        console.log(item, subRespostas);
-    }
-
-    const handleSimOuNao = (item) => {
-        let split = item.name.split('-')
-        simOuNao[`${split[1]}`] = item.value
-    }
-
-    const buscarCids = async (cid) => {
-        try {
-            if (cid === '' || cid.length <= 2) {
-                setCids([])
-            } else {
-                const result = await getCids(cid)
-                console.log(result);
-                if (!result.cids) {
-                    setCids([])
-                    return
-                }
-                setCids(result.cids)
-            }
-        } catch (error) {
-            console.log(error);
-            setCids([])
-        }
-    }
-
-    const adicionarCids = (item) => {
-        let div = document.getElementById('cids-selecionados')
-        if (item.checked === true) {
-            arrCids.push(item.value)
-            let div1 = document.createElement('div')
-            let span = document.createElement('span')
-            span.textContent = item.value
-            div1.setAttribute('id', item.value)
-            div1.appendChild(span)
-            div.appendChild(div1)
-        }
-        if (item.checked === false) {
-            let indice = arrCids.indexOf(item.value)
-            arrCids.splice(indice, 1)
-            let divRetirada = document.getElementById(item.value)
-            console.log(divRetirada);
-            divRetirada.parentNode.removeChild(divRetirada)
-        }
-        console.log(arrCids.some((cid => cid !== 'F841 (Autismo atípico)' && cid !== 'F840 (Autismo infantil)')));
-    }
-
-    const mostraDivergencia = (item) => {
-        let div = document.getElementById('divergencia-container')
-        if (item === 'true') {
-            div.classList.remove('none')
-        } else {
-            div.classList.add('none')
-        }
-    }
+    const [cidsSelecionados, setCidsSelecionados] = useState([])
+    const [cidsDs, setCidsDs] = useState([])
+    const [respostasFormulario, setRespostasFormulario] = useState({})
+    const [imc, setImc] = useState(0)
+    const [indicadorImc, setIndicadorImc] = useState('')
+    const [openDialog, setOpenDialog] = useState(false)
+    const [loadingEnviando, setLoadingEnviando] = useState(false)
+    const [openToast, setOpenToast] = useState(false)
+    const [messageToast, setMessageToast] = useState('')
+    const [severityToast, setSeverityToast] = useState('success')
 
     const alterarFormulario = async () => {
         try {
@@ -176,8 +141,6 @@ const Formulario = () => {
             try {
                 const result = await getPropostaById(id)
                 setPessoa(result)
-                setFormulario(result.formulario)
-                setSexo(result.sexo)
                 if (result.formulario !== 'adulto') {
                     setHabitos(false)
                 }
@@ -186,186 +149,252 @@ const Formulario = () => {
                 console.log(error);
             }
         }
-        buscarPerguntas()
         buscarInfoPessoa()
-    }, [id, pessoa?.grupoCarencia])
+    }, [id])
+
+    useEffect(() => {
+        const buscarPerguntas = async () => {
+            try {
+                let result = await getPerguntas()
+                result = result.perguntas.filter(pergunta => {
+                    const sexo = pergunta.sexo === 'N'
+                    return pergunta.formulario === pessoa.formulario && (pergunta.sexo === pessoa.sexo || sexo)
+                })
+                setPerguntas(result)
+                setRespostasFormulario({})
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        if (pessoa) buscarPerguntas()
+    }, [pessoa])
+
+    useEffect(() => {
+        if (respostasFormulario?.peso?.resposta && respostasFormulario?.altura?.resposta) {
+            const peso = parseFloat(respostasFormulario.peso.resposta)
+            const altura = parseFloat(respostasFormulario.altura.resposta)
+            console.log(peso, altura);
+            const imc = peso / (altura * altura)
+            console.log(imc);
+            setImc(imc)
+            if (imc >= 40) {
+                setIndicadorImc('OBESIDADE III')
+            }
+            if (imc >= 35 && imc <= 39.99) {
+                setIndicadorImc('OBESIDADE II')
+            }
+            if (imc >= 30 && imc <= 34.99) {
+                setIndicadorImc('OBESIDADE I')
+            }
+        }
+    }, [respostasFormulario?.peso?.resposta, respostasFormulario?.altura?.resposta])
+
+    useEffect(() => {
+        if (respostasFormulario?.espectro?.resposta === 'Sim') {
+            setAutismo(true)
+        } else {
+            setAutismo(false)
+        }
+    }, [respostasFormulario?.espectro?.resposta])
+
+    useEffect(() => {
+        console.log(tea);
+    }, [tea])
 
     return (
         <>
             <Sidebar>
-                <section className="section-formulario-container">
-                    <div className="formulario-container">
+                <Container>
+                    <Box
+                        mt={2}
+                    >
                         {
                             loading ? (
                                 <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }} />
                             ) : null
                         }
-                        <div className="title">
-                            <h3>Entrevista Qualificativa</h3>
-                            <Box display='flex' mt={2}>
-                                <FormControl size="small" style={{ minWidth: '130px' }}>
-                                    <InputLabel>Formulário</InputLabel>
-                                    <Select
-                                        label='Formulário'
-                                        onChange={e => setNovoFormulario(e.target.value)}
-                                    >
-                                        <MenuItem>
-                                            <em>Formulário</em>
-                                        </MenuItem>
-                                        <MenuItem value='adulto-f'>Adulto feminino</MenuItem>
-                                        <MenuItem value='adulto-m'>Adulto masculino</MenuItem>
-                                        <MenuItem value='0-2 anos'>0-2 anos</MenuItem>
-                                        <MenuItem value='2-8 anos'>2-8 anos</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <Button style={{ marginLeft: '10px' }} variant="contained" size="small" onClick={alterarFormulario}>Alterar</Button>
-                            </Box>
 
-                            <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
-                        </div>
+                        <Title
+                            size={'medium'}
+                        >
+                            Entrevista Qualificativa
+                        </Title>
+                        <Box display='flex' mt={2}>
+                            <FormControl size="small" style={{ minWidth: '130px' }}>
+                                <InputLabel>Formulário</InputLabel>
+                                <Select
+                                    label='Formulário'
+                                    onChange={e => setNovoFormulario(e.target.value)}
+                                >
+                                    <MenuItem>
+                                        <em>Formulário</em>
+                                    </MenuItem>
+                                    <MenuItem value='adulto-f'>Adulto feminino</MenuItem>
+                                    <MenuItem value='adulto-m'>Adulto masculino</MenuItem>
+                                    <MenuItem value='0-2 anos'>0-2 anos</MenuItem>
+                                    <MenuItem value='2-8 anos'>2-8 anos</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Button style={{ marginLeft: '10px' }} variant="contained" size="small" onClick={alterarFormulario}>Alterar</Button>
+                        </Box>
+
+                        <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
+
                         <Box m={2} textAlign='center'>
                             <InfoAdicionais data={infoAdicional} />
                         </Box>
                         <RoteiroTeleEntrevista />
-                        <div className="info-pessoa-entrevista-container">
-                            <div className="title">
-                                <h3>Questionário Médico</h3>
-                            </div>
-                            <InfoPessoaEntrevista pessoa={pessoa} />
-                        </div>
-                        <div className="observacoes-entrevista">
-                            <div className="title">
-                                <h3>Observações</h3>
-                                <h4>IMC: <span id="imc"></span></h4>
-                            </div>
-                        </div>
-                        <div className="formulario">
+                        <InfoPessoaEntrevista pessoa={pessoa} />
+                        <Divider />
+                        <Chip
+                            label={`IMC: ${imc.toFixed(2)} ${indicadorImc}`}
+                            color={indicadorImc ? 'error' : 'primary'}
+                            variant='filled'
+                            sx={{
+                                mt: 2
+                            }}
+                        />
+                        <Title
+                            size={'small'}
+                        >
+                            Questionário Médico
+                        </Title>
+                        <Box
+                            display='flex'
+                            flexDirection='column'
+                            gap={2}
+                        >
                             {
-                                perguntas.map(e => {
+                                perguntas.filter(pergunta => pergunta.categoria === 'questionario').map(pergunta => {
+                                    return (
+                                        <React.Fragment key={pergunta._id}>
+                                            {!pergunta.existeSub ? <FormControlTextField
+                                                key={pergunta._id}
+                                                label={pergunta.pergunta}
+                                                placeholder={'Resposta'}
+                                                onBlur={e => {
+                                                    setRespostasFormulario({
+                                                        ...respostasFormulario, [pergunta.name]: {
+                                                            resposta: e.target.value
+                                                        }
+                                                    })
+                                                }}
+                                            /> : (
+                                                <RadioQuestion
+                                                    tea={tea}
+                                                    setTea={setTea}
+                                                    pessoa={pessoa}
+                                                    pergunta={pergunta}
+                                                    respostasFormulario={respostasFormulario}
+                                                    setRespostasFormulario={setRespostasFormulario}
+                                                />
+                                            )}
 
-                                    if (e.formulario === formulario && e.categoria === 'questionario') {
-
-                                        if (e.sexo !== 'M' && e.sexo !== 'F') {
-                                            return (
-                                                <>
-                                                    <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} pessoa={pessoa} setAutismo={setAutismo}></Pergunta>
-                                                </>
-                                            )
-                                        }
-                                        if (e.sexo === 'M' && sexo === 'M') {
-                                            return (
-                                                <>
-                                                    <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} pessoa={pessoa} setAutismo={setAutismo}></Pergunta>
-                                                </>
-                                            )
-                                        }
-                                        if (e.sexo === 'F' && sexo === 'F') {
-                                            return (
-                                                <>
-                                                    <Pergunta sexo={sexo} formulario={formulario} handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} pessoa={pessoa} setAutismo={setAutismo}></Pergunta>
-                                                </>
-                                            )
-                                        }
-                                    }
-
-                                    return null
+                                        </React.Fragment>
+                                    )
                                 })
                             }
-                        </div>
+                        </Box>
                         {
-                            habitos ? (
-                                <>
-                                    <div className="perguntas-habitos-container title">
-                                        <h3>HÁBITOS E HISTÓRICO FAMILIAR</h3>
-                                    </div>
-                                    <div className="formulario">
+                            habitos && (
+                                <Box>
+                                    <Title
+                                        size={'small'}
+                                    >
+                                        HÁBITOS E HISTÓRICO FAMILIAR
+                                    </Title>
+                                    <Box
+                                        display='flex'
+                                        flexDirection='column'
+                                        gap={2}
+                                    >
                                         {
-                                            perguntas.map(e => {
-                                                if (e.formulario === 'adulto' && e.categoria === 'habitos') {
-                                                    return (
-                                                        <>
-                                                            <Pergunta handleSimOuNao={handleSimOuNao} handleChangeSub={handleChangeSub} handleChange={handleChange} item={e} />
-                                                        </>
-                                                    )
-                                                }
-
-                                                return null
+                                            perguntas.filter(pergunta => pergunta.categoria === 'habitos').map(pergunta => {
+                                                return (
+                                                    <FormControlTextField
+                                                        key={pergunta._id}
+                                                        label={pergunta.pergunta}
+                                                        placeholder={'Resposta'}
+                                                        onBlur={e => {
+                                                            setRespostasFormulario({ ...respostasFormulario, [pergunta.name]: { resposta: e.target.value } })
+                                                        }}
+                                                    />
+                                                )
                                             })
                                         }
-                                    </div>
-                                </>
-                            ) : null
+                                    </Box>
+                                </Box>
+                            )
                         }
+                        <Box
+                            m={2}
+                        >
+                            <FormControl fullWidth sx={{ maxWidth: '300px' }}>
+                                <InputLabel>Identifica Divergência</InputLabel>
+                                <Select
+                                    label='Identifica Divergência'
+                                    onChange={e => {
+                                        setDivergencia(e.target.value)
+                                    }}
+                                    value={divergencia}
+                                    size="small"
+                                >
+                                    <MenuItem value={false}>Não</MenuItem>
+                                    <MenuItem value={true}>Sim</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
 
-                        <div className="div-pergunta">
-                            <label htmlFor="identifica-divergencia" className="label-pergunta">Identifica Divergência?</label>
-                            <select name="identifica-divergencia" id="identifica-divergencia" onChange={e => {
-                                mostraDivergencia(e.target.value)
-                                if (e.target.value === 'true') {
-                                    setDivergencia(true)
-                                    let divIndicadorObesidade = document.getElementById('indicador-obesidade')
-                                    divIndicadorObesidade.classList.add('none')
-                                } else {
-                                    setDivergencia(false)
-                                    let divIndicadorObesidade = document.getElementById('indicador-obesidade')
-                                    divIndicadorObesidade.classList.remove('none')
-                                }
-                            }}>
-                                <option value={false}>Não</option>
-                                <option value={true}>Sim</option>
-                            </select>
-                        </div>
+                        <Collapse in={divergencia} mountOnEnter unmountOnExit >
+                            <Box>
+                                <Title
+                                    size={'small'}
+                                >
+                                    IDENTIFICAÇÃO DE DIVERGÊNCIAS
+                                </Title>
+                                <Box
+                                    display='flex'
+                                    flexDirection='column'
+                                    width={'100%'}
+                                    gap={2}
+                                >
+                                    <Alert severity='error'>
+                                        <Typography m={1}>
+                                            Notamos que houve divergência para as patologias: A, B, C (listar patologias) em relação ao preenchimento da DS. Para estas, iremos imputar CPT para ficar de acordo com as informações concedidas pelo Senhor(a). As demais coberturas permanecem inalteradas, caso haja necessidade de maior esclarecimentos procure seu corretor.
+                                        </Typography>
+                                        <Typography m={1}>
+                                            * Cobertura Parcial Temporária (CPT) aquela que admite, por um período ininterrupto de até 24 meses, a partir da data da contratação ou adesão ao plano privado de assistência à saúde, a suspensão da cobertura de Procedimentos de Alta Complexidade (PAC), leitos de alta tecnologia e procedimentos cirúrgicos, desde que relacionados exclusivamente às doenças ou lesões preexistentes declaradas pelo beneficiário ou seu representante legal. (para os CIDs declarados, não para todo tipo de tratamento)
+                                        </Typography>
+                                    </Alert>
+                                    <FormControlTextField label='Qual divergência?' name='qual-divergencia' onChange={e => setQualDivergencia(e.target.value)} placeholder={'Resposta'} value={qualDivergencia} />
+                                    <FormControlTextField label='Por que o beneficiário não informou na Declaração de Saúde essas patologias?' name='motivo-beneficiario' onChange={e => setMotivoBeneficiario(e.target.value)} placeholder={'Resposta'} value={motivoBeneficiario} />
+                                    <Cids cidsSelecionados={cidsSelecionados} setCidsSeleciados={setCidsSelecionados} />
+                                    {
+                                        pessoa?.tipoContrato === 'ADESÃO' && (
+                                            <Box>
+                                                <Typography
+                                                    m={2}
+                                                    variant='h6'
 
-                        <div id="divergencia-container" className="none">
-                            <div className="perguntas-habitos-container title">
-                                <h3>Identificação de divergências</h3>
-                            </div>
-                            <div className="divergencias-container">
-                                <Alert severity='error'>
-                                    <Typography m={1}>
-                                        Notamos que houve divergência para as patologias: A, B, C (listar patologias) em relação ao preenchimento da DS. Para estas, iremos imputar CPT para ficar de acordo com as informações concedidas pelo Senhor(a). As demais coberturas permanecem inalteradas, caso haja necessidade de maior esclarecimentos procure seu corretor.
-                                    </Typography>
-                                    <Typography m={1}>
-                                        * Cobertura Parcial Temporária (CPT) aquela que admite, por um período ininterrupto de até 24 meses, a partir da data da contratação ou adesão ao plano privado de assistência à saúde, a suspensão da cobertura de Procedimentos de Alta Complexidade (PAC), leitos de alta tecnologia e procedimentos cirúrgicos, desde que relacionados exclusivamente às doenças ou lesões preexistentes declaradas pelo beneficiário ou seu representante legal. (para os CIDs declarados, não para todo tipo de tratamento)
+                                                >
+                                                    Cids Declaração de Saúde
+                                                </Typography>
+                                                <Cids cidsSelecionados={cidsDs} setCidsSeleciados={setCidsDs} />
+                                            </Box>
+                                        )
+                                    }
+                                </Box>
+                            </Box>
+                        </Collapse>
+                        {
+                            indicadorImc && (
+                                <Alert severity="error">
+                                    <Typography>
+                                        De acordo com a OMS pelo cálculo realizado com as informações de seu peso e altura, o Sr(a) está inserido na faixa de peso {indicadorImc} com isso será necessário incluirmos essa informação e constará no seu contrato pré-existência para esta patologia.
                                     </Typography>
                                 </Alert>
-                                <div className="div-pergunta">
-                                    <label htmlFor="pergunta-divergencia" className="label-pergunta">Qual divergência?</label>
-                                    <input type="text" name="pergunta-qual-divergencia" id="divergencia" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
-                                </div>
-                                <div className="div-pergunta">
-                                    <label htmlFor="pergunta-patologias" className="label-pergunta">Por que o beneficiário não informou na Declaração de Saúde essas patologias?</label>
-                                    <input type="text" name="pergunta-patologias" id="patologias" className="input-pergunta" onKeyUp={e => handleChange(e.target)} />
-                                </div>
-                                <div className="div-pergunta">
-                                    <label htmlFor="cid">CID:</label>
-                                    <input type="text" name="cid" id="cid" className="input-pergunta" onChange={e => {
-                                        buscarCids(e.target.value)
-                                    }} />
-
-                                    <h4>Cids Selecionados: </h4>
-                                    <div id="cids-selecionados">
-
-                                    </div>
-                                </div>
-                                <div className="cids-container">
-                                    {
-                                        cids.map(e => {
-                                            return (
-                                                <div className="cid">
-                                                    <input type="checkbox" name={e.subCategoria} id={e.subCategoria} value={`${e.subCategoria} (${e.descricao})`} onClick={(item) => {
-                                                        adicionarCids(item.target)
-                                                    }} /> <label htmlFor={e.subCategoria}>{e.subCategoria} - {e.descricao}</label >
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div id="indicador-obesidade">
-
-                        </div>
+                            )
+                        }
                         {
                             autismo && (
                                 <Alert severity="error">
@@ -373,12 +402,84 @@ const Formulario = () => {
                                 </Alert>
                             )
                         }
-                    </div>
-                    <Box display='inline-block'>
-                        <ModalFormulario respostas={respostas} cids={arrCids} subRespostas={subRespostas} simOuNao={simOuNao} pessoa={pessoa} divergencia={divergencia} entrevistaQualidade={entrevistaQualidade} />
                     </Box>
-                    <ModalPatologias idCelula={id} celula={'Tele Entrevista'} />
-                </section>
+                    <Box alignItems={'center'} m={3} >
+                        <Button
+                            size="large"
+                            variant='contained'
+                            onClick={async () => {
+                                try {
+                                    setLoadingEnviando(true)
+                                    setOpenDialog(true)
+
+                                    for (const pergunta of perguntas) {
+                                        if (!respostasFormulario[pergunta.name]?.resposta) {
+                                            setOpenDialog(false)
+                                            setOpenToast(true)
+                                            setMessageToast('Preencha todas as perguntas!' + pergunta.pergunta)
+                                            setSeverityToast('error')
+                                            return
+                                        }
+                                    }
+                                    console.log(divergencia);
+
+                                    const data = await finalizarEntrevista(
+                                        {
+                                            id,
+                                            respostas: respostasFormulario,
+                                            pessoa,
+                                            divergencia: divergencia ? 'Sim' : 'Não',
+                                            qualDivergencia,
+                                            motivoBeneficiario,
+                                            cids: cidsSelecionados.map(cid => {
+                                                return {
+                                                    ...cid,
+                                                    codigo: cid.subCategoria
+                                                }
+                                            }),
+                                            cidsDs,
+                                            tea
+                                        }
+                                    )
+                                    setLoadingEnviando(false)
+                                    await gerarPdf(data._id)
+                                } catch (error) {
+                                    console.log(error);
+                                    setLoadingEnviando(false)
+                                    setOpenDialog(false)
+                                    setOpenToast(true)
+                                    setMessageToast('Erro ao enviar formulário!')
+                                    setSeverityToast('error')
+                                }
+                            }}
+                            endIcon={<Save />}
+                        >
+                            Enviar Formulário
+                        </Button>
+                    </Box>
+                    <Dialog
+                        open={openDialog}
+                        onClose={() => setOpenDialog(false)}
+                    >
+                        <DialogContent>
+                            {
+                                loadingEnviando ? (
+                                    <CircularProgress />
+                                ) : (
+                                    <Alert severity='success'>
+                                        Formulário enviado com sucesso!
+                                    </Alert>
+                                )
+                            }
+                        </DialogContent>
+                    </Dialog>
+                    <Toast
+                        open={openToast}
+                        onClose={() => setOpenToast(false)}
+                        message={messageToast}
+                        severity={severityToast}
+                    />
+                </Container>
             </Sidebar>
         </>
     )

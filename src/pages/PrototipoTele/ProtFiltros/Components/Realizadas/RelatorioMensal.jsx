@@ -15,7 +15,7 @@ const RelatorioMensal = () => {
 
     const handleClickOpen = () => {
         setOpen(true)
-        
+
     }
 
     const handleClose = () => {
@@ -76,10 +76,9 @@ const RelatorioMensal = () => {
                 xls += `<td>${e.divergencia || ''}</td>`
                 xls += `<td>${e.tea || ''}</td>`
                 // xls += `<td>${e.cids}</td>`
-                if (e.cids) {
-                    const arrCids = e.codigosCids.split('-')
-                    arrCids.forEach(cid => {
-                        xls += `<td>${cid}</td>`
+                if (e.cidsAjustados) {
+                    e.cidsAjustados.forEach(cid => {
+                        xls += `<td>${cid.codigo} - ${cid.ano}</td>`
                     })
                 } else {
                     xls += `<td></td>`

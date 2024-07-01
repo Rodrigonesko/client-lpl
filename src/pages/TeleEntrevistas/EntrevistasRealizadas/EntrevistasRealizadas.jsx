@@ -5,7 +5,8 @@ import { CircularProgress, Button, TextField, Box, TableContainer, Table, TableH
 import moment from 'moment'
 import gerarPdf from '../Pdf/Pdf'
 import ModalEntrevistasRealizadas from './ModalEntrevistasRealizadas'
-//import Pdf2 from '../Pdf/Pdf2'
+import { getDadosEntrevistaByDetails } from '../../../_services/teleEntrevistaV2.service'
+import Linha from './components/Linha'
 
 const style = {
     position: 'absolute',
@@ -48,24 +49,13 @@ const EntrevistasRealizadas = () => {
 
     const buscarEntrevistas = async () => {
         try {
-
             setLoading(true)
-
             if (pesquisa.length < 3) {
                 return
             }
-
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/realizadas/${pesquisa}`, {
-                withCredentials: true,
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-
+            const result = await getDadosEntrevistaByDetails(pesquisa)
             setLoading(false)
-
-            setEntrevistas(result.data.result)
-
+            setEntrevistas(result)
         } catch (error) {
             console.log(error);
         }
@@ -127,17 +117,17 @@ const EntrevistasRealizadas = () => {
             result.data.entrevistas.forEach(e => {
                 xls += "<tr>"
                 xls += `<td>${e._id}</td>`
-                xls += `<td>${e.proposta || ''}</td>`
-                xls += `<td>${e.tipoContrato || ''}</td>`
+                xls += `<td>${e.idProposta.proposta || ''}</td>`
+                xls += `<td>${e.idProposta.tipoContrato || ''}</td>`
                 xls += `<td>${e.dataEntrevista || ''}</td>`
-                xls += `<td>${e.nome || ''}</td>`
-                xls += `<td>${e.cpf || ''}</td>`
-                xls += `<td>${e.dataNascimento || ''}</td>`
-                xls += `<td>${e.idade || ''}</td>`
-                xls += `<td>${e.responsavel || ''}</td>`
+                xls += `<td>${e.idProposta.nome || ''}</td>`
+                xls += `<td>${e.idProposta.cpf || ''}</td>`
+                xls += `<td>${e.idProposta.dataNascimento || ''}</td>`
+                xls += `<td>${e.idProposta.idade || ''}</td>`
+                xls += `<td>${e.idProposta.responsavel || ''}</td>`
                 xls += `<td>${e.houveDivergencia || ''}</td>`
                 xls += `<td>${e.divergencia ? e.divergencia : ''}</td>`
-                xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${moment(e.idProposta.dataRecebimento).format('DD/MM/YYYY')}</td>`
                 xls += `<td>${e.entrevistaQualidade ? 'Sim' : ''}</td>`
                 // xls += `<td>${e.cids}</td>`
                 if (e.cids) {
@@ -187,10 +177,6 @@ const EntrevistasRealizadas = () => {
         }
     }
 
-    // const gerarPdf = () => {
-    //     console.log(formRef.current);
-    // }
-
     return (<>
         <Sidebar>
             <Container className='scrollable'>
@@ -239,34 +225,10 @@ const EntrevistasRealizadas = () => {
                                 {
                                     entrevistas.map(e => {
                                         return (
-                                            <TableRow key={e._id} style={{ background: e.entrevistaQualidade ? 'lightgreen' : null }}>
-                                                <TableCell>{e.proposta}</TableCell>
-                                                <TableCell>{moment(e.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
-                                                <TableCell>{e.nome}</TableCell>
-                                                <TableCell>{e.cpf}</TableCell>
-                                                <TableCell>{e.idade}</TableCell>
-                                                <TableCell>
-                                                    <select onChange={item => alterarSexo(e._id, item.target.value)} >
-                                                        <option value="M" selected={e.sexo === 'M'}>M</option>
-                                                        <option value="F" selected={e.sexo === 'F'} >F</option>
-                                                    </select>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {
-                                                        e.cancelado ? (
-                                                            <Button variant='contained' size='small' onClick={() => {
-                                                                setId(e._id)
-                                                                setNome(e.nome)
-                                                                setpProposta(e.proposta)
-                                                                setModalVoltar(true)
-                                                            }} >Voltar</Button>
-                                                        ) : null
-                                                    }
-                                                </TableCell>
-                                                <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${e._id}`} size='small' >Editar</Button>  </TableCell>
-                                                {/* <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${e.proposta}/${e.nome}`} target='_blank'>PDF</Button></TableCell> */}
-                                                <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(e.proposta, e.nome) }}>PDF</Button></TableCell>
-                                            </TableRow>
+                                            <Linha
+                                                key={e._id}
+                                                entrevista={e}
+                                            />
                                         )
                                     })
                                 }

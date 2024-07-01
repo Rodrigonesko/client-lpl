@@ -14,6 +14,7 @@ import gerarPdf from "../../../TeleEntrevistas/Pdf/Pdf";
 import PopoverTentativaContato from "../Components/PopoverTentativaContato";
 import AuthContext from "../../../../context/AuthContext";
 import { useContext } from "react";
+import { getDadosEntrevistaByPropostaId } from "../../../../_services/teleEntrevistaV2.service";
 
 const EnhancedTableHead = () => {
     return (
@@ -187,9 +188,12 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                     </IconButton>
                                 </Tooltip>
                                 {
-                                    (item.newStatus === 'Concluído' || item.status === 'Concluído') &&  (
+                                    (item.newStatus === 'Concluído' || item.status === 'Concluído') && (
                                         <Tooltip title='PDF'>
-                                            <IconButton onClick={() => { gerarPdf(item.proposta, item.nome) }} color="error">
+                                            <IconButton onClick={async () => {
+                                                const dadosEntrevista = await getDadosEntrevistaByPropostaId(item._id)
+                                                gerarPdf(dadosEntrevista._id)
+                                            }} color="error">
                                                 <PictureAsPdfIcon />
                                             </IconButton>
                                         </Tooltip>

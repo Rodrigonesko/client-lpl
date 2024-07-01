@@ -197,7 +197,7 @@ const Anexos = () => {
                                                     <TableCell>{e.nome}</TableCell>
                                                     <TableCell>{e.tipoContrato}</TableCell>
                                                     <TableCell>{e.houveDivergencia}</TableCell>
-                                                    <TableCell>{e.cids}</TableCell>
+                                                    <TableCell>{e.cidsAjustados.map(cid => `${cid.codigo} (${cid.descricao}) : ${cid.ano} ,`)}</TableCell>
                                                     <TableCell>{e.divergencia}</TableCell>
                                                     <TableCell><Button variant='contained' color='success' size='small' onClick={() => {
                                                         setModalConcluir(true)

@@ -252,7 +252,7 @@ const Implantacao = () => {
                                                 <TableCell>{e.situacaoAmil}</TableCell>
                                                 <TableCell>{e.tipoContrato}</TableCell>
                                                 <TableCell>{e.houveDivergencia}</TableCell>
-                                                <TableCell>{e.cids}</TableCell>
+                                                <TableCell>{e.cidsAjustados.map(cid => `${cid.codigo} (${cid.descricao}): ${cid.ano}, `)}</TableCell>
                                                 <TableCell>{e.divergencia}</TableCell>
                                                 <TableCell><Button onClick={() => {
                                                     setModalImplantar(true)

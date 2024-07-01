@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
 import Axios from 'axios'
-import { Form, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
-import './EditarEntrevista.css'
 import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button, FormControlLabel, Checkbox, Chip } from '@mui/material'
 import Toast from '../../../components/Toast/Toast'
-import { getCids } from '../../../_services/teleEntrevista.service'
+import { getCids, getPerguntas } from '../../../_services/teleEntrevista.service'
+import { getDadosEntrevistaById, updateDadosEntrevista, updatePropostaEntrevista } from '../../../_services/teleEntrevistaV2.service'
 
 const EditarEntrevista = () => {
 
@@ -33,13 +33,8 @@ const EditarEntrevista = () => {
 
     const buscarPerguntas = async () => {
         try {
-            const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/perguntas`, {
-                withCredentials: true,
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            setPerguntas(result.data.perguntas)
+            const result = await getPerguntas()
+            setPerguntas(result.perguntas)
         } catch (error) {
             console.log(error);
         }
@@ -56,21 +51,57 @@ const EditarEntrevista = () => {
 
     const salvar = async () => {
         try {
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, {
-                withCredentials: true,
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            // const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, {
+            //     withCredentials: true,
+            //     headers: {
+            //         authorization: `Bearer ${localStorage.getItem('token')}`
+            //     }
+            // })
+
+            console.log(respostas);
+
+            await updateDadosEntrevista({
+                _id: id,
+                ...respostas,
+                cidsAjustados: cids,
+                houveDivergencia,
             })
-            if (result.status === 200) {
-                setMessage('Entrevista salva com sucesso!')
-                setSeverity("success")
-                setOpenToast(true)
-                setFlushHook(true)
-            }
+
+
+            setMessage('Entrevista salva com sucesso!')
+            setSeverity("success")
+            setOpenToast(true)
+            setFlushHook(true)
+
         } catch (error) {
             console.log(error);
             setMessage('Erro ao salvar entrevista!')
+            setSeverity("error")
+            setOpenToast(true)
+        }
+    }
+
+    const handleSaveInfo = async () => {
+        try {
+            await updatePropostaEntrevista({
+                _id: dadosEntrevista.idProposta._id
+            }, {
+                nome,
+                cpf,
+                dataNascimento,
+            })
+            await updateDadosEntrevista({
+                _id: id,
+                nome,
+                cpf,
+                dataNascimento,
+            })
+            setMessage('Dados atualizados com sucesso!')
+            setSeverity("success")
+            setOpenToast(true)
+        } catch (error) {
+            console.log(error);
+            setMessage('Erro ao salvar os dados!')
             setSeverity("error")
             setOpenToast(true)
         }
@@ -80,8 +111,8 @@ const EditarEntrevista = () => {
         try {
             if (cid.length < 3) return
             const result = await getCids(cid)
-            console.log(result.cids);
-            setCidsList(result.cids)
+            console.log(result);
+            setCidsList(result)
         } catch (error) {
             console.log(error);
         }
@@ -91,21 +122,16 @@ const EditarEntrevista = () => {
         setFlushHook(false)
         const buscarDadosEntrevista = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/buscar/dadosEntrevista/${id}`, {
-                    withCredentials: true,
-                    headers: {
-                        authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-                setDadosEntrevista(result.data.proposta)
-                setHouveDivergencia(result.data.proposta.houveDivergencia)
-                setDataNascimento(result.data.proposta.dataNascimento)
-                setNome(result.data.proposta.nome)
-                setCpf(result.data.proposta.cpf)
-                setQualDivergencia(result.data.proposta.divergencia)
-                setPatologias(result.data.proposta.patologias)
-                setCids(result.data.proposta.cids.split(', '))
-
+                const result = await getDadosEntrevistaById(id)
+                setDadosEntrevista(result)
+                setHouveDivergencia(result.houveDivergencia)
+                setDataNascimento(result.dataNascimento)
+                setNome(result.nome)
+                setCpf(result.cpf)
+                setQualDivergencia(result.divergencia)
+                setPatologias(result.patologias)
+                console.log(result.cidsAjustados);
+                setCids(result.cidsAjustados)
             } catch (error) {
                 console.log(error);
             }
@@ -144,6 +170,9 @@ const EditarEntrevista = () => {
                         <Grid item xs={12}>
                             <TextField variant='standard' size='small' label="Data Nascimento" value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} fullWidth />
                         </Grid>
+                        <Grid item xs={12}>
+                            <Button variant='contained' fullWidth onClick={handleSaveInfo}>Salvar Informações</Button>
+                        </Grid>
                     </Grid>
                     <Box width={'100%'} m={1} p={1}>
                         <Box width={'100%'}>
@@ -151,7 +180,7 @@ const EditarEntrevista = () => {
                                 perguntas.map(e => {
                                     if (e.formulario === dadosEntrevista.tipoFormulario) {
                                         return (
-                                            <Box m={1}>
+                                            <Box m={1} key={e._id}>
                                                 <Typography m={1}>{e.pergunta}</Typography>
                                                 <TextField
                                                     id={e.name}
@@ -222,7 +251,11 @@ const EditarEntrevista = () => {
                                     cids.map(e => {
                                         return (
                                             <Chip
-                                                label={e}
+                                                key={e.codigo}
+                                                label={`${e.codigo} - ${e.descricao} - ${e.ano}`}
+                                                onDelete={() => {
+                                                    setCids(cids.filter(c => c.codigo !== e.codigo))
+                                                }}
                                             />
                                         )
                                     })
@@ -239,23 +272,19 @@ const EditarEntrevista = () => {
                                     sx={{ marginBottom: '10px' }}
                                 />
                                 {
-                                    cidsList.map(e => {
+                                    cidsList.map((e, index) => {
                                         return (
-                                            <Box>
+                                            <Box key={index} >
                                                 <FormControlLabel
                                                     control={<Checkbox />}
-                                                    value={`${e.subCategoria} (${e.descricao})`}
                                                     label={`${e.subCategoria} (${e.descricao})`}
-                                                    checked={cids.includes(`${e.subCategoria} (${e.descricao})`)}
-                                                    onChange={e => {
-                                                        if (cids.includes(e.target.value)) {
-                                                            cids.splice(cids.indexOf(e.target.value), 1)
+                                                    checked={cids.some(cid => cid.codigo === e.subCategoria)}
+                                                    onChange={(element) => {
+                                                        if (element.target.checked) {
+                                                            setCids([...cids, { codigo: e.subCategoria, descricao: e.descricao, ano: '' }])
                                                         } else {
-                                                            cids.push(e.target.value)
+                                                            setCids(cids.filter(c => c.codigo !== e.subCategoria))
                                                         }
-                                                        handleChange({ id: 'cids', value: cids })
-                                                        console.log(cids);
-
                                                     }}
                                                 />
                                             </Box>
