@@ -23,8 +23,8 @@ import ProtAdmissionalDemissional from "./pages/PrototipoAdmissionalDemissional/
 
 /* Modulo de Chamados*/
 
-import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
-import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
+// import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
+// import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
 
 /* Modulo de Mensagens*/
 
@@ -139,7 +139,7 @@ import ItensChecklist from "./pages/Sindicancia/ItensChecklist/ItensChecklist";
 
 /* Controle atividades  */
 
-import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
+// import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
 /* Whatsapp */
 
@@ -314,18 +314,18 @@ const AppRoutes = () => {
 
                 {/*admin infra*/}
 
-                <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
+                {/* <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
                     <AtendimentoChamados />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
                 <Route exact path="/admin/infra/contingencias" element={<ProtectedRoute>
                     <ControleContigencias />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/producao/solicitarChamados" element={<ProtectedRoute>
+                {/* <Route exact path="/admin/producao/solicitarChamados" element={<ProtectedRoute>
                     <SolicitarChamados />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/* Tele entrevista Routes */}
 
@@ -556,9 +556,9 @@ const AppRoutes = () => {
 
                 {/* Controle de Atividades */}
 
-                <Route path="/controleAtividades" element={<ProtectedRoute>
+                {/* <Route path="/controleAtividades" element={<ProtectedRoute>
                     <ControleAtividades />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/* Whatsapp */}
 

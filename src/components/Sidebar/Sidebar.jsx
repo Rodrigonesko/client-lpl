@@ -139,7 +139,7 @@ const Sidebar = ({ children }) => {
                     <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
                         <ChatIcon />
                     </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
-                    <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
+                    {/* <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem> */}
                     {
                         acessos?.administrador ? (
                             <SubMenu title="Admin" icon={<FaShieldAlt />} >
