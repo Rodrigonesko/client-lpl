@@ -10,12 +10,10 @@ const ModalGerarInventarioExcel = () => {
     return (
         <ModalComponent
             isButton={true}
-            buttonColorScheme={blue[900]}
             headerText={'Relatório do Inventário'}
             textButton={'Gerar Relatório'}
             buttonText={'Gerar Relatório'}
             size={'lg'}
-            saveButtonColorScheme={blue[900]}
             buttonIcon={<FaFileExcel />}
             onAction={async () => {
                 const response = await findAllInventario();

@@ -29,7 +29,8 @@ const ModalComponent = ({
                             '&:hover': {
                                 backgroundColor: buttonColorScheme || 'primary.dark',
                                 opacity: 0.8
-                            }
+                            },
+                            borderRadius: '10px',
                         }}
                     >
                         {buttonText}
@@ -58,21 +59,21 @@ const ModalComponent = ({
                 </DialogContent>
                 <DialogActions>
                     <Button color="inherit" variant="contained" onClick={() => setOpen(false)}>Cancelar</Button>
-                    {!onAction ? '' : 
-                    <Button
-                    variant="contained"
-                    onClick={async () => {
-                            await onAction();
-                            setOpen(false);
-                        }}
-                        sx={{
-                            backgroundColor: saveButtonColorScheme || 'primary.main',
-                            '&:hover': {
-                                backgroundColor: saveButtonColorScheme || 'primary.dark',
-                                opacity: 0.8
-                            }
-                            
-                        }}
+                    {!onAction ? '' :
+                        <Button
+                            variant="contained"
+                            onClick={async () => {
+                                await onAction();
+                                setOpen(false);
+                            }}
+                            sx={{
+                                backgroundColor: saveButtonColorScheme || 'primary.main',
+                                '&:hover': {
+                                    backgroundColor: saveButtonColorScheme || 'primary.dark',
+                                    opacity: 0.8
+                                }
+
+                            }}
                         >{textButton ?? 'Salvar'}</Button>
                     }
                 </DialogActions>
