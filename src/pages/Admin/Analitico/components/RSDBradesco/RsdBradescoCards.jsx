@@ -11,7 +11,6 @@ const RsdBradescoCards = ({ data }) => {
             <CardDashboardRsdBradesco title='A Iniciar Pacotes' value={data.aIniciar} icon={<PlayCircleFilledOutlined color="inherit" />} />
             <CardDashboardRsdBradesco title='Em Andamento Pacotes' value={data.emAndamento} icon={<AutorenewOutlined color="primary" />} />
             <CardDashboardRsdBradesco title='Agendados Pacotes' value={data.agendados} icon={<AlignHorizontalLeft color="warning" />} />
-            {/* <CardDashboardRsdBradesco title='Total Pacotes' value={data.total} icon={<AlignHorizontalLeft color="warning" />} /> */}
             <Grid item xs={12} sm={6} lg={12}>
                 <Box
                     p={2}
