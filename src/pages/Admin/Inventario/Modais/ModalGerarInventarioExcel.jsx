@@ -53,7 +53,7 @@ const ModalGerarInventarioExcel = () => {
                             cell.fill = {
                                 type: 'pattern',
                                 pattern: 'solid',
-                                fgColor: { argb: 'FF6100' },
+                                fgColor: { argb: '0099ff' },
                             };
                             cell.font = {
                                 bold: true,
