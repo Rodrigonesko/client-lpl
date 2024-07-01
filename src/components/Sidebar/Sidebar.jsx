@@ -283,6 +283,8 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
                         <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
                         <MenuItem><Link to='/bradesco/titulares'>Titulares</Link></MenuItem>
+                        <MenuItem><Link to='/bradesco/prestadores'>Prestadores</Link></MenuItem>
+                        <MenuItem><Link to='/bradesco/rendimento'>Rendimento</Link></MenuItem>
                     </SubMenu>
                 </Menu>
             </ProSidebar>

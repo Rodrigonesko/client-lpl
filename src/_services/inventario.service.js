@@ -12,3 +12,7 @@ export const uploadNotasFiscais = async (formData, _id) => {
 export const filterInventario = async (nomeItem, ondeEsta, etiqueta, status, page, limit) => {
     return await new ApiCall(`/inventario/filter?nomeItem=${nomeItem}&ondeEsta=${ondeEsta}&etiqueta=${etiqueta}&status=${status}&page=${page}&limit=${limit}`).get()
 }
+
+export const findAllInventario = async () => {
+    return await new ApiCall(`/inventario/findAll`).get()
+}

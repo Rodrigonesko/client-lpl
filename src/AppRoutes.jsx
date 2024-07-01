@@ -181,6 +181,9 @@ import Segurados from "./pages/RsdBradesco/Segurados/Index";
 import FichaSegurado from "./pages/RsdBradesco/FichaSegurado/Index";
 import Protocolos from "./pages/RsdBradesco/Protocolos/Protocolos";
 import AnaliticoBradescoRsd from "./pages/RsdBradesco/Analitico/Analitico"
+import Prestadores from "./pages/RsdBradesco/Prestadores/Prestadores";
+import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
+import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
 
 const AppRoutes = () => {
     return (
@@ -190,6 +193,7 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                {/* RSD Bradesco */}
                 <Route exact path="/bradesco/rsdBradesco" element={<ProtectedRoute>
                     <RsdBradesco />
                 </ProtectedRoute>} />
@@ -202,11 +206,20 @@ const AppRoutes = () => {
                 <Route exact path="/bradesco/fichaSegurado/:id" element={<ProtectedRoute>
                     <FichaSegurado />
                 </ProtectedRoute>} />
+                <Route exact path="/bradesco/fichaPrestador/:id" element={<ProtectedRoute>
+                    <FichaPrestador />
+                </ProtectedRoute>} />
                 <Route exact path="/bradesco/protocolos/:id" element={<ProtectedRoute>
                     <Protocolos />
                 </ProtectedRoute>} />
                 <Route exact path="/bradesco/analiticoRsdBradesco" element={<ProtectedRoute>
                     <AnaliticoBradescoRsd />
+                </ProtectedRoute>} />
+                <Route exact path="/bradesco/prestadores" element={<ProtectedRoute>
+                    <Prestadores />
+                </ProtectedRoute>} />
+                <Route exact path="/bradesco/rendimento" element={<ProtectedRoute>
+                    <AnaliticoRsdBradesco />
                 </ProtectedRoute>} />
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>

@@ -7,9 +7,10 @@ import RsdBradescoCardsPareceres from "../../Admin/Analitico/components/RSDBrade
 import { getQuantidadePacotes, getQuantidadePareceres, getQuantidadePedidos } from "../../../_services/rsdBradesco.service"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
+import { indigo, red } from "@mui/material/colors"
 
 
-const Analitico = () => {
+const AnaliticoRsdBradesco = () => {
 
     const [dataInicio, setDataInicio] = useState(moment().subtract(30, 'days').format('YYYY-MM-DD'))
     const [dataFim, setDataFim] = useState(moment().format('YYYY-MM-DD'))
@@ -76,7 +77,7 @@ const Analitico = () => {
     return (
         <Sidebar>
             <Container maxWidth>
-                <Title size={'medium'} sx={{ mb: 2 }} >Análitico</Title>
+                <Title size={'medium'} sx={{ mb: 2 }} fontColor={indigo[800]} lineColor={red[600]} >Rendimento</Title>
                 <Box>
                     <Box sx={{
                         display: 'flex',
@@ -149,4 +150,4 @@ const Analitico = () => {
     )
 }
 
-export default Analitico
+export default AnaliticoRsdBradesco

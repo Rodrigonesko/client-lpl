@@ -34,7 +34,7 @@ const RsdBradescoCardsPareceres = ({ data }) => {
                             p: 1
                         }}
                     >
-                        {<KeyboardDoubleArrowUpOutlined color="secondary" />}
+                        {<Cancel color="error" />}
                     </Box>
                 </Box>
             </Grid>

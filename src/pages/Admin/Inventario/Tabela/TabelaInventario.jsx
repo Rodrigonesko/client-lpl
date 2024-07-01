@@ -6,6 +6,7 @@ import ModalEditarInventario from "../Modais/ModalEditarInventario";
 import moment from "moment";
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import { filterInventario } from "../../../../_services/inventario.service";
+import { CleaningServicesOutlined } from "@mui/icons-material";
 
 const TabelaInventario = ({ flushHook, setFlushHook }) => {
 
@@ -69,43 +70,51 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     return (
         <>
             <form action="" >
-                <TextField type='text' onChange={(e) => { setNomeItem(e.target.value) }} value={nomeItem} size='small' label='Nome do Item' sx={{ marginRight: '10px', width: '170px' }} InputProps={{
-                    style: {
-                        borderRadius: '10px',
-                    }
-                }} />
-                <TextField type='text' onChange={(e) => { setOndeEsta(e.target.value) }} value={ondeEsta} size='small' label='Com quem está' sx={{ marginRight: '10px', width: '170px' }} InputProps={{
-                    style: {
-                        borderRadius: '10px',
-                    }
-                }} />
-                <TextField type='text' onChange={(e) => { setEtiqueta(e.target.value) }} value={etiqueta} size='small' label='Etiqueta' sx={{ marginRight: '10px', width: '170px' }} InputProps={{
-                    style: {
-                        borderRadius: '10px',
-                    }
-                }} />
-                <FormControl size='small' sx={{ minWidth: 190 }} >
-                    <InputLabel id='Status'>Status</InputLabel>
-                    <Select
-                        value={status}
-                        labelId="Status"
-                        margin='dense'
-                        id='Status'
-                        label='Status'
-                        onChange={(e) => { setStatus(e.target.value) }}
-                        sx={{ borderRadius: '10px', marginRight: '10px' }} >
-                        <MenuItem value={'emEstoque'}>EM ESTOQUE</MenuItem>
-                        <MenuItem value={'emUso'}>EM USO</MenuItem>
-                        <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
-                    </Select>
-                </FormControl>
-                <Button onClick={() => {
-                    setNomeItem('')
-                    setOndeEsta('')
-                    setEtiqueta('')
-                    setStatus('')
-                    setFlushHook(true)
-                }} variant='contained' sx={{ marginLeft: '10px', borderRadius: '10px' }}>Limpar Pesquisa</Button>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }}
+                >
+                    <TextField type='text' fullWidth onChange={(e) => { setNomeItem(e.target.value) }} value={nomeItem} size='small' label='Nome do Item' sx={{ marginRight: 2 }} InputProps={{
+                        style: {
+                            borderRadius: '10px',
+                        }
+                    }} />
+                    <TextField type='text' fullWidth onChange={(e) => { setOndeEsta(e.target.value) }} value={ondeEsta} size='small' label='Com quem está' sx={{ marginRight: 2 }} InputProps={{
+                        style: {
+                            borderRadius: '10px',
+                        }
+                    }} />
+                    <TextField type='text' fullWidth onChange={(e) => { setEtiqueta(e.target.value) }} value={etiqueta} size='small' label='Etiqueta' sx={{ marginRight: 2 }} InputProps={{
+                        style: {
+                            borderRadius: '10px',
+                        }
+                    }} />
+                    <FormControl size='small' sx={{ minWidth: 300 }} >
+                        <InputLabel id='Status'>Status</InputLabel>
+                        <Select
+                            value={status}
+                            labelId="Status"
+                            margin='dense'
+                            id='Status'
+                            label='Status'
+                            onChange={(e) => { setStatus(e.target.value) }}
+                            sx={{ borderRadius: '10px', marginRight: 2 }} >
+                            <MenuItem value={'emEstoque'}>EM ESTOQUE</MenuItem>
+                            <MenuItem value={'emUso'}>EM USO</MenuItem>
+                            <MenuItem value={'descontinuado'}>DESCONTINUADO</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button onClick={() => {
+                        setNomeItem('')
+                        setOndeEsta('')
+                        setEtiqueta('')
+                        setStatus('')
+                        setFlushHook(true)
+                    }} variant='contained' sx={{ marginLeft: '10px', borderRadius: '10px', width: '100px' }}><CleaningServicesOutlined /></Button>
+                </Box>
             </form>
             <br />
             <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
@@ -140,15 +149,15 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                         !loading ? (
                             <Table size='small'>
                                 <TableHead>
-                                    <TableRow className="table-header" sx={{ bgcolor: blue[600] }}>
-                                        <TableCell sx={{ color: "white" }} >NOME ITEM</TableCell>
-                                        <TableCell sx={{ color: "white" }} >ETIQUETA</TableCell>
-                                        <TableCell sx={{ color: "white" }} >COM QUEM ESTÁ</TableCell>
-                                        <TableCell sx={{ color: "white" }} >DESCRIÇÃO</TableCell>
-                                        <TableCell sx={{ color: "white" }} >DATA DE COMPRA</TableCell>
-                                        <TableCell sx={{ color: "white" }} >DATA DE GARANTIA</TableCell>
-                                        <TableCell sx={{ color: "white" }} >STATUS</TableCell>
-                                        <TableCell sx={{ color: "white" }} >BOTÕES</TableCell>
+                                    <TableRow sx={{ bgcolor: blue[600] }}>
+                                        <TableCell sx={{ color: "white" }} >Nome Item</TableCell>
+                                        <TableCell sx={{ color: "white" }} >Etiqueta</TableCell>
+                                        <TableCell sx={{ color: "white" }} >Com Quem Está</TableCell>
+                                        <TableCell sx={{ color: "white" }} >Descrição</TableCell>
+                                        <TableCell sx={{ color: "white" }} >Data de Compra</TableCell>
+                                        <TableCell sx={{ color: "white" }} >Data de Garantia</TableCell>
+                                        <TableCell sx={{ color: "white" }} >Status</TableCell>
+                                        <TableCell sx={{ color: "white" }} ></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
