@@ -9,9 +9,7 @@ import Estatisticas from "./Components/Estatisticas";
 const ProtEnviar = () => {
 
     const [tab, setTab] = useState('Enviar')
-
-
-
+    
     return (
         <Sidebar>
             <Box m={2}>

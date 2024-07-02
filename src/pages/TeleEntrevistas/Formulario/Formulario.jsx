@@ -396,7 +396,7 @@ const Formulario = () => {
                             )
                         }
                         {
-                            autismo && (
+                            autismo && pessoa.tipoContrato !== 'ADESÃO' && (
                                 <Alert severity="error">
                                     Agradecemos pelas informações fornecidas e, apenas para fins de esclarecimento, informamos que o serviço de Acompanhante Terapêutico Escolar não possui cobertura pela Operadora de Saúde, visto o disposto na Lei de nº 14.454/2022 e o parecer da Agência Nacional de Saúde Suplementar 25/2022, que é nosso órgão regulador, que dispõe sobre a não cobertura em razão da falta de eficácia científica e técnica e de recomendação dos órgãos competentes.
                                 </Alert>
@@ -437,7 +437,12 @@ const Formulario = () => {
                                                     codigo: cid.subCategoria
                                                 }
                                             }),
-                                            cidsDs,
+                                            cidsDs: cidsDs.map(cid => {
+                                                return {
+                                                    ...cid,
+                                                    codigo: cid.subCategoria
+                                                }
+                                            }),
                                             tea
                                         }
                                     )

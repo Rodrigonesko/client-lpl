@@ -20,7 +20,7 @@ const Linha = ({ entrevista }) => {
                 <FormControl size="small">
                     <InputLabel>Sexo</InputLabel>
                     <Select
-                        value={data.idProposta.sexo}
+                        value={data?.idProposta?.sexo}
                         label="Sexo"
                         onChange={async (e) => {
                             try {

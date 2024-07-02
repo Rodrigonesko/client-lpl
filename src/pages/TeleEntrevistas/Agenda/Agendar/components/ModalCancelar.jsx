@@ -61,6 +61,7 @@ const ModalCancelar = ({ proposta, setRefresh, setOpenToast, setMessage, setSeve
                         >
                             <MenuItem value='Sem Sucesso de Contato!'>Sem Sucesso de Contato!</MenuItem>
                             <MenuItem value='Beneficiario Solicitou o Cancelamento'>Beneficiario Solicitou o Cancelamento</MenuItem>
+                            <MenuItem value='Não encontrado no Sistema'>Não encontrado no Sistema</MenuItem>
                         </Select>
                     </FormControl>
                 </DialogContent>

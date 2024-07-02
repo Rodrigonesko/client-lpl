@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../../components/Sidebar/Sidebar'
-import Axios from 'axios'
 import { useParams } from 'react-router-dom'
 import moment from 'moment/moment'
 import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, MenuItem, Button, FormControlLabel, Checkbox, Chip } from '@mui/material'
@@ -8,11 +7,92 @@ import Toast from '../../../components/Toast/Toast'
 import { getCids, getPerguntas } from '../../../_services/teleEntrevista.service'
 import { getDadosEntrevistaById, updateDadosEntrevista, updatePropostaEntrevista } from '../../../_services/teleEntrevistaV2.service'
 
+const InputCids = ({ cidsSelecionados = [], setCidsSeleciados, cid }) => {
+    console.log(cidsSelecionados);
+    const [ano, setAno] = useState(cidsSelecionados?.find(item => item.codigo === cid.subCategoria)?.ano || '')
+    const [anosAtras, setAnosAtras] = useState('')
+    const [openToast, setOpenToast] = useState(false)
+    const [severity, setSeverity] = useState('success')
+    const [message, setMessage] = useState('')
+    useEffect(() => {
+        if (anosAtras !== '') {
+            setAno((new Date().getFullYear() - anosAtras).toString())
+        } else {
+            setAno('')
+        }
+    }, [anosAtras])
+    useEffect(() => {
+        if (ano.length === 4) {
+            setAnosAtras((new Date().getFullYear() - parseInt(ano)).toString())
+        }
+    }, [ano])
+    return (
+        <>
+            <Box
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'space-between'}
+                p={1}
+            >
+                <FormControlLabel
+                    control={<Checkbox />}
+                    label={`${cid.subCategoria} - ${cid.descricao}`}
+                    checked={cidsSelecionados.some(item => item.codigo === cid.subCategoria)}
+                    onChange={(e) => {
+                        if (e.target.checked) {
+                            if (ano.length !== 4) {
+                                setOpenToast(true)
+                                setSeverity('error')
+                                setMessage('Preencha o campo ano corretamente')
+                                return
+                            }
+                            setCidsSeleciados([...cidsSelecionados, { ...cid, ano, codigo: cid.subCategoria }])
+                        } else {
+                            setCidsSeleciados(cidsSelecionados.filter(item => item.codigo !== cid.subCategoria))
+                        }
+                    }}
+                />
+                <Box>
+                    <TextField
+                        InputProps={{
+                            sx: {
+                                padding: '0px',
+                                fontSize: '12px'
+                            }
+                        }}
+                        size='small'
+                        label='Ano'
+                        value={ano}
+                        onChange={(e) => {
+                            setAno(e.target.value)
+                        }}
+                    />
+                    <TextField
+                        InputProps={{
+                            sx: {
+                                padding: '0px',
+                                fontSize: '12px',
+                                width: '60px'
+                            }
+                        }}
+                        placeholder={'Anos'}
+                        size="small"
+                        value={anosAtras}
+                        onChange={(e) => setAnosAtras(e.target.value)}
+                    />
+                </Box>
+            </Box>
+            <Toast
+                open={openToast}
+                onClose={() => setOpenToast(false)}
+                severity={severity}
+                message={message}
+            />
+        </>
+    )
+}
+
 const EditarEntrevista = () => {
-
-    // let respostas = {
-
-    // }
 
     const { id } = useParams()
     const [perguntas, setPerguntas] = useState([])
@@ -274,20 +354,12 @@ const EditarEntrevista = () => {
                                 {
                                     cidsList.map((e, index) => {
                                         return (
-                                            <Box key={index} >
-                                                <FormControlLabel
-                                                    control={<Checkbox />}
-                                                    label={`${e.subCategoria} (${e.descricao})`}
-                                                    checked={cids.some(cid => cid.codigo === e.subCategoria)}
-                                                    onChange={(element) => {
-                                                        if (element.target.checked) {
-                                                            setCids([...cids, { codigo: e.subCategoria, descricao: e.descricao, ano: '' }])
-                                                        } else {
-                                                            setCids(cids.filter(c => c.codigo !== e.subCategoria))
-                                                        }
-                                                    }}
-                                                />
-                                            </Box>
+                                            <InputCids
+                                                key={index}
+                                                cid={e}
+                                                cidsSelecionados={cids}
+                                                setCidsSeleciados={setCids}
+                                            />
                                         )
                                     })
                                 }

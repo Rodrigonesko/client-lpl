@@ -6,6 +6,7 @@ import Toast from '../../../../components/Toast/Toast'
 import { ArrowRight } from '@mui/icons-material'
 import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../../_services/teleEntrevistaExterna.service'
 import ModalEnviarMensagens from './ModalEnviarMensagens'
+import { mandaAtendimentoAutomatizado } from '../../../../_services/teleEntrevistaV2.service'
 
 const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
 
@@ -14,13 +15,16 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
     const [toastMessage, setToastMessage] = useState('')
     const [toastSeverity, setToastSeverity] = useState('success')
 
-    const handleEnviar = async (id) => {
+    const handleEnviar = async (proposta) => {
         setLoading(true)
         try {
-            const result = await sendMessageSaudacao({ _id: id })
-            if (result.msg !== 'ok') {
-                throw new Error('Erro ao enviar mensagem!')
+            let result
+            if (proposta.tipoContrato === 'ADESÃO') {
+                result = await mandaAtendimentoAutomatizado(proposta._id)
+            } else {
+                result = await sendMessageSaudacao(proposta._id)
             }
+            console.log(result);
             setOpenToast(true)
             setToastMessage('Mensagem enviada com sucesso!')
             setToastSeverity('success')
@@ -29,6 +33,7 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
             }
             setLoading(false)
         } catch (error) {
+            console.log(error);
             setOpenToast(true)
             setToastMessage('Erro ao enviar mensagem!')
             setToastSeverity('error')
@@ -51,7 +56,7 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
             <TableCell>{proposta.celular}</TableCell>
             <TableCell>
                 {
-                    !!proposta.ddd && !!proposta.celular ? (
+                    (!!proposta.ddd && !!proposta.celular) && (
                         <Tooltip
                             title="Enviar proposta"
                             placement="top"
@@ -64,7 +69,7 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
                                     textTransform: 'none'
                                 }}
                                 onClick={() => {
-                                    handleEnviar(proposta._id)
+                                    handleEnviar(proposta)
                                 }}
                                 disabled={loading}
                                 endIcon={loading && <CircularProgress color='primary' size={'20px'} />}
@@ -72,7 +77,7 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
                                 <ArrowRight />
                             </Button>
                         </Tooltip>
-                    ) : null
+                    )
                 }
 
             </TableCell>
