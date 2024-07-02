@@ -1,4 +1,4 @@
-import { Box, Container, FormControl, InputLabel, Pagination, Select, TextField, MenuItem, ThemeProvider, CircularProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, IconButton, Tooltip, Typography, Divider } from "@mui/material"
+import { Box, Container, FormControl, InputLabel, Pagination, Select, TextField, MenuItem, ThemeProvider, CircularProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, IconButton, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import Title from "../../../components/Title/Title"
 import { indigo, red } from "@mui/material/colors"
@@ -14,7 +14,6 @@ const Prestadores = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
-    const [flushHook, setFlushHook] = useState(false)
 
     const [pedidos, setPedidos] = useState([])
     const [pesquisa, setPesquisa] = useState('')
@@ -33,7 +32,7 @@ const Prestadores = () => {
 
     useEffect(() => {
         fetch()
-    }, [page, rowsPerPage, pesquisa, flushHook])
+    }, [page, rowsPerPage, pesquisa])
 
     return (
         <>
