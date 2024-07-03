@@ -69,6 +69,20 @@ const RadioQuestion = ({ pergunta, respostasFormulario, setRespostasFormulario, 
                             />
                         ))
                     }
+                    <FormControlTextField
+                        label={'Observações'}
+                        placeholder={'Resposta'}
+                        onBlur={e => {
+                            setRespostasFormulario({
+                                ...respostasFormulario,
+                                [pergunta.name]: {
+                                    ...respostasFormulario[pergunta.name],
+                                    'Observações:': e.target.value
+                                }
+                            })
+                        }}
+
+                    />
                 </Box>
             </Collapse>
             <Collapse in={resposta === 'Não'} mountOnEnter unmountOnExit>
@@ -90,6 +104,20 @@ const RadioQuestion = ({ pergunta, respostasFormulario, setRespostasFormulario, 
                         />
                     ))
                 }
+                <FormControlTextField
+                    label={'Observações'}
+                    placeholder={'Resposta'}
+                    onBlur={e => {
+                        setRespostasFormulario({
+                            ...respostasFormulario,
+                            [pergunta.name]: {
+                                ...respostasFormulario[pergunta.name],
+                                'Observações:': e.target.value
+                            }
+                        })
+                    }}
+
+                />
             </Collapse>
         </Box>
     )
@@ -369,23 +397,24 @@ const Formulario = () => {
                                     <FormControlTextField label='Qual divergência?' name='qual-divergencia' onChange={e => setQualDivergencia(e.target.value)} placeholder={'Resposta'} value={qualDivergencia} />
                                     <FormControlTextField label='Por que o beneficiário não informou na Declaração de Saúde essas patologias?' name='motivo-beneficiario' onChange={e => setMotivoBeneficiario(e.target.value)} placeholder={'Resposta'} value={motivoBeneficiario} />
                                     <Cids cidsSelecionados={cidsSelecionados} setCidsSeleciados={setCidsSelecionados} />
-                                    {
-                                        pessoa?.tipoContrato === 'ADESÃO' && (
-                                            <Box>
-                                                <Typography
-                                                    m={2}
-                                                    variant='h6'
 
-                                                >
-                                                    Cids Declaração de Saúde
-                                                </Typography>
-                                                <Cids cidsSelecionados={cidsDs} setCidsSeleciados={setCidsDs} />
-                                            </Box>
-                                        )
-                                    }
                                 </Box>
                             </Box>
                         </Collapse>
+                        {
+                            pessoa?.tipoContrato === 'ADESÃO' && (
+                                <Box>
+                                    <Typography
+                                        m={2}
+                                        variant='h6'
+
+                                    >
+                                        Cids Declaração de Saúde
+                                    </Typography>
+                                    <Cids cidsSelecionados={cidsDs} setCidsSeleciados={setCidsDs} />
+                                </Box>
+                            )
+                        }
                         {
                             indicadorImc && (
                                 <Alert severity="error">
