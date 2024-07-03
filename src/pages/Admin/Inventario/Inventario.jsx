@@ -1,10 +1,11 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Divider } from "@mui/material";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ModalCriarInventario from "./Modais/ModalCriarInventario";
 import TabelaInventario from "./Tabela/TabelaInventario";
 import Title from "../../../components/Title/Title";
+import ModalGerarInventarioExcel from "./Modais/ModalGerarInventarioExcel";
 
 const Inventario = () => {
 
@@ -30,9 +31,13 @@ const Inventario = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Box display={"flex"} paddingTop={"15px"} paddingBottom={"15px"}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Title size={'medium'}>Inventário LPL</Title>
+                        <ModalGerarInventarioExcel />
+                    </Box>
+                    <Divider sx={{ mb: 2 }} />
+                    <Box display={"flex"} paddingBottom={"15px"}>
                         <Box>
-                            <Title size={'medium'}>Inventário LPL</Title>
                             <ModalCriarInventario setFlushHook={setFlushHook} />
                             <br />
                         </Box>

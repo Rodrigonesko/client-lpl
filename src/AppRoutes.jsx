@@ -23,8 +23,8 @@ import ProtAdmissionalDemissional from "./pages/PrototipoAdmissionalDemissional/
 
 /* Modulo de Chamados*/
 
-import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
-import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
+// import SolicitarChamados from "./pages/Chamados/SolicitarChamados";
+// import AtendimentoChamados from "./pages/Chamados/AtendimentoChamados";
 
 /* Modulo de Mensagens*/
 
@@ -139,7 +139,7 @@ import ItensChecklist from "./pages/Sindicancia/ItensChecklist/ItensChecklist";
 
 /* Controle atividades  */
 
-import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
+// import ControleAtividades from "./pages/ControleAtividades/ControleAtividades";
 
 /* Whatsapp */
 
@@ -181,6 +181,9 @@ import Segurados from "./pages/RsdBradesco/Segurados/Index";
 import FichaSegurado from "./pages/RsdBradesco/FichaSegurado/Index";
 import Protocolos from "./pages/RsdBradesco/Protocolos/Protocolos";
 import AnaliticoBradescoRsd from "./pages/RsdBradesco/Analitico/Analitico"
+import Prestadores from "./pages/RsdBradesco/Prestadores/Prestadores";
+import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
+import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
 
 const AppRoutes = () => {
     return (
@@ -190,6 +193,7 @@ const AppRoutes = () => {
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
 
+                {/* RSD Bradesco */}
                 <Route exact path="/bradesco/rsdBradesco" element={<ProtectedRoute>
                     <RsdBradesco />
                 </ProtectedRoute>} />
@@ -202,11 +206,20 @@ const AppRoutes = () => {
                 <Route exact path="/bradesco/fichaSegurado/:id" element={<ProtectedRoute>
                     <FichaSegurado />
                 </ProtectedRoute>} />
+                <Route exact path="/bradesco/fichaPrestador/:id" element={<ProtectedRoute>
+                    <FichaPrestador />
+                </ProtectedRoute>} />
                 <Route exact path="/bradesco/protocolos/:id" element={<ProtectedRoute>
                     <Protocolos />
                 </ProtectedRoute>} />
                 <Route exact path="/bradesco/analiticoRsdBradesco" element={<ProtectedRoute>
                     <AnaliticoBradescoRsd />
+                </ProtectedRoute>} />
+                <Route exact path="/bradesco/prestadores" element={<ProtectedRoute>
+                    <Prestadores />
+                </ProtectedRoute>} />
+                <Route exact path="/bradesco/rendimento" element={<ProtectedRoute>
+                    <AnaliticoRsdBradesco />
                 </ProtectedRoute>} />
 
                 <Route exact path="/sulAmerica/configuracaoQuestionario" element={<ProtectedRoute>
@@ -301,18 +314,18 @@ const AppRoutes = () => {
 
                 {/*admin infra*/}
 
-                <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
+                {/* <Route exact path="/admin/infra/atendimentoChamados" element={<ProtectedRoute>
                     <AtendimentoChamados />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
                 <Route exact path="/admin/infra/contingencias" element={<ProtectedRoute>
                     <ControleContigencias />
                 </ProtectedRoute>} />
                 <Route exact path="/admin/infra/inventario" element={<ProtectedRoute>
                     <Inventario />
                 </ProtectedRoute>} />
-                <Route exact path="/admin/producao/solicitarChamados" element={<ProtectedRoute>
+                {/* <Route exact path="/admin/producao/solicitarChamados" element={<ProtectedRoute>
                     <SolicitarChamados />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/* Tele entrevista Routes */}
 
@@ -543,9 +556,9 @@ const AppRoutes = () => {
 
                 {/* Controle de Atividades */}
 
-                <Route path="/controleAtividades" element={<ProtectedRoute>
+                {/* <Route path="/controleAtividades" element={<ProtectedRoute>
                     <ControleAtividades />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
 
                 {/* Whatsapp */}
 
