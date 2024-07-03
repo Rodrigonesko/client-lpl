@@ -6,6 +6,8 @@ import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, Me
 import Toast from '../../../components/Toast/Toast'
 import { getCids, getPerguntas } from '../../../_services/teleEntrevista.service'
 import { getDadosEntrevistaById, updateDadosEntrevista, updatePropostaEntrevista } from '../../../_services/teleEntrevistaV2.service'
+import Cids from '../Formulario/components/Cids'
+import CidsDeclaracaoSaude from './components/CidsDeclaracaoSaude'
 
 const InputCids = ({ cidsSelecionados = [], setCidsSeleciados, cid }) => {
     console.log(cidsSelecionados);
@@ -14,6 +16,7 @@ const InputCids = ({ cidsSelecionados = [], setCidsSeleciados, cid }) => {
     const [openToast, setOpenToast] = useState(false)
     const [severity, setSeverity] = useState('success')
     const [message, setMessage] = useState('')
+
     useEffect(() => {
         if (anosAtras !== '') {
             setAno((new Date().getFullYear() - anosAtras).toString())
@@ -111,6 +114,8 @@ const EditarEntrevista = () => {
     const [cidsList, setCidsList] = useState([])
     const [respostas, setRespostas] = useState({})
 
+    const [cidsDs, setCidsDs] = useState([])
+
     const buscarPerguntas = async () => {
         try {
             const result = await getPerguntas()
@@ -144,6 +149,7 @@ const EditarEntrevista = () => {
                 _id: id,
                 ...respostas,
                 cidsAjustados: cids,
+                cidsDs: cidsDs,
                 houveDivergencia,
             })
 
@@ -326,6 +332,12 @@ const EditarEntrevista = () => {
                                     sx={{ marginBottom: '10px' }}
                                 />
                             </Box>
+                            {/* <Typography
+                                variant='h6'
+                            >
+                                Cids
+                            </Typography>
+                            <Cids cidsSelecionados={cids} setCidsSeleciados={setCids} /> */}
                             <Box m={1}>
                                 {
                                     cids.map(e => {
@@ -364,6 +376,18 @@ const EditarEntrevista = () => {
                                     })
                                 }
                             </Box>
+                            {
+                                dadosEntrevista?.tipoContrato === 'ADESÃO' && (
+                                    <Box>
+                                        <Typography
+                                            variant='h6'
+                                        >
+                                            Cids Declaração de Saúde
+                                        </Typography>
+                                        <CidsDeclaracaoSaude cidsSelecionados={cidsDs} setCidsSeleciados={setCidsDs} />
+                                    </Box>
+                                )
+                            }
                         </Box>
                     </Box>
                     <Box>

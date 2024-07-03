@@ -26,7 +26,6 @@ const ProducaoDiariaMui = ({ producao, total, setData, buscarDadosData, title, l
                                     <TableCell colSpan={2}>
                                         <LinearProgress color='secondary' sx={{ width: '100%' }} />
                                     </TableCell>
-
                                 </TableBody>
 
                             ) : (
