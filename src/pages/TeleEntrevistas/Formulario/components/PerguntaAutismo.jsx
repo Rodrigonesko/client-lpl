@@ -40,7 +40,7 @@ const PerguntaAutismo = ({ pessoa, tea, setTea }) => {
                         </RadioGroup>
                     </FormControl>
                     {
-                        (prcs.findIndex(prc => prc === pessoa.grupoCarencia) !== -1) && tea ? (
+                        (prcs.findIndex(prc => prc === pessoa.grupoCarencia) !== -1) && tea && pessoa.tipoContrato !== 'ADESÃO' ? (
                             <>
                                 <Alert severity="error">Informar sobre a carência de 180 dias para Terapias. {`\n`} <strong>Material de apoio</strong> : Carência é o tempo que você terá que esperar para ser atendido pelo plano de saúde em um determinado procedimento. Essa informação esta claramente disposta no seu contrato e segue o disposto na Lei nº 9.656/98,.</Alert>
                             </>
@@ -59,7 +59,7 @@ const PerguntaAutismo = ({ pessoa, tea, setTea }) => {
                         </RadioGroup>
                     </FormControl>
                     {
-                        copart === 'Sim' ? (
+                        copart === 'Sim' && pessoa.tipoContrato !== 'ADESÃO' ? (
                             <Alert severity="error">informar que o produto contratado prevê COPART para realização de Terapias. {'\n'}  <strong>Material de apoio</strong> COPART: É o plano de saúde em que o beneficiário paga um valor à parte pela realização de um procedimento ou evento, essa informação está claramente disposta no seu contrato e é prevista na Resolução nr 433 da ANS.</Alert>
                         ) : null
                     }

@@ -23,7 +23,7 @@ const ModalVoltarEntrevista = ({ entrevista }) => {
                 <DialogTitle>Voltar Entrevista</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Deseja realmente voltar a entrevista do beneficiario {entrevista.idProposta.nome}?
+                        Deseja realmente voltar a entrevista do beneficiario {entrevista?.nome}?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

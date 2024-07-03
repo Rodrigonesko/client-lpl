@@ -1,5 +1,5 @@
 import { ApiCall } from "./api";
-const URL_API = 'http://localhost:3001'
+const URL_API = process.env.REACT_APP_API_KEY;
 
 /* Propostas */
 
@@ -17,6 +17,10 @@ export const updatePropostaEntrevista = async (data) => {
 
 export const deletePropostaEntrevista = async (id) => {
     return await new ApiCall(`/newPropostaEntrevista/${id}`, URL_API).delete()
+}
+
+export const mandaAtendimentoAutomatizado = async (id) => {
+    return await new ApiCall(`/newWhatsapp/mandaAtendimentoAutomatizado`, 'http://localhost:3002').post({ id })
 }
 
 /* Dados Entrevista  */

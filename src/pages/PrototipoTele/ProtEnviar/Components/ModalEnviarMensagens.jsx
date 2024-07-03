@@ -13,6 +13,7 @@ const ModalEnviarMensagens = ({
     const [progress, setProgress] = useState(0)
 
     const enviar = async () => {
+        console.log(propostas);
         setLoading(true)
         for (let i = 0; i < propostas.length; i++) {
             await enviarMensagem(propostas[i])
