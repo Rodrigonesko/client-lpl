@@ -102,19 +102,19 @@ const gerarPdf = async (id) => {
                     ],
                     [
                         { text: 'Nome:', bold: true },
-                        { text: `${result.idProposta.nome}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.nome}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'CPF:', bold: true },
-                        { text: `${result.idProposta.cpf}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.cpf}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'Proposta:', bold: true },
-                        { text: `${result.idProposta.proposta}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.proposta}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ],
                     [
                         { text: 'Data Nascimento:', bold: true },
-                        { text: `${result.idProposta.dataNascimento}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
+                        { text: `${result.dataNascimento}`, bold: false, margin: [10, 0, 0, 0], italics: true, color: '#0070c0' }
                     ]
                 ]
             }
