@@ -12,8 +12,10 @@ const ProducaoDiariaTele = () => {
     const [total, setTotal] = useState(0)
     const [data, setData] = useState('')
     // const [totalRn, setTotalRn] = useState(0)
+    const [loading, setLoading] = useState(false)
 
     const buscarDados = async () => {
+setLoading(true)
         try {
 
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${moment().format('YYYY-MM-DD')}`, {
@@ -29,9 +31,11 @@ const ProducaoDiariaTele = () => {
         } catch (error) {
             console.log(error);
         }
+        setLoading(false)
     }
-
+    
     const buscarDadosData = async () => {
+        setLoading(true)
         try {
             const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/entrevistas/producao/diaria/${data}`, {
                 withCredentials: true,
@@ -45,6 +49,7 @@ const ProducaoDiariaTele = () => {
         } catch (error) {
             console.log(error);
         }
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -56,7 +61,7 @@ const ProducaoDiariaTele = () => {
             <Sidebar>
                 <Container>
                     <Box m={3} display='flex' justifyContent='center' alignItems='center'>
-                        <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData}></ProducaoDiariaMui>
+                        <ProducaoDiariaMui producao={producao} total={total} setData={setData} buscarDadosData={buscarDadosData} loading={loading}></ProducaoDiariaMui>
                     </Box>
                 </Container>
             </Sidebar>
