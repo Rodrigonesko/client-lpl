@@ -1,14 +1,9 @@
 import { Box, FormControlLabel, TextField, Checkbox, Chip, Divider } from "@mui/material"
 import { useEffect, useState } from "react"
 import { getCids } from "../../../../_services/teleEntrevista.service"
-import Toast from "../../../../components/Toast/Toast"
 import FormControlTextField from "../../Formulario/components/FormControlTextField"
 
 const InputCids = ({ cidsSelecionados, setCidsSeleciados, cid }) => {
-
-    const [openToast, setOpenToast] = useState(false)
-    const [severity, setSeverity] = useState('success')
-    const [message, setMessage] = useState('')
 
     return (
         <>
@@ -21,23 +16,17 @@ const InputCids = ({ cidsSelecionados, setCidsSeleciados, cid }) => {
                 <FormControlLabel
                     control={<Checkbox />}
                     label={`${cid.subCategoria} - ${cid.descricao}`}
-                    checked={cidsSelecionados.some(item => item.subCategoria === cid.subCategoria)}
+                    checked={cidsSelecionados.some(item => item.codigo === cid.subCategoria)}
                     onChange={(e) => {
                         if (e.target.checked) {
-                            setCidsSeleciados([...cidsSelecionados, { ...cid }])
+                            setCidsSeleciados([...cidsSelecionados, { ...cid, codigo: cid.subCategoria }])
                         } else {
-                            setCidsSeleciados(cidsSelecionados.filter(item => item.subCategoria !== cid.subCategoria))
+                            setCidsSeleciados(cidsSelecionados.filter(item => item.codigo !== cid.subCategoria))
                         }
                     }}
                 />
             </Box>
             <Divider />
-            <Toast
-                open={openToast}
-                severity={severity}
-                message={message}
-                onClose={() => setOpenToast(false)}
-            />
         </>
 
     )

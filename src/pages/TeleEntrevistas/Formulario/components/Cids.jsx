@@ -6,7 +6,7 @@ import FormControlTextField from "./FormControlTextField"
 
 const InputCids = ({ cidsSelecionados, setCidsSeleciados, cid }) => {
 
-    const [ano, setAno] = useState(cidsSelecionados.find(item => item.subCategoria === cid.subCategoria)?.ano || '')
+    const [ano, setAno] = useState(cidsSelecionados.find(item => item.codigo === cid.subCategoria)?.ano || '')
     const [anosAtras, setAnosAtras] = useState('')
     const [openToast, setOpenToast] = useState(false)
     const [severity, setSeverity] = useState('success')
@@ -36,8 +36,8 @@ const InputCids = ({ cidsSelecionados, setCidsSeleciados, cid }) => {
             >
                 <FormControlLabel
                     control={<Checkbox />}
-                    label={`${cid.subCategoria} - ${cid.descricao}`}
-                    checked={cidsSelecionados.some(item => item.subCategoria === cid.subCategoria)}
+                    label={`${cid.subCategoria} - ${cid.descricao} - ${cid.ano}`}
+                    checked={cidsSelecionados.some(item => item.codigo === cid.subCategoria)}
                     onChange={(e) => {
                         if (e.target.checked) {
                             if (ano.length !== 4) {
@@ -46,9 +46,9 @@ const InputCids = ({ cidsSelecionados, setCidsSeleciados, cid }) => {
                                 setMessage('Preencha o campo ano corretamente')
                                 return
                             }
-                            setCidsSeleciados([...cidsSelecionados, { ...cid, ano }])
+                            setCidsSeleciados([...cidsSelecionados, { ...cid, ano, codigo: cid.subCategoria }])
                         } else {
-                            setCidsSeleciados(cidsSelecionados.filter(item => item.subCategoria !== cid.subCategoria))
+                            setCidsSeleciados(cidsSelecionados.filter(item => item.codigo !== cid.subCategoria))
                         }
                     }}
                 />

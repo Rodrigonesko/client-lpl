@@ -114,7 +114,6 @@ const EditarEntrevista = () => {
     const [cidsList, setCidsList] = useState([])
     const [respostas, setRespostas] = useState({})
 
-    const [cidsSelecionados, setCidsSelecionados] = useState([])
     const [cidsDs, setCidsDs] = useState([])
 
     const buscarPerguntas = async () => {
@@ -333,12 +332,12 @@ const EditarEntrevista = () => {
                                     sx={{ marginBottom: '10px' }}
                                 />
                             </Box>
-                            <Typography
+                            {/* <Typography
                                 variant='h6'
                             >
                                 Cids
                             </Typography>
-                            <Cids cidsSelecionados={cids} setCidsSeleciados={setCids} />
+                            <Cids cidsSelecionados={cids} setCidsSeleciados={setCids} /> */}
                             <Box m={1}>
                                 {
                                     cids.map(e => {
