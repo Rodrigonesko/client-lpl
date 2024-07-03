@@ -36,7 +36,7 @@ const ControleContigencias = () => {
                             {
                                 contingencias.map(contingencia => {
                                     return (
-                                        <Card sx={{ width: '200px', margin: '10px', bgcolor: contingencia.inativo ? 'lightgray' : '', padding: '5px' }}>
+                                        <Card sx={{ width: '198px', margin: '10px', bgcolor: contingencia.inativo ? 'lightgray' : '', padding: '5px' }}>
                                             <object data={`${process.env.REACT_APP_API_KEY}/media${contingencia.arquivo}`} type='application/pdf' height={250} width='100%'>
                                                 PDF
                                             </object>

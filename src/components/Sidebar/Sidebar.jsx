@@ -139,7 +139,7 @@ const Sidebar = ({ children }) => {
                     <MenuItem icon={<Badge badgeContent={quantidadeMensagens} color="secondary">
                         <ChatIcon />
                     </Badge>}><Link to='/internMessages'>Chat</Link></MenuItem>
-                    <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem>
+                    {/* <MenuItem icon={< FaExchangeAlt />}><Link to='/controleAtividades'>Controle de Atividades</Link></MenuItem> */}
                     {
                         acessos?.administrador ? (
                             <SubMenu title="Admin" icon={<FaShieldAlt />} >
@@ -283,6 +283,8 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/bradesco/rsdBradesco'>Pedidos</Link></MenuItem>
                         <MenuItem><Link to='/bradesco/uploadBradesco'>Upload Bradesco</Link></MenuItem>
                         <MenuItem><Link to='/bradesco/titulares'>Titulares</Link></MenuItem>
+                        <MenuItem><Link to='/bradesco/prestadores'>Prestadores</Link></MenuItem>
+                        <MenuItem><Link to='/bradesco/rendimento'>Rendimento</Link></MenuItem>
                     </SubMenu>
                 </Menu>
             </ProSidebar>

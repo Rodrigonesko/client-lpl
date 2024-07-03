@@ -1,4 +1,4 @@
-import { AlignHorizontalLeft, AutorenewOutlined, Cancel, Done, KeyboardDoubleArrowUpOutlined } from "@mui/icons-material"
+import { AlignHorizontalLeft, AutorenewOutlined, Cancel, Done, KeyboardDoubleArrowUpOutlined, PlayCircleFilledOutlined } from "@mui/icons-material"
 import CardDashboardRsdBradesco from "../../../../../components/Card/CardDashboardRsdBradesco"
 import { Box, Grid, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors"
@@ -9,7 +9,7 @@ const RsdBradescoCardsPedidos = ({ data }) => {
         <>
             <CardDashboardRsdBradesco title='Sucesso Pedidos' value={data.sucesso} icon={<Done color="success" />} />
             <CardDashboardRsdBradesco title='Insucesso Pedidos' value={data.insucesso} icon={<Cancel color="error" />} />
-            <CardDashboardRsdBradesco title='A Iniciar Pedidos' value={data.aIniciar} icon={<AlignHorizontalLeft color="warning" />} />
+            <CardDashboardRsdBradesco title='A Iniciar Pedidos' value={data.aIniciar} icon={<PlayCircleFilledOutlined color="warning" />} />
             <CardDashboardRsdBradesco title='Em Andamento Pedidos' value={data.emAndamento} icon={<AutorenewOutlined color="primary" />} />
             <Grid item xs={12} sm={6} lg={12}>
                 <Box
