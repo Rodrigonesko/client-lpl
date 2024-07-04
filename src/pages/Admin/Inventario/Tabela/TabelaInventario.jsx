@@ -38,6 +38,27 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     }
 
     useEffect(() => {
+        const handleFilter = async () => {
+            try {
+                setLoading(true);
+                const result = await filterInventario(
+                    nomeItem,
+                    ondeEsta,
+                    etiqueta,
+                    status,
+                    page,
+                    rowsPerPage,
+                )
+                setSolicitacoes(result.resultOrdenado)
+
+                setTotalPages(result.total)
+                console.log(result.total);
+                setLoading(false)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         handleFilter()
         setFlushHook(false)
     }, [flushHook, setFlushHook, nomeItem, ondeEsta, etiqueta, status, page, rowsPerPage])
@@ -46,26 +67,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         setSnackSelect(false)
     }
 
-    const handleFilter = async () => {
-        try {
-            setLoading(true);
-            const result = await filterInventario(
-                nomeItem,
-                ondeEsta,
-                etiqueta,
-                status,
-                page,
-                rowsPerPage,
-            )
-            setSolicitacoes(result.resultOrdenado)
 
-            setTotalPages(result.total)
-            console.log(result.total);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     return (
         <>

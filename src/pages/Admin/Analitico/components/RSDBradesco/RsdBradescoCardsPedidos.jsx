@@ -1,4 +1,4 @@
-import { AlignHorizontalLeft, AutorenewOutlined, Cancel, Done, KeyboardDoubleArrowUpOutlined, PlayCircleFilledOutlined } from "@mui/icons-material"
+import { AutorenewOutlined, Cancel, Done, KeyboardDoubleArrowUpOutlined, PlayCircleFilledOutlined } from "@mui/icons-material"
 import CardDashboardRsdBradesco from "../../../../../components/Card/CardDashboardRsdBradesco"
 import { Box, Grid, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors"

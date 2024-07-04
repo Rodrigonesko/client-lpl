@@ -1,10 +1,13 @@
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getTemplates } from "../../../_services/whatsapp.service";
 import ModalInsertVariables from "./ModalInsertVariables";
+import { ChatContext } from "./ChatContext";
 
 const TemplateMenu = () => {
+
+    const { setWhatsappReceiver } = useContext(ChatContext)
 
     const [templates, setTemplates] = useState([])
     const [anchorEl, setAnchorEl] = useState(null);

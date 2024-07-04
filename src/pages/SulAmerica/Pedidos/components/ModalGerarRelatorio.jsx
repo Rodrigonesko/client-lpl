@@ -45,7 +45,7 @@ const ModalGerarRelatorio = () => {
 
                 worksheet.columns = [
                     { header: 'Beneficiario', key: 'beneficiario', width: 15 },
-                    { header: 'Responsável', key: 'responsavel', width: 15 },
+                    { header: 'Responsável', key: 'responsavelLegal', width: 15 },
                     { header: 'Valor Pago', key: 'valorPago', width: 15 },
                     { header: 'Prestador', key: 'prestador', width: 15 },
                     { header: 'Data Conclusão', key: 'dataConclusao', width: 15 },
@@ -73,7 +73,7 @@ const ModalGerarRelatorio = () => {
                 response.forEach(pedido => {
                     worksheet.addRow({
                         beneficiario: pedido.beneficiario.nome || '',
-                        responsavel: pedido.beneficiario?.responsavelLegal || '',
+                        responsavelLegal: pedido.beneficiario?.responsavelLegal || '',
                         valorPago: pedido.valorPago || 0,
                         prestador: pedido.prestador.nome || '',
                         dataConclusao: pedido.dataConclusao ? new Date(pedido.dataConclusao) : '',

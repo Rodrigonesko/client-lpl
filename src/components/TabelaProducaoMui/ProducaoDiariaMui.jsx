@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Typography, Box, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, LinearProgress } from '@mui/material'
+import { Card, CardContent, Typography, Box, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, LinearProgress } from '@mui/material'
 
 const ProducaoDiariaMui = ({ producao, total, setData, buscarDadosData, title, loading }) => {
     return (

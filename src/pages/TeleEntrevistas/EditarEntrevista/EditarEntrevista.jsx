@@ -6,7 +6,6 @@ import { Container, Typography, Paper, TextField, Grid, Box, Divider, Select, Me
 import Toast from '../../../components/Toast/Toast'
 import { getCids, getPerguntas } from '../../../_services/teleEntrevista.service'
 import { getDadosEntrevistaById, updateDadosEntrevista, updatePropostaEntrevista } from '../../../_services/teleEntrevistaV2.service'
-import Cids from '../Formulario/components/Cids'
 import CidsDeclaracaoSaude from './components/CidsDeclaracaoSaude'
 
 const InputCids = ({ cidsSelecionados = [], setCidsSeleciados, cid }) => {
@@ -217,7 +216,8 @@ const EditarEntrevista = () => {
                 setQualDivergencia(result.divergencia)
                 setPatologias(result.patologias)
                 console.log(result.cidsAjustados);
-                setCids(result.cidsAjustados)
+                setCids(result?.cidsAjustados || [])
+                setCidsDs(result?.cidsDs || [])
             } catch (error) {
                 console.log(error);
             }

@@ -132,7 +132,7 @@ const ModalGerarRelatorios = () => {
                     tipoComprovante: pedido.tipoComprovante,
                     dataCriacao: new Date(pedido.dataCriacao),
                     parecer: pedido.parecer,
-                    dataRetorno: pedido.dataRetorno,
+                    dataRetorno: new Date(pedido.dataRetorno),
                     // parecer: pedido.parecer
                 })
             });

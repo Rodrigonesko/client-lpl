@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, TextField, Checkbox, Chip, Divider } from "@mui/material"
+import { Box, FormControlLabel, Checkbox, Chip, Divider } from "@mui/material"
 import { useEffect, useState } from "react"
 import { getCids } from "../../../../_services/teleEntrevista.service"
 import FormControlTextField from "../../Formulario/components/FormControlTextField"
@@ -36,19 +36,19 @@ const CidsDeclaracaoSaude = ({ cidsSelecionados, setCidsSeleciados }) => {
 
     const [cids, setCids] = useState([])
     const [pesquisa, setPesquisa] = useState('')
-
-    const buscarCids = async () => {
-        try {
-            const result = await getCids(pesquisa)
-            console.log(result);
-            setCids(result)
-        } catch (error) {
-            console.log(error);
-            setCids([])
-        }
-    }
-
+    
     useEffect(() => {
+        const buscarCids = async () => {
+            try {
+                const result = await getCids(pesquisa)
+                console.log(result);
+                setCids(result)
+            } catch (error) {
+                console.log(error);
+                setCids([])
+            }
+        }
+
         if (pesquisa.length > 2) {
             buscarCids()
         } else {
@@ -67,8 +67,8 @@ const CidsDeclaracaoSaude = ({ cidsSelecionados, setCidsSeleciados }) => {
                     cidsSelecionados.map((cid, index) => (
                         <Chip
                             key={index}
-                            label={`${cid.subCategoria} - ${cid.descricao}`}
-                            onDelete={() => setCidsSeleciados(cidsSelecionados.filter(item => item.subCategoria !== cid.subCategoria))}
+                            label={`${cid.codigo} - ${cid.descricao}`}
+                            onDelete={() => setCidsSeleciados(cidsSelecionados.filter(item => item.codigo !== cid.codigo))}
                         />
                     ))
                 }
