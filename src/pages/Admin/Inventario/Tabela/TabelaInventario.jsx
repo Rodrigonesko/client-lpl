@@ -57,7 +57,7 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
                 page,
                 rowsPerPage,
             )
-            setSolicitacoes(result.resultOrdenado)
+            setSolicitacoes(result.result)
 
             setTotalPages(result.total)
             console.log(result.total);
