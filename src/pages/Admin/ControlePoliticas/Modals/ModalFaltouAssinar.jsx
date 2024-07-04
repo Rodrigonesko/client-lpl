@@ -26,6 +26,9 @@ const ModalFaltouAssinar = ({ id }) => {
         let arrAux = []
         console.log(id);
         for (const analista of analistas) {
+            if (analista.inativo === false) {
+                return
+            }
             const politicasLidas = analista.politicasLidas
             if (politicasLidas.length === 0 || !politicasLidas.some((idPolitica) => idPolitica === id)) {
                 arrAux.push(analista.name)

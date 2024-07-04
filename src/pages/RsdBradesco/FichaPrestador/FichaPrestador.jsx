@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@emotion/react"
 import Sidebar from "../../../components/Sidebar/Sidebar"
 import { themeBradesco } from "../components/theme"
-import { Box, Button, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, IconButton, Tooltip, Link } from "@mui/material"
+import { Box, Button, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, IconButton, Tooltip, Link, Chip } from "@mui/material"
 import Title from "../../../components/Title/Title"
 import { useParams } from "react-router-dom"
 import { indigo, red } from "@mui/material/colors"
@@ -10,6 +10,7 @@ import { getPedidosByPrestador, getPrestadorById, updatePrestador } from "../../
 import { ArrowForward, Save } from "@mui/icons-material"
 import { useForm } from "react-hook-form"
 import Toast from "../../../components/Toast/Toast"
+import { colorStatusPedido, colorStatusRsdBradesco } from "../utils/types"
 
 const Input = ({ label, type = 'text', register, multiline }) => {
     return (
@@ -146,7 +147,7 @@ const FichaPrestador = () => {
                                             <TableCell sx={{ color: 'white' }} >Sinistro</TableCell>
                                             <TableCell sx={{ color: 'white' }} >Segurado</TableCell>
                                             <TableCell sx={{ color: 'white' }} >Titular</TableCell>
-                                            <TableCell sx={{ color: 'white' }} >Status</TableCell>
+                                            <TableCell align="center" sx={{ color: 'white' }} >Status</TableCell>
                                             <TableCell></TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -174,7 +175,16 @@ const FichaPrestador = () => {
                                                             {pedido.segurado.titular.codigo}
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell>{pedido.status}</TableCell>
+                                                    <TableCell align="center">
+                                                        <Chip
+                                                            label={pedido.status}
+                                                            sx={{
+                                                                color: 'white',
+                                                                backgroundColor: colorStatusPedido[pedido.status],
+                                                            }}
+                                                            size="small"
+                                                        />
+                                                    </TableCell>
                                                     <TableCell>
                                                         <Tooltip title='Pedido'>
                                                             <IconButton size='small' href={`/bradesco/protocolos/${pedido.pacote._id}`} >

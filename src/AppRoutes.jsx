@@ -183,6 +183,7 @@ import AnaliticoBradescoRsd from "./pages/RsdBradesco/Analitico/Analitico"
 import Prestadores from "./pages/RsdBradesco/Prestadores/Prestadores";
 import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
 import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
+import Contatos from "./pages/Sindicancia/Contatos/Contatos";
 
 const AppRoutes = () => {
     return (
@@ -597,6 +598,9 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/sindicancia/itensChecklist" element={<ProtectedRoute>
                     <ItensChecklist />
+                </ProtectedRoute>} />
+                <Route exact path="/sindicancia/contatos" element={<ProtectedRoute>
+                    <Contatos />
                 </ProtectedRoute>} />
 
             </Routes>

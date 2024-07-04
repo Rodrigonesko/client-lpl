@@ -68,6 +68,20 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     }
 
 
+    const handleFilter = async () => {
+        try {
+            setLoading(true);
+            const result = await filterInventario(
+                nomeItem,
+                ondeEsta,
+                etiqueta,
+                status,
+                page,
+                rowsPerPage,
+            )
+            setSolicitacoes(result.result)
+        }
+
 
     return (
         <>
