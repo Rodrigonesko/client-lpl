@@ -33,8 +33,6 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
         })
         setFlushHook(true)
         setSnackSelect(true)
-        console.log(resultado)
-        console.log(id, status)
     }
 
     useEffect(() => {
@@ -66,22 +64,6 @@ const TabelaInventario = ({ flushHook, setFlushHook }) => {
     const handleCloseSelect = () => {
         setSnackSelect(false)
     }
-
-
-    const handleFilter = async () => {
-        try {
-            setLoading(true);
-            const result = await filterInventario(
-                nomeItem,
-                ondeEsta,
-                etiqueta,
-                status,
-                page,
-                rowsPerPage,
-            )
-            setSolicitacoes(result.result)
-        }
-
 
     return (
         <>

@@ -82,3 +82,7 @@ export const sendMessageBradesco = async (data) => {
 export const sendTemplateMessageBradesco = async (data) => {
     return await new ApiCall('/conversa/sendTemplateMessage', URL_API_BRADESCO).post(data)
 }
+
+export const createNumeroBradesco = async (data) => {
+    return await new ApiCall('/conversa/createNumber', URL_API_BRADESCO).post(data)
+}

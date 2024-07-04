@@ -43,7 +43,7 @@ const Contacts = () => {
                     if (response.error) {
                         return
                     }
-                    setContacts(response)
+                    setContacts(response.numeros)
                 }
             } catch (error) {
                 console.log(error);
@@ -82,7 +82,7 @@ const Contacts = () => {
                     if (response.error) {
                         return
                     }
-                    setContacts(response)
+                    setContacts(response.numeros)
                 }
             } catch (error) {
                 console.log(error);

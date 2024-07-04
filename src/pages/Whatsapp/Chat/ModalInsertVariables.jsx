@@ -37,7 +37,9 @@ const ModalInsertVariables = ({ template }) => {
                 throw new Error('Preencha todas as variáveis')
             }
 
-            if (whatsappReceiver.whatsapp !== 'whatsapp:+551150399889') {
+            console.log(whatsappSender);
+
+            if (whatsappSender !== 'whatsapp:+551150399889') {
                 await sendTemplateMessage({
                     de: whatsappSender,
                     para: whatsappReceiver.whatsapp,
@@ -47,6 +49,7 @@ const ModalInsertVariables = ({ template }) => {
                     messagingServiceSid: template.messagingServiceSid
                 })
             } else {
+                console.log('bradesco');
                 await sendTemplateMessageBradesco({
                     to: whatsappReceiver.whatsapp,
                     templateId: template.contentSid,
