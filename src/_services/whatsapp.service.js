@@ -1,5 +1,6 @@
 import { ApiCall } from "./api";
 const URL_API = process.env.REACT_APP_WHATSAPP_SERVICE
+const URL_API_BRADESCO = 'http://localhost:3004'
 const token = localStorage.getItem('token')
 
 export const getTemplates = async () => {
@@ -62,4 +63,22 @@ export const sendFiles = async (data) => {
     return await new ApiCall('/whatsapp/sendFiles', URL_API, token, {
         headers: { "Content-Type": `multipart/form-data; boundary=${data._boundary}` }
     }).post(data)
+}
+
+/* SINDICANCIA BRADESCO */
+
+export const getContactsBradesco = async (pesquisa, page, limit) => {
+    return await new ApiCall(`/conversa/getNumbersByFilter?pesquisa=${pesquisa}&page=${page}&limit=${limit}`, URL_API_BRADESCO).get()
+}
+
+export const getChatBradescoByNumber = async (whatsapp) => {
+    return await new ApiCall(`/conversa/getAllChat/${whatsapp}`, URL_API_BRADESCO).get()
+}
+
+export const sendMessageBradesco = async (data) => {
+    return await new ApiCall('/conversa/sendMessage', URL_API_BRADESCO).post(data)
+}
+
+export const sendTemplateMessageBradesco = async (data) => {
+    return await new ApiCall('/conversa/sendTemplateMessage', URL_API_BRADESCO).post(data)
 }

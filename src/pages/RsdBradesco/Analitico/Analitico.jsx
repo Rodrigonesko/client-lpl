@@ -41,34 +41,37 @@ const AnaliticoRsdBradesco = () => {
         falhaTentativaDeContato: 0,
     })
 
-    const handleFilter = async () => {
 
-        if (moment(dataInicio).isAfter(dataFim)) {
-            console.log('Data início não pode ser maior que a data fim')
-            return
-        }
-
-        if (dataInicio === '' || dataFim === '') {
-            console.log('Preencha as datas')
-            return
-        }
-
-        setLoading(true)
-
-        try {
-            const result = await getQuantidadePacotes(dataInicio, dataFim)
-            setData(result)
-            const pedido = await getQuantidadePedidos(dataInicio, dataFim)
-            setPedidos(pedido)
-            const parecer = await getQuantidadePareceres(dataInicio, dataFim)
-            setPareceres(parecer)
-        } catch (error) {
-            console.log(error);
-        }
-        setLoading(false)
-    }
 
     useEffect(() => {
+
+        const handleFilter = async () => {
+
+            if (moment(dataInicio).isAfter(dataFim)) {
+                console.log('Data início não pode ser maior que a data fim')
+                return
+            }
+
+            if (dataInicio === '' || dataFim === '') {
+                console.log('Preencha as datas')
+                return
+            }
+
+            setLoading(true)
+
+            try {
+                const result = await getQuantidadePacotes(dataInicio, dataFim)
+                setData(result)
+                const pedido = await getQuantidadePedidos(dataInicio, dataFim)
+                setPedidos(pedido)
+                const parecer = await getQuantidadePareceres(dataInicio, dataFim)
+                setPareceres(parecer)
+            } catch (error) {
+                console.log(error);
+            }
+            setLoading(false)
+        }
+
         if (dataInicio && dataFim) {
             handleFilter()
         }

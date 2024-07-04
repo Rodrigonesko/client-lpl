@@ -18,19 +18,21 @@ const Prestadores = () => {
     const [pedidos, setPedidos] = useState([])
     const [pesquisa, setPesquisa] = useState('')
 
-    const fetch = async () => {
-        setLoading(true)
-        try {
-            const get = await getPrestadoresByFilter(pesquisa, page, rowsPerPage)
-            setPedidos(get.pedidos)
-            setTotalPages(get.total)
-        } catch (error) {
-            console.log(error);
-        }
-        setLoading(false)
-    }
 
     useEffect(() => {
+        const fetch = async () => {
+            setLoading(true)
+            try {
+                const get = await getPrestadoresByFilter(pesquisa, page, rowsPerPage)
+                setPedidos(get.pedidos)
+                setTotalPages(get.total)
+            } catch (error) {
+                console.log(error);
+            }
+            setLoading(false)
+        }
+
+
         fetch()
     }, [page, rowsPerPage, pesquisa])
 

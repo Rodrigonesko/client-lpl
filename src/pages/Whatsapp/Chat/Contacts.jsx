@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemText, Typography, Badge, TextField, IconButton } from '@mui/material'
-import { getContacts, getFilterContactsRsd } from '../../../_services/whatsapp.service'
+import { getContacts, getContactsBradesco, getFilterContactsRsd } from '../../../_services/whatsapp.service'
 import { ChatContext } from './ChatContext'
 import moment from 'moment'
 import { Close, Search } from '@mui/icons-material'
@@ -38,7 +38,13 @@ const Contacts = () => {
                     }
                     setContacts(response.segurados)
                 }
-
+                if(whatsappSender === 'whatsapp:+551150399889'){
+                    const response = await getContactsBradesco('', 1, 100)
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response)
+                }
             } catch (error) {
                 console.log(error);
                 setContacts([])
@@ -48,7 +54,6 @@ const Contacts = () => {
     }, [whatsappSender, flushHook, responsavel])
 
     useEffect(() => {
-
         const fetch = async () => {
             try {
                 if (whatsappSender === 'whatsapp:+551150264875') {
@@ -67,11 +72,17 @@ const Contacts = () => {
                 }
                 if(whatsappSender === 'whatsapp:+551150397403'){
                     const response = await getSeguradoByFilter(search, 1, 100)
-                    console.log(response);
                     if (response.error) {
                         return
                     }
                     setContacts(response.segurados)
+                }
+                if(whatsappSender === 'whatsapp:+551150399889'){
+                    const response = await getContactsBradesco(search, 1, 100)
+                    if (response.error) {
+                        return
+                    }
+                    setContacts(response)
                 }
             } catch (error) {
                 console.log(error);

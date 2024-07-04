@@ -84,7 +84,7 @@ import BaixaAgd from "./pages/Rsd/BaixaAgd/BaixaAgd";
 import UploadEntrevistas from './pages/TeleEntrevistas/Upload/UploadEntrevistas'
 import Agendar from "./pages/TeleEntrevistas/Agenda/Agendar/Agendar";
 import Agendado from "./pages/TeleEntrevistas/Agenda/Agendado/Agendado";
-import Mensagens from "./pages/TeleEntrevistas/Agenda/Mensagens/Mensagens";
+// import Mensagens from "./pages/TeleEntrevistas/Agenda/Mensagens/Mensagens";
 import Formulario from "./pages/TeleEntrevistas/Formulario/Formulario";
 import EntrevistasRealizadas from "./pages/TeleEntrevistas/EntrevistasRealizadas/EntrevistasRealizadas";
 import EditarEntrevista from "./pages/TeleEntrevistas/EditarEntrevista/EditarEntrevista";
@@ -106,7 +106,6 @@ import AtendimentoHumanizado from "./pages/TeleEntrevistas/Mensagens/Necessário
 import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/RespostasJanelasHorarios/RespostasJanelasHorarios";
 import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
-import Dicionario from "./pages/TeleEntrevistas/Dicionario/Dicionario";
 
 import ProtFiltros from "./pages/PrototipoTele/ProtFiltros/ProtFiltros";
 import ProtDetalhesTele from "./pages/PrototipoTele/ProtDetalhesTele/ProtDetalhesTele";
@@ -339,9 +338,9 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/agenda/agendados" element={<ProtectedRoute>
                     <Agendado />
                 </ProtectedRoute>} />
-                <Route exact path="/entrevistas/agenda/mensagens" element={<ProtectedRoute>
+                {/* <Route exact path="/entrevistas/agenda/mensagens" element={<ProtectedRoute>
                     <Mensagens />
-                </ProtectedRoute>} />
+                </ProtectedRoute>} /> */}
                 <Route exact path="/entrevistas/formulario/:id" element={<ProtectedRoute>
                     <Formulario />
                 </ProtectedRoute>} />
@@ -401,9 +400,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/conversas" element={<ProtectedRoute>
                     <Conversas />
-                </ProtectedRoute>} />
-                <Route exact path="/dicionario" element={<ProtectedRoute>
-                    <Dicionario />
                 </ProtectedRoute>} />
 
                 {/* Prototipo Tele */}

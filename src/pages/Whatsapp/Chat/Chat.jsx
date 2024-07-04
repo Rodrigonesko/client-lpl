@@ -4,7 +4,7 @@ import { Add, Send } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import TemplateMenu from "./TemplateMenu";
 import { useContext, useEffect, useState } from "react";
-import { assumirConversaRsd, getMessagesRsd, readMessagesRsd, sendMessage } from "../../../_services/whatsapp.service";
+import { assumirConversaRsd, getChatBradescoByNumber, getMessagesRsd, readMessagesRsd, sendMessage, sendMessageBradesco } from "../../../_services/whatsapp.service";
 import { ChatContext } from "./ChatContext";
 import moment from "moment";
 import { io } from "socket.io-client";
@@ -28,11 +28,18 @@ const Chat = () => {
         try {
             if (message === '') return
             setLoadingSend(true)
-            await sendMessage({
-                de: whatsappSender,
-                para: whatsappReceiver.whatsapp,
-                mensagem: message
-            })
+            if (whatsappSender !== 'whatsapp:+551150399889') {
+                await sendMessage({
+                    de: whatsappSender,
+                    para: whatsappReceiver.whatsapp,
+                    mensagem: message
+                })
+            } else {
+                await sendMessageBradesco({
+                    para: whatsappReceiver.whatsapp,
+                    mensagem: message
+                })
+            }
             setMessage('')
             setLoadingSend(false)
         } catch (error) {
@@ -48,7 +55,6 @@ const Chat = () => {
             console.log(error);
         }
     }
-
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -83,9 +89,18 @@ const Chat = () => {
                 setMessages(response?.mensagens)
                 console.log(response);
             }
-
+            if (whatsappSender === 'whatsapp:+551150399889') {
+                const response = await getChatBradescoByNumber(whatsappReceiver.whatsapp)
+                console.log(response);
+                if (response.error) {
+                    setMessages([])
+                    return console.log(response.error)
+                }
+                setMessages(response)
+            }
         }
-        if (whatsappReceiver._id) {
+
+        if (whatsappReceiver._id || whatsappReceiver.whatsapp) {
             fetchMessages()
         }
     }, [whatsappReceiver])

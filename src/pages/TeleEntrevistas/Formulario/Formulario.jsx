@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import RoteiroTeleEntrevista from "../../../components/RoteiroTeleEntrevista/RoteiroTeleEntrevista";
 import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoPessoaEntrevista";
-import InfoAdicionais from "./InfoAdicional/InfoAdicional";
+import InfoAdicionais from "./components/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography, Container, Collapse, RadioGroup, FormControlLabel, Radio, Divider, Chip, Dialog, DialogContent } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
 import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
@@ -394,10 +394,9 @@ const Formulario = () => {
                                             * Cobertura Parcial Temporária (CPT) aquela que admite, por um período ininterrupto de até 24 meses, a partir da data da contratação ou adesão ao plano privado de assistência à saúde, a suspensão da cobertura de Procedimentos de Alta Complexidade (PAC), leitos de alta tecnologia e procedimentos cirúrgicos, desde que relacionados exclusivamente às doenças ou lesões preexistentes declaradas pelo beneficiário ou seu representante legal. (para os CIDs declarados, não para todo tipo de tratamento)
                                         </Typography>
                                     </Alert>
-                                    <FormControlTextField label='Qual divergência?' name='qual-divergencia' onChange={e => setQualDivergencia(e.target.value)} placeholder={'Resposta'} value={qualDivergencia} />
+                                    {/* <FormControlTextField label='Qual divergência?' name='qual-divergencia' onChange={e => setQualDivergencia(e.target.value)} placeholder={'Resposta'} value={qualDivergencia} /> */}
                                     <FormControlTextField label='Por que o beneficiário não informou na Declaração de Saúde essas patologias?' name='motivo-beneficiario' onChange={e => setMotivoBeneficiario(e.target.value)} placeholder={'Resposta'} value={motivoBeneficiario} />
                                     <Cids cidsSelecionados={cidsSelecionados} setCidsSeleciados={setCidsSelecionados} />
-
                                 </Box>
                             </Box>
                         </Collapse>
@@ -450,7 +449,14 @@ const Formulario = () => {
                                             return
                                         }
                                     }
-                                    console.log(divergencia);
+
+                                    if (divergencia && cidsSelecionados.length === 0) {
+                                        setOpenDialog(false)
+                                        setOpenToast(true)
+                                        setMessageToast('Selecione os CIDs da divergência!')
+                                        setSeverityToast('error')
+                                        return
+                                    }
 
                                     const data = await finalizarEntrevista(
                                         {

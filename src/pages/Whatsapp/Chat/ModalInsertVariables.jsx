@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, MenuItem, TextField, Typography } from "@mui/material"
 import { useContext, useEffect, useState } from "react"
-import { sendTemplateMessage } from "../../../_services/whatsapp.service"
+import { sendTemplateMessage, sendTemplateMessageBradesco } from "../../../_services/whatsapp.service"
 import Toast from "../../../components/Toast/Toast"
 import { ChatContext } from "./ChatContext"
 
@@ -37,15 +37,23 @@ const ModalInsertVariables = ({ template }) => {
                 throw new Error('Preencha todas as variáveis')
             }
 
-            await sendTemplateMessage({
-                de: whatsappSender,
-                para: whatsappReceiver.whatsapp,
-                mensagem: message,
-                contentSid: template.contentSid,
-                contentVariables: variables,
-                messagingServiceSid: template.messagingServiceSid
-            })
-
+            if (whatsappReceiver.whatsapp !== 'whatsapp:+551150399889') {
+                await sendTemplateMessage({
+                    de: whatsappSender,
+                    para: whatsappReceiver.whatsapp,
+                    mensagem: message,
+                    contentSid: template.contentSid,
+                    contentVariables: variables,
+                    messagingServiceSid: template.messagingServiceSid
+                })
+            } else {
+                await sendTemplateMessageBradesco({
+                    to: whatsappReceiver.whatsapp,
+                    templateId: template.contentSid,
+                    variables: variables.map(v => ({ name: v.name, value: v.value })),
+                    mensagem: message
+                })
+            }
             setLoading(false)
             setOpen(false)
             setOpenToast(true)
@@ -151,7 +159,7 @@ const ModalInsertVariables = ({ template }) => {
                         disabled={loading}
                         endIcon={loading && <CircularProgress size={20} />}
                     >
-                        Salvar
+                        Enviar
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -19,11 +19,12 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
         setLoading(true)
         try {
             let result
-            if (proposta.tipoContrato === 'ADESÃO') {
-                result = await mandaAtendimentoAutomatizado(proposta._id)
-            } else {
-                result = await sendMessageSaudacao(proposta._id)
-            }
+            // if (proposta.tipoContrato === 'ADESÃO') {
+            //     result = await mandaAtendimentoAutomatizado(proposta._id)
+            // } else {
+            console.log(proposta._id);
+            result = await sendMessageSaudacao({ _id: proposta._id })
+            // }
             console.log(result);
             setOpenToast(true)
             setToastMessage('Mensagem enviada com sucesso!')

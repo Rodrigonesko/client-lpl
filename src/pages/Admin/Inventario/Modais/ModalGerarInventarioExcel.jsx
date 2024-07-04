@@ -1,6 +1,5 @@
 import { FaFileExcel } from "react-icons/fa";
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
-import { blue } from "@mui/material/colors";
 import { findAllInventario } from "../../../../_services/inventario.service";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
