@@ -184,6 +184,7 @@ import Prestadores from "./pages/RsdBradesco/Prestadores/Prestadores";
 import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
 import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
 import Contatos from "./pages/Sindicancia/Contatos/Contatos";
+import UrgenciaEmergenciaNew from "./pages/UrgenciaEmergenciaNew/UrgenciaEmergenciaNew";
 
 const AppRoutes = () => {
     return (
@@ -192,6 +193,11 @@ const AppRoutes = () => {
                 <Route exact path="/login" element={<Login />} />
 
                 {/* <ProtectedRoute path='/' element='<Home />' /> */}
+
+                {/* Urgencia Emergencia Novo */}
+                <Route exact path="/urgenciaEmergenciaNew" element={<ProtectedRoute>
+                    <UrgenciaEmergenciaNew />
+                </ProtectedRoute>} />
 
                 {/* RSD Bradesco */}
                 <Route exact path="/bradesco/rsdBradesco" element={<ProtectedRoute>
