@@ -215,7 +215,11 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/urgenciaEmergencia/todos'>Concluídos</Link></MenuItem>
                         <MenuItem><Link to='/urgenciaEmergencia/producao'>Produção</Link></MenuItem>
                         <MenuItem><Link to='/urgenciaEmergencia/upload'>Upload</Link></MenuItem>
-
+                        {
+                            acessos?.administrador && (
+                                <MenuItem><Link to='/urgenciaEmergenciaNew' >Urgência Emergência New</Link></MenuItem>
+                            )
+                        }
                     </SubMenu>
                     <SubMenu title='RSD' icon={<FaDonate></FaDonate>}>
                         <MenuItem><Link to='/Rsd/PainelProcesso'>Painel de Processos</Link></MenuItem>
