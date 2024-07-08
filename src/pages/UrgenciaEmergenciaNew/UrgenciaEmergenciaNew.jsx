@@ -1,8 +1,10 @@
-import { Box, CircularProgress, Container, FormControl, InputLabel, MenuItem, Pagination, Select, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from "@mui/material"
+import { Box, CircularProgress, Container, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField, Tooltip, Typography } from "@mui/material"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import Title from "../../components/Title/Title"
 import { blue, red } from "@mui/material/colors"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { filterUrgenciasEmergencias } from "../../_services/urgenciaEmergenciaNew.service"
+import { ArrowForwardIosOutlined } from "@mui/icons-material"
 
 const tabStyle = {
     '&:hover': {
@@ -42,20 +44,50 @@ const TabIcon = ({ children, value, status }) => {
 
 const UrgenciaEmergenciaNew = () => {
 
-    const [status, setStatus] = useState('A INICIAR')
+    const [status, setStatus] = useState('A Iniciar')
     const [totais, setTotais] = useState({
         total: 0,
         totalAIniciar: 0,
-        totalAgendado: 0,
         totalEmAndamento: 0,
         totalConcluido: 0,
-        totalCancelado: 0
     })
 
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
+
+    const [urgenciaEmergencia, setUrgenciaEmergencia] = useState([])
+    const [pesquisa, setPesquisa] = useState('')
+
+    const fetch = async () => {
+        setLoading(true)
+        try {
+            const get = await filterUrgenciasEmergencias(status, pesquisa, page, rowsPerPage)
+            setUrgenciaEmergencia(get.urgencias)
+            setTotalPages(get.total)
+            const [totalAIniciar, totalEmAndamento, totalConcluido, todos] = await Promise.all([
+                filterUrgenciasEmergencias('A Iniciar', '', 1, 1),
+                filterUrgenciasEmergencias('Andamento', '', 1, 1),
+                filterUrgenciasEmergencias('Concluído', '', 1, 1),
+                filterUrgenciasEmergencias('', '', 1, 1)
+            ].map((promise) => promise.then((res) => res.total)))
+            setTotais({
+                total: todos,
+                totalAIniciar,
+                totalEmAndamento,
+                totalConcluido
+            })
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetch()
+    }, [status, pesquisa, page, rowsPerPage])
+
 
     return (
         <>
@@ -74,13 +106,19 @@ const UrgenciaEmergenciaNew = () => {
                             mt: 1,
                         }}
                     >
-                        <Tab value={'A INICIAR'} label="A iniciar" icon={<TabIcon status={status} value={'A INICIAR'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                        <Tab value={'AGENDADO'} label="Agendado" icon={<TabIcon status={status} value={'AGENDADO'}>{totais.totalAgendado}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                        <Tab value={'EM ANDAMENTO'} label="Em andamento" icon={<TabIcon status={status} value={'EM ANDAMENTO'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                        <Tab value={'SUCESSO CONTATO'} label="Sucesso" icon={<TabIcon status={status} value={'SUCESSO CONTATO'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                        <Tab value={'INSUCESSO CONTATO'} label="Insucesso" icon={<TabIcon status={status} value={'INSUCESSO CONTATO'}>{totais.totalCancelado}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                        <Tab value={'A Iniciar'} label="A iniciar" icon={<TabIcon status={status} value={'A Iniciar'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                        <Tab value={'Andamento'} label="Em andamento" icon={<TabIcon status={status} value={'Andamento'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                        <Tab value={'Concluído'} label="Concluído" icon={<TabIcon status={status} value={'Concluído'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
                         <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     </Tabs>
+                    <Box sx={{ mt: 2, mb: 3 }}>
+                        <TextField type='text' label='Nome, MO ou Proposta' fullWidth size='small' value={pesquisa} onChange={(e) => { setPesquisa(e.target.value) }} InputProps={{
+                            style: {
+                                borderRadius: '10px'
+                            }
+                        }} />
+                    </Box>
+
                     <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                         <FormControl size="small" disabled={loading}>
                             <InputLabel>Linhas</InputLabel>
@@ -123,6 +161,20 @@ const UrgenciaEmergenciaNew = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
+                                        {urgenciaEmergencia.map((item) => (
+                                            <TableRow key={item._id}>
+                                                <TableCell>{item.nomeAssociado}</TableCell>
+                                                <TableCell>{item.numAssociado}</TableCell>
+                                                <TableCell>{item.pedido}</TableCell>
+                                                <TableCell>{item.retorno}</TableCell>
+                                                <TableCell>{item.observacoes}</TableCell>
+                                                <TableCell>{
+                                                    <Tooltip title='Detalhes'>
+                                                        <IconButton><ArrowForwardIosOutlined /></IconButton>
+                                                    </Tooltip>
+                                                }</TableCell>
+                                            </TableRow>
+                                        ))}
                                     </TableBody>
                                 </Table>
                             ) : (
