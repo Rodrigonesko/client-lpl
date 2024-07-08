@@ -112,7 +112,7 @@ const UrgenciaEmergenciaNew = () => {
                         <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     </Tabs>
                     <Box sx={{ mt: 2, mb: 3 }}>
-                        <TextField type='text' label='Nome, MO ou Proposta' fullWidth size='small' value={pesquisa} onChange={(e) => { setPesquisa(e.target.value) }} InputProps={{
+                        <TextField type='text' label='Nome, MO ou Pedido' fullWidth size='small' value={pesquisa} onChange={(e) => { setPesquisa(e.target.value) }} InputProps={{
                             style: {
                                 borderRadius: '10px'
                             }
