@@ -5,6 +5,7 @@ import { blue, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterUrgenciasEmergencias } from "../../_services/urgenciaEmergenciaNew.service"
 import { ArrowForwardIosOutlined } from "@mui/icons-material"
+import Upload from "./Upload/Upload"
 
 const tabStyle = {
     '&:hover': {
@@ -93,7 +94,10 @@ const UrgenciaEmergenciaNew = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size={'medium'}>Urgência Emergência</Title>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Title size={'medium'}>Urgência Emergência</Title>
+                        <Upload />
+                    </Box>
                     <Tabs
                         value={status}
                         onChange={(e, newValue) => setStatus(newValue)}

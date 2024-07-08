@@ -199,9 +199,6 @@ const AppRoutes = () => {
                 <Route exact path="/urgenciaEmergenciaNew" element={<ProtectedRoute>
                     <UrgenciaEmergenciaNew />
                 </ProtectedRoute>} />
-                <Route exact path="/urgenciaEmergenciaNew/upload" element={<ProtectedRoute>
-                    <Upload />
-                </ProtectedRoute>} />
 
                 {/* RSD Bradesco */}
                 <Route exact path="/bradesco/rsdBradesco" element={<ProtectedRoute>
