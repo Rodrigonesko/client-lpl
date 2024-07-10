@@ -175,7 +175,7 @@ const UrgenciaEmergenciaNew = () => {
                                                 <TableCell>{
                                                     <>
                                                         {
-                                                            (item.status === 'A INICIAR') && <Delete pedido={item} setLoading={setLoading} />
+                                                            (item.status === 'A Iniciar') && <Delete pedido={item} setLoading={setLoading} />
                                                         }
                                                         <Tooltip title='Detalhes'>
                                                             <IconButton><ArrowForwardIosOutlined /></IconButton>

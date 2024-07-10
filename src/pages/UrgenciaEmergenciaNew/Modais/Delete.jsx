@@ -28,7 +28,7 @@ const Delete = ({ pedido, setLoading }) => {
     return (
         <>
             <Tooltip title='Deletar' >
-                <IconButton onClick={handleOpen}><DeleteOutline /></IconButton>
+                <IconButton color='error' onClick={handleOpen}><DeleteOutline /></IconButton>
                 <Dialog
                     open={open}
                 >

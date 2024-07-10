@@ -1,6 +1,7 @@
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Snackbar, TextField } from "@mui/material"
 import axios from "axios";
 import { useState } from "react";
+import { createInventario } from "../../../../_services/inventario.service";
 
 const ModalCriarInventario = ({ setFlushHook }) => {
 
@@ -85,7 +86,7 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                 return
             }
 
-            const resultado = await axios.post(process.env.REACT_APP_API_KEY + '/inventario/request', {
+            const resultado = await createInventario({
                 nome: dados.nomeItem,
                 status: dados.status,
                 etiqueta: dados.etiqueta,
@@ -93,11 +94,6 @@ const ModalCriarInventario = ({ setFlushHook }) => {
                 descricao: dados.descricao,
                 dataDeCompra: dados.dataDeCompra,
                 tempoGarantia: dados.tempoGarantia
-            }, {
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
             })
             console.log(resultado)
             setOpenSnack(true)
