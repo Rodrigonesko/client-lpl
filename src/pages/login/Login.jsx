@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { TextField, Button, Box, Tooltip, IconButton, InputAdornment, Paper, Grid } from "@mui/material";
+import { TextField, Button, Box, Tooltip, IconButton, InputAdornment, Paper, Grid, CircularProgress } from "@mui/material";
 import AuthContext from "../../context/AuthContext";
 import Axios from 'axios'
 import logo from '../../imgs/logo.png'
@@ -12,7 +12,7 @@ const Login = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
@@ -25,8 +25,7 @@ const Login = () => {
 
     const login = async (e) => {
         e.preventDefault()
-        console.log(email, password);
-        
+        setLoading(true)
         try {
             const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/login`, {
                 email,
@@ -42,7 +41,7 @@ const Login = () => {
                 setOpen(true)
                 setMessage('Login efetuado com sucesso!')
                 setSeverity('success')
-
+                setLoading(false)
                 await Axios.post(`${process.env.REACT_APP_API_KEY}/controleAtividade/iniciarPadrao`, {
                     name: result.data.user
                 }, {
@@ -52,13 +51,13 @@ const Login = () => {
                     }
                 })
                 window.location.replace('/')
-
             }
         } catch (error) {
             console.log(error);
             setOpen(true)
             setMessage('Erro ao efetuar login!')
             setSeverity('error')
+            setLoading(false)
         }
 
     }
@@ -123,6 +122,7 @@ const Login = () => {
                             InputProps={{
                                 style: { borderRadius: '10px' }
                             }}
+                            disabled={loading}
                         />
                         <TextField
                             placeholder='Senha'
@@ -150,8 +150,9 @@ const Login = () => {
                                 ),
                                 style: { borderRadius: '10px' }
                             }}
+                            disabled={loading}
                         />
-                        <Button type='submit' variant='contained' fullWidth onClick={login} sx={{ borderRadius: '10px', mt: 2 }} >Entrar</Button>
+                        <Button disabled={loading} endIcon={loading && <CircularProgress size={20} />} type='submit' variant='contained' fullWidth onClick={login} sx={{ borderRadius: '10px', mt: 2 }} >Entrar</Button>
                     </form>
                 </Box>
             </Grid>

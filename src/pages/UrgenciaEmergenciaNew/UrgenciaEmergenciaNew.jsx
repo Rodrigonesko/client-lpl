@@ -5,7 +5,8 @@ import { blue, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterUrgenciasEmergencias } from "../../_services/urgenciaEmergenciaNew.service"
 import { ArrowForwardIosOutlined } from "@mui/icons-material"
-import Upload from "./Upload/Upload"
+import Upload from "./components/Upload"
+import ModalRelatorio from "./components/modalRelatorio"
 
 const tabStyle = {
     '&:hover': {
@@ -45,7 +46,7 @@ const TabIcon = ({ children, value, status }) => {
 
 const UrgenciaEmergenciaNew = () => {
 
-    const [status, setStatus] = useState('A Iniciar')
+    const [status, setStatus] = useState('A INICIAR')
     const [totais, setTotais] = useState({
         total: 0,
         totalAIniciar: 0,
@@ -57,6 +58,7 @@ const UrgenciaEmergenciaNew = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
 
     const [urgenciaEmergencia, setUrgenciaEmergencia] = useState([])
     const [pesquisa, setPesquisa] = useState('')
@@ -64,14 +66,34 @@ const UrgenciaEmergenciaNew = () => {
     const fetch = async () => {
         setLoading(true)
         try {
-            const get = await filterUrgenciasEmergencias(status, pesquisa, page, rowsPerPage)
+            const get = await filterUrgenciasEmergencias({
+                status,
+                pesquisa,
+                page,
+                limit: rowsPerPage
+            })
             setUrgenciaEmergencia(get.urgencias)
             setTotalPages(get.total)
             const [totalAIniciar, totalEmAndamento, totalConcluido, todos] = await Promise.all([
-                filterUrgenciasEmergencias('A Iniciar', '', 1, 1),
-                filterUrgenciasEmergencias('Andamento', '', 1, 1),
-                filterUrgenciasEmergencias('Concluído', '', 1, 1),
-                filterUrgenciasEmergencias('', '', 1, 1)
+                filterUrgenciasEmergencias({
+                    status: 'A INICIAR',
+                    page: 1,
+                    limit: 1
+                }),
+                filterUrgenciasEmergencias({
+                    status: 'EM ANDAMENTO',
+                    page: 1,
+                    limit: 1
+                }),
+                filterUrgenciasEmergencias({
+                    status: 'CONCLUÍDO',
+                    page: 1,
+                    limit: 1
+                }),
+                filterUrgenciasEmergencias({
+                    page: 1,
+                    limit: 1
+                })
             ].map((promise) => promise.then((res) => res.total)))
             setTotais({
                 total: todos,
@@ -87,8 +109,7 @@ const UrgenciaEmergenciaNew = () => {
 
     useEffect(() => {
         fetch()
-    }, [status, pesquisa, page, rowsPerPage])
-
+    }, [status, pesquisa, page, rowsPerPage, refresh])
 
     return (
         <>
@@ -96,11 +117,21 @@ const UrgenciaEmergenciaNew = () => {
                 <Container maxWidth>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Title size={'medium'}>Urgência Emergência</Title>
-                        <Upload />
+                        <Box
+                            display='flex'
+                            alignItems='center'
+                            gap={2}
+                        >
+                            <ModalRelatorio />
+                            <Upload setRefresh={setRefresh} />
+                        </Box>
                     </Box>
                     <Tabs
                         value={status}
-                        onChange={(e, newValue) => setStatus(newValue)}
+                        onChange={(e, newValue) => {
+                            setStatus(newValue)
+                            setPage(1)
+                        }}
                         variant="scrollable"
                         scrollButtons="auto"
                         sx={{
@@ -110,13 +141,16 @@ const UrgenciaEmergenciaNew = () => {
                             mt: 1,
                         }}
                     >
-                        <Tab value={'A Iniciar'} label="A iniciar" icon={<TabIcon status={status} value={'A Iniciar'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
-                        <Tab value={'Andamento'} label="Em andamento" icon={<TabIcon status={status} value={'Andamento'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                        <Tab value={'A INICIAR'} label="A iniciar" icon={<TabIcon status={status} value={'A Iniciar'}>{totais.totalAIniciar}</TabIcon>} iconPosition="end" sx={tabStyle} />
+                        <Tab value={'EM ANDAMENTO'} label="Em andamento" icon={<TabIcon status={status} value={'Andamento'}>{totais.totalEmAndamento}</TabIcon>} iconPosition="end" sx={tabStyle} />
                         <Tab value={'Concluído'} label="Concluído" icon={<TabIcon status={status} value={'Concluído'}>{totais.totalConcluido}</TabIcon>} iconPosition="end" sx={tabStyle} />
                         <Tab value={''} label="Todos" icon={<TabIcon status={status} value={''}>{totais.total}</TabIcon>} iconPosition="end" sx={tabStyle} />
                     </Tabs>
                     <Box sx={{ mt: 2, mb: 3 }}>
-                        <TextField type='text' label='Nome, MO ou Pedido' fullWidth size='small' value={pesquisa} onChange={(e) => { setPesquisa(e.target.value) }} InputProps={{
+                        <TextField type='text' label='Nome, MO ou Pedido' fullWidth size='small' value={pesquisa} onChange={(e) => {
+                            setPesquisa(e.target.value)
+                            setPage(1)
+                        }} InputProps={{
                             style: {
                                 borderRadius: '10px'
                             }
@@ -174,7 +208,10 @@ const UrgenciaEmergenciaNew = () => {
                                                 <TableCell>{item.observacoes}</TableCell>
                                                 <TableCell>{
                                                     <Tooltip title='Detalhes'>
-                                                        <IconButton><ArrowForwardIosOutlined /></IconButton>
+                                                        <IconButton
+                                                            href={`/urgenciaEmergencia/detalhes/${item._id}`}
+                                                        ><ArrowForwardIosOutlined />
+                                                        </IconButton>
                                                     </Tooltip>
                                                 }</TableCell>
                                             </TableRow>

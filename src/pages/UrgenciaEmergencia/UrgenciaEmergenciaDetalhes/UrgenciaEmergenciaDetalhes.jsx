@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import Axios from 'axios'
 import { useParams } from "react-router-dom";
 import moment from "moment/moment";
 import { Button, Box, Container, TextField, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Alert } from "@mui/material";
 import Toast from "../../../components/Toast/Toast";
 import Title from "../../../components/Title/Title";
 import InfoLabel from "../../../components/InfoLabel/InfoLabel";
+import { findByIdUrgenciaEmergencia, updateUrgenciaEmergencia } from "../../../_services/urgenciaEmergenciaNew.service";
+import AuthContext from "../../../context/AuthContext";
 
 const UrgenciaEmergenciaDetalhes = () => {
 
     const { id } = useParams()
+    const { name } = useContext(AuthContext)
 
-    const [proposta, setProposta] = useState({})
+    const [pedido, setPedido] = useState({})
     const [telefone, setTelefone] = useState('')
     const [email, setEmail] = useState('')
     const [retorno, setRetorno] = useState('')
@@ -24,30 +26,18 @@ const UrgenciaEmergenciaDetalhes = () => {
 
     const salvarInfo = async () => {
         try {
-            const obj = {
+            await updateUrgenciaEmergencia({
+                ...pedido,
                 telefone,
                 email,
                 retorno,
-                observacoes
-            }
-
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/salvarInfo`, {
-                obj,
-                id
-            }, {
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+                observacoes,
+                analista: name
             })
-
-            if (result.status === 200) {
-                setSeverity('success')
-                setMessage('Informações salvas com sucesso!')
-                setOpen(true)
-                setFlushHook(true)
-            }
-
+            setSeverity('success')
+            setMessage('Informações salvas com sucesso!')
+            setOpen(true)
+            setFlushHook(!flushHook)
         } catch (error) {
             console.log(error);
             setSeverity('error')
@@ -58,96 +48,64 @@ const UrgenciaEmergenciaDetalhes = () => {
 
     const concluir = async () => {
         try {
-            const obj = {
-                telefone,
-                email,
-                retorno,
-                observacoes
-            }
-
-            console.log(obj);
-
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluir`, {
-                obj,
-                id
-            }, {
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            await salvarInfo()
+            await updateUrgenciaEmergencia({
+                ...pedido,
+                status: 'Concluído',
+                dataConclusao: moment().format('YYYY-MM-DD')
             })
-
-            if (result.status === 200) {
-                setSeverity('success')
-                setMessage('Concluído com sucesso!')
-                setOpen(true)
-                setFlushHook(true)
-            }
-
+            setSeverity('success')
+            setMessage('Pedido concluído com sucesso!')
+            setOpen(true)
+            setFlushHook(!flushHook)
         } catch (error) {
             console.log(error);
+            setSeverity('error')
+            setMessage('Erro ao concluir pedido!')
+            setOpen(true)
         }
     }
 
     const atribuirContato = async (contato) => {
         try {
-            const obj = {
-                contato,
-                telefone,
-                email,
-                retorno,
-                observacoes
-            }
-
-            const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/salvarContato`, {
-                obj,
-                id
-            }, {
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            await salvarInfo()
+            await updateUrgenciaEmergencia({
+                ...pedido,
+                [contato]: moment().format('YYYY-MM-DD HH:mm:ss'),
+                status: 'EM ANDAMENTO',
+                analista: name
             })
-
-            if (result.status === 200) {
-                setSeverity('success')
-                setMessage('Informações salvas com sucesso!')
-                setOpen(true)
-                setFlushHook(true)
-            }
-
+            setSeverity('success')
+            setMessage('Contato atribuído com sucesso!')
+            setOpen(true)
+            setFlushHook(!flushHook)
         } catch (error) {
             console.log(error);
+            setSeverity('error')
+            setMessage('Erro ao atribuir contato!')
+            setOpen(true)
         }
     }
 
     useEffect(() => {
         const buscarInfoProposta = async () => {
             try {
-                const result = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/detalhes/${id}`, {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-
-                setProposta(result.data.proposta)
-                setEmail(result.data.proposta.email)
-                setTelefone(result.data.proposta.telefone)
-                setRetorno(result.data.proposta.retorno)
-                setObservacoes(result.data.proposta.observacoes)
-
-                const tel = document.getElementById('telefone')
-                tel.value = result.data.proposta.telefone
-                document.getElementById('email').value = result.data.proposta.email
-
+                const result = await findByIdUrgenciaEmergencia(id)
+                setPedido(result)
+                setEmail(result.email)
+                setTelefone(result.telefone)
+                setRetorno(result.retorno)
+                setObservacoes(result.observacoes)
             } catch (error) {
                 console.log(error);
+                setSeverity('error')
+                setMessage('Erro ao buscar informações da proposta!')
+                setOpen(true)
             }
         }
-        setFlushHook(false)
-
-        buscarInfoProposta()
+        if (id) {
+            buscarInfoProposta()
+        }
     }, [id, flushHook])
 
     return (
@@ -156,26 +114,23 @@ const UrgenciaEmergenciaDetalhes = () => {
                 <Title
                     size={'medium'}
                 >
-                    Pedido {proposta.pedido}
+                    Pedido {pedido.pedido}
                 </Title>
-                {/* <div className="title">
-                    <h3>Pedido: {proposta.pedido} - {proposta.status} - {proposta.analista}</h3>
-                </div> */}
                 <Alert
-                    severity={proposta.status === 'Andamento' ? 'info' : 'success'}
+                    severity={pedido.status === 'Concluído' ? 'success' : pedido.status === 'EM ANDAMENTO' ? 'warning' : 'info'}
                     sx={{ marginBottom: '10px' }}
                     variant="filled"
                 >
-                    {proposta.status}
+                    {pedido.status}
                 </Alert>
                 <Grid container spacing={2}>
-                    <InfoLabel label='Nome' value={proposta.nomeAssociado} />
-                    <InfoLabel label='MO' value={proposta.numAssociado} />
-                    <InfoLabel label='Data Atendimento' value={proposta.dataAtendimento ? moment(proposta.dataAtendimento).format('DD/MM/YYYY') : null} />
-                    <InfoLabel label='Data Recebimento' value={moment(proposta.dataRecebimento).format('DD/MM/YYYY')} />
-                    <InfoLabel label='Data Nascimento' value={moment(proposta.dataNascimento).format('DD/MM/YYYY')} />
-                    <InfoLabel label='Idade' value={proposta.idade} />
-                    <InfoLabel label='Data Adesão' value={proposta.dataAdesao ? moment(proposta.dataAdesao).format('DD/MM/YYYY') : null} />
+                    <InfoLabel label='Nome' value={pedido.nomeAssociado} />
+                    <InfoLabel label='MO' value={pedido.numAssociado} />
+                    <InfoLabel label='Data Atendimento' value={pedido.dataAtendimento ? moment(pedido.dataAtendimento).format('DD/MM/YYYY') : null} />
+                    <InfoLabel label='Data Recebimento' value={moment(pedido.dataRecebimento).format('DD/MM/YYYY')} />
+                    <InfoLabel label='Data Nascimento' value={moment(pedido.dataNascimento).format('DD/MM/YYYY')} />
+                    <InfoLabel label='Idade' value={pedido.idade} />
+                    <InfoLabel label='Data Adesão' value={pedido.dataAdesao ? moment(pedido.dataAdesao).format('DD/MM/YYYY') : null} />
                 </Grid>
                 <Box
                     display='flex'
@@ -188,31 +143,32 @@ const UrgenciaEmergenciaDetalhes = () => {
                 </Box>
 
                 <Grid container spacing={2} mt={2}>
-                    <InfoLabel label='PRC' value={proposta.prc} />
-                    <InfoLabel label='Nome Prestador' value={proposta.nomePrestador} xl={4} />
-                    <InfoLabel label='Cid Principal' value={proposta.cidPrin} xl={4} />
-                    <InfoLabel label='Info Relatório Médico' value={proposta.relatorioMedico} />
+                    <InfoLabel label='PRC' value={pedido.prc} />
+                    <InfoLabel label='Nome Prestador' value={pedido.nomePrestador} xl={4} />
+                    <InfoLabel label='Cid Principal' value={pedido.cidPrin} xl={4} />
+                    <InfoLabel label='Info Relatório Médico' value={pedido.relatorioMedico} />
                 </Grid>
                 <Grid container spacing={2} mt={2} mb={2}>
                     <InfoLabel label='1° Contato' value={
-                        proposta.contato1 ? (moment(proposta.contato1).format('DD/MM/YYYY HH:mm')) : <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato1'} onClick={e => {
+                        pedido.contato1 ? (moment(pedido.contato1).format('DD/MM/YYYY HH:mm')) : <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato1'} onClick={e => {
                             atribuirContato(e.target.value)
                         }
                         } >1° Contato</Button>
                     } />
                     <InfoLabel label='2° Contato' value={
-                        proposta.contato2 ? (moment(proposta.contato2).format('DD/MM/YYYY HH:mm')) : <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato2'} onClick={e => {
-                            atribuirContato(e.target.value)
-                        }
-                        } >2° Contato</Button>
+                        pedido.contato2 ? (moment(pedido.contato2).format('DD/MM/YYYY HH:mm')) : pedido.contato1 &&
+                            <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato2'} onClick={e => {
+                                atribuirContato(e.target.value)
+                            }
+                            } >2° Contato</Button>
                     } />
                     <InfoLabel label='3° Contato' value={
-                        proposta.contato3 ? (moment(proposta.contato3).format('DD/MM/YYYY HH:mm')) : <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato3'} onClick={e => {
+                        pedido.contato3 ? (moment(pedido.contato3).format('DD/MM/YYYY HH:mm')) : pedido.contato2 && <Button variant="contained" size='small' className="btn-padrao-azul" value={'contato3'} onClick={e => {
                             atribuirContato(e.target.value)
                         }
                         } >3° Contato</Button>
                     } />
-                    <InfoLabel label='Responsável' value={proposta.analista} />
+                    <InfoLabel label='Responsável' value={pedido.analista} />
                 </Grid>
                 <FormControl sx={{ width: '400px' }}>
                     <InputLabel>Retificou?</InputLabel>
@@ -224,9 +180,9 @@ const UrgenciaEmergenciaDetalhes = () => {
                         }}
                     >
                         <MenuItem value=''>Selecione</MenuItem>
-                        <MenuItem value='Sim, retificou' selected={proposta.retorno === 'Sim, retificou'} >Sim, retificou</MenuItem>
-                        <MenuItem value='Não aceitou retificar' selected={proposta.retorno === 'Não aceitou retificar'} >Não aceitou retificar</MenuItem>
-                        <MenuItem value='Sem sucesso de contato' selected={proposta.retorno === 'Sem sucesso de contato'} >Sem sucesso de contato</MenuItem>
+                        <MenuItem value='Sim, retificou'>Sim, retificou</MenuItem>
+                        <MenuItem value='Não aceitou retificar'>Não aceitou retificar</MenuItem>
+                        <MenuItem value='Sem sucesso de contato'>Sem sucesso de contato</MenuItem>
                     </Select>
                 </FormControl>
                 <Box
@@ -249,9 +205,9 @@ const UrgenciaEmergenciaDetalhes = () => {
                 <Box mt={2}>
                     <Button variant='contained' onClick={salvarInfo} style={{ marginRight: '10px' }} >Salvar</Button>
                     {
-                        proposta.status === 'Andamento' ? (
+                        (pedido.status === 'A INICIAR' || pedido.status === 'EM ANDAMENTO') && (
                             <Button color="success" variant='contained' onClick={concluir} >Concluir</Button>
-                        ) : null
+                        )
                     }
                 </Box>
             </Container>
