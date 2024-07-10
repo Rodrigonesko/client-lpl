@@ -214,6 +214,9 @@ const Formulario = () => {
             if (imc >= 30 && imc <= 34.99) {
                 setIndicadorImc('OBESIDADE I')
             }
+            if (imc < 29.99) {
+                setIndicadorImc('')
+            }
         }
     }, [respostasFormulario?.peso?.resposta, respostasFormulario?.altura?.resposta])
 

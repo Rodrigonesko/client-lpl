@@ -4,7 +4,7 @@ import { Add, Send } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import TemplateMenu from "./TemplateMenu";
 import { useContext, useEffect, useState } from "react";
-import { assumirConversaRsd, getChatBradescoByNumber, getMessagesRsd, readMessagesRsd, sendMessage, sendMessageBradesco } from "../../../_services/whatsapp.service";
+import { assumirConversaRsd, getChatBradescoByNumber, getMessagesRsd, readMessagesRsd, sendMessage, sendMessageBradesco, updateNumeroBradesco } from "../../../_services/whatsapp.service";
 import { ChatContext } from "./ChatContext";
 import moment from "moment";
 import { io } from "socket.io-client";
@@ -14,6 +14,7 @@ import { getBeneficiarioByWhatsapp, updateBeneficiario } from "../../../_service
 import { getSeguradoById, updateSegurado } from "../../../_services/rsdBradesco.service";
 
 const socket = io(process.env.REACT_APP_WHATSAPP_SERVICE)
+const socketBradesco = io(process.env.REACT_APP_SOCKET_WHATS_SINDICANCIA_BRADESCO)
 
 const Chat = () => {
 
@@ -87,11 +88,13 @@ const Chat = () => {
                     return console.log(response.error)
                 }
                 setMessages(response?.mensagens)
-                console.log(response);
             }
             if (whatsappSender === 'whatsapp:+551150399889') {
                 const response = await getChatBradescoByNumber(whatsappReceiver.whatsapp)
-                console.log(response);
+                await updateNumeroBradesco({
+                    ...whatsappReceiver,
+                    quantidadeMensagens: 0
+                })
                 if (response.error) {
                     setMessages([])
                     return console.log(response.error)
@@ -112,6 +115,14 @@ const Chat = () => {
 
     useEffect(() => {
         socket.on('messageReceived', (message) => {
+            const lastMessage = message.mensagens[message.mensagens.length - 1]
+            if (message.whatsapp === whatsappReceiver.whatsapp || lastMessage.de === whatsappSender) {
+                setMessages(message.mensagens)
+            }
+            setFlushHook((prev) => !prev)
+        })
+        socketBradesco.on('message', (message) => {
+            console.log(message);
             const lastMessage = message.mensagens[message.mensagens.length - 1]
             if (message.whatsapp === whatsappReceiver.whatsapp || lastMessage.de === whatsappSender) {
                 setMessages(message.mensagens)
@@ -198,9 +209,9 @@ const Chat = () => {
                     id="chat"
                 >
                     {
-                        messages.map(message => (
+                        messages.map((message, index) => (
                             <Box
-                                key={message.sid}
+                                key={index}
                                 sx={{
                                     display: 'flex',
                                     gap: '10px',
