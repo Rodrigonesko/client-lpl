@@ -185,7 +185,6 @@ import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
 import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
 import Contatos from "./pages/Sindicancia/Contatos/Contatos";
 import UrgenciaEmergenciaNew from "./pages/UrgenciaEmergenciaNew/UrgenciaEmergenciaNew";
-import Upload from "./pages/UrgenciaEmergenciaNew/Upload/Upload";
 
 const AppRoutes = () => {
     return (

@@ -4,8 +4,9 @@ import Title from "../../components/Title/Title"
 import { blue, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterUrgenciasEmergencias } from "../../_services/urgenciaEmergenciaNew.service"
-import { ArrowForwardIosOutlined } from "@mui/icons-material"
-import Upload from "./Upload/Upload"
+import { ArrowForwardIosOutlined, DeleteOutline } from "@mui/icons-material"
+import Upload from "./Modais/Upload"
+import Delete from "./Modais/Delete"
 
 const tabStyle = {
     '&:hover': {
@@ -122,7 +123,6 @@ const UrgenciaEmergenciaNew = () => {
                             }
                         }} />
                     </Box>
-
                     <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
                         <FormControl size="small" disabled={loading}>
                             <InputLabel>Linhas</InputLabel>
@@ -173,9 +173,14 @@ const UrgenciaEmergenciaNew = () => {
                                                 <TableCell>{item.retorno}</TableCell>
                                                 <TableCell>{item.observacoes}</TableCell>
                                                 <TableCell>{
-                                                    <Tooltip title='Detalhes'>
-                                                        <IconButton><ArrowForwardIosOutlined /></IconButton>
-                                                    </Tooltip>
+                                                    <>
+                                                        {
+                                                            (item.status === 'A INICIAR') && <Delete pedido={item} setLoading={setLoading} />
+                                                        }
+                                                        <Tooltip title='Detalhes'>
+                                                            <IconButton><ArrowForwardIosOutlined /></IconButton>
+                                                        </Tooltip>
+                                                    </>
                                                 }</TableCell>
                                             </TableRow>
                                         ))}

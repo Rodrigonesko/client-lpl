@@ -1,9 +1,8 @@
 import { Alert, Box, Button, Dialog, DialogActions, DialogContent, Input, Typography } from "@mui/material"
-import Sidebar from "../../../components/Sidebar/Sidebar"
 import { blue, grey } from "@mui/material/colors"
 import { useState } from "react";
 import * as XLSX from 'xlsx';
-import { createPedidosByPlanilha } from "../../../_services/sulAmerica.service";
+import { createUrgenciasEmergencias } from "../../../_services/urgenciaEmergenciaNew.service";
 
 const Upload = () => {
 
@@ -43,7 +42,7 @@ const Upload = () => {
                         ...row,
                     }
                 });
-                const result = await createPedidosByPlanilha(rows);
+                const result = await createUrgenciasEmergencias(rows);
                 console.log(result);
                 setMessage({
                     text: 'Arquivo enviado com sucesso - ' + result + ' propostas criadas',
@@ -79,7 +78,6 @@ const Upload = () => {
                 onClose={handleClose}
             >
                 <DialogContent>
-
                     <Box
                         sx={{
                             display: 'flex',
