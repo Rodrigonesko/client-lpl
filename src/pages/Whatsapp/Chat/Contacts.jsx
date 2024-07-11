@@ -31,14 +31,14 @@ const Contacts = () => {
                     }
                     setContacts(response)
                 }
-                if(whatsappSender === 'whatsapp:+551150397403'){
+                if (whatsappSender === 'whatsapp:+551150397403') {
                     const response = await getSeguradoByFilter('', 1, 100, 'horarioUltimaMensagem')
                     if (response.error) {
                         return
                     }
                     setContacts(response.segurados)
                 }
-                if(whatsappSender === 'whatsapp:+551150399889'){
+                if (whatsappSender === 'whatsapp:+551150399889') {
                     const response = await getContactsBradesco('', 1, 100)
                     if (response.error) {
                         return
@@ -70,14 +70,14 @@ const Contacts = () => {
                     }
                     setContacts(response)
                 }
-                if(whatsappSender === 'whatsapp:+551150397403'){
+                if (whatsappSender === 'whatsapp:+551150397403') {
                     const response = await getSeguradoByFilter(search, 1, 100)
                     if (response.error) {
                         return
                     }
                     setContacts(response.segurados)
                 }
-                if(whatsappSender === 'whatsapp:+551150399889'){
+                if (whatsappSender === 'whatsapp:+551150399889') {
                     const response = await getContactsBradesco(search, 1, 100)
                     if (response.error) {
                         return
@@ -146,13 +146,13 @@ const Contacts = () => {
             >
                 <List>
                     {
-                        contacts.map(contact => (
+                        contacts.map((contact, index) => (
                             <ListItemButton
                                 sx={{
                                     borderRadius: '10px',
                                     p: 1,
                                 }}
-                                key={contact._id}
+                                key={index}
                                 selected={whatsappReceiver.nome === contact.nome}
                                 onClick={() => setWhatsappReceiver(contact)}
                             >

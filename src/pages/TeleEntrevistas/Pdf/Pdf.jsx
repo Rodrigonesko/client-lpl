@@ -12,7 +12,7 @@ const gerarPdf = async (id) => {
     const result = await getDadosEntrevistaById(id)
 
     const resultPerguntas = await getPerguntas()
-    
+
     let coren = await filterUsers({
         name: result.responsavel
     })
@@ -28,7 +28,9 @@ const gerarPdf = async (id) => {
     }
 
     const perguntas = resultPerguntas.perguntas.filter(pergunta => {
-        return pergunta.categoria === 'questionario' && pergunta.formulario === result.idProposta.formulario
+        return pergunta.categoria === 'questionario' &&
+            pergunta.formulario === result.idProposta.formulario &&
+            (pergunta.sexo === result.sexo || pergunta.sexo === 'N')
     }).map(pergunta => {
         return [
             { text: pergunta.pergunta, margin: [20, 0, 20, 0] },
@@ -38,7 +40,8 @@ const gerarPdf = async (id) => {
     })
 
     const habitos = resultPerguntas.perguntas.filter(pergunta => {
-        return pergunta.categoria === 'habitos' && pergunta.formulario === result.idProposta.formulario
+        return pergunta.categoria === 'habitos' &&
+            pergunta.formulario === result.idProposta.formulario
     }).map(pergunta => {
         return [
             { text: pergunta.pergunta, margin: [20, 0, 20, 0] },
