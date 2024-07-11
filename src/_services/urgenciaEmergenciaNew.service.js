@@ -5,6 +5,15 @@ export const uploadUrgenciaEmergencia = async (data) => {
     return await new ApiCall('/urgencia-emergencia/upload', url).post(data)
 }
 
+
+export const createUrgenciasEmergencias = async (data) => {
+    return await new ApiCall('/urgencia-emergencia/planilha', url).post(data)
+}
+
+export const deleteUrgenciaEmergencia = async (id) => {
+    return await new ApiCall(`/urgencia-emergencia/${id}`, url).delete()
+}
+
 export const findByIdUrgenciaEmergencia = async (id) => {
     return await new ApiCall(`/urgencia-emergencia/id/${id}`, url).get()
 }

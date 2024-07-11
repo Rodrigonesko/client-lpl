@@ -16,3 +16,7 @@ export const filterInventario = async (nomeItem, ondeEsta, etiqueta, status, pag
 export const findAllInventario = async () => {
     return await new ApiCall(`/inventario/findAll`).get()
 }
+
+export const createInventario = async (data) => {
+    return await new ApiCall(`/inventario/request`).post(data)
+}
