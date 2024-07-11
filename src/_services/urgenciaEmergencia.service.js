@@ -11,3 +11,7 @@ export const getProducaoMensalUrgenciaEmergencia = async (mes, analista) => {
 export const producaoTotal = async () => {
     return await new ApiCall(`/urgenciaEmergencia/producaoTotal`).get()
 }
+
+export const gerarRelatorio = async () => {
+    return await new ApiCall(`/urgenciaEmergencia/todas`).get()
+}

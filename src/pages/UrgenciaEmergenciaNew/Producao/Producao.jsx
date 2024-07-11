@@ -2,12 +2,12 @@ import moment from "moment";
 import { useEffect } from "react";
 import { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { Box, CircularProgress, Container, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import Title from "../../../components/Title/Title";
 import { producaoDiaria } from "../../../_services/urgenciaEmergenciaNew.service";
 import { blue } from "@mui/material/colors";
 import TabelaProducaoMui from "../../../components/TabelaProducaoMui/TabelaProducaoMui";
-import { producaoTotal } from "../../../_services/urgenciaEmergencia.service";
+import { gerarRelatorio, producaoTotal } from "../../../_services/urgenciaEmergencia.service";
 
 const Producao = () => {
 
@@ -29,6 +29,44 @@ const Producao = () => {
         setLoading(false)
     }
 
+    const relatorio = async () => {
+        try {
+
+            setLoading(true)
+
+            const result = await gerarRelatorio()
+
+            let xls = '\ufeff'
+            xls += "<table border='1'>"
+            xls += "<thead><tr>"
+            xls += "<th>Pedido</th>"
+            xls += "<th>Data Conclusão</th>"
+            xls += "<th>Analista</th>"
+            xls += "</tr></thead><tbody>"
+
+            result.propostas.forEach(e => {
+                xls += "<tr>";
+                xls += `<td>${e.pedido}</td>`
+                xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
+                xls += `<td>${e.analista}</td>`
+                xls += `</tr>`
+            })
+
+            xls += "</tbody></table>"
+
+            setLoading(false)
+
+            var a = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
+            a.download = 'Producao Urgencia Emergencia.xls'
+            a.click()
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         fetch()
     }, [day])
@@ -37,7 +75,10 @@ const Producao = () => {
         <>
             <Sidebar>
                 <Container maxWidth>
-                    <Title size='medium' >Produção Urgência Emergência</Title>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Title size='medium' >Produção Urgência Emergência</Title>
+                        <Button onClick={relatorio} variant='contained' >Relatório</Button>
+                    </Box>
                     <Box sx={{ mt: 3, mb: 3 }}>
                         <TextField type="date" label='Data' size='small' value={day} onChange={(e) => { setDay(e.target.value) }}
                             InputLabelProps={{
