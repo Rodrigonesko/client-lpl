@@ -35,3 +35,8 @@ export const filterUrgenciasEmergencias = async (data) => {
 export const updateUrgenciaEmergencia = async (data) => {
     return await new ApiCall(`/urgencia-emergencia/${data._id}`, url).put(data)
 }
+
+export const producaoDiaria = async (day) => {
+    return await new ApiCall(`/urgencia-emergencia/producaoDiaria?day=${day}`, url).get()
+}
+

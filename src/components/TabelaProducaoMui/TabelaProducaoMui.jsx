@@ -3,6 +3,7 @@ import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer,
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import moment from 'moment/moment';
+import { blue } from '@mui/material/colors';
 
 function Row(props) {
     const { row } = props;
@@ -110,13 +111,13 @@ const TabelaProducaoMui = ({ producao }) => {
 
     return (
         <>
-            <TableContainer component={Paper} style={{ maxWidth: '400px' }}>
-                <Table aria-label='collapsible table' className='table'>
-                    <TableHead class='table-header'>
+            <TableContainer >
+                <Table size='small'>
+                    <TableHead sx={{ bgcolor: blue[600] }}>
                         <TableRow>
                             <TableCell></TableCell>
-                            <TableCell align="center">Mês</TableCell>
-                            <TableCell align="center">Quantidade</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>Mês</TableCell>
+                            <TableCell align="center" sx={{ color: 'white' }}>Quantidade</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
