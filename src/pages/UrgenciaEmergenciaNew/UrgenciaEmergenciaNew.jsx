@@ -4,10 +4,10 @@ import Title from "../../components/Title/Title"
 import { blue, red } from "@mui/material/colors"
 import { useEffect, useState } from "react"
 import { filterUrgenciasEmergencias } from "../../_services/urgenciaEmergenciaNew.service"
-import { ArrowForwardIosOutlined, DeleteOutline } from "@mui/icons-material"
+import { ArrowForwardIosOutlined } from "@mui/icons-material"
 import Upload from "./Modais/Upload"
 import Delete from "./Modais/Delete"
-import ModalRelatorio from "./components/modalRelatorio"
+import ModalRelatorio from "./Modais/modalRelatorio"
 
 const tabStyle = {
     '&:hover': {
@@ -87,7 +87,7 @@ const UrgenciaEmergenciaNew = () => {
                     limit: 1
                 }),
                 filterUrgenciasEmergencias({
-                    status: 'CONCLUÍDO',
+                    status: 'Concluído',
                     page: 1,
                     limit: 1
                 }),
@@ -206,18 +206,20 @@ const UrgenciaEmergenciaNew = () => {
                                                 <TableCell>{item.pedido}</TableCell>
                                                 <TableCell>{item.retorno}</TableCell>
                                                 <TableCell>{item.observacoes}</TableCell>
-                                                <TableCell>{
+                                                <TableCell
+                                                    align="right"
+                                                >{
 
                                                     <>
                                                         {
-                                                            (item.status === 'A Iniciar') && <Delete pedido={item} setLoading={setLoading} />
+                                                            (item.status === 'A INICIAR') && <Delete pedido={item} setLoading={setLoading} setRefresh={setRefresh} />
                                                         }
-                                                                                <Tooltip title='Detalhes'>
-                                                        <IconButton
-                                                            href={`/urgenciaEmergencia/detalhes/${item._id}`}
-                                                        ><ArrowForwardIosOutlined />
-                                                        </IconButton>
-                                                    </Tooltip>
+                                                        <Tooltip title='Detalhes'>
+                                                            <IconButton
+                                                                href={`/urgenciaEmergencia/detalhes/${item._id}`}
+                                                            ><ArrowForwardIosOutlined />
+                                                            </IconButton>
+                                                        </Tooltip>
                                                     </>
 
                                                 }</TableCell>

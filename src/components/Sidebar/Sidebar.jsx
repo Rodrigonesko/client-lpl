@@ -207,7 +207,6 @@ const Sidebar = ({ children }) => {
                         <MenuItem><Link to='/entrevistas/upload'>Upload</Link></MenuItem>
                         <MenuItem><Link to='/rn/upload'>Upload Rn</Link></MenuItem>
                         <MenuItem><Link to='/entrevistas/cid/adicionar'>Adicionar Cid</Link></MenuItem>
-                        <MenuItem><Link to='/dicionario'>Dicionário</Link></MenuItem>
                     </SubMenu>
                     <SubMenu title="Urgência & Emergência" icon={<RiAlarmWarningLine />} >
                         <MenuItem><Link to='/urgenciaEmergencia/andamento'>Em andamento</Link></MenuItem>
@@ -239,7 +238,7 @@ const Sidebar = ({ children }) => {
                             } */}
                         <MenuItem><Link to='/rsd/BaixaAgd'>Baixa AGD</Link></MenuItem>
                     </SubMenu>
-                    <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
+                    {/* <SubMenu title='Elegiblidade' icon={<FaClipboardCheck />}>
                         <MenuItem><Link to='/elegibilidade/analiseDocumentos'>Atribuição analista</Link></MenuItem>
                         <MenuItem><Link to='/elegibilidade/semDocumentos'>Sem Documentos</Link></MenuItem>
                         <MenuItem><Link to='/elegibilidade/analise'>Análise</Link></MenuItem>
@@ -256,7 +255,7 @@ const Sidebar = ({ children }) => {
                             <MenuItem><Link to='/elegibilidadePme/todos'>Todos</Link></MenuItem>
                             <MenuItem><Link to='/elegibilidadePme/upload'>Upload</Link></MenuItem>
                         </SubMenu>
-                    </SubMenu>
+                    </SubMenu> */}
                     <SubMenu title='Prototipo Tele' icon={<FaClipboard />}>
                         <MenuItem><Link to='/prototipoTele/filtros'>Pendencias</Link></MenuItem>
                         <MenuItem><Link to='/prototipoTele/enviar'>Envio</Link></MenuItem>

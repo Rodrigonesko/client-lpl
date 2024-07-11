@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, IconButton, Tooltip } fro
 import { useState } from "react"
 import { deleteUrgenciaEmergencia } from "../../../_services/urgenciaEmergenciaNew.service"
 
-const Delete = ({ pedido, setLoading }) => {
+const Delete = ({ pedido, setLoading, setRefresh }) => {
 
     const [open, setOpen] = useState(false)
 
@@ -18,7 +18,8 @@ const Delete = ({ pedido, setLoading }) => {
     const handleDelete = async () => {
         setLoading(true)
         try {
-            await deleteUrgenciaEmergencia(pedido.id)
+            await deleteUrgenciaEmergencia(pedido._id)
+            setRefresh(prev => !prev)
         } catch (error) {
             console.log(error);
         }

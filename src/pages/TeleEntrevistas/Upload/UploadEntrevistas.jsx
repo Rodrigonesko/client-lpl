@@ -2,102 +2,123 @@ import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './UploadEntrevistas.css'
 import * as XLSX from 'xlsx';
-import moment from "moment/moment";
-import { CircularProgress } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Input, Paper, Radio, RadioGroup, Typography } from "@mui/material";
 import { uploadPropostas } from "../../../_services/teleEntrevista.service";
+import { uploadAdesao } from "../../../_services/teleEntrevistaV2.service";
 
 const UploadRn = () => {
 
     const [file, setFile] = useState()
-    const [status, setStatus] = useState('')
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('success')
+    const [tipoContrato, setTipoContrato] = useState('')
     const [loading, setLoading] = useState(false)
+
 
     const send = async e => {
         e.preventDefault()
 
+        if (tipoContrato === '') {
+            setMessage('Selecione o tipo de contrato')
+            setSeverity('error')
+            return
+        }
+
+        if (!file) {
+            setMessage('Selecione um arquivo')
+            setSeverity('error')
+            return
+        }
+        setLoading(true)
         const data = await file.arrayBuffer()
-
         const workbook = XLSX.read(data, { type: 'array' })
-
         const firsSheetName = workbook.SheetNames[0]
-
         const worksheet = workbook.Sheets[firsSheetName]
-
         const result = XLSX.utils.sheet_to_json(worksheet)
 
         try {
-
-            setStatus('Enviando...')
-
-            setLoading(true)
-
-            const send = await uploadPropostas({ result })
-
-            if (send.error) {
-                setStatus(send.error)
-                setLoading(false)
-                return
+            if (tipoContrato === 'PME') {
+                const send = await uploadPropostas({ result })
+                setMessage(send.message)
+                setSeverity('success')
             }
-            console.log(send);
-            setStatus(send.message)
-
-
-            let csv = "Name; Given Name; Additional Name; Family Name; Yomi Name; Given Name Yomi; Additional Name Yomi; Family Name Yomi; Name Prefix; Name Suffix; Initials; Nickname; Short Name; Maiden Name; Birthday; Gender; Location; Billing Information; Directory Server; Mileage; Occupation; Hobby; Sensitivity; Priority; Subject; Notes; Language; Photo; Group Membership; Phone 1 - Type; Phone 1 - Value\n";
-
-            result.forEach(e => {
-                let telefone = `(${e.NUM_DDD_CEL}) ${e.NUM_CEL}`
-                let proposta = e.NUM_PROPOSTA
-                let nome = e.NOME_ASSOCIADO
-
-                let data = new Date()
-
-                data = moment(data).format('DD/MM/YYYY')
-
-                let dataArr = data.split('/')
-
-                let mes = dataArr[1]
-                let ano = dataArr[2]
-
-                csv += `${mes}/${ano} - ${proposta} - ${nome}`
-                csv += `;${mes}/${ano} - ${proposta} - ${nome}`
-                csv += `;;;;;;;;;;;;;;;;;;;;;;;;;;`
-                csv += `;* myContacts;`
-                csv += `; ${telefone}`
-                csv += `\n`
-
-            })
-
-            var hiddenElement = document.createElement('a');
-            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-            hiddenElement.target = '_blank';
-            hiddenElement.download = 'contatos.csv';
-            hiddenElement.click();
-
+            if (tipoContrato === 'ADESÃO') {
+                const send = await uploadAdesao(result)
+                setMessage(`Foram enviados ${send} propostas`)
+                setSeverity('success')
+            }
             setLoading(false)
-
         } catch (error) {
             console.log(error);
-            setStatus('Algo deu errado')
+            setMessage('Algo deu errado')
+            setSeverity('error')
             setLoading(false)
         }
-
     }
-
     return (
 
         <Sidebar>
-            <section className="section-upload-container">
-                {
-                    loading ? (
-                        <CircularProgress style={{ position: 'absolute', top: '50%', left: '50%' }}></CircularProgress>
-                    ) : null
-                }
-                {status !== '' ? (
-                    <div className="result">
-                        <p>{status}</p>
-                    </div>
-                ) : null}
-                <div className="upload-container">
+            <Container
+                sx={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        padding: '20px',
+                    }}
+                    component={Paper}
+                    elevation={1}
+                >
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        Upload de Tele Entrevista
+                    </Typography>
+                    <Box>
+                        <FormControl>
+                            <FormLabel>Tipo de Contrato</FormLabel>
+                            <RadioGroup
+                                value={tipoContrato}
+                                onChange={e => setTipoContrato(e.target.value)}
+                            >
+                                <FormControlLabel control={<Radio />} label='PME' value={'PME'} />
+                                <FormControlLabel control={<Radio />} label='ADESÃO' value={'ADESÃO'} />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2
+                        }}
+                    >
+                        <Input type="file" onChange={e => setFile(e.target.files[0])} />
+                        <Button disabled={loading} endIcon={loading && <CircularProgress size={20} />} variant="contained" onClick={send}>Enviar</Button>
+                    </Box>
+                    {
+                        message && (
+                            <Alert
+                                severity={severity}
+                                variant="filled"
+                            >
+                                {message}
+                            </Alert>
+                        )
+                    }
+                </Box>
+                {/* <div className="upload-container">
                     <form action="" method="post">
                         <div className="title">
                             <h2>Upload Tele Entrevista</h2>
@@ -110,8 +131,8 @@ const UploadRn = () => {
                             <button className="btn" onClick={send} >Enviar</button>
                         </div>
                     </form>
-                </div>
-            </section>
+                </div> */}
+            </Container>
         </Sidebar>
 
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress, FormControl, InputLabel, RadioGroup, FormControlLabel, Radio, FormLabel, TextField, Box } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress, FormControl, RadioGroup, FormControlLabel, Radio, FormLabel, TextField, Box } from '@mui/material'
 import Toast from '../../../components/Toast/Toast'
 import { BiSpreadsheet } from 'react-icons/bi'
 import ExcelJS from 'exceljs';
@@ -13,11 +13,17 @@ const ModalRelatorio = () => {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
     const [openToast, setOpenToast] = useState(false)
-    const [tipoRelatorio, setTipoRelatorio] = useState('')
+    const [tipoRelatorio, setTipoRelatorio] = useState('Data Inclusão')
     const [dataInicio, setDataInicio] = useState('')
     const [dataFim, setDataFim] = useState('')
 
     const gerarRelatorio = async () => {
+        if(!dataInicio || !dataFim) {
+            setMessage('Preencha as datas corretamente!')
+            setSeverity('error')
+            setOpenToast(true)
+            return
+        }
         setLoading(true)
         try {
             const query = {}
