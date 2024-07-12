@@ -26,6 +26,7 @@ const RelatorioAdesao = () => {
             }
             setLoading(true)
             const result = await getEntrevistasEntreDatasAdesao(startDate, endDate)
+            console.log(result);
             let xls = '\ufeff'
             xls += "<table border='1'>"
             xls += "<thead><tr>"

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import './UploadEntrevistas.css'
 import * as XLSX from 'xlsx';
 import { Alert, Box, Button, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Input, Paper, Radio, RadioGroup, Typography } from "@mui/material";
 import { uploadPropostas } from "../../../_services/teleEntrevista.service";

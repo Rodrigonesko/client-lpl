@@ -73,6 +73,7 @@ const RelatorioPropostas = () => {
         xls += "<thead><tr>"
         xls += "<th>Data Recebimento</th>"
         xls += "<th>Data Vigencia</th>"
+        xls += "<th>Vigencia Amil</th>"
         xls += "<th>Proposta</th>"
         xls += "<th>Nome</th>"
         xls += "<th>Cpf</th>"
@@ -120,6 +121,7 @@ const RelatorioPropostas = () => {
             xls += "<tr>"
             xls += `<td>${moment(e.dataRecebimento).format('DD/MM/YYYY')}</td>`
             xls += `<td>${moment(e.vigencia).format('DD/MM/YYYY')}</td>`
+            xls += `<td>${moment(e.vigenciaAmil).format('DD/MM/YYYY')}</td>`
             xls += `<td>${e.proposta || ''}</td>`
             xls += `<td>${e.nome || ''}</td>`
             xls += `<td>${e.cpf || ''}</td>`

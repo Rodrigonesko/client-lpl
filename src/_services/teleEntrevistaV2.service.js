@@ -56,6 +56,25 @@ export const updateDadosEntrevista = async (data) => {
 
 /* --------------------------------------------------------------- */
 
+export class PropostaService {
+
+    uploadAdesao = async (data) => {
+        return await new ApiCall('/tele-entrevista/spreadsheet', URL_API_V2).post(data)
+    }
+
+    uploadArquivoPropostaEntrevista = async (id, data) => {
+        return await new ApiCall(`/tele-entrevista/upload/${id}`, URL_API_V2).post(data)
+    }
+
+    findById = async (id) => {
+        return await new ApiCall(`/proposta/id/${id}`, URL_API_V2).get()
+    }
+}
+
 export const uploadAdesao = async (data) => {
     return await new ApiCall('/tele-entrevista/spreadsheet', URL_API_V2).post(data)
+}
+
+export const uploadArquivoPropostaEntrevista = async (id, data) => {
+    return await new ApiCall(`/tele-entrevista/upload/${id}`, URL_API_V2).post(data)
 }

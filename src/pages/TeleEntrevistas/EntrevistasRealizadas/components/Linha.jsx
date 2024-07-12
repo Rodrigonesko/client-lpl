@@ -4,6 +4,7 @@ import moment from "moment"
 import { useState } from "react"
 import { updatePropostaEntrevista } from "../../../../_services/teleEntrevistaV2.service"
 import ModalVoltarEntrevista from "./ModalVoltarEntrevista"
+import DrawerDetalhes from "./DrawerDetalhes"
 
 const Linha = ({ entrevista }) => {
 
@@ -46,6 +47,9 @@ const Linha = ({ entrevista }) => {
             <TableCell><Button variant='contained' href={`/entrevistas/propostas/editar/${data._id}`} size='small' >Editar</Button>  </TableCell>
             {/* <TableCell><Button color='error' variant='contained' size='small' href={`/entrevistas/pdf2/${data.proposta}/${data.nome}`} target='_blank'>PDF</Button></TableCell> */}
             <TableCell><Button color='error' variant='contained' size='small' onClick={() => { gerarPdf(data._id) }}>PDF</Button></TableCell>
+            <TableCell>
+                <DrawerDetalhes proposta={data?.idProposta} />
+            </TableCell>
         </TableRow>
     )
 }

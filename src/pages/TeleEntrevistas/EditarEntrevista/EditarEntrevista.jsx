@@ -126,7 +126,6 @@ const EditarEntrevista = () => {
 
     const handleChange = (item) => {
         try {
-            // respostas[`${item.id}`] = item.value
             setRespostas({ ...respostas, [item.id]: item.value })
         } catch (error) {
             console.log(error);
@@ -135,15 +134,6 @@ const EditarEntrevista = () => {
 
     const salvar = async () => {
         try {
-            // const result = await Axios.put(`${process.env.REACT_APP_API_KEY}/entrevistas/editar/dadosEntrevista`, { dados: respostas, id, houveDivergencia, dataNascimento, nome, cpf }, {
-            //     withCredentials: true,
-            //     headers: {
-            //         authorization: `Bearer ${localStorage.getItem('token')}`
-            //     }
-            // })
-
-            console.log(respostas);
-
             await updateDadosEntrevista({
                 _id: id,
                 ...respostas,
@@ -151,13 +141,10 @@ const EditarEntrevista = () => {
                 cidsDs: cidsDs,
                 houveDivergencia,
             })
-
-
             setMessage('Entrevista salva com sucesso!')
             setSeverity("success")
             setOpenToast(true)
             setFlushHook(true)
-
         } catch (error) {
             console.log(error);
             setMessage('Erro ao salvar entrevista!')
@@ -196,7 +183,6 @@ const EditarEntrevista = () => {
         try {
             if (cid.length < 3) return
             const result = await getCids(cid)
-            console.log(result);
             setCidsList(result)
         } catch (error) {
             console.log(error);
@@ -215,7 +201,6 @@ const EditarEntrevista = () => {
                 setCpf(result.cpf)
                 setQualDivergencia(result.divergencia)
                 setPatologias(result.patologias)
-                console.log(result.cidsAjustados);
                 setCids(result?.cidsAjustados || [])
                 setCidsDs(result?.cidsDs || [])
             } catch (error) {
@@ -332,12 +317,6 @@ const EditarEntrevista = () => {
                                     sx={{ marginBottom: '10px' }}
                                 />
                             </Box>
-                            {/* <Typography
-                                variant='h6'
-                            >
-                                Cids
-                            </Typography>
-                            <Cids cidsSelecionados={cids} setCidsSeleciados={setCids} /> */}
                             <Box m={1}>
                                 {
                                     cids.map(e => {
