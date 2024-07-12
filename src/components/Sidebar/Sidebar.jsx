@@ -218,6 +218,7 @@ const Sidebar = ({ children }) => {
                             acessos?.administrador && (
                                 <>
                                     <MenuItem><Link to='/urgenciaEmergenciaNew' >Urgência Emergência New</Link></MenuItem>
+                                    <MenuItem><Link to='/urgenciaEmergenciaNew/producao' >Produção Diaria</Link></MenuItem>
                                 </>
                             )
                         }

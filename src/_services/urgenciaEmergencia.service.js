@@ -7,3 +7,11 @@ export const filterPropostas = async (pesquisa, page) => {
 export const getProducaoMensalUrgenciaEmergencia = async (mes, analista) => {
     return await new ApiCall(`/urgenciaEmergencia/producaoMensal/${mes}/${analista}`).get()
 }
+
+export const producaoTotal = async () => {
+    return await new ApiCall(`/urgenciaEmergencia/producaoTotal`).get()
+}
+
+export const gerarRelatorio = async () => {
+    return await new ApiCall(`/urgenciaEmergencia/todas`).get()
+}

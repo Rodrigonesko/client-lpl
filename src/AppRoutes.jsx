@@ -183,7 +183,11 @@ import Prestadores from "./pages/RsdBradesco/Prestadores/Prestadores";
 import FichaPrestador from "./pages/RsdBradesco/FichaPrestador/FichaPrestador";
 import AnaliticoRsdBradesco from "./pages/RsdBradesco/Analitico/Analitico";
 import Contatos from "./pages/Sindicancia/Contatos/Contatos";
+
+/* Urgencia Emergenca Nova*/
+
 import UrgenciaEmergenciaNew from "./pages/UrgenciaEmergenciaNew/UrgenciaEmergenciaNew";
+import Producao from "./pages/UrgenciaEmergenciaNew/Producao/Producao";
 
 const AppRoutes = () => {
     return (
@@ -196,6 +200,9 @@ const AppRoutes = () => {
                 {/* Urgencia Emergencia Novo */}
                 <Route exact path="/urgenciaEmergenciaNew" element={<ProtectedRoute>
                     <UrgenciaEmergenciaNew />
+                </ProtectedRoute>} />
+                <Route exact path="/urgenciaEmergenciaNew/producao" element={<ProtectedRoute>
+                    <Producao />
                 </ProtectedRoute>} />
 
                 {/* RSD Bradesco */}
