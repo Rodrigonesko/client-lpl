@@ -125,11 +125,11 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     {
                         messages.map(message => {
                             return (
-                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
+                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+551150394280' || message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
                                     <Typography color='darkblue' fontSize='14px' >
                                         {message.de}
                                     </Typography>
-                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
+                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+551150394280' || message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
                                     <Typography color='GrayText'>{moment(message.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                     <Typography variant='body2' color='GrayText'>
                                         {

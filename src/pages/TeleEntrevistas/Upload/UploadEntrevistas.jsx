@@ -3,7 +3,9 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import * as XLSX from 'xlsx';
 import { Alert, Box, Button, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Input, Paper, Radio, RadioGroup, Typography } from "@mui/material";
 import { uploadPropostas } from "../../../_services/teleEntrevista.service";
-import { uploadAdesao } from "../../../_services/teleEntrevistaV2.service";
+import { PropostaService } from "../../../_services/teleEntrevistaV2.service";
+
+const propostaService = new PropostaService()
 
 const UploadRn = () => {
 
@@ -42,7 +44,7 @@ const UploadRn = () => {
                 setSeverity('success')
             }
             if (tipoContrato === 'ADESÃO') {
-                const send = await uploadAdesao(result)
+                const send = await propostaService.uploadAdesao(result)
                 setMessage(`Foram enviados ${send} propostas`)
                 setSeverity('success')
             }

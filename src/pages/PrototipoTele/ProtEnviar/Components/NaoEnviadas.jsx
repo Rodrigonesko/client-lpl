@@ -203,12 +203,12 @@ const NaoEnviadas = () => {
                             control={<Radio />}
                             label="Maior de 18 e menor de 8 anos"
                         />
-                        {/* <FormControlLabel
+                        <FormControlLabel
                             value="titular com dependente maior de 9 anos e menor de 17 anos"
                             control={<Radio />}
                             label="9 a 17 anos"
                         />
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             value="todas"
                             control={<Radio />}
                             label="Todas"

@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { getEntrevistasEntreDatas, getEntrevistasEntreDatasAdesao } from "../../../../../_services/teleEntrevista.service"
-import { blue, deepPurple } from "@mui/material/colors"
+import { getEntrevistasEntreDatasAdesao } from "../../../../../_services/teleEntrevista.service"
+import { blue } from "@mui/material/colors"
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TextField } from "@mui/material"
 import moment from "moment"
 

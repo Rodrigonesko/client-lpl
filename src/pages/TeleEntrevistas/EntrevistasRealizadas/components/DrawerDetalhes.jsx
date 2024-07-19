@@ -2,9 +2,8 @@ import { ArrowForward } from "@mui/icons-material"
 import { IconButton, Drawer, Typography, Box, Button, Dialog, DialogActions, DialogContent, Input } from "@mui/material"
 import { useState } from "react"
 import Toast from "../../../../components/Toast/Toast"
-import { uploadArquivoPropostaEntrevista } from "../../../../_services/teleEntrevistaV2.service"
-import axios from "axios"
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service"
+import axios from "axios"
 
 const propostaService = new PropostaService()
 
@@ -24,12 +23,11 @@ const DrawerDetalhes = ({ proposta }) => {
         const formData = new FormData()
         formData.append('file', file, file.name)
         try {
-            const response = await uploadArquivoPropostaEntrevista(data._id, formData)
+            await propostaService.uploadArquivoPropostaEntrevista(data._id, formData)
             setOpenToast(true)
             setMessage('Upload feito com sucesso')
             setSeverity('success')
             setOpenDialog(false)
-            console.log(response);
             const res = await propostaService.findById(data._id)
             setData(res)
         } catch (error) {
@@ -42,8 +40,8 @@ const DrawerDetalhes = ({ proposta }) => {
 
     const fileDownload = async (arquivo) => {
         try {
-            console.log(`${process.env.REACT_APP_API_TELE_ENTREVISTA}/file/download/${arquivo}`);
-            const res = await axios.get(`${process.env.REACT_APP_API_TELE_ENTREVISTA}/file/download/${arquivo}`, {
+            console.log(`${process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO}/file/download/${arquivo}`);
+            const res = await axios.get(`${process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO}/file/download/${arquivo}`, {
                 responseType: 'blob',
                 headers: {
                     'Content-Type': 'application/json',
