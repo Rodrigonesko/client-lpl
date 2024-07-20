@@ -70,4 +70,22 @@ export class PropostaService {
     findById = async (id) => {
         return await new ApiCall(`/proposta/id/${id}`, URL_API_V2).get()
     }
+
+    findByFilter = async (filter) => {
+        return await new ApiCall(`/proposta/filter`, URL_API_V2).post(filter)
+    }
+
+    update = async (data) => {
+        return await new ApiCall(`/proposta/${data._id}`, URL_API_V2).put(data)
+    }
+
+    adicionarTentativaDeContato = async (id, data) => {
+        return await new ApiCall(`/proposta/tentativa-de-contato/${id}`, URL_API_V2).patch(data)
+    }
+}
+
+export class HorarioService {
+    reagendar = async (id, data) => {
+        return await new ApiCall(`/horario/reagendar/${id}`, URL_API_V2).patch(data)
+    }
 }

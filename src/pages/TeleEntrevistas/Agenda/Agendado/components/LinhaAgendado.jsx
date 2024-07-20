@@ -1,27 +1,32 @@
 import { Chip, FormControl, InputLabel, MenuItem, Select, TableCell, TableRow, Typography } from "@mui/material"
 import moment from "moment"
 import { useState } from "react"
-import PopoverTelefone from "./PopoverTelefone"
-import Toast from "../../../../../components/Toast/Toast"
-import { updatePropostaEntrevista } from "../../../../../_services/teleEntrevistaV2.service"
-import MenuOpcoes from "./MenuOpcoes"
+import MenuOpcoes from "../../Agendar/components/MenuOpcoes"
+import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service"
+import PopoverTelefone from "../../Agendar/components/PopoverTelefone"
 
-const LinhaTele = ({ proposta, setRefresh }) => {
+const propostaService = new PropostaService()
+
+const LinhaAgendado = ({
+    proposta,
+    setRefresh,
+    setOpenToast,
+    setSeverity,
+    setMessage
+}) => {
+
     const [data, setData] = useState(proposta || {})
-    const [openToast, setOpenToast] = useState(false)
-    const [message, setMessage] = useState('')
-    const [severity, setSeverity] = useState('success')
 
     return (
         <TableRow>
+            {/* <TableCell>
+                Tele
+            </TableCell> */}
             <TableCell>
-                {moment(data.vigencia).format('DD/MM/YYYY')}
-                <Typography
-                    variant="body2"
-                    color="textSecondary"
-                >
-                    {data.vigenciaAmil}
-                </Typography>
+                {moment(data.dataEntrevista).format('DD/MM/YYYY HH:mm')}
+            </TableCell>
+            <TableCell>
+                {data.enfermeiro}
             </TableCell>
             <TableCell>
                 {data.proposta}
@@ -33,7 +38,7 @@ const LinhaTele = ({ proposta, setRefresh }) => {
                 </Typography>
             </TableCell>
             <TableCell>
-                {data.nome}
+                {data.nome} <Chip size="small" label={data.tipoAssociado} color={data.tipoAssociado === 'Titular' ? 'primary' : 'warning'} />
                 <Typography
                     variant="body2"
                     color="textSecondary"
@@ -42,11 +47,7 @@ const LinhaTele = ({ proposta, setRefresh }) => {
                 </Typography>
             </TableCell>
             <TableCell>
-                <Typography
-                    variant="body2"
-                >
-                    {data.dataNascimento}
-                </Typography>
+                {data.dataNascimento}
                 <Typography
                     variant="body2"
                     color="textSecondary"
@@ -62,7 +63,7 @@ const LinhaTele = ({ proposta, setRefresh }) => {
                         label="Sexo"
                         onChange={async (e) => {
                             try {
-                                await updatePropostaEntrevista({ _id: data._id, sexo: e.target.value })
+                                await propostaService.update({ _id: data._id, sexo: e.target.value })
                                 setData({ ...data, sexo: e.target.value })
                                 setOpenToast(true)
                                 setMessage('Salvo com sucesso')
@@ -80,7 +81,7 @@ const LinhaTele = ({ proposta, setRefresh }) => {
                     </Select>
                 </FormControl>
             </TableCell>
-            <TableCell>
+            <TableCell align="center">
                 {data.telefone}
                 <PopoverTelefone
                     proposta={data}
@@ -90,32 +91,24 @@ const LinhaTele = ({ proposta, setRefresh }) => {
                     setSeverity={setSeverity}
                 />
             </TableCell>
-            <TableCell>
+            <TableCell align="center">
                 <Chip
                     label={data.tentativasDeContato.length}
                     color="primary"
-                    sx={{ fontWeight: 'bold' }}
-                    size="small"
                 />
             </TableCell>
-            <TableCell>
+            <TableCell align="center">
                 <MenuOpcoes
                     proposta={data}
                     setProposta={setData}
-                    setMessage={setMessage}
+                    setRefresh={setRefresh}
                     setOpenToast={setOpenToast}
                     setSeverity={setSeverity}
-                    setRefresh={setRefresh}
+                    setMessage={setMessage}
                 />
             </TableCell>
-            <Toast
-                open={openToast}
-                message={message}
-                severity={severity}
-                onClose={() => setOpenToast(false)}
-            />
         </TableRow>
     )
 }
 
-export default LinhaTele
+export default LinhaAgendado

@@ -1,16 +1,15 @@
 import { IconButton, Tooltip, Menu, MenuItem, Box } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
-import { useContext, useState } from "react";
-import { ArrowForward } from "@mui/icons-material";
-import moment from "moment";
-import AuthContext from "../../../../../context/AuthContext";
-import { updatePropostaEntrevista } from "../../../../../_services/teleEntrevistaV2.service";
+import { useState } from "react";
+import { ArrowForward, Phone, Undo } from "@mui/icons-material";
+import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
 import ModalExcluir from "./ModalExcluir";
 import ModalCancelar from "./ModalCancelar";
+import ModalReagendar from "./ModalReagendar";
+
+const propostaService = new PropostaService()
 
 const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeverity, setMessage }) => {
-
-    const { name } = useContext(AuthContext)
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -36,44 +35,12 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
         handleClose()
     }
 
-    const handleTentativaDeContato = async (tentativa) => {
+    const handleTentativaDeContato = async () => {
         try {
-            if (tentativa === 1) {
-                await updatePropostaEntrevista({
-                    _id: proposta._id,
-                    contato1: moment().format('DD/MM/YYYY HH:mm'),
-                    responsavelContato1: name
-                })
-                setProposta({
-                    ...proposta,
-                    contato1: moment().format('DD/MM/YYYY HH:mm'),
-                    responsavelContato1: name
-                })
-            }
-            if (tentativa === 2) {
-                await updatePropostaEntrevista({
-                    _id: proposta._id,
-                    contato2: moment().format('DD/MM/YYYY HH:mm'),
-                    responsavelContato2: name
-                })
-                setProposta({
-                    ...proposta,
-                    contato2: moment().format('DD/MM/YYYY HH:mm'),
-                    responsavelContato2: name
-                })
-            }
-            if (tentativa === 3) {
-                await updatePropostaEntrevista({
-                    _id: proposta._id,
-                    contato3: moment().format('DD/MM/YYYY HH:mm'),
-                    responsavelContato3: name
-                })
-                setProposta({
-                    ...proposta,
-                    contato3: moment().format('DD/MM/YYYY HH:mm'),
-                    responsavelContato3: name
-                })
-            }
+            const response = await propostaService.adicionarTentativaDeContato(proposta._id, {
+                canal: 'TELEFONE',
+            })
+            setProposta(response)
             sucesso()
         } catch (error) {
             console.log(error);
@@ -130,29 +97,36 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={() => handleTentativaDeContato(1)}>
-                    {
-                        proposta.contato1 ? proposta.contato1 : '1° Tentativa'
-                    }
+                {
+                    proposta.tentativasDeContato.map((tentativa, index) => (
+                        <MenuItem
+                            key={index}
+                        >
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                justifyContent={"space-between"}
+                                gap={1}
+                                width={'100%'}
+                            >
+                                {tentativa.data}
+                            </Box>
+                        </MenuItem>
+                    ))
+                }
+                <MenuItem
+                    onClick={handleTentativaDeContato}
+                >
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent={"space-between"}
+                        gap={1}
+                        width={'100%'}
+                    >
+                        Tentativa de Contato <Phone />
+                    </Box>
                 </MenuItem>
-                {
-                    proposta.contato1 && (
-                        <MenuItem onClick={() => handleTentativaDeContato(2)}>
-                            {
-                                proposta.contato2 ? proposta.contato2 : '2° Tentativa'
-                            }
-                        </MenuItem>
-                    )
-                }
-                {
-                    proposta.contato2 && (
-                        <MenuItem onClick={() => handleTentativaDeContato(3)}>
-                            {
-                                proposta.contato3 ? proposta.contato3 : '3° Tentativa'
-                            }
-                        </MenuItem>
-                    )
-                }
                 <ModalCancelar
                     proposta={proposta}
                     setRefresh={setRefresh}
@@ -167,6 +141,10 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                     setSeverity={setSeverity}
                     setMessage={setMessage}
                 />
+                {
+                    proposta.agendado === 'agendado' && <ModalReagendar proposta={proposta} setRefresh={setRefresh} />
+                }
+
                 <MenuItem
                     onClick={() => {
                         window.open(`/entrevistas/formulario/${proposta._id}`, '_blank');

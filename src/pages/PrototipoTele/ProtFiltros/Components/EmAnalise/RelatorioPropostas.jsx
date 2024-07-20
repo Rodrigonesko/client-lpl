@@ -107,6 +107,7 @@ const RelatorioPropostas = () => {
         xls += "<th>Responsavel 2° Contato</th>"
         xls += "<th>3° Contato</th>"
         xls += "<th>Responsavel 3° Contato</th>"
+        xls += "<th>Total de tentativas</th>"
         xls += "<th>Dias uteis</th>"
         xls += "<th>Ret</th>"
         xls += "<th>Nome Operadora</th>"
@@ -149,12 +150,13 @@ const RelatorioPropostas = () => {
             xls += `<td>${e.status || ''}</td>`
             xls += `<td>${e.dataConclusao ? moment(e.dataConclusao).format('DD/MM/YYYY') : ''}</td>`
             xls += `<td>${e.tipoContrato || ''}</td>`
-            xls += `<td>${e.contato1 || ''}</td>`
-            xls += `<td>${e.responsavelContato1 || ''}</td>`
-            xls += `<td>${e.contato2 || ''}</td>`
-            xls += `<td>${e.responsavelContato2 || ''}</td>`
-            xls += `<td>${e.contato3 || ''}</td>`
-            xls += `<td>${e.responsavelContato3 || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato[0]?.data || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato[0]?.responsavel || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato[1]?.data || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato[1]?.responsavel || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato[2]?.data || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato[2]?.responsavel || ''}</td>`
+            xls += `<td>${e?.tentativasDeContato?.length}</td>`
 
             let diasUteis = calcularDiasUteis(moment(e.dataRecebimento), moment(e.dataConclusao), feriados)
             if (!e.dataConclusao) {

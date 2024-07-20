@@ -2,6 +2,9 @@ import { Box, Button, FormControl, FormControlLabel, FormLabel, Popover, Radio, 
 import Toast from "../../../../components/Toast/Toast";
 import { useState } from "react";
 import { tentativaContatoEntrevista } from "../../../../_services/teleEntrevista.service";
+import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+
+const propostaService = new PropostaService()
 
 const PopoverTentativaContato = ({ children, tentativa, _id, setFlushHook }) => {
 
@@ -28,7 +31,9 @@ const PopoverTentativaContato = ({ children, tentativa, _id, setFlushHook }) => 
 
     const handleSalvar = async () => {
         try {
-            await tentativaContatoEntrevista({ id: _id, tentativa, tipo })
+            await propostaService.adicionarTentativaDeContato(_id, {
+                canal: tipo.toUpperCase()
+            })
             setAnchorEl(null);
             setToastOpen(true)
             setSeverity('success')

@@ -223,39 +223,19 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                 <Typography variant="h6">
                                     Contatos
                                 </Typography>
-                                <Box display={'flex'} mb={1}>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>1° Contato:</span>  {item.contato1 || <PopoverTentativaContato tentativa={'tentativa 1'} _id={item._id} setFlushHook={setFlushHook}>1° Contato</PopoverTentativaContato>}
-                                    </Typography>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>Responsavel:</span> {item.responsavelContato1}
-                                    </Typography>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>Tipo:</span> {item.tipoContato1}
-                                    </Typography>
-                                </Box>
-                                <Box display={'flex'} mb={1}>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>2° Contato:</span>  {!item.contato2 && !!item.contato1 ? <PopoverTentativaContato tentativa={'tentativa 2'} _id={item._id} setFlushHook={setFlushHook}>2° Contato</PopoverTentativaContato> : item.contato2}
-                                    </Typography>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>Responsavel:</span> {item.responsavelContato2}
-                                    </Typography>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>Tipo:</span> {item.tipoContato2}
-                                    </Typography>
-                                </Box>
-                                <Box display={'flex'} mb={1}>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>3° Contato:</span>  {!item.contato3 && !!item.contato2 && !!item.contato1 ? <PopoverTentativaContato tentativa={'tentativa 3'} _id={item._id} setFlushHook={setFlushHook}>3° Contato</PopoverTentativaContato> : item.contato3}
-                                    </Typography>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>Responsavel:</span> {item.responsavelContato3}
-                                    </Typography>
-                                    <Typography mr={2}>
-                                        <span style={{ fontWeight: 'bold' }}>Tipo:</span> {item.tipoContato3}
-                                    </Typography>
-                                </Box>
+                                {
+                                    item.tentativasDeContato.map((tentativa, index) => (
+                                        <Typography key={index}>
+                                            <strong>{tentativa.data}:</strong> {tentativa.canal} - {tentativa.responsavel}
+                                        </Typography>
+                                    ))
+                                }
+                                <PopoverTentativaContato
+                                    _id={item._id}
+                                    setFlushHook={setFlushHook}
+                                >
+                                    Tentativa de Contato
+                                </PopoverTentativaContato>
                             </Box>
                             <Box>
                                 <Typography variant="h6">
