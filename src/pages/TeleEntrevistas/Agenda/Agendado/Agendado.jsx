@@ -7,8 +7,11 @@ import { Search } from "@mui/icons-material";
 import Title from "../../../../components/Title/Title";
 import Toast from "../../../../components/Toast/Toast";
 import LinhaAgendado from "./components/LinhaAgendado";
+import { RnService } from "../../../../_services/rn.service";
+import MenuOpcoes from "../Agendar/components/MenuOpcoes";
 
 const propostaService = new PropostaService()
+const rnService = new RnService()
 
 const Agendado = () => {
 
@@ -57,7 +60,17 @@ const Agendado = () => {
                     limit,
                     page
                 })
-                setPropostas(result.propostas)
+                const resultRn = await rnService.findByFilter({
+                    status: { $nin: ['Concluido', 'Cancelado'] },
+                    pesquisa,
+                    responsavel,
+                    agendado: 'Agendado',
+                    sort: 'dataEntrevista',
+                    limit,
+                    page
+                })
+                console.log(resultRn);
+                setPropostas([...result.propostas.map(p => { return { ...p, tipo: 'Tele' } }), ...resultRn.pedidos.map(p => { return { ...p, tipo: 'RN' } })].sort((a, b) => new Date(a.dataEntrevista) - new Date(b.dataEntrevista)))
                 setTotal(result.total)
                 setLoading(false)
             } catch (error) {
@@ -163,7 +176,7 @@ const Agendado = () => {
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                {/* <TableCell>Tipo</TableCell> */}
+                                <TableCell>Tipo</TableCell>
                                 <TableCell>Data</TableCell>
                                 <TableCell>Analista</TableCell>
                                 <TableCell>Proposta</TableCell>
@@ -188,7 +201,7 @@ const Agendado = () => {
                             {
                                 propostas.map(proposta => {
                                     return (
-                                        <LinhaAgendado
+                                        proposta.tipo === 'Tele' ? <LinhaAgendado
                                             key={proposta._id}
                                             proposta={proposta}
                                             setPropostas={setPropostas}
@@ -196,7 +209,29 @@ const Agendado = () => {
                                             setSeverity={setSeverity}
                                             setMessage={setMessage}
                                             setRefresh={setRefresh}
-                                        />
+                                        /> : (
+                                            <TableRow key={proposta._id}>
+                                                <TableCell>{proposta.tipo}</TableCell>
+                                                <TableCell>{proposta.dataEntrevista}</TableCell>
+                                                <TableCell>{proposta.responsavel}</TableCell>
+                                                <TableCell>{proposta.proposta}</TableCell>
+                                                <TableCell>{proposta.beneficiario}</TableCell>
+                                                <TableCell>{proposta.idade}</TableCell>
+                                                <TableCell>{proposta.sexo}</TableCell>
+                                                <TableCell align="center">{proposta.telefones}</TableCell>
+                                                <TableCell align="center"></TableCell>
+                                                <TableCell align="center">
+                                                    <MenuOpcoes
+                                                        proposta={proposta}
+                                                        setRefresh={setRefresh}
+                                                        setOpenToast={setOpenToast}
+                                                        setSeverity={setSeverity}
+                                                        setMessage={setMessage}
+                                                        rn={true}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        )
                                     )
                                 })
                             }

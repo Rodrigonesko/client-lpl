@@ -19,9 +19,9 @@ const LinhaAgendado = ({
 
     return (
         <TableRow>
-            {/* <TableCell>
+            <TableCell>
                 Tele
-            </TableCell> */}
+            </TableCell>
             <TableCell>
                 {moment(data.dataEntrevista).format('DD/MM/YYYY HH:mm')}
             </TableCell>

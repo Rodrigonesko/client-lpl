@@ -9,7 +9,7 @@ import ModalReagendar from "./ModalReagendar";
 
 const propostaService = new PropostaService()
 
-const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeverity, setMessage }) => {
+const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeverity, setMessage, rn }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -98,7 +98,7 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 {
-                    proposta.tentativasDeContato.map((tentativa, index) => (
+                    !rn && proposta.tentativasDeContato.map((tentativa, index) => (
                         <MenuItem
                             key={index}
                         >
@@ -114,7 +114,7 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                         </MenuItem>
                     ))
                 }
-                <MenuItem
+                {!rn && <MenuItem
                     onClick={handleTentativaDeContato}
                 >
                     <Box
@@ -126,28 +126,32 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                     >
                         Tentativa de Contato <Phone />
                     </Box>
-                </MenuItem>
-                <ModalCancelar
+                </MenuItem>}
+                {!rn && <ModalCancelar
                     proposta={proposta}
                     setRefresh={setRefresh}
                     setOpenToast={setOpenToast}
                     setSeverity={setSeverity}
                     setMessage={setMessage}
-                />
-                <ModalExcluir
+                />}
+                {!rn && <ModalExcluir
                     proposta={proposta}
                     setRefresh={setRefresh}
                     setOpenToast={setOpenToast}
                     setSeverity={setSeverity}
                     setMessage={setMessage}
-                />
+                />}
                 {
-                    proposta.agendado === 'agendado' && <ModalReagendar proposta={proposta} setRefresh={setRefresh} />
+                    (proposta.agendado.toLowerCase() === 'agendado') && <ModalReagendar proposta={proposta} setRefresh={setRefresh} />
                 }
 
                 <MenuItem
                     onClick={() => {
-                        window.open(`/entrevistas/formulario/${proposta._id}`, '_blank');
+                        if(!rn){
+                            window.open(`/entrevistas/formulario/${proposta._id}`, '_blank');
+                        } else {
+                            window.open(`/rn/rns/${proposta._id}`, '_blank');
+                        }
                     }}>
                     <Box
                         display="flex"
