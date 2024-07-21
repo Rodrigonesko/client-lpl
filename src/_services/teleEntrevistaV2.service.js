@@ -89,3 +89,9 @@ export class HorarioService {
         return await new ApiCall(`/horario/reagendar/${id}`, URL_API_V2).patch(data)
     }
 }
+
+export class DadosEntrevistaService {
+    findByFilter = async (filter) => {
+        return await new ApiCall(`/dados-entrevista/filter`, URL_API_V2).post(filter)
+    }
+}

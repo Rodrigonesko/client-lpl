@@ -1,8 +1,12 @@
 import { useState } from "react"
-import { getEntrevistasEntreDatasAdesao } from "../../../../../_services/teleEntrevista.service"
 import { blue } from "@mui/material/colors"
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TextField } from "@mui/material"
 import moment from "moment"
+import { DadosEntrevistaService } from "../../../../../_services/teleEntrevistaV2.service"
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+
+const dadosEntrevistaService = new DadosEntrevistaService()
 
 const RelatorioAdesao = () => {
     const [open, setOpen] = useState(false)
@@ -12,7 +16,6 @@ const RelatorioAdesao = () => {
 
     const handleClickOpen = () => {
         setOpen(true)
-
     }
 
     const handleClose = () => {
@@ -25,78 +28,84 @@ const RelatorioAdesao = () => {
                 return
             }
             setLoading(true)
-            const result = await getEntrevistasEntreDatasAdesao(startDate, endDate)
-            console.log(result);
-            let xls = '\ufeff'
-            xls += "<table border='1'>"
-            xls += "<thead><tr>"
-            xls += "<th>Id</th>"
-            xls += "<th>anexo</th>"
-            xls += "<th>implantado</th>"
-            xls += "<th>implantacao</th>"
-            xls += "<th>Ano Ref</th>"
-            xls += "<th>Mês Ref</th>"
-            xls += "<th>Data Conclusão</th>"
-            xls += "<th>Porte</th>"
-            xls += "<th>Proposta</th>"
-            xls += "<th>Nome</th>"
-            xls += "<th>CPF</th>"
-            xls += "<th>Data Nascimento</th>"
-            xls += "<th>UF</th>"
-            xls += "<th>Administradora</th>"
-            xls += "<th>Responsável</th>"
-            xls += "<th>Status Final</th>"
-            xls += "<th>Divergência DS</th>"
-            xls += "<th>Observações</th>"
-            xls += "<th>TEA</th>"
-            xls += "<th>Cids</th>"
-            xls += "<th>Cids Adesão</th>"
-            xls += "</tr></thead><tbody>"
-
-            result.forEach(e => {
-                xls += "<tr>"
-                xls += `<td>${e._id}</td>`
-                xls += `<td>${e.anexadoSisAmil || ''}</td>`
-                xls += `<td>${e.implantacao || ''}</td>`
-                xls += `<td>${e.implantado || ''}</td>`
-                xls += `<td>${moment(e.dataEntrevista).format('YYYY')}</td>`
-                xls += `<td>${moment(e.dataEntrevista).format('MM')}</td>`
-                xls += `<td>${e.dataEntrevista || ''}</td>`
-                xls += `<td>${e.tipoContrato || ''}</td>`
-                xls += `<td>${e.proposta || ''}</td>`
-                xls += `<td>${e.nome || ''}</td>`
-                xls += `<td>${e.cpf || ''}</td>`
-                xls += `<td>${e.dataNascimento || ''}</td>`
-                xls += `<td>${e.filial || ''}</td>`
-                xls += `<td>${e.administradora || ''}</td>`
-                xls += `<td>${e.responsavel || ''}</td>`
-                xls += `<td>${e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA'}</td>`
-                xls += `<td>${e.houveDivergencia}</td>`
-                xls += `<td>${e.divergencia || ''}</td>`
-                xls += `<td>${e.tea || ''}</td>`
-                xls += `<td>${e.cidsAjustados.map(cid => `${cid.codigo} (${cid.descricao}) : ${cid.ano},`)}</td>`
-                xls += `<td>${e?.cidsDs?.map(cid => `${cid.codigo} (${cid.descricao}) : ${cid.ano},`)}</td>`
-                // if (e.cids) {
-                //     const arrCids = e.codigosCids.split('-')
-                //     arrCids.forEach(cid => {
-                //         xls += `<td>${cid}</td>`
-                //     })
-                // } else {
-                //     xls += `<td></td>`
-                // }
-                xls += `</tr>`
+            const result = await dadosEntrevistaService.findByFilter({
+                dataInicio: startDate,
+                dataFim: endDate,
+                tipoContrato: 'ADESÃO',
+                limit: 100000,
+                page: 1
             })
 
-            xls += "</tbody></table>"
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Relatorio Adesão');
 
-            var a = document.createElement('a');
-            var data_type = 'data:application/vnd.ms-excel';
-            a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-            a.download = 'Relatorio Propostas.xls'
-            a.click()
+            const columns = [
+                { header: 'Id', key: '_id', width: 10 },
+                { header: 'anexo', key: 'anexadoSisAmil', width: 10 },
+                { header: 'implantado', key: 'implantacao', width: 10 },
+                { header: 'implantacao', key: 'implantado', width: 10 },
+                { header: 'Ano Ref', key: 'ano', width: 10 },
+                { header: 'Mês Ref', key: 'mes', width: 10 },
+                { header: 'Data Conclusão', key: 'dataEntrevista', width: 10 },
+                { header: 'Porte', key: 'tipoContrato', width: 10 },
+                { header: 'Proposta', key: 'proposta', width: 10 },
+                { header: 'Nome', key: 'nome', width: 10 },
+                { header: 'CPF', key: 'cpf', width: 10 },
+                { header: 'Data Nascimento', key: 'dataNascimento', width: 10 },
+                { header: 'UF', key: 'filial', width: 10 },
+                { header: 'Administradora', key: 'administradora', width: 10 },
+                { header: 'Responsável', key: 'responsavel', width: 10 },
+                { header: 'Status Final', key: 'cancelado', width: 10 },
+                { header: 'Divergência DS', key: 'houveDivergencia', width: 10 },
+                { header: 'Tentativas de Contato', key: 'tentativasDeContato', width: 10 },
+                { header: 'Tentativa 1', key: 'tentativa1', width: 10 },
+                { header: 'Tentativa 2', key: 'tentativa2', width: 10 },
+                { header: 'Tentativa 3', key: 'tentativa3', width: 10 },
+                { header: 'TEA', key: 'tea', width: 10 },
+                { header: 'Cids', key: 'cidsAjustados', width: 10 },
+                { header: 'Cids Adesão', key: 'cidsDs', width: 10 },
+            ]
 
+            worksheet.columns = columns
+
+            result.entrevistas.forEach(e => {
+                const cidsAjustados = e.cidsAjustados.reduce((acc, cid) => {
+                    return acc + `${cid.codigo} (${cid.descricao}) : ${cid.ano}, `
+                }, '')
+                const cidsDs = e?.cidsDs?.reduce((acc, cid) => {
+                    return acc + `${cid.codigo} (${cid.descricao}) : ${cid.ano}, `
+                }, '')
+                worksheet.addRow({
+                    _id: e._id,
+                    anexadoSisAmil: e.anexadoSisAmil,
+                    implantacao: e.implantacao,
+                    implantado: e.implantado,
+                    ano: moment(e.dataEntrevista).format('YYYY'),
+                    mes: moment(e.dataEntrevista).format('MM'),
+                    dataEntrevista: new Date(e.dataEntrevista),
+                    tipoContrato: e.tipoContrato,
+                    proposta: e.proposta,
+                    nome: e.nome,
+                    cpf: e.cpf,
+                    dataNascimento: e.dataNascimento,
+                    filial: e.filial,
+                    administradora: e.administradora,
+                    responsavel: e.responsavel,
+                    cancelado: e.cancelado ? 'INCIDÊNCIA' : 'ENTREVISTA DISPONIBILIZADA',
+                    houveDivergencia: e.houveDivergencia,
+                    tentativasDeContato: e?.idProposta?.tentativasDeContato.length,
+                    tentativa1: e?.idProposta?.tentativasDeContato[0]?.data,
+                    tentativa2: e?.idProposta?.tentativasDeContato[1]?.data,
+                    tentativa3: e?.idProposta?.tentativasDeContato[2]?.data,
+                    tea: e.tea,
+                    cidsAjustados,
+                    cidsDs,
+                })
+            })
+            const buffer = await workbook.xlsx.writeBuffer()
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+            saveAs(blob, 'Relatorio Propostas.xlsx')
             setLoading(false)
-
         } catch (error) {
             console.log(error);
         }
@@ -126,7 +135,7 @@ const RelatorioAdesao = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Relatorio Mensal das Entrevistas
+                    Relatorio Adesão
                 </DialogTitle>
                 <DialogContent>
                     <Box component={Paper} p={1}>

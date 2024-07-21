@@ -133,12 +133,11 @@ const ModalGerarRelatorios = () => {
                     dataCriacao: new Date(pedido.dataCriacao),
                     parecer: pedido.parecer,
                     dataRetorno: new Date(pedido.dataRetorno),
-                    // parecer: pedido.parecer
                 })
             });
 
             worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
-                row.eachCell(function (cell, colNumber) {
+                row.eachCell(function (cell) {
                     if (rowNumber === 1) {
                         cell.font = {
                             bold: true,
