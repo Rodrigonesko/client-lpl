@@ -6,7 +6,7 @@ import InfoPessoaEntrevista from "../../../components/InfoPessoaEntrevista/InfoP
 import InfoAdicionais from "./components/InfoAdicional";
 import { Alert, Select, Button, InputLabel, FormControl, MenuItem, Box, CircularProgress, Typography, Container, Collapse, RadioGroup, FormControlLabel, Radio, Divider, Chip, Dialog, DialogContent } from '@mui/material'
 import EntrevistaQualidade from "../../../components/EntrevistaQualidade/EntrevistaQualidade";
-import { alterarFormularioEntrevista, getPropostaById } from "../../../_services/teleEntrevistaExterna.service";
+import { alterarFormularioEntrevista } from "../../../_services/teleEntrevistaExterna.service";
 import { getPerguntas } from "../../../_services/teleEntrevista.service";
 import Cids from "./components/Cids";
 import FormControlTextField from "./components/FormControlTextField";
@@ -16,6 +16,9 @@ import PerguntaAutismo from "./components/PerguntaAutismo";
 import Toast from "../../../components/Toast/Toast";
 import { finalizarEntrevista } from "../../../_services/teleEntrevistaV2.service";
 import gerarPdf from "../Pdf/Pdf";
+import { PropostaService } from "../../../_services/teleEntrevistaV2.service";
+
+const propostaService = new PropostaService()
 
 const RadioQuestion = ({ pergunta, respostasFormulario, setRespostasFormulario, pessoa, setTea, tea }) => {
 
@@ -130,7 +133,6 @@ const Formulario = () => {
     const [perguntas, setPerguntas] = useState([])
     const [pessoa, setPessoa] = useState()
     const [divergencia, setDivergencia] = useState(false)
-    const [qualDivergencia, setQualDivergencia] = useState('')
     const [motivoBeneficiario, setMotivoBeneficiario] = useState('')
     const [habitos, setHabitos] = useState(true)
     const [autismo, setAutismo] = useState(false)
@@ -167,7 +169,7 @@ const Formulario = () => {
     useEffect(() => {
         const buscarInfoPessoa = async () => {
             try {
-                const result = await getPropostaById(id)
+                const result = await propostaService.findById(id)
                 setPessoa(result)
                 if (result.formulario !== 'adulto') {
                     setHabitos(false)
@@ -227,10 +229,6 @@ const Formulario = () => {
             setAutismo(false)
         }
     }, [respostasFormulario?.espectro?.resposta])
-
-    useEffect(() => {
-        console.log(tea);
-    }, [tea])
 
     return (
         <>
@@ -467,7 +465,6 @@ const Formulario = () => {
                                             respostas: respostasFormulario,
                                             pessoa,
                                             divergencia: divergencia ? 'Sim' : 'Não',
-                                            qualDivergencia,
                                             motivoBeneficiario,
                                             cids: cidsSelecionados.map(cid => {
                                                 return {

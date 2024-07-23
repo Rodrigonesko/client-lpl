@@ -1,15 +1,20 @@
 import { IconButton, Tooltip, Menu, MenuItem, Box } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ArrowForward, Phone, Undo } from "@mui/icons-material";
 import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
 import ModalExcluir from "./ModalExcluir";
 import ModalCancelar from "./ModalCancelar";
 import ModalReagendar from "./ModalReagendar";
+import AuthContext from "../../../../../context/AuthContext";
 
 const propostaService = new PropostaService()
 
 const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeverity, setMessage, rn }) => {
+
+    const context = useContext(AuthContext)
+
+    console.log(context);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -127,27 +132,30 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                         Tentativa de Contato <Phone />
                     </Box>
                 </MenuItem>}
-                {!rn && <ModalCancelar
-                    proposta={proposta}
-                    setRefresh={setRefresh}
-                    setOpenToast={setOpenToast}
-                    setSeverity={setSeverity}
-                    setMessage={setMessage}
-                />}
-                {!rn && <ModalExcluir
-                    proposta={proposta}
-                    setRefresh={setRefresh}
-                    setOpenToast={setOpenToast}
-                    setSeverity={setSeverity}
-                    setMessage={setMessage}
-                />}
+                {(
+                    !rn && context?.acessos?.agendamento && context?.acessos?.administrador
+                ) && <ModalCancelar
+                        proposta={proposta}
+                        setRefresh={setRefresh}
+                        setOpenToast={setOpenToast}
+                        setSeverity={setSeverity}
+                        setMessage={setMessage}
+                    />}
+                {(
+                    !rn && context?.acessos?.agendamento && context?.acessos?.administrador
+                ) && <ModalExcluir
+                        proposta={proposta}
+                        setRefresh={setRefresh}
+                        setOpenToast={setOpenToast}
+                        setSeverity={setSeverity}
+                        setMessage={setMessage}
+                    />}
                 {
-                    (proposta.agendado.toLowerCase() === 'agendado') && <ModalReagendar proposta={proposta} setRefresh={setRefresh} />
+                    (proposta?.agendado?.toLowerCase() === 'agendado') && <ModalReagendar proposta={proposta} setRefresh={setRefresh} />
                 }
-
                 <MenuItem
                     onClick={() => {
-                        if(!rn){
+                        if (!rn) {
                             window.open(`/entrevistas/formulario/${proposta._id}`, '_blank');
                         } else {
                             window.open(`/rn/rns/${proposta._id}`, '_blank');

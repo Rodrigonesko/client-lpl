@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { useParams } from "react-router-dom";
 import moment from "moment/moment";
-import { Button, Box, Container, TextField, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Alert } from "@mui/material";
+import { Button, Box, Container, TextField, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Alert, Tooltip, IconButton } from "@mui/material";
 import Toast from "../../../components/Toast/Toast";
 import Title from "../../../components/Title/Title";
 import InfoLabel from "../../../components/InfoLabel/InfoLabel";
 import { findByIdUrgenciaEmergencia, updateUrgenciaEmergencia } from "../../../_services/urgenciaEmergenciaNew.service";
 import AuthContext from "../../../context/AuthContext";
+import InputMask from "react-input-mask";
+import { ArrowForward } from "@mui/icons-material";
 
 const UrgenciaEmergenciaDetalhes = () => {
 
@@ -17,6 +19,7 @@ const UrgenciaEmergenciaDetalhes = () => {
     const [pedido, setPedido] = useState({})
     const [telefone, setTelefone] = useState('')
     const [email, setEmail] = useState('')
+    const [whatsapp, setWhatsapp] = useState('')
     const [retorno, setRetorno] = useState('')
     const [observacoes, setObservacoes] = useState('')
     const [open, setOpen] = useState(false)
@@ -32,7 +35,8 @@ const UrgenciaEmergenciaDetalhes = () => {
                 email,
                 retorno,
                 observacoes,
-                analista: name
+                analista: name,
+                whatsapp: `whatsapp:+55${whatsapp.replace(/\D/g, '')}`
             })
             setSeverity('success')
             setMessage('Informações salvas com sucesso!')
@@ -96,6 +100,7 @@ const UrgenciaEmergenciaDetalhes = () => {
                 setTelefone(result.telefone)
                 setRetorno(result.retorno)
                 setObservacoes(result.observacoes)
+                setWhatsapp(result?.whatsapp?.replace(/\D/g, '')?.replaceAll('5', ''))
             } catch (error) {
                 console.log(error);
                 setSeverity('error')
@@ -140,6 +145,32 @@ const UrgenciaEmergenciaDetalhes = () => {
                 >
                     <TextField size="small" label="Telefone" value={telefone} onChange={e => setTelefone(e.target.value)} fullWidth />
                     <TextField size="small" label="E-mail" value={email} onChange={e => setEmail(e.target.value)} fullWidth />
+                    <Box
+                        display='flex'
+                        alignItems='center'
+                        gap={2}
+                    >
+                        <InputMask
+                            mask="(99) 99999-9999"
+                            value={whatsapp}
+                            onChange={e => setWhatsapp(e.target.value)}
+                        >
+                            {() => <TextField size="small" label="Whatsapp" fullWidth />}
+                        </InputMask>
+                        {
+                            pedido.whatsapp && (
+                                <Tooltip title="Ver conversa">
+                                    <IconButton
+                                        onClick={() => window.open(`/entrevistas/chat/${pedido.whatsapp}`, '_blank')}
+                                    >
+                                        <ArrowForward />
+                                    </IconButton>
+                                </Tooltip>
+                            )
+                        }
+
+                    </Box>
+
                 </Box>
 
                 <Grid container spacing={2} mt={2}>

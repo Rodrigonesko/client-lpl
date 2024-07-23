@@ -20,7 +20,7 @@ const LinhaTele = ({ proposta, setRefresh }) => {
                     variant="body2"
                     color="textSecondary"
                 >
-                    {data.vigenciaAmil}
+                    {moment(data.vigenciaAmil).format('DD/MM/YYYY')}
                 </Typography>
             </TableCell>
             <TableCell>

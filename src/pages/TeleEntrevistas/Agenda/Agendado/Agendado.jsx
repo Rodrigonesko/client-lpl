@@ -9,6 +9,7 @@ import Toast from "../../../../components/Toast/Toast";
 import LinhaAgendado from "./components/LinhaAgendado";
 import { RnService } from "../../../../_services/rn.service";
 import MenuOpcoes from "../Agendar/components/MenuOpcoes";
+import moment from "moment";
 
 const propostaService = new PropostaService()
 const rnService = new RnService()
@@ -212,7 +213,7 @@ const Agendado = () => {
                                         /> : (
                                             <TableRow key={proposta._id}>
                                                 <TableCell>{proposta.tipo}</TableCell>
-                                                <TableCell>{proposta.dataEntrevista}</TableCell>
+                                                <TableCell>{moment(proposta.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
                                                 <TableCell>{proposta.responsavel}</TableCell>
                                                 <TableCell>{proposta.proposta}</TableCell>
                                                 <TableCell>{proposta.beneficiario}</TableCell>

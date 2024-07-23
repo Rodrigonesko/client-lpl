@@ -58,7 +58,7 @@ const TabelaTele = () => {
                     display="flex"
                     gap={2}
                 >
-                    <FormControl size="small" sx={{width: '120px'}}>
+                    <FormControl size="small" sx={{ width: '120px' }}>
                         <InputLabel>Linhas</InputLabel>
                         <Select
                             value={limit}
@@ -71,7 +71,7 @@ const TabelaTele = () => {
                             <MenuItem value={100}>100</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl size="small" sx={{width: '300px'}}>
+                    <FormControl size="small" sx={{ width: '300px' }}>
                         <InputLabel>Tipo Contrato</InputLabel>
                         <Select
                             value={tipoContrato}
@@ -116,7 +116,7 @@ const TabelaTele = () => {
                         onChange={(e) => setSort(e.target.value)}
                         label="Ordenar por"
                     >
-                        <MenuItem value="vigencia">Vigência</MenuItem>
+                        <MenuItem value="createdAt">Vigência</MenuItem>
                         <MenuItem value="vigenciaAmil">Vigência Amil</MenuItem>
                         <MenuItem value="proposta">Proposta</MenuItem>
                         <MenuItem value="beneficiario">Beneficiário</MenuItem>

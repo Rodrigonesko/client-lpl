@@ -93,17 +93,12 @@ import Horarios from "./pages/TeleEntrevistas/Agenda/Horarios/Horarios";
 import FaturamentoEntrevistas from "./pages/TeleEntrevistas/FaturamentoEntrevistas/FaturamentoEntrevistas";
 import ReportTeleEntrevistas from "./pages/TeleEntrevistas/ReportTeleEntrevistas/ReportTeleEntrevistas";
 import ProducaoEntrevistas from "./pages/TeleEntrevistas/Producao/ProducaoTele";
-import ReportAgendadas from "./pages/TeleEntrevistas/ReportAgendadas/ReportAgendadas";
 import ProducaoDiariaTele from "./pages/TeleEntrevistas/ProducaoDiaria/ProducaoDiariaTele";
 import AdicionarCid from "./pages/TeleEntrevistas/AdicionarCid/AdicionarCid";
 import Implantacao from "./pages/TeleEntrevistas/Agenda/Implantacao/Implantacao";
 
 import NaoEnviados from "./pages/TeleEntrevistas/Mensagens/NaoEnviados/NaoEnviados";
 import Ajustar from "./pages/TeleEntrevistas/Mensagens/Ajustar/Ajustar";
-import Enviados from "./pages/TeleEntrevistas/Mensagens/Enviados/Enviados";
-import ErroAoEnviar from "./pages/TeleEntrevistas/Mensagens/ErroAoEnviar/ErroAoEnviar";
-import AtendimentoHumanizado from "./pages/TeleEntrevistas/Mensagens/NecessárioAtendimento/AtendimentoHumanizado";
-import RespostasJanelasHorarios from "./pages/TeleEntrevistas/Mensagens/RespostasJanelasHorarios/RespostasJanelasHorarios";
 import Chat from "./pages/TeleEntrevistas/Mensagens/Chat/Chat";
 import Conversas from "./pages/TeleEntrevistas/Mensagens/Conversas/Conversas";
 
@@ -377,9 +372,6 @@ const AppRoutes = () => {
                 <Route exact path="/entrevistas/producao" element={<ProtectedRoute>
                     <ProducaoEntrevistas />
                 </ProtectedRoute>} />
-                <Route exact path="/entrevistas/reportAgendadas" element={<ProtectedRoute>
-                    <ReportAgendadas />
-                </ProtectedRoute>} />
                 <Route exact path="/entrevistas/producaoDiaria" element={<ProtectedRoute>
                     <ProducaoDiariaTele />
                 </ProtectedRoute>} />
@@ -394,18 +386,6 @@ const AppRoutes = () => {
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/Ajustar" element={<ProtectedRoute>
                     <Ajustar />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/Enviados" element={<ProtectedRoute>
-                    <Enviados />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/ErroAoEnviar" element={<ProtectedRoute>
-                    <ErroAoEnviar />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/AtendimentoHumanizado" element={<ProtectedRoute>
-                    <AtendimentoHumanizado />
-                </ProtectedRoute>} />
-                <Route exact path="/entrevistas/RespostasJanelas" element={<ProtectedRoute>
-                    <RespostasJanelasHorarios />
                 </ProtectedRoute>} />
                 <Route exact path="/entrevistas/chat/:whatsapp" element={<ProtectedRoute>
                     <Chat />

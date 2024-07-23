@@ -15,6 +15,15 @@ import MensagemPadraoAdesao from './mensagensPadrao/MensagemPadraoAdesao';
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
+const numeros = [
+    'whatsapp:+551150396002',
+    'whatsapp:+551150394558',
+    'whatsapp:+551150392183',
+    'whatsapp:+551150394280',
+    'whatsapp:+554140426114',
+    'whatsapp:+15674092338'
+]
+
 const Chat = () => {
 
     const inputRef = useRef(null)
@@ -134,14 +143,14 @@ const Chat = () => {
                                 {
                                     chat.map(e => {
                                         return (
-                                            <Box key={e._id} m={1} style={{ textAlign: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' || e.de === 'whatsapp:+551150394280' ? 'right' : 'left' }}>
+                                            <Box key={e._id} m={1} style={{ textAlign: numeros.includes(e.de) ? 'right' : 'left' }}>
                                                 <Typography color='darkblue' fontSize='14px' >
                                                     {e.de}
                                                 </Typography>
                                                 <Typography
-                                                    style={{
+                                                    sx={{
                                                         display: 'inline-block',
-                                                        backgroundColor: e.de === 'whatsapp:+15674092338' || e.de === 'whatsapp:+554140426114' || e.de === 'whatsapp:+551150396002' || e.de === 'whatsapp:+551150394558' || e.de === 'whatsapp:+551150392183' || e.de === 'whatsapp:+551150394280' ? '#0066FF' : 'gray',
+                                                        bgcolor: numeros.includes(e.de) ? 'primary.main' : 'grey',
                                                         color: 'white',
                                                         padding: '10px',
                                                         borderRadius: '10px',
@@ -193,23 +202,15 @@ const Chat = () => {
                             }
                         </Box>
                         <Box mt={2} ml={1}>
-                            {/* <Box>
-                                <TextField label='Numero de envio' value={whatsapp} disabled />
-                                <Button variant='contained' sx={{ marginLeft: '10px' }}>Atualizar</Button>
-                            </Box> */}
                             <MensagemDiaAnterior setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemAdiantarTele setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemDependentesFaltantes setLoading={setLoading} setMensagem={setMensagem} />
                             <MensagemSemSucessoContato hookMsg={setMensagem} />
                             {
                                 beneficiario?.tipoContrato === 'ADESÃO' ? (
-                                    <>
-                                        <MensagemPadraoAdesao para={whatsapp} setFlushHook={setAux} />
-                                    </>
+                                    <MensagemPadraoAdesao para={whatsapp} setFlushHook={setAux} />
                                 ) : (
-                                    <>
-                                        <PrimeiroContato hookMsg={setMensagem} />
-                                    </>
+                                    <PrimeiroContato hookMsg={setMensagem} />
                                 )
                             }
                         </Box>

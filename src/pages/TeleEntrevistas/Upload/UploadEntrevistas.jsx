@@ -35,7 +35,8 @@ const UploadRn = () => {
         const workbook = XLSX.read(data, { type: 'array' })
         const firsSheetName = workbook.SheetNames[0]
         const worksheet = workbook.Sheets[firsSheetName]
-        const result = XLSX.utils.sheet_to_json(worksheet)
+        let result = XLSX.utils.sheet_to_json(worksheet)
+        console.log(result);
 
         try {
             if (tipoContrato === 'PME') {
@@ -44,6 +45,14 @@ const UploadRn = () => {
                 setSeverity('success')
             }
             if (tipoContrato === 'ADESÃO') {
+                result = result.map(item => {
+                    const newItem = {};
+                    Object.keys(item).forEach(key => {
+                        const trimmedKey = key.trim(); // Remove espaços antes e depois
+                        newItem[trimmedKey] = item[key];
+                    });
+                    return newItem;
+                });
                 const send = await propostaService.uploadAdesao(result)
                 setMessage(`Foram enviados ${send} propostas`)
                 setSeverity('success')

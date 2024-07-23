@@ -158,7 +158,6 @@ const Sidebar = ({ children }) => {
                                     <MenuItem><Link to='/admin/rh/agenda'>Agenda</Link></MenuItem>
                                 </SubMenu>
                                 <SubMenu title='Infra' icon={<FaTools />}>
-                                    <MenuItem><Link to='/admin/infra/atendimentoChamados'>Chamados TI</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/contingencias'>Controle de Contingências</Link></MenuItem>
                                     <MenuItem><Link to='/admin/infra/inventario'>Inventário</Link></MenuItem>
                                 </SubMenu>
@@ -169,7 +168,6 @@ const Sidebar = ({ children }) => {
                         <SubMenu title='Agenda' icon={<FaCalendar />}>
                             <MenuItem><Link to='/entrevistas/agenda/agendar'>Agendar</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/agenda/agendados'>Agendados</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/agenda/mensagens'>Mensagens</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/agenda/anexos'>Anexar SisAmil</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/implantacao'>Implatação</Link></MenuItem>
                             {
@@ -181,18 +179,12 @@ const Sidebar = ({ children }) => {
                         <SubMenu title='Whatsapp' icon={<FaWhatsapp />}>
                             <MenuItem><Link to='/entrevistas/naoEnviados'>Não Enviados</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/Ajustar'>Ajustar</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/Enviados'>Enviados</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/ErroAoEnviar'>Erro ao enviar</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/AtendimentoHumanizado'>Atendimento Humanizado</Link></MenuItem>
-                            <MenuItem><Link to='/entrevistas/RespostasJanelas'>Janelas Escolhidas</Link></MenuItem>
                             <MenuItem><Link to='/entrevistas/conversas'>Conversas</Link></MenuItem>
                         </SubMenu>
                         <MenuItem><Link to='/entrevistas/propostas'>Propostas</Link></MenuItem>
                         <MenuItem><Link to='/rn/todas'>Rns</Link></MenuItem>
                         {
                             acessos?.agendamento || acessos?.administrador ? (<>
-
-                                <MenuItem><Link to='/entrevistas/reportAgendadas'>Report Agendadas</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/producaoDiaria'>Produção Diaria</Link></MenuItem>
                                 <MenuItem><Link to='/entrevistas/producao'>Produção</Link></MenuItem>
                             </>

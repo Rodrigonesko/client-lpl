@@ -41,15 +41,7 @@ const MensagemPadraoAdesao = ({ para, setFlushHook }) => {
         }
         try {
             setLoading(true)
-
-            console.log(nome,
-                moment(data1).format('DD/MM/YYYY'),
-                opcoesJanela[opcaoJanelas][0],
-                moment(data2).format('DD/MM/YYYY'),
-                opcoesJanela[opcaoJanelas][1],
-                numero);
-
-            const response = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/newWhatsapp/sendTemplateMessage`, {
+            await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/newWhatsapp/sendTemplateMessage`, {
                 de: 'whatsapp:+551150394280',
                 para,
                 template: opcaoJanelas === 0 ? opcoesJanela[0][2] : opcoesJanela[1][2],
@@ -63,11 +55,8 @@ const MensagemPadraoAdesao = ({ para, setFlushHook }) => {
                 ]
             }, {
                 withCredentials: true,
-
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
-
             })
-
             setOpenToast(true)
             setMessage('Mensagem enviada com sucesso')
             setSeverity('success')
