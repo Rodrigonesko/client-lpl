@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Detalhes.css'
-import { Container, Button, Box, Paper, Alert, Snackbar, TextField, Divider, Typography } from "@mui/material";
+import { Container, Button, Box, Paper, Alert, Snackbar, TextField, Divider, Typography, Tooltip, IconButton } from "@mui/material";
 import moment from "moment";
 import { getInfoRn, tentativaContatoRn, updateRn } from "../../../_services/teleEntrevista.service";
 import ModalCancelarRn from "./modais/ModalCancelarRn";
 import { CiFloppyDisk } from 'react-icons/ci'
 import ModalConcluirRn from "./modais/ModalConcluirRn";
 import ModalRnDuplicada from "./modais/ModalRnDuplicada";
+import InputMask from 'react-input-mask'
+import { RnService } from "../../../_services/rn.service";
+import { WhatsApp } from "@mui/icons-material";
+
+const rnService = new RnService()
 
 const Detalhes = () => {
 
@@ -25,29 +30,26 @@ const Detalhes = () => {
     const [horario2, setHorario2] = useState('')
     const [horario3, setHorario3] = useState('')
     const [observacoes, setObservacoes] = useState('')
+    const [whatsapp, setWhatsapp] = useState('')
     const [concluido, setConcluido] = useState(false)
 
     const [flushHook, setFlushHook] = useState(false)
 
     const update = async () => {
-
-        console.log(id);
-
         try {
-            await updateRn({
-                id: id,
-                email: email,
+            await rnService.update({
+                _id: id,
+                email,
                 dataContato1: data1,
                 dataContato2: data2,
                 dataContato3: data3,
                 horarioContato1: horario1,
                 horarioContato2: horario2,
                 horarioContato3: horario3,
-                observacoes: observacoes
+                observacoes,
+                whatsapp: `whatsapp:+55${whatsapp.replace(/\D/g, '')}`
             })
-
             setOpenSnack(true)
-
         } catch (error) {
             console.log(error);
         }
@@ -103,6 +105,7 @@ const Detalhes = () => {
             setHorario2(result.horarioContato2)
             setHorario3(result.horarioContato3)
             setObservacoes(result.observacoes)
+            setWhatsapp(result.whatsapp.replace(/\D/g, '').slice(2))
 
             if (result.status === 'Concluido') {
                 setConcluido(true)
@@ -160,6 +163,35 @@ const Detalhes = () => {
                     </Box>
                     <Box display='flex' justifyContent='space-between' m={2}>
                         <TextField label='Email' size="small" variant='standard' value={email} onChange={e => setEmail(e.target.value)} sx={{ width: '300px' }} />
+                        <Box
+                            display='flex'
+                            gap={2}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                        >
+                            <InputMask
+                                mask="(99) 99999-9999"
+                                value={whatsapp}
+                                onChange={e => setWhatsapp(e.target.value)}
+                            >
+                                {() => <TextField label='Whatsapp' size="small" variant='standard' />}
+                            </InputMask>
+                            {
+                                dados.whatsapp && (
+                                    <Tooltip title="Ver conversa">
+                                        <IconButton
+                                            href={`/entrevistas/chat/${dados.whatsapp}`}
+                                            target="_blank"
+                                            color="success"
+                                        >
+                                            <WhatsApp />
+                                        </IconButton>
+                                    </Tooltip>
+                                )
+                            }
+
+                        </Box>
+
                         <TextField label='Telefone' size="small" variant='standard' value={dados.telefones} inputProps={{ readOnly: true }} focused />
                     </Box>
 
@@ -204,12 +236,30 @@ const Detalhes = () => {
                             }
                         </div>
                     </div>
-                    <div className="info-proposta observacoes">
-                        <div className="info-box observacoes">
-                            <label htmlFor="observacoes">Observações</label>
-                            <textarea name="observacoes" id="observacoes" cols="30" rows="10" defaultValue={dados.observacoes} onChange={e => setObservacoes(e.target.value)} ></textarea>
-                        </div>
-                    </div>
+
+                    <Box
+                        m={2}
+                    >
+                        <Typography
+                            variant='h6'
+                            sx={{ marginTop: '10px' }}
+                        >
+                            Observações
+                        </Typography>
+                        <TextField
+                            InputProps={{
+                                style: {
+                                    fontSize: '15px'
+                                }
+                            }}
+                            multiline
+                            fullWidth
+                            rows={6}
+                            value={observacoes}
+                            onChange={e => setObservacoes(e.target.value)}
+
+                        />
+                    </Box>
                     <div className="buttons">
                         <Button startIcon={<CiFloppyDisk />} onClick={update} className="salvar">Salvar</Button>
                         {
@@ -219,7 +269,6 @@ const Detalhes = () => {
                                     <ModalRnDuplicada id={id} email={email} proposta={dados.proposta} flushHook={setFlushHook} />
                                     <ModalCancelarRn id={dados._id} proposta={dados.proposta} flushHook={setFlushHook} />
                                 </>
-
                             )
                         }
 

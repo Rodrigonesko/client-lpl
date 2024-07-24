@@ -12,6 +12,14 @@ import { io } from "socket.io-client";
 import MensagemAdiantarTele from './mensagensPadrao/MensagemAdiantarTele';
 import MensagemDependentesFaltantes from './mensagensPadrao/MensagemDependentesFaltantes';
 import MensagemPadraoAdesao from './mensagensPadrao/MensagemPadraoAdesao';
+import { RnService } from '../../../../_services/rn.service';
+import { findByWhatsappUrgenciaEmergencia } from '../../../../_services/urgenciaEmergenciaNew.service';
+import MensagemPadraoRn from './mensagensPadrao/MensagemPadraoRn';
+import MensagemPadraoUe from './mensagensPadrao/MensagemPadraoUe';
+import { WhatsappService } from '../../../../_services/teleEntrevistaV2.service';
+
+const rnService = new RnService()
+const whatsappService = new WhatsappService()
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
 
@@ -21,7 +29,8 @@ const numeros = [
     'whatsapp:+551150392183',
     'whatsapp:+551150394280',
     'whatsapp:+554140426114',
-    'whatsapp:+15674092338'
+    'whatsapp:+15674092338',
+    'whatsapp:+15752234727'
 ]
 
 const Chat = () => {
@@ -37,6 +46,8 @@ const Chat = () => {
     const [aux, setAux] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const [beneficiario, setBeneficiario] = useState()
+    const [rn, setRn] = useState()
+    const [ue, setUe] = useState()
 
     const isSmallScreen = useMediaQuery('(max-width:800px)');
 
@@ -47,26 +58,37 @@ const Chat = () => {
             if (mensagem.trim() === '') {
                 return
             }
-            const result = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/sendMessage`, {
-                whatsapp,
-                mensagem
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            })
-            if (result.status === 200) {
-                buscarMensagens()
-                setError(false)
-                setLoading(false)
+
+            if (!rn && !ue) {
+                const result = await Axios.post(`${process.env.REACT_APP_API_TELE_KEY}/sendMessage`, {
+                    whatsapp,
+                    mensagem
+                }, {
+                    withCredentials: true,
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                })
+                if (result.status === 200) {
+                    buscarMensagens()
+                    setError(false)
+                    setLoading(false)
+                }
+            } else {
+                await whatsappService.sendMessage({
+                    de: 'whatsapp:+15752234727',
+                    para: whatsapp,
+                    mensagem,
+                })
             }
+
+
             setMensagem('')
             setAux(!aux)
             inputRef.current.value = '';
         } catch (error) {
             console.log(error);
-            if (error.response.data.msg === 63024) {
+            if (error?.response?.data?.msg === 63024) {
                 setErrorMessage('Esse número não tem whatsapp')
-            } else if (error.response.data.msg === 63016) {
+            } else if (error?.response?.data?.msg === 63016) {
                 setErrorMessage('Não foi possível enviar a mensagem pois, está fora da janela de 24 horas, por favor utilize um template pronto.')
             } else {
                 setErrorMessage('Erro ao enviar mensagem')
@@ -97,6 +119,11 @@ const Chat = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
+            const responseRn = await rnService.findByWhatsApp(whatsapp)
+            console.log(responseRn);
+            const responseUe = await findByWhatsappUrgenciaEmergencia(whatsapp)
+            if (responseRn) setRn(responseRn)
+            if (responseUe) setUe(responseUe)
             setBeneficiario(response.data)
             setAux(true)
         } catch (error) {
@@ -211,6 +238,16 @@ const Chat = () => {
                                     <MensagemPadraoAdesao para={whatsapp} setFlushHook={setAux} />
                                 ) : (
                                     <PrimeiroContato hookMsg={setMensagem} />
+                                )
+                            }
+                            {
+                                rn && (
+                                    <MensagemPadraoRn pedido={rn} setRefresh={setAux} />
+                                )
+                            }
+                            {
+                                ue && (
+                                    <MensagemPadraoUe pedido={ue} setRefresh={setAux} />
                                 )
                             }
                         </Box>

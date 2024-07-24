@@ -95,3 +95,14 @@ export class DadosEntrevistaService {
         return await new ApiCall(`/dados-entrevista/filter`, URL_API_V2).post(filter)
     }
 }
+
+export class WhatsappService {
+
+    sendMessage = async (data) => {
+        return await new ApiCall(`/whatsapp/send-message`, URL_API_V2).post(data)
+    }
+
+    sendTemplateMessage = async (data) => {
+        return await new ApiCall(`/whatsapp/send-template-message`, URL_API_V2).post(data)
+    }
+}

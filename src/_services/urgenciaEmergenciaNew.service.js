@@ -4,8 +4,6 @@ const url = process.env.REACT_APP_API_TELE_ENTREVISTA
 export const uploadUrgenciaEmergencia = async (data) => {
     return await new ApiCall('/urgencia-emergencia/upload', url).post(data)
 }
-
-
 export const createUrgenciasEmergencias = async (data) => {
     return await new ApiCall('/urgencia-emergencia/planilha', url).post(data)
 }
@@ -16,6 +14,10 @@ export const deleteUrgenciaEmergencia = async (id) => {
 
 export const findByIdUrgenciaEmergencia = async (id) => {
     return await new ApiCall(`/urgencia-emergencia/id/${id}`, url).get()
+}
+
+export const findByWhatsappUrgenciaEmergencia = async (whatsapp) => {
+    return await new ApiCall(`/urgencia-emergencia/whatsapp/${whatsapp}`, url).get()
 }
 
 export const filterUrgenciasEmergencias = async (data) => {

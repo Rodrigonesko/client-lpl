@@ -7,6 +7,9 @@ import { getPoliticas, updatePoliticas } from '../../../_services/politicas.serv
 import { FaRegFilePdf, FaRegEyeSlash } from 'react-icons/fa'
 import ModalFaltouAssinar from './Modals/ModalFaltouAssinar'
 import Title from '../../../components/Title/Title'
+import { BiSpreadsheet } from 'react-icons/bi'
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 const ControlePoliticas = () => {
 
@@ -26,13 +29,45 @@ const ControlePoliticas = () => {
         setFlushHook(true)
     };
 
+    const gerarRelatorio = async (politica) => {
+        console.log(politica);
 
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Relatório de Assinaturas');
+
+        worksheet.columns = [
+            { header: 'Nome', key: 'nome', width: 10 },
+            { header: 'Data', key: 'data', width: 10 },
+            { header: 'Politica', key: 'politica', width: 10 }
+        ];
+
+        // Removendo duplicatas
+        const nomesVistos = {};
+        const assinaturasUnicas = politica.assinaturas.filter(assinatura => {
+            if (nomesVistos[assinatura.nome]) {
+                return false;
+            } else {
+                nomesVistos[assinatura.nome] = true;
+                return true;
+            }
+        });
+
+        assinaturasUnicas.forEach(assinatura => {
+            worksheet.addRow({
+                nome: assinatura.nome,
+                data: new Date(assinatura.data),
+                politica: politica.nome
+            });
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buffer]), `Relatório de Assinaturas - ${politica.nome}.xlsx`);
+    };
     useEffect(() => {
         setFlushHook(false)
         fetchData()
 
     }, [flushHook])
-
     return (
 
         <Sidebar>
@@ -48,7 +83,7 @@ const ControlePoliticas = () => {
                         {
                             politicas.map(politica => {
                                 return (
-                                    <Card sx={{ width: '230px', margin: '10px', bgcolor: politica.inativo ? 'lightgray' : '', padding: '5px' }}>
+                                    <Card key={politica._id} sx={{ width: '230px', margin: '10px', bgcolor: politica.inativo ? 'lightgray' : '', padding: '5px' }}>
                                         <object data={`${process.env.REACT_APP_API_KEY}/media${politica.arquivo}`} type='application/pdf' height={250} width='100%'>
                                             PDF
                                         </object>
@@ -65,8 +100,17 @@ const ControlePoliticas = () => {
                                                 <Button variant='contained' target='_blank' color='error' href={`${process.env.REACT_APP_API_KEY}/media${politica.arquivo}`} ><FaRegFilePdf /></Button>
                                             </Tooltip>
                                             <ModalFaltouAssinar id={politica._id} />
-                                            <Tooltip title='Inativar'>
+                                            {/* <Tooltip title='Inativar'>
                                                 <Button type='button' variant='contained' target='_blank' color='error' onClick={() => handleInativarClick(politica._id, !politica.inativo)}><FaRegEyeSlash /></Button>
+                                            </Tooltip> */}
+                                            <Tooltip title='Relatório'>
+                                                <Button
+                                                    variant='contained'
+                                                    color='success'
+                                                    onClick={() => gerarRelatorio(politica)}
+                                                >
+                                                    <BiSpreadsheet />
+                                                </Button>
                                             </Tooltip>
                                         </CardActions>
                                     </Card>
