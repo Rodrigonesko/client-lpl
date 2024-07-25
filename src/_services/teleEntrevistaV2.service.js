@@ -75,6 +75,10 @@ export class PropostaService {
         return await new ApiCall(`/proposta/filter`, URL_API_V2).post(filter)
     }
 
+    relatorioRespondeuWhats = async () => {
+        return await new ApiCall(`/proposta/relatorio-respondidos-whatsapp`, URL_API_V2).get()
+    }
+
     update = async (data) => {
         return await new ApiCall(`/proposta/${data._id}`, URL_API_V2).put(data)
     }

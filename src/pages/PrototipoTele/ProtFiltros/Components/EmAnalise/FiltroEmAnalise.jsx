@@ -13,6 +13,7 @@ import RelatorioPropostas from "./RelatorioPropostas";
 import RelatorioNaoRealizadas from "./RelatorioNaoRealizadas";
 import RelatorioDevolverAmil from "./RelatorioDevolverAmil";
 import Search from "@mui/icons-material/Search";
+import RelatorioRespondeuWhats from "./RelatorioRespondeuWhats";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -368,11 +369,12 @@ const FiltroEmAnalise = () => {
                 </Typography>
             </Box>
             <Divider />
-            <Box display={'flex'} m={1} >
+            <Box display={'flex'} m={1} gap={2} >
                 <GerarHorarios />
                 <RelatorioPropostas />
                 <RelatorioNaoRealizadas />
                 <RelatorioDevolverAmil />
+                <RelatorioRespondeuWhats />
             </Box>
             <Box display={'flex'} m={2}>
                 <Filtros
