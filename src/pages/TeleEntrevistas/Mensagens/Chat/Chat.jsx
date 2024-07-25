@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from '../../../../components/Sidebar/Sidebar'
 import { useMediaQuery, Container, Box, Paper, Typography, TextField, Button, Alert, CircularProgress, Chip, Tooltip } from '@mui/material'
 import Axios from 'axios'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getCookie } from 'react-use-cookie';
 import moment from 'moment';
 import PrimeiroContato from './mensagensPadrao/PrimeiroContato';
@@ -78,9 +78,10 @@ const Chat = () => {
                     para: whatsapp,
                     mensagem,
                 })
+                buscarMensagens()
+                setError(false)
+                setLoading(false)
             }
-
-
             setMensagem('')
             setAux(!aux)
             inputRef.current.value = '';
@@ -108,6 +109,7 @@ const Chat = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
+            console.log(result.data);
             setChat(result.data)
             await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/visualizarMensagem`, {
                 whatsapp
@@ -120,7 +122,6 @@ const Chat = () => {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
             const responseRn = await rnService.findByWhatsApp(whatsapp)
-            console.log(responseRn);
             const responseUe = await findByWhatsappUrgenciaEmergencia(whatsapp)
             if (responseRn) setRn(responseRn)
             if (responseUe) setUe(responseUe)
@@ -187,6 +188,32 @@ const Chat = () => {
                                                     {e.mensagem.split('\n').map((item, key) => {
                                                         return <span key={key}>{item}<br /></span>
                                                     })}
+                                                    {
+                                                        e.arquivo ? (
+                                                            <Box
+                                                                sx={{
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    gap: '10px',
+                                                                    alignItems: 'center',
+                                                                }}
+                                                            >
+                                                                <Link href={e.arquivo} target="_blank" rel="noreferrer" color={'primary'} underline="hover">
+                                                                    Arquivo
+                                                                </Link>
+                                                                <img
+                                                                    src={e.arquivo}
+                                                                    alt="Arquivo"
+                                                                    style={{
+                                                                        maxWidth: '300px',
+                                                                        maxHeight: '300px',
+                                                                        objectFit: 'cover',
+                                                                    }}
+                                                                />
+                                                            </Box>
+
+                                                        ) : null
+                                                    }
                                                 </Typography>
                                                 <Typography color='GrayText'>{moment(e.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                                 <Typography variant='body2' color='GrayText'>
@@ -235,9 +262,9 @@ const Chat = () => {
                             <MensagemSemSucessoContato hookMsg={setMensagem} />
                             {
                                 beneficiario?.tipoContrato === 'ADESÃO' ? (
-                                    <MensagemPadraoAdesao para={whatsapp} setFlushHook={setAux} />
+                                    !rn && !ue && <MensagemPadraoAdesao para={whatsapp} setFlushHook={setAux} />
                                 ) : (
-                                    <PrimeiroContato hookMsg={setMensagem} />
+                                    !rn && !ue && <PrimeiroContato hookMsg={setMensagem} />
                                 )
                             }
                             {
