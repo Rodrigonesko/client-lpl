@@ -71,6 +71,10 @@ export class PropostaService {
         return await new ApiCall(`/proposta/id/${id}`, URL_API_V2).get()
     }
 
+    findByCpfTitular = async (cpf) => {
+        return await new ApiCall(`/proposta/cpf-titular/${cpf}`, URL_API_V2).get()
+    }
+
     findByFilter = async (filter) => {
         return await new ApiCall(`/proposta/filter`, URL_API_V2).post(filter)
     }
@@ -108,5 +112,9 @@ export class WhatsappService {
 
     sendTemplateMessage = async (data) => {
         return await new ApiCall(`/whatsapp/send-template-message`, URL_API_V2).post(data)
+    }
+
+    sendMessageJanela = async (data) => {
+        return await new ApiCall(`/whatsapp/enviar-mensagem-janelas`, URL_API_V2).post(data)
     }
 }

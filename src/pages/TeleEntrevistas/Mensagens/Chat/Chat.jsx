@@ -74,7 +74,7 @@ const Chat = () => {
                 }
             } else {
                 await whatsappService.sendMessage({
-                    de: 'whatsapp:+15752234727',
+                    de: 'whatsapp:+554140426114',
                     para: whatsapp,
                     mensagem,
                 })

@@ -151,6 +151,7 @@ const Formulario = () => {
     const [openToast, setOpenToast] = useState(false)
     const [messageToast, setMessageToast] = useState('')
     const [severityToast, setSeverityToast] = useState('success')
+    const [naoAgendados, setNaoAgendados] = useState([])
 
     const alterarFormulario = async () => {
         try {
@@ -170,6 +171,8 @@ const Formulario = () => {
         const buscarInfoPessoa = async () => {
             try {
                 const result = await propostaService.findById(id)
+                const dependentes = await propostaService.findByCpfTitular(result.cpfTitular)
+                setNaoAgendados(dependentes.filter(dependente => dependente.agendado !== 'agendado' && !['Concluído', 'Cancelada'].includes(dependente.status)))
                 setPessoa(result)
                 if (result.formulario !== 'adulto') {
                     setHabitos(false)
@@ -266,9 +269,23 @@ const Formulario = () => {
                             </FormControl>
                             <Button style={{ marginLeft: '10px' }} variant="contained" size="small" onClick={alterarFormulario}>Alterar</Button>
                         </Box>
-
                         <EntrevistaQualidade setEntrevistaQualidade={setEntrevistaQualidade} entrevistaQualidade={entrevistaQualidade} />
-
+                        {
+                            naoAgendados.length > 0 && (
+                                <Alert severity='error'>
+                                    <Typography>
+                                        Existem dependentes não agendados
+                                    </Typography>
+                                    {
+                                        naoAgendados.map(dependente => (
+                                            <Typography variant="body2" key={dependente._id}>
+                                                {dependente.nome}
+                                            </Typography>
+                                        ))
+                                    }
+                                </Alert>
+                            )
+                        }
                         <Box m={2} textAlign='center'>
                             <InfoAdicionais data={infoAdicional} />
                         </Box>
@@ -497,6 +514,22 @@ const Formulario = () => {
                             Enviar Formulário
                         </Button>
                     </Box>
+                    {
+                        naoAgendados.length > 0 && (
+                            <Alert severity='error'>
+                                <Typography>
+                                    Existem dependentes não agendados
+                                </Typography>
+                                {
+                                    naoAgendados.map(dependente => (
+                                        <Typography variant="body2" key={dependente._id}>
+                                            {dependente.nome}
+                                        </Typography>
+                                    ))
+                                }
+                            </Alert>
+                        )
+                    }
                     <Dialog
                         open={openDialog}
                         onClose={() => setOpenDialog(false)}

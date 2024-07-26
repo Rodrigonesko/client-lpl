@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 import moment from "moment"
 import Toast from "../../../../../components/Toast/Toast"
 
-const NUMERO = 'whatsapp:+15752234727'
+const NUMERO = 'whatsapp:+554140426114'
 const TEMPLATE = 'HXd3f5e2a084ba040fa6d5737b0d63bf31'
 const MESSAGE_SERVICE_SID = 'MG3b384472f4d9839eaa31b758842628fe'
 const whatsappService = new WhatsappService()

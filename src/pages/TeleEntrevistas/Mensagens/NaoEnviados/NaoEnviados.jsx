@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../../components/Sidebar/Sidebar";
-import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, MenuItem, TextField } from "@mui/material";
+import { Container, Typography, Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Modal, LinearProgress, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, MenuItem, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import Axios from 'axios'
 import { getCookie } from "react-use-cookie";
 import moment from "moment";
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 'auto',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    height: '80vh',
-    overflowY: 'auto'
-};
-
+import { WhatsappService } from "../../../../_services/teleEntrevistaV2.service";
+import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+const whatsappService = new WhatsappService()
+const propostaService = new PropostaService()
 const Modelo1 = ({ data1, data2 }) => {
     return (
         <Typography>
@@ -93,18 +82,15 @@ const NaoEnviados = () => {
 
             for (const item of propostas) {
                 if (count === Number(quantidade)) {
-                    console.log('entrou');
                     break
                 }
                 count++
-                const result = await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/enviarMensagem`, {
-                    proposta: item,
-                    modeloEscolhido,
-                    data1: moment(data1).format('DD/MM/YYYY'),
-                    data2: moment(data2).format('DD/MM/YYYY')
-                }, {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
+                await whatsappService.sendMessageJanela({
+                    id: item._id,
+                    modelo: modeloEscolhido,
+                    template: 'HX3a1e1fd7d3c0713290ab8430e9a92df6',
+                    data1,
+                    data2
                 })
                 setProgressValue((count / propostas.length) * 100)
                 buscarPropostas()
@@ -124,7 +110,6 @@ const NaoEnviados = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
-
             setPropostas(result.data)
             setLoading(false)
         } catch (error) {
@@ -136,14 +121,11 @@ const NaoEnviados = () => {
     const voltarParaAjuste = async (id) => {
         try {
             setLoading(true)
-
-            await Axios.put(`${process.env.REACT_APP_API_TELE_KEY}/voltarAjuste`, {
-                id
-            }, {
-                withCredentials: true,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
+            await propostaService.update({
+                _id: id,
+                situacao: 'Corrigir',
+                cpfTitular: null
             })
-
             buscarPropostas()
             setLoading(false)
         } catch (error) {
@@ -173,7 +155,7 @@ const NaoEnviados = () => {
                     </Box>
                     <Box>
                         <TableContainer>
-                            <Table className="table">
+                            <Table size="small">
                                 <TableHead className="table-header">
                                     <TableRow>
                                         <TableCell>Proposta</TableCell>
@@ -198,7 +180,7 @@ const NaoEnviados = () => {
                                                     <TableCell>{e.tipoAssociado}</TableCell>
                                                     <TableCell>{e.ddd}</TableCell>
                                                     <TableCell>{e.celular}</TableCell>
-                                                    <TableCell><Button variant="contained" onClick={() => voltarParaAjuste(e._id)}>Ajustar</Button></TableCell>
+                                                    <TableCell><Button size="small" variant="contained" onClick={() => voltarParaAjuste(e._id)}>Ajustar</Button></TableCell>
                                                 </TableRow>
                                             )
                                         })
@@ -207,13 +189,14 @@ const NaoEnviados = () => {
                             </Table>
                         </TableContainer>
                     </Box>
-                    <Modal
+                    <Dialog
                         open={stateModal}
                         onClose={() => setStateModal(false)}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
                     >
-                        <Box sx={style}>
+                        <DialogTitle>
+                            Enviar Mensagens
+                        </DialogTitle>
+                        <DialogContent>
                             <Box component={Paper} p={3} display='flex'>
                                 <Box mr={4}>
                                     <Box>
@@ -232,10 +215,10 @@ const NaoEnviados = () => {
                                                 <MenuItem>
                                                     <em>Modelo</em>
                                                 </MenuItem>
-                                                <MenuItem value='Modelo 1'>
+                                                <MenuItem value='1'>
                                                     Modelo 1
                                                 </MenuItem>
-                                                <MenuItem value='Modelo 2'>
+                                                <MenuItem value='2'>
                                                     Modelo 2
                                                 </MenuItem>
                                             </Select>
@@ -290,12 +273,12 @@ const NaoEnviados = () => {
                                     </Alert>
                                 ) : null
                             }
-                            <Box m={1} display='flex' justifyContent='space-around'>
+                            <DialogActions>
                                 <Button variant="contained" color='inherit' onClick={() => setStateModal(false)}>Fechar</Button>
                                 <Button variant="contained" color='success' onClick={enviarMensagens}>Enviar</Button>
-                            </Box>
-                        </Box>
-                    </Modal>
+                            </DialogActions>
+                        </DialogContent>
+                    </Dialog>
                 </Container>
             </Sidebar>
         </>
