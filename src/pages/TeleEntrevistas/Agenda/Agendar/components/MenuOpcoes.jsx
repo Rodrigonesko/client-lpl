@@ -1,21 +1,21 @@
 import { IconButton, Tooltip, Menu, MenuItem, Box } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useContext, useState } from "react";
-import { ArrowForward, Phone, Undo } from "@mui/icons-material";
+import { ArrowForward, Phone } from "@mui/icons-material";
 import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
 import ModalExcluir from "./ModalExcluir";
 import ModalCancelar from "./ModalCancelar";
 import ModalReagendar from "./ModalReagendar";
 import AuthContext from "../../../../../context/AuthContext";
+import ModalDetalhesTele from "../../../components/ModalDetalhesTele";
 
 const propostaService = new PropostaService()
 
 const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeverity, setMessage, rn }) => {
 
+    const [openDialog, setOpenDialog] = useState(false)
+
     const context = useContext(AuthContext)
-
-    console.log(context);
-
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -171,7 +171,26 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
                         Formulário <ArrowForward />
                     </Box>
                 </MenuItem>
+                <MenuItem
+                    onClick={() => setOpenDialog(true)}
+                >
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent={"space-between"}
+                        gap={1}
+                        width={'100%'}
+                    >
+                        Detalhes
+                    </Box>
+                </MenuItem>
             </Menu>
+            <ModalDetalhesTele
+                cpfTitular={proposta.cpfTitular}
+                setFlushHook={setRefresh}
+                setOpenDialog={setOpenDialog}
+                openDialog={openDialog}
+            />
         </>
     )
 }
