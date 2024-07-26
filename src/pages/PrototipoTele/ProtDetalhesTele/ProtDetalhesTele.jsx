@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from "@mui/material"
+import { Box, LinearProgress, Typography } from "@mui/material"
 //import Sidebar from "../../../components/Sidebar/Sidebar"
 import { grey } from "@mui/material/colors"
 import CardInfoTitular from "./Cards/CardInfoTitular";
@@ -16,6 +16,7 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
     // const { cpfTitular } = useParams()
 
     const [data, setData] = useState([])
+    const [data2, setData2] = useState()
     const [titular, setTitular] = useState({})
     const [horarios, setHorarios] = useState({})
     const [analistasDisponiveis, setAnalistasDisponiveis] = useState({})
@@ -46,12 +47,23 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
         const fetchData = async () => {
             setLoading(true)
             const result = await getDataByCpfTitular(cpfTitular)
+            const agrupamentoPropostas = {};
+
             result.forEach(item => {
-                if (item.cpf === item.cpfTitular) {
-                    setTitular(item)
+                if (item.tipoAssociado.toLowerCase().trim() === 'titular' || result.length === 1) {
+                    setTitular(item);
                 }
-            })
+
+                // Agrupando propostas por valor
+                const valorProposta = item.proposta;
+                if (!agrupamentoPropostas[valorProposta]) {
+                    agrupamentoPropostas[valorProposta] = [];
+                }
+                agrupamentoPropostas[valorProposta].push(item);
+            });
+            console.log(agrupamentoPropostas);
             setData(result)
+            setData2(agrupamentoPropostas)
             setLoading(false)
         }
         setFlushHook(false)
@@ -82,7 +94,7 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
                 }
                 <Box display={'flex'} width={'100%'}>
                     {
-                        data.length !== 0 && (
+                        data2 && (
                             <>
                                 <CardInfoTitular data={titular} setFlushHook={setFlushHook} />
                                 <CardComentariosTele cpf={cpfTitular} />
@@ -92,6 +104,41 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
                     }
                 </Box>
                 {
+                    data2 && (
+                        Object.keys(data2).map((key, index) => {
+                            return (
+                                <Box
+                                    key={index}
+
+                                >
+                                    <Typography
+                                        variant={'h6'}
+                                        m={2}
+                                    >
+                                        {key}
+                                    </Typography>
+                                    <CardInfoTele
+                                        setShowConversas={setShowConversas}
+                                        setNomeWhatsapp={setNomeWhatsapp}
+                                        setResponsavelAtendimentoWhatsapp={setResponsavelWhatsapp}
+                                        setWhatsappSelected={setWhatsappSelected}
+                                        setConversaSelecionada={setConversaSelecionada}
+                                        data={data2[key]}
+                                        selectedObjects={selectedObjects}
+                                        setSelectedObjects={setSelectedObjects}
+                                        setFlushHook={setFlushHook}
+                                    />
+                                    <CardAcoesTele
+                                        objects={selectedObjects}
+                                        setFlushHook={setFlushHook}
+                                    />
+                                </Box>
+                            )
+                        }
+                        )
+                    )
+                }
+                {/* {
                     data.length !== 0 && (
                         <>
                             <CardInfoTele
@@ -112,7 +159,7 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
                             />
                         </>
                     )
-                }
+                } */}
                 {
                     (Object.keys(horarios).length !== 0 && Object.keys(analistasDisponiveis) !== 0) && (
                         <Box m={2}>

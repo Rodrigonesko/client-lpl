@@ -20,8 +20,18 @@ import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { io } from "socket.io-client";
 import MensagemDependentesFaltantes from "../Components/MensagemDependentesFaltantes";
 import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
+import { Link } from "react-router-dom";
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
+
+const numeros = [
+    'whatsapp:+551150394280',
+    'whatsapp:+15674092338',
+    'whatsapp:+554140426114',
+    'whatsapp:+551150396002',
+    'whatsapp:+551150394558',
+    'whatsapp:+551150392183'
+]
 
 const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendimento, setResponsavelAtendimento, selectedWhatsapp, setSelectedWhatsapp, data, setData }) => {
 
@@ -125,11 +135,47 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     {
                         messages.map(message => {
                             return (
-                                <Box key={message._id} m={1} style={{ textAlign: message.de === 'whatsapp:+551150394280' || message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? 'right' : 'left' }}>
+                                <Box key={message._id} m={1} style={{ textAlign: numeros.includes(message.de) ? 'right' : 'left' }}>
                                     <Typography color='darkblue' fontSize='14px' >
                                         {message.de}
                                     </Typography>
-                                    <Typography style={{ display: 'inline-block', backgroundColor: message.de === 'whatsapp:+551150394280' || message.de === 'whatsapp:+15674092338' || message.de === 'whatsapp:+554140426114' || message.de === 'whatsapp:+551150396002' || message.de === 'whatsapp:+551150394558' || message.de === 'whatsapp:+551150392183' ? blue[500] : 'gray', color: 'white', padding: '10px', borderRadius: '10px', maxWidth: '80%' }}>{message.mensagem}</Typography>
+                                    <Typography
+                                        sx={{
+                                            display: 'inline-block',
+                                            backgroundColor: numeros.includes(message.de) ? blue[500] : 'gray',
+                                            color: 'white',
+                                            padding: '10px',
+                                            borderRadius: '10px',
+                                            maxWidth: '80%'
+                                        }}>
+                                        {message.mensagem}
+                                        {
+                                            message.arquivo ? (
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        gap: '10px',
+                                                        alignItems: 'center',
+                                                    }}
+                                                >
+                                                    <Link href={message.arquivo} target="_blank" rel="noreferrer" color={'primary'} underline="hover">
+                                                        Arquivo
+                                                    </Link>
+                                                    <img
+                                                        src={message.arquivo}
+                                                        alt="Arquivo"
+                                                        style={{
+                                                            maxWidth: '300px',
+                                                            maxHeight: '300px',
+                                                            objectFit: 'cover',
+                                                        }}
+                                                    />
+                                                </Box>
+
+                                            ) : null
+                                        }
+                                    </Typography>
                                     <Typography color='GrayText'>{moment(message.horario).format('HH:mm DD/MM/YYYY')}</Typography>
                                     <Typography variant='body2' color='GrayText'>
                                         {

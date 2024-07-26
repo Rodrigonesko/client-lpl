@@ -8,7 +8,7 @@ const CardInfoTitular = ({ data, setFlushHook }) => {
         <Box borderRadius={'10px'} color={'white'} bgcolor={deepPurple[500]} maxWidth={'50%'} width={'50%'} m={2} p={2} component={Paper}>
             <Typography variant="h5" fontWeight={'bold'}>
                 <Typography variant="subtitle2">Proposta</Typography>
-                {data.proposta} | {data.tipoContrato}
+                {data.tipoContrato}
             </Typography>
             <Typography variant="h5" fontWeight={'bold'}>
                 <Typography variant="subtitle2">Titular</Typography>
