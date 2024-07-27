@@ -22,6 +22,7 @@ const rnService = new RnService()
 const whatsappService = new WhatsappService()
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
+const socketLocaweb = io(process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO);
 
 const numeros = [
     'whatsapp:+551150396002',
@@ -159,6 +160,15 @@ const Chat = () => {
                 }
             }
         })
+        socketLocaweb.on('messageReceived', async (message) => {
+            if (message.whatsapp === whatsapp) {
+                buscarMensagens()
+                const component = chatRef.current;
+                if (component) {
+                    component.scrollTop = component.scrollHeight;
+                }
+            }
+        });
     }, [])
 
     return (

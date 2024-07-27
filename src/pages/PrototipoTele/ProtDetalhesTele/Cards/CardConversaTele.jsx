@@ -23,6 +23,7 @@ import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
 import { Link } from "react-router-dom";
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
+const socketLocaweb = io(process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO);
 
 const numeros = [
     'whatsapp:+551150394280',
@@ -82,6 +83,12 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                 setFlushHook(true)
             }
         })
+        socketLocaweb.on('messageReceived', async (message) => {
+            if (message.whatsapp === data.whatsapp) {
+                setFlushHook(true)
+            }
+        }
+        )
     }, [data.whatsapp])
 
     useEffect(() => {
