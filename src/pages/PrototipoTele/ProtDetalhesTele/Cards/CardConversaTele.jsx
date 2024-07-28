@@ -23,7 +23,7 @@ import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
 import { Link } from "react-router-dom";
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
-const socketLocaweb = io(process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO);
+const socketLocaweb = io('http://200.234.207.26:5007');
 
 const numeros = [
     'whatsapp:+551150394280',

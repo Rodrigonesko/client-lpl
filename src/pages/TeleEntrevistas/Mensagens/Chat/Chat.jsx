@@ -22,7 +22,7 @@ const rnService = new RnService()
 const whatsappService = new WhatsappService()
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
-const socketLocaweb = io(process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO);
+const socketLocaweb = io('http://200.234.207.26:5007');
 
 const numeros = [
     'whatsapp:+551150396002',
