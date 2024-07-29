@@ -213,7 +213,7 @@ const Agendado = () => {
                                         /> : (
                                             <TableRow key={proposta._id}>
                                                 <TableCell>{proposta.tipo}</TableCell>
-                                                <TableCell>{moment(proposta.dataEntrevista).format('DD/MM/YYYY')}</TableCell>
+                                                <TableCell>{moment(proposta.dataEntrevista).format('DD/MM/YYYY HH:mm')}</TableCell>
                                                 <TableCell>{proposta.responsavel}</TableCell>
                                                 <TableCell>{proposta.proposta}</TableCell>
                                                 <TableCell>{proposta.beneficiario}</TableCell>

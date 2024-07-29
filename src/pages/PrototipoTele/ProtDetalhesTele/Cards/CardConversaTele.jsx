@@ -23,7 +23,7 @@ import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
 import { Link } from "react-router-dom";
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
-const socketLocaweb = io('http://200.234.207.26:5007');
+const socketLocaweb = io(process.env.REACT_APP_API_TELE_ENTREVISTA_EXTERNO);
 
 const numeros = [
     'whatsapp:+551150394280',
@@ -78,7 +78,6 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
         });
         socket.on('statusMessage', async (data) => {
             const { From, To } = data
-            console.log(data);
             if (To === data.whatsapp) {
                 setFlushHook(true)
             }
@@ -94,6 +93,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
     useEffect(() => {
         const component = chatRef.current;
         if (component) {
+            console.log(messages);
             component.scrollTop = component.scrollHeight;
         }
 
@@ -166,9 +166,9 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                                                         alignItems: 'center',
                                                     }}
                                                 >
-                                                    <Link href={message.arquivo} target="_blank" rel="noreferrer" color={'primary'} underline="hover">
+                                                    <a href={message.arquivo} target="_blank" color={'primary'} underline="hover">
                                                         Arquivo
-                                                    </Link>
+                                                    </a>
                                                     <img
                                                         src={message.arquivo}
                                                         alt="Arquivo"

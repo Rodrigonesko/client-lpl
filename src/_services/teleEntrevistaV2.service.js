@@ -63,6 +63,14 @@ export class PropostaService {
         return await new ApiCall('/proposta/spreadsheet', URL_API_V2).post(data)
     }
 
+    concluir = async (data) => {
+        return await new ApiCall('/proposta/concluir', URL_API_V2).post(data)
+    }
+
+    cancelar = async (data) => {
+        return await new ApiCall('/proposta/cancelar', URL_API_V2).post(data)
+    }
+
     uploadArquivoPropostaEntrevista = async (id, data) => {
         return await new ApiCall(`/proposta/upload/${id}`, URL_API_V2_EXTERNA).post(data)
     }

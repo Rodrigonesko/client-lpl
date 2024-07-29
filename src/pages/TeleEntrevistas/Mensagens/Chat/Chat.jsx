@@ -208,9 +208,9 @@ const Chat = () => {
                                                                     alignItems: 'center',
                                                                 }}
                                                             >
-                                                                <Link href={e.arquivo} target="_blank" rel="noreferrer" color={'primary'} underline="hover">
+                                                                <a href={e.arquivo} target="_blank" rel="noreferrer" color={'primary'} underline="hover">
                                                                     Arquivo
-                                                                </Link>
+                                                                </a>
                                                                 <img
                                                                     src={e.arquivo}
                                                                     alt="Arquivo"
