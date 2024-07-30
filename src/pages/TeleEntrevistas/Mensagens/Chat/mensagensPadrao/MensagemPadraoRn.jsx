@@ -38,7 +38,7 @@ const MensagemPadraoRn = ({ pedido, setRefresh }) => {
                 template: TEMPLATE,
                 variaveis: {
                     '1': nome,
-                    '4': moment(data).format('DD/MM/YYYY')
+                    '2': moment(data).format('DD/MM/YYYY')
                 },
                 messagingServiceSid: MESSAGE_SERVICE_SID,
                 mensagem: `
