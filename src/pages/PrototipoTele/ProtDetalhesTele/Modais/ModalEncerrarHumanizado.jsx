@@ -1,10 +1,16 @@
 import { Tooltip, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import Toast from "../../../../components/Toast/Toast"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { encerrarAtendimentoHumanizado } from "../../../../_services/teleEntrevistaExterna.service"
+import AuthContext from "../../../../context/AuthContext"
+import { PropostaService } from "../../../../_services/teleEntrevistaV2.service"
+const propostaService = new PropostaService()
+
 
 const ModalEncerrarHumanizado = ({ objects, setFlushHook }) => {
+
+    const { name } = useContext(AuthContext)
 
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
@@ -23,6 +29,15 @@ const ModalEncerrarHumanizado = ({ objects, setFlushHook }) => {
         try {
 
             for (const item of objects) {
+                await propostaService.update({
+                    _id: item._id,
+                    $push: {
+                        logs: {
+                            responsavel: name,
+                            acao: 'Encerrou atendimento humanizado',
+                        }
+                    }
+                })
                 await encerrarAtendimentoHumanizado({
                     id: item._id,
                 })

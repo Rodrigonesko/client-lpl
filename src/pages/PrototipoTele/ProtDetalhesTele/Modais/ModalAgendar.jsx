@@ -1,13 +1,18 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, IconButton, Radio, RadioGroup, Tooltip, Typography, CircularProgress } from "@mui/material"
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Agendamento from "../Components/Agendamento";
 import { Delete } from "@mui/icons-material";
 import Toast from "../../../../components/Toast/Toast";
 import { agendarEntrevista, verificarAgendamento } from "../../../../_services/teleEntrevista.service";
 import { encerrarAtendimentoJanela } from "../../../../_services/teleEntrevistaExterna.service";
+import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+import AuthContext from "../../../../context/AuthContext";
+const propostaService = new PropostaService()
 
 const ModalAgendar = ({ objects, setFlushHook }) => {
+
+    const { name } = useContext(AuthContext)
 
     const [open, setOpen] = useState(false)
     const [agendamentos, setAgendamentos] = useState([])
@@ -91,6 +96,15 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
             }
 
             for (const item of agendamentos) {
+                await propostaService.update({
+                    _id: item._id,
+                    $push: {
+                        logs: {
+                            responsavel: name,
+                            acao: 'Agendou entrevista',
+                        }
+                    }
+                })
                 await agendarEntrevista({
                     id: item._id,
                     responsavel: item.analista,
