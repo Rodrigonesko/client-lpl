@@ -23,7 +23,7 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
     const handleCancelar = async () => {
         try {
             for (const item of objects) {
-                if(item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
+                if (item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
                 await cancelarEntrevista({ id: item._id, motivoCancelamento: motivo })
             }
             setSeverity('success')
@@ -74,6 +74,7 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
                         >
                             <FormControlLabel value="Sem Sucesso de Contato!" control={<Radio />} label="Sem Sucesso de Contato!" />
                             <FormControlLabel value="Beneficiario Solicitou o Cancelamento" control={<Radio />} label="Beneficiario Solicitou o Cancelamento" />
+                            <FormControlLabel value={"Não encontrado no Sistema"} control={<Radio />} label={"Não encontrado no Sistema"} />
                         </RadioGroup>
                     </FormControl>
                 </DialogContent>
