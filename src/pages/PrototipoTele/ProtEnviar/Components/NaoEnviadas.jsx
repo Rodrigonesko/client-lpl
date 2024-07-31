@@ -249,7 +249,16 @@ const NaoEnviadas = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {!loading ? (propostas.filter(proposta => proposta.nome.toLocaleLowerCase().includes(pesquisa.toLocaleLowerCase()) || proposta.proposta.toLocaleLowerCase().includes(pesquisa.toLocaleLowerCase())).map((proposta, index) => (
+                        {!loading ? (propostas.filter(proposta => {
+                            proposta.nome.toLocaleLowerCase().includes(pesquisa.toLocaleLowerCase()) || 
+                            proposta.proposta.toLocaleLowerCase().includes(pesquisa.toLocaleLowerCase())})
+                            .filter(proposta => {
+                                if(filterText === 'titular com dependente maior de 9 anos e menor de 17 anos'){
+                                    return proposta.tipoContrato === 'ADESÃO'
+                                } else {
+                                    return true
+                                }
+                            }).map((proposta, index) => (
                             <Row
                                 key={index}
                                 proposta={proposta}

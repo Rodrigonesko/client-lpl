@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup, Tooltip, Typography } from "@mui/material"
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Toast from "../../../../components/Toast/Toast";
 import { cancelarEntrevista } from "../../../../_services/teleEntrevista.service";
+import AuthContext from "../../../../context/AuthContext";
+import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+const propostaService = new PropostaService()
 
 const ModalCancelar = ({ objects, setFlushHook }) => {
+
+    const { name } = useContext(AuthContext)
 
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
@@ -23,7 +28,16 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
     const handleCancelar = async () => {
         try {
             for (const item of objects) {
-                if (item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
+                if(item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
+                await propostaService.update({
+                    _id: item._id,
+                    $push: {
+                        logs: {
+                            responsavel: name,
+                            acao: 'Cancelou entrevista',
+                        }
+                    }
+                })
                 await cancelarEntrevista({ id: item._id, motivoCancelamento: motivo })
             }
             setSeverity('success')

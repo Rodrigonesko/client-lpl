@@ -110,7 +110,7 @@ const NaoEnviados = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token') || getCookie('token')}` }
             })
-            setPropostas(result.data)
+            setPropostas(result.data.filter(e => e.tipoAssociado !== 'ADESÃO'))
             setLoading(false)
         } catch (error) {
             console.log(error);

@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material"
 import UndoIcon from '@mui/icons-material/Undo';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Toast from "../../../../components/Toast/Toast";
 import { retrocederEntrevista } from "../../../../_services/teleEntrevista.service";
+import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+import AuthContext from "../../../../context/AuthContext";
+const propostaService = new PropostaService()
 
 const ModalRetroceder = ({ objects, setFlushHook }) => {
+
+    const { name } = useContext(AuthContext)
 
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
@@ -23,6 +28,15 @@ const ModalRetroceder = ({ objects, setFlushHook }) => {
         try {
 
             for (const item of objects) {
+                await propostaService.update({
+                    _id: item._id,
+                    $push: {
+                        logs: {
+                            responsavel: name,
+                            acao: 'Retrocedeu entrevista',
+                        }
+                    }
+                })
                 const result = await retrocederEntrevista({ id: item._id })
                 console.log(result);
             }
