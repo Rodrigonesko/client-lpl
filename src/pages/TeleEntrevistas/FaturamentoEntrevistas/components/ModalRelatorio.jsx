@@ -1,10 +1,15 @@
 import { useState } from "react"
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
 import Toast from "../../../../components/Toast/Toast"
-import Axios from 'axios'
 import moment from 'moment'
 import { DadosEntrevistaService } from "../../../../_services/teleEntrevistaV2.service"
+import { RnService } from "../../../../_services/rn.service"
+import { filterUrgenciasEmergencias } from "../../../../_services/urgenciaEmergenciaNew.service"
+import { saveAs } from 'file-saver';
+import ExcelJS from 'exceljs';
+
 const dadosEntrevistaService = new DadosEntrevistaService()
+const rnService = new RnService()
 
 const ModalRelatorio = () => {
 
@@ -17,120 +22,122 @@ const ModalRelatorio = () => {
     const [dataFim, setDataFim] = useState('')
 
     const gerarRelatorio = async () => {
-
         setLoading(true)
+        try {
+            const [result, resultUe, reusltRn] = await Promise.all([
+                dadosEntrevistaService.findByFilter({
+                    dataInicio,
+                    dataFim,
+                    page: 1,
+                    limit: 20000
+                }),
+                filterUrgenciasEmergencias({
+                    status: 'Concluído',
+                    dataInicioConclusao: dataInicio,
+                    dataFimConclusao: dataFim,
+                    page: 1,
+                    limit: 20000
+                }),
+                rnService.findByFilter({
+                    dataInicio,
+                    dataFim,
+                    page: 1,
+                    limit: 20000
+                })
+            ])
 
-        const result = await dadosEntrevistaService.findByFilter({
-            dataInicio,
-            dataFim,
-            page: 1,
-            limit: 20000
-        })
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Pedidos');
 
-        console.log(result);
+            worksheet.columns = [
+                { header: 'Id', key: 'id', width: 15 },
+                { header: 'Analista', key: 'analista', width: 15 },
+                { header: 'Tipo', key: 'tipo', width: 15 },
+                { header: 'Proposta', key: 'proposta', width: 15 },
+                { header: 'Nome', key: 'nome', width: 15 },
+                { header: 'Data Entrevista', key: 'dataEntrevista', width: 15 },
+                { header: 'Faturado', key: 'faturado', width: 15 },
+                { header: 'Nota Fiscal', key: 'nf', width: 15 },
+                { header: 'Data Faturamento', key: 'dataFaturamento', width: 15 },
+            ];
 
-        const reusltRn = await Axios.get(`${process.env.REACT_APP_API_KEY}/rn/concluidas`, {
-            withCredentials: true,
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        const resultUe = await Axios.get(`${process.env.REACT_APP_API_KEY}/urgenciaEmergencia/concluidas?limit=0&page=0`, {
-            withCredentials: true,
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+            result.entrevistas.forEach(e => {
+                worksheet.addRow({
+                    id: e._id || '',
+                    analista: e.cancelado ? e.divergencia : e.responsavel || '',
+                    tipo: 'Tele' || '',
+                    proposta: e.proposta || '',
+                    nome: e.nome || '',
+                    dataEntrevista: moment(e.dataEntrevista).format('DD/MM/YYYY') || '',
+                    faturado: e.faturado || '',
+                    nf: e.nf || '',
+                    dataFaturamento: e.dataFaturamento ? moment(e.dataFaturamento).format('DD/MM/YYYY') : '' || '',
+                });
 
-        let xls = '\ufeff'
-        xls += "<table border='1'>"
-        xls += "<thead><tr>"
-        xls += "<th>Id</th>"
-        xls += "<th>Analista</th>"
-        xls += "<th>Tipo</th>"
-        xls += "<th>Proposta</th>"
-        xls += "<th>Nome</th>"
-        xls += "<th>Data Entrevista</th>"
-        xls += "<th>Faturado</th>"
-        xls += "<th>Nota Fiscal</th>"
-        xls += "<th>Data Faturamento</th>"
-        xls += "</tr></thead><tbody>"
+            })
 
-        result.entrevistas.forEach(e => {
-            xls += "<tr>"
-            xls += `<td>${e._id}</td>`
-            xls += `<td>${e.cancelado ? e.divergencia : e.responsavel}</td>`
-            xls += `<td>Tele</td>`
-            xls += `<td>${e.proposta}</td>`
-            xls += `<td>${e.nome}</td>`
-            xls += `<td>${moment(e.dataEntrevista).format('DD/MM/YYYY')}</td>`
-            xls += `<td>${e.faturado}</td>`
-            if (e.nf === undefined) {
-                xls += `<td></td>`
-            } else {
-                xls += `<td>${e.nf}</td>`
-            }
-            if (e.dataFaturamento === undefined) {
-                xls += `<td></td>`
-            } else {
-                xls += `<td>${moment(e.dataFaturamento).format('DD/MM/YYYY')}</td>`
-            }
-            xls += `</tr>`
-        })
+            reusltRn.pedidos.forEach(e => {
+                worksheet.addRow({
+                    id: e._id || '',
+                    analista: e.responsavel || '',
+                    tipo: 'Rn' || '',
+                    proposta: e.proposta || '',
+                    nome: e.beneficiario || '',
+                    dataEntrevista: moment(e.dataConclusao).format('DD/MM/YYYY') || '',
+                    faturado: e.faturado || '',
+                    nf: e.nf || '',
+                    dataFaturamento: e.dataFaturamento ? moment(e.dataFaturamento).format('DD/MM/YYYY') : '' || '',
+                });
+            })
 
-        reusltRn.data.result.forEach(e => {
-            xls += "<tr>"
-            xls += `<td>${e._id}</td>`
-            xls += `<td>${e.responsavel}</td>`
-            xls += `<td>Rn</td>`
-            xls += `<td>${e.proposta}</td>`
-            xls += `<td>${e.beneficiario}</td>`
-            xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
-            xls += `<td>${e.faturado}</td>`
-            if (e.nf === undefined) {
-                xls += `<td></td>`
-            } else {
-                xls += `<td>${e.nf}</td>`
-            }
-            if (e.dataFaturamento === undefined) {
-                xls += `<td></td>`
-            } else {
-                xls += `<td>${moment(e.dataFaturamento).format('DD/MM/YYYY')}</td>`
-            }
-            xls += `</tr>`
-        })
+            resultUe.urgencias.forEach(e => {
+                worksheet.addRow({
+                    id: e._id || '',
+                    analista: e.retorno === 'Sem sucesso de contato' ? 'Sem Sucesso de Contato!' : e.analista || '',
+                    tipo: 'UE' || '',
+                    proposta: e.pedido || '',
+                    nome: e.nomeAssociado || '',
+                    dataEntrevista: moment(e.dataConclusao).format('DD/MM/YYYY') || '',
+                    faturado: e.faturado || '',
+                    nf: e.nf || '',
+                    dataFaturamento: e.dataFaturamento ? moment(e.dataFaturamento).format('DD/MM/YYYY') : '' || '',
+                });
+            })
 
-        resultUe.data.propostas.forEach(e => {
-            xls += "<tr>"
-            xls += `<td>${e._id}</td>`
-            xls += `<td>${e.retorno === 'Sem sucesso de contato' ? 'Sem Sucesso de Contato!' : e.analista}</td>`
-            xls += `<td>UE</td>`
-            xls += `<td>${e.pedido}</td>`
-            xls += `<td>${e.nomeAssociado}</td>`
-            xls += `<td>${moment(e.dataConclusao).format('DD/MM/YYYY')}</td>`
-            xls += `<td>${e.faturado}</td>`
-            if (e.nf === undefined) {
-                xls += `<td></td>`
-            } else {
-                xls += `<td>${e.nf}</td>`
-            }
-            if (e.dataFaturamento === undefined) {
-                xls += `<td></td>`
-            } else {
-                xls += `<td>${moment(e.dataFaturamento).format('DD/MM/YYYY')}</td>`
-            }
-            xls += `</tr>`
-        })
+            worksheet.eachRow((row, rowNumber) => {
+                row.eachCell((cell) => {
+                    if (rowNumber === 1) {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FF6100' },
+                        };
+                        cell.font = {
+                            bold: true,
+                            color: { argb: 'FFFFFF' },
+                        }
+                        cell.border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        }
+                    }
+                });
+            })
 
-        xls += "</tbody></table>"
-
-        var a = document.createElement('a');
-        var data_type = 'data:application/vnd.ms-excel';
-        a.href = data_type + ', ' + xls.replace(/ /g, '%20');
-        a.download = 'Relatorio Faturamento.xls'
-        a.click()
-
-        setLoading(false)
+            workbook.xlsx.writeBuffer().then((buffer) => {
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), `faturamento-tel-${moment().format('DD-MM-YYYY')}.xlsx`);
+            });
+            
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setSeverity('error')
+            setMessage('Erro ao gerar relatório')
+            setOpenToast(true)
+            setLoading(false)
+        }
     }
 
     return (
@@ -166,6 +173,7 @@ const ModalRelatorio = () => {
                             InputLabelProps={{
                                 shrink: true
                             }}
+                            disabled={loading}
                         />
                         <TextField
                             label="Data Fim"
@@ -176,17 +184,24 @@ const ModalRelatorio = () => {
                             InputLabelProps={{
                                 shrink: true
                             }}
+                            disabled={loading}
                         />
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button
                         onClick={() => setOpen(false)}
+                        variant="contained"
+                        color="inherit"
                     >
                         Cancelar
                     </Button>
                     <Button
                         onClick={gerarRelatorio}
+                        variant="contained"
+                        color="primary"
+                        disabled={loading}
+                        endIcon={loading && <CircularProgress size={20} />}
                     >
                         Gerar
                     </Button>
