@@ -75,6 +75,10 @@ export class PropostaService {
         return await new ApiCall(`/proposta/upload/${id}`, URL_API_V2_EXTERNA).post(data)
     }
 
+    filterPendentes = async (filter) => {
+        return await new ApiCall('/proposta/filter-pendentes', URL_API_V2).post(filter)
+    }
+
     findById = async (id) => {
         return await new ApiCall(`/proposta/id/${id}`, URL_API_V2).get()
     }
@@ -85,6 +89,10 @@ export class PropostaService {
 
     findByFilter = async (filter) => {
         return await new ApiCall(`/proposta/filter`, URL_API_V2).post(filter)
+    }
+
+    quantidadePropostasPendentes = async () => {
+        return await new ApiCall(`/proposta/quantidade-propostas-pendentes`, URL_API_V2).get()
     }
 
     relatorioRespondeuWhats = async () => {

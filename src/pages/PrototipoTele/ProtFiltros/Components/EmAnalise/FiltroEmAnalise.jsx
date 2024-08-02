@@ -14,6 +14,9 @@ import RelatorioNaoRealizadas from "./RelatorioNaoRealizadas";
 import RelatorioDevolverAmil from "./RelatorioDevolverAmil";
 import Search from "@mui/icons-material/Search";
 import RelatorioRespondeuWhats from "./RelatorioRespondeuWhats";
+import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
+
+const propostaService = new PropostaService();
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -30,7 +33,10 @@ const FiltroEmAnalise = () => {
         janelas: false,
         ajustar: false,
         semWhats: false,
-        erroWhatsapp: false
+        erroWhatsapp: false,
+        semResposta: false,
+        respondido: false,
+        incidencia: false,
     });
 
     const [tipoContrato, setTipoContrato] = useState({
@@ -181,7 +187,7 @@ const FiltroEmAnalise = () => {
             setLoading(true)
             setPage(1);
 
-            const result = await filterPropostas({
+            const result = await propostaService.filterPendentes({
                 status: status,
                 tipoContrato: tipoContrato,
                 vigencia: vigencia,
@@ -210,6 +216,9 @@ const FiltroEmAnalise = () => {
             ajustar: false,
             semWhats: false,
             agendado: false,
+            semResposta: false,
+            respondido: false,
+            incidencia: false,
         });
 
         setTipoContrato({
@@ -248,6 +257,9 @@ const FiltroEmAnalise = () => {
             ajustar: true,
             semWhats: true,
             agendado: true,
+            semResposta: true,
+            respondido: true,
+            incidencia: true,
         });
 
         setTipoContrato({
@@ -394,104 +406,6 @@ const FiltroEmAnalise = () => {
                     handleChangeIdade={handleChangeIdade}
                 />
                 <Box p={1} width={'100%'}>
-                    {/*na  box abaixo coloque em chips os filtros aplicados*/}
-                    <Box>
-                        <Typography fontWeight={'bold'}>
-                            Filtros Aplicados
-                        </Typography>
-                        <Box display={'flex'} flexWrap={'wrap'} mt={1}>
-                            {
-                                status.agendar && (
-                                    <Chip
-                                        label={'Agendar'}
-                                        sx={{
-                                            backgroundColor: blue[100],
-                                            color: blue[800],
-                                            '&:hover': {
-                                                backgroundColor: blue[500],
-                                                opacity: 0.8,
-                                            },
-                                            mr: 1,
-                                            mb: 1
-                                        }}
-                                        size="small"
-                                    />
-                                )
-                            }
-                            {
-                                status.agendado && (
-                                    <Chip
-                                        label={'Agendado'}
-                                        sx={{
-                                            backgroundColor: blue[100],
-                                            color: blue[800],
-                                            '&:hover': {
-                                                backgroundColor: blue[500],
-                                                opacity: 0.8,
-                                            },
-                                            mr: 1,
-                                            mb: 1
-                                        }}
-                                        size="small"
-                                    />
-                                )
-                            }
-                            {
-                                status.humanizado && (
-                                    <Chip
-                                        label={'Humanizado'}
-                                        sx={{
-                                            backgroundColor: deepPurple[100],
-                                            color: deepPurple[800],
-                                            '&:hover': {
-                                                backgroundColor: deepPurple[500],
-                                                opacity: 0.8,
-                                            },
-                                            mr: 1,
-                                            mb: 1
-                                        }}
-                                        size="small"
-                                    />
-                                )
-                            }
-                            {
-                                status.canceladoHumanizado && (
-                                    <Chip
-                                        label={'Cancelado Humanizado'}
-                                        sx={{
-                                            backgroundColor: deepPurple[100],
-                                            color: deepPurple[800],
-                                            '&:hover': {
-                                                backgroundColor: deepPurple[500],
-                                                opacity: 0.8,
-                                            },
-                                            mr: 1,
-                                            mb: 1
-                                        }}
-                                        size="small"
-                                    />
-                                )
-                            }
-                            {
-                                status.naoLidas && (
-                                    <Chip
-                                        label={'Não Lidas'}
-                                        sx={{
-                                            backgroundColor: grey[100],
-                                            color: grey[800],
-                                            '&:hover': {
-                                                backgroundColor: grey[500],
-                                                opacity: 0.8,
-                                            },
-                                            mr: 1,
-                                            mb: 1
-                                        }}
-                                        size="small"
-                                    />
-                                )
-                            }
-                        </Box>
-                    </Box>
                     <form
                         action=""
                         style={{

@@ -6,6 +6,8 @@ import { Refresh, Menu, Close } from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+import { PropostaService } from '../../../../../_services/teleEntrevistaV2.service';
+const propostaService = new PropostaService()
 
 const Filtros = ({
     status,
@@ -51,7 +53,7 @@ const Filtros = ({
     const fetchTotalPropostas = async () => {
         try {
             setLoading(true)
-            const result = await quantidadePropostasNaoRealizadas()
+            const result = await propostaService.quantidadePropostasPendentes()
             setTotalPropostas(result)
             setLoading(false)
         } catch (error) {
@@ -243,25 +245,6 @@ const Filtros = ({
                                 control={
                                     open ? (
                                         <Checkbox
-                                            checked={status.naoLidas}
-                                            onChange={handleChangeStatus}
-                                            name="naoLidas"
-                                        />) : (
-                                        <Tooltip title='Não lidas' arrow>
-                                            <Checkbox
-                                                checked={status.naoLidas}
-                                                onChange={handleChangeStatus}
-                                                name="naoLidas"
-                                            />
-                                        </Tooltip>
-                                    )
-                                }
-                                label={open && `Não lidas (${totalPropostas.naoLidas})`}
-                            />
-                            <FormControlLabel
-                                control={
-                                    open ? (
-                                        <Checkbox
                                             checked={status.janelas}
                                             onChange={handleChangeStatus}
                                             name="janelas"
@@ -333,6 +316,67 @@ const Filtros = ({
                                     )
                                 }
                                 label={open && `Erro Whatsapp (${totalPropostas.erroWhatsapp})`}
+                            />
+                            <FormControlLabel
+                                control={
+                                    open ? (
+                                        <Checkbox
+                                            checked={status.semResposta}
+                                            onChange={handleChangeStatus}
+                                            name="semResposta"
+                                        />) : (
+                                        <Tooltip title='Erro Whatsapp' arrow>
+                                            <Checkbox
+                                                checked={status.semResposta}
+                                                onChange={handleChangeStatus}
+                                                name="semResposta"
+                                            />
+                                        </Tooltip>
+                                    )
+                                }
+                                label={open && `Sem resposta (${totalPropostas.semResposta})`}
+                            />
+                            <FormControlLabel
+                                control={
+                                    open ?
+                                        (
+                                            <Checkbox
+                                                checked={status.respondidos}
+                                                onChange={handleChangeStatus}
+                                                name="respondidos"
+                                            />
+                                        ) : (
+                                            <Tooltip title='Não lidas' arrow>
+                                                <Checkbox
+                                                    checked={status.respondidos}
+                                                    onChange={handleChangeStatus}
+                                                    name="respondidos"
+                                                />
+                                            </Tooltip>
+                                        )
+                                }
+                                label={open && `Respondidos (${totalPropostas.respondidos})`}
+                            />
+                            <FormControlLabel
+                                control={
+                                    open ?
+                                        (
+                                            <Checkbox
+                                                checked={status.incidencia}
+                                                onChange={handleChangeStatus}
+                                                name="incidencia"
+                                            />
+                                        ) : (
+                                            <Tooltip title='Não lidas' arrow>
+                                                <Checkbox
+                                                    checked={status.incidencia}
+                                                    onChange={handleChangeStatus}
+                                                    name="incidencia"
+                                                />
+                                            </Tooltip>
+                                        )
+                                }
+                                label={open && `Incidencia (${totalPropostas.incidencia})`}
                             />
                         </FormGroup>
                     </FormControl>
