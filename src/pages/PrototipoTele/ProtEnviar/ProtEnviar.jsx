@@ -19,7 +19,6 @@ const ProtEnviar = () => {
                 >
                     <Tab label="Enviar" value='Enviar' />
                     <Tab label="Ajustar" value={'Ajustar'} />
-                    <Tab label="Enviadas" value={'Enviadas'} />
                     <Tab label="Não Respondias" value={'NaoRespondidas'} />
                     <Tab label="Estatisticas" value={'Estatisticas'} />
                 </Tabs>
@@ -32,9 +31,6 @@ const ProtEnviar = () => {
                     tab === 'Ajustar' && (
                         <ProtAjustar />
                     )
-                }
-                {
-                    tab === 'Enviadas' && 'Enviadas'
                 }
                 {
                     tab === 'NaoRespondidas' && <NaoRespondias />

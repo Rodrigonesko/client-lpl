@@ -6,7 +6,8 @@ import Toast from '../../../../components/Toast/Toast'
 import { ArrowRight } from '@mui/icons-material'
 import { filterPropostasNaoEnviadas, sendMessageSaudacao } from '../../../../_services/teleEntrevistaExterna.service'
 import ModalEnviarMensagens from './ModalEnviarMensagens'
-import { mandaAtendimentoAutomatizado } from '../../../../_services/teleEntrevistaV2.service'
+import { WhatsappService } from '../../../../_services/teleEntrevistaV2.service'
+const whatsappService = new WhatsappService()
 
 const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
 

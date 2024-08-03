@@ -10,6 +10,7 @@ import { getDataByCpfTitular, getHorariosDisponiveis } from "../../../_services/
 import CardAcoesTele from "./Cards/CardAcoesTele";
 import HorariosDisponiveis from "../../TeleEntrevistas/Agenda/Agendar/HorariosDisponiveis";
 import CardConversaTele from "./Cards/CardConversaTele";
+import moment from "moment";
 
 const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesquisa }) => {
 
@@ -115,7 +116,7 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
                                         variant={'h6'}
                                         m={2}
                                     >
-                                        {key}
+                                        {key} - {moment(data2[key][0].dataRecebimento).format('DD/MM/YYYY')}
                                     </Typography>
                                     <CardInfoTele
                                         setShowConversas={setShowConversas}

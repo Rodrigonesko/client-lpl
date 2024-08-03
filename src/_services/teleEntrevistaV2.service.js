@@ -133,4 +133,8 @@ export class WhatsappService {
     sendMessageJanela = async (data) => {
         return await new ApiCall(`/whatsapp/enviar-mensagem-janelas`, URL_API_V2).post(data)
     }
+
+    sendMessageAutomatizado = async (data) => {
+        return await new ApiCall(`/whatsapp/enviar-mensagem-automatizado`, URL_API_V2).post(data)
+    }
 }
