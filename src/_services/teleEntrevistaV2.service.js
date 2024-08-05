@@ -87,6 +87,10 @@ export class PropostaService {
         return await new ApiCall(`/proposta/cpf-titular/${cpf}`, URL_API_V2).get()
     }
 
+    findByWhatsapp = async (whatsapp) => {
+        return await new ApiCall(`/proposta/whatsapp/${whatsapp}`, URL_API_V2).get()
+    }
+
     findByFilter = async (filter) => {
         return await new ApiCall(`/proposta/filter`, URL_API_V2).post(filter)
     }

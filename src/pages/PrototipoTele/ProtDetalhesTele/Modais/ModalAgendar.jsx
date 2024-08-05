@@ -4,8 +4,7 @@ import { useContext, useState } from "react";
 import Agendamento from "../Components/Agendamento";
 import { Delete } from "@mui/icons-material";
 import Toast from "../../../../components/Toast/Toast";
-import { agendarEntrevista, verificarAgendamento } from "../../../../_services/teleEntrevista.service";
-import { encerrarAtendimentoJanela } from "../../../../_services/teleEntrevistaExterna.service";
+import { verificarAgendamento } from "../../../../_services/teleEntrevista.service";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
 import { HorarioService } from "../../../../_services/teleEntrevistaV2.service";
 import AuthContext from "../../../../context/AuthContext";
@@ -76,9 +75,7 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
             return
         }
         try {
-
             setLoading(true)
-
             for (const item of agendamentos) {
 
                 const dataAjustada = item.data.split('/').reverse().join('-')
@@ -96,7 +93,6 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
                     return
                 }
             }
-
             for (const item of agendamentos) {
                 await propostaService.update({
                     _id: item._id,
@@ -107,7 +103,6 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
                         }
                     }
                 })
-
                 await horarioService.agendar({
                     id: item._id,
                     analista: item.analista,
@@ -115,18 +110,6 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
                     horario: item.horario,
                     canal
                 })
-
-                // await agendarEntrevista({
-                //     id: item._id,
-                //     responsavel: item.analista,
-                //     data: item.data,
-                //     horario: item.horario,
-                //     canal
-                // })
-
-                // await encerrarAtendimentoJanela({
-                //     id: item._id
-                // })
             }
             setLoading(false)
             setSeverity('success')

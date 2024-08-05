@@ -20,7 +20,6 @@ import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { io } from "socket.io-client";
 import MensagemDependentesFaltantes from "../Components/MensagemDependentesFaltantes";
 import MensagemAdiantarTele from "../Components/MensagemAdiantarTele";
-import { Link } from "react-router-dom";
 
 const socket = io(process.env.REACT_APP_API_TELE_KEY);
 const socketLocaweb = io('http://200.234.207.26:5007');
@@ -28,6 +27,7 @@ const socketLocaweb = io('http://200.234.207.26:5007');
 const numeros = [
     'whatsapp:+551150394280',
     'whatsapp:+15674092338',
+    'whatsapp:+15752234727',
     'whatsapp:+554140426114',
     'whatsapp:+551150396002',
     'whatsapp:+551150394558',
@@ -209,6 +209,7 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                 </Box>
                 <InputSendMessage message={message} setMessage={setMessage} setFlushHook={setFlushHook} whatsapp={whatsapp} />
                 <Box mt={1}>
+
                     <MensagemSemSucesso setMessage={setMessage} />
                     <MensagemPadrao setMessage={setMessage} nome={nome} />
                     <MensagemHorarios setMessage={setMessage} />
