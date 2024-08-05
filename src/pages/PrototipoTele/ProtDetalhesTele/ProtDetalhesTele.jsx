@@ -10,7 +10,10 @@ import { getDataByCpfTitular, getHorariosDisponiveis } from "../../../_services/
 import CardAcoesTele from "./Cards/CardAcoesTele";
 import HorariosDisponiveis from "../../TeleEntrevistas/Agenda/Agendar/HorariosDisponiveis";
 import CardConversaTele from "./Cards/CardConversaTele";
+import { PropostaService } from "../../../_services/teleEntrevistaV2.service";
 import moment from "moment";
+
+const propostaService = new PropostaService()
 
 const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesquisa }) => {
 
@@ -47,6 +50,7 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
 
         const fetchData = async () => {
             setLoading(true)
+            await propostaService.entrouNaProposta(cpfTitular)
             const result = await getDataByCpfTitular(cpfTitular)
             const agrupamentoPropostas = {};
 
@@ -93,6 +97,11 @@ const ProtDetalhesTele = ({ cpfTitular, atualizarTabela, atualizarPesquisa, pesq
                         <LinearProgress sx={{ width: '100%' }} />
                     )
                 }
+                {/* <Box display={'flex'}>
+                    {
+                        data2[Object.keys(data2)[0]][0].tipoAssociado.toLowerCase().trim() === 'titular' ? 'Titular' : 'Dependente'
+                    }
+                </Box> */}
                 <Box display={'flex'} width={'100%'}>
                     {
                         data2 && (

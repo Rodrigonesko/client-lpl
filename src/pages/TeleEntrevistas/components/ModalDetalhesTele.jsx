@@ -3,17 +3,25 @@ import { AppBar, Dialog, IconButton, Slide, Toolbar } from "@mui/material"
 import { forwardRef, useState } from "react"
 import ProtDetalhesTele from "../../PrototipoTele/ProtDetalhesTele/ProtDetalhesTele";
 import { grey } from "@mui/material/colors";
+import { PropostaService } from "../../../_services/teleEntrevistaV2.service";
+const propostaService = new PropostaService()
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const ModalDetalhesTele = ({ cpfTitular, setFlushHook, openDialog, setOpenDialog }) => {
+
+    const handleClose = async () => {
+        setOpenDialog(false)
+        await propostaService.saiuDaProposta(cpfTitular)
+    }
+
     return (
         <>
             <Dialog
                 open={openDialog}
-                onClose={() => setOpenDialog(false)}
+                onClose={handleClose}
                 fullScreen
                 TransitionComponent={Transition}
             >
@@ -22,9 +30,7 @@ const ModalDetalhesTele = ({ cpfTitular, setFlushHook, openDialog, setOpenDialog
                         <IconButton
                             edge="start"
                             color="inherit"
-                            onClick={() => {
-                                setOpenDialog(false)
-                            }}
+                            onClick={handleClose}
                             aria-label="close"
                         >
                             <Close />

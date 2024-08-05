@@ -13,6 +13,8 @@ import RelatorioGeral from "./RelatorioGeral";
 import AuthContext from "../../../../../context/AuthContext";
 import Toast from "../../../../../components/Toast/Toast";
 import RelatorioAdesao from "./RelatorioAdesão";
+import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
+const propostaService = new PropostaService()
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -104,6 +106,11 @@ const Realizadas = () => {
         setSeverity('success')
         setMessage('Salvo com sucesso!')
         setOpenToast(true)
+    }
+
+    const handleClose = async () => {
+        setOpenDialog(false)
+        await propostaService.saiuDaProposta(cpfTitular)
     }
 
     useEffect(() => {
@@ -418,7 +425,7 @@ const Realizadas = () => {
             />
             <Dialog
                 open={openDialog}
-                onClose={() => setOpenDialog(false)}
+                onClose={handleClose}
                 fullScreen
                 TransitionComponent={Transition}
             >
@@ -427,8 +434,8 @@ const Realizadas = () => {
                         <IconButton
                             edge="start"
                             color="inherit"
-                            onClick={() => {
-                                setOpenDialog(false)
+                            onClick={async () => {
+                                await handleClose()
                                 setCpfTitular('')
                             }}
                             aria-label="close"
@@ -465,7 +472,7 @@ const Realizadas = () => {
                     }}
                 />
             </Dialog>
-        </Box>
+        </Box >
 
     )
 }

@@ -342,6 +342,12 @@ const FiltroEmAnalise = () => {
         setTotalPages(result.total);
         setLoading(false)
     }
+
+    const handleClose = async () => {
+        setOpenDialog(false)
+        await propostaService.saiuDaProposta(cpfTitular)
+    }
+
     useEffect(() => {
         fetchPropostas(page);
     }, []);
@@ -560,7 +566,7 @@ const FiltroEmAnalise = () => {
             </Box>
             <Dialog
                 open={openDialog}
-                onClose={() => setOpenDialog(false)}
+                onClose={handleClose}
                 fullScreen
                 TransitionComponent={Transition}
             >
@@ -569,8 +575,8 @@ const FiltroEmAnalise = () => {
                         <IconButton
                             edge="start"
                             color="inherit"
-                            onClick={() => {
-                                setOpenDialog(false)
+                            onClick={async () => {
+                                await handleClose()
                                 setCpfTitular('')
                             }}
                             aria-label="close"

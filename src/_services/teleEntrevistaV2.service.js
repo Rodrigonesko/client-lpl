@@ -110,6 +110,14 @@ export class PropostaService {
     adicionarTentativaDeContato = async (id, data) => {
         return await new ApiCall(`/proposta/tentativa-de-contato/${id}`, URL_API_V2).patch(data)
     }
+
+    entrouNaProposta = async (cpfTitular) => {
+        return await new ApiCall(`/proposta/entrou-na-proposta/${cpfTitular}`, URL_API_V2).patch()
+    }
+
+    saiuDaProposta = async (cpfTitular) => {
+        return await new ApiCall(`/proposta/sair-da-proposta/${cpfTitular}`, URL_API_V2).patch()
+    }
 }
 
 export class HorarioService {

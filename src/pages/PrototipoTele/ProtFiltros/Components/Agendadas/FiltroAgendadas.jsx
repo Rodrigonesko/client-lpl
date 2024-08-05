@@ -13,6 +13,8 @@ import { ArrowRight, Close, FormatListNumbered, History, ManageAccounts, Menu, P
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { reagendarEntrevista } from "../../../../../_services/teleEntrevista.service";
 import Toast from "../../../../../components/Toast/Toast";
+import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
+const propostaService = new PropostaService()
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -274,6 +276,11 @@ const FiltroAgendadas = () => {
         setTotalPages(result.total);
         setLoading(false)
         setPesquisa('')
+    }
+
+    const handleClose = async () => {
+        setOpenDialog(false)
+        await propostaService.saiuDaProposta(cpfTitular)
     }
 
     useEffect(() => {
