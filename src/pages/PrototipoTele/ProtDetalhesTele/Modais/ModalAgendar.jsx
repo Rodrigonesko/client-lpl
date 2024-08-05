@@ -7,8 +7,10 @@ import Toast from "../../../../components/Toast/Toast";
 import { agendarEntrevista, verificarAgendamento } from "../../../../_services/teleEntrevista.service";
 import { encerrarAtendimentoJanela } from "../../../../_services/teleEntrevistaExterna.service";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+import { HorarioService } from "../../../../_services/teleEntrevistaV2.service";
 import AuthContext from "../../../../context/AuthContext";
 const propostaService = new PropostaService()
+const horarioService = new HorarioService()
 
 const ModalAgendar = ({ objects, setFlushHook }) => {
 
@@ -105,17 +107,26 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
                         }
                     }
                 })
-                await agendarEntrevista({
+
+                await horarioService.agendar({
                     id: item._id,
-                    responsavel: item.analista,
+                    analista: item.analista,
                     data: item.data,
                     horario: item.horario,
                     canal
                 })
 
-                await encerrarAtendimentoJanela({
-                    id: item._id
-                })
+                // await agendarEntrevista({
+                //     id: item._id,
+                //     responsavel: item.analista,
+                //     data: item.data,
+                //     horario: item.horario,
+                //     canal
+                // })
+
+                // await encerrarAtendimentoJanela({
+                //     id: item._id
+                // })
             }
             setLoading(false)
             setSeverity('success')

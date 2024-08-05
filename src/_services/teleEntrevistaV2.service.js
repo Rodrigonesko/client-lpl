@@ -109,6 +109,11 @@ export class PropostaService {
 }
 
 export class HorarioService {
+
+    agendar = async (data) => {
+        return await new ApiCall('/horario/agendar', URL_API_V2).patch(data)
+    }
+
     reagendar = async (id, data) => {
         return await new ApiCall(`/horario/reagendar/${id}`, URL_API_V2).patch(data)
     }
