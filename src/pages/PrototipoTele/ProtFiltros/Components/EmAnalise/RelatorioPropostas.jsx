@@ -78,6 +78,7 @@ const RelatorioPropostas = () => {
         xls += "<th>Tipo Associado</th>"
         xls += "<th>Nome</th>"
         xls += "<th>Cpf</th>"
+        xls += "<th>Cpf Titular</th>"
         xls += "<th>Data Nascimento</th>"
         xls += "<th>Administrador</th>"
         xls += "<th>Risco</th>"
@@ -118,6 +119,7 @@ const RelatorioPropostas = () => {
             xls += `<td>${e.tipoAssociado || ''}</td>`
             xls += `<td>${e.nome || ''}</td>`
             xls += `<td>${e.cpf || ''}</td>`
+            xls += `<td>${e.cpfTitular || ''}</td>`
             xls += `<td>${e.dataNascimento || ''}</td>`
             xls += `<td>${e.administradora || ''}</td>`
             xls += `<td>${e.riscoImc || ''}</td>`

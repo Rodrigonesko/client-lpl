@@ -30,7 +30,7 @@ const ModalSendTemplateMessage = ({
         setLoadingModal(true)
         try {
             const proposta = await propostaService.findByWhatsapp(whatsapp)
-            const variaveis  = Object.keys(newVariaveis).reduce((acc, key, index) => {
+            const variaveis = Object.keys(newVariaveis).reduce((acc, key, index) => {
                 acc[index + 1] = newVariaveis[key]
                 return acc
             }, {})
@@ -81,9 +81,16 @@ const ModalSendTemplateMessage = ({
                 })
             }
             if (key === 'nome') {
+                console.log(proposta.nome);
                 setNewVariaveis({
                     ...newVariaveis,
                     [key]: proposta.nome
+                })
+            }
+            if (key === 'telefone') {
+                setNewVariaveis({
+                    ...newVariaveis,
+                    [key]: proposta.tipoContrato === 'ADESÃO' ? '11 42401232' : '11 42403554'
                 })
             }
         })

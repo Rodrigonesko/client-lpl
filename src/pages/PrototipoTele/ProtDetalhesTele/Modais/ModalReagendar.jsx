@@ -4,8 +4,11 @@ import { useContext, useState } from "react";
 import Toast from "../../../../components/Toast/Toast";
 import { reagendarEntrevista } from "../../../../_services/teleEntrevista.service";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+import { HorarioService } from "../../../../_services/teleEntrevistaV2.service";
 import AuthContext from "../../../../context/AuthContext";
+import moment from "moment";
 const propostaService = new PropostaService()
+const horarioService = new HorarioService()
 
 const ModalReagendar = ({ objects, setFlushHook }) => {
 
@@ -37,7 +40,14 @@ const ModalReagendar = ({ objects, setFlushHook }) => {
                         }
                     }
                 })
-                await reagendarEntrevista({ id: item._id })
+                await horarioService.reagendar(
+                    item._id,
+                    {
+                        enfermeiro: item.enfermeiro,
+                        dia: moment(item.dataEntrevista).format('YYYY-MM-DD'),
+                        horario: moment(item.dataEntrevista).format('HH:mm'),
+                    }
+                )
             }
 
             setSeverity('success')

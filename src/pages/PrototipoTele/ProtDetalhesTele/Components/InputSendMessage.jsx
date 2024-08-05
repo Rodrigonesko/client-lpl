@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, IconButton, TextField, Tooltip, Menu, MenuItem } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, TextField, Tooltip, Menu, MenuItem, Popover } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import { sendMessageTele } from "../../../../_services/teleEntrevistaExterna.service";
 import Toast from "../../../../components/Toast/Toast";
@@ -74,9 +74,9 @@ const InputSendMessage = ({ message, setMessage, whatsapp, setFlushHook }) => {
                     <Add />
                 </IconButton>
             </Tooltip>
-            <Menu
-                anchorEl={anchorEl}
+            <Popover
                 open={open}
+                anchorEl={anchorEl}
                 onClose={handleClose}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
@@ -98,7 +98,7 @@ const InputSendMessage = ({ message, setMessage, whatsapp, setFlushHook }) => {
                         />
                     ))
                 }
-            </Menu>
+            </Popover>
             <Button disabled={loading} endIcon={loading && <CircularProgress size={'20px'} />} onClick={handleSendMessage} variant="contained" size="small"><SendIcon /></Button>
             <Toast
                 open={toastOpen}

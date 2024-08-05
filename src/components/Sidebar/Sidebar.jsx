@@ -62,13 +62,34 @@ const Sidebar = ({ children }) => {
         }
 
         if (!socketTele) {
-            socketTele = io(`${process.env.REACT_APP_API_TELE_KEY}`, {
+            socketTele = io(`http://200.234.207.26:5007`, {
                 query: `name=${name}`
             })
         }
 
-
         socketTele.on('receivedMessage', async (data) => {
+            console.log(data);
+            if (location.pathname === `/entrevistas/chat/${data.whatsapp}`) {
+                return
+            }
+
+            if (!data.responsavel || data.enfermeiro === '') {
+                return
+            }
+
+            if (data.responsavel === name || data.enfermeiro === name) {
+                console.log(data.responsavel, data.enfermeiro);
+                console.log(name);
+                setMessageTele(`${data.proposta} - ${data.nome}: ${data.mensagem}`)
+                setWhatsappTele(data.whatsapp)
+
+                if (location.pathname !== `/entrevistas/chat/${data.whatsapp}`) {
+                    setOpenToastTele(true);
+                }
+            }
+        })
+
+        socketTele.on('messageReceived', async (data) => {
             if (location.pathname === `/entrevistas/chat/${data.whatsapp}`) {
                 return
             }

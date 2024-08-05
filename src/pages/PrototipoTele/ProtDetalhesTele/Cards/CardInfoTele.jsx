@@ -266,6 +266,9 @@ const Row = ({ item, setShowConversas, setNomeWhatsapp, setResponsavelAtendiment
                                         <Typography>
                                             <strong>IMC: </strong> {item.imc}
                                         </Typography>
+                                        <Typography>
+                                            <strong>Data Conclusão: </strong> {moment(item.dataConclusao).format('DD/MM/YYYY HH:mm:ss')}
+                                        </Typography>
                                     </Box>
                                 </Box>
                             </Box>

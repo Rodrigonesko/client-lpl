@@ -208,14 +208,14 @@ const CardConversaTele = ({ open, setOpen, _id, nome, setNome, responsavelAtendi
                     }
                 </Box>
                 <InputSendMessage message={message} setMessage={setMessage} setFlushHook={setFlushHook} whatsapp={whatsapp} />
-                <Box mt={1}>
+                {/* <Box mt={1}>
 
                     <MensagemSemSucesso setMessage={setMessage} />
                     <MensagemPadrao setMessage={setMessage} nome={nome} />
                     <MensagemHorarios setMessage={setMessage} />
                     <MensagemDependentesFaltantes setMessage={setMessage} />
                     <MensagemAdiantarTele setMessage={setMessage} />
-                </Box>
+                </Box> */}
             </Box>
         </Slide >
 

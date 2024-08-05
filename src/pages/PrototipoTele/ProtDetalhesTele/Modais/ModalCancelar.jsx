@@ -2,7 +2,6 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useContext, useState } from "react";
 import Toast from "../../../../components/Toast/Toast";
-import { cancelarEntrevista } from "../../../../_services/teleEntrevista.service";
 import AuthContext from "../../../../context/AuthContext";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
 const propostaService = new PropostaService()
@@ -38,7 +37,10 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
                         }
                     }
                 })
-                await cancelarEntrevista({ id: item._id, motivoCancelamento: motivo })
+                await propostaService.cancelar({
+                    id: item._id,
+                    motivo
+                })
             }
             setSeverity('success')
             setMessage('Cancelado com sucesso')
