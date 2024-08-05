@@ -1,8 +1,8 @@
 const templateMessages = [
     {
         nome: 'Sem Sucesso',
-        mensagem: 'Olá, tudo bem? Estou tentando falar com você, mas não tive sucesso. Poderia me chamar no whatsapp?',
-        templateSid: 'whatsapp:template:1',
+        mensagem: 'Estamos tentando contato com o Sr (a) porém sem sucesso. A Sr (a) pode por favor ligar no número 11 4240-0422 e pedir para falar com a equipe médica.',
+        templateSid: 'HX8df3402983474f02545859752d43e674',
         variaveis: {
         }
     },
