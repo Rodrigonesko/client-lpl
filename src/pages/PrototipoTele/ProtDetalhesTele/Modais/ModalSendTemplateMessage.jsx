@@ -77,7 +77,10 @@ const ModalSendTemplateMessage = ({
             if (key === 'link') {
                 setNewVariaveis({
                     ...newVariaveis,
-                    [key]: `https://wa.me/${proposta.wppSender}?text=Olá,%20gostaria%20de%20agendar%20meu%20horário%20para%20a%20entrevista.`
+                    [key]: `https://wa.me/${proposta?.wppSender?.replace(
+                        /\D/g,
+                        ''
+                    )}?text=Olá,%20gostaria%20de%20agendar%20meu%20horário%20para%20a%20entrevista.`
                 })
             }
             if (key === 'nome') {
