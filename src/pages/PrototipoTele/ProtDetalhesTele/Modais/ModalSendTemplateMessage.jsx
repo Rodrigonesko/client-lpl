@@ -34,6 +34,7 @@ const ModalSendTemplateMessage = ({
                 acc[index + 1] = newVariaveis[key]
                 return acc
             }, {})
+            console.log(proposta);
             await whatsappService.sendTemplateMessage({
                 de: proposta.wppSender,
                 para: whatsapp,

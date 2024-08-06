@@ -76,8 +76,8 @@ const ProtFiltros = () => {
                             <Tab sx={tabStyle} label="Pendencias" {...a11yProps(0)} />
                             <Tab sx={tabStyle} label="Agendadas" {...a11yProps(1)} />
                             <Tab sx={tabStyle} label="Realizadas" {...a11yProps(1)} />
-                            <Tab sx={tabStyle} label="Anexos" {...a11yProps(1)} />
-                            <Tab sx={tabStyle} label="Implantação" {...a11yProps(1)} />
+                            {/* <Tab sx={tabStyle} label="Anexos" {...a11yProps(1)} />
+                            <Tab sx={tabStyle} label="Implantação" {...a11yProps(1)} /> */}
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
@@ -89,12 +89,12 @@ const ProtFiltros = () => {
                     <CustomTabPanel value={value} index={2}>
                         <Realizadas />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={3}>
+                    {/* <CustomTabPanel value={value} index={3}>
                         <Anexos />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={4}>
                         <Implantacao />
-                    </CustomTabPanel>
+                    </CustomTabPanel> */}
                 </Box>
             </Sidebar>
         </>

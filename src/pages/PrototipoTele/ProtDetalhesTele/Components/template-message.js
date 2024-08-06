@@ -63,6 +63,17 @@ Lembrando que em caso de menor de idade a entrevista será realizada com o respo
         }
     },
     {
+        nome: 'Horarios disponiveis',
+        mensagem: `Visto que o preenchimento dos horários é feito em tempo real, esse horário já foi preenchido. Vou te passar os horários disponíveis atualizados:
+Horários disponíveis para o dia {{1}} - {{2}}
+Qual o melhor horário?`,
+        templateSid: 'HXaa45e3096fb0f31ea8c7c4ed64c2c8fa',
+        variaveis: {
+            data: '',
+            horarios: ''
+        }
+    },
+    {
         nome: 'Retomando atendimento',
         mensagem: `Prezado(a) Sr(a), desculpe a demora em retornar. Podemos retomar o seu agendamento?
 Se sim, por favor, digitar OK`,

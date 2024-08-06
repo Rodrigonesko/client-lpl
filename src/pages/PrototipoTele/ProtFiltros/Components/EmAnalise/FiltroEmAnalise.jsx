@@ -15,6 +15,7 @@ import RelatorioDevolverAmil from "./RelatorioDevolverAmil";
 import Search from "@mui/icons-material/Search";
 import RelatorioRespondeuWhats from "./RelatorioRespondeuWhats";
 import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
+import FiltrosAgendar from "./FiltrosAgendar";
 
 const propostaService = new PropostaService();
 
@@ -38,6 +39,18 @@ const FiltroEmAnalise = () => {
         respondido: false,
         incidencia: false,
     });
+
+    const [subStatus, setSubStatus] = useState({
+        humanizado: false,
+        naoLidas: false,
+        janelas: false,
+        ajustar: false,
+        semWhats: false,
+        erroWhatsapp: false,
+        semResposta: false,
+        respondido: false,
+        incidencia: false,
+    })
 
     const [tipoContrato, setTipoContrato] = useState({
         pme: false,
@@ -395,7 +408,7 @@ const FiltroEmAnalise = () => {
                 <RelatorioRespondeuWhats />
             </Box>
             <Box display={'flex'} m={2}>
-                <Filtros
+                {/* <Filtros
                     status={status}
                     tipoContrato={tipoContrato}
                     vigencia={vigencia}
@@ -410,6 +423,9 @@ const FiltroEmAnalise = () => {
                     handleAll={handleAll}
                     idade={idade}
                     handleChangeIdade={handleChangeIdade}
+                /> */}
+                <FiltrosAgendar 
+                
                 />
                 <Box p={1} width={'100%'}>
                     <form
