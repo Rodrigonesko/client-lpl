@@ -1,10 +1,52 @@
-import { Box, Checkbox, Collapse, Divider, FormControlLabel, Typography } from "@mui/material";
-import { useState } from "react";
+import { Box, Checkbox, Chip, CircularProgress, Collapse, Divider, FormControlLabel, IconButton, Tooltip, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { filtros } from "./filtros";
-
-const FiltrosAgendar = () => {
+import { CleaningServices, Refresh } from "@mui/icons-material";
+import { PropostaService } from "../../../../../_services/teleEntrevistaV2.service";
+const propostaService = new PropostaService();
+const FiltrosAgendar = ({ filters, setFilters }) => {
 
     const [openCollase, setOpenCollase] = useState(true);
+    const [quantidade, setQuantidade] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(false);
+
+    const handleFilter = (filtro, itemFilter) => {
+        console.log(filtro);
+        
+        setFilters({
+            ...filters,
+            [itemFilter]: filters[itemFilter].map((item) => {
+                if (item.name === filtro.name) {
+                    return {
+                        ...item,
+                        checked: !filtro.checked // Alterna o estado se for 'Sub Status', caso contrário, marca como true
+                    }
+                }
+                if (itemFilter !== 'Sub Status') {
+                    return {
+                        ...item,
+                        checked: false // Desmarca todos os outros itens
+                    };
+                }
+                return item;
+            })
+        });
+    };
+
+    const handleCleanFilter = () => {
+        setFilters(filtros);
+    };
+
+    useEffect(() => {
+        const fech = async () => {
+            setLoading(true);
+            const res = await propostaService.quantidadePropostasPendentes();
+            setQuantidade(res);
+            setLoading(false);
+        }
+        fech();
+    }, [filters, refresh]);
 
     return (
         <Box>
@@ -17,42 +59,70 @@ const FiltrosAgendar = () => {
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        bgcolor: 'lightgray',
                         p: 1,
                         m: 1,
                         borderRadius: 1
                     }}
                 >
-                    <Typography alignSelf={'center'}>
-                        Filtros
-                    </Typography>
+                    <Box>
+                        <Tooltip title='Limpar filtros' >
+                            <IconButton
+                                onClick={handleCleanFilter}
+                            >
+                                <CleaningServices />
+                            </IconButton>
+                        </Tooltip>
+                        {
+                            loading ? (
+                                <CircularProgress size={18} />
+                            ) : (
+                                <Tooltip title='Atualizar' >
+                                    <IconButton
+                                        onClick={() => setRefresh(!refresh)}
+                                    >
+                                        <Refresh />
+                                    </IconButton>
+                                </Tooltip>
+                            )
+                        }
+
+                    </Box>
                     {
-                        Object.keys(filtros).map((item, index) => (
+                        Object.keys(filters).map((itemFilter, index) => (
                             <Box
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    bgcolor: 'lightgray',
-                                    p: 1,
-                                    m: 1,
-                                    borderRadius: 1
+                                    mb: 1
                                 }}
                             >
-                                <Typography >
-                                    {item}
-                                </Typography>
+                                <Divider>
+                                    <Chip label={itemFilter} size="small" />
+                                </Divider>
                                 {
-                                    filtros[item].map((item, index) => (
-                                        <FormControlLabel control={<Checkbox />} label={item.label} />
+                                    filters[itemFilter].map((item, index) => (
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox size="small" />
+                                            }
+                                            sx={{
+                                                '& .MuiFormControlLabel-label': {
+                                                    fontSize: '14px' // Altere o tamanho da fonte conforme necessário
+                                                }
+                                            }}
+                                            checked={item.checked}
+                                            onChange={() => handleFilter(item, itemFilter)}
+                                            label={`${item.label} (${quantidade[item.name] || 0})`}
+                                        />
                                     ))
                                 }
-                                <Divider />
+
                             </Box>
                         ))
                     }
-                </Box>
-            </Collapse>
-        </Box>
+                </Box >
+            </Collapse >
+        </Box >
     )
 }
 
