@@ -1,4 +1,4 @@
- export const filtros = {
+export const filtros = {
     'Status': [
         {
             name: 'agendar',
@@ -47,23 +47,24 @@
             label: 'Erro WhatsApp',
             checked: false
         },
-        {
-            name: 'semResposta',
-            label: 'Sem Resposta',
-            checked: false
-        },
+
         {
             name: 'meioCaminho',
             label: 'Meio Caminho',
             checked: false
         },
         {
-            name: 'respondido',
-            label: 'Respondido',
+            name: 'semResposta',
+            label: 'Sem Resposta',
             checked: false
-        }
+        },
+        // {
+        //     name: 'respondido',
+        //     label: 'Respondido',
+        //     checked: false
+        // }
     ],
-    'Não Respondidos': [
+    'Sem Resposta': [
         {
             name: 'semResposta0',
             label: '0',

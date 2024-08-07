@@ -185,7 +185,19 @@ const FiltroEmAnalise = () => {
                                 <TableHead>
                                     <TableRow sx={{ bgcolor: '#F5F5F5' }}>
                                         <TableCell>Recebimento</TableCell>
-                                        <TableCell>Vigência</TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                variant="body2"
+                                            >
+                                                ANS
+                                            </Typography>
+                                            <Typography
+                                                variant={'caption'}
+                                                color={'textSecondary'}
+                                            >
+                                                Vigência Amil
+                                            </Typography>
+                                        </TableCell>
                                         <TableCell>Proposta</TableCell>
                                         <TableCell>Nome</TableCell>
                                         <TableCell>Associado</TableCell>
