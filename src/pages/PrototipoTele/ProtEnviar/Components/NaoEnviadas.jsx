@@ -24,7 +24,8 @@ const Row = ({ proposta, index, filterText, flushFilter, setFlushFilter }) => {
             //     result = await mandaAtendimentoAutomatizado(proposta._id)
             // } else {
             console.log(proposta._id);
-            result = await sendMessageSaudacao({ _id: proposta._id })
+            // result = await sendMessageSaudacao({ _id: proposta._id })
+            result = await whatsappService.sendMessageAutomatizado({id: proposta._id})
             // }
             console.log(result);
             setOpenToast(true)

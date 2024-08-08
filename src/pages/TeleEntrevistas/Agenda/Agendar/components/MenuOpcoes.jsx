@@ -42,10 +42,12 @@ const MenuOpcoes = ({ proposta, setProposta, setRefresh, setOpenToast, setSeveri
 
     const handleTentativaDeContato = async () => {
         try {
-            const response = await propostaService.adicionarTentativaDeContato(proposta._id, {
+            await propostaService.adicionarTentativaDeContato(proposta._id, {
                 canal: 'TELEFONE',
             })
-            setProposta(response)
+            // setProposta(response)
+            setRefresh(prev => !prev)
+            setProposta(prev => ({ ...prev, tentativasDeContato: [...prev.tentativasDeContato, { data: new Date().toLocaleString() }] }))
             sucesso()
         } catch (error) {
             console.log(error);
