@@ -5,6 +5,7 @@ import { useContext, useState } from "react"
 import { encerrarAtendimentoHumanizado } from "../../../../_services/teleEntrevistaExterna.service"
 import AuthContext from "../../../../context/AuthContext"
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service"
+import moment from "moment"
 const propostaService = new PropostaService()
 
 
@@ -35,6 +36,7 @@ const ModalEncerrarHumanizado = ({ objects, setFlushHook }) => {
                         logs: {
                             responsavel: name,
                             acao: 'Encerrou atendimento humanizado',
+                            data: moment().format('YYYY-MM-DD HH:mm:ss')
                         }
                     }
                 })

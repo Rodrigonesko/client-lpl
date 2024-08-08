@@ -37,6 +37,7 @@ const ModalReagendar = ({ objects, setFlushHook }) => {
                         logs: {
                             responsavel: name,
                             acao: 'Reagendou entrevista',
+                            data: moment().format('YYYY-MM-DD HH:mm:ss')
                         }
                     }
                 })

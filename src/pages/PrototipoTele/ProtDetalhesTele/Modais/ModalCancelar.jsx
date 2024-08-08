@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import Toast from "../../../../components/Toast/Toast";
 import AuthContext from "../../../../context/AuthContext";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
+import moment from "moment";
 const propostaService = new PropostaService()
 
 const ModalCancelar = ({ objects, setFlushHook }) => {
@@ -34,6 +35,7 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
                         logs: {
                             responsavel: name,
                             acao: 'Cancelou entrevista',
+                            data: moment().format('YYYY-MM-DD HH:mm:ss')
                         }
                     }
                 })

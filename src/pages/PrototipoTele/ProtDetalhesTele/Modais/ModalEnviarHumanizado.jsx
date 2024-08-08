@@ -5,6 +5,7 @@ import Toast from "../../../../components/Toast/Toast";
 import { mandarParaAtendimentoHumanizado } from "../../../../_services/teleEntrevista.service";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
 import AuthContext from "../../../../context/AuthContext";
+import moment from "moment";
 
 const propostaService = new PropostaService()
 
@@ -35,6 +36,7 @@ const ModalEnviarHumanizado = ({ objects, setFlushHook }) => {
                         logs: {
                             responsavel: name,
                             acao: 'Mandou para atendimento humanizado',
+                            data: moment().format('YYYY-MM-DD HH:mm:ss')
                         }
                     }
                 })

@@ -8,6 +8,7 @@ import { verificarAgendamento } from "../../../../_services/teleEntrevista.servi
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
 import { HorarioService } from "../../../../_services/teleEntrevistaV2.service";
 import AuthContext from "../../../../context/AuthContext";
+import moment from "moment";
 const propostaService = new PropostaService()
 const horarioService = new HorarioService()
 
@@ -100,6 +101,7 @@ const ModalAgendar = ({ objects, setFlushHook }) => {
                         logs: {
                             responsavel: name,
                             acao: 'Agendou entrevista',
+                            data: moment().format('YYYY-MM-DD HH:mm:ss')
                         }
                     }
                 })

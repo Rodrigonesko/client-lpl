@@ -5,6 +5,7 @@ import Toast from "../../../../components/Toast/Toast";
 import { retrocederEntrevista } from "../../../../_services/teleEntrevista.service";
 import { PropostaService } from "../../../../_services/teleEntrevistaV2.service";
 import AuthContext from "../../../../context/AuthContext";
+import moment from "moment";
 const propostaService = new PropostaService()
 
 const ModalRetroceder = ({ objects, setFlushHook }) => {
@@ -34,6 +35,7 @@ const ModalRetroceder = ({ objects, setFlushHook }) => {
                         logs: {
                             responsavel: name,
                             acao: 'Retrocedeu entrevista',
+                            data: moment().format('YYYY-MM-DD HH:mm:ss')
                         }
                     }
                 })
