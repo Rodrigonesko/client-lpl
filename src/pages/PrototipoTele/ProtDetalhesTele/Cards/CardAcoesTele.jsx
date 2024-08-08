@@ -8,13 +8,10 @@ import ModalAgendar from "../Modais/ModalAgendar";
 import ModalEncerrarHumanizado from "../Modais/ModalEncerrarHumanizado";
 import { useContext } from "react";
 import AuthContext from "../../../../context/AuthContext";
+import ModalEnviarCancelamento from "../Modais/ModalEnviarCancelamento";
 
 const CardAcoesTele = ({ objects, setFlushHook }) => {
-
     const { acessos } = useContext(AuthContext)
-
-    console.log(acessos);
-
     return (
         <Box component={Paper} p={1} m={2}>
             <Typography m={2} variant="h5">
@@ -25,6 +22,7 @@ const CardAcoesTele = ({ objects, setFlushHook }) => {
             <ModalReagendar objects={objects} setFlushHook={setFlushHook} />
             <ModalRetroceder objects={objects} setFlushHook={setFlushHook} />
             <ModalEnviarHumanizado objects={objects} setFlushHook={setFlushHook} />
+            <ModalEnviarCancelamento propostas={objects} setFlushHook={setFlushHook} />
             {
                 (acessos?.administrador || acessos?.agendamento) && (
                     <ModalCancelar objects={objects} setFlushHook={setFlushHook} />

@@ -11,6 +11,8 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
 
     const { name } = useContext(AuthContext)
 
+    console.log(objects);
+
     const [open, setOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
     const [severity, setSeverity] = useState('success')
@@ -28,7 +30,7 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
     const handleCancelar = async () => {
         try {
             for (const item of objects) {
-                if(item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
+                if (item.newStatus === 'Cancelado' || item.newStatus === 'Concluído') continue
                 await propostaService.update({
                     _id: item._id,
                     $push: {
@@ -76,6 +78,9 @@ const ModalCancelar = ({ objects, setFlushHook }) => {
                             return (
                                 <DialogContentText key={index}>
                                     {obj.nome}
+                                    <Typography>
+                                        {obj.cancelamento?.motivo} - {obj.cancelamento?.data} - {obj.cancelamento?.responsavel}
+                                    </Typography>
                                 </DialogContentText>
                             )
                         })}

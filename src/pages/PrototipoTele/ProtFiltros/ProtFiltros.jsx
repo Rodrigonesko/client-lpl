@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import FiltroEmAnalise from "./Components/EmAnalise/FiltroEmAnalise";
 import FiltroAgendadas from "./Components/Agendadas/FiltroAgendadas";
 import Realizadas from "./Components/Realizadas/Realizadas";
-import Anexos from "./Components/Anexos/Anexos";
-import Implantacao from "./Components/Implantacao/Implantacao";
 
 const tabStyle = {
     ":hover": {
@@ -62,7 +60,7 @@ const ProtFiltros = () => {
     const initialValue = localStorage.getItem('tabValue') ? parseInt(localStorage.getItem('tabValue')) : 0
     const [value, setValue] = React.useState(initialValue);
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (_, newValue) => {
         setValue(newValue);
         localStorage.setItem('tabValue', newValue)
     }
@@ -76,8 +74,6 @@ const ProtFiltros = () => {
                             <Tab sx={tabStyle} label="Pendencias" {...a11yProps(0)} />
                             <Tab sx={tabStyle} label="Agendadas" {...a11yProps(1)} />
                             <Tab sx={tabStyle} label="Realizadas" {...a11yProps(1)} />
-                            {/* <Tab sx={tabStyle} label="Anexos" {...a11yProps(1)} />
-                            <Tab sx={tabStyle} label="Implantação" {...a11yProps(1)} /> */}
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
@@ -89,12 +85,6 @@ const ProtFiltros = () => {
                     <CustomTabPanel value={value} index={2}>
                         <Realizadas />
                     </CustomTabPanel>
-                    {/* <CustomTabPanel value={value} index={3}>
-                        <Anexos />
-                    </CustomTabPanel>
-                    <CustomTabPanel value={value} index={4}>
-                        <Implantacao />
-                    </CustomTabPanel> */}
                 </Box>
             </Sidebar>
         </>

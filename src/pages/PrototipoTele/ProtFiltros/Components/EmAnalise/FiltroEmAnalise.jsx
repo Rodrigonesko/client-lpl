@@ -158,6 +158,7 @@ const FiltroEmAnalise = () => {
                                     <MenuItem value={'tipoAssociado'}>Associado</MenuItem>
                                     <MenuItem value={'idade'}>Idade</MenuItem>
                                     <MenuItem value={'horarioRespondido'}>Horario Respondido</MenuItem>
+                                    <MenuItem value={'dataEntrevista'}>Data Entrevista</MenuItem>
                                 </Select>
                             </FormControl>
                             <FormControl
@@ -177,7 +178,6 @@ const FiltroEmAnalise = () => {
                                 </Select>
                             </FormControl>
                         </Box>
-
                     </Box>
                     <TableContainer>
                         {

@@ -2,7 +2,7 @@ import { Button, CircularProgress } from "@mui/material"
 import { useState } from "react"
 import { getPropostasNaoRealizadasTele } from "../../../../../_services/teleEntrevista.service"
 import moment from "moment"
-import { blue, red } from "@mui/material/colors"
+import { blue } from "@mui/material/colors"
 
 const RelatorioNaoRealizadas = () => {
 
